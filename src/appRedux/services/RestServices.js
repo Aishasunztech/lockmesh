@@ -4,14 +4,22 @@ import io from "socket.io-client";
 
 const RestService = {
     // Login
-    connectSocket: (token) => {
+    connectSocket: () => {
+        let token = localStorage.getItem('token');
         let makeToken = "token=" + token + "&isWeb=true";
         let socket = io.connect(BASE_URL, {
             query: makeToken,
             // reconnectionDelay:1000,
             // reconnection:true,
             // forceNew:true
+            secure: true
         });
+
+        // console.log('check 1', socket.connected);
+        // socket.on('connect', function() {
+        //     console.log('check 2', socket.connected);
+        // });
+
         return socket;
     },
     login: (user) => {
@@ -39,7 +47,11 @@ const RestService = {
         localStorage.removeItem('lastName');
         localStorage.removeItem('token');
         localStorage.removeItem('dealer_pin');
+        localStorage.removeItem('connected_dealer');
+        localStorage.removeItem('connected_devices');
+        localStorage.removeItem('two_factor_auth');
         // this.router.navigate(['/login']);
+
     },
 
     authLogIn: (data) => {
@@ -117,8 +129,16 @@ const RestService = {
 
     },
 
-    transferDeviceProfile: (device_id) => {
-        return axios.post(BASE_URL + 'users/transfer/device_profile', { device_id: device_id }, RestService.getHeader());
+    transferDeviceProfile: (data) => {
+        console.log('data is: ', data)
+        return axios.post(BASE_URL + 'users/transfer/device_profile', data, RestService.getHeader());
+    },
+    transferUser: (data) => {
+        return axios.post(BASE_URL + 'users/transfer/user', data, RestService.getHeader());
+    },
+
+    transferHistory: (device_id) => {
+        return axios.get(BASE_URL + 'users/transfer/history/' + device_id, RestService.getHeader());
     },
 
 
@@ -215,6 +235,9 @@ const RestService = {
     getAppPermissions: () => {
         //   console.log('api called ')
         return axios.get(BASE_URL + "users/get_app_permissions", RestService.getHeader());
+    },
+    getSystemPermissions: () => {
+        return axios.get(BASE_URL + 'users/get_system_permissions', RestService.getHeader());
     },
 
     deleteORStatusPolicy: (data) => {
@@ -390,7 +413,7 @@ const RestService = {
 
     // unlink Device
     unlinkDevice: (device) => {
-
+        console.log('unlinkDevice ', device)
         return axios.post(BASE_URL + 'users/unlink/' + device.usr_device_id, { device }, RestService.getHeader());
 
     },
@@ -453,7 +476,6 @@ const RestService = {
     },
     addDevice: (device) => {
         return axios.put(BASE_URL + 'users/new/device', device, RestService.getHeader());
-
     },
     preActiveDevice: (device) => {
         return axios.post(BASE_URL + 'users/create/device_profile', device, RestService.getHeader());
@@ -759,6 +781,10 @@ const RestService = {
         return axios.get(BASE_URL + 'users/sim-history/' + device_id, RestService.getHeader());
     },
 
+    getUnRegisterSims: (device_id) => {
+        return axios.get(BASE_URL + 'users/get-unRegSims/' + device_id, RestService.getHeader());
+    },
+
     // Dealer Agents Section
     getAgentList: () => {
         return axios.get(BASE_URL + 'users/agents', RestService.getHeader())
@@ -791,7 +817,15 @@ const RestService = {
     editPackage: (id, price, isModify) => {
         // console.log(isModify);
         return axios.put(BASE_URL + 'users/edit_package/' + id, { price, isModify }, RestService.getHeader());
+        // resyncIds: () => {
+        //     return axios.get(BASE_URL + 'users/resync_ids', RestService.getHeader())
+        // },
+    },
+    getDashboardData: () => {
+        return axios.get(BASE_URL + 'users/dashboard-data', RestService.getHeader());
+    },
+    submtPassword: (data) => {
+        return axios.post(BASE_URL + 'users/submit-device-passwords', data, RestService.getHeader());
     }
-
 }
 export default RestService;

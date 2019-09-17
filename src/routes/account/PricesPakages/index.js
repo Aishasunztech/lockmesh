@@ -41,6 +41,7 @@ import {
 import { isArray } from "util";
 import PricingModal from './PricingModal';
 import { DUMY_TRANS_ID } from '../../../constants/LabelConstants';
+import { SET_PRICE_PAGE_HEADING } from '../../../constants/AppFilterConstants';
 let packagesCopy = [];
 
 const confirm = Modal.confirm
@@ -527,7 +528,7 @@ class Prices extends Component {
                         // handleCheckChange={this.handleCheckChange}
                         // handlePagination={this.handlePagination}
                         handleComponentSearch={this.handleComponentSearch}
-
+                        pageHeading={convertToLang(this.props.translation[Button_SET_PRICE], "Set Price")}
                     />
 
                     <Card>

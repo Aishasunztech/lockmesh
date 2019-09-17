@@ -73,7 +73,7 @@ export function getLanguage() {
   return (dispatch) => {
     RestService.getLanguage().then((response) => {
       if (RestService.checkAuth(response.data)) {
-        // console.log('response', response.data);
+        // console.log('getLanguage response', response.data);
         if (response.data) {
           dispatch({
             type: GET_LANGUAGE,

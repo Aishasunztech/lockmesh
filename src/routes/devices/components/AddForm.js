@@ -26,6 +26,7 @@ import moment from 'moment';
 const confirm = Modal.confirm;
 const success = Modal.success
 
+const { TextArea } = Input;
 class AddDevice extends Component {
 
     constructor(props) {
@@ -995,18 +996,6 @@ class AddDevice extends Component {
                     {(this.props.preActive) ?
                         <Fragment>
                             <Form.Item
-                                label={convertToLang(this.props.translation[Device_Note], "NOTE ")}
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}
-                            >
-                                {this.props.form.getFieldDecorator('note', {
-                                    initialValue: '',
-                                })(
-                                    <Input />
-                                )}
-
-                            </Form.Item>
-                            <Form.Item
                                 label={convertToLang(this.props.translation[Device_Valid_For], "VALID FOR(DAYS) ")}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
@@ -1018,6 +1007,24 @@ class AddDevice extends Component {
                                     }],
                                 })(
                                     <InputNumber min={1} />
+                                )}
+
+                            </Form.Item>
+                            <Form.Item
+                                label={convertToLang(this.props.translation[Device_Note], "NOTE ")}
+                                labelCol={{ span: 8 }}
+                                wrapperCol={{ span: 14 }}
+                            >
+                                {this.props.form.getFieldDecorator('note', {
+                                    initialValue: '',
+                                })(
+                                    // <Input />
+                                    <TextArea
+                                        // value={value}
+                                        // onChange={this.onChange}
+                                        // placeholder="Controlled autosize"
+                                        autosize={{ minRows: 3, maxRows: 5 }}
+                                    />
                                 )}
 
                             </Form.Item>

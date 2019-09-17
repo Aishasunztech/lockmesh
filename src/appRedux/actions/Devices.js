@@ -15,7 +15,8 @@ import {
     DELETE_UNLINK_DEVICE,
     GET_PARENT_PACKAGES,
     GET_PRODUCT_PRICES,
-    USER_CREDITS
+    USER_CREDITS,
+    TRANSFER_DEVICE
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -305,13 +306,13 @@ export function getAllPGPEmails() {
 }
 export function rejectDevice(device) {
     return (dispatch) => {
-        // console.log(device)
+        // console.log(device , 'action of reject device')
         RestService.rejectDevice(device).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: REJECT_DEVICE,
                     response: response.data,
-                    device_id: device,
+                    device: device,
                 })
             } else {
                 dispatch({

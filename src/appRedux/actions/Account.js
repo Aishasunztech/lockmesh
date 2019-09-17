@@ -25,7 +25,8 @@ import {
     GET_PARENT_PACKAGES,
     PACKAGE_PERMSSION_SAVED,
     DELETE_PACKAGE,
-    EDIT_PACKAGE
+    EDIT_PACKAGE,
+    RESYNC_IDS
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -357,12 +358,12 @@ export const resetPrice = () => {
     return (dispatch) => {
         dispatch({
             type: RESET_PRICE,
-
         })
     }
 }
 
 export const setPrice = (field, value, price_for = '') => {
+    // console.log('action called successfully')
     return (dispatch) => {
         dispatch({
             type: SET_PRICE,
@@ -473,6 +474,13 @@ export function modifyPackage(id, price, isModify = false) {
                     type: INVALID_TOKEN
                 });
             }
+        })
+    }
+}
+export const resyncIds = () => {
+    return (dispatch) => {
+        dispatch({
+            type: RESYNC_IDS,
         })
     }
 }

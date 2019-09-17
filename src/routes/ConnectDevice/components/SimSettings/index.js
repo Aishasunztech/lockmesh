@@ -8,6 +8,7 @@ import {
     simHistory,
     getSims,
     deleteSim,
+    getUnRegisterSims
 } from "../../../../appRedux/actions/ConnectDevice";
 import { ENABLE, ENCRYPT, Guest, ENCRYPTED, IN_APP_MENU_DISPLAY } from '../../../../constants/TabConstants';
 import { checkValue, convertToLang } from '../../../utils/commonUtils';
@@ -108,6 +109,8 @@ class SimSettings extends Component {
 
     handleSimModal = () => {
         this.refs.add_sim_reg.showModal();
+        // this.props.getSims(this.props.deviceID);
+        this.props.getUnRegisterSims(this.props.deviceID);
     }
 
     handleChecked = (e, obj, label) => {
@@ -180,7 +183,7 @@ class SimSettings extends Component {
             sim_list,
         } = this.props;
         console.log('sim list is ', sim_list);
-        if (sim_list.length == 0) { unrGuest=0; unrEncrypt=0; guestSimAll=0; encryptSimAll=0; }
+        if (sim_list.length == 0) { unrGuest = 0; unrEncrypt = 0; guestSimAll = 0; encryptSimAll = 0; }
         return (
             <div>
                 <Fragment>
@@ -235,7 +238,7 @@ class SimSettings extends Component {
                                 this.handleChecked(e, {
                                     id: "all",
                                     device_id: this.props.deviceID,
-                                    iccid: sim_list ? sim_list[0].iccid : '',
+                                    // iccid: sim_list ? sim_list[0].iccid : '',
                                 }, "encrypt");
                             }}
                                 checked={encryptSimAll ? true : false}
@@ -277,6 +280,7 @@ class SimSettings extends Component {
                         translation={this.props.translation}
                         deviceID={this.props.deviceID}
                         device={this.props.device}
+                        unRegSims={this.props.unRegSims}
                         total_dvc={this.props.sim_list}
                     />
                     <EditRegistrationModal
@@ -285,6 +289,7 @@ class SimSettings extends Component {
                         translation={this.props.translation}
                         deviceID={this.props.deviceID}
                         device={this.props.device}
+                        unRegSims={this.props.unRegSims}
                         total_dvc={this.props.sim_list}
                     />
 
@@ -303,12 +308,13 @@ function mapDispatchToProps(dispatch) {
         simHistory: simHistory,
         deleteSim: deleteSim,
         getSims: getSims,
+        getUnRegisterSims: getUnRegisterSims
     }, dispatch);
 }
 
 
 var mapStateToProps = ({ device_details }) => {
-    // console.log('device_details  unrGuest ', device_details.unrGuest)
+    console.log('device_details  unRegSims ', device_details.unRegSims)
     return {
         encryptSimAll: device_details.encryptSimAll,
         guestSimAll: device_details.guestSimAll,
@@ -318,6 +324,7 @@ var mapStateToProps = ({ device_details }) => {
         sim_list: device_details.sim_list,
         device: device_details.device,
         simHistoryList: device_details.simHistoryList,
+        unRegSims: device_details.unRegSims,
     }
 }
 

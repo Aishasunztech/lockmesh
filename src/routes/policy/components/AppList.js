@@ -423,7 +423,7 @@ class AppList extends Component {
                                 </Col>
                                 <Col span={3} className="">
                                     <Avatar src={`${BASE_URL}users/getFile/${this.state.mainExtension.icon}`} style={{ width: "30px", height: "30px" }} />
-                                    {/* <img src={require("assets/images/setting.png")} /> */}
+                                    {/* <img src={require("assets/images/secure_setting.png")} /> */}
                                 </Col>
                                 <Col span={15} className="pl-0">
                                     <h5 style={{ marginTop: '9px' }}>{convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], "Secure Settings Permission")}</h5>
@@ -468,10 +468,8 @@ class AppList extends Component {
                             </Row>
                         </div> : false
                 }
-
                 {
                     this.props.isCheckAllButtons ?
-
                         <div className="applist_menu">
                             <Row>
                                 <Col className="text-center" span={7}>
@@ -483,10 +481,9 @@ class AppList extends Component {
                                                     <Button size="small" type="primary" style={{ marginTop: 12 }} onClick={() => this.props.addApps('app_list')} >{convertToLang(this.props.translation[ADD_PERMISSIONS], "Add Permissions")}</Button>
                                                     : false
                                             : false
-
                                     }</Col>
-                                <Col className="text-center pr-2 pl-2" span={4}></Col>
-                                <Col className="text-center pr-2 pl-2" span={4}>
+                                <Col className="text-center pr-2 pl-2" span={5}></Col>
+                                <Col className="text-center pr-2 pl-2" span={3}>
                                     <span className="policy_s_txt">{convertToLang(this.props.translation[GUEST_ALL], "Guest All")}</span>
                                     <Switch checked={this.state.guestAll ? true : false}
                                         size='small'
@@ -509,7 +506,6 @@ class AppList extends Component {
                                 </Col>
                                 <Col className="text-center pr-2 pl-2" span={4}>
                                     {
-
                                         this.props.apps || this.props.appPermissions ?
                                             <div>
                                                 <span className="policy_s_txt">{convertToLang(this.props.translation[Enable_ALL], "Enable All")}</span>
@@ -523,9 +519,7 @@ class AppList extends Component {
                                             </div>
                                             : false}
                                 </Col>
-
                             </Row>
-
                         </div> : false
                 }
                 <Table

@@ -142,6 +142,7 @@ class AddApk extends Component {
             }
         }
     };
+
     validatelogoFile = async (rule, value, callback) => {
         const form = this.props.form;
         if (this.state.fileList.length <= 0) {
@@ -150,6 +151,7 @@ class AddApk extends Component {
             callback();
         }
     };
+    
     validateAkpFile = async (rule, value, callback) => {
         const form = this.props.form;
         if (this.state.fileList2.length <= 0) {
@@ -187,10 +189,12 @@ class AddApk extends Component {
         };
         let token = localStorage.getItem('token');
         let _this = this;
-        const props = {
+        
+        // const props changed into logoProps by Usman
+        const logoProps = {
             name: 'logo',
             multiple: false,
-            action: BASE_URL + 'users/upload',
+            action: `${BASE_URL}users/upload?fieldName=logo`,
             headers: { 'authorization': token },
             accept: '.png, .jpg',
             disabled: this.state.disableLogo,
@@ -246,10 +250,12 @@ class AddApk extends Component {
                 _this.setState({ fileList });
             },
         };
-        const props2 = {
+        
+        // const props2 changed into apkProps by Usman
+        const apkProps = {
             name: 'apk',
             multiple: false,
-            action: BASE_URL + 'users/upload',
+            action: `${BASE_URL}users/upload?fieldName=apk&screen=autoUpdate`,
             headers: { 'authorization': token },
             accept: '.apk',
             disabled: this.state.disableApk,
@@ -257,7 +263,6 @@ class AddApk extends Component {
             className: 'upload-list-inline',
             listType: 'picture',
             onRemove(info) {
-                // document.getElementById('apkSize').style.display = 'none'
                 _this.setState({ disableApk: false });
             },
             beforeUpload(file) {
@@ -339,7 +344,7 @@ class AddApk extends Component {
                                     }
                                 )
                                     (
-                                        <Upload {...props}>
+                                        <Upload {...logoProps}>
                                             <Button className="width_100 upload_btn" type="default" >
                                                 <Icon type="folder-open" /> {convertToLang(this.props.translation[APK_UPLOAD_ICON], "Upload ICON")}
                                             </Button>
@@ -366,18 +371,13 @@ class AddApk extends Component {
                                     ],
 
                                 })(
-                                    <Upload  {...props2} >
+                                    <Upload  {...apkProps} >
                                         <Button className="width_100 upload_btn" type="default" >
                                             <Icon type="folder-open" /> {convertToLang(this.props.translation[APK_UPLOAD_FILE], "Upload APK FILE")}
                                         </Button>
-                                        {/* <p className="ant-upload-drag-icon">
-                                                    <Icon type="file" />
-                                                </p>
-                                                <h2 className="ant-upload-hint">UPLOAD APK FILE</h2>
-                                                <p className="ant-upload-text">Upload Apk file (.apk)</p> */}
+
                                     </Upload>
                                 )}
-                                {/* <label>Apk size: </label><span>{size}</span> */}
                             </div>
                         </Form.Item>
                         <Form.Item label={convertToLang(this.props.translation[APK_SIZE], "Apk size")} className="upload_file" {...formItemLayout}>

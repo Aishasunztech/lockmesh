@@ -101,7 +101,7 @@ class DealerList extends Component {
             searchText: '',
             columns: [],
             pagination: this.props.pagination,
-            expandedRowKeys: [],
+            expandedRowKeys: props.expandedRowKeys, // [],
             redirect: false,
             dealer_id: '',
 
@@ -119,6 +119,12 @@ class DealerList extends Component {
 
     componentDidUpdate(prevProps) {
 
+        // if (this.props.expandedRowsKey !== prevProps.expandedRowsKey) {
+        //     this.setState({
+        //         expandedRowKeys: this.props.expandedRowsKey
+        //     })
+        // }
+        
         if (this.props !== prevProps) {
             this.setState({
                 columns: this.props.columns,
@@ -206,6 +212,7 @@ class DealerList extends Component {
     renderList(list) {
         data = [];
         list.map((dealer, index) => {
+            // console.log('dealer list is: ', dealer.dealer_name)
             // console.log('dealer.account_status is: ', dealer.account_status);
             const dealer_status = (dealer.account_status === "suspended") ? "Activate" : "Suspend";
             const button_type = (dealer_status === "Activate") ? "default" : "danger";
@@ -222,7 +229,7 @@ class DealerList extends Component {
                         onClick={() => (dealer.unlink_status === 0) ? showConfirm(this, dealer.dealer_id, this.props.deleteDealer, 'DELETE') : showConfirm(this, dealer.dealer_id, this.props.undoDealer, 'UNDELETE')}>
                         {(dealer.unlink_status === 0) ? <div>{convertToLang(this.props.translation[Button_Delete], 'DELETE')} </div> : <div> {convertToLang(this.props.translation[Button_Undo], "UNDELETE")} </div>}
                     </Button>
-                    <Button type="primary" style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => showConfirm(this, dealer, this.props.updatePassword, 'RESET PASSWORD')} >{convertToLang(this.props.translation[Button_passwordreset], "Password Reset")}</Button>
+                    <Button type="primary" style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => showConfirm(this, dealer, this.props.updatePassword, 'RESET PASSWORD', dealer.dealer_name)} >{convertToLang(this.props.translation[Button_passwordreset], "Password Reset")}</Button>
                     {(this.props.user.type === ADMIN) ?
                         <Button style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => { }} >{convertToLang(this.props.translation[Button_Connect], "Connect")}</Button>
                         :
@@ -288,7 +295,7 @@ class DealerList extends Component {
     }
 }
 
-function showConfirm(_this, id, action, btn_title) {
+function showConfirm(_this, id, action, btn_title, name = "") {
     let title_Action = '';
     if (btn_title == 'SUSPEND') {
         title_Action = convertToLang(_this.props.translation[Button_Suspend], "SUSPEND ");
@@ -309,7 +316,7 @@ function showConfirm(_this, id, action, btn_title) {
         value = value;
     }
     confirm({
-        title: convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ") + title_Action + convertToLang(_this.props.translation[OF_THIS], " of this ") + value + ' ?',
+        title: `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[OF_THIS], " of this ")}  ${value} ${name ? `(${name})` : ""} ?`,
         onOk() {
             return new Promise((resolve, reject) => {
                 setTimeout(Math.random() > 0.5 ? resolve : reject);
@@ -323,7 +330,7 @@ function showConfirm(_this, id, action, btn_title) {
         },
         okText: convertToLang(_this.props.translation[Button_Ok], "Ok"),
         cancelText: convertToLang(_this.props.translation[Button_Cancel], "Cancel"),
-        onCancel() { },
+        onCancel() {},
     });
 }
 export default class Tab extends Component {
@@ -349,6 +356,12 @@ export default class Tab extends Component {
     }
 
     componentDidUpdate(prevProps) {
+
+        // if (this.props.expandedRowsKey !== prevProps.expandedRowsKey) {
+        //     this.setState({
+        //         expandedRowKeys: this.props.expandedRowsKey
+        //     })
+        // }
 
         if (this.props !== prevProps) {
 

@@ -19,7 +19,8 @@ import {
     GET_PARENT_PACKAGES,
     PACKAGE_PERMSSION_SAVED,
     DELETE_PACKAGE,
-    EDIT_PACKAGE
+    EDIT_PACKAGE,
+    RESYNC_IDS
 } from "../../constants/ActionTypes";
 import { message, Modal } from "antd";
 
@@ -122,6 +123,14 @@ export default (state = initialState, action) => {
                 ...state,
                 prices: state.pricesCopy,
                 isPriceChanged: false
+            }
+        }
+        case RESYNC_IDS: {
+            success({
+                title: "ID's data Refreshed successfully",
+            });
+            return {
+                ...state
             }
         }
 

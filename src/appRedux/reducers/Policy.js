@@ -6,10 +6,10 @@ import {
     GET_DEALER_APPS,
     HANDLE_CHECK_SYSTEM_PERMISSIONS,
     SAVE_POLICY,
-    PERMSSION_SAVED,
+    PERMISSION_SAVED,
     HANDLE_CHECK_ALL_APP_POLICY,
     HANDLE_POLICY_STATUS,
-    POLICY_PERMSSION_SAVED,
+    POLICY_PERMISSION_SAVED,
     EDIT_POLICY,
     SAVE_POLICY_CHANGES,
     GET_PAGINATION,
@@ -20,7 +20,8 @@ import {
     CHECK_TOGGLE_BUTTONS,
     RESET_POLICY,
     RESET_ADD_POLICY_FORM,
-    HANDLE_APPS_GOTTED
+    HANDLE_APPS_GOTTED,
+    GET_SYSTEM_PERMISSIONS
 } from "../../constants/ActionTypes";
 import {
     POLICY_NAME,
@@ -47,14 +48,15 @@ const initialState = {
     isloading: true,
     copyPolicies: [],
     selectedOptions: [],
-    options: [POLICY_NAME, POLICY_NOTE, ],
+    options: [POLICY_NAME, POLICY_NOTE,],
     allExtensions: [],
     appPermissions: [],
     allExtensionsCopy: [],
     appPermissionsCopy: [],
-    systemPermissions: { "wifi_status": false, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false },
-    systemPermissionsCopy: { "wifi_status": false, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false },
-    systemPermissionsdump: { "wifi_status": false, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false },
+
+    systemPermissions: [],
+    systemPermissionsCopy: [],
+    systemPermissionsDump: [],
 
     guestAlldealerApps: false,
     encryptedAlldealerApps: false,
@@ -105,6 +107,23 @@ export default (state = initialState, action) => {
             }
         }
 
+        case GET_APPS_PERMISSIONS: {
+            // console.log('data permissions', action.payload)
+            return {
+                ...state,
+                appPermissions: action.payload.appPermissions,
+                allExtensions: action.payload.extensions,
+                appPermissionsCopy: JSON.parse(JSON.stringify(action.payload.appPermissions)),
+                allExtensionsCopy: JSON.parse(JSON.stringify(action.payload.extensions)),
+            }
+        }
+
+        case GET_SYSTEM_PERMISSIONS: {
+            return {
+                ...state,
+                systemPermissions: action.payload.sysPermissions
+            }
+        }
         case HANDLE_APPS_GOTTED: {
             return {
                 ...state,
@@ -112,19 +131,7 @@ export default (state = initialState, action) => {
             }
         }
 
-        case GET_APPS_PERMISSIONS: {
-            // console.log('data permissions', action.payload)
-            return {
-                ...state,
-                appPermissions: action.payload.appPermissions,
-                allExtensions: action.payload.extensions,
-                systemPermissions: initialState.systemPermissionsdump,
-
-                appPermissionsCopy: JSON.parse(JSON.stringify(action.payload.appPermissions)),
-                allExtensionsCopy: JSON.parse(JSON.stringify(action.payload.extensions)),
-                systemPermissionsCopy: JSON.parse(JSON.stringify(initialState.systemPermissionsdump))
-            }
-        }
+        
 
         case GET_PAGINATION: {
             return {
@@ -282,14 +289,15 @@ export default (state = initialState, action) => {
 
         case HANDLE_CHECK_SYSTEM_PERMISSIONS: {
 
-            let changedState = state.systemPermissions;
-            //  console.log(changedState[action.payload.key], 'REDUCER INS PERMISDFAO', action.payload.key)   
-            changedState[action.payload.key] = action.payload.value
-            state.systemPermissions = changedState;
-            // console.log(changedState, 'relst')
+            let changeSysPermissions = state.systemPermissions;
+
+            let index  = changeSysPermissions.findIndex(sysPermission=>sysPermission.setting_name === action.payload.key);
+            //  console.log(changeSysPermissions[action.payload.key], 'REDUCER INS PERMISDFAO', action.payload.key)   
+            changeSysPermissions[index].setting_status = action.payload.value
+            // console.log(changeSysPermissions, 'relst')
             return {
                 ...state,
-                systemPermissions: { ...state.systemPermissions },
+                systemPermissions: [ ...changeSysPermissions ],
             }
         }
 
@@ -355,9 +363,10 @@ export default (state = initialState, action) => {
                     }
                     // }
                 } else if (stateToUpdate === 'controls') {
-                    // console.log(changedState[rowId][stateToUpdate][key], 'changed 0', action.payload.value)
-
-                    changedState[rowId][stateToUpdate][key] = action.payload.value;
+                    console.log('key', key)
+                    let index = changedState[rowId][stateToUpdate].findIndex(control=> control.setting_name === key);
+                    console.log("index", index)
+                    changedState[rowId][stateToUpdate][index].setting_status = action.payload.value;
                 }
 
                 changedState[rowId]['isChangedPolicy'] = true;
@@ -385,7 +394,7 @@ export default (state = initialState, action) => {
                     changedState.splice(index, 1);
                     success({
                         // title: 'Policy Deleted Successfully',
-                        title:  convertToLang(action.translation[POLICY_DELETED_SUCCESSFULLY], "Policy Deleted Successfully"),
+                        title: convertToLang(action.translation[POLICY_DELETED_SUCCESSFULLY], "Policy Deleted Successfully"),
                     });
 
                 } else if (action.payload.key === 'status') {
@@ -644,7 +653,7 @@ export default (state = initialState, action) => {
             }
         }
 
-        case POLICY_PERMSSION_SAVED: {
+        case POLICY_PERMISSION_SAVED: {
             // console.log("dasdasdad");
             success({
                 title: action.payload

@@ -1,5 +1,5 @@
 // APP Constants
-export const VERSION = '3.2'
+export const VERSION = '4.1'
 
 // ACL
 export const ADMIN = "admin";
@@ -15,6 +15,8 @@ export const DEVICE_TRIAL = "Trial";
 export const DEVICE_SUSPENDED = "Suspended";
 export const DEVICE_EXPIRED = "Expired";
 export const DEVICE_UNLINKED = "Unlinked";
+export const DEVICE_TRANSFERED = "Transfered";
+export const DEVICE_FLAGGED = "Flagged";
 export const DEVICE_PENDING_ACTIVATION = "Pending activation";
 export const DEVICE_PRE_ACTIVATION = "Pre-activated";
 
@@ -36,10 +38,12 @@ export const APPS = 'apps';
 export const SET_GUEST_PASSWORD = "Set.Guest.Password.id"; // Set Guest Password
 export const SET_ENCRYPTED_PASSWORD = 'Set.Encrypted.Password.id'; // Set Encrypted Password
 export const SET_DURESS_PASSWORD = 'Set.Duress.Password.id'; // Set Duress Password
+export const RESET_DURESS_PASSWORD = 'Reset.Duress.Password.id'; // Reset Duress Password
 export const CHANGE_ADMIN_PANEL_CODE = "Change.Admin.Panel.Code.id"; // Change Admin Panel Code
 
 export const APPLICATION_PERMISION = 'application.permission.id'; // Application Permission
 export const SECURE_SETTING_PERMISSION = 'secure.settings.permission.id'; // Secure Settings Permission
+export const ANDROID_SETTING_PERMISSION = 'android.settings.permission.id'; // Android Settings Permission
 export const SECURE_SETTINGS = 'secure.settings.id'; // Secure Settings
 export const SYSTEM_PERMISSION = 'system.permission.id';// System Permission
 export const MANAGE_PASSWORDS = 'manage.passwords.id'; // Manage Password
@@ -58,7 +62,7 @@ export const POLICY = 'policy';
 export const SELECT_POLICY = "Select.Policy.id"; // Select Policy
 
 // Constant Package Names
-export const Main_SETTINGS = 'com.android.settingsSettings';
+export const Main_SETTINGS = 'com.android.settings';
 export const SECURE_SETTING = 'com.secureSetting.SecureSettingsMainSecure Settings';
 // export const SYSTEM_CONTROLS_UNIQUE = 'com.secure.systemcontrolSystem Control';
 
@@ -174,6 +178,7 @@ export const ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST = "Are.you.sure.you.wa
 export const PROFILE_NAME = "PROFILE.NAME.id"; // PROFILE NAME
 
 export const GUEST_ALL = "Guest.All.id"; // Guest All
+export const SHOW_ALL = "Show.All.id"; // Show All
 export const Encrypted_ALL = "Encrypted.All.id"; // Encrypted All
 export const Enable_ALL = "Enable.All.id"; // Enable All
 // export const GUEST_ALL = "Guest.All.id"; // Guest All

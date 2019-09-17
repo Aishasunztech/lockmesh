@@ -32,6 +32,8 @@ import {
 import { Button_Add_User, Button_submit, Button_Cancel } from '../../../constants/ButtonConstants';
 import { LABEL_DATA_PGP_EMAIL, DUMY_TRANS_ID, LABEL_DATA_CHAT_ID, LABEL_DATA_SIM_ID } from '../../../constants/LabelConstants';
 
+const { TextArea } = Input;
+
 class EditDevice extends Component {
 
     constructor(props) {
@@ -82,8 +84,11 @@ class EditDevice extends Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
+                // console.log('edit device form values are: ', values);
                 // console.log("Device List", values)
                 values.prevPGP = this.props.device.pgp_email;
+                values.prevChatID = this.props.device.chat_id;
+                values.prevSimId = this.props.device.sim_id;
                 values.finalStatus = this.props.device.finalStatus;
                 // console.log("Device Details ", values)
                 this.props.editDeviceFunc(values);
@@ -99,10 +104,6 @@ class EditDevice extends Component {
         this.props.getChatIDs();
         this.props.getPGPEmails();
         this.props.getUserList();
-        // this.setState({
-        //     addNewUserModal: false
-        // })
-
     }
 
 
@@ -332,6 +333,7 @@ class EditDevice extends Component {
 
 
     render() {
+        // console.log('check edit device: ', this.props.device);
         // console.log('props of coming', this.props.device);
         const { visible, loading, isloading, addNewUserValue } = this.state;
         const { users_list } = this.props;
@@ -361,6 +363,7 @@ class EditDevice extends Component {
                             <Spin />
                         </div>
                         :
+                        // (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? null :
                         <Fragment>
                             <Form.Item
                                 label={convertToLang(this.props.translation[USER_ID], "USER ID")}
@@ -370,15 +373,20 @@ class EditDevice extends Component {
 
 
                                 {this.props.form.getFieldDecorator('user_id', {
-                                    initialValue: this.props.new ? "" : this.state.addNewUserModal ? lastObject.user_id : this.props.device.user_id,
-                                    // rules: [{
-                                    //     required: true, message: convertToLang(this.props.translation[USER_ID_IS_REQUIRED], "User ID is Required !"),
-                                    // }]
+                                    initialValue: this.state.addNewUserModal ? lastObject.user_id : this.props.device.user_id,
+
+                                    rules: [
+                                        (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? {} :
+                                            {
+                                                required: true, message: convertToLang(this.props.translation[USER_ID_IS_REQUIRED], "User ID is Required !"),
+                                            }
+                                    ]
                                 })(
                                     <Select
                                         className="pos_rel"
                                         setFieldsValue={this.state.addNewUserModal ? lastObject.user_id : addNewUserValue}
                                         showSearch
+                                        disabled={(this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? true : false}
                                         placeholder={convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}
                                         optionFilterProp="children"
                                         onChange={this.handleUserChange}
@@ -406,7 +414,7 @@ class EditDevice extends Component {
                                     //     Add User
                                     // </Button> */}
                                 )}
-                                {/* {(this.props.user.type === ADMIN) ? null :
+                                {(this.props.user.type === ADMIN || (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1')) ? null :
                                     <Button
                                         className="add_user_btn"
                                         type="primary"
@@ -473,13 +481,10 @@ class EditDevice extends Component {
                         wrapperCol={{ span: 14 }}
                     >
                         {this.props.form.getFieldDecorator('pgp_email', {
-                            initialValue: this.props.device.pgp_email,
-                            rules: [
-
-                                {
-                                    type: 'email', message: convertToLang(this.props.translation[Not_valid_Email], 'The input is not valid E-mail!'),
-                                }
-                            ],
+                            initialValue: (this.props.device.pgp_email === 'N/A') ? "" : this.props.device.pgp_email,
+                            rules: [{
+                                type: 'email', message: convertToLang(this.props.translation[Not_valid_Email], 'The input is not valid E-mail!'),
+                            }],
                         })(
                             <Select
                                 showSearch
@@ -494,7 +499,7 @@ class EditDevice extends Component {
                                 disabled={this.state.disablePgp}
                             >
                                 {this.props.pgp_emails.map((pgp_email) => {
-                                    return (<Select.Option key={pgp_email.id} value={pgp_email.pgp_email}>{pgp_email.pgp_email}</Select.Option>)
+                                    return (<Select.Option key={pgp_email.id} value={pgp_email.pgp_email.trim()}>{pgp_email.pgp_email.trim()}</Select.Option>)
                                 })}
                             </Select>
                             // <Input />
@@ -533,7 +538,7 @@ class EditDevice extends Component {
                         wrapperCol={{ span: 14 }}
                     >
                         {this.props.form.getFieldDecorator('sim_id', {
-                            initialValue: this.props.device.sim_id
+                            initialValue: (this.props.device.sim_id === 'N/A') ? "" : this.props.device.sim_id,
                         })(
                             <Select
                                 // className="pos_rel"
@@ -672,18 +677,6 @@ class EditDevice extends Component {
                         <Fragment>
 
                             <Form.Item
-                                label={convertToLang(this.props.translation[Device_Note], "Note ")}
-                                labelCol={{ span: 8, xs: 24, sm: 8 }}
-                                wrapperCol={{ span: 14, md: 14, xs: 24 }}
-                            >
-                                {this.props.form.getFieldDecorator('note', {
-                                    initialValue: this.props.device.note,
-                                })(
-                                    <Input />
-                                )}
-
-                            </Form.Item>
-                            <Form.Item
                                 label={convertToLang(this.props.translation[Device_Valid_For], "VALID FOR(DAYS)  ")}
                                 labelCol={{ span: 8, xs: 24, sm: 8 }}
                                 wrapperCol={{ span: 14, md: 14, xs: 24 }}
@@ -748,6 +741,25 @@ class EditDevice extends Component {
                         </Fragment>
 
                     }
+
+                    <Form.Item
+                        label={convertToLang(this.props.translation[Device_Note], "Note ")}
+                        labelCol={{ span: 8, xs: 24, sm: 8 }}
+                        wrapperCol={{ span: 14, md: 14, xs: 24 }}
+                    >
+                        {this.props.form.getFieldDecorator('note', {
+                            initialValue: this.props.device.note,
+                        })(
+                            // <Input />
+                            <TextArea
+                                // value={value}
+                                // onChange={this.onChange}
+                                // placeholder="Controlled autosize"
+                                autosize={{ minRows: 3, maxRows: 5 }}
+                            />
+                        )}
+
+                    </Form.Item>
 
                     <Form.Item className="edit_ftr_btn11"
                         wrapperCol={{

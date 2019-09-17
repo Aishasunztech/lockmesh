@@ -80,27 +80,25 @@ class Customizer extends Component {
     if (varname) vars[varname] = color;
     // console.log("vars: ", vars)
     if (window.less.modifyVars) {
-    window.less
-      .modifyVars(vars)
-      .then(() => {
-        success({
-          title: `Theme updated successfully`,
+      window.less
+        .modifyVars(vars)
+        .then(() => {
+          success({
+            title: `Theme updated successfully`,
+          });
+          this.setState({ vars });
+          localStorage.setItem("app-theme", JSON.stringify(vars));
+        })
+        .catch(err => {
+          error({
+            title: `Failed to update theme`,
+          });
         });
-        this.setState({ vars });
-        localStorage.setItem("app-theme", JSON.stringify(vars));
-      })
-      .catch(err => {
-        error({
-          title: `Failed to update theme`,
-        });
-      });
     } else {
-      error({
-        title: `Internet Problem`,
-      });
+      message.error(`Check Please your internet connection is poor`);
     }
   };
- 
+
   toggleCustomizer = () => {
     this.setState(previousState => (
       {
@@ -158,17 +156,15 @@ class Customizer extends Component {
     } finally {
       this.state = { vars, initialValue, isCustomizerOpened: false };
       if (window.less.modifyVars) {
-      window.less
-        .modifyVars(vars)
-        .then(() => {
-        })
-        .catch(error => {
-          message.error(`Failed to update theme`);
-        });
+        window.less
+          .modifyVars(vars)
+          .then(() => {
+          })
+          .catch(error => {
+            message.error(`Failed to update theme`);
+          });
       } else {
-        error({
-          title: `Internet Problem`,
-        });
+        message.error(`Check Please your internet connection is poor`);
       }
     }
   }
@@ -176,7 +172,7 @@ class Customizer extends Component {
   render() {
 
     return (
-     <div></div>
+      <div></div>
     );
   }
 }

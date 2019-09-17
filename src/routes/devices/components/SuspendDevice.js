@@ -15,7 +15,7 @@ export default class SuspendDevice extends Component {
 
     handleSuspendDevice = (device, refresh) => {
         // console.log('device', device)
-        const title = (device.account_status === "suspended") ? convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_ACTIVATE_THE_DEVICE], "Are you sure, you want to activate the device ") + device.device_id + " ?" : convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_SUSPEND_THE_DEVICE], "Are you sure, you want to suspend the device ") + device.device_id + "?";
+        const title = (device.account_status === "suspended") ? convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_SUSPEND_THE_DEVICE], "Are you sure, you want to suspend the device ") + device.device_id + " ?" : convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_SUSPEND_THE_DEVICE], "Are you sure, you want to suspend the device ") + device.device_id + "?";
         this.confirm({
             title: title,
             content: '',
@@ -24,7 +24,7 @@ export default class SuspendDevice extends Component {
             onOk: (() => {
                 this.props.suspendDevice(device);
                 if (window.location.pathname.split("/").pop() !== 'devices') {
-                    refresh(device.device_id);
+                    // refresh(device.device_id);
                 }
             }),
             onCancel() { },

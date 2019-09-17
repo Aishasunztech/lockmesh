@@ -13,6 +13,7 @@ import AppMarket from "./AppMarket";
 import socket from "./Socket";
 import SideBar from "./SideBar"
 import Agents from './Agent';
+import Dashboard from './Dashboard';
 
 const reducers = combineReducers({
   routing: routerReducer,
@@ -28,7 +29,8 @@ const reducers = combineReducers({
   appMarket: AppMarket,
   agents: Agents,
   socket: socket,
-  sidebar: SideBar
+  sidebar: SideBar,
+  dashboard: Dashboard
 });
 
 export default reducers;

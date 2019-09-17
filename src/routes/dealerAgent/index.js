@@ -27,6 +27,7 @@ import {
 import { dealerAgentColumns } from '../utils/columnsUtils';
 import { ADMIN } from '../../constants/Constants';
 import { Button_Confirm, Button_Cancel } from '../../constants/ButtonConstants';
+import { AGENTS_PAGE_HEADING } from '../../constants/AppFilterConstants';
 
 var copyDealerAgents = [];
 var status = true;
@@ -199,12 +200,12 @@ class DealerAgent extends Component {
         confirm({
             title: convertToLang(_this.props.translation[WARNING], "WARNING!"),
             content: convertToLang(_this.props.translation[WARNING], "Are you sure, you want to delete Agent?"),
-            okText:  convertToLang(this.props.translation[Button_Confirm], "Confirm"),
+            okText: convertToLang(this.props.translation[Button_Confirm], "Confirm"),
             cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
             onOk() {
                 _this.props.deleteAgent(agentID);
             },
-            onCancel() { 
+            onCancel() {
 
             },
         });
@@ -215,12 +216,12 @@ class DealerAgent extends Component {
         confirm({
             title: convertToLang(_this.props.translation[WARNING], "WARNING!"),
             content: convertToLang(_this.props.translation[WARNING], "Are you sure, you want to change password?"),
-            okText:  convertToLang(this.props.translation[Button_Confirm], "Confirm"),
+            okText: convertToLang(this.props.translation[Button_Confirm], "Confirm"),
             cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
             onOk() {
                 _this.props.resetAgentPwd(agentID);
             },
-            onCancel() { 
+            onCancel() {
 
             },
         });
@@ -256,10 +257,11 @@ class DealerAgent extends Component {
                     // if we want to disable button use disableAddButton
 
                     isAddButton={this.props.user.type !== ADMIN}
+                    isAddAgentButton={true}
                     disableAddButton={this.props.user.type === ADMIN}
                     addButtonText={convertToLang(this.props.translation['button.add.agent'], "Add Agent")}
                     handleAppFilterAddButton={this.handleAddUserModal}
-
+                    pageHeading={convertToLang(this.props.translation[AGENTS_PAGE_HEADING], "Agents")}
                     // toLink="add-device"
 
                     // language translation
@@ -274,6 +276,7 @@ class DealerAgent extends Component {
                     agentStatusHandler={this.agentStatusHandler}
                     handleDeleteAgent={this.handleDeleteAgent}
                     handleResetPwd={this.handleResetPwd}
+                    user={this.props.user}
                 />
                 <AddAgent
                     addAgentModal={this.state.addAgentModal}

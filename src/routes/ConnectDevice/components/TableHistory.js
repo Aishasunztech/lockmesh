@@ -18,12 +18,6 @@ import { Button_Apply } from '../../../constants/ButtonConstants';
 import { HISTORY_DATE } from '../../../constants/DeviceConstants';
 
 
-// applyProfile = (app_list) => {
-//     this.props.loadDeviceProfile(app_list);
-//     this.props.showHistoryModal(false, '');
-// }
-
-
 
 class TableHistory extends Component {
     constructor(props) {
@@ -49,8 +43,9 @@ class TableHistory extends Component {
     }
 
     renderList = (histories, type, callback) => {
+        // console.log("list", histories);
         return histories.map((history) => {
-            // console.log("list", history.extenssions);
+          
 
             return ({
                 key: history.id,
@@ -75,7 +70,7 @@ class TableHistory extends Component {
                 ),
                 app_list: history.app_list,
                 controls: history.controls,
-                secure_apps: (type === "profile") ? history.permissions : history.secure_apps,
+                secure_apps: (type === "profile") ? history.secure_apps : history.secure_apps,
                 push_apps: history.push_apps,
                 passwords: history.passwords
             })
@@ -120,12 +115,14 @@ class TableHistory extends Component {
                 pagination={false}
                 onExpand={this.onExpandRow}
                 expandedRowRender={record => {
-                    // console.log("record", record);
+                    console.log("record", record, this.props.type);
 
                     let app_list = (record.app_list !== undefined && record.app_list !== null && record.app_list !== '') ? record.app_list : [];
                     let extensions = (record.secure_apps !== undefined && record.secure_apps !== null && record.secure_apps !== '') ? record.secure_apps : [];
 
-                    let controls = (record.controls !== undefined && record.controls !== null && record.controls !== '') ? (Object.entries(record.controls).length > 0 && record.controls.constructor === Object) ? record.controls : [] : [];
+                    let controls = (record.controls && record.controls.length) ? record.controls: [];
+
+                    console.log("table history controls: ", controls);
                     let push_apps = record.push_apps === null || record.push_apps === 'null' ? [] : record.push_apps;
                     let passwords = record.passwords;
                     // console.log("app_list: ", app_list);

@@ -94,14 +94,10 @@ class Customizer extends Component {
           localStorage.setItem("app-theme", JSON.stringify(vars));
         })
         .catch(err => {
-          error({
-            title: `Failed to update theme`,
-          });
+          message.error(`Failed to update theme`);
         });
     } else {
-      error({
-        title: `Internet Problem`,
-      });
+      message.error(`Check Please your internet connection is poor`);
     }
   };
   getColorPicker = (varName) => (
@@ -139,11 +135,15 @@ class Customizer extends Component {
   resetTheme = () => {
     localStorage.setItem('app-theme', '{}');
     this.setState({ vars: this.state.initialValue });
-    window.less
-      .modifyVars(this.state.initialValue)
-      .catch(error => {
-        message.error(`Failed to reset theme`);
-      });
+    if (window.less.modifyVars) {
+      window.less
+        .modifyVars(this.state.initialValue)
+        .catch(error => {
+          message.error(`Failed to reset theme`);
+        });
+    } else {
+      message.error(`Check Please your internet connection is poor`);
+    }
   };
   toggleCustomizer = () => {
     this.setState(previousState => (
@@ -406,13 +406,17 @@ class Customizer extends Component {
       vars = Object.assign({}, initialValue, JSON.parse(localStorage.getItem('app-theme')));
     } finally {
       this.state = { vars, initialValue, isCustomizerOpened: false };
-      window.less
-        .modifyVars(vars)
-        .then(() => {
-        })
-        .catch(error => {
-          message.error(`Failed to update theme`);
-        });
+      if (window.less.modifyVars) {
+        window.less
+          .modifyVars(vars)
+          .then(() => {
+          })
+          .catch(error => {
+            message.error(`Failed to update theme`);
+          });
+      } else {
+        message.error(`Check Please your internet connection is poor`);
+      }
     }
   }
 

@@ -1086,7 +1086,7 @@ class Account extends Component {
                                                 <Card className="manage_ac" style={{ borderRadius: 12 }}>
                                                     <div>
                                                         <div>
-                                                            <h2 style={{ textAlign: "center", width: "75%", margin: "0 auto" }}>
+                                                            <h2 style={{ textAlign: "center", width: "80%", margin: "0 auto" }}>
                                                                 <Icon type="lock" className="lock_icon2" />
                                                                 {convertToLang(this.props.translation[BACKUP_DATABASE], "BACKUP DATABASE")} </h2>
                                                             <Divider className="mb-0" />

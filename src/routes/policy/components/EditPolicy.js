@@ -15,7 +15,14 @@ import {
 import styles from './policy.css';
 import RestService from '../../../appRedux/services/RestServices'
 import { BASE_URL } from '../../../constants/Application';
-import { POLICY_SAVE_CONFIRMATION, PLEASE_INPUT_POLICY_NAME, POLICY_APP_NAME, POLICY_NOTE, POLICY_COMMAND, NAME } from '../../../constants/PolicyConstants';
+import {
+    POLICY_SAVE_CONFIRMATION,
+    PLEASE_INPUT_POLICY_NAME,
+    POLICY_APP_NAME,
+    POLICY_NOTE,
+    POLICY_COMMAND,
+    NAME
+} from '../../../constants/PolicyConstants';
 import { Button_Save, Button_Cancel, Button_AddApps, Button_Add } from '../../../constants/ButtonConstants';
 import { convertToLang } from '../../utils/commonUtils';
 import { Tab_POLICY_SELECTED_APPS, Guest, ENCRYPTED, ENABLE, Tab_SECURE_SETTING } from '../../../constants/TabConstants';
@@ -338,65 +345,27 @@ class EditPolicy extends Component {
 
 
     renderSystemPermissions = () => {
+
         const { controls } = this.state.editAblePolicy;
 
         if (controls) {
-
-            return [{
-                rowKey: 'wifi_status',
-                name: 'Wifi',
-                action: (
-                    <Switch
-                        checked={controls.wifi_status}
-                        onClick={(e) => {
-                            return this.props.handleEditPolicy(e, 'wifi_status', '', 'controls', this.state.editAblePolicy.id)
-                        }}
-                        size="small"
-                    />
-                )
-            }, {
-                rowKey: 'bluetooth_status',
-                name: 'Bluetooth',
-                action: (
-                    <Switch
-                        checked={controls.bluetooth_status}
-                        onClick={(e) => this.props.handleEditPolicy(e, 'bluetooth_status', '', 'controls', this.state.editAblePolicy.id)}
-                        size="small"
-                    />
-                )
-            }, {
-                rowKey: 'screenshot_status',
-                name: 'ScreenShot',
-                action: (
-                    <Switch
-                        checked={controls.screenshot_status}
-                        onClick={(e) => this.props.handleEditPolicy(e, 'screenshot_status', '', 'controls', this.state.editAblePolicy.id)}
-                        size="small"
-                    />
-                )
-            }, {
-                rowKey: 'location_status',
-                name: 'Location',
-                action: (
-                    <Switch
-                        checked={controls.location_status}
-                        onClick={(e) => this.props.handleEditPolicy(e, 'location_status', '', 'controls', this.state.editAblePolicy.id)}
-                        size="small"
-                    />
-                )
-            }, {
-                rowKey: 'hotspot_status',
-                name: 'Hotspot',
-                action: (
-                    <Switch
-                        checked={controls.hotspot_status}
-                        onClick={(e) => this.props.handleEditPolicy(e, 'hotspot_status', '', 'controls', this.state.editAblePolicy.id)}
-                        size="small"
-                    />
-                )
-
-            }]
+            return controls.map(control => {
+                return {
+                    rowKey: control.setting_name,
+                    name: control.setting_name,
+                    action: (
+                        <Switch
+                            checked={(control.setting_status === 1 || control.setting_status === true) ? true : false}
+                            onClick={(e) => {
+                                return this.props.handleEditPolicy(e, control.setting_name, '', 'controls', this.state.editAblePolicy.id)
+                            }}
+                            size="small"
+                        />
+                    )
+                }
+            })
         }
+
     }
 
     SavePolicyChanges = () => {
@@ -492,27 +461,35 @@ class EditPolicy extends Component {
         let response = true
         if (/[^A-Za-z \d]/.test(value)) {
             callback("Please insert only alphabets and numbers.")
-        } else {
-            response = await RestService.checkPolicyName(value, this.props.editAblePolicyId).then((response) => {
-                if (RestService.checkAuth(response.data)) {
-                    if (response.data.status) {
-                        return true
-                    } else {
-                        return false
-                    }
-                }
-            });
+        }
+        else {
+            let substring = value.substring(0, 1);
 
-            if (response) {
-                callback()
-                this.props.form.setFieldsValue({
-                    // policy_name: value,
-                    // isPolicy_name: 'success',
-                    command_name: '#' + value.replace(/ /g, '_'),
-                    // policy_name_error: ''
-                })
+            if (substring === ' ') {
+                callback("Policy name cannot start with blank space.")
             } else {
-                callback("Policy name already taken please use another name.")
+
+                response = await RestService.checkPolicyName(value, this.props.editAblePolicyId).then((response) => {
+                    if (RestService.checkAuth(response.data)) {
+                        if (response.data.status) {
+                            return true
+                        }
+                        else {
+                            return false
+                        }
+                    }
+                });
+                if (response) {
+                    callback()
+                    this.props.form.setFieldsValue({
+                        // policy_name: value,
+                        // isPolicy_name: 'success',
+                        command_name: '#' + value.replace(/ /g, '_'),
+                        // policy_name_error: ''
+                    })
+                } else {
+                    callback("Policy name already taken please use another name.")
+                }
             }
         }
 
@@ -590,7 +567,7 @@ class EditPolicy extends Component {
                                         </Col>
                                         <Col span={3} className="">
                                             <Avatar src={`${BASE_URL}users/getFile/${this.state.main_extension.icon}`} style={{ width: "30px", height: "30px" }} />
-                                            {/* <img src={require("assets/images/setting.png")} /> */}
+                                            {/* <img src={require("assets/images/secure_setting.png")} /> */}
                                         </Col>
                                         <Col span={15} className="pl-0">
                                             <h5 style={{ marginTop: '9px' }}>{convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], "Secure Settings Permission")}</h5>

@@ -248,7 +248,7 @@ class Apk extends Component {
                                     cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                                     onCancel={this.handleCancel}
                                     className="d_tool_pup"
-                                    width="42%"
+                                    
                                 >
                                     <Row className="d_t_m">
                                         <h4 style={{ lineHeight: '30px', marginBottom: 0 }}><Markup content={convertToLang(this.props.translation[DT_MODAL_BODY], "Neutral Launcher (BYOD) <b>(Android v8+)</b>")} ></Markup></h4>

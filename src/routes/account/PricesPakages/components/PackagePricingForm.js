@@ -44,31 +44,28 @@ class PackagePricingForm extends Component {
     }
 
 
-    setPrice = (fieldName, is_pkg_feature = false, pkg_feature_value = '') => {
+    setPrice = (fieldName, is_pkg_feature = false, pkg_feature_value = '', e) => {
         // let value = e.target.value;
         // console.log(fieldName, is_pkg_feature, pkg_feature_value);
         let value = ''
         if (fieldName) {
-            if (fieldName === 'pkgPrice' && value < 0) {
-            } else {
-                if (is_pkg_feature) {
-                    if (pkg_feature_value !== '' && fieldName) {
-                        value = pkg_feature_value;
 
-                        this.props.setPkgDetail(pkg_feature_value, fieldName, is_pkg_feature);
-                    }
-                } else {
-                    value = this.props.form.getFieldValue(fieldName)
-                    // console.log('fiels name', fieldName, 'value', value)
-                    if (value !== '' && fieldName) {
-                        this.props.setPkgDetail(value, fieldName, is_pkg_feature);
-                    }
+            if (is_pkg_feature) {
+                if (pkg_feature_value !== '' && fieldName) {
+                    value = pkg_feature_value;
+                    this.props.setPkgDetail(pkg_feature_value, fieldName, is_pkg_feature);
                 }
-                this.setState({
-                    [fieldName]: value
-                })
+            } else {
+                // value = this.props.form.getFieldValue(fieldName)
+                console.log('fiels name', fieldName, 'value', value)
+                if (e !== '' && fieldName) {
+                    this.props.setPkgDetail(e, fieldName, is_pkg_feature);
+                }
+                value = e
             }
-
+            this.setState({
+                [fieldName]: value
+            })
         }
     }
 
@@ -125,13 +122,13 @@ class PackagePricingForm extends Component {
                                         validator: this.PackageNameChange,
                                     }
                                 ],
-                            })(<Input />)}
+                            })(<Input onChange={(e => this.setPrice('pkgName', '', '', e.target.value))} />)}
                         </Form.Item>
                     </Col>
                     <Col span={4}>
-                        <Button type="primary" onClick={() => this.setPrice('pkgName')}> {convertToLang(this.props.translation[Button_SET], "SET")} </Button>
+                        {/* <Button type="primary" onClick={() => this.setPrice('pkgName')}> {convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
                     </Col>
-                    <Col span={6}>
+                    <Col span={7}>
                         <h4 className='priceText'>{this.state.pkgName}</h4>
                     </Col>
                 </Row>
@@ -149,9 +146,9 @@ class PackagePricingForm extends Component {
                             })(<Select
                                 showSearch
                                 style={{ width: "100%" }}
-                                placeholder={convertToLang(this.props.translation[SELECT_PRICE], "SELECT PRICE")}
+                                placeholder={convertToLang(this.props.translation[SELECT_PRICE], "SELECT TERM")}
                                 optionFilterProp="children"
-                                // onChange={onChange}
+                                onChange={(pkgTerms => this.setPrice('pkgTerms', '', '', pkgTerms))}
                                 // onFocus={onFocus}
                                 // onBlur={onBlur}
                                 // onSearch={onSearch}
@@ -168,7 +165,7 @@ class PackagePricingForm extends Component {
                         </Form.Item>
                     </Col>
                     <Col span={4}>
-                        <Button type="primary" onClick={() => this.setPrice('pkgTerms')}> {convertToLang(this.props.translation[Button_SET], "SET")} </Button>
+                        {/* <Button type="primary" onClick={() => this.setPrice('pkgTerms')}> {convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
                     </Col>
                     <Col span={7}>
                         <h4 className='priceText'>{this.state.pkgTerms}</h4>
@@ -185,12 +182,12 @@ class PackagePricingForm extends Component {
                                         message: 'Please Input Package Price',
                                     },
                                 ],
-                            })(<Input type='number' min={0} />)}
+                            })(<Input onChange={(e => this.setPrice('pkgPrice', '', '', e.target.value))} type='number' min={0} />)}
 
                         </Form.Item>
                     </Col>
                     <Col span={4}>
-                        <Button type="primary" onClick={() => this.setPrice('pkgPrice')} > {convertToLang(this.props.translation[Button_SET], "SET")} </Button>
+                        {/* <Button type="primary" onClick={() => this.setPrice('pkgPrice')} > {convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
                     </Col>
                     <Col span={7}>
                         <h4 className='priceText'>Price: ${this.state.pkgPrice}</h4>

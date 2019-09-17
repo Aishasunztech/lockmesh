@@ -62,8 +62,8 @@ class RegisterSimForm extends Component {
     handleICCIDValidation = (rule, value, callback) => {
         if ((value !== undefined) && value.length > 0) {
             // if (Number(value)) {
-                if (/^[a-zA-Z0-9]+$/.test(value)) {
-                if (value.length != 20) callback(`${convertToLang(this.props.translation[ICC_ID_20_LONG], "ICC ID should be 20 digits long")}  :(${value.length})`);
+            if (/^[a-zA-Z0-9]+$/.test(value)) {
+                if (value.length != 20 && value.length != 19) callback(`${convertToLang(this.props.translation[ICC_ID_20_LONG], "ICC ID should be 19 or 20 digits long")}  :(${value.length})`);
 
             } else {
                 callback(convertToLang(this.props.translation[Only_alpha_numeric], "Please insert only alphabets and numbers"));
@@ -82,6 +82,7 @@ class RegisterSimForm extends Component {
     }
 
     render() {
+        
         var deviceSimIds = [];
         deviceSimIds[0] = this.props.device.sim_id;
         // console.log(deviceSimIds)

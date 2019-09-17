@@ -1,15 +1,24 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { convertToLang } from '../../utils/commonUtils';
-
 import { Tabs, Button, Row, Col, Avatar, Input, Form, Checkbox, Icon, Steps, message, Table, Divider, Tag, Switch } from "antd";
+
+import { convertToLang } from '../../utils/commonUtils';
+import { getDealerApps } from '../../../appRedux/actions/ConnectDevice';
+import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, SECURE_SETTING, SYSTEM_CONTROLS_UNIQUE, Main_SETTINGS, APPS, POLICY_DETAILS } from '../../../constants/Constants';
+
 import AppList from "./AppList";
 import { BASE_URL } from '../../../constants/Application';
-import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, SECURE_SETTING, SYSTEM_CONTROLS_UNIQUE, Main_SETTINGS, APPS, POLICY_DETAILS } from '../../../constants/Constants';
 import styles from './policy.css';
-import { getDealerApps, } from '../../../appRedux/actions/ConnectDevice';
-import { handleCheckAppPolicy, getAppPermissions, handleChekSystemPermission, savePolicy, handleCheckAllAppPolicy } from '../../../appRedux/actions/Policy';
+
+import {
+    handleCheckAppPolicy,
+    getAppPermissions,
+    handleCheckSystemPermission,
+    savePolicy,
+    handleCheckAllAppPolicy,
+    getSystemPermissions
+} from '../../../appRedux/actions/Policy';
 import RestService from '../../../appRedux/services/RestServices'
 import { NAME, COMMAND, POLICY_NOTE, POLICY_COMMAND, PLEASE_INPUT_POLICY_NAME } from '../../../constants/PolicyConstants';
 import { Tab_SECURE_SETTING } from '../../../constants/TabConstants';
@@ -25,33 +34,7 @@ const columns = [{
     dataIndex: 'action',
     key: 'action',
 }];
-const data = [
-    {
-        name: "Wifi",
-        action: (<Switch size="small"></Switch>),
-        key: 1,
-    },
-    {
-        name: "Bluetooth",
-        action: (<Switch size="small"></Switch>),
-        key: 2,
-    },
-    {
-        name: "Screenshot",
-        action: (<Switch size="small"></Switch>),
-        key: 3,
-    },
-    {
-        name: "Location",
-        action: (<Switch size="small"></Switch>),
-        key: 4,
-    },
-    {
-        name: "Hotspot",
-        action: (<Switch size="small"></Switch>),
-        key: 4,
-    }
-];
+
 
 class AddPolicy extends Component {
     constructor(props) {
@@ -122,7 +105,7 @@ class AddPolicy extends Component {
                 let secure_apps = [];
 
                 let main_extension = JSON.parse(JSON.stringify(this.state.allExtensions.find(item => item.uniqueName === SECURE_SETTING)));
-                
+
                 if (main_extension) {
                     secure_apps = main_extension.subExtension
                 }
@@ -132,7 +115,7 @@ class AddPolicy extends Component {
                 }
 
                 delete main_extension.subExtension;
-                
+
                 if (main_extension) {
                     appPermissions.push(JSON.parse(JSON.stringify(main_extension)));
                 }
@@ -151,7 +134,7 @@ class AddPolicy extends Component {
                 this.props.getDealerApps();
                 this.props.getAppPermissions();
                 this.props.getPolicies();
-                
+
                 this.setState({
                     current: 0,
                     pushApps: [],
@@ -175,6 +158,7 @@ class AddPolicy extends Component {
     componentDidMount() {
         this.props.getDealerApps();
         this.props.getAppPermissions();
+        this.props.getSystemPermissions();
 
         let main_system_control = {};
         if (this.props.appPermissions.length) {
@@ -257,29 +241,17 @@ class AddPolicy extends Component {
     }
 
     renderSystemPermissions = () => {
+
         if (this.state.systemPermissions) {
 
-            return [{
-                rowKey: 'wifi_status',
-                name: 'Wifi',
-                action: <Switch checked={this.state.systemPermissions.wifi_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'wifi_status')} size="small" />
-            }, {
-                rowKey: 'bluetooth_status',
-                name: 'Bluetooth',
-                action: <Switch checked={this.state.systemPermissions.bluetooth_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'bluetooth_status')} size="small" />
-            }, {
-                rowKey: 'screenshot_status',
-                name: 'ScreenShot',
-                action: <Switch checked={this.state.systemPermissions.screenshot_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'screenshot_status')} size="small" />
-            }, {
-                rowKey: 'location_status',
-                name: 'Location',
-                action: <Switch checked={this.state.systemPermissions.location_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'location_status')} size="small" />
-            }, {
-                rowKey: 'hotspot_status',
-                name: 'Hotspot',
-                action: <Switch checked={this.state.systemPermissions.hotspot_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'hotspot_status')} size="small" />
-            }]
+            return this.state.systemPermissions.map(sysPermission => {
+                return {
+                    rowKey: sysPermission.setting_name,
+                    name: sysPermission.setting_name,
+                    action: <Switch checked={(sysPermission.setting_status === 1 || sysPermission.setting_status === true)?true: false} onClick={(e) => this.props.handleCheckSystemPermission(e, sysPermission.setting_name)} size="small" />
+                }
+            })
+        
         }
 
     }
@@ -288,28 +260,35 @@ class AddPolicy extends Component {
         let response = true
         if (/[^A-Za-z \d]/.test(value)) {
             callback("Please insert only alphabets and numbers.")
-        }
-        else {
-            response = await RestService.checkPolicyName(value).then((response) => {
-                if (RestService.checkAuth(response.data)) {
-                    if (response.data.status) {
-                        return true
-                    }
-                    else {
-                        return false
+        } else {
+            if (value) {
+                let substring = value.substring(0, 1);
+
+                if (substring === ' ') {
+                    callback("Policy name cannot start with blank space.")
+                } else {
+                    response = await RestService.checkPolicyName(value).then((response) => {
+                        if (RestService.checkAuth(response.data)) {
+                            if (response.data.status) {
+                                return true
+                            }
+                            else {
+                                return false
+                            }
+                        }
+                    });
+                    if (response) {
+                        callback()
+                        this.setState({
+                            policy_name: value,
+                            // isPolicy_name: 'success',
+                            disabledCommand: '#' + value.replace(/ /g, '_'),
+                            // policy_name_error: ''
+                        })
+                    } else {
+                        callback("Policy name already taken please use another name.")
                     }
                 }
-            });
-            if (response) {
-                callback()
-                this.setState({
-                    policy_name: value,
-                    // isPolicy_name: 'success',
-                    disabledCommand: '#' + value.replace(/ /g, '_'),
-                    // policy_name_error: ''
-                })
-            } else {
-                callback("Policy name already taken please use another name.")
             }
         }
 
@@ -321,7 +300,6 @@ class AddPolicy extends Component {
         this.props.form.setFieldsValue({
             command: e.target.value
         })
-
     }
 
     handleChecked = (value, key) => {
@@ -349,6 +327,7 @@ class AddPolicy extends Component {
         tabSelected++;
         this.setState({ tabSelected: String(tabSelected) })
     }
+
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -424,7 +403,7 @@ class AddPolicy extends Component {
                                 AddPolicy={true}
                                 secureSettings='allExtensions'
                                 pageType={'allExtensions'}
-                                
+
                                 translation={this.props.translation}
                             />
                         </TabPane>
@@ -468,7 +447,7 @@ class AddPolicy extends Component {
                                     {getFieldDecorator('command', {
 
                                         rules: [{
-                                            required: true, message: convertToLang(this.props.translation[PLEASE_INPUT_POLICY_NAME], "Please Input Policy Name"),
+                                            required: true, message: convertToLang(this.props.translation[PLEASE_INPUT_POLICY_NAME], "Please Input Policy Note"),
                                         }],
 
                                     })(
@@ -494,10 +473,13 @@ class AddPolicy extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
+        // getting formData
         getDealerApps: getDealerApps,
         getAppPermissions: getAppPermissions,
+        getSystemPermissions: getSystemPermissions,
+
         handleCheckAppPolicy: handleCheckAppPolicy,
-        handleChekSystemPermission: handleChekSystemPermission,
+        handleCheckSystemPermission: handleCheckSystemPermission,
         handleCheckAllAppPolicy: handleCheckAllAppPolicy,
         savePolicy: savePolicy
     }, dispatch)

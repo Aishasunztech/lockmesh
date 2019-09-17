@@ -67,7 +67,7 @@ class UserDeviceList extends Component {
             pagination: 10
 
         }
-        
+
     }
 
     // handleTableChange = (pagination, query, sorter) => {
@@ -98,9 +98,9 @@ class UserDeviceList extends Component {
                 }
             }
         })
-        this.setState({ 
+        this.setState({
             listdeviceCols: columns
-         });
+        });
     }
 
     componentDidMount() {
@@ -255,7 +255,7 @@ class UserDeviceList extends Component {
                 style = { margin: '0 8px 0 0', width: '60px', display: 'none' }
                 text = "Activate";
             }
-            let ConnectBtn = <Button type="default" size="small" style={style}><Link to={`/connect-device/${btoa(device.device_id)}`.trim()}> {convertToLang(this.props.translation[Button_Connect], "Connect")} </Link></Button>
+            let ConnectBtn = <Link to={`/connect-device/${btoa(device.device_id)}`.trim()}><Button type="default" size="small" style={style}> {convertToLang(this.props.translation[Button_Connect], "CONNECT")}</Button></Link>
             // console.log(device.usr_device_id);
             return {
                 rowKey: index,
@@ -326,21 +326,7 @@ class UserDeviceList extends Component {
                             </div>
                         </Col>
                         <Col span={6}>
-                            <div className="pagination1">
-                                <Select
-                                    value={this.state.pagination}
-                                    //  defaultValue={this.state.DisplayPages}
-                                    style={{ width: '100%' }}
-                                    // onSelect={value => this.setState({DisplayPages:value})}
-                                    onChange={value => this.handlePagination(value)}
-                                >
-                                    <Select.Option value="10" >10</Select.Option>
-                                    <Select.Option value="20">20</Select.Option>
-                                    <Select.Option value="30">30</Select.Option>
-                                    <Select.Option value="50">50</Select.Option>
-                                    <Select.Option value="100">100</Select.Option>
-                                </Select>
-                            </div>
+                            <div style={{ display: "none" }}>Dummy</div>
                         </Col>
                         <Col span={6}>
                             <div style={{ display: "none" }}>Dummy</div>
