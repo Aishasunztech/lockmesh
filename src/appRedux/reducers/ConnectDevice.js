@@ -77,7 +77,7 @@ import {
 } from '../../constants/Constants';
 
 import { message, Modal, Alert, Icon } from 'antd';
-import { ACK_UNINSTALLED_APPS, ACK_INSTALLED_APPS, ACK_SETTING_APPLIED, ACTION_IN_PROCESS } from '../../constants/SocketConstants';
+import { ACK_UNINSTALLED_APPS, ACK_INSTALLED_APPS, ACK_SETTING_APPLIED, SEND_ONLINE_OFFLINE_STATUS } from '../../constants/SocketConstants';
 // import { Button_Cancel } from '../../constants/ButtonConstants';
 // import { convertToLang } from '../../routes/utils/commonUtils';
 // import { WIPE_DEVICE_DESCRIPTION } from '../../constants/DeviceConstants';
@@ -1589,7 +1589,15 @@ export default (state = initialState, action) => {
                 extensions: extensions
             }
         }
+        case SEND_ONLINE_OFFLINE_STATUS: {
+            let device = JSON.parse(JSON.stringify(state.device));
+            device.online=action.payload;
 
+            return {
+                ...state,
+                device: device
+            }
+        }
         default:
             return state;
 
