@@ -386,35 +386,56 @@ class FilterDevices extends Component {
 
     let demoDevices = [];
     if (status) {
-    copyDevices = this.state.selectedDevices;
+      copyDevices = this.state.selectedDevices;
       status = false;
     }
-    console.log("devices", copyDevices);
 
     if (e.target.value.length) {
-      console.log("keyname", e.target.name);
-      console.log("value", e.target.value);
       // console.log(this.state.devices);
       copyDevices.forEach((device) => {
-        console.log("device", device);
+        if (e.target.name === 'all') {
+          Object.keys(device).map(key => {
 
-        if (device[e.target.name] !== undefined) {
-          if ((typeof device[e.target.name]) === 'string') {
-            // console.log("lsdjfls", device[e.target.name])
-            if (device[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
-              demoDevices.push(device);
+            if (device[key] !== undefined && key != 'status' && key != 'account_status') {
+              if ((typeof device[key]) === 'string') { 
+                if (device[key].toUpperCase().includes(e.target.value.toUpperCase())) {
+                  if(!demoDevices.includes(device)){
+                    demoDevices.push(device);
+                  }
+                }
+              } else if (device[key] !== null && key != 'status' && key != 'account_status') {
+                if (device[key].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
+                  if(!demoDevices.includes(device)){
+                    demoDevices.push(device);
+                  }
+                }
+              } else {
+                // demoDevices.push(device);
+              }
+            } else {
+              // demoDevices.push(device);
             }
-          } else if (device[e.target.name] !== null) {
-            // console.log("else lsdjfls", device[e.target.name])
-            if (device[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
-              demoDevices.push(device);
+          })
+        } else {
+          if (device[e.target.name] !== undefined) {
+            if ((typeof device[e.target.name]) === 'string') {
+              // console.log("lsdjfls", device[e.target.name])
+              if (device[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
+                demoDevices.push(device);
+              }
+            } else if (device[e.target.name] !== null) {
+              // console.log("else lsdjfls", device[e.target.name])
+              if (device[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
+                demoDevices.push(device);
+              }
+            } else {
+              // demoDevices.push(device);
             }
           } else {
-            // demoDevices.push(device);
+            demoDevices.push(device);
           }
-        } else {
-          demoDevices.push(device);
         }
+
       });
       // console.log("searched value", demoDevices);
       this.setState({
@@ -731,11 +752,12 @@ class FilterDevices extends Component {
               <Input.Search
                 placeholder="Search"
                 style={{ marginBottom: 0 }}
-              // onKeyUp={
-              //   (e) => {
-              //     this.handleSearch(e, true)
-              //   }
-              // }
+                onKeyUp={
+                  (e) => {
+                    e.target.name = 'all';
+                    this.handleSearch(e, true)
+                  }
+                }
               />
             </div>
           </Col>
