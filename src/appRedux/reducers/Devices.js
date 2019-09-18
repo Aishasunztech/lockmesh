@@ -158,6 +158,7 @@ export default (state = initialState, action) => {
                 let objIndex = state.devices.findIndex((obj => obj.device_id === action.payload.device.device_id));
                 if (objIndex !== -1) {
                     state.devices[objIndex].flagged = 'Not flagged';
+                    state.devices[objIndex].finalStatus = action.payload.device.finalStatus;
                 }
             }
             return {
