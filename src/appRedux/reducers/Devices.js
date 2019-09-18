@@ -22,7 +22,8 @@ import {
     UNFLAG_DEVICE,
     GET_PARENT_PACKAGES,
     UNLINK_DEVICE,
-    TRANSFER_DEVICE
+    TRANSFER_DEVICE,
+    FLAG_DEVICE
 } from "../../constants/ActionTypes";
 
 // import { convertToLang } from '../../routes/utils/commonUtils';
@@ -137,6 +138,25 @@ export default (state = initialState, action) => {
                 devices: action.payload,
             }
 
+        case FLAG_DEVICE: {
+            console.log('def devbice is ', action.payload.device, action.payload.device.flagged)
+            if (action.response.status) {
+
+                let objIndex = state.devices.findIndex((obj => obj.device_id === action.payload.device.device_id));
+                console.log('object index is: ', objIndex)
+                if (objIndex !== -1) {
+                    state.devices[objIndex].flagged = action.payload.device.flagged;
+                    state.devices[objIndex].finalStatus = action.payload.device.finalStatus;
+                }
+                console.log("state.devices[objIndex] is: ", state.devices[objIndex])
+
+            }
+            return {
+                ...state,
+                devices: [...state.devices]
+            }
+        }
+
         case UNFLAG_DEVICE: {
             if (action.response.status) {
                 // console.log('unflaged', action.response.device_id)
@@ -144,10 +164,10 @@ export default (state = initialState, action) => {
                 if (objIndex !== -1) {
                     state.devices[objIndex].flagged = 'Not flagged';
                 }
-                return {
-                    ...state,
-                    devices: [...state.devices]
-                }
+            }
+            return {
+                ...state,
+                devices: [...state.devices]
             }
         }
 
@@ -158,6 +178,7 @@ export default (state = initialState, action) => {
                 success({
                     title: action.response.msg,
                 });
+
                 if (action.isTransferred) {
                     devices = state.devices.filter((obj => obj.device_id !== action.payload.device_id));
                 }
@@ -176,21 +197,21 @@ export default (state = initialState, action) => {
 
         case TRANSFER_DEVICE: {
 
-            console.log('check devices', state.devices)
-            // if (action.response.status) {
+            // console.log('check devices', state.devices)
+            if (action.response.status) {
                 success({
-                    title:  "device trasfered" //action.response.msg,
+                    title: action.response.msg,
                 });
                 let objIndex = state.devices.findIndex((obj => obj.device_id === action.payload.device_id));
                 if (objIndex !== -1) {
                     state.devices[objIndex].finalStatus = 'Transfered';
                     state.devices[objIndex].transfer_status = 1;
                 }
-            // } else {
-            //     error({
-            //         title: action.response.msg,
-            //     });
-            // }
+            } else {
+                error({
+                    title: action.response.msg,
+                });
+            }
             // console.log('unlink called');
             return {
                 ...state,

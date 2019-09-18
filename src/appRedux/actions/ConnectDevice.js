@@ -287,7 +287,7 @@ export function wipe(device) {
 }
 
 export function unlinkDevice(device, transferred = false) {
-    console.log(transferred, 'you are at action file of unlinkDevice', device)
+    // console.log(transferred, 'you are at action file of unlinkDevice', device)
     return (dispatch) => {
         RestService.unlinkDevice(device).then((response) => {
             // console.log('response to unlink device', response);
@@ -786,21 +786,21 @@ export function savePolicy(app_list, passwords = null, profileType, profileName,
 }
 
 export const transferDeviceProfile = (data) => {
-    alert("transferDeviceProfile ",data);
+    // console.log("transferDeviceProfile action file",data);
     return (dispatch) => {
-        // RestService.transferDeviceProfile(data).then((response) => {
-            // if (RestService.checkAuth(response.data)) {
+        RestService.transferDeviceProfile(data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: TRANSFER_DEVICE,
-                    // response: response.data,
-                    payload: data
+                    response: response.data,
+                    payload: data.flagged_device
                 })
-            // } else {
-            //     dispatch({
-            //         type: INVALID_TOKEN
-            //     })
-            // }
-        // })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
     }
 }
 
