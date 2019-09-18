@@ -65,15 +65,19 @@ import {
     MESSAGE_HANDLER,
     TRANSFER_HISTORY,
     SINGLE_APP_PULLED,
-    SINGLE_APP_PUSHED
+    SINGLE_APP_PUSHED,
+    PASSWORD_CHANGED,
+    PUSH_APP_CHECKED,
+    RESET_PUSH_APPS,
+    GET_UNREG_SIMS
 } from "../../constants/ActionTypes";
 
 import {
-    NOT_AVAILABLE, MAIN_MENU, WARNNING, PROCEED_WITH_WIPING_THE_DEVICE,
+    NOT_AVAILABLE, MAIN_MENU, WARNNING, PROCEED_WITH_WIPING_THE_DEVICE, Main_SETTINGS, SECURE_SETTING, SAVE_PROFILE_TEXT
 } from '../../constants/Constants';
 
 import { message, Modal, Alert, Icon } from 'antd';
-import { ACK_UNINSTALLED_APPS, ACK_INSTALLED_APPS, ACK_SETTING_APPLIED } from '../../constants/SocketConstants';
+import { ACK_UNINSTALLED_APPS, ACK_INSTALLED_APPS, ACK_SETTING_APPLIED, ACTION_IN_PROCESS } from '../../constants/SocketConstants';
 // import { Button_Cancel } from '../../constants/ButtonConstants';
 // import { convertToLang } from '../../routes/utils/commonUtils';
 // import { WIPE_DEVICE_DESCRIPTION } from '../../constants/DeviceConstants';
@@ -159,7 +163,6 @@ const initialState = {
     undoExtensions: [],
     redoExtensions: [],
     controls: {},
-    changedCtrls: {},
     undoControls: [],
     redoControls: [],
     activities: [],
@@ -187,11 +190,14 @@ const initialState = {
     simUpdated: false,
     simDeleted: false,
     simHistoryList: [],
+    unRegSims: [],
 
     // Transfer
     transferHistoryList: [],
     getHistory: ''
 };
+let pwdObject = { "admin_password": null, "guest_password": null, "encrypted_password": null, "duress_password": null }
+
 
 export default (state = initialState, action) => {
 
@@ -252,11 +258,35 @@ export default (state = initialState, action) => {
             }
 
         }
+
+
+        case PUSH_APP_CHECKED: {
+            let key = action.payload.key;
+            let value = action.payload.value;
+            let apk_id = action.payload.apk_id
+
+            let apklist = state.apk_list;
+            let index = apklist.findIndex(apk => apk.apk_id == apk_id);
+            if (index > -1) {
+                apklist[index][key] = value
+            }
+            return {
+                ...state,
+                apk_list: apklist
+            }
+
+        }
+
         case SUSPEND_DEVICE2: {
             if (action.response.status) {
-
+                // console.log(state.device, 'device is the', action.response.data)
                 state.device = action.response.data;
-                state.device.account_status = 'suspended';
+                let date = getCurrentDate();
+                state.activities.push({
+                    action_name: 'SUSPENDED',
+                    created_at: date
+                })
+                // state.device.account_status = 'suspended';
 
                 success({
                     title: action.response.msg,
@@ -271,18 +301,24 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isloading: false,
+                device: state.device,
+                activities: state.activities,
                 pageName: NOT_AVAILABLE
             }
 
         }
 
         case FLAG_DEVICE: {
-
+            // console.log(state.device, 'def devbice is ', action.payload.device)
             if (action.response.status) {
 
-                state.device = action.response.data;
+                state.device = action.payload.device;
                 state.pageName = NOT_AVAILABLE;
                 state.status = 'Suspended';
+                state.activities.push({
+                    action_name: 'FLAGED',
+                    created_at: getCurrentDate()
+                })
                 success({
                     title: action.response.msg,
                 });
@@ -294,13 +330,23 @@ export default (state = initialState, action) => {
             }
             return {
                 ...state,
+                device: state.device,
+                activities: state.activities,
                 isloading: false,
             }
         }
 
         case UNFLAG_DEVICE: {
-            // console.log(action.response.msg);
+            // console.log(action.payload.device, 'unflage device is the ');
             if (action.response.status) {
+
+                state.device = action.payload.device;
+                state.activities.push({
+                    action_name: 'UNFLAGED',
+                    created_at: getCurrentDate()
+                })
+
+
                 success({
                     title: action.response.msg,
                 });
@@ -313,20 +359,37 @@ export default (state = initialState, action) => {
             // console.log('action done ', state.device)
             return {
                 ...state,
+                device: state.device,
+                activities: state.activities,
                 isloading: false,
             }
         }
+
+
+        case RESET_PUSH_APPS: {
+            return {
+                ...state,
+                apk_list: JSON.parse(JSON.stringify(state.apk_list_dump))
+            }
+        }
+
         case WIPE_DEVICE: {
             // console.log(action.response.msg);
             if (action.response.status) {
-                success({
-                    title: action.response.msg,
-                });
+                if (action.response.online) {
+                    success({
+                        title: action.response.msg,
+                    });
+                } else {
+                    warning({
+                        title: action.response.msg, //  'Warning Device Offline',
+                        content: action.response.content // "Wipe command sent to device. Action will be performed when device is back online", // 'Apps pushed to device. Action will be performed when device is back online',
+                    });
+                }
             } else {
                 error({
                     title: action.response.msg,
                 });
-
             }
             // console.log('action done ', state.device)
             return {
@@ -338,9 +401,14 @@ export default (state = initialState, action) => {
             state.undoApps.push(JSON.parse(JSON.stringify(action.payload)));
             state.undoExtensions.push(JSON.parse(JSON.stringify(action.extensions)));
             state.undoControls.push(JSON.parse(JSON.stringify(action.controls)));
-            //  console.log('controls form reduvcer of getdeviceapp', action.controls)
+            // console.log('controls form reduvcer of getdeviceapp', action.controls)
             let applications = action.payload;
             let check = handleCheckedAll(applications);
+            // console.log('abaid app list ', action.payload);
+            // console.log(action.payload.filter(e => e.uniqueName == SECURE_SETTING))
+
+            // console.log("action.extensions  ", action.extensions)
+
             return {
                 ...state,
                 app_list: action.payload,
@@ -373,6 +441,7 @@ export default (state = initialState, action) => {
 
 
         case GET_PROFILES: {
+            console.log(action.payload, 'profils are')
             return {
                 ...state,
                 isloading: true,
@@ -389,6 +458,7 @@ export default (state = initialState, action) => {
         }
 
         case GET_ACTIVITIES: {
+            // console.log('action to palylad activities', action.payload.data)
             return {
                 ...state,
                 activities: action.payload.data
@@ -444,6 +514,16 @@ export default (state = initialState, action) => {
         }
         case APPLY_POLICY: {
             if (action.payload.status) {
+                // console.log(action.policyId, 'policy id', action.policyName, 'policyName', state.activities);
+                let date = getCurrentDate();
+                state.activities.push({
+                    action_name: 'POLICY APPLIED',
+                    created_at: date,
+                    data: {
+                        policy_name: action.policyName,
+                        policy_id: action.policyId
+                    }
+                })
                 if (action.payload.online) {
                     success({
                         title: action.payload.msg, // "Policy is Being applied",
@@ -461,10 +541,12 @@ export default (state = initialState, action) => {
                     title: action.payload.msg,
                 });
             }
+            // console.log(state.activities, 'new activities')
             return {
                 ...state,
                 is_policy_process: 1,
-                applyPolicyConfirm: false
+                applyPolicyConfirm: false,
+                activities: state.activities
             }
         }
 
@@ -501,7 +583,6 @@ export default (state = initialState, action) => {
 
             return {
                 ...state,
-                changedCtrls: {},
                 pageName: MAIN_MENU,
                 showMessage: false,
                 applyBtn: false,
@@ -598,12 +679,17 @@ export default (state = initialState, action) => {
 
         case ACTIVATE_DEVICE2: {
 
-            //  console.log(state.device, 'active device done', action.payload.device);
+            //  console.log(state.device, 'active device done', action.response.device);
             if (action.response.status) {
 
                 state.device = action.response.data;
                 state.status = '';
-                state.pageName = 'main_menu'
+                state.pageName = 'main_menu';
+                let date = getCurrentDate();
+                state.activities.push({
+                    action_name: 'ACTIVE',
+                    created_at: date
+                })
                 success({
                     title: action.response.msg,
                 });
@@ -619,6 +705,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 device: state.device,
+                activities: state.activities,
                 isloading: true
             }
         }
@@ -738,8 +825,14 @@ export default (state = initialState, action) => {
         }
 
         case SAVE_PROFILE: {
+            // console.log(action.response, 'response from save profle');
+            if (action.response.status) {
+                state.profiles.push(action.response.data)
+            }
+            // console.log('new profiles are', state.profiles)
             return {
                 ...state,
+                profiles: state.profiles,
                 isSaveProfileBtn: false,
             }
         }
@@ -789,24 +882,27 @@ export default (state = initialState, action) => {
         }
 
         case HANDLE_CHECK_CONTROL: {
-            let changedControls = JSON.parse(JSON.stringify(state.controls));
-            // if (action.payload.key === 'wifi_status') {
-            //     changedControls[action.payload.key] = true;
-            // } else {
-            changedControls.controls[action.payload.key] = action.payload.value;
-            state.changedCtrls[action.payload.key] = action.payload.value;
-            // }
+            // copy of System Permission state #removed JSON.parse(JSON.stringify())
+            let controls = JSON.parse(JSON.stringify(state.controls));
+            // let controls = state.controls.controls;
 
-            state.controls = JSON.parse(JSON.stringify(changedControls));
-            let controls = state.controls;
-            state.undoControls.push(JSON.parse(JSON.stringify(changedControls)));
-            // console.log('reduver aongds', state.controls);
+            // console.log(action.payload.key);
+            // console.log(controls.controls);
+            let index = controls.controls.findIndex((control) => control.setting_name === action.payload.key);
+            if (index > -1) {
+                // console.log("permission index:", index);
+
+                controls.controls[index].setting_status = action.payload.value;
+                controls.controls[index].isChanged = true;
+
+                // push into stack
+                state.undoControls.push(JSON.parse(JSON.stringify(controls)));
+                state.controls = JSON.parse(JSON.stringify(controls));
+            }
 
             return {
                 ...state,
                 controls: state.controls,
-                forceUpdate: state.forceUpdate + 1,
-                changedCtrls: state.changedCtrls,
                 applyBtn: true,
                 undoBtn: true,
                 clearBtn: true,
@@ -821,6 +917,7 @@ export default (state = initialState, action) => {
             // console.log(action.payload.main,' obj index is', objIndex)
             if (objIndex > -1) {
                 changedControls.settings[objIndex][action.payload.key] = action.payload.value;
+                changedControls.settings[objIndex]["isChanged"] = true;
                 // console.log(changedSettings[objIndex], 'app is the ', changedSettings[objIndex][action.payload.key])
             }
 
@@ -904,11 +1001,13 @@ export default (state = initialState, action) => {
         case HANDLE_CHECK_EXTENSION: {
 
             let changedExtensions = JSON.parse(JSON.stringify(state.extensions));
-
+            // console.log('hi at reducer')
+            // console.log("changedExtensions at reducer: ", changedExtensions)
 
             changedExtensions.forEach(extension => {
                 if (extension.uniqueName === action.payload.uniqueName) {
                     if (action.payload.app_id === '000') {
+                        extension["isChanged"] = true;
                         extension[action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
                     } else {
                         let objIndex = extension.subExtension.findIndex((obj => obj.app_id === action.payload.app_id));
@@ -1173,7 +1272,6 @@ export default (state = initialState, action) => {
                 redoBtn: false,
                 undoBtn: false,
                 applyBtn: false,
-                changedCtrls: {},
                 pageName: MAIN_MENU
             }
         }
@@ -1183,7 +1281,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 apk_list: action.payload,
-                apk_list_dump: action.payload
+                apk_list_dump: JSON.parse(JSON.stringify(action.payload))
             }
         }
 
@@ -1273,10 +1371,18 @@ export default (state = initialState, action) => {
             }
         }
         case RECEIVE_SIM_DATA: {
-            if (action.payload) {
+            if (action.payload.unRegSims.length > 0) {
+                // console.log('unRegSims red')
                 return {
                     ...state,
-                    simUpdated: new Date()
+                    unRegSims: action.payload.unRegSims
+                }
+            } else {
+                // console.log('not unRegSims red')
+                return {
+                    ...state,
+                    simUpdated: new Date(),
+                    unRegSims: []
                 }
             }
         }
@@ -1322,6 +1428,25 @@ export default (state = initialState, action) => {
             }
         }
 
+        case GET_UNREG_SIMS: {
+            // console.log("action.payload.data ", action.payload.data);
+
+            if (action.response.status) {
+
+                return {
+                    ...state,
+                    isloading: false,
+                    unRegSims: action.payload.data
+                }
+            } else {
+                return {
+                    ...state,
+                    isloading: false,
+                    unRegSims: []
+                }
+            }
+        }
+
         case WRITE_IMEI: {
             if (action.payload.status) {
                 // if (action.payload.insertedData !== null) {
@@ -1355,6 +1480,45 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 reSync: action.payload
+            }
+        }
+        case PASSWORD_CHANGED: {
+
+            // console.log('password reducer', action.payload)
+
+            if (action.payload.response.status) {
+                if (action.payload.response.online) {
+
+                    success({
+                        title: action.payload.response.msg,
+                    });
+
+                } else {
+                    // message.warning(<Fragment><span>Warning Device Offline</span> <div>Apps pushed to device. </div> <div>Action will be performed when device is back online</div></Fragment>)
+                    warning({
+                        title: 'Warning Device Offline',
+                        content: action.payload.response.msg,
+                    });
+                }
+                if (action.payload.pwdType) {
+                    pwdObject[action.payload.pwdType] = action.payload.passwords.pwd ? action.payload.passwords.pwd : null;
+                }
+
+                state.activities.push({
+                    action_name: 'PASSWORD',
+                    created_at: getCurrentDate(),
+                    data: { passwords: JSON.stringify(pwdObject) }
+                })
+
+            } else {
+                error({
+                    title: action.payload.response.msg,
+                });
+            }
+
+            return {
+                ...state,
+                activities: state.activities
             }
         }
 
@@ -1402,9 +1566,24 @@ export default (state = initialState, action) => {
         }
 
         case ACK_SETTING_APPLIED: {
+            // console.log("ACK_SETTING_APPLIED controls ", action.payload.controls)
+            console.log("states extensions: ", state.extensions);
+            let extensions = action.payload.app_list.filter(e => e.uniqueName == SECURE_SETTING); //action.payload.extensions
+            console.log("updated extension is: ", action.payload.app_list.filter(e => e.uniqueName == SECURE_SETTING))
+            // state.extensions[0].subExtension = action.payload.extensions
+            // let secureSettings = action.payload.extensions.filter(e => e.uniqueName == SECURE_SETTING);
+            let settings = action.payload.app_list.filter(e => e.uniqueName == Main_SETTINGS);
+            // console.log('settings are: ', settings);
+            let controls = {};
+            controls["controls"] = action.payload.controls;
+            controls["settings"] = [settings[settings.length - 1]];
+            // console.log("ACK_SETTING_APPLIED after controls ", action.payload.controls)
+
             return {
                 ...state,
                 app_list: action.payload.app_list,
+                controls: controls,
+                extensions: extensions
             }
         }
 
@@ -1520,3 +1699,9 @@ function handleCheckedAllExts(extensions) {
 //         },
 //     });
 // }
+
+function getCurrentDate() {
+    var tempDate = new Date();
+    var date = tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' + tempDate.getDate() + ' ' + tempDate.getHours() + ':' + tempDate.getMinutes() + ':' + tempDate.getSeconds();
+    return date
+}

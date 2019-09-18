@@ -6,6 +6,7 @@ import { convertToLang } from '../../utils/commonUtils';
 import AddSimPermission from './AddSimPermission'
 import { Markup } from 'interweave';
 import { Modal, Button, Form, Input, Select, Radio, InputNumber, Popover, Icon, Row, Col, Spin } from 'antd';
+
 import { withRouter, Redirect, Link } from 'react-router-dom';
 
 import { getSimIDs, getChatIDs, getPGPEmails } from "../../../appRedux/actions/Devices";
@@ -20,7 +21,7 @@ import { LABEL_DATA_PGP_EMAIL, LABEL_DATA_SIM_ID, LABEL_DATA_CHAT_ID } from '../
 import { Not_valid_Email, POLICY, Start_Date, Expire_Date, Expire_Date_Require, SELECT_POLICY } from '../../../constants/Constants';
 import { DEALER_PIN } from '../../../constants/DealerConstants';
 const confirm = Modal.confirm;
-
+const { TextArea } = Input;
 class AddDevice extends Component {
 
     constructor(props) {
@@ -41,7 +42,7 @@ class AddDevice extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
-            // console.log('form', values);
+            // console.log('add device form values are: ', values);
             if (!err) {
                 if (this.state.type == 1) {
                     showConfirm(this, values);
@@ -426,18 +427,6 @@ class AddDevice extends Component {
                     {(this.props.preActive) ?
                         <Fragment>
                             <Form.Item
-                                label={convertToLang(this.props.translation[Device_Note], "NOTE ")}
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}
-                            >
-                                {this.props.form.getFieldDecorator('note', {
-                                    initialValue: '',
-                                })(
-                                    <Input />
-                                )}
-
-                            </Form.Item>
-                            <Form.Item
                                 label={convertToLang(this.props.translation[Device_Valid_For], "VALID FOR(DAYS) ")}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
@@ -449,6 +438,24 @@ class AddDevice extends Component {
                                     }],
                                 })(
                                     <InputNumber min={1} />
+                                )}
+
+                            </Form.Item>
+                            <Form.Item
+                                label={convertToLang(this.props.translation[Device_Note], "NOTE ")}
+                                labelCol={{ span: 8 }}
+                                wrapperCol={{ span: 14 }}
+                            >
+                                {this.props.form.getFieldDecorator('note', {
+                                    initialValue: '',
+                                })(
+                                    // <Input />
+                                    <TextArea
+                                        // value={value}
+                                        // onChange={this.onChange}
+                                        // placeholder="Controlled autosize"
+                                        autosize={{ minRows: 3, maxRows: 5 }}
+                                    />
                                 )}
 
                             </Form.Item>

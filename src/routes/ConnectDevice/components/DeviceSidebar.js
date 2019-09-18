@@ -36,7 +36,8 @@ import {
     REMAINING_TERM_DAYS,
     ONLINE,
     DEVICE_TYPE,
-    DEVICE_VERSION
+    DEVICE_VERSION,
+    DEVICE_FIRMWAREINFO
 } from '../../../constants/DeviceConstants';
 import { Button_Refresh } from '../../../constants/ButtonConstants';
 import { ADMIN } from '../../../constants/Constants';
@@ -146,6 +147,11 @@ export default class DeviceSidebar extends Component {
                 value: checkValue(device_details.version)
             },
             {
+                key: 5,
+                name: (<a href="javascript:void(0)" >{titleCase(convertToLang(this.props.translation[DEVICE_FIRMWAREINFO], "FIRMWARE INFO"))}:</a>),
+                value: <span >{checkValue(device_details.firmware_info)}</span>
+            },
+            {
                 key: 6,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_NAME], "DEVICE NAME"))}:</a>),
                 value: (<span className="captilize">{checkValue(device_details.name)}</span>)
@@ -232,6 +238,11 @@ export default class DeviceSidebar extends Component {
                 key: 29,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation["Last Online"], "Last Online"))}:</a>),
                 value: checkValue(device_details.lastOnline)
+            },
+            {
+                key: 30,
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation["Note"], "Note"))}:</a>),
+                value: checkValue(device_details.note)
             }
         ]
     }

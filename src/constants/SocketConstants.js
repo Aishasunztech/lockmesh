@@ -42,6 +42,7 @@ export const ACK_pull_APPS = 'ack_pull_apps_';
 export const ACK_FINISHED_PULL_APPS = 'ack_finished_pull_apps_';
 
 export const FINISH_POLICY = 'finish_policy_';
+export const FINISH_WIPE = 'finish_wipe_';
 export const FINISH_POLICY_STEP = 'finish_policy_step_';
 
 

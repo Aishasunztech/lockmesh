@@ -10,7 +10,7 @@ import { convertToLang } from '../../utils/commonUtils';
 const renderApps = (apk_list) => {
     let app_list = []
      apk_list.map((app) => {
-        if (app.system_app !== 1) {
+        if (app.system_app !== 1 && app.system_app !== true && app.package_name) {
             app_list.push( {
                 key: (app.app_id) ? app.app_id : 'N/A',
                 app_id: (app.app_id) ? app.app_id : 'N/A',

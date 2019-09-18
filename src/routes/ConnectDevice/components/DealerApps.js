@@ -9,10 +9,11 @@ import { convertToLang } from '../../utils/commonUtils';
 
 const renderApps = (props, apk_list, isSwitchable, selectedAppKeys) => {
     let apps = [];
+    // console.log(selectedAppKeys, 'keys are')
     if (props.app_list) {
         apk_list.forEach(apk => {
-            let index =props.app_list.findIndex((app)=> app.package_name === apk.package_name);
-            if(index === -1){
+            let index = props.app_list.findIndex((app) => app.package_name === apk.package_name);
+            if (index === -1) {
                 apps.push(apk);
             }
         });
@@ -20,47 +21,94 @@ const renderApps = (props, apk_list, isSwitchable, selectedAppKeys) => {
         apps = apk_list;
     }
 
-    return apps.map((app) => {
+    let data = [];
+
+    apps.map((app) => {
 
         let isAvailable = selectedAppKeys !== undefined ? (selectedAppKeys.length) ? selectedAppKeys.find(el => (el === app.apk_id) ? true : false) : false : false;
-        return {
-            key: (app.apk_id) ? app.apk_id : 'N/A',
-            apk_id: (app.apk_id) ? app.apk_id : 'N/A',
-            package_name: app.package_name,
-            version_name: app.version_name,
-            apk: app.apk ? app.apk : 'N/A',
-            apk_name: app.apk_name ? app.apk_name : 'N/A',
-            apk_logo: (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.icon} />),
-            guest: ((isSwitchable || props.disabledSwitch) ?
-                <Switch
-                    defaultChecked={app.guest === true || app.guest === 1 ? true : false}
-                    disabled={!isAvailable}
-                    size={"small"}
-                    onClick={(e) => {
-                        props.handleChecked(e, "guest", app.apk_id);
-                    }}
-                /> : (app.guest === true) ? 'On' : 'Off'),
-            encrypted: ((isSwitchable || props.disabledSwitch) ?
-                <Switch
-                    defaultChecked={app.encrypted === true || app.encrypted === 1 ? true : false}
+        if (props.onlyShowSelected) {
+            // console.log('if is called')
+            if (isAvailable) {
+                data.push({
+                    key: (app.apk_id) ? app.apk_id : 'N/A',
+                    apk_id: (app.apk_id) ? app.apk_id : 'N/A',
+                    package_name: app.package_name,
+                    version_name: app.version_name,
+                    apk: app.apk ? app.apk : 'N/A',
+                    apk_name: app.apk_name ? app.apk_name : 'N/A',
+                    apk_logo: (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.icon} />),
+                    guest: ((isSwitchable || props.disabledSwitch) ?
+                        <Switch
+                            defaultChecked={app.guest === true || app.guest === 1 ? true : false}
+                            disabled={true}
+                            size={"small"}
+                            onClick={(e) => {
+                                props.handleChecked(e, "guest", app.apk_id);
+                            }}
+                        /> : (app.guest === true) ? 'On' : 'Off'),
+                    encrypted: ((isSwitchable || props.disabledSwitch) ?
+                        <Switch
+                            defaultChecked={app.encrypted === true || app.encrypted === 1 ? true : false}
 
-                    disabled={!isAvailable}
-                    size={"small"}
-                    onClick={(e) => {
-                        props.handleChecked(e, "encrypted", app.apk_id);
-                    }}
-                /> : (app.encrypted === true) ? 'On' : 'Off'),
-            enable: ((isSwitchable || props.disabledSwitch) ?
-                <Switch
-                    defaultChecked={app.enable === true || app.enable === 1 ? true : false}
-                    disabled={!isAvailable}
-                    size={"small"}
-                    onClick={(e) => {
-                        props.handleChecked(e, "enable", app.apk_id);
-                    }}
-                /> : (app.enable === true) ? 'On' : 'Off'),
+                            disabled={true}
+                            size={"small"}
+                            onClick={(e) => {
+                                props.handleChecked(e, "encrypted", app.apk_id);
+                            }}
+                        /> : (app.encrypted === true) ? 'On' : 'Off'),
+                    enable: ((isSwitchable || props.disabledSwitch) ?
+                        <Switch
+                            defaultChecked={app.enable === true || app.enable === 1 ? true : false}
+                            disabled={true}
+                            size={"small"}
+                            onClick={(e) => {
+                                props.handleChecked(e, "enable", app.apk_id);
+                            }}
+                        /> : (app.enable === true) ? 'On' : 'Off'),
+                })
+            }
+        } else {
+            data.push({
+                key: (app.apk_id) ? app.apk_id : 'N/A',
+                apk_id: (app.apk_id) ? app.apk_id : 'N/A',
+                package_name: app.package_name,
+                version_name: app.version_name,
+                apk: app.apk ? app.apk : 'N/A',
+                apk_name: app.apk_name ? app.apk_name : 'N/A',
+                apk_logo: (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.icon} />),
+                guest: ((isSwitchable || props.disabledSwitch) ?
+                    <Switch
+                        defaultChecked={app.guest === true || app.guest === 1 ? true : false}
+                        disabled={!isAvailable}
+                        size={"small"}
+                        onClick={(e) => {
+                            props.handleChecked(e, "guest", app.apk_id);
+                        }}
+                    /> : (app.guest === true) ? 'On' : 'Off'),
+                encrypted: ((isSwitchable || props.disabledSwitch) ?
+                    <Switch
+                        defaultChecked={app.encrypted === true || app.encrypted === 1 ? true : false}
+
+                        disabled={!isAvailable}
+                        size={"small"}
+                        onClick={(e) => {
+                            props.handleChecked(e, "encrypted", app.apk_id);
+                        }}
+                    /> : (app.encrypted === true) ? 'On' : 'Off'),
+                enable: ((isSwitchable || props.disabledSwitch) ?
+                    <Switch
+                        defaultChecked={app.enable === true || app.enable === 1 ? true : false}
+                        disabled={!isAvailable}
+                        size={"small"}
+                        onClick={(e) => {
+                            props.handleChecked(e, "enable", app.apk_id);
+                        }}
+                    /> : (app.enable === true) ? 'On' : 'Off'),
+            })
         }
     });
+
+    return data;
 }
 
 const DealerApps = (props) => {

@@ -24,7 +24,7 @@ export default class SuspendDevice extends Component {
             onOk: (() => {
                 this.props.suspendDevice(device);
                 if (window.location.pathname.split("/").pop() !== 'devices') {
-                    refresh(device.device_id);
+                    // refresh(device.device_id);
                 }
             }),
             onCancel() { },

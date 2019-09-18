@@ -27,7 +27,7 @@ import { DEVICE_DEALER_ID, DEVICE_DEALER_PIN, DEVICE_DEALER_NAME } from '../../c
 
 import { cloneableGenerator } from 'redux-saga/utils';
 import moment from 'moment';
-
+import { isArray } from "util";
 
 export function getStatus(status, account_status, unlink_status, device_status, activation_status) {
 
@@ -217,5 +217,130 @@ export function convertToLang(lngWord, constant) {
     return constant;
   } else {
     return "N/A";
+  }
+}
+
+export function handleMultipleSearch(e, copy_status, copyRequireSearchData, demoSearchValues, requireForSearch) {
+  // handleMultipleSearch(e, this.state.copy_status, copyDevices, this.state.SearchValues, this.state.filteredDevices)
+
+  // console.log("e, copy_status, copyRequireSearchData, demoSearchValues, requireForSearch ", e.target.value, copy_status, copyRequireSearchData, demoSearchValues, requireForSearch)
+
+  let demoData = [];
+  if (copy_status) {
+    copyRequireSearchData = requireForSearch;
+    copy_status = false;
+  }
+
+  let targetName = e.target.name;
+  let targetValue = e.target.value;
+  let searchColsAre = Object.keys(demoSearchValues).length;
+
+  // console.log(demoSearchValues, 'value  is: ', targetValue)
+
+  if (targetValue.length || Object.keys(demoSearchValues).length) {
+    demoSearchValues[targetName] = { key: targetName, value: targetValue };
+
+    copyRequireSearchData.forEach((obj) => {
+      // console.log('device is: ', device);
+      // if (obj[targetName] !== undefined) {
+
+        let searchRecords = 0;
+
+        if (searchColsAre > 0) {
+          Object.values(demoSearchValues).forEach((data) => {
+
+            if (obj[data.key] !== undefined && obj[data.key] !== null) {
+              if (data.value == "") {
+                searchRecords++;
+              } else if (typeof (obj[data.key]) === 'string') {
+                if (obj[data.key].toString().toUpperCase().includes(data.value.toString().toUpperCase())) {
+                  searchRecords++;
+                }
+              } else
+                // if (obj[data.key] !== null) {
+                  if (isArray(obj[data.key])) {
+
+                    if (data.key == "devicesList") {
+                      if (obj[data.key].length.toString().toUpperCase().includes(data.value.toString().toUpperCase())) {
+                        searchRecords++;
+                      }
+                    }
+
+                  } else if (obj[data.key].toString().toUpperCase().includes(data.value.toString().toUpperCase())) {
+                    searchRecords++;
+                  }
+                // }
+            }
+          })
+
+          if (searchColsAre === searchRecords) {
+            demoData.push(obj);
+          }
+        }
+        else {
+          if (obj[targetName].toString().toUpperCase().includes(targetValue.toString().toUpperCase())) {
+            demoData.push(obj);
+          }
+        }
+      // }
+      // else {
+      //   // demoData.push(obj);
+      // }
+    });
+    return {
+      copy_status,
+      copyRequireSearchData,
+      demoData,
+      SearchValues: demoSearchValues
+    }
+  } else {
+    return {
+      copy_status,
+      copyRequireSearchData,
+      demoData: copyRequireSearchData,
+      SearchValues: demoSearchValues
+    }
+  }
+}
+
+export function filterData_RelatedToMultipleSearch(devices, SearchValues) {
+  let searchedDevices = [];
+  let searchData = Object.values(SearchValues);
+  let searchColsAre = Object.keys(SearchValues).length;
+
+  if (searchColsAre) {
+    devices.forEach((device) => {
+      let searchDevices = 0;
+
+      for (let search of searchData) {
+        // console.log('search is: ', search)
+        // console.log('search key is: ', search.key)
+        if (search.value == "") {
+          searchDevices++;
+        } else if (typeof (device[search.key]) === 'string') {
+          if (device[search.key].toUpperCase().includes(search.value.toUpperCase())) {
+            searchDevices++;
+          }
+        } else if (isArray(device[search.key])) {
+          if (search.key == "devicesList") {
+            if (device[search.key].length.toString().toUpperCase().includes(search.value.toUpperCase())) {
+              searchDevices++;
+            }
+          }
+        } else {
+          if (device[search.key].toString().toUpperCase().includes(search.value.toUpperCase())) {
+            searchDevices++;
+          }
+        }
+
+      }
+      if (searchColsAre === searchDevices) {
+        searchedDevices.push(device);
+      }
+
+    });
+    return searchedDevices;
+  } else {
+    return devices;
   }
 }

@@ -204,7 +204,21 @@ export default class ImeiView extends Component {
                     maskClosable={false}
                     width='850px'
                     visible={visible}
-                    title={<div> <span style={{ position: "absolute", lineHeight: "36px" }}>{convertToLang(this.props.translation[MANAGE_IMEI], "MANAGE IMEI")}</span> <div className="text-center"><Button> <a href='https://dyrk.org/tools/imei/' target='blank'> {convertToLang(this.props.translation[GENERATE_IMEI_NUMBER], "Generate IMEI number")}</a></Button></div> <br /> <span>{`${convertToLang(this.props.translation[DEVICE_ID], "Device ID")}:`} {(this.props.device.id) ? this.props.device.device_id : ''}</span></div>}
+                    title={
+                        <div>
+                            <span style={{ position: "absolute", lineHeight: "36px" }}>
+                                {convertToLang(this.props.translation[MANAGE_IMEI], "MANAGE IMEI")}</span>
+                            <div className="text-center">
+                                <Button>
+                                    <a href='https://dyrk.org/tools/imei/' target='blank'>
+                                        {convertToLang(this.props.translation[GENERATE_IMEI_NUMBER], "Generate IMEI number")}
+                                    </a>
+                                </Button></div>
+                            <span>
+                                {`${convertToLang(this.props.translation[DEVICE_ID], "Device ID")}:`}
+                                {(this.props.device.id) ? this.props.device.device_id : ''}
+                            </span>
+                        </div>}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     okText={convertToLang(this.props.translation[Button_Ok], "Ok")}

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import {
-    FINISHED_PUSH_APPS, FINISHED_PULL_APPS, IN_PROCESS, FINISHED_POLICY, FINISHED_IMEI, SINGLE_APP_PUSHED, GET_APP_JOBS, SINGLE_APP_PULLED, FINISHED_POLICY_STEP
+    FINISHED_PUSH_APPS, FINISHED_PULL_APPS, IN_PROCESS, FINISHED_POLICY, FINISHED_IMEI, SINGLE_APP_PUSHED, GET_APP_JOBS, SINGLE_APP_PULLED, FINISHED_POLICY_STEP, FINISHED_WIPE
 } from "../../constants/ActionTypes";
 
 import { message, Modal } from 'antd';
@@ -40,7 +40,7 @@ export default (state = initialState, action) => {
                 socket: action.payload
             }
         }
-        
+
         case GET_APP_JOBS: {
             if (action.payload.id) {
                 if (action.data_type === 'policy') {
@@ -125,6 +125,14 @@ export default (state = initialState, action) => {
                 complete_policy_step: state.complete_policy_step + 1
             }
         }
+        case FINISHED_WIPE: {
+            success({
+                title: "Device Wiped Successfully.",
+            });
+            return {
+                ...state
+            }
+        }
 
         case FINISHED_POLICY: {
             // console.log("works");
@@ -139,7 +147,7 @@ export default (state = initialState, action) => {
                 complete_policy_step: 0
             }
         }
-        
+
         case IN_PROCESS: {
             // console.log("works");
             return {
