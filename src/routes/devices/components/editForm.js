@@ -422,7 +422,7 @@ class EditDevice extends Component {
                                     >
                                         {convertToLang(this.props.translation[Button_Add_User], "Add User")}
                                     </Button>
-                                } */}
+                                }
 
                             </Form.Item>
 
