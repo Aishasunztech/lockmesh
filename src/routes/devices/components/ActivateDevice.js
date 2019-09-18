@@ -23,7 +23,7 @@ export default class ActivateDevice extends Component {
 
                 this.props.activateDevice(device);
                 if (window.location.pathname.split("/").pop() !== 'devices') {
-                    refresh(device.device_id);
+                    // refresh(device.device_id);
                 }
             },
             onCancel() { },

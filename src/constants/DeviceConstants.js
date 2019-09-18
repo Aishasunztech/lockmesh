@@ -10,6 +10,7 @@ export const DEVICE_LASTONLINE = "tableHeadings.lastOnline";
 export const DEVICE_MODE = "tableHeadings.MODE";
 export const DEVICE_TYPE = "tableHeadings.TYPE";
 export const DEVICE_VERSION = "tableHeadings.VERSION";
+export const DEVICE_FIRMWAREINFO = "FIRMWARE INFO";
 export const DEVICE_NAME = "tableHeadings.DEVICENAME";
 export const DEVICE_ACTIVATION_CODE = "tableHeadings.ACTIVATIONCODE";
 export const DEVICE_ACCOUNT_EMAIL = "tableHeadings.ACCOUNTEMAIL";

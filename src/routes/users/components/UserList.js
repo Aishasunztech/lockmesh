@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 // import styles1 from './users_fixheader.css';
 import CustomScrollbars from "../../../util/CustomScrollbars";
+import scrollIntoView from 'scroll-into-view';
 
 import { Card, Row, Col, List, Button, message, Table, Icon, Switch, Modal } from "antd";
 import UserDeviceList from './UserDeviceList'
@@ -123,11 +124,12 @@ class UserList extends Component {
         this.setState({
             users: this.props.users,
             expandedRowKeys: this.props.expandedRowsKey
-        })
+        });
+        // this.handleScroll()
     }
 
     onExpandRow = (expanded, record) => {
-        // console.log(expanded, 'data is expanded', record);
+        console.log(expanded, 'data is expanded', record);
         if (expanded) {
             if (!this.state.expandedRowKeys.includes(record.rowKey)) {
                 this.state.expandedRowKeys.push(record.rowKey);
@@ -141,19 +143,37 @@ class UserList extends Component {
         }
     }
 
+    handleScroll = () => {
+        if (this.props.location.state) {
+            scrollIntoView(document.querySelector('.exp_row'), {
+                align: {
+                    top: 0,
+                    left: 0
+                },
+            });
+        }
+    }
+
     componentDidUpdate(prevProps) {
 
+        // if (this.props.expandedRowsKey !== prevProps.expandedRowsKey) {
+        //     this.setState({
+        //         expandedRowKeys: this.props.expandedRowsKey
+        //     })
+        // }
+        
         if (this.props !== prevProps) {
 
             // console.log('this.props.expandr', this.props)
             this.setState({
                 columns: this.props.columns,
                 users: this.props.users,
-                expandedRowKeys: this.props.expandedRowsKey
+                // expandedRowKeys: this.props.expandedRowsKey
             })
         }
     }
     render() {
+        this.handleScroll()
         let type = this.props.user.type
         let styleType = "";
         if (type === ADMIN) {
@@ -161,7 +181,7 @@ class UserList extends Component {
         } else {
             styleType = "users_fix_card_dealer"
         }
-        // console.log(this.state.expandedRowKeys)
+        console.log("render function: ", this.state.expandedRowKeys)
         return (
             <Fragment>
                 <Card className={`fix_card ${styleType}`}>
@@ -185,7 +205,7 @@ class UserList extends Component {
                             }}
                             expandIconColumnIndex={3}
                             expandedRowKeys={this.state.expandedRowKeys}
-                            onExpand={this.onExpandRow}
+                            onExpand={(expended, record) => this.onExpandRow(expended, record)}
                             expandIconAsCell={false}
                             defaultExpandedRowKeys={(this.props.location.state) ? [this.props.location.state.id] : []}
                             columns={this.state.columns}

@@ -33,7 +33,7 @@ export default class FlagDevice extends Component {
         e.preventDefault();
         this.state.func(this.state.device.usr_device_id, this.refs.option.state.value);
         this.setState({ visible: false });
-        this.state.refreshDevice(this.state.device.device_id)
+        // this.state.refreshDevice(this.state.device.device_id)
     }
     handleCancel = () => {
         this.setState({ visible: false });
@@ -47,6 +47,7 @@ export default class FlagDevice extends Component {
                 <Modal
                     maskClosable={false}
                     visible={visible}
+                    destroyOnClose={true}
                     title={<div>{convertToLang(this.props.translation[FLAG_DEVICE], "Flag Device")} <br /> {convertToLang(this.props.translation[DEVICE_ID], "DEVICE ID")}: {this.state.device.device_id}</div>}
                     onOk={this.handleOk}
                     okText= {convertToLang(this.props.translation[Button_Ok], "Ok")}

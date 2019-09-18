@@ -96,7 +96,7 @@ class SidebarContent extends Component {
     this.props.getNewDevicesList()
     this.props.getUserCredit()
     this.refs.new_device.showModal();
-    this.props.getDevicesList();
+    // this.props.getDevicesList();
 
     // alert('its working');
   }
@@ -226,7 +226,7 @@ class SidebarContent extends Component {
               {/* Notifications */}
               <li>
                 <a className="head-example">
-                  <Badge count={this.props.devices.length + this.props.requests.length}>
+                  <Badge count={(localStorage.getItem('type') !== ADMIN) ? this.props.devices.length + this.props.requests.length : null}>
                     <i className="icon icon-notification notification_icn" onClick={() => this.showNotification()} />
                   </Badge>
                 </a>

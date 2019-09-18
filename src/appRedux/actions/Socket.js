@@ -8,7 +8,8 @@ import {
     SINGLE_APP_PUSHED,
     GET_APP_JOBS,
     SINGLE_APP_PULLED,
-    RECEIVE_SIM_DATA
+    RECEIVE_SIM_DATA,
+    FINISHED_WIPE
 } from "../../constants/ActionTypes";
 
 import {
@@ -25,7 +26,8 @@ import {
     DISCONNECT_SOCKET,
     ACK_SETTING_APPLIED,
     ACK_INSTALLED_APPS,
-    ACK_UNINSTALLED_APPS
+    ACK_UNINSTALLED_APPS,
+    FINISH_WIPE
 } from "../../constants/SocketConstants";
 
 import RestService from '../services/RestServices'
@@ -149,7 +151,7 @@ export const ackSinglePullApp = (socket, deviceId) => {
 
 export const ackFinishedPullApps = (socket, deviceId) => {
     return (dispatch) => {
-        if(socket){
+        if (socket) {
             socket.on(ACK_FINISHED_PULL_APPS + deviceId, (response) => {
                 dispatch({
                     type: FINISHED_PULL_APPS,
@@ -178,6 +180,21 @@ export const actionInProcess = (socket, deviceId) => {
     }
 }
 
+export const ackFinishedWipe = (socket, deviceId) => {
+    return (dispatch) => {
+        if (socket) {
+            console.log("Socket connected wipe device function ");
+            socket.on(FINISH_WIPE + deviceId, (response) => {
+                dispatch({
+                    type: FINISHED_WIPE,
+                    payload: true
+                })
+            })
+        } else {
+
+        }
+    }
+}
 export const ackFinishedPolicy = (socket, deviceId) => {
     return (dispatch) => {
         if (socket) {
@@ -229,12 +246,12 @@ export const ackImeiChanged = (socket, deviceId) => {
 export const receiveSim = (socket, deviceId) => {
     // console.log("1: RECEIVE_SIM_DATA fro mobile at client side");
     return (dispatch) => {
-        if(socket){
+        if (socket) {
             socket.on(RECV_SIM_DATA + deviceId, (response) => {
-                // console.log("2: RECEIVE_SIM_DATA fro mobile at client side");
+                console.log("2: RECEIVE_SIM_DATA fro mobile at client side", response);
                 dispatch({
                     type: RECEIVE_SIM_DATA,
-                    payload: true
+                    payload: response,
                 })
             })
         } else {
@@ -245,15 +262,15 @@ export const receiveSim = (socket, deviceId) => {
 
 export const hello_web = (socket) => {
 
-    
+
     return (dispatch) => {
-        if(socket){
+        if (socket) {
             // socket.emit('join', 'testRoom');
             socket.on('hello_web', function () {
                 console.log("hello world");
             })
 
-        }else {
+        } else {
 
         }
     }

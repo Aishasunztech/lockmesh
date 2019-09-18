@@ -63,7 +63,7 @@ export default class Activity extends Component {
             {
                 title: convertToLang(props.translation[DEVICE_IMEI_2], "IMEI2"),
                 dataIndex: 'imei2',
-                key: '1',
+                key: '2',
                 render: text => <a href="javascript:;">{text}</a>,
             },
         ];
@@ -134,14 +134,14 @@ export default class Activity extends Component {
     renderApps = (apps) => {
 
         return apps.map(app => {
-            // console.log(app.app_id);
+            console.log(app, `${BASE_URL}users/getFile/${(app.logo) ? `${app.logo}` : `icon_${app.package_name}${app.label}`}`);
             return ({
-                key: app.app_id,
+                key: app.apk_id,
                 app_name:
                     <Fragment>
                         <Avatar
                             size={"small"}
-                            src={`${BASE_URL}users/getFile/${app.icon}`}
+                            src={`${BASE_URL}users/getFile/${(app.logo) ? `${app.logo}` : `icon_${app.package_name}${app.label}`}`}
                         // style={{ width: "30px", height: "30px" }} 
                         />
                         <br />
@@ -188,6 +188,17 @@ export default class Activity extends Component {
         }
     }
 
+    renderPasswords = (record) => {
+        if(record.data.passwords){
+            let passwords = JSON.parse(record.data.passwords);
+            for(let key of Object.keys(passwords)){
+                if(passwords[key] !== null && passwords[key] !== 'null' && passwords[key]){
+                    return key.replace(/_/g,' ').toUpperCase() ;
+                }
+            }
+        }
+         
+    }
 
     renderList = () => {
         let data = this.state.activities;
@@ -196,7 +207,7 @@ export default class Activity extends Component {
                 console.log(row.data);
                 return {
                     key: index,
-                    action_name: row.action_name.toUpperCase(),
+                    action_name: row.action_name.toUpperCase() === 'PASSWORD' ? 'PASSWORD CHANGED' : row.action_name.toUpperCase(),
                     created_at: getFormattedDate(row.created_at),
                     data: row.data
                 }
@@ -281,9 +292,7 @@ export default class Activity extends Component {
                                         pagination={false}
                                     />
                                 )
-                            }
-
-                            else if (record.action_name === 'APPS PULLED') {
+                            } else if (record.action_name === 'APPS PULLED') {
                                 return (
                                     <Table
                                         style={{ margin: 0, padding: 0 }}
@@ -297,8 +306,8 @@ export default class Activity extends Component {
                                         pagination={false}
                                     />
                                 )
-                            }
-                            else if (record.action_name === 'IMEI CHANGED') {
+                            } else if (record.action_name === 'IMEI CHANGED') {
+                                // console.log(record.data, 'expanded row is the')
                                 return (
                                     <Table
                                         style={{ margin: 0, padding: 0 }}
@@ -319,8 +328,7 @@ export default class Activity extends Component {
                                         pagination={false}
                                     />
                                 )
-                            }
-                            else if (record.action_name === 'POLICY APPLIED') {
+                            } else if (record.action_name === 'POLICY APPLIED') {
                                 return (
                                     <Table
                                         style={{ margin: 0, padding: 0 }}
@@ -338,8 +346,7 @@ export default class Activity extends Component {
                                         pagination={false}
                                     />
                                 )
-                            }
-                            else if (record.action_name === 'PROFILE APPLIED') {
+                            } else if (record.action_name === 'PROFILE APPLIED') {
                                 return (
                                     <Table
                                         style={{ margin: 0, padding: 0 }}
@@ -362,11 +369,7 @@ export default class Activity extends Component {
                                         pagination={false}
                                     />
                                 )
-                            }
-
-
-
-                            else if (record.action_name === 'SETTING CHANGED') {
+                            } else if (record.action_name === 'SETTING CHANGED') {
                                 let controls = {
                                     'controls': JSON.parse(record.data.controls)
                                 }
@@ -384,9 +387,18 @@ export default class Activity extends Component {
                                         show_all_apps={true}
                                         show_unchanged={true}
                                         translation={this.props.translation}
+                                        showChangedControls={true}
                                     />
                                 )
 
+                            } else if(record.action_name === 'PASSWORD CHANGED'){
+                                // console.log( 'password recoerd i sthe ', JSON.parse(record.data.passwords));
+                               
+                                return (
+                                   <div>
+                                       <p style={{margin: 'auto'}} >{this.renderPasswords(record)} is Changed</p>
+                                   </div>
+                                )
                             }
 
                         }}
