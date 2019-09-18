@@ -21,7 +21,8 @@ import {
     DELETE_UNLINK_DEVICE,
     UNFLAG_DEVICE,
     GET_PARENT_PACKAGES,
-    UNLINK_DEVICE
+    UNLINK_DEVICE,
+    TRANSFER_DEVICE
 } from "../../constants/ActionTypes";
 
 // import { convertToLang } from '../../routes/utils/commonUtils';
@@ -147,6 +148,54 @@ export default (state = initialState, action) => {
                     ...state,
                     devices: [...state.devices]
                 }
+            }
+        }
+
+        case UNLINK_DEVICE: {
+            let devices = state.devices;
+
+            if (action.response.status) {
+                success({
+                    title: action.response.msg,
+                });
+                if (action.isTransferred) {
+                    devices = state.devices.filter((obj => obj.device_id !== action.payload.device_id));
+                }
+            } else {
+                error({
+                    title: action.response.msg,
+                });
+            }
+            // console.log('unlink called');
+            return {
+                ...state,
+                isLoading: false,
+                devices
+            }
+        }
+
+        case TRANSFER_DEVICE: {
+
+            console.log('check devices', state.devices)
+            // if (action.response.status) {
+                success({
+                    title:  "device trasfered" //action.response.msg,
+                });
+                let objIndex = state.devices.findIndex((obj => obj.device_id === action.payload.device_id));
+                if (objIndex !== -1) {
+                    state.devices[objIndex].finalStatus = 'Transfered';
+                    state.devices[objIndex].transfer_status = 1;
+                }
+            // } else {
+            //     error({
+            //         title: action.response.msg,
+            //     });
+            // }
+            // console.log('unlink called');
+            return {
+                ...state,
+                isLoading: false,
+                devices: [...state.devices]
             }
         }
 

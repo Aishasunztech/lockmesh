@@ -705,7 +705,7 @@ class SideActions extends Component {
         // console.log('-----', this.props.device_details.finalStatus == "Transfered")
         // transfer_user_status
         if (this.props.device_details.finalStatus == "Transfered") {
-            showConfirm(this.props.device, this.props.unlinkDevice, this, convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_UNLINK_THE_DEVICE], "Do you really want to unlink the device "), 'unlink')
+            showConfirm(this.props.device, this.props.unlinkDevice, this, convertToLang(this.props.translation[""], "Do you really want to unlink the transfered device "), 'unlink', true)
         } else {
             if (flagged === 'Unflag') {
                 showConfirm(this.props.device, this.props.unflagged, this, convertToLang(this.props.translation[DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE], 'Do you really want to unflag the device '), 'flagged')
@@ -1360,7 +1360,7 @@ var mapStateToProps = ({ device_details, auth, settings, devices, sidebar }, oth
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(SideActions);
-function showConfirm(device, action, _this, msg, type) {
+function showConfirm(device, action, _this, msg, type, transfered = false) {
     confirm({
         title: msg + device.device_id,
         onOk() {
@@ -1372,7 +1372,7 @@ function showConfirm(device, action, _this, msg, type) {
                     action(device)
                 } else if (type === 'unlink') {
                     // console.log('unlink check =========> ', device)
-                    action(device);
+                    action(device, transfered);
                 }
                 if (type === 'flagged') {
                     action(device.device_id)
@@ -1397,7 +1397,7 @@ function showConfirmPolcy(_this) {
     confirm({
         title: convertToLang(_this.props.translation[DO_YOU_WANT_TO_APPLY], "Do you want to apply") + " # " + _this.state.policyName + convertToLang(_this.props.translation[POLICY_ON_DEVICE], " policy on device?"),
         onOk() {
-            _this.props.applyPolicy(_this.props.device.device_id, _this.props.device.id, _this.state.policyId , _this.state.policyName);
+            _this.props.applyPolicy(_this.props.device.device_id, _this.props.device.id, _this.state.policyId, _this.state.policyName);
         },
         okText: convertToLang(_this.props.translation[Button_Ok], "Ok"),
         cancelText: convertToLang(_this.props.translation[Button_Cancel], "Cancel"),

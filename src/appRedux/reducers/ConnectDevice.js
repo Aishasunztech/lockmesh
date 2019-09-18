@@ -710,23 +710,28 @@ export default (state = initialState, action) => {
             }
         }
 
-        case UNLINK_DEVICE: {
-            if (action.response.status) {
-                success({
-                    title: action.response.msg,
-                });
-            } else {
-                error({
-                    title: action.response.msg,
-                });
-            }
-            // console.log('unlink called');
-            return {
-                ...state,
-                isLoading: false,
+        // case UNLINK_DEVICE: {
+        //     let devices = state.devices;
 
-            }
-        }
+        //     if (action.response.status) {
+        //         success({
+        //             title: action.response.msg,
+        //         });
+        //         if (action.isTransferred) {
+        //             devices = state.devices.filter((obj => obj.device_id !== action.payload.device_id));
+        //         }
+        //     } else {
+        //         error({
+        //             title: action.response.msg,
+        //         });
+        //     }
+        //     // console.log('unlink called');
+        //     return {
+        //         ...state,
+        //         isLoading: false,
+        //         devices
+        //     }
+        // }
         case GUEST_PASSWORD: {
             // console.log(GUEST_PASSWORD);
             // console.log(action.payload);

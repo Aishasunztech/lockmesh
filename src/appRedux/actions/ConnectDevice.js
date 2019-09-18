@@ -58,7 +58,8 @@ import {
     PASSWORD_CHANGED,
     PUSH_APP_CHECKED,
     RESET_PUSH_APPS,
-    GET_UNREG_SIMS
+    GET_UNREG_SIMS,
+    TRANSFER_DEVICE
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -285,8 +286,8 @@ export function wipe(device) {
     }
 }
 
-export function unlinkDevice(device) {
-    // console.log('you are at action file of unlinkDevice', device)
+export function unlinkDevice(device, transferred = false) {
+    console.log(transferred, 'you are at action file of unlinkDevice', device)
     return (dispatch) => {
         RestService.unlinkDevice(device).then((response) => {
             // console.log('response to unlink device', response);
@@ -295,7 +296,8 @@ export function unlinkDevice(device) {
                     dispatch({
                         response: response.data,
                         type: UNLINK_DEVICE,
-                        payload: response.data.profiles
+                        payload: device,
+                        isTransferred: transferred
                     })
                 }
 
@@ -784,20 +786,21 @@ export function savePolicy(app_list, passwords = null, profileType, profileName,
 }
 
 export const transferDeviceProfile = (data) => {
-    // alert(data);
+    alert("transferDeviceProfile ",data);
     return (dispatch) => {
-        RestService.transferDeviceProfile(data).then((response) => {
-            if (RestService.checkAuth(response.data)) {
+        // RestService.transferDeviceProfile(data).then((response) => {
+            // if (RestService.checkAuth(response.data)) {
                 dispatch({
-                    type: MESSAGE_HANDLER,
-                    payload: response.data
+                    type: TRANSFER_DEVICE,
+                    // response: response.data,
+                    payload: data
                 })
-            } else {
-                dispatch({
-                    type: INVALID_TOKEN
-                })
-            }
-        })
+            // } else {
+            //     dispatch({
+            //         type: INVALID_TOKEN
+            //     })
+            // }
+        // })
     }
 }
 
