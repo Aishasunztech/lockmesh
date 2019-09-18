@@ -145,12 +145,12 @@ class UserList extends Component {
 
     handleScroll = () => {
         if (this.props.location.state) {
-            scrollIntoView(document.querySelector('.exp_row'), {
-                align: {
-                    top: 0,
-                    left: 0
-                },
-            });
+            // scrollIntoView(document.querySelector('.exp_row'), {
+            //     align: {
+            //         top: 0,
+            //         left: 0
+            //     },
+            // });
         }
     }
 
