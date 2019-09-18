@@ -13,6 +13,7 @@ import {
 } from "../../constants/ActionTypes";
 
 import {
+    SEND_ONLINE_OFFLINE_STATUS,
     ACK_FINISHED_PUSH_APPS,
     ACK_FINISHED_PULL_APPS,
     ACTION_IN_PROCESS,
@@ -57,6 +58,16 @@ export const getNotification = (socket) => {
     }
 }
 
+export const sendOnlineOfflineStatus = (socket, deviceId) => {
+    return (dispatch) => {
+        socket.on(SEND_ONLINE_OFFLINE_STATUS + deviceId, (response) => {
+            dispatch({
+                type: SEND_ONLINE_OFFLINE_STATUS,
+                payload: response.status
+            })
+        })
+    }
+}
 export const ackSettingApplied = (socket, deviceId) => {
     return (dispatch) => {
         socket.on(ACK_SETTING_APPLIED + deviceId, (response) => {

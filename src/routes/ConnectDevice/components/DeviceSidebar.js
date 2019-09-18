@@ -142,7 +142,7 @@ export default class DeviceSidebar extends Component {
                 value: checkValue(device_details.type)
             },
             {
-                key: 5,
+                key: 533,
                 name: (<a href="javascript:void(0)" >{titleCase(convertToLang(this.props.translation[DEVICE_VERSION], "VERSION"))}:</a>),
                 value: checkValue(device_details.version)
             },
