@@ -94,7 +94,7 @@ export default class DeviceSidebar extends Component {
             {
                 key: 26,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[REMAINING_TERM_DAYS], 'REMAINING TERM DAYS'))}:</a>),
-                value: device_details.remainTermDays
+                value: (device_details.remainTermDays > 0) ? device_details.remainTermDays : 0
             },
             {
                 key: 2,
