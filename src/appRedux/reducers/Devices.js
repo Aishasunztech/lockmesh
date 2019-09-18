@@ -139,17 +139,12 @@ export default (state = initialState, action) => {
             }
 
         case FLAG_DEVICE: {
-            console.log('def devbice is ', action.payload.device, action.payload.device.flagged)
             if (action.response.status) {
-
                 let objIndex = state.devices.findIndex((obj => obj.device_id === action.payload.device.device_id));
-                console.log('object index is: ', objIndex)
                 if (objIndex !== -1) {
                     state.devices[objIndex].flagged = action.payload.device.flagged;
                     state.devices[objIndex].finalStatus = action.payload.device.finalStatus;
                 }
-                console.log("state.devices[objIndex] is: ", state.devices[objIndex])
-
             }
             return {
                 ...state,
@@ -160,7 +155,7 @@ export default (state = initialState, action) => {
         case UNFLAG_DEVICE: {
             if (action.response.status) {
                 // console.log('unflaged', action.response.device_id)
-                let objIndex = state.devices.findIndex((obj => obj.device_id === action.response.device_id));
+                let objIndex = state.devices.findIndex((obj => obj.device_id === action.payload.device.device_id));
                 if (objIndex !== -1) {
                     state.devices[objIndex].flagged = 'Not flagged';
                 }

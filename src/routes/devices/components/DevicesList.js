@@ -776,7 +776,7 @@ export default class Tab extends Component {
             cancelText: convertToLang(this.props.translation[Button_No], 'No'),
             onOk() {
                 _this.props.unflagged(device.device_id)
-                _this.props.activateDevice(device)
+                // _this.props.activateDevice(device)
                 // console.log('OK');
             },
             onCancel() {
