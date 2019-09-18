@@ -1460,7 +1460,7 @@ export default (state = initialState, action) => {
                 } else {
                     warning({
                         title: action.payload.msg, //  'Warning Device Offline',
-                        content: action.imeiData.imeiNo + `${action.payload.content1}` + action.imeiData.type + `${action.payload.content2}`,
+                        content: action.imeiData.imeiNo + `${action.payload.title1}` + action.imeiData.type + `${action.payload.title2}`,
                     });
                 }
                 // console.log('new state is', state.imei_list)
@@ -1527,7 +1527,10 @@ export default (state = initialState, action) => {
             let app_list = state.app_list;
             if (action.payload.status) {
                 action.payload.app_list.forEach((app) => {
-                    app_list.push(app)
+                    let found = state.app_list.filter(e => e.uniqueName === app.uniqueName);
+                    if (found.length === 0) {
+                        app_list.push(app)
+                    } 
                 });
             } else {
 
@@ -1566,7 +1569,7 @@ export default (state = initialState, action) => {
         }
 
         case ACK_SETTING_APPLIED: {
-            // console.log("ACK_SETTING_APPLIED controls ", action.payload.controls)
+            // console.log(action.payload.app_list.length, "ACK_SETTING_APPLIED action.payload.app_list ", action.payload.app_list)
             console.log("states extensions: ", state.extensions);
             let extensions = action.payload.app_list.filter(e => e.uniqueName == SECURE_SETTING); //action.payload.extensions
             console.log("updated extension is: ", action.payload.app_list.filter(e => e.uniqueName == SECURE_SETTING))
