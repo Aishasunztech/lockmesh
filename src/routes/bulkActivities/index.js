@@ -91,7 +91,7 @@ class BulkActivities extends Component {
         this.state = {
             columns: columns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
             filteredDevices: [],
-            selectedAction: "Null",
+            selectedAction: "NOT SELECTED",
             selectedDealers: [],
             selectedUsers: [],
             dealerList: [],
@@ -498,7 +498,7 @@ class BulkActivities extends Component {
                                 placeholder={convertToLang(this.props.translation[""], "Select any action")}
                                 onChange={this.handleChangeAction}
                             >
-                                <Select.Option value="Null">{convertToLang(this.props.translation[""], "Select any action")}</Select.Option>
+                                <Select.Option value="NOT SELECTED">{convertToLang(this.props.translation[""], "Select any action")}</Select.Option>
                                 {this.actionList.map((item, index) => {
                                     return (<Select.Option key={item.id} value={item.key}>{item.value}</Select.Option>)
                                 })}
@@ -535,12 +535,10 @@ class BulkActivities extends Component {
                     <br />
 
                     <p>Dealers Selected: <span className="font_26">{((this.state.selectedDealers.length) ?
-                        this.state.selectedDealers.map((item, index) => {
-                            return (
-                                this.state.selectedDealers.length - 1 !== index ? `${item.label}, ` : `${item.label}`
-                            )
-                        })
-                        : "NULL")}</span></p>
+                        this.state.selectedDealers.map((item, index) =>
+                            this.state.selectedDealers.length - 1 !== index ? `${item.label}, ` : `${item.label}`
+                        )
+                        : "NOT SELECTED")}</span></p>
                     <Row gutter={24} className="">
                         <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
                             <span className=""> {convertToLang(this.props.translation[""], "Select Users:")} </span>
@@ -567,9 +565,9 @@ class BulkActivities extends Component {
                     </Row>
                     <br />
                     <p>Users Selected: <span className="font_26">{(this.state.selectedUsers.length) ?
-                         this.state.selectedUsers.map((item, index) => 
-                        this.state.selectedUsers.length-1 !== index ? `${item.label}, `: `${item.label}`
-                         ) : "NULL"}</span></p>
+                        this.state.selectedUsers.map((item, index) =>
+                            this.state.selectedUsers.length - 1 !== index ? `${item.label}, ` : `${item.label}`
+                        ) : "NOT SELECTED"}</span></p>
 
                     <FilterDeives
                         devices={this.state.filteredDevices}

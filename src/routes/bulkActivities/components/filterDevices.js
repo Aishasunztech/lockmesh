@@ -156,7 +156,7 @@ class FilterDevices extends Component {
       let updateSelectedDevices = this.state.selectedDevices;
       let { copySelectedDevices } = this.state;
 
-      if (action !== "NULL" && updateSelectedDevices.length) {
+      if (action !== "NOT SELECTED" && updateSelectedDevices.length) {
         if (action === "SUSPEND DEVICES") {
           updateSelectedDevices = copySelectedDevices.filter((device) => device.finalStatus != DEVICE_SUSPENDED)
         } else if (action === "ACTIVATE DEVICES") {
@@ -606,7 +606,7 @@ class FilterDevices extends Component {
     console.log(this.props.selectedDealers, this.props.selectedUsers, 'action apply', this.props.handleActionValue);
 
     let action = this.props.handleActionValue;
-    if (action !== "Null") {
+    if (action !== "NOT SELECTED") {
       if (this.state.selectedDevices.length) {
         if (action === "SUSPEND DEVICES") {
           this.refs.bulk_suspend.handleSuspendDevice(this.state.selectedDevices, this.props.selectedDealers, this.props.selectedUsers);
