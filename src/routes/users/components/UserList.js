@@ -173,13 +173,10 @@ class UserList extends Component {
         }
     }
     render() {
-        // console.log('scrollStatus is:: ', this.props.expandedRowsKey[0] !== undefined, this.props.location, this.state.scrollStatus)
+        // console.log("CONDITIONS", this.state.expandedRowKeys.length === 1 && this.state.expandedRowKeys[0] !== undefined && this.props.location.state !== undefined && this.state.expandedRowKeys[0] == this.props.location.state.id)
 
-        if (this.props.expandedRowsKey[0] !== undefined && this.props.location) { //  && this.state.scrollStatus
-            if (this.props.location.state && this.props.expandedRowsKey[0].includes(this.props.location.state.id)) {
-                this.handleScroll();
-                // this.setState({ scrollStatus: false })
-            }
+        if (this.state.expandedRowKeys.length === 1 && this.state.expandedRowKeys[0] !== undefined && this.props.location.state !== undefined && this.state.expandedRowKeys[0] == this.props.location.state.id) { //  && this.state.scrollStatus
+            this.handleScroll();
         }
 
         let type = this.props.user.type

@@ -267,14 +267,19 @@ class DealerList extends Component {
     }
 
     render() {
-        console.log(this.props.expandedRowKeys, 'dealers list console', this.props.location);
+        // console.log(this.props.expandedRowKeys, 'dealers list console', this.props.location);
 
         // if (this.props.expandedRowKeys[0] !== undefined && this.props.location) { //  && this.state.scrollStatus
         //     if (this.props.location.state && this.props.expandedRowKeys[0].toString().includes(this.props.location.state.id.toString())) {
-                this.handleScroll();
-                // this.setState({ scrollStatus: false })
+        // this.handleScroll();
+        // this.setState({ scrollStatus: false })
         //     }
         // }
+
+
+        if (this.state.expandedRowKeys.length === 1 && this.props.expandedRowKeys[0] !== undefined && this.props.location.state !== undefined && this.state.expandedRowKeys[0] == this.props.location.state.id) { //  && this.state.scrollStatus
+            this.handleScroll();
+        }
 
         return (
             <Card className="fix_card dealer_fix_card">
