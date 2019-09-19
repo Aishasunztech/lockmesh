@@ -1,6 +1,8 @@
 export const CONNECT_SOCKET = 'CONNECT_SOCKET';
 export const DISCONNECT_SOCKET = 'DISCONNECT_SOCKET';
 
+export const SEND_ONLINE_OFFLINE_STATUS = 'send_online_offline_status_';
+
 export const GET_SYNC_STATUS = "get_sync_status_";
 export const GET_APPLIED_SETTINGS = "get_applied_settings_";
 export const DEVICE_STATUS = "device_status_";
@@ -42,6 +44,7 @@ export const ACK_pull_APPS = 'ack_pull_apps_';
 export const ACK_FINISHED_PULL_APPS = 'ack_finished_pull_apps_';
 
 export const FINISH_POLICY = 'finish_policy_';
+export const FINISH_WIPE = 'finish_wipe_';
 export const FINISH_POLICY_STEP = 'finish_policy_step_';
 
 

@@ -144,9 +144,10 @@ export default (state = initialState, action) => {
         case UNFLAG_DEVICE: {
             if (action.response.status) {
                 // console.log('unflaged', action.response.device_id)
-                let objIndex = state.devices.findIndex((obj => obj.device_id === action.response.device_id));
+                let objIndex = state.devices.findIndex((obj => obj.device_id === action.payload.device.device_id));
                 if (objIndex !== -1) {
                     state.devices[objIndex].flagged = 'Not flagged';
+                    state.devices[objIndex].finalStatus = action.payload.device.finalStatus;
                 }
                 return {
                     ...state,

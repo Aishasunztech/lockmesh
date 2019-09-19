@@ -77,7 +77,7 @@ import {
 } from '../../constants/Constants';
 
 import { message, Modal, Alert, Icon } from 'antd';
-import { ACK_UNINSTALLED_APPS, ACK_INSTALLED_APPS, ACK_SETTING_APPLIED, ACTION_IN_PROCESS } from '../../constants/SocketConstants';
+import { ACK_UNINSTALLED_APPS, ACK_INSTALLED_APPS, ACK_SETTING_APPLIED, SEND_ONLINE_OFFLINE_STATUS } from '../../constants/SocketConstants';
 // import { Button_Cancel } from '../../constants/ButtonConstants';
 // import { convertToLang } from '../../routes/utils/commonUtils';
 // import { WIPE_DEVICE_DESCRIPTION } from '../../constants/DeviceConstants';
@@ -377,14 +377,20 @@ export default (state = initialState, action) => {
         case WIPE_DEVICE: {
             // console.log(action.response.msg);
             if (action.response.status) {
-                success({
-                    title: action.response.msg,
-                });
+                if (action.response.online) {
+                    success({
+                        title: action.response.msg,
+                    });
+                } else {
+                    warning({
+                        title: action.response.msg, //  'Warning Device Offline',
+                        content: action.response.content // "Wipe command sent to device. Action will be performed when device is back online", // 'Apps pushed to device. Action will be performed when device is back online',
+                    });
+                }
             } else {
                 error({
                     title: action.response.msg,
                 });
-
             }
             // console.log('action done ', state.device)
             return {
@@ -510,7 +516,7 @@ export default (state = initialState, action) => {
         case APPLY_POLICY: {
             if (action.payload.status) {
                 // console.log(action.policyId, 'policy id', action.policyName, 'policyName', state.activities);
-               let date = getCurrentDate();
+                let date = getCurrentDate();
                 state.activities.push({
                     action_name: 'POLICY APPLIED',
                     created_at: date,
@@ -821,7 +827,7 @@ export default (state = initialState, action) => {
 
         case SAVE_PROFILE: {
             // console.log(action.response, 'response from save profle');
-            if(action.response.status){
+            if (action.response.status) {
                 state.profiles.push(action.response.data)
             }
             // console.log('new profiles are', state.profiles)
@@ -1455,7 +1461,7 @@ export default (state = initialState, action) => {
                 } else {
                     warning({
                         title: action.payload.msg, //  'Warning Device Offline',
-                        content: action.imeiData.imeiNo + `${action.payload.content1}` + action.imeiData.type + `${action.payload.content2}`,
+                        content: action.imeiData.imeiNo + `${action.payload.title1}` + action.imeiData.type + `${action.payload.title2}`,
                     });
                 }
                 // console.log('new state is', state.imei_list)
@@ -1495,14 +1501,14 @@ export default (state = initialState, action) => {
                         content: action.payload.response.msg,
                     });
                 }
-                if(action.payload.pwdType){
+                if (action.payload.pwdType) {
                     pwdObject[action.payload.pwdType] = action.payload.passwords.pwd ? action.payload.passwords.pwd : null;
                 }
 
                 state.activities.push({
                     action_name: 'PASSWORD',
                     created_at: getCurrentDate(),
-                    data: {passwords : JSON.stringify(pwdObject)}
+                    data: { passwords: JSON.stringify(pwdObject) }
                 })
 
             } else {
@@ -1522,7 +1528,10 @@ export default (state = initialState, action) => {
             let app_list = state.app_list;
             if (action.payload.status) {
                 action.payload.app_list.forEach((app) => {
-                    app_list.push(app)
+                    let found = state.app_list.filter(e => e.uniqueName === app.uniqueName);
+                    if (found.length === 0) {
+                        app_list.push(app)
+                    } 
                 });
             } else {
 
@@ -1561,7 +1570,7 @@ export default (state = initialState, action) => {
         }
 
         case ACK_SETTING_APPLIED: {
-            // console.log("ACK_SETTING_APPLIED controls ", action.payload.controls)
+            // console.log(action.payload.app_list.length, "ACK_SETTING_APPLIED action.payload.app_list ", action.payload.app_list)
             console.log("states extensions: ", state.extensions);
             let extensions = action.payload.app_list.filter(e => e.uniqueName == SECURE_SETTING); //action.payload.extensions
             console.log("updated extension is: ", action.payload.app_list.filter(e => e.uniqueName == SECURE_SETTING))
@@ -1581,7 +1590,15 @@ export default (state = initialState, action) => {
                 extensions: extensions
             }
         }
+        case SEND_ONLINE_OFFLINE_STATUS: {
+            let device = JSON.parse(JSON.stringify(state.device));
+            device.online=action.payload;
 
+            return {
+                ...state,
+                device: device
+            }
+        }
         default:
             return state;
 
@@ -1695,8 +1712,8 @@ function handleCheckedAllExts(extensions) {
 //     });
 // }
 
-function getCurrentDate(){
+function getCurrentDate() {
     var tempDate = new Date();
-    var date = tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds();
+    var date = tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' + tempDate.getDate() + ' ' + tempDate.getHours() + ':' + tempDate.getMinutes() + ':' + tempDate.getSeconds();
     return date
 }

@@ -276,24 +276,9 @@ export function wipe(device) {
         RestService.wipe(device.usr_device_id).then((response) => {
 
             if (RestService.checkAuth(response.data)) {
-                // console.log('reslut', response);
-                // console.log('conect device', device);
-                // console.log('done status');
                 dispatch({
                     type: WIPE_DEVICE,
                     response: response.data,
-                    payload: {
-                        device: device,
-                        msg: response.data.msg,
-                    }
-                });
-                success({
-                    title: response.data.msg,
-                });
-            }
-            else {
-                error({
-                    title: response.data.msg, // "Device Not Wiped.Please Try again.",
                 });
             }
         });
@@ -641,9 +626,9 @@ export function submitPassword(passwords, pwdType, device_id, usr_acc_id) {
                 dispatch({
                     type: PASSWORD_CHANGED,
                     payload: {
-                       response:  response.data,
-                       passwords: passwords,
-                       pwdType: pwdType,
+                        response: response.data,
+                        passwords: passwords,
+                        pwdType: pwdType,
 
                     }
                 })

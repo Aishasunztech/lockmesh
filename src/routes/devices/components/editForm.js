@@ -31,6 +31,8 @@ import {
 import { Button_Add_User, Button_submit, Button_Cancel } from '../../../constants/ButtonConstants';
 import { LABEL_DATA_PGP_EMAIL } from '../../../constants/LabelConstants';
 
+const { TextArea } = Input;
+
 class EditDevice extends Component {
 
     constructor(props) {
@@ -52,6 +54,7 @@ class EditDevice extends Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
+                // console.log('edit device form values are: ', values);
                 // console.log("Device List", values)
                 values.prevPGP = this.props.device.pgp_email;
                 values.prevChatID = this.props.device.chat_id;
@@ -380,18 +383,6 @@ class EditDevice extends Component {
                         <Fragment>
 
                             <Form.Item
-                                label={convertToLang(this.props.translation[Device_Note], "Note ")}
-                                labelCol={{ span: 8, xs: 24, sm: 8 }}
-                                wrapperCol={{ span: 14, md: 14, xs: 24 }}
-                            >
-                                {this.props.form.getFieldDecorator('note', {
-                                    initialValue: this.props.device.note,
-                                })(
-                                    <Input />
-                                )}
-
-                            </Form.Item>
-                            <Form.Item
                                 label={convertToLang(this.props.translation[Device_Valid_For], "VALID FOR(DAYS)  ")}
                                 labelCol={{ span: 8, xs: 24, sm: 8 }}
                                 wrapperCol={{ span: 14, md: 14, xs: 24 }}
@@ -456,6 +447,25 @@ class EditDevice extends Component {
                         </Fragment>
 
                     }
+
+                    <Form.Item
+                        label={convertToLang(this.props.translation[Device_Note], "Note ")}
+                        labelCol={{ span: 8, xs: 24, sm: 8 }}
+                        wrapperCol={{ span: 14, md: 14, xs: 24 }}
+                    >
+                        {this.props.form.getFieldDecorator('note', {
+                            initialValue: this.props.device.note,
+                        })(
+                            // <Input />
+                            <TextArea
+                                // value={value}
+                                // onChange={this.onChange}
+                                // placeholder="Controlled autosize"
+                                autosize={{ minRows: 3, maxRows: 5 }}
+                            />
+                        )}
+
+                    </Form.Item>
 
                     <Form.Item className="edit_ftr_btn11"
                         wrapperCol={{

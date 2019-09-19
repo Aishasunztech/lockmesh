@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 // import { bindActionCreators } from "redux";
 import { Input, Modal, Select, Button } from "antd";
-import { componentSearch, getDealerStatus, titleCase, convertToLang } from '../utils/commonUtils';
+import { componentSearch, getDealerStatus, titleCase, convertToLang, handleMultipleSearch, filterData_RelatedToMultipleSearch } from '../utils/commonUtils';
 import { getDealerList, suspendDealer, deleteDealer, activateDealer, undoDealer, updatePassword, editDealer } from "../../appRedux/actions/Dealers";
 import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
 import { resetUploadForm } from "../../appRedux/actions/Apk";
@@ -56,7 +56,7 @@ import { Tab_All, Tab_Active, Tab_Suspended, Tab_Archived } from "../../constant
 import { dealerColumns, sDealerColumns } from '../utils/columnsUtils';
 import { Sidebar_dealers, Sidebar_sdealers } from "../../constants/SidebarConstants";
 
-var coppydealers = [];
+var copyDealers = [];
 var status = true;
 class Dealers extends Component {
 
@@ -82,6 +82,7 @@ class Dealers extends Component {
             suspendDealers: [],
             unlinkedDealers: [],
             expandedRowsKey: [],
+            SearchValues: []
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -96,7 +97,7 @@ class Dealers extends Component {
     // };
 
     handleTableChange = (pagination, query, sorter) => {
-        console.log('check sorter func: ', sorter)
+        // console.log('check sorter func: ', sorter)
         let { columns } = this.state;
 
         columns.forEach(column => {
@@ -164,41 +165,47 @@ class Dealers extends Component {
         // alert('value');
         // alert(value);
         // let type = value.toLowerCase();
+        let dealers = [];
         switch (value) {
             case 'active':
+                dealers = this.filterList('active', this.props.dealers);
                 this.setState({
-                    dealers: this.filterList('active', this.props.dealers),
+                    dealers: this.handleSearch12(dealers),
                     column: this.state.columns,
                     tabselect: '2'
                 })
 
                 break;
             case 'suspended':
+                dealers = this.filterList('suspended', this.props.dealers);
                 this.setState({
-                    dealers: this.filterList('suspended', this.props.dealers),
+                    dealers: this.handleSearch12(dealers),
                     column: this.state.columns,
                     tabselect: '4'
                 })
                 break;
 
             case 'all':
+                dealers = this.props.dealers;
                 this.setState({
-                    dealers: this.props.dealers,
+                    dealers: this.handleSearch12(dealers),
                     column: this.state.columns,
                     tabselect: '1'
                 })
                 break;
             case "unlinked":
+                dealers = this.filterList('unlinked', this.props.dealers);
                 this.setState({
-                    dealers: this.filterList('unlinked', this.props.dealers),
+                    dealers: this.handleSearch12(dealers),
                     column: this.state.columns,
                     tabselect: '3'
                 })
                 break;
 
             default:
+                dealers = this.props.dealers;
                 this.setState({
-                    dealers: this.props.dealers,
+                    dealers: this.handleSearch12(dealers),
                     column: this.state.columns,
                     tabselect: '1'
                 })
@@ -342,10 +349,10 @@ class Dealers extends Component {
         try {
             if (value.length) {
                 if (status) {
-                    coppydealers = this.state.dealers;
+                    copyDealers = this.state.dealers;
                     status = false;
                 }
-                let founddealers = componentSearch(coppydealers, value);
+                let founddealers = componentSearch(copyDealers, value);
                 // console.log("found dealers", founddealers);
                 if (founddealers.length) {
                     this.setState({
@@ -359,7 +366,7 @@ class Dealers extends Component {
             } else {
                 status = true;
                 this.setState({
-                    dealers: coppydealers,
+                    dealers: copyDealers,
                 })
             }
         } catch (error) {
@@ -373,17 +380,19 @@ class Dealers extends Component {
 
         if ((window.location.pathname.split("/").pop() === 'sdealer') && (this.state.columns !== undefined) && (this.state.options !== undefined) && (this.state.columns !== null) && (this.state.columns.length <= 8)) {
             //  alert('if sdealer')
-
+            status = true;
             let sDealerCols = sDealerColumns(this.props.translation, this.handleSearch);
             this.state.columns.push(...sDealerCols);
             // this.state.columns = this.state.columns
         }
         if ((window.location.pathname.split("/").pop() === 'sdealer') && (this.state.options.length <= 6)) {
             // alert('if sdealer')
+            status = true;
             this.state.options.push(convertToLang(this.props.translation[Parent_Dealer], "PARENT DEALER"), convertToLang(this.props.translation[Parent_Dealer_ID], "PARENT DEALER ID"));
         }
         else if ((window.location.pathname.split("/").pop() === 'dealer') && ((this.state.columns.length > 8) || (this.state.options.length > 6))) {
             // alert('if dealer')
+            status = true;
             this.state.columns = this.state.columns.filter(lst => lst.title !== convertToLang(this.props.translation[Parent_Dealer_ID], "PARENT DEALER ID"));
             this.state.columns = this.state.columns.filter(lst => lst.title !== convertToLang(this.props.translation[Parent_Dealer], "PARENT DEALER"));
             this.state.options = this.state.options.slice(0, 6);
@@ -434,7 +443,7 @@ class Dealers extends Component {
         switch (value) {
             case '2':
                 this.setState({
-                    dealers: this.filterList('active', this.props.dealers),
+                    dealers: this.handleSearch12(this.filterList('active', this.props.dealers)),
                     column: this.state.columns,
                     tabselect: '2'
                 })
@@ -442,28 +451,28 @@ class Dealers extends Component {
                 break;
             case '4':
                 this.setState({
-                    dealers: this.filterList('suspended', this.props.dealers),
+                    dealers: this.handleSearch12(this.filterList('suspended', this.props.dealers)),
                     column: this.state.columns,
                     tabselect: '4'
                 })
                 break;
             case '1':
                 this.setState({
-                    dealers: this.props.dealers,
+                    dealers: this.handleSearch12(this.props.dealers),
                     column: this.state.columns,
                     tabselect: '1'
                 })
                 break;
             case "3":
                 this.setState({
-                    dealers: this.filterList('unlinked', this.props.dealers),
+                    dealers: this.handleSearch12(this.filterList('unlinked', this.props.dealers)),
                     column: this.state.columns,
                     tabselect: '3'
                 })
                 break;
             default:
                 this.setState({
-                    dealers: this.props.dealers,
+                    dealers: this.handleSearch12(this.props.dealers),
                     column: this.state.columns,
                     tabselect: '1'
                 })
@@ -587,54 +596,187 @@ class Dealers extends Component {
         );
     }
 
+    // handleSearch = (e) => {
+
+    //     let demoDealers = [];
+    //     if (status) {
+    //         coppydealers = this.state.dealers;
+    //         status = false;
+    //     }
+    //     // console.log("devices", coppydealers);
+
+    //     if (e.target.value.length) {
+    //         // console.log("keyname", e.target.name);
+    //         // console.log("value", e.target.value);
+    //         // console.log(this.state.dealers);
+    //         coppydealers.forEach((dealer) => {
+    //             // console.log("device", dealer);
+    //             // console.log('dealer amount is', dealer[e.target.name])
+
+    //             if (dealer[e.target.name] !== undefined) {
+    //                 if ((typeof dealer[e.target.name]) === 'string') {
+    //                     if (dealer[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
+    //                         demoDealers.push(dealer);
+    //                     }
+    //                 } else if (dealer[e.target.name] !== null) {
+    //                     if (dealer[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
+    //                         demoDealers.push(dealer);
+    //                     }
+    //                     if (isArray(dealer[e.target.name])) {
+    //                         // console.log('is it working', e.target.name)
+    //                         if (dealer[e.target.name][0]['total'].includes(e.target.value)) {
+    //                             demoDealers.push(dealer);
+    //                         }
+    //                     }
+    //                 } else {
+    //                     // demoDevices.push(device);
+    //                 }
+    //             } else {
+    //                 demoDealers.push(dealer);
+    //             }
+    //         });
+    //         // console.log("searched value", demoDealers);
+    //         this.setState({
+    //             dealers: demoDealers
+    //         })
+    //     } else {
+    //         this.setState({
+    //             dealers: coppydealers
+    //         })
+    //     }
+    // }
+
     handleSearch = (e) => {
 
-        let demoDealers = [];
-        if (status) {
-            coppydealers = this.state.dealers;
-            status = false;
-        }
-        // console.log("devices", coppydealers);
+        this.state.SearchValues[e.target.name] = { key: e.target.name, value: e.target.value };
 
-        if (e.target.value.length) {
-            // console.log("keyname", e.target.name);
-            // console.log("value", e.target.value);
-            // console.log(this.state.dealers);
-            coppydealers.forEach((dealer) => {
-                // console.log("device", dealer);
-                // console.log('dealer amount is', dealer[e.target.name])
+        let response = handleMultipleSearch(e, status, copyDealers, this.state.SearchValues, this.state.dealers)
 
-                if (dealer[e.target.name] !== undefined) {
-                    if ((typeof dealer[e.target.name]) === 'string') {
-                        if (dealer[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
-                            demoDealers.push(dealer);
-                        }
-                    } else if (dealer[e.target.name] !== null) {
-                        if (dealer[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
-                            demoDealers.push(dealer);
-                        }
-                        if (isArray(dealer[e.target.name])) {
-                            // console.log('is it working', e.target.name)
-                            if (dealer[e.target.name][0]['total'].includes(e.target.value)) {
-                                demoDealers.push(dealer);
-                            }
-                        }
-                    } else {
-                        // demoDevices.push(device);
-                    }
-                } else {
-                    demoDealers.push(dealer);
-                }
-            });
-            // console.log("searched value", demoDealers);
-            this.setState({
-                dealers: demoDealers
-            })
-        } else {
-            this.setState({
-                dealers: coppydealers
-            })
-        }
+        console.log(response.SearchValues, "response is: ===========> ", response)
+        this.setState({
+            dealers: response.demoData,
+            SearchValues: response.SearchValues
+        });
+        status = response.copy_status;
+        copyDealers = response.copyRequireSearchData;
+
+
+        // let demoDealers = [];
+        // let demoSearchValues = this.state.SearchValues;
+        // if (status) {
+        //     copyDealers = this.state.dealers;
+        //     status = false;
+        // }
+        // console.log("coppydealers ", copyDealers);
+
+        // let targetName = e.target.name;
+        // let targetValue = e.target.value;
+
+        // // if (e.target.value.length) {
+        // if (targetValue.length || Object.keys(demoSearchValues).length) {
+        //     demoSearchValues[targetName] = { key: targetName, value: targetValue };
+        //     this.state.SearchValues[targetName] = { key: targetName, value: targetValue };
+
+        //     // console.log("keyname", e.target.name);
+        //     // console.log("value", e.target.value);
+        //     // console.log(this.state.dealers);
+        //     copyDealers.forEach((dealer) => {
+        //         // console.log("device", dealer);
+        //         // console.log('dealer amount is', dealer[e.target.name])
+
+        //         let searchColsAre = Object.keys(demoSearchValues).length;
+        //         let searchDealers = 0;
+
+        //         if (searchColsAre > 0) {
+        //             Object.values(demoSearchValues).forEach((data) => {
+
+        //                 if (data.value == "") {
+        //                     searchDealers++;
+        //                 }
+        //                 else if ((typeof dealer[data.key]) === 'string') {
+        //                     if (dealer[data.key].toUpperCase().includes(data.value.toUpperCase())) {
+        //                         searchDealers++;
+        //                     }
+        //                 } else if (dealer[data.key] !== null) {
+        //                     if (isArray(dealer[data.key])) {
+        //                         // console.log('is it working', data.key)
+        //                         if (dealer[data.key][0]['total'].toString().toUpperCase().includes(data.value.toUpperCase())) {
+        //                             // demoDealers.push(dealer);
+        //                             searchDealers++;
+        //                         }
+        //                     } else if (dealer[data.key].toString().toUpperCase().includes(data.value.toUpperCase())) {
+        //                         searchDealers++;
+        //                     }
+
+        //                 } else {
+        //                     // demoDevices.push(device);
+        //                 }
+
+        //             })
+
+        //             if (searchColsAre === searchDealers) {
+        //                 demoDealers.push(dealer);
+        //             }
+
+        //         } else {
+        //             if (dealer[targetName].toUpperCase().includes(targetValue.toUpperCase())) {
+        //                 demoDealers.push(dealer);
+        //             }
+        //         }
+
+        //     });
+        //     // console.log("searched value", demoDealers);
+        //     this.setState({
+        //         dealers: demoDealers,
+        //         SearchValues: demoSearchValues
+        //     })
+        // } else {
+        //     this.setState({
+        //         dealers: copyDealers,
+        //         SearchValues: demoSearchValues
+        //     })
+        // }
+    }
+
+
+    handleSearch12 = (dealers) => {
+        // console.log('check 2nd search data:: ', dealers);
+
+        let response = filterData_RelatedToMultipleSearch(dealers, this.state.SearchValues);
+        return response;
+
+        // let searchedDealers = [];
+        // let searchData = Object.values(this.state.SearchValues);
+        // let searchColsAre = Object.keys(this.state.SearchValues).length;
+
+        // if (searchColsAre) {
+        //     Dealers.forEach((device) => {
+        //         let searchDealers = 0;
+
+        //         for (let search of searchData) {
+        //             // console.log('search is: ', search)
+        //             // console.log('search key is: ', search.key)
+        //             if (search.value == "") {
+        //                 searchDealers++;
+        //             } else if (isArray(device[search.key])) {
+        //                 // console.log('is it working', data.key)
+        //                 if (device[search.key].toString().toUpperCase().includes(search.value.toUpperCase())) {
+        //                     searchDealers++;
+        //                 }
+        //             } else if (device[search.key].toString().toUpperCase().includes(search.value.toUpperCase())) {
+        //                 searchDealers++;
+        //             }
+
+        //         }
+        //         if (searchColsAre === searchDealers) {
+        //             searchedDealers.push(device);
+        //         }
+
+        //     });
+        //     return searchedDealers;
+        // } else {
+        //     return Dealers;
+        // }
     }
 
     handleSubmit = (e) => {
@@ -651,7 +793,7 @@ class Dealers extends Component {
 var mapStateToProps = (state) => {
     // console.log("mapStateToProps");
     // console.log(state.dealers.isloading);
-    // console.log('state.dealer', state.dealers);
+    // console.log('state.dealer', state.dealers.dealers);
     // console.log("selected options Dealer", state.settings.dealerOptions);
     return {
         isloading: state.dealers.isloading,

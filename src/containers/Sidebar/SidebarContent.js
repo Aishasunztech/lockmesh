@@ -226,7 +226,7 @@ class SidebarContent extends Component {
               {/* Notifications */}
               <li>
                 <a className="head-example">
-                  <Badge count={this.props.devices.length + this.props.requests.length}>
+                  <Badge count={(localStorage.getItem('type') !== ADMIN) ? this.props.devices.length + this.props.requests.length : null}>
                     <i className="icon icon-notification notification_icn" onClick={() => this.showNotification()} />
                   </Badge>
                 </a>

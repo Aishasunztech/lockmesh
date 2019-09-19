@@ -51,6 +51,7 @@ import {
   ackFinishedPushApps,
   ackFinishedPullApps,
   ackFinishedPolicy,
+  ackFinishedWipe,
   actionInProcess,
   ackImeiChanged,
   getAppJobQueue,
@@ -62,7 +63,8 @@ import {
   closeSocketEvents,
   ackInstalledApps,
   ackUninstalledApps,
-  ackSettingApplied
+  ackSettingApplied,
+  sendOnlineOfflineStatus
 } from "../../appRedux/actions/Socket";
 
 import imgUrl from '../../assets/images/mobile.png';
@@ -239,10 +241,12 @@ class ConnectDevice extends Component {
       if (this.props.socket === null && nextProps.socket !== null) {
         console.log('path changed');
         // console.log("socket connected component")
+        nextProps.sendOnlineOfflineStatus(nextProps.socket, device_id);
         nextProps.actionInProcess(nextProps.socket, device_id);
         nextProps.ackFinishedPushApps(nextProps.socket, device_id);
         nextProps.ackFinishedPullApps(nextProps.socket, device_id);
         nextProps.ackFinishedPolicy(nextProps.socket, device_id);
+        nextProps.ackFinishedWipe(nextProps.socket, device_id);
         nextProps.ackImeiChanged(nextProps.socket, device_id);
         nextProps.ackSinglePushApp(nextProps.socket, device_id);
         nextProps.ackSinglePullApp(nextProps.socket, device_id);
@@ -798,6 +802,7 @@ function mapDispatchToProps(dispatch) {
     ackFinishedPullApps: ackFinishedPullApps,
     ackFinishedPushApps: ackFinishedPushApps,
     ackFinishedPolicy: ackFinishedPolicy,
+    ackFinishedWipe: ackFinishedWipe,
     ackImeiChanged: ackImeiChanged,
     actionInProcess: actionInProcess,
     getActivities: getActivities,
@@ -814,6 +819,7 @@ function mapDispatchToProps(dispatch) {
     ackInstalledApps: ackInstalledApps,
     ackUninstalledApps: ackUninstalledApps,
     ackSettingApplied: ackSettingApplied,
+    sendOnlineOfflineStatus: sendOnlineOfflineStatus,
     hello_web: hello_web,
   }, dispatch);
 }
