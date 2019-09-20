@@ -936,16 +936,16 @@ class Devices extends Component {
                             <DevicesList
                                 onChangeTableSorting={this.handleTableChange}
                                 devices={this.state.devices}
-                                allDevices={this.state.allDevices.length}
-                                activeDevices={this.state.activeDevices.length}
-                                expireDevices={this.state.expireDevices.length}
-                                suspendDevices={this.state.suspendDevices.length}
-                                preActiveDevices={this.state.preActiveDevices.length}
-                                pendingDevices={this.state.pendingDevices.length}
-                                unlinkedDevices={this.state.unlinkedDevices.length}
-                                flaggedDevices={this.state.flaggedDevices.length}
-                                transferredDevices={this.state.transferredDevices.length}
-                                trialDevices={this.state.trialDevices.length}
+                                allDevices={this.state.allDevices}
+                                activeDevices={this.state.activeDevices}
+                                expireDevices={this.state.expireDevices}
+                                suspendDevices={this.state.suspendDevices}
+                                preActiveDevices={this.state.preActiveDevices}
+                                pendingDevices={this.state.pendingDevices}
+                                unlinkedDevices={this.state.unlinkedDevices}
+                                flaggedDevices={this.state.flaggedDevices}
+                                transferredDevices={this.state.transferredDevices}
+                                trialDevices={this.state.trialDevices}
                                 suspendDevice={this.props.suspendDevice}
                                 activateDevice={this.props.activateDevice}
                                 columns={this.state.columns}

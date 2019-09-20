@@ -71,8 +71,8 @@ export default class PricingModal extends Component {
             if (this.state.pkg_features && this.state.pkgName && this.state.pkgTerms && this.state.pkgName !== '' && this.state.pkgTerms !== '') {
                 let pkgName = this.state.pkgName;
                 let pkgTerm = this.state.pkgTerms;
-                let pkgPrice = this.state.pkgPricepkgTerms;
-                let pkgFeatures = this.state.pkg_featurespkgTerms;
+                let pkgPrice = this.state.pkgPrice;
+                let pkgFeatures = this.state.pkg_features;
                 let dealer_id = this.props.dealer_id
 
                 let data = {
@@ -217,7 +217,7 @@ function showConfirm(_this, data) {
             </Row>
         </div>,
         onOk() {
-            console.log('OK');
+            // console.log('OK');
             _this.props.setPackage(data);
             _this.props.showPricingModal(false);
             _this.setState({

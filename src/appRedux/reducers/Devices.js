@@ -22,7 +22,8 @@ import {
     UNFLAG_DEVICE,
     GET_PARENT_PACKAGES,
     GET_PRODUCT_PRICES,
-    UNLINK_DEVICE
+    UNLINK_DEVICE,
+    ADD_DEVICE
 } from "../../constants/ActionTypes";
 
 // import { convertToLang } from '../../routes/utils/commonUtils';
@@ -61,6 +62,7 @@ import {
 
 import SettingStates from './InitialStates';
 import { message, Modal } from 'antd';
+import { DEVICE_PRE_ACTIVATION, DEVICE_UNLINKED } from "../../constants/Constants";
 
 var { translation } = SettingStates;
 
@@ -240,9 +242,13 @@ export default (state = initialState, action) => {
             }
 
         case DELETE_UNLINK_DEVICE:
+            let type = DEVICE_UNLINKED
             if (action.response.status) {
+                if (action.payload.type === 'pre-active') {
+                    type = DEVICE_PRE_ACTIVATION
+                }
                 for (let id of action.response.data) {
-                    let objIndex = state.devices.findIndex((obj => obj.id === id));
+                    let objIndex = state.devices.findIndex((obj => obj.id === id && obj.finalStatus == type));
                     state.devices.splice(objIndex, 1);
                 }
                 success({
@@ -290,6 +296,38 @@ export default (state = initialState, action) => {
                 ...state,
                 devices: [...state.devices],
                 newDevices: filteredDevices,
+                //    selectedOptions: [...state.selectedOptions],
+                // options: state.options,
+                isloading: false,
+                msg: state.msg,
+                showMsg: "hello",
+                options: state.options,
+                // devices: action.payload,
+            }
+
+        case ADD_DEVICE:
+            console.log(action.response, action.payload.formData.device_id);
+            var filteredNewDevices = state.newDevices;
+            if (action.response.status) {
+                state.devices.unshift(action.response.data[0])
+                var alldevices = state.newDevices;
+                var device_id = action.payload.formData.device_id;
+                filteredNewDevices = alldevices.filter(device => device.device_id !== device_id);
+
+                success({
+                    title: action.response.msg,
+                });
+            }
+            else {
+                error({
+                    title: action.response.msg,
+                });
+            }
+
+            return {
+                ...state,
+                devices: [...state.devices],
+                newDevices: filteredNewDevices,
                 //    selectedOptions: [...state.selectedOptions],
                 // options: state.options,
                 isloading: false,

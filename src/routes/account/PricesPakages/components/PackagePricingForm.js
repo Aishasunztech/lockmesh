@@ -57,7 +57,7 @@ class PackagePricingForm extends Component {
                 }
             } else {
                 // value = this.props.form.getFieldValue(fieldName)
-                console.log('fiels name', fieldName, 'value', value)
+                // console.log('fiels name', fieldName, 'value', value)
                 if (e !== '' && fieldName) {
                     this.props.setPkgDetail(e, fieldName, is_pkg_feature);
                 }

@@ -401,7 +401,7 @@ class AddDevice extends Component {
             pgp_email: (this.props.pgp_emails.length && !disablePgp) ? this.props.pgp_emails[0].pgp_email : '',
             chat_id: (this.props.chat_ids.length && !disableChat) ? this.props.chat_ids[0].chat_id : '',
             sim_id: (this.props.sim_ids.length && !disableSim) ? this.props.sim_ids[0].sim_id : '',
-            sim_id2: (this.sim_id2_included) ? (this.props.sim_ids.length) ? this.props.sim_ids[1].sim_id : undefined : undefined,
+            sim_id2: (this.sim_id2_included) ? (this.props.sim_ids.length > 1) ? this.props.sim_ids[1].sim_id : undefined : undefined,
             vpn: vpn,
             disableSim: disableSim,
             disableChat: disableChat,

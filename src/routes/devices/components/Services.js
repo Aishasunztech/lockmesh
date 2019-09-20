@@ -184,7 +184,7 @@ class ServicesList extends Component {
 
 
     renderList(type, list) {
-        // console.log(list);
+        console.log(list);
         if (type === 'package') {
             return list.map((item, index) => {
                 let services = JSON.parse(item.pkg_features)

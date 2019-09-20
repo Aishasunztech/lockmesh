@@ -16,7 +16,8 @@ import {
     GET_PARENT_PACKAGES,
     GET_PRODUCT_PRICES,
     USER_CREDITS,
-    TRANSFER_DEVICE
+    TRANSFER_DEVICE,
+    ADD_DEVICE
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -85,8 +86,10 @@ export function deleteUnlinkDevice(action, devices) {
                     type: DELETE_UNLINK_DEVICE,
                     response: response.data,
                     payload: {
-                        formData: devices
+                        formData: devices,
+                        type: action
                     }
+
                 });
                 if (action === 'pre-active') {
                     if (response.data.status) {
@@ -330,14 +333,13 @@ export function addDevice(device) {
             if (RestService.checkAuth(response.data)) {
 
                 dispatch({
-                    type: EDIT_DEVICE,
+                    type: ADD_DEVICE,
                     response: response.data,
                     payload: {
                         formData: device,
                     }
                 });
                 if (response.data.status) {
-                    // console.log("object");
                     dispatch({
                         type: USER_CREDITS,
                         response: response.data
