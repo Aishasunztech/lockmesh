@@ -583,6 +583,8 @@ export default (state = initialState, action) => {
 
             return {
                 ...state,
+                undoApps: [],
+                redoApps: [],
                 pageName: MAIN_MENU,
                 showMessage: false,
                 applyBtn: false,
@@ -1022,7 +1024,8 @@ export default (state = initialState, action) => {
             state.extensions = JSON.parse(JSON.stringify(changedExtensions));
             let extensions = state.extensions;
             state.undoExtensions.push(JSON.parse(JSON.stringify(changedExtensions)));
-            let check = handleCheckedAllExts(extensions);
+            // let check = handleCheckedAllExts(extensions);
+            let check = handleCheckedAll(extensions[0].subExtension);
 
             return {
                 ...state,
@@ -1605,6 +1608,7 @@ export default (state = initialState, action) => {
 }
 
 function handleCheckedAll(applications) {
+    // console.log('handleCheckedAll applications  ', applications)
     let guestCount = 0;
     let encryptedCount = 0;
     let enableCount = 0;
@@ -1628,6 +1632,9 @@ function handleCheckedAll(applications) {
 
     })
 
+    // console.log("guestCount === applications.length ", guestCount, applications.length)
+    // console.log("encryptedCount === applications.length ", encryptedCount , applications.length)
+
     if (guestCount === applications.length) {
         guestAll = true;
     }
@@ -1646,42 +1653,45 @@ function handleCheckedAll(applications) {
     }
 }
 
-function handleCheckedAllExts(extensions) {
-    let guestCount = 0;
-    let encryptedCount = 0;
-    let enableCount = 0;
+// function handleCheckedAllExts(extensions) {
+//     console.log('handleCheckedAllExts extensions  ', extensions)
+//     let guestCount = 0;
+//     let encryptedCount = 0;
+//     let enableCount = 0;
 
-    let guestAll = false;
-    let encryptedAll = false;
+//     let guestAll = false;
+//     let encryptedAll = false;
 
-    extensions.forEach(app => {
-        if (app.guest === true || app.guest === 1) {
-            guestCount = guestCount + 1;
-        }
+//     extensions.forEach(app => {
+//         if (app.guest === true || app.guest === 1) {
+//             ++guestCount;
+//         }
 
-        if (app.encrypted === true || app.encrypted === 1) {
-            encryptedCount = encryptedCount + 1;
-        }
+//         if (app.encrypted === true || app.encrypted === 1) {
+//             ++encryptedCount;
+//         }
 
-        if (app.enable === true || app.enable === 1) {
-            enableCount = enableCount + 1;
-        }
+//         if (app.enable === true || app.enable === 1) {
+//             ++enableCount;
+//         }
 
-    })
+//     })
 
-    if (guestCount === extensions.length) {
-        guestAll = true;
-    }
+//     console.log("guestCount === extensions.length ", guestCount, extensions.length)
+//     console.log("encryptedCount === extensions.length ", encryptedCount , extensions.length)
+//     if (guestCount === extensions.length) {
+//         guestAll = true;
+//     }
 
-    if (encryptedCount === extensions.length) {
-        encryptedAll = true;
-    }
+//     if (encryptedCount === extensions.length) {
+//         encryptedAll = true;
+//     }
 
-    return {
-        guestAllExt: guestAll,
-        encryptedAllExt: encryptedAll,
-    }
-}
+//     return {
+//         guestAllExt: guestAll,
+//         encryptedAllExt: encryptedAll,
+//     }
+// }
 
 // function showConfirm1(device, msg, buttonText) {
 //     confirm({
