@@ -31,7 +31,7 @@ class UserList extends Component {
             pagination: this.props.pagination,
             users: [],
             expandedRowKeys: [],
-
+            scrollStatus: true
         }
     }
     handlePagination = (value) => {
@@ -156,12 +156,12 @@ class UserList extends Component {
 
     componentDidUpdate(prevProps) {
 
-        // if (this.props.expandedRowsKey !== prevProps.expandedRowsKey) {
-        //     this.setState({
-        //         expandedRowKeys: this.props.expandedRowsKey
-        //     })
-        // }
-        
+        if (JSON.stringify(this.props.expandedRowsKey) !== JSON.stringify(prevProps.expandedRowsKey)) {
+            this.setState({
+                expandedRowKeys: this.props.expandedRowsKey
+            })
+        }
+
         if (this.props !== prevProps) {
 
             // console.log('this.props.expandr', this.props)
@@ -173,7 +173,12 @@ class UserList extends Component {
         }
     }
     render() {
-        this.handleScroll()
+        // console.log("CONDITIONS", this.state.expandedRowKeys.length === 1 && this.state.expandedRowKeys[0] !== undefined && this.props.location.state !== undefined && this.state.expandedRowKeys[0] == this.props.location.state.id)
+
+        if (this.state.expandedRowKeys.length === 1 && this.state.expandedRowKeys[0] !== undefined && this.props.location.state !== undefined && this.state.expandedRowKeys[0] == this.props.location.state.id) { //  && this.state.scrollStatus
+            this.handleScroll();
+        }
+
         let type = this.props.user.type
         let styleType = "";
         if (type === ADMIN) {
@@ -181,7 +186,7 @@ class UserList extends Component {
         } else {
             styleType = "users_fix_card_dealer"
         }
-        console.log("render function: ", this.state.expandedRowKeys)
+        // console.log("render function this.state.expandedRowKeys: ", this.state.expandedRowKeys)
         return (
             <Fragment>
                 <Card className={`fix_card ${styleType}`}>
