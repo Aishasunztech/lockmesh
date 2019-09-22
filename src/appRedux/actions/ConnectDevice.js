@@ -58,7 +58,8 @@ import {
     PASSWORD_CHANGED,
     PUSH_APP_CHECKED,
     RESET_PUSH_APPS,
-    GET_UNREG_SIMS
+    GET_UNREG_SIMS,
+    HANDLE_CHECK_ALL_PUSH_APPS
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -1085,6 +1086,18 @@ export const resetPushApps = () => {
             type: RESET_PUSH_APPS,
         })
 
+    }
+}
+
+export const handleCheckedAllPushApps = (value, key) => {
+    return (dispatch) => {
+        dispatch({
+            type: HANDLE_CHECK_ALL_PUSH_APPS,
+            payload: {
+                value: value,
+                key: key
+            }
+        })
     }
 }
 

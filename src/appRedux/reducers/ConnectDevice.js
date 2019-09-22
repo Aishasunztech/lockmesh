@@ -69,7 +69,8 @@ import {
     PASSWORD_CHANGED,
     PUSH_APP_CHECKED,
     RESET_PUSH_APPS,
-    GET_UNREG_SIMS
+    GET_UNREG_SIMS,
+    HANDLE_CHECK_ALL_PUSH_APPS
 } from "../../constants/ActionTypes";
 
 import {
@@ -194,7 +195,10 @@ const initialState = {
 
     // Transfer
     transferHistoryList: [],
-    getHistory: ''
+    getHistory: '',
+    guestAllPushApps: false,
+    enableAllPushApp: false,
+    encryptedAllPushApps: false,
 };
 let pwdObject = { "admin_password": null, "guest_password": null, "encrypted_password": null, "duress_password": null }
 
@@ -270,11 +274,33 @@ export default (state = initialState, action) => {
             if (index > -1) {
                 apklist[index][key] = value
             }
+            let checked = getCheckedAllPushApp(apklist);
+            // console.log(checked, 'checked')
             return {
                 ...state,
-                apk_list: apklist
+                apk_list: JSON.parse(JSON.stringify(apklist)),
+                ...checked
             }
+        }
 
+        case HANDLE_CHECK_ALL_PUSH_APPS: {
+            let key = action.payload.key;
+            let value = action.payload.value;
+            let apklist = state.apk_list;
+            // console.log(key, 'key', 'value', value, 'ajku', apklist)
+            for (let apk of apklist) {
+                apk[key] = value
+                // console.log(apk)
+            }
+            state[key + 'AllPushApps'] = value;
+
+            return {
+                ...state,
+                apk_list: JSON.parse(JSON.stringify(apklist)),
+                guestAllPushApps: state.guestAllPushApps,
+                enableAllPushApps: state.enableAllPushApps,
+                encryptedAllPushApps: state.encryptedAllPushApps,
+            }
         }
 
         case SUSPEND_DEVICE2: {
@@ -369,7 +395,10 @@ export default (state = initialState, action) => {
         case RESET_PUSH_APPS: {
             return {
                 ...state,
-                apk_list: JSON.parse(JSON.stringify(state.apk_list_dump))
+                apk_list: JSON.parse(JSON.stringify(state.apk_list_dump)),
+                guestAllPushApps: false,
+                enableAllPushApps: false,
+                encryptedAllPushApps: false
             }
         }
 
@@ -404,9 +433,12 @@ export default (state = initialState, action) => {
             // console.log('controls form reduvcer of getdeviceapp', action.controls)
             let applications = action.payload;
             let check = handleCheckedAll(applications);
-            // console.log('abaid app list ', action.payload);
-            // console.log(action.payload.filter(e => e.uniqueName == SECURE_SETTING))
+            console.log('abaid app list ', action.payload);
 
+            console.log("GET_DEVICE_APPS ", action.extensions);
+            let checkExt = handleCheckedAllExts(action.extensions[0].subExtension);
+            // console.log(action.payload.filter(e => e.uniqueName == SECURE_SETTING))
+            console.log("check ext: ", checkExt);
             // console.log("action.extensions  ", action.extensions)
 
             return {
@@ -420,7 +452,8 @@ export default (state = initialState, action) => {
                 isEncryptedPwd: false,
                 isGuestPwd: false,
                 applyBtn: false,
-                ...check
+                ...check,
+                ...checkExt
             }
         }
 
@@ -441,7 +474,7 @@ export default (state = initialState, action) => {
 
 
         case GET_PROFILES: {
-            console.log(action.payload, 'profils are')
+            // console.log(action.payload, 'profils are')
             return {
                 ...state,
                 isloading: true,
@@ -583,6 +616,8 @@ export default (state = initialState, action) => {
 
             return {
                 ...state,
+                undoApps: [],
+                redoApps: [],
                 pageName: MAIN_MENU,
                 showMessage: false,
                 applyBtn: false,
@@ -1022,7 +1057,8 @@ export default (state = initialState, action) => {
             state.extensions = JSON.parse(JSON.stringify(changedExtensions));
             let extensions = state.extensions;
             state.undoExtensions.push(JSON.parse(JSON.stringify(changedExtensions)));
-            let check = handleCheckedAllExts(extensions);
+            // let check = handleCheckedAllExts(extensions);
+            let check = handleCheckedAllExts(extensions[0].subExtension);
 
             return {
                 ...state,
@@ -1073,18 +1109,25 @@ export default (state = initialState, action) => {
 
                 state.redoExtensions.push(JSON.parse(JSON.stringify(exten)));
 
+                let extensions = JSON.parse(JSON.stringify(state.undoExtensions[state.undoExtensions.length - 1]));
+                console.log("UNDO_EXTENSIONS ", extensions);
+
+                let check = handleCheckedAllExts(extensions[0].subExtension);
+
                 if (state.undoExtensions.length === 1) {
                     return {
                         ...state,
                         undoBtn: false,
                         redoBtn: true,
-                        extensions: JSON.parse(JSON.stringify(state.undoExtensions[state.undoExtensions.length - 1]))
+                        extensions: extensions,
+                        ...check
                     };
                 } else {
                     return {
                         ...state,
                         redoBtn: true,
-                        extensions: JSON.parse(JSON.stringify(state.undoExtensions[state.undoExtensions.length - 1]))
+                        extensions: extensions,
+                        ...check
                     };
                 }
             } else {
@@ -1099,6 +1142,8 @@ export default (state = initialState, action) => {
             if (state.redoExtensions.length > 0) {
 
                 let extensions = state.redoExtensions[state.redoExtensions.length - 1];
+                console.log("REDO_EXTENSIONS ", extensions);
+                let check = handleCheckedAllExts(extensions[0].subExtension);
                 // console.log('if exist ex', extensions)
                 state.redoExtensions.pop();
                 state.undoExtensions.push(JSON.parse(JSON.stringify(extensions)));
@@ -1109,14 +1154,16 @@ export default (state = initialState, action) => {
                         extensions: extensions,
                         undoBtn: true,
                         redoBtn: false,
-                        clearBtn: true
+                        clearBtn: true,
+                        ...check
                     };
                 } else {
                     return {
                         ...state,
                         extensions: extensions,
                         undoBtn: true,
-                        clearBtn: true
+                        clearBtn: true,
+                        ...check
                     };
 
                 }
@@ -1530,7 +1577,7 @@ export default (state = initialState, action) => {
                     let found = state.app_list.filter(e => e.uniqueName === app.uniqueName);
                     if (found.length === 0) {
                         app_list.push(app)
-                    } 
+                    }
                 });
             } else {
 
@@ -1569,29 +1616,26 @@ export default (state = initialState, action) => {
         }
 
         case ACK_SETTING_APPLIED: {
-            // console.log(action.payload.app_list.length, "ACK_SETTING_APPLIED action.payload.app_list ", action.payload.app_list)
-            console.log("states extensions: ", state.extensions);
-            let extensions = action.payload.app_list.filter(e => e.uniqueName == SECURE_SETTING); //action.payload.extensions
-            console.log("updated extension is: ", action.payload.app_list.filter(e => e.uniqueName == SECURE_SETTING))
-            // state.extensions[0].subExtension = action.payload.extensions
-            // let secureSettings = action.payload.extensions.filter(e => e.uniqueName == SECURE_SETTING);
+            let extensions = action.payload.app_list.filter(e => e.uniqueName == SECURE_SETTING);
+            console.log("ACK_SETTING_APPLIED ", extensions);
+            let check = handleCheckedAllExts(extensions[0].subExtension);
+
             let settings = action.payload.app_list.filter(e => e.uniqueName == Main_SETTINGS);
-            // console.log('settings are: ', settings);
             let controls = {};
             controls["controls"] = action.payload.controls;
             controls["settings"] = [settings[settings.length - 1]];
-            // console.log("ACK_SETTING_APPLIED after controls ", action.payload.controls)
 
             return {
                 ...state,
                 app_list: action.payload.app_list,
                 controls: controls,
-                extensions: extensions
+                extensions: extensions,
+                ...check
             }
         }
         case SEND_ONLINE_OFFLINE_STATUS: {
             let device = JSON.parse(JSON.stringify(state.device));
-            device.online=action.payload;
+            device.online = action.payload;
 
             return {
                 ...state,
@@ -1605,6 +1649,7 @@ export default (state = initialState, action) => {
 }
 
 function handleCheckedAll(applications) {
+    console.log('handleCheckedAllExts applications  ', applications)
     let guestCount = 0;
     let encryptedCount = 0;
     let enableCount = 0;
@@ -1628,6 +1673,9 @@ function handleCheckedAll(applications) {
 
     })
 
+    console.log("guestCount === applications.length ", guestCount, applications.length)
+    console.log("encryptedCount === applications.length ", encryptedCount , applications.length)
+
     if (guestCount === applications.length) {
         guestAll = true;
     }
@@ -1647,6 +1695,7 @@ function handleCheckedAll(applications) {
 }
 
 function handleCheckedAllExts(extensions) {
+    console.log('handleCheckedAllExts extensions  ', extensions)
     let guestCount = 0;
     let encryptedCount = 0;
     let enableCount = 0;
@@ -1655,6 +1704,47 @@ function handleCheckedAllExts(extensions) {
     let encryptedAll = false;
 
     extensions.forEach(app => {
+        if (app.guest === true || app.guest === 1) {
+            ++guestCount;
+        }
+
+        if (app.encrypted === true || app.encrypted === 1) {
+            ++encryptedCount;
+        }
+
+        if (app.enable === true || app.enable === 1) {
+            ++enableCount;
+        }
+
+    })
+
+    console.log("guestCount === extensions.length ", guestCount, extensions.length)
+    console.log("encryptedCount === extensions.length ", encryptedCount , extensions.length)
+    if (guestCount === extensions.length) {
+        guestAll = true;
+    }
+
+    if (encryptedCount === extensions.length) {
+        encryptedAll = true;
+    }
+
+    return {
+        guestAllExt: guestAll,
+        encryptedAllExt: encryptedAll,
+    }
+}
+
+
+function getCheckedAllPushApp(apkList) {
+    let guestCount = 0;
+    let encryptedCount = 0;
+    let enableCount = 0;
+
+    let guestAll = false;
+    let encryptedAll = false;
+    let enableAll = false;
+
+    apkList.forEach(app => {
         if (app.guest === true || app.guest === 1) {
             guestCount = guestCount + 1;
         }
@@ -1669,17 +1759,22 @@ function handleCheckedAllExts(extensions) {
 
     })
 
-    if (guestCount === extensions.length) {
+    if (guestCount === apkList.length) {
         guestAll = true;
     }
 
-    if (encryptedCount === extensions.length) {
+    if (enableCount === apkList.length) {
+        enableAll = true;
+    }
+
+    if (encryptedCount === apkList.length) {
         encryptedAll = true;
     }
 
     return {
-        guestAllExt: guestAll,
-        encryptedAllExt: encryptedAll,
+        guestAllPushApps: guestAll,
+        encryptedAllPushApps: encryptedAll,
+        enableAllPushApps: enableAll,
     }
 }
 
