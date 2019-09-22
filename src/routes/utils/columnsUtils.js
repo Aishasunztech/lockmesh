@@ -307,7 +307,7 @@ export function devicesColumns(translation, handleSearch, SearchValues = []) {
                     align: "center",
                     dataIndex: 'lastOnline',
                     key: 'lastOnline',
-                    sorter: (a, b) => { return a.lastOnline.props.children[1].localeCompare(b.lastOnline.props.children[1]) },
+                    sorter: (a, b) => { return a.lastOnline.localeCompare(b.lastOnline) },
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
