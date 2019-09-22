@@ -1,8 +1,11 @@
+import packageJson from '../../package.json';
+
+
 let hostName = window.location.hostname
 
 let URL = "http://localhost:3000/";
 let SUPERADMIN = "http://localhost:8042/";
-let TITLE = "LockMesh";
+let TITLE = packageJson.name;
 
 switch (hostName) {
     case "localhost":
@@ -70,3 +73,6 @@ export const BASE_URL = URL;
 export const APP_TITLE = TITLE;
 
 export const SUPERADMIN_URL = `${SUPERADMIN}api/v1/`;
+
+// APP Constants
+export const VERSION = packageJson.version;
