@@ -249,12 +249,15 @@ export function devicesColumns(translation, handleSearch, SearchValues = []) {
             dataIndex: 'transfered_to',
             children: [
                 {
-                    title: "TRANSFERED TO",
+                    title: "TRANSFERRED TO",
                     align: "center",
                     dataIndex: 'transfered_to',
                     key: "transfered_to",
                     sorter: (a, b) => {
-                        return a.transfered_to.props.children.localeCompare(b.transfered_to.props.children)
+                        // console.log(a.transfered_to.props);
+                        if (a.transfered_to.props) {
+                            return a.transfered_to.props.children.localeCompare(b.transfered_to.props.children)
+                        }
                     },
                     sortDirections: ['ascend', 'descend'],
                 }
