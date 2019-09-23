@@ -121,7 +121,6 @@ class SettingAppPermissions extends Component {
   render() {
     const { extension, isExtension } = this.props;
     // const { extension } = this.state;
-    console.log( isExtension , this.props.extension, 'extenion ate is')
     if (isExtension) {
       return (
         <Fragment>
