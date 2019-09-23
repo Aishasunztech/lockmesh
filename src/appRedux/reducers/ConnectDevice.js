@@ -1656,13 +1656,13 @@ export default (state = initialState, action) => {
                 controls["controls"] = state.controls ? state.controls.controls? state.controls.controls : [] : [];
             }
 
-            let extensions = action.payload.app_list.filter(e => e.uniqueName == SECURE_SETTING);
-            // console.log(action.payload, "ACK_SETTING_APPLIED ", extensions);
+            // let extensions = action.payload.app_list.filter(e => e.uniqueName == SECURE_SETTING);
+            // // console.log(action.payload, "ACK_SETTING_APPLIED ", extensions);
 
-            let check = {}
-            if (extensions !== undefined && extensions[0].subExtension) {
-                check = handleCheckedAllExts(extensions[0].subExtension);
-            }
+            // let check = {}
+            // if (extensions !== undefined && extensions[0].subExtension) {
+            //     check = handleCheckedAllExts(extensions[0].subExtension);
+            // }
 
             let settings = action.payload.app_list.filter(e => e.uniqueName == Main_SETTINGS);
             if (settings && settings.length) {
@@ -1676,8 +1676,8 @@ export default (state = initialState, action) => {
                 ...state,
                 app_list: action.payload.app_list,
                 controls: controls,
-                extensions: extensions,
-                ...check
+                // extensions: extensions,
+                // ...check
             }
         }
         case SEND_ONLINE_OFFLINE_STATUS: {
