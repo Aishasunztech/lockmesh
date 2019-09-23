@@ -234,7 +234,7 @@ export default class NewDevices extends Component {
 
     render() {
         let flaggedDevices = this.filterList(this.props.flaggedDevices)
-        console.log('check flaggedDevices ', flaggedDevices, 'requests', this.props.requests, 'NewDevices', this.props.devices)
+        // console.log('check flaggedDevices ', flaggedDevices, 'requests', this.props.requests, 'NewDevices', this.props.devices)
         return (
             <div>
                 <Modal
@@ -259,7 +259,7 @@ export default class NewDevices extends Component {
                             />
                         </Fragment>
                     }
-                    {(this.state.sectionVisible) ?
+                    {/* {(this.state.sectionVisible) ?
                         <Fragment>
                             <h1>{convertToLang(this.props.translation[CREDITS_CASH_REQUESTS], "CREDITS CASH REQUESTS")}</h1>
                             <Table
@@ -271,7 +271,7 @@ export default class NewDevices extends Component {
 
                             />
                         </Fragment>
-                        : null}
+                        : null} */}
                 </Modal>
                 <AddDeviceModal ref='add_device_modal' translation={this.props.translation} />
 

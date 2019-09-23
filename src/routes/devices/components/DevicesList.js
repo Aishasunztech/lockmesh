@@ -143,7 +143,8 @@ class DevicesList extends Component {
     renderList(list) {
         // console.log('list of dec', list)
         return list.map((device, index) => {
-            // console.log('device finalStatus is: ', device.finalStatus)
+
+            // console.log('device finalStatus is: ', this.props.user.dealer_pin)
             // console.log('device is: ', device)
             // console.log('tab Select is: ', this.props.tabselect)
 
@@ -216,7 +217,7 @@ class DevicesList extends Component {
                                         (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                                         : (status === DEVICE_UNLINKED && this.props.user.type !== ADMIN) ?
                                             (<Fragment>{DeleteBtn}</Fragment>)
-                                            : (status === DEVICE_PENDING_ACTIVATION && this.props.user.type !== ADMIN) ?
+                                            : (status === DEVICE_PENDING_ACTIVATION && this.props.user.type !== ADMIN && device.link_code === this.props.user.dealer_pin) ?
                                                 (<Fragment>
                                                     <Fragment>{DeclineBtn}</Fragment><Fragment>{AcceptBtn}</Fragment>
                                                 </Fragment>)
