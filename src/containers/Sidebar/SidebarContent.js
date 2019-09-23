@@ -91,12 +91,13 @@ class SidebarContent extends Component {
   };
 
   showNotification = () => {
-
-    this.props.getNewCashRequests();
-    this.props.getNewDevicesList()
-    this.props.getUserCredit()
-    this.refs.new_device.showModal();
-    // this.props.getDevicesList();
+    if (this.props.authUser.type !== ADMIN) {
+      this.props.getNewCashRequests();
+      this.props.getNewDevicesList()
+      this.props.getUserCredit()
+      this.refs.new_device.showModal();
+      // this.props.getDevicesList();
+    }
 
     // alert('its working');
   }
