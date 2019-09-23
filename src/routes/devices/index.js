@@ -121,6 +121,7 @@ class Devices extends Component {
             copy_status: true,
             translation: {},
             SearchValues: [],
+            globalSearchedValue: "",
         }
         this.copyDevices = [];
 
@@ -184,6 +185,7 @@ class Devices extends Component {
                 }
             });
         }
+
 
         return dumyDevices;
     }
@@ -328,6 +330,7 @@ class Devices extends Component {
         switch (value) {
             case DEVICE_ACTIVATED:
                 devices = this.state.activeDevices;
+                devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
                     filteredDevices: devices,
@@ -338,6 +341,7 @@ class Devices extends Component {
                 break;
             case DEVICE_TRIAL:
                 devices = this.state.trialDevices;
+                devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
                     filteredDevices: devices,
@@ -348,6 +352,7 @@ class Devices extends Component {
                 break;
             case DEVICE_SUSPENDED:
                 devices = this.state.suspendDevices;
+                devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
                     filteredDevices: devices,
@@ -357,6 +362,7 @@ class Devices extends Component {
                 break;
             case DEVICE_TRANSFERED:
                 devices = this.state.transferredDevices;
+                devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
                     filteredDevices: devices,
@@ -366,6 +372,7 @@ class Devices extends Component {
                 break;
             case DEVICE_FLAGGED:
                 devices = this.state.flaggedDevices;
+                devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
                     filteredDevices: devices,
@@ -375,6 +382,7 @@ class Devices extends Component {
                 break;
             case DEVICE_EXPIRED:
                 devices = this.state.expireDevices;
+                devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
                     filteredDevices: devices,
@@ -384,6 +392,7 @@ class Devices extends Component {
                 break;
             case 'all':
                 devices = this.state.allDevices;
+                devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
                     filteredDevices: devices,
@@ -393,6 +402,7 @@ class Devices extends Component {
                 break;
             case DEVICE_UNLINKED:
                 devices = this.state.unlinkedDevices;
+                devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
                     filteredDevices: devices,
@@ -403,6 +413,7 @@ class Devices extends Component {
             case DEVICE_PENDING_ACTIVATION:
                 // alert(value);
                 devices = this.state.pendingDevices;
+                devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
                     filteredDevices: devices,
@@ -412,6 +423,7 @@ class Devices extends Component {
                 break;
             case DEVICE_PRE_ACTIVATION:
                 devices = this.state.preActiveDevices;
+                devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
                     filteredDevices: devices,
@@ -421,6 +433,7 @@ class Devices extends Component {
                 break;
             default:
                 devices = this.state.allDevices;
+                devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices,
                     filteredDevices: devices,
@@ -580,6 +593,7 @@ class Devices extends Component {
         switch (value) {
             case '4':
                 devices = this.filterList(DEVICE_ACTIVATED, this.props.devices);
+                devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
                     tabselect: '4',
@@ -588,7 +602,8 @@ class Devices extends Component {
                 })
                 break;
             case '9':
-                devices = this.filterList(DEVICE_TRIAL, this.props.devices);
+                devices = this.state.trialDevices;
+                devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 // devices = this.state.trialDevices
                 this.setState({
                     devices: this.handleSearch12(devices),
@@ -598,7 +613,8 @@ class Devices extends Component {
                 })
                 break;
             case '7':
-                devices = this.filterList(DEVICE_SUSPENDED, this.props.devices);
+                devices = this.state.suspendDevices;
+                devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
                     filteredDevices: devices,
@@ -607,7 +623,8 @@ class Devices extends Component {
                 })
                 break;
             case '6':
-                devices = this.filterList(DEVICE_EXPIRED, this.props.devices);
+                devices = this.state.expireDevices;
+                devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
                     filteredDevices: devices,
@@ -617,6 +634,7 @@ class Devices extends Component {
                 break;
             case '1':
                 devices = this.props.devices;
+                devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
                     filteredDevices: devices,
@@ -625,7 +643,8 @@ class Devices extends Component {
                 })
                 break;
             case "5":
-                devices = this.filterList(DEVICE_UNLINKED, this.props.devices)
+                devices = this.state.unlinkedDevices
+                devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
                     filteredDevices: devices,
@@ -634,7 +653,8 @@ class Devices extends Component {
                 })
                 break;
             case "2":
-                devices = this.filterList(DEVICE_PENDING_ACTIVATION, this.props.devices)
+                devices = this.state.pendingDevices
+                devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
                     filteredDevices: devices,
@@ -643,7 +663,8 @@ class Devices extends Component {
                 })
                 break;
             case "3":
-                devices = this.filterList(DEVICE_PRE_ACTIVATION, this.props.devices)
+                devices = this.state.preActiveDevices
+                devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
                     filteredDevices: devices,
@@ -652,7 +673,8 @@ class Devices extends Component {
                 })
                 break;
             case "8":
-                devices = this.filterList(DEVICE_TRANSFERED, this.props.devices);
+                devices = this.state.transferredDevices
+                devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
                     filteredDevices: devices,
@@ -661,7 +683,8 @@ class Devices extends Component {
                 })
                 break;
             case "10":
-                devices = this.filterList(DEVICE_FLAGGED, this.props.devices)
+                devices = this.state.flaggedDevices
+                devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
                     filteredDevices: devices,
@@ -671,6 +694,7 @@ class Devices extends Component {
                 break;
             default:
                 devices = this.props.devices;
+                devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: devices,
                     filteredDevices: devices,
@@ -679,7 +703,22 @@ class Devices extends Component {
                 })
                 break;
         }
+    }
 
+    handleGlobalSearch(devices) {
+        console.log("HANDLE GLOBAL SEARCH");
+        if (devices.length) {
+            if (this.state.globalSearchedValue !== "") {
+                status = true
+                let foundDevices = componentSearch(devices, this.state.globalSearchedValue);
+                if (foundDevices.length) {
+                    devices = foundDevices
+                } else {
+                    devices = []
+                }
+            }
+        }
+        return devices
     }
 
     updateColumn(column, type) {
@@ -815,20 +854,55 @@ class Devices extends Component {
 
     handleComponentSearch = (value) => {
         try {
+            switch (this.state.tabselect) {
+                case '4':
+                    copyDevices = this.state.activeDevices
+                    break;
+                case '9':
+                    copyDevices = this.state.trialDevices
+                    break;
+                case '7':
+                    copyDevices = this.state.suspendDevices
+                    break;
+                case '6':
+                    copyDevices = this.state.expireDevices
+                    break;
+                case '1':
+                    copyDevices = this.state.allDevices;
+
+                    break;
+                case "5":
+                    copyDevices = this.state.unlinkedDevices
+                    break;
+                case "2":
+                    copyDevices = this.state.pendingDevices
+                    break;
+                case "3":
+                    copyDevices = this.state.preActiveDevices
+                    break;
+                case "8":
+                    copyDevices = this.state.transferredDevices
+                    break;
+                case "10":
+                    copyDevices = this.state.flaggedDevices
+                    break;
+                default:
+                    copyDevices = this.state.allDevices
+                    break;
+            }
             if (value.length) {
 
-                if (status) {
-                    copyDevices = this.state.devices;
-                    status = false;
-                }
+                // console.log("DEVICES LIST", copyDevices);
                 let foundDevices = componentSearch(copyDevices, value);
                 if (foundDevices.length) {
                     this.setState({
                         devices: foundDevices,
+                        globalSearchedValue: value
                     })
                 } else {
                     this.setState({
-                        devices: []
+                        devices: [],
+                        globalSearchedValue: value
                     })
                 }
             } else {
@@ -836,6 +910,7 @@ class Devices extends Component {
 
                 this.setState({
                     devices: copyDevices,
+                    globalSearchedValue: ""
                 })
             }
         } catch (error) {
@@ -898,7 +973,7 @@ class Devices extends Component {
 
 
     render() {
-        // console.log('search data is: ', this.state.SearchValues);
+        // console.log('search data is: ', this.state.devices);
         let type = this.props.user.type
         let styleType = {};
         if (type === ADMIN) {
@@ -1060,7 +1135,7 @@ class Devices extends Component {
 
         let response = filterData_RelatedToMultipleSearch(devices, this.state.SearchValues);
         return response;
-        
+
         // let searchedDevices = [];
         // let searchData = Object.values(this.state.SearchValues);
         // let searchColsAre = Object.keys(this.state.SearchValues).length;
