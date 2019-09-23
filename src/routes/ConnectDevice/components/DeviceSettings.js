@@ -213,6 +213,46 @@ export default class DeviceSettings extends Component {
         }
     }
 
+    renderAppList = (datalist) => {
+        let data = JSON.parse(JSON.stringify(datalist));
+        let appList = [];
+        if (data.length) {
+
+            data.map((item, index) => {
+                if (!item.extension && item.visible) {
+                    appList.push(
+                        {
+                            rowKey: item.app_id,
+                            key: index,
+                            app_name: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
+                            label: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
+                            guest: <Switch
+                                size="small"
+                                value={item.guest}
+                                checked={(item.guest === true || item.guest === 1) ? true : false}
+                                disabled={true}
+                            />,
+                            encrypted: <Switch
+                                size="small"
+                                value={item.encrypted}
+                                checked={(item.encrypted === true || item.encrypted === 1) ? true : false}
+                                disabled={true}
+                            />,
+                            enable: <Switch
+                                size="small"
+                                value={item.enable}
+                                checked={(item.enable === true || item.enable === 1) ? true : false}
+                                disabled={true}
+                            />,
+                        }
+                    );
+                }
+            })
+
+        }
+        return appList;
+    }
+
     render() {
         // console.log("this.props.controls. ischanged", this.props.controls.isChanged)
 
@@ -278,7 +318,7 @@ export default class DeviceSettings extends Component {
                                 bordered={false}
                                 columns={this.appsColumns}
                                 align='center'
-                                dataSource={this.renderData(this.state.applist)}
+                                dataSource={this.renderAppList(this.state.applist)}
                                 pagination={false}
 
                             />
@@ -290,7 +330,7 @@ export default class DeviceSettings extends Component {
                 {(this.props.extensions && extenObjIndex >= 0) ?
                     (this.props.extensions && this.props.extensions[extenObjIndex].isChanged) ?
                         <Fragment>
-                            <Divider > {convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], "Secure Settings Permission")} </Divider>
+                            <Divider > {convertToLang(this.props.translation[""], "Secure Settings")} </Divider>
 
                             <Row className="sec_head">
                                 <Col span={8}>
@@ -341,7 +381,7 @@ export default class DeviceSettings extends Component {
                     (this.props.controls && objIndex >= 0) ?
                         (this.props.auth.authUser.type === ADMIN && this.props.settings && this.props.settings.length && this.props.settings[objIndex].isChanged) ?
                             <Fragment>
-                                <Divider > {convertToLang(this.props.translation[ANDROID_SETTING_PERMISSION], "Android Settings Permission")} </Divider>
+                                <Divider > {convertToLang(this.props.translation[ANDROID_SETTING_PERMISSION], "Android Settings")} </Divider>
                                 <div className="row width_100 m-0 sec_head1">
                                     <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
                                         <span>Guest</span>
