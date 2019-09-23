@@ -186,7 +186,6 @@ class UserList extends Component {
         } else {
             styleType = "users_fix_card_dealer"
         }
-        // console.log("render function: ", this.state.expandedRowKeys)
         // console.log("render function this.state.expandedRowKeys: ", this.state.expandedRowKeys)
         return (
             <Fragment>
