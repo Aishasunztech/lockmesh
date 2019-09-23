@@ -5,6 +5,8 @@ import EditDealer from './editDealer';
 import { Tabs } from 'antd';
 // import EditApk from './editDealer';
 import { ADMIN } from '../../../constants/Constants';
+import scrollIntoView from 'scroll-into-view';
+
 import DealerDevicesList from '../../users/components/UserDeviceList';
 import { convertToLang } from '../../utils/commonUtils'
 import { Redirect } from 'react-router-dom';
@@ -104,9 +106,21 @@ class DealerList extends Component {
             expandedRowKeys: props.expandedRowKeys, // [],
             redirect: false,
             dealer_id: '',
-
+            scrollStatus: true
         };
         this.renderList = this.renderList.bind(this);
+    }
+
+    handleScroll = () => {
+        // console.log("this.props.location ", this.props.location)
+        if (this.props.location.state) {
+            scrollIntoView(document.querySelector('.exp_row'), {
+                align: {
+                    top: 0,
+                    left: 0
+                },
+            });
+        }
     }
 
     handlePagination = (value) => {
@@ -119,16 +133,16 @@ class DealerList extends Component {
 
     componentDidUpdate(prevProps) {
 
-        // if (this.props.expandedRowsKey !== prevProps.expandedRowsKey) {
-        //     this.setState({
-        //         expandedRowKeys: this.props.expandedRowsKey
-        //     })
-        // }
-        
+        if (JSON.stringify(this.props.expandedRowKeys) !== JSON.stringify(prevProps.expandedRowKeys)) {
+            this.setState({
+                expandedRowKeys: this.props.expandedRowKeys
+            })
+        }
+
         if (this.props !== prevProps) {
             this.setState({
                 columns: this.props.columns,
-                expandedRowKeys: this.props.expandedRowKeys
+                // expandedRowKeys: this.props.expandedRowKeys
             })
         }
     }
@@ -253,7 +267,20 @@ class DealerList extends Component {
     }
 
     render() {
-        // console.log(this.props.dealersList, 'dealers list console');
+        // console.log(this.props.expandedRowKeys, 'dealers list console', this.props.location);
+
+        // if (this.props.expandedRowKeys[0] !== undefined && this.props.location) { //  && this.state.scrollStatus
+        //     if (this.props.location.state && this.props.expandedRowKeys[0].toString().includes(this.props.location.state.id.toString())) {
+        // this.handleScroll();
+        // this.setState({ scrollStatus: false })
+        //     }
+        // }
+
+
+        if (this.state.expandedRowKeys.length === 1 && this.props.expandedRowKeys[0] !== undefined && this.props.location.state !== undefined && this.state.expandedRowKeys[0] == this.props.location.state.id) { //  && this.state.scrollStatus
+            this.handleScroll();
+        }
+
         return (
             <Card className="fix_card dealer_fix_card">
                 <hr className="fix_header_border" style={{ top: "57px" }} />
@@ -330,7 +357,7 @@ function showConfirm(_this, id, action, btn_title, name = "") {
         },
         okText: convertToLang(_this.props.translation[Button_Ok], "Ok"),
         cancelText: convertToLang(_this.props.translation[Button_Cancel], "Cancel"),
-        onCancel() {},
+        onCancel() { },
     });
 }
 export default class Tab extends Component {
@@ -357,11 +384,7 @@ export default class Tab extends Component {
 
     componentDidUpdate(prevProps) {
 
-        // if (this.props.expandedRowsKey !== prevProps.expandedRowsKey) {
-        //     this.setState({
-        //         expandedRowKeys: this.props.expandedRowsKey
-        //     })
-        // }
+
 
         if (this.props !== prevProps) {
 
