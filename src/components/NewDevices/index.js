@@ -42,7 +42,7 @@ export default class NewDevices extends Component {
 
 
 
-    showModal = (sectionVisible = true, showLInkRequest = false ) => {
+    showModal = (sectionVisible = true, showLInkRequest = false) => {
         this.setState({
             visible: true,
             sectionVisible,
@@ -79,7 +79,7 @@ export default class NewDevices extends Component {
         }
     }
     rejectDevice(device) {
-// console.log('reject device called')
+        // console.log('reject device called')
         this.props.rejectDevice(device);
     }
 
@@ -113,7 +113,7 @@ export default class NewDevices extends Component {
 
 
     renderList1(list) {
-        console.log(list);
+        // console.log(list);
         return list.map((request) => {
             return {
                 key: request.id ? `${request.id}` : "N/A",
@@ -168,7 +168,7 @@ export default class NewDevices extends Component {
             let acceptButton = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.refs.add_device_modal.showModal(device, this.props.addDevice); this.setState({ visible: false }) }}> {convertToLang(this.props.translation[Button_ACCEPT], "ACCEPT")}</Button>;
 
             let actionButns;
-            console.log(this.state.sectionVisible, 'section visible state')
+            // console.log(this.state.sectionVisible, 'section visible state')
             if (this.state.sectionVisible) {
                 if (this.props.flaggedDevices !== undefined) {
                     if (flagged) {
@@ -188,13 +188,13 @@ export default class NewDevices extends Component {
                 }
 
             } else {
-                if(this.state.showLInkRequest){
+                if (this.state.showLInkRequest) {
                     actionButns = (<Fragment>
                         <Fragment>{declineButton}</Fragment>
                         <Fragment>{acceptButton}</Fragment>
                         <Fragment>{transferButton}</Fragment>
                     </Fragment>);
-                }else{
+                } else {
                     actionButns = (<Fragment>{transferButton}</Fragment>);
                 }
             }
@@ -216,7 +216,7 @@ export default class NewDevices extends Component {
 
     filterList = (devices) => {
         let dumyDevices = [];
-        console.log('check Devices at filterList ', devices)
+        // console.log('check Devices at filterList ', devices)
         if (devices !== undefined) {
             devices.filter(function (device) {
                 if (device.finalStatus !== DEVICE_UNLINKED) {

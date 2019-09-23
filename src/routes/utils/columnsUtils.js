@@ -129,7 +129,7 @@ import {
 
 export function devicesColumns(translation, handleSearch, SearchValues = []) {
 
-    console.log('devicesColumns SearchValues ', SearchValues)
+    // console.log('devicesColumns SearchValues ', SearchValues)
     return ([
         {
             title: "#",
