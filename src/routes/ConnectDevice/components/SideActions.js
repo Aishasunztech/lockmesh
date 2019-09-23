@@ -729,13 +729,15 @@ class SideActions extends Component {
 
         } else if (historyType === "profile") {
             showConfirmProfile(this, name, history)
+            this.props.showHistoryModal(false);
         } else if (historyType === POLICY) {
 
             this.showPwdConfirmModal(true, POLICY)
+            this.props.showHistoryModal(false);
             this.setState({
                 policyId: historyId,
                 policyName: name,
-                historyModal: true
+                historyModal: false
             })
         }
     }
@@ -926,7 +928,7 @@ class SideActions extends Component {
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={12} className="gutter-row" justify="center" >
                                 <Tooltip title="Coming Soon">
-                                {/* <Button
+                                    {/* <Button
                                     type="default"
                                     onClick={() => this.handleTransfer()}
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }}
@@ -935,10 +937,10 @@ class SideActions extends Component {
                                     <Icon type="swap" />
                                     {convertToLang(this.props.translation[Button_Transfer], "Transfer")} </Button> */}
 
-                                {/* <Button type="default" onClick={() => { if (flagged === "Unflag") { this.handleTransfer(this.props.device_id) } else { Modal.error({ title: 'Plaese Flag the device first to Transfer' }); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button> */}
-                                <Button type="default"
-                                    // onClick={() => this.handleTransferHistoryModal(true)}
-                                    style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button>
+                                    {/* <Button type="default" onClick={() => { if (flagged === "Unflag") { this.handleTransfer(this.props.device_id) } else { Modal.error({ title: 'Plaese Flag the device first to Transfer' }); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button> */}
+                                    <Button type="default"
+                                        // onClick={() => this.handleTransferHistoryModal(true)}
+                                        style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button>
                                 </Tooltip>
                                 <Button type={button_type}
                                     onClick={() => (device_status === "Unsuspend") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
@@ -1397,7 +1399,7 @@ function showConfirmPolcy(_this) {
     confirm({
         title: convertToLang(_this.props.translation[DO_YOU_WANT_TO_APPLY], "Do you want to apply") + " # " + _this.state.policyName + convertToLang(_this.props.translation[POLICY_ON_DEVICE], " policy on device?"),
         onOk() {
-            _this.props.applyPolicy(_this.props.device.device_id, _this.props.device.id, _this.state.policyId , _this.state.policyName);
+            _this.props.applyPolicy(_this.props.device.device_id, _this.props.device.id, _this.state.policyId, _this.state.policyName);
         },
         okText: convertToLang(_this.props.translation[Button_Ok], "Ok"),
         cancelText: convertToLang(_this.props.translation[Button_Cancel], "Cancel"),
