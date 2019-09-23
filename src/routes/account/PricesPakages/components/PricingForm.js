@@ -28,20 +28,40 @@ class PricingForm extends Component {
     setPrice = (fieldName, value) => {
         if (fieldName) {
             // let value = this.props.form.getFieldValue(fieldName)
-            if (value >= 0 || value == '') {
-// console.log('set set price called ok', value)
-                if (fieldName && this.props.price_for) {
-                    this.props.setPrice(fieldName, value, this.props.price_for);
+            var isnum = /^\d+$/.test(value);
+
+            if ((fieldName && this.props.price_for) && (isnum || value == '')) {
+                this.props.setPrice(fieldName, value, this.props.price_for);
+                if (this.props.pricesFormErrors && this.props.pricesFormErrors.length) {
+                    this.props.restrictSubmit(true, `${fieldName + this.props.innerTab}`)
                 }
-                // this.props.form.setFieldsValue({ [fieldName]: '' })
+            }else{
+                this.props.restrictSubmit(false, `${fieldName + this.props.innerTab}`)
             }
         }
     }
 
-    componentDidUpdate(prevProps){
+    checkPrice = async (rule, value, callback) => {
+
+        let field = rule.field;
+        var isnum = /^\d+$/.test(value);
+
+        if (isnum && value > 0 ) {
+            callback()
+            if (this.props.pricesFormErrors && this.props.pricesFormErrors.length) {
+                this.props.restrictSubmit(true, `${field + this.props.innerTab}`)
+            }
+        } else {
+            callback("Price must be in Numbers and greater than zero")
+            this.props.restrictSubmit(false, `${field + this.props.innerTab}`)
+        }
+    }
+
+    componentDidUpdate(prevProps) {
         // console.log(this.props.innerTab, 'llllllllll', prevProps.innerTab)
-        if(this.props.innerTab !== prevProps.innerTab){
-            this.props.form.resetFields()
+        if (this.props.innerTab !== prevProps.innerTab) {
+            this.props.form.resetFields();
+            this.props.form.validateFields();
         }
     }
 
@@ -52,73 +72,94 @@ class PricingForm extends Component {
         return (
             <Form onSubmit={this.handleSubmit}>
                 <Row>
-                    <Col span={12}>
-                        <Form.Item label= {convertToLang(this.props.translation[one_month], "1 month")}
+                    <Col span={17}>
+                        <Form.Item label={convertToLang(this.props.translation[one_month], "1 month")}
                             labelCol={{ span: 8 }}
                             wrapperCol={{ span: 15 }}>
                             {getFieldDecorator('1 month', {
-
-                            })(<Input type='number' onChange={e =>  this.setPrice('1 month', e.target.value)} min={0} />)}
+                                initialValue: this.props.innerTabData ? this.props.innerTabData['1 month'] ? this.props.innerTabData['1 month'] : '0' : '0',
+                                rules: [
+                                    {
+                                        min: 1
+                                    }, {
+                                        validator: this.checkPrice,
+                                    }
+                                ],
+                            })(<Input type='number' onChange={e => this.setPrice('1 month', e.target.value)} min={1} />)}
 
                         </Form.Item>
                     </Col>
-                    <Col span={5}>
-                        {/* <Button type="primary" onClick={() => this.setPrice('1 month')} >{convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
-                    </Col>
+                   
                     <Col span={7}>
                         <h4 className='priceText'>{convertToLang(this.props.translation[PRICE], "PRICE")} : ${this.props.innerTabData ? this.props.innerTabData['1 month'] ? this.props.innerTabData['1 month'] : 0 : 0}</h4>
                     </Col>
                 </Row>
 
                 <Row>
-                    <Col span={12}>
+                    <Col span={17}>
                         <Form.Item label={convertToLang(this.props.translation[three_month], "3 month")} labelCol={{ span: 8 }}
                             wrapperCol={{ span: 15 }}>
                             {getFieldDecorator('3 month', {
-
-                            })(<Input type='number' onChange={e =>  this.setPrice('3 month', e.target.value)} min={0} />)}
+                                initialValue: this.props.innerTabData ? this.props.innerTabData['3 month'] ? this.props.innerTabData['3 month'] : '0' : '0',
+                                rules: [
+                                    {
+                                        min: 1
+                                    }, {
+                                        validator: this.checkPrice,
+                                    }
+                                ],
+                            })(<Input type='number' onChange={e => this.setPrice('3 month', e.target.value)} min={1} />)}
 
 
                         </Form.Item>
                     </Col>
-                    <Col span={5}>
-                        {/* <Button type="primary" onClick={() => this.setPrice('3 month')} >{convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
-                    </Col>
+                  
                     <Col span={7}>
                         <h4 className='priceText'>{convertToLang(this.props.translation[PRICE], "PRICE")} : ${this.props.innerTabData ? this.props.innerTabData['3 month'] ? this.props.innerTabData['3 month'] : 0 : 0}</h4>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={12}>
+                    <Col span={17}>
                         <Form.Item label={convertToLang(this.props.translation[six_month], "6 month")} labelCol={{ span: 8 }}
                             wrapperCol={{ span: 15 }}>
                             {getFieldDecorator('6 month', {
-
-                            })(<Input type='number' onChange={e =>  this.setPrice('6 month', e.target.value)} min={0} />)}
+                                initialValue: this.props.innerTabData ? this.props.innerTabData['6 month'] ? this.props.innerTabData['6 month'] : '0' : '0',                                
+                                rules: [
+                                    {
+                                        min: 1
+                                    }, {
+                                        validator: this.checkPrice,
+                                    }
+                                ],
+                            })(<Input type='number' onChange={e => this.setPrice('6 month', e.target.value)} min={1} />)}
 
 
                         </Form.Item>
                     </Col>
-                    <Col span={5}>
-                        {/* <Button type="primary" onClick={() => this.setPrice('6 month')}>{convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
-                    </Col>
+                   
                     <Col span={7}>
                         <h4 className='priceText'>{convertToLang(this.props.translation[PRICE], "PRICE")} : ${this.props.innerTabData ? this.props.innerTabData['6 month'] ? this.props.innerTabData['6 month'] : 0 : 0}</h4>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={12}>
+                    <Col span={17}>
                         <Form.Item label={convertToLang(this.props.translation[twelve_month], "12 month")} labelCol={{ span: 8 }}
                             wrapperCol={{ span: 15 }}>
                             {getFieldDecorator('12 month', {
-
-                            })(<Input type='number' onChange={e =>  this.setPrice('12 month', e.target.value)} min={0} />)}
+                                initialValue: this.props.innerTabData ? this.props.innerTabData['12 month'] ? this.props.innerTabData['12 month'] : '0' : '0',
+                                
+                                rules: [
+                                    {
+                                        min: 1
+                                    }, {
+                                        validator: this.checkPrice,
+                                    }
+                                ],
+                            })(<Input type='number' onChange={e => this.setPrice('12 month', e.target.value)} min={1} />)}
 
                         </Form.Item>
                     </Col>
-                    <Col span={5}>
-                        {/* <Button type="primary" onClick={() => this.setPrice('12 month')}>{convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
-                    </Col>
+                    
                     <Col span={7}>
                         <h4 className='priceText'>{convertToLang(this.props.translation[PRICE], "PRICE")} : ${this.props.innerTabData ? this.props.innerTabData["12 month"] ? this.props.innerTabData['12 month'] : 0 : 0}</h4>
                     </Col>

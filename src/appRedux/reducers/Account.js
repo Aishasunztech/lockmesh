@@ -73,21 +73,24 @@ export default (state = initialState, action) => {
             }
         }
         case SAVE_PACKAGE: {
-            // console.log(action.response, 'response form save id prices')
+           let dump = [];
             if (action.response.status) {
                 success({
                     title: action.response.msg
                 })
                 if (action.response.data.length) {
-                    state.packages.push(action.response.data[0])
+                     dump = JSON.parse(JSON.stringify(state.packages));
+                    dump.push(action.response.data[0])
                 }
             } else {
                 error({
                     title: action.response.msg
                 })
             }
+            // console.log(state.packages, 'test deff',action.response, 'response form save id prices')
             return {
-                ...state
+                ...state,
+                packages: dump 
             }
         }
 
@@ -133,10 +136,11 @@ export default (state = initialState, action) => {
             let copyPrices = JSON.parse(JSON.stringify(state.prices));
             let price_for = action.payload.price_for;
             let field = action.payload.field;
+            let value = action.payload.value;
 
-            // console.log('price for', price_for, 'field', field, 'value', action.payload.value)
+            value = +value;
             if (price_for && price_for !== '') {
-                copyPrices[price_for][field] = action.payload.value;
+                copyPrices[price_for][field] = value.toString();
             }
             // console.log(copyPrices[price_for], 'prices are', field)
             return {
@@ -144,7 +148,6 @@ export default (state = initialState, action) => {
                 prices: copyPrices,
                 isPriceChanged: true
             }
-
         }
 
         case IMPORT_CSV:

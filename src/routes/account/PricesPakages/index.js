@@ -255,7 +255,7 @@ class Prices extends Component {
     // }
 
     componentWillReceiveProps(nextProps) {
-        // console.log(nextProps.prices, 'next props of prices ')
+        // console.log(nextProps.packages, 'next props of prices ')
         if (this.props !== nextProps) {
             // console.log(nextProps.prices, 'next props of prices ')
 
@@ -311,13 +311,13 @@ class Prices extends Component {
 
             for (var key in data) {
                 if (data.hasOwnProperty(key)) {
-                    console.log(key + " -> " + data[key]);
+                    // console.log(key + " -> " + data[key]);
                     let name = key;
                     name = name.charAt(0).toUpperCase() + name.slice(1);
                     let dump = {
                         name: name.replace(/_/g, ' '),
                         f_value: data[key] ? "yes" : 'No',
-                        rowKey: key
+                        rowKey: name
                     }
 
                     features.push(dump)
@@ -366,7 +366,7 @@ class Prices extends Component {
         })
     }
     render() {
-        // console.log(this.state.prices, 'prices are coming')
+        // console.log(this.state.packages, 'prices are coming', this.props.packages)
         return (
             <div>
                 <div>
@@ -498,7 +498,7 @@ function mapDispatchToProps(dispatch) {
 
 
 var mapStateToProps = ({ account, auth, settings }, otherprops) => {
-    // console.log(auth.authUser, ' authUser props are')
+    // console.log(account.packages, ' authUser props are')
     return {
         auth: auth.authUser,
         prices: account.prices,
