@@ -74,7 +74,7 @@ import {
 } from "../../constants/ActionTypes";
 
 import {
-    NOT_AVAILABLE, MAIN_MENU, WARNNING, PROCEED_WITH_WIPING_THE_DEVICE, Main_SETTINGS, SECURE_SETTING, SAVE_PROFILE_TEXT
+    NOT_AVAILABLE, MAIN_MENU, WARNNING, PROCEED_WITH_WIPING_THE_DEVICE, Main_SETTINGS, SECURE_SETTING, SAVE_PROFILE_TEXT, APPS, SYSTEM_CONTROLS
 } from '../../constants/Constants';
 
 import { message, Modal, Alert, Icon } from 'antd';
@@ -209,9 +209,13 @@ export default (state = initialState, action) => {
 
         case CHANGE_PAGE: {
 
+            let checkApplyBtn = handleApplyBtn(action.payload, state.undoControls, state.redoControls, state.undoExtensions, state.redoExtensions, state.undoApps, state.redoApps);
+            // console.log("checkApplyBtn ", checkApplyBtn)
+
             return {
                 ...state,
-                pageName: action.payload
+                pageName: action.payload,
+                ...checkApplyBtn
             }
         }
         case CLEAR_STATE: {
@@ -427,18 +431,24 @@ export default (state = initialState, action) => {
             }
         }
         case GET_DEVICE_APPS: {
+            // let chechApplyBtn = handleApplyBtn([], state.pageName);
+
             state.undoApps.push(JSON.parse(JSON.stringify(action.payload)));
             state.undoExtensions.push(JSON.parse(JSON.stringify(action.extensions)));
             state.undoControls.push(JSON.parse(JSON.stringify(action.controls)));
             // console.log('controls form reduvcer of getdeviceapp', action.controls)
             let applications = action.payload;
             let check = handleCheckedAll(applications);
-            console.log('abaid app list ', action.payload);
+            // console.log('abaid app list ', action.payload);
 
-            console.log("GET_DEVICE_APPS ", action.extensions);
-            let checkExt = handleCheckedAllExts(action.extensions[0].subExtension);
+            // console.log("GET_DEVICE_APPS ", action.extensions);
+            let checkExt = {};
+            if(action.extensions.length){
+                checkExt = handleCheckedAllExts(action.extensions[0].subExtension);
+            }
+            
             // console.log(action.payload.filter(e => e.uniqueName == SECURE_SETTING))
-            console.log("check ext: ", checkExt);
+            // console.log("check ext: ", checkExt);
             // console.log("action.extensions  ", action.extensions)
 
             return {
@@ -618,6 +628,10 @@ export default (state = initialState, action) => {
                 ...state,
                 undoApps: [],
                 redoApps: [],
+                undoControls: [],
+                redoControls: [],
+                undoExtensions: [],
+                redoExtensions: [],
                 pageName: MAIN_MENU,
                 showMessage: false,
                 applyBtn: false,
@@ -719,7 +733,7 @@ export default (state = initialState, action) => {
 
                 state.device = action.response.data;
                 state.status = '';
-                state.pageName = 'main_menu';
+                state.pageName = MAIN_MENU;
                 let date = getCurrentDate();
                 state.activities.push({
                     action_name: 'ACTIVE',
@@ -983,6 +997,7 @@ export default (state = initialState, action) => {
                     return {
                         ...state,
                         undoBtn: false,
+                        applyBtn: false,
                         redoBtn: true,
                         controls: JSON.parse(JSON.stringify(state.undoControls[state.undoControls.length - 1]))
                     };
@@ -996,7 +1011,8 @@ export default (state = initialState, action) => {
             } else {
                 return {
                     ...state,
-                    undoBtn: false
+                    undoBtn: false,
+                    applyBtn: false,
                 };
             }
         }
@@ -1013,6 +1029,7 @@ export default (state = initialState, action) => {
                         ...state,
                         controls: controls,
                         undoBtn: true,
+                        applyBtn: true,
                         redoBtn: false,
                         clearBtn: true
                     };
@@ -1021,6 +1038,7 @@ export default (state = initialState, action) => {
                         ...state,
                         controls: controls,
                         undoBtn: true,
+                        applyBtn: true,
                         clearBtn: true
                     };
 
@@ -1110,7 +1128,7 @@ export default (state = initialState, action) => {
                 state.redoExtensions.push(JSON.parse(JSON.stringify(exten)));
 
                 let extensions = JSON.parse(JSON.stringify(state.undoExtensions[state.undoExtensions.length - 1]));
-                console.log("UNDO_EXTENSIONS ", extensions);
+                // console.log("UNDO_EXTENSIONS ", extensions);
 
                 let check = handleCheckedAllExts(extensions[0].subExtension);
 
@@ -1118,6 +1136,7 @@ export default (state = initialState, action) => {
                     return {
                         ...state,
                         undoBtn: false,
+                        applyBtn: false,
                         redoBtn: true,
                         extensions: extensions,
                         ...check
@@ -1133,7 +1152,8 @@ export default (state = initialState, action) => {
             } else {
                 return {
                     ...state,
-                    undoBtn: false
+                    undoBtn: false,
+                    applyBtn: false,
                 };
             }
         }
@@ -1142,7 +1162,7 @@ export default (state = initialState, action) => {
             if (state.redoExtensions.length > 0) {
 
                 let extensions = state.redoExtensions[state.redoExtensions.length - 1];
-                console.log("REDO_EXTENSIONS ", extensions);
+                // console.log("REDO_EXTENSIONS ", extensions);
                 let check = handleCheckedAllExts(extensions[0].subExtension);
                 // console.log('if exist ex', extensions)
                 state.redoExtensions.pop();
@@ -1153,6 +1173,7 @@ export default (state = initialState, action) => {
                         ...state,
                         extensions: extensions,
                         undoBtn: true,
+                        applyBtn: true,
                         redoBtn: false,
                         clearBtn: true,
                         ...check
@@ -1162,6 +1183,7 @@ export default (state = initialState, action) => {
                         ...state,
                         extensions: extensions,
                         undoBtn: true,
+                        applyBtn: true,
                         clearBtn: true,
                         ...check
                     };
@@ -1245,6 +1267,7 @@ export default (state = initialState, action) => {
                     return {
                         ...state,
                         undoBtn: false,
+                        applyBtn: false,
                         redoBtn: true,
                         clearBtn: true,
                         app_list: JSON.parse(JSON.stringify(state.undoApps[state.undoApps.length - 1]))
@@ -1253,6 +1276,7 @@ export default (state = initialState, action) => {
                     return {
                         ...state,
                         redoBtn: true,
+                        applyBtn: true,
                         clearBtn: true,
                         app_list: state.undoApps[state.undoApps.length - 1]
                     };
@@ -1260,7 +1284,8 @@ export default (state = initialState, action) => {
             } else {
                 return {
                     ...state,
-                    undoBtn: false
+                    undoBtn: false,
+                    applyBtn: false,
                 };
             }
         }
@@ -1277,6 +1302,7 @@ export default (state = initialState, action) => {
                         ...state,
                         app_list: apps,
                         undoBtn: true,
+                        applyBtn: true,
                         redoBtn: false,
                         clearBtn: true
 
@@ -1285,7 +1311,8 @@ export default (state = initialState, action) => {
                     return {
                         ...state,
                         app_list: apps,
-                        undoBtn: true
+                        undoBtn: true,
+                        applyBtn: true,
                     };
 
                 }
@@ -1526,7 +1553,8 @@ export default (state = initialState, action) => {
         case DEVICE_SYNCED: {
             return {
                 ...state,
-                reSync: action.payload
+                reSync: action.payload,
+                // isLoading: false
             }
         }
         case PASSWORD_CHANGED: {
@@ -1616,14 +1644,33 @@ export default (state = initialState, action) => {
         }
 
         case ACK_SETTING_APPLIED: {
+            let controls = {};
+
+            if (action.payload.app_list) {
+
+            }
+
+            if (action.payload.controls) {
+                controls["controls"] = action.payload.controls;
+            } else {
+                controls["controls"] = state.controls ? state.controls.controls? state.controls.controls : [] : [];
+            }
+
             let extensions = action.payload.app_list.filter(e => e.uniqueName == SECURE_SETTING);
-            console.log("ACK_SETTING_APPLIED ", extensions);
-            let check = handleCheckedAllExts(extensions[0].subExtension);
+            // console.log(action.payload, "ACK_SETTING_APPLIED ", extensions);
+
+            let check = {}
+            if (extensions !== undefined && extensions[0].subExtension) {
+                check = handleCheckedAllExts(extensions[0].subExtension);
+            }
 
             let settings = action.payload.app_list.filter(e => e.uniqueName == Main_SETTINGS);
-            let controls = {};
-            controls["controls"] = action.payload.controls;
-            controls["settings"] = [settings[settings.length - 1]];
+            if (settings && settings.length) {
+                controls["settings"] = [settings[settings.length - 1]];
+            } else {
+                controls["settings"] = [];
+            }
+
 
             return {
                 ...state,
@@ -1642,14 +1689,163 @@ export default (state = initialState, action) => {
                 device: device
             }
         }
+        
         default:
             return state;
 
     }
 }
 
+
+function handleApplyBtn(pageName, undoControls, redoControls, undoExtensions, redoExtensions, undoApps, redoApps) {
+    // console.log("pageName =============> ", pageName, undoApps, undoExtensions, undoControls)
+
+    let buttons = {
+        undoBtn: false,
+        applyBtn: false,
+        redoBtn: false,
+        clearBtn: false,
+    }
+
+    if (pageName === MAIN_MENU) {
+        if (undoControls.length > 1 || undoExtensions.length > 1 || undoApps.length > 1) {
+            buttons = {
+                applyBtn: true,
+                undoBtn: false,
+                redoBtn: false,
+                clearBtn: true
+            }
+        } else {
+            buttons = {
+                undoBtn: false,
+                redoBtn: false,
+            }
+        }
+    }
+    else if (pageName === APPS) {
+        // console.log("undoApps.length ", undoApps.length, "redoApps.length ", redoApps.length)
+
+        if ((undoApps.length === 0 || undoApps.length === 1) && redoApps.length === 0) {
+            // buttons = buttons;
+            if (undoControls.length > 1 || undoExtensions.length > 1) {
+                buttons = {
+                    applyBtn: true,
+                    undoBtn: false,
+                    redoBtn: false,
+                    clearBtn: true
+                }
+            }
+        } else if (undoApps.length > 1 && redoApps.length === 0) {
+            buttons = {
+                applyBtn: true,
+                undoBtn: true,
+                clearBtn: true,
+            }
+
+        } else if ((undoApps.length === 0 || undoApps.length === 1) && redoApps.length > 0) {
+
+            buttons = {
+                undoBtn: false,
+                redoBtn: true,
+                clearBtn: true,
+                applyBtn: false,
+            }
+        } else if (undoApps.length > 1 && redoApps.length > 0) {
+            buttons = {
+                undoBtn: true,
+                applyBtn: true,
+                redoBtn: true,
+                clearBtn: true,
+            }
+        }
+
+    }
+    else if (pageName === SYSTEM_CONTROLS) {
+        // console.log("undoControls.length ", undoControls.length, "redoControls.length ", redoControls.length)
+
+        if ((undoControls.length === 0 || undoControls.length === 1) && redoControls.length === 0) {
+            // buttons = buttons;
+            if (undoExtensions.length > 1 || undoApps.length > 1) {
+
+                buttons = {
+                    applyBtn: true,
+                    undoBtn: false,
+                    redoBtn: false,
+                    clearBtn: true
+                }
+            } else {
+            }
+        } else if (undoControls.length > 1 && redoControls.length === 0) {
+            buttons = {
+                applyBtn: true,
+                undoBtn: true,
+                clearBtn: true,
+            }
+
+        } else if ((undoControls.length === 0 || undoControls.length === 1) && redoControls.length > 0) {
+
+            buttons = {
+                undoBtn: false,
+                redoBtn: true,
+                clearBtn: true,
+                applyBtn: false,
+            }
+        } else if (undoControls.length > 1 && redoControls.length > 0) {
+            buttons = {
+                undoBtn: true,
+                applyBtn: true,
+                redoBtn: true,
+                clearBtn: true,
+            }
+        }
+
+    }
+    else if (pageName === SECURE_SETTING) {
+        // console.log("undoExtensions.length ", undoExtensions.length, "redoExtensions.length ", redoExtensions.length)
+
+        if ((undoExtensions.length === 0 || undoExtensions.length === 1) && redoExtensions.length === 0) {
+            // buttons = buttons;
+            if (undoControls.length > 1 || undoApps.length > 1) {
+
+                buttons = {
+                    applyBtn: true,
+                    undoBtn: false,
+                    redoBtn: false,
+                    clearBtn: true
+                }
+            } else {
+            }
+        } else if (undoExtensions.length > 1 && redoExtensions.length === 0) {
+            buttons = {
+                applyBtn: true,
+                undoBtn: true,
+                clearBtn: true,
+            }
+
+        } else if ((undoExtensions.length === 0 || undoExtensions.length === 1) && redoExtensions.length > 0) {
+
+            buttons = {
+                undoBtn: false,
+                redoBtn: true,
+                clearBtn: true,
+                applyBtn: false,
+            }
+        } else if (undoExtensions.length > 1 && redoExtensions.length > 0) {
+            buttons = {
+                undoBtn: true,
+                applyBtn: true,
+                redoBtn: true,
+                clearBtn: true,
+            }
+        }
+
+    }
+    return buttons
+
+}
+
 function handleCheckedAll(applications) {
-    console.log('handleCheckedAllExts applications  ', applications)
+    // console.log('handleCheckedAllExts applications  ', applications)
     let guestCount = 0;
     let encryptedCount = 0;
     let enableCount = 0;
@@ -1659,22 +1855,24 @@ function handleCheckedAll(applications) {
     let enableAll = false;
 
     applications.forEach(app => {
-        if (app.guest === true || app.guest === 1) {
-            guestCount = guestCount + 1;
+        if(!app.extension && app.visible){
+            if (app.guest === true || app.guest === 1) {
+                guestCount = guestCount + 1;
+            }
+    
+            if (app.encrypted === true || app.encrypted === 1) {
+                encryptedCount = encryptedCount + 1;
+            }
+    
+            if (app.enable === true || app.enable === 1) {
+                enableCount = enableCount + 1;
+            }
         }
-
-        if (app.encrypted === true || app.encrypted === 1) {
-            encryptedCount = encryptedCount + 1;
-        }
-
-        if (app.enable === true || app.enable === 1) {
-            enableCount = enableCount + 1;
-        }
-
+       
     })
 
-    console.log("guestCount === applications.length ", guestCount, applications.length)
-    console.log("encryptedCount === applications.length ", encryptedCount , applications.length)
+    // console.log("guestCount === applications.length ", guestCount, applications.length)
+    // console.log("encryptedCount === applications.length ", encryptedCount, applications.length)
 
     if (guestCount === applications.length) {
         guestAll = true;
@@ -1695,7 +1893,7 @@ function handleCheckedAll(applications) {
 }
 
 function handleCheckedAllExts(extensions) {
-    console.log('handleCheckedAllExts extensions  ', extensions)
+    // console.log('handleCheckedAllExts extensions  ', extensions)
     let guestCount = 0;
     let encryptedCount = 0;
     let enableCount = 0;
@@ -1718,8 +1916,8 @@ function handleCheckedAllExts(extensions) {
 
     })
 
-    console.log("guestCount === extensions.length ", guestCount, extensions.length)
-    console.log("encryptedCount === extensions.length ", encryptedCount , extensions.length)
+    // console.log("guestCount === extensions.length ", guestCount, extensions.length)
+    // console.log("encryptedCount === extensions.length ", encryptedCount, extensions.length)
     if (guestCount === extensions.length) {
         guestAll = true;
     }

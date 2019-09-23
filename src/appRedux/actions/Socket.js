@@ -9,7 +9,8 @@ import {
     GET_APP_JOBS,
     SINGLE_APP_PULLED,
     RECEIVE_SIM_DATA,
-    FINISHED_WIPE
+    FINISHED_WIPE,
+    DEVICE_SYNCED
 } from "../../constants/ActionTypes";
 
 import {
@@ -68,6 +69,17 @@ export const sendOnlineOfflineStatus = (socket, deviceId) => {
         })
     }
 }
+export const deviceSynced = (socket, deviceId) => {
+    return (dispatch) => {
+        socket.on("device_synced_" + deviceId, (response) => {
+            dispatch({
+                type: DEVICE_SYNCED,
+                payload: response.status
+            })
+        })
+    }
+}
+
 export const ackSettingApplied = (socket, deviceId) => {
     return (dispatch) => {
         socket.on(ACK_SETTING_APPLIED + deviceId, (response) => {
