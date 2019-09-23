@@ -341,7 +341,8 @@ class AddDevice extends Component {
                 let data = {
                     id: item.id,
                     pkg_features: item.pkg_features,
-                    pkg_price: item.pkg_price
+                    pkg_price: item.pkg_price,
+                    pkg_dealer_type: item.dealer_type
                 }
                 total_price = total_price + Number(item.pkg_price)
                 packagesData.push(data)
@@ -626,7 +627,7 @@ class AddDevice extends Component {
 
     render() {
         // console.log(this.props);
-        // console.log('id is', this.state.products, this.state.packages);
+        console.log('id is', this.state.products, this.state.packages);
         const { visible, loading, isloading, addNewUserValue } = this.state;
         const { users_list } = this.props;
         var lastObject = users_list[0]

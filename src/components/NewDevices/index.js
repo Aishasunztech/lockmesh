@@ -42,7 +42,7 @@ export default class NewDevices extends Component {
 
 
 
-    showModal = (sectionVisible = true, showLInkRequest = false ) => {
+    showModal = (sectionVisible = true, showLInkRequest = false) => {
         this.setState({
             visible: true,
             sectionVisible,
@@ -79,7 +79,7 @@ export default class NewDevices extends Component {
         }
     }
     rejectDevice(device) {
-// console.log('reject device called')
+        // console.log('reject device called')
         this.props.rejectDevice(device);
     }
 
@@ -188,13 +188,13 @@ export default class NewDevices extends Component {
                 }
 
             } else {
-                if(this.state.showLInkRequest){
+                if (this.state.showLInkRequest) {
                     actionButns = (<Fragment>
                         <Fragment>{declineButton}</Fragment>
                         <Fragment>{acceptButton}</Fragment>
                         <Fragment>{transferButton}</Fragment>
                     </Fragment>);
-                }else{
+                } else {
                     actionButns = (<Fragment>{transferButton}</Fragment>);
                 }
             }
@@ -307,13 +307,16 @@ export default class NewDevices extends Component {
 
 function showConfirm(_this, msg, action, request) {
     confirm({
-        title: convertToLang(this.props.translation[WARNING], "WARNING!"),
+        title: convertToLang(_this.props.translation[WARNING], "WARNING!"),
         content: msg,
-        okText: convertToLang(this.props.translation[Button_Confirm], "Confirm"),
-        cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
+        okText: convertToLang(_this.props.translation[Button_Confirm], "Confirm"),
+        cancelText: convertToLang(_this.props.translation[Button_Cancel], "Cancel"),
         onOk() {
             action(request);
         },
-        onCancel() { },
+        onCancel() {
+
+
+        },
     });
 }

@@ -103,12 +103,13 @@ class PurchaseCredit extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        // console.log(this.refs.purchaseCredit);
         this.props.form.validateFieldsAndScroll((err, values) => {
-            // console.log('form', values);
+            console.log('form', values);
             if (!err) {
                 if (values.method === 'CASH') {
+
                     showConfirm(this, <span>Are you sure you want to request for <strong> "{values.credits} Credits"</strong> on <strong>"CASH"</strong> ?'</span>, values)
+                    // console.log("Hello");
                 } else if (values.method === 'BTC') {
                     this.setState({
                         bitCoinModal: true,
@@ -306,7 +307,6 @@ class PurchaseCredit extends Component {
                 </Modal >
             </Fragment>
         )
-
     }
 }
 
@@ -315,12 +315,13 @@ export default PurchaseCredit;
 
 
 function showConfirm(_this, msg, values) {
+    console.log(_this, msg, values);
     confirm({
-        title: convertToLang(this.props.translation[WARNING], "WARNING!"),
+        title: convertToLang(_this.props.translation[WARNING], "WARNING!"),
         content: msg,
         // okText: "Confirm",
-        okText:  convertToLang(this.props.translation[Button_Confirm], "Confirm"),
-        cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
+        okText: convertToLang(_this.props.translation[Button_Confirm], "Confirm"),
+        cancelText: convertToLang(_this.props.translation[Button_Cancel], "Cancel"),
         onOk() {
             _this.props.purchaseCredits(values)
             _this.cancelPurchaseModal()

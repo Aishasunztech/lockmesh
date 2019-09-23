@@ -283,8 +283,6 @@ class DevicesList extends Component {
     }
 
     deleteAllUnlinkedDevice = (type) => {
-        // console.log(this.state.selectedRows, 'selected keys', this.state.selectedRowKeys)
-        // console.log(type);
         if (this.state.selectedRowKeys.length) {
             let title = convertToLang(this.props.translation[ALERT_TO_SURE_DELETE_ALL_DEVICES], " Are you sure, you want to delete All these devices");
             let arr = [];

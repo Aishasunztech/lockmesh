@@ -184,7 +184,7 @@ class ServicesList extends Component {
 
 
     renderList(type, list) {
-        console.log(list);
+        // console.log(list);
         if (type === 'package') {
             return list.map((item, index) => {
                 let services = JSON.parse(item.pkg_features)
@@ -192,6 +192,7 @@ class ServicesList extends Component {
                     id: item.id,
                     rowKey: item.id,
                     pkg_name: `${item.pkg_name}`,
+                    dealer_type: `${item.dealer_type}`,
                     sim_id: (services.sim_id) ? <span style={{ color: "#008000" }}> YES</span > : <span style={{ color: "Red" }}>NO</span >,
                     sim_id2: (services.sim_id2) ? <span style={{ color: "#008000" }}> YES</span > : <span style={{ color: "Red" }}>NO</span >,
                     chat_id: (services.chat_id) ? <span style={{ color: "#008000" }}> YES</span > : <span style={{ color: "Red" }}>NO</span >,
