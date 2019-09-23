@@ -64,7 +64,8 @@ import {
   ackInstalledApps,
   ackUninstalledApps,
   ackSettingApplied,
-  sendOnlineOfflineStatus
+  sendOnlineOfflineStatus,
+  deviceSynced
 } from "../../appRedux/actions/Socket";
 
 import imgUrl from '../../assets/images/mobile.png';
@@ -262,7 +263,7 @@ class ConnectDevice extends Component {
         nextProps.ackUninstalledApps(nextProps.socket, device_id);
         nextProps.ackSettingApplied(nextProps.socket, device_id);
         nextProps.receiveSim(nextProps.socket, device_id);
-
+        nextProps.deviceSynced(nextProps.socket, device_id);
         // nextProps.hello_web(nextProps.socket);
       }
       // }
@@ -827,7 +828,7 @@ function mapDispatchToProps(dispatch) {
     ackUninstalledApps: ackUninstalledApps,
     ackSettingApplied: ackSettingApplied,
     sendOnlineOfflineStatus: sendOnlineOfflineStatus,
-    hello_web: hello_web,
+    deviceSynced: deviceSynced
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, auth, socket, settings }, ownProps) => {
