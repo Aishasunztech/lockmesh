@@ -74,13 +74,13 @@ class Users extends Component {
     }
 
     // handleTableChange = (pagination, query, sorter) => {
-    //     // console.log('check sorter func: ', sorter)
+    //     // 
     //     const sortOrder = sorter.order || "ascend";
     //     this.state.columns = usersColumns(sortOrder, this.props.translation, this.handleSearch);
     // };
 
     handleTableChange = (pagination, query, sorter) => {
-        console.log('check sorter func: ', sorter)
+        // 
         let { columns } = this.state;
 
         columns.forEach(column => {
@@ -109,7 +109,7 @@ class Users extends Component {
     componentDidMount() {
         this.props.getUserList();
         this.props.getPagination('users');
-        // console.log(this.props.location.state);
+        // 
         this.state.columns[2].children[0].title = convertToLang(this.props.translation[USER_ID], "USER ID") + ' (' + this.props.users_list.length + ')'
         this.setState({
             users: this.props.users_list,
@@ -121,8 +121,9 @@ class Users extends Component {
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.users_list !== this.props.users_list) {
+            
             this.state.columns[2].children[0].title = convertToLang(this.props.translation[USER_ID], "USER ID") + ' (' + nextProps.users_list.length + ')'
-            // console.log('will recice props is called', nextProps.users_list)
+            // 
             this.setState({
                 defaultPagingValue: this.props.DisplayPages,
                 users: nextProps.users_list,
@@ -135,8 +136,8 @@ class Users extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
-            // console.log('this.props ', this.props.DisplayPages);
-            this.state.columns[2].children[0].title = convertToLang(this.props.translation[USER_ID], "USER ID") + ' (' + this.props.users_list.length + ')'
+            // 
+            // this.state.columns[2].children[0].title = convertToLang(this.props.translation[USER_ID], "USER ID") + ' (' + this.props.users_list.length + ')'
             this.setState({
                 defaultPagingValue: this.props.DisplayPages,
                 expandedRowsKeys: (this.props.location.state) ? [this.props.location.state.id] : []
@@ -153,20 +154,20 @@ class Users extends Component {
 
 
     handleComponentSearch = (value) => {
-        //    console.log('values sr', value)   
+        //       
         try {
             if (value.length) {
 
-                // console.log('length')
+                // 
 
                 if (status) {
-                    // console.log('status')
+                    // 
                     copyUsers = this.state.users;
                     status = false;
                 }
-                // console.log(this.state.users,'coppy de', coppyDevices)
+                // 
                 let foundUsers = componentSearch(copyUsers, value);
-                // console.log('found devics', foundUsers)
+                // 
                 if (foundUsers.length) {
                     this.setState({
                         users: foundUsers,
@@ -198,7 +199,7 @@ class Users extends Component {
     }
 
     consoled = () => {
-        // console.log('rendered row is ', this.refs)
+        // 
     }
 
 
@@ -210,21 +211,21 @@ class Users extends Component {
         if (e.target.value.length) {
 
             copyUsers.forEach((user) => {
-                //  console.log("user", user[e.target.name] !== undefined);
+                //  
                 if (user['devicesList'].length > 0) {
                     let demoDeviceList = [];
                     for (let device of user['devicesList']) {
 
                         if (device[e.target.name] !== undefined && device[e.target.name] !== null) {
                             if ((typeof device[e.target.name]) === 'string') {
-                                // console.log("string check", typeof device[e.target.name])
+                                // 
 
                                 if (device[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
                                     demoDeviceList.push(device);
                                 }
                             }
                             else if (device[e.target.name] !== null) {
-                                // console.log("else null check", user[e.target.name])
+                                // 
                                 // if (device[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
                                 //     demoDeviceList.push(device);
                                 // }
@@ -235,7 +236,7 @@ class Users extends Component {
                             // demoUsers.push(user);
                         }
                     }
-                    // console.log('array of device will b', demoDeviceList);
+                    // 
 
                     if (demoDeviceList.length > 0) {
                         user.devicesList = demoDeviceList;
@@ -247,7 +248,7 @@ class Users extends Component {
                 }
 
             });
-            //  console.log(this.state.originalUsers, "searched value", demoUsers);
+            //  
             this.setState({
                 users: demoUsers,
                 expandedRowsKeys: expandedRowsKeys
@@ -261,14 +262,14 @@ class Users extends Component {
     }
 
     handleSearch = (e) => {
-        // console.log('============ check search value ========')
-        // console.log(e.target.name , e.target.value);
+        // 
+        // 
 
         this.state.SearchValues[e.target.name] = { key: e.target.name, value: e.target.value };
-        
+
         let response = handleMultipleSearch(e, status, copyUsers, this.state.SearchValues, this.state.users)
 
-        console.log(response.SearchValues, "response is: ===========> ", response)
+        
         this.setState({
             users: response.demoData,
             SearchValues: response.SearchValues
@@ -283,7 +284,7 @@ class Users extends Component {
         //     coppyUsers = this.state.users;
         //     status = false;
         // }
-        // // console.log("demoSearchValues ", demoSearchValues);
+        // // 
 
         // let targetName = e.target.name;
         // let targetValue = e.target.value;
@@ -291,18 +292,18 @@ class Users extends Component {
         // if (targetValue.length || Object.keys(demoSearchValues).length) {
         //     demoSearchValues[targetName] = { key: targetName, value: targetValue };
         //     this.state.SearchValues[targetName] = { key: targetName, value: targetValue };
-        //     // console.log("keyname", e.target.name);
-        //     // console.log("value", e.target.value);
-        //     // console.log(this.state.devices);
+        //     // 
+        //     // 
+        //     // 
         //     coppyUsers.forEach((user) => {
-        //         // console.log(user, "user", user[e.target.name] !== undefined);
+        //         // 
 
         //         // if (user[e.target.name] !== undefined) {
 
         //         let searchColsAre = Object.keys(demoSearchValues).length;
         //         let searchUsers = 0;
         //         // if (typeof (user[targetName]) === 'string' && user[targetName] !== null && user[targetName] !== undefined) {
-        //         // console.log("string check", user[e.target.name])
+        //         // 
 
         //         if (searchColsAre > 0) {
         //             Object.values(demoSearchValues).forEach((data) => {
@@ -336,7 +337,7 @@ class Users extends Component {
 
 
         //     });
-        //     //  console.log("searched value", demoUsers);
+        //     //  
         //     this.setState({
         //         users: demoUsers,
         //         SearchValues: demoSearchValues
@@ -350,31 +351,31 @@ class Users extends Component {
     }
 
     // handleSearch = (e) => {
-    //     // console.log('============ check search value ========')
-    //     // console.log(e.target.name , e.target.value);
+    //     // 
+    //     // 
 
     //     let demoUsers = [];
     //     if (status) {
     //         coppyUsers = this.state.users;
     //         status = false;
     //     }
-    //     //   console.log("devices", coppyDevices);
+    //     //   
 
     //     if (e.target.value.length) {
-    //         // console.log("keyname", e.target.name);
-    //         // console.log("value", e.target.value);
-    //         // console.log(this.state.devices);
+    //         // 
+    //         // 
+    //         // 
     //         coppyUsers.forEach((user) => {
-    //              console.log("user", user[e.target.name] !== undefined);
+    //              
 
     //             if (user[e.target.name] !== undefined) {
     //                 if ((typeof user[e.target.name]) === 'string') {
-    //                     // console.log("string check", user[e.target.name])
+    //                     // 
     //                     if (user[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
     //                         demoUsers.push(user);
     //                     }
     //                 } else if (user[e.target.name] !== null) {
-    //                     // console.log("else null check", user[e.target.name])
+    //                     // 
     //                     if (user[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
     //                         demoUsers.push(user);
     //                     }
@@ -385,7 +386,7 @@ class Users extends Component {
     //                 demoUsers.push(user);
     //             }
     //         });
-    //         //  console.log("searched value", demoUsers);
+    //         //  
     //         this.setState({
     //             users: demoUsers
     //         })
@@ -397,7 +398,8 @@ class Users extends Component {
     // }
 
     render() {
-        // console.log(this.state.expandedRowsKeys, 'refs is');
+        this.state.columns[2].children[0].title = convertToLang(this.props.translation[USER_ID], "USER ID") + ' (' + this.state.users.length + ')'
+        // 
         return (
             <Fragment>
                 <AppFilter
@@ -450,7 +452,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ auth, users, devices, settings }) => {
-    // console.log("users.users_list::", settings.translation);
+    // 
     return {
         user: auth.authUser,
         users_list: users.users_list,

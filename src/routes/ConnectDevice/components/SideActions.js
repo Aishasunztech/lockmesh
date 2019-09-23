@@ -752,13 +752,15 @@ class SideActions extends Component {
 
         } else if (historyType === "profile") {
             showConfirmProfile(this, name, history)
+            this.props.showHistoryModal(false);
         } else if (historyType === POLICY) {
 
             this.showPwdConfirmModal(true, POLICY)
+            this.props.showHistoryModal(false);
             this.setState({
                 policyId: historyId,
                 policyName: name,
-                historyModal: true
+                historyModal: false
             })
         }
     }
