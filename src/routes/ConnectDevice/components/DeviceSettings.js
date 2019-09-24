@@ -12,11 +12,10 @@ export default class DeviceSettings extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            appColumns: [],
-            applist: [],
+            push_apps: [],
+            app_list: [],
             extensions: [],
             controls: {},
-            push_apps: []
         }
 
         this.appsColumns = appsColumns(props.translation);
@@ -26,10 +25,10 @@ export default class DeviceSettings extends Component {
 
     controlValues = () => {
         console.log(this.state.controls, 'apply setting controls')
-        if (this.state.controls.controls && this.state.controls.controls.length > 0) {
+        if (this.state.controls.length > 0) {
 
             let data = [];
-            this.state.controls.controls.map(control => {
+            this.state.controls.map(control => {
                 // if(control.isChanged){
                 if (this.props.showChangedControls) {
                     if (control.isChanged) {
@@ -67,43 +66,26 @@ export default class DeviceSettings extends Component {
 
     filterAppList = () => {
         let data = this.props.app_list;
+        // console.log("policy app data ", data, this.props.show_all_apps, this.props.show_unchanged);
         let applist = [];
         if (this.props.show_all_apps) {
-            if (this.props.show_unchanged) {
-                for (let obj of data) {
-                    if (obj.isChanged !== undefined && obj.isChanged === true) {
-                        // if(applist.includes(obj)){
-                        // }else{
-                        applist.push(obj);
-                        // }
-                    }
-                }
-                this.setState({ applist: applist })
-            } else {
-                this.setState({ applist: data })
-            }
-
+            this.setState({ app_list: data })
         } else {
             for (let obj of data) {
-                if (obj.isChanged !== undefined && obj.isChanged === true) {
-                    // if(applist.includes(obj)){
-
-                    // }else{
+                if (obj.isChanged !== undefined && obj.isChanged === true && !obj.extension && obj.visible) {
                     applist.push(obj);
-
-                    // }
                 }
             }
-            this.setState({ applist: applist })
+            this.setState({ app_list: applist })
         }
 
     }
 
-
-
     filterExtensions = () => {
         let data = this.props.extensions;
+
         let extensions = [];
+        console.log("DATA EXTENSIONS", data, this.props.show_all_apps, this.props.show_unchanged);
         if (this.props.show_all_apps) {
             if (this.props.show_unchanged) {
                 if (data.length) {
@@ -123,12 +105,8 @@ export default class DeviceSettings extends Component {
         } else {
             if (data.length) {
                 for (let obj of data) {
-                    if (obj.uniqueName === this.props.extensionUniqueName) {
-                        for (let item of obj.subExtension) {
-                            if (item.isChanged !== undefined && item.isChanged === true) {
-                                extensions.push(item);
-                            }
-                        }
+                    if (obj.isChanged !== undefined && obj.isChanged === true) {
+                        extensions.push(obj);
                     }
                 }
                 this.setState({ extensions: extensions })
@@ -212,13 +190,56 @@ export default class DeviceSettings extends Component {
 
         }
     }
+    renderPushData = (datalist) => {
+        // console.log(JSON.parse(datalist));
+        // console.log(this.props.type, 'datalist is type of');
+        let data = JSON.parse(JSON.stringify(datalist));
+
+        // if (this.props.type === 'profile') {
+        //     data = JSON.parse(JSON.stringify(datalist))
+        // }
+
+        if (datalist.length > 0) {
+            return data.map((item, index) => {
+                return {
+                    rowKey: item.apk_id,
+                    key: index,
+                    app_name: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
+                    label: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
+                    // guest: (item.guest === 1 || item.guest === true) ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>,
+                    guest: <Switch
+                        size="small"
+                        value={item.guest}
+                        checked={(item.guest === true || item.guest === 1) ? true : false}
+                        disabled={true}
+                    />,
+                    encrypted: <Switch
+                        size="small"
+                        value={item.encrypted}
+                        checked={(item.encrypted === true || item.encrypted === 1) ? true : false}
+                        disabled={true}
+                    />,
+                    enable: <Switch
+                        size="small"
+                        value={item.enable}
+                        checked={(item.enable === true || item.enable === 1) ? true : false}
+                        disabled={true}
+                    />,
+                }
+            })
+
+        }
+    }
+
 
     renderAppList = (datalist) => {
+        // console.log(datalist, "applist");
         let data = JSON.parse(JSON.stringify(datalist));
         let appList = [];
         if (data.length) {
 
             data.map((item, index) => {
+                console.log(item);
                 if (!item.extension && item.visible) {
                     appList.push(
                         {
@@ -254,32 +275,31 @@ export default class DeviceSettings extends Component {
     }
 
     render() {
-        // console.log("this.props.controls. ischanged", this.props.controls.isChanged)
+        console.log("this.props.controls. ischanged", this.props.controls, this.state.app_list)
 
 
         // find the length of changed controls. it can be refactored
         let changes = 0;
         if (this.state.controls && Object.entries(this.state.controls).length) {
-            if (this.state.controls.controls && this.state.controls.controls.length) {
-                this.state.controls.controls.map(item => {
-
+            if (this.state.controls && this.state.controls.length) {
+                this.state.controls.map(item => {
                     if (item.isChanged) {
                         changes++
                     }
-                    // console.log(item, "item.isChanged",item.isChanged)
                 })
             }
         }
 
-        let objIndex = -1;
-        if (this.props.settings && this.props.settings.length) {
-            objIndex = this.props.settings.findIndex(item => item.uniqueName === Main_SETTINGS)
+        let setting = [];
+        if (this.props.app_list && this.props.app_list.length) {
+            setting = this.props.app_list.filter(item => item.uniqueName === Main_SETTINGS)
+        }
+        let exten = [];
+        if (this.props.app_list && this.props.app_list.length) {
+            exten = this.props.app_list.filter(item => item.uniqueName === SECURE_SETTING)
         }
 
-        let extenObjIndex = -1;
-        if (this.props.extensions && this.props.extensions.length) {
-            extenObjIndex = this.props.extensions.findIndex(item => item.uniqueName === SECURE_SETTING)
-        }
+        console.log("SECURE SETTING APPS", exten);
 
         // console.log(this.props.extensions, 'check extension  ', this.props.extensions[extenObjIndex].isChanged);
 
@@ -300,7 +320,7 @@ export default class DeviceSettings extends Component {
                                 bordered={false}
                                 columns={this.appsColumns}
                                 align='center'
-                                dataSource={this.renderData(this.state.push_apps)}
+                                dataSource={this.renderPushData(this.state.push_apps)}
                                 pagination={false}
 
                             />
@@ -309,7 +329,8 @@ export default class DeviceSettings extends Component {
 
                 {/* applisting */}
                 {
-                    this.state.applist.length > 0 ?
+                    this.state.app_list.length > 0 ?
+
                         <div>
                             <Divider> {convertToLang(this.props.translation[APPLICATION_PERMISION], "APPLICATION PERMISION")} </Divider>
                             <Table
@@ -318,7 +339,7 @@ export default class DeviceSettings extends Component {
                                 bordered={false}
                                 columns={this.appsColumns}
                                 align='center'
-                                dataSource={this.renderAppList(this.state.applist)}
+                                dataSource={this.renderAppList(this.state.app_list)}
                                 pagination={false}
 
                             />
@@ -327,8 +348,8 @@ export default class DeviceSettings extends Component {
 
                 {/* secure extension for all */}
 
-                {(this.props.extensions && extenObjIndex >= 0) ?
-                    (this.props.extensions && this.props.extensions[extenObjIndex].isChanged) ?
+                {(exten.length > 0) ?
+                    (exten[0].isChanged || this.props.show_all_apps) ?
                         <Fragment>
                             <Divider > {convertToLang(this.props.translation[""], "Secure Settings")} </Divider>
 
@@ -336,19 +357,19 @@ export default class DeviceSettings extends Component {
                                 <Col span={8}>
                                     <span>{convertToLang(this.props.translation[Guest], "Guest")} </span>
                                     <Switch disabled
-                                        checked={this.props.extensions[extenObjIndex].guest === 1 ? true : false}
+                                        checked={exten[0].guest === 1 ? true : false}
                                         size="small" />
                                 </Col>
                                 <Col span={8}>
                                     <span>{convertToLang(this.props.translation[ENCRYPT], "Encrypt")} </span>
                                     <Switch disabled
-                                        checked={this.props.extensions[extenObjIndex].encrypted === 1 ? true : false}
+                                        checked={exten[0].encrypted === 1 ? true : false}
                                         size="small" />
                                 </Col>
                                 <Col span={8}>
                                     <span>{convertToLang(this.props.translation[ENABLE], "Enable")} </span>
                                     <Switch disabled
-                                        checked={this.props.extensions[extenObjIndex].enable === 1 ? true : false}
+                                        checked={exten[0].enable === 1 ? true : false}
                                         size="small" />
                                 </Col>
                             </Row>
@@ -378,8 +399,8 @@ export default class DeviceSettings extends Component {
 
                 {/* System Control setting for all */}
                 {
-                    (this.props.controls && objIndex >= 0) ?
-                        (this.props.auth.authUser.type === ADMIN && this.props.settings && this.props.settings.length && this.props.settings[objIndex].isChanged) ?
+                    (this.props.controls && setting.length > 0) ?
+                        (this.props.auth.authUser.type === ADMIN && setting.length && (setting[0].isChanged || this.props.show_all_apps)) ?
                             <Fragment>
                                 <Divider > {convertToLang(this.props.translation[ANDROID_SETTING_PERMISSION], "Android Settings")} </Divider>
                                 <div className="row width_100 m-0 sec_head1">
@@ -387,15 +408,15 @@ export default class DeviceSettings extends Component {
                                         <span>Guest</span>
                                         <Switch
                                             disabled
-                                            checked={this.props.settings[objIndex].guest === 1 || this.props.settings[objIndex].guest === true ? true : false} size="small" />
+                                            checked={setting[0].guest === 1 || setting[0].guest === true ? true : false} size="small" />
                                     </div>
                                     <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
                                         <span>Encrypt</span>
-                                        <Switch disabled checked={this.props.settings[objIndex].encrypted === 1 || this.props.settings[objIndex].encrypted === true ? true : false} size="small" />
+                                        <Switch disabled checked={setting[0].encrypted === 1 || setting[0].encrypted === true ? true : false} size="small" />
                                     </div>
                                     <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
                                         <span>Enable</span>
-                                        <Switch disabled checked={this.props.settings[objIndex].enable === 1 || this.props.settings[objIndex].enable === true ? true : false} size="small" />
+                                        <Switch disabled checked={setting[0].enable === 1 || setting[0].enable === true ? true : false} size="small" />
                                     </div>
                                 </div>
                             </Fragment>
@@ -407,43 +428,43 @@ export default class DeviceSettings extends Component {
                 {
                     this.props.showChangedControls ?
                         changes > 0 ?
-                            Object.entries(this.state.controls).length > 0 ?
-                                this.state.controls.controls.length > 0 ?
 
-                                    <div>
-                                        {/* {console.log('if', Object.entries(this.state.controls.controls).length > 0)} */}
-                                        <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], "SYSTEM PERMISSION")}</Divider>
+                            this.state.controls.length > 0 ?
 
-                                        <Table
-                                            style={{ margin: 0, padding: 0 }}
-                                            size='default'
-                                            bordered={false}
-                                            columns={this.controlColumns}
-                                            align='center'
-                                            dataSource={this.controlValues()}
-                                            pagination={false}
+                                <div>
+                                    {/* {console.log('if', Object.entries(this.state.controls.controls).length > 0)} */}
+                                    <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], "SYSTEM PERMISSION")}</Divider>
 
-                                        />
+                                    <Table
+                                        style={{ margin: 0, padding: 0 }}
+                                        size='default'
+                                        bordered={false}
+                                        columns={this.controlColumns}
+                                        align='center'
+                                        dataSource={this.controlValues()}
+                                        pagination={false}
 
-                                    </div> : null : null : null
+                                    />
+
+                                </div> : null : null
                         : this.props.showChangedControls === undefined ?
 
-                            Object.keys(this.state.controls).length > 0 ?
-                                this.state.controls.controls.length > 0 ?
-                                    <div>
-                                        <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], "SYSTEM PERMISSION")}</Divider>
-                                        <Table
-                                            style={{ margin: 0, padding: 0 }}
-                                            size='default'
-                                            bordered={false}
-                                            columns={this.controlColumns}
-                                            align='center'
-                                            dataSource={this.controlValues()}
-                                            pagination={false}
 
-                                        />
+                            this.state.controls.length > 0 ?
+                                <div>
+                                    <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], "SYSTEM PERMISSION")}</Divider>
+                                    <Table
+                                        style={{ margin: 0, padding: 0 }}
+                                        size='default'
+                                        bordered={false}
+                                        columns={this.controlColumns}
+                                        align='center'
+                                        dataSource={this.controlValues()}
+                                        pagination={false}
 
-                                    </div> : null : null : null
+                                    />
+
+                                </div> : null : null
                 }
 
                 {(this.props.type === 'profile') ?

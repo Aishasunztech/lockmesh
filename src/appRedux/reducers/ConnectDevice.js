@@ -70,7 +70,9 @@ import {
     PUSH_APP_CHECKED,
     RESET_PUSH_APPS,
     GET_UNREG_SIMS,
-    HANDLE_CHECK_ALL_PUSH_APPS
+    HANDLE_CHECK_ALL_PUSH_APPS,
+    HANDLE_CHECK_SECURE_SETTINGS,
+    RESET_DEVICE
 } from "../../constants/ActionTypes";
 
 import {
@@ -88,7 +90,6 @@ const confirm = Modal.confirm;
 const success = Modal.success
 const error = Modal.error
 
-const actions = require("../../appRedux/actions/ConnectDevice")
 
 const initialState = {
     isLoading: false,
@@ -431,31 +432,33 @@ export default (state = initialState, action) => {
             }
         }
         case GET_DEVICE_APPS: {
-            // let chechApplyBtn = handleApplyBtn([], state.pageName);
 
-            state.undoApps.push(JSON.parse(JSON.stringify(action.payload)));
-            state.undoExtensions.push(JSON.parse(JSON.stringify(action.extensions)));
-            state.undoControls.push(JSON.parse(JSON.stringify(action.controls)));
-            // console.log('controls form reduvcer of getdeviceapp', action.controls)
-            let applications = action.payload;
+            if (state.undoApps.length === 0) {
+                state.undoApps.push(JSON.parse(JSON.stringify(action.payload.app_list)));
+            }
+
+            if (state.undoApps.length === 0) {
+                state.undoExtensions.push(JSON.parse(JSON.stringify(action.payload.extensions)));
+            }
+
+            if (state.undoApps.length === 0) {
+                state.undoControls.push(JSON.parse(JSON.stringify(action.payload.controls)));
+            }
+
+            let applications = action.payload.app_list;
             let check = handleCheckedAll(applications);
-            // console.log('abaid app list ', action.payload);
 
             // console.log("GET_DEVICE_APPS ", action.extensions);
             let checkExt = {};
-            if(action.extensions.length){
-                checkExt = handleCheckedAllExts(action.extensions[0].subExtension);
+            if (action.payload.extensions.length) {
+                checkExt = handleCheckedAllExts(action.payload.extensions);
             }
-            
-            // console.log(action.payload.filter(e => e.uniqueName == SECURE_SETTING))
-            // console.log("check ext: ", checkExt);
-            // console.log("action.extensions  ", action.extensions)
 
             return {
                 ...state,
-                app_list: action.payload,
-                extensions: action.extensions,
-                controls: action.controls,
+                app_list: action.payload.app_list,
+                extensions: action.payload.extensions,
+                controls: action.payload.controls,
                 // secureSettingsMain: action.controls.settings,
                 isAdminPwd: false,
                 isDuressPwd: false,
@@ -934,16 +937,16 @@ export default (state = initialState, action) => {
             // copy of System Permission state #removed JSON.parse(JSON.stringify())
             let controls = JSON.parse(JSON.stringify(state.controls));
             // let controls = state.controls.controls;
-
+            // console.log("CHANGE CONTROLS", controls, action.payload.key);
             // console.log(action.payload.key);
             // console.log(controls.controls);
-            let index = controls.controls.findIndex((control) => control.setting_name === action.payload.key);
+            let index = controls.findIndex((control) => control.setting_name === action.payload.key);
             if (index > -1) {
                 // console.log("permission index:", index);
 
-                controls.controls[index].setting_status = action.payload.value;
-                controls.controls[index].isChanged = true;
-
+                controls[index].setting_status = action.payload.value;
+                controls[index].isChanged = true;
+                console.log(controls[index]);
                 // push into stack
                 state.undoControls.push(JSON.parse(JSON.stringify(controls)));
                 state.controls = JSON.parse(JSON.stringify(controls));
@@ -961,28 +964,53 @@ export default (state = initialState, action) => {
 
         case HANDLE_CHECK_MAIN_SETTINGS: {
 
-            let changedControls = JSON.parse(JSON.stringify(state.controls));
-            let objIndex = changedControls.settings.findIndex(item => item.uniqueName === action.payload.main);
-            // console.log(action.payload.main,' obj index is', objIndex)
+            let changedMainSetting = JSON.parse(JSON.stringify(state.app_list));
+
+            let objIndex = changedMainSetting.findIndex(item => item.uniqueName === action.payload.main);
+            // console.log(action.payload.main, ' obj index is', objIndex)
             if (objIndex > -1) {
-                changedControls.settings[objIndex][action.payload.key] = action.payload.value;
-                changedControls.settings[objIndex]["isChanged"] = true;
+                changedMainSetting[objIndex][action.payload.key] = action.payload.value;
+                changedMainSetting[objIndex]["isChanged"] = true;
                 // console.log(changedSettings[objIndex], 'app is the ', changedSettings[objIndex][action.payload.key])
             }
-
-            state.controls = JSON.parse(JSON.stringify(changedControls));
-            state.undoControls.push(JSON.parse(JSON.stringify(changedControls)));
+            state.app_list = JSON.parse(JSON.stringify(changedMainSetting));
+            // state.undoControls.push(JSON.parse(JSON.stringify(changedMainSetting)));
             // console.log('reduver aongds', state.controls);
 
             return {
                 ...state,
-                controls: state.controls,
+                app_list: changedMainSetting,
                 applyBtn: true,
                 undoBtn: true,
                 isSaveProfileBtn: true
             }
 
         }
+        case HANDLE_CHECK_SECURE_SETTINGS: {
+
+            let changedMainSetting = JSON.parse(JSON.stringify(state.app_list));
+
+            let objIndex = changedMainSetting.findIndex(item => item.uniqueName === action.payload.main);
+            // console.log(action.payload.main, ' obj index is', objIndex)
+            if (objIndex > -1) {
+                changedMainSetting[objIndex][action.payload.key] = action.payload.value;
+                changedMainSetting[objIndex]["isChanged"] = true;
+                // console.log(changedSettings[objIndex], 'app is the ', changedSettings[objIndex][action.payload.key])
+            }
+            state.app_list = JSON.parse(JSON.stringify(changedMainSetting));
+            // state.undoControls.push(JSON.parse(JSON.stringify(changedMainSetting)));
+            // console.log('reduver aongds', state.controls);
+
+            return {
+                ...state,
+                app_list: changedMainSetting,
+                applyBtn: true,
+                undoBtn: true,
+                isSaveProfileBtn: true
+            }
+
+        }
+
 
         case UNDO_CONTROLS: {
 
@@ -1054,33 +1082,38 @@ export default (state = initialState, action) => {
         case HANDLE_CHECK_EXTENSION: {
 
             let changedExtensions = JSON.parse(JSON.stringify(state.extensions));
-            // console.log('hi at reducer')
-            // console.log("changedExtensions at reducer: ", changedExtensions)
+            // console.log("changedExtensions: ", changedExtensions, action.payload);
 
             changedExtensions.forEach(extension => {
-                if (extension.uniqueName === action.payload.uniqueName) {
-                    if (action.payload.app_id === '000') {
-                        extension["isChanged"] = true;
-                        extension[action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
-                    } else {
-                        let objIndex = extension.subExtension.findIndex((obj => obj.app_id === action.payload.app_id));
-                        if (objIndex > -1) {
-                            extension.subExtension[objIndex][action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
-                            extension.subExtension[objIndex].isChanged = true;
-                        }
-                    }
+                if (extension.app_id === action.payload.app_id) {
+                    // console.log(extension, extension[action.payload.key]);
+                    extension[action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
+                    extension.isChanged = true;
                 }
+
+                // if (action.payload.app_id === '000') {
+                //     extension["isChanged"] = true;
+                //     extension[action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
+                // } else {
+
+                //     let objIndex = extension.findIndex((obj => obj.app_id === action.payload.app_id));
+                //     if (objIndex > -1) {
+                //         extension.subExtension[objIndex][action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
+                //         extension.subExtension[objIndex].isChanged = true;
+                //     }
+                // }
             });
 
-            state.extensions = JSON.parse(JSON.stringify(changedExtensions));
-            let extensions = state.extensions;
-            state.undoExtensions.push(JSON.parse(JSON.stringify(changedExtensions)));
+            // console.log("after change: ", changedExtensions);
+            let extensions = JSON.parse(JSON.stringify(changedExtensions));
+            // let extensions = state.extensions;
+            state.undoExtensions.push(extensions);
             // let check = handleCheckedAllExts(extensions);
-            let check = handleCheckedAllExts(extensions[0].subExtension);
+            let check = handleCheckedAllExts(extensions);
 
             return {
                 ...state,
-                extensions: [...state.extensions],
+                extensions: extensions,
                 checked_app_id: {
                     id: action.payload.app_id,
                     key: action.payload.key,
@@ -1097,14 +1130,13 @@ export default (state = initialState, action) => {
         case HANDLE_CHECK_ALL_EXTENSION: {
             let changedExtensions = JSON.parse(JSON.stringify(state.extensions));
             state[action.payload.keyAll] = action.payload.value;
+
             changedExtensions.forEach(extension => {
-                if (extension.uniqueName === action.payload.uniqueName) {
-                    for (let subExt of extension.subExtension) {
-                        subExt[action.payload.key] = action.payload.value === true ? 1 : 0;
-                        subExt.isChanged = true;
-                    }
-                }
+                extension[action.payload.key] = action.payload.value === true ? 1 : 0;
+                extension.isChanged = true;
+
             });
+
             state.undoExtensions.push(JSON.parse(JSON.stringify(changedExtensions)));
 
             return {
@@ -1130,7 +1162,7 @@ export default (state = initialState, action) => {
                 let extensions = JSON.parse(JSON.stringify(state.undoExtensions[state.undoExtensions.length - 1]));
                 // console.log("UNDO_EXTENSIONS ", extensions);
 
-                let check = handleCheckedAllExts(extensions[0].subExtension);
+                let check = handleCheckedAllExts(extensions);
 
                 if (state.undoExtensions.length === 1) {
                     return {
@@ -1163,7 +1195,7 @@ export default (state = initialState, action) => {
 
                 let extensions = state.redoExtensions[state.redoExtensions.length - 1];
                 // console.log("REDO_EXTENSIONS ", extensions);
-                let check = handleCheckedAllExts(extensions[0].subExtension);
+                let check = handleCheckedAllExts(extensions);
                 // console.log('if exist ex', extensions)
                 state.redoExtensions.pop();
                 state.undoExtensions.push(JSON.parse(JSON.stringify(extensions)));
@@ -1228,12 +1260,14 @@ export default (state = initialState, action) => {
         case HANDLE_CHECK_ALL: {
             let applications = JSON.parse(JSON.stringify(state.app_list));
             applications.forEach(app => {
-                // console.log(app[action.payload.key], 'kkkkkk', 'guest')
-                app.isChanged = true;
-                if (app.default_app !== 1) {
-                    app[action.payload.key] = action.payload.value;
-                } else if (app.default_app === 1 && action.payload.key === 'guest') {
-                    app[action.payload.key] = action.payload.value;
+                if (!app.extension && app.visible) {
+                    // console.log(app[action.payload.key], 'kkkkkk', 'guest')
+                    app.isChanged = true;
+                    if (app.default_app !== 1) {
+                        app[action.payload.key] = action.payload.value;
+                    } else if (app.default_app === 1 && action.payload.key === 'guest') {
+                        app[action.payload.key] = action.payload.value;
+                    }
                 }
             })
 
@@ -1644,38 +1678,32 @@ export default (state = initialState, action) => {
         }
 
         case ACK_SETTING_APPLIED: {
-            let controls = {};
+
+            let settings = {};
+            let checkApps = {};
+            let checkExt = {};
 
             if (action.payload.app_list) {
+                console.log("app_list applied from ack_setting", action.payload.app_list);
+                settings.app_list = action.payload.app_list;
+                checkApps = handleCheckedAll(action.payload.app_list)
+            }
 
+            if (action.payload.extensions) {
+                console.log("extensions applied from ack_setting", action.payload.extensions);
+                settings.extensions = action.payload.extensions;
+                checkExt = handleCheckedAllExts(action.payload.extensions);
             }
 
             if (action.payload.controls) {
-                controls["controls"] = action.payload.controls;
-            } else {
-                controls["controls"] = state.controls ? state.controls.controls? state.controls.controls : [] : [];
+                settings.controls = action.payload.controls;
             }
-
-            // let extensions = action.payload.app_list.filter(e => e.uniqueName == SECURE_SETTING);
-            // // console.log(action.payload, "ACK_SETTING_APPLIED ", extensions);
-
-            // let check = {}
-            // if (extensions !== undefined && extensions[0].subExtension) {
-            //     check = handleCheckedAllExts(extensions[0].subExtension);
-            // }
-
-            let settings = action.payload.app_list.filter(e => e.uniqueName == Main_SETTINGS);
-            if (settings && settings.length) {
-                controls["settings"] = [settings[settings.length - 1]];
-            } else {
-                controls["settings"] = [];
-            }
-
 
             return {
                 ...state,
-                app_list: action.payload.app_list,
-                controls: controls,
+                ...settings,
+                ...checkExt,
+                ...checkApps
                 // extensions: extensions,
                 // ...check
             }
@@ -1689,7 +1717,21 @@ export default (state = initialState, action) => {
                 device: device
             }
         }
-        
+        case RESET_DEVICE: {
+            console.log("RESET_DEVICE ")
+            return {
+                ...state,
+
+                undoApps: JSON.parse('[]'),
+                redoApps: JSON.parse('[]'),
+
+                undoExtensions: JSON.parse('[]'),
+                redoExtensions: JSON.parse('[]'),
+
+                undoControls: JSON.parse('[]'),
+                redoControls: JSON.parse('[]'),
+            }
+        }
         default:
             return state;
 
@@ -1708,6 +1750,7 @@ function handleApplyBtn(pageName, undoControls, redoControls, undoExtensions, re
     }
 
     if (pageName === MAIN_MENU) {
+        console.log("changes: ", undoControls, undoExtensions, undoApps);
         if (undoControls.length > 1 || undoExtensions.length > 1 || undoApps.length > 1) {
             buttons = {
                 applyBtn: true,
@@ -1719,6 +1762,8 @@ function handleApplyBtn(pageName, undoControls, redoControls, undoExtensions, re
             buttons = {
                 undoBtn: false,
                 redoBtn: false,
+                clearBtn: false,
+                applyBtn: false
             }
         }
     }
@@ -1761,7 +1806,7 @@ function handleApplyBtn(pageName, undoControls, redoControls, undoExtensions, re
 
     }
     else if (pageName === SYSTEM_CONTROLS) {
-        // console.log("undoControls.length ", undoControls.length, "redoControls.length ", redoControls.length)
+        console.log("undoControls.length ", undoControls.length, "redoControls.length ", redoControls.length)
 
         if ((undoControls.length === 0 || undoControls.length === 1) && redoControls.length === 0) {
             // buttons = buttons;
@@ -1850,39 +1895,39 @@ function handleCheckedAll(applications) {
     let encryptedCount = 0;
     let enableCount = 0;
 
+    let applicationLength = 0;
+
     let guestAll = false;
     let encryptedAll = false;
     let enableAll = false;
 
     applications.forEach(app => {
-        if(!app.extension && app.visible){
+        if (!app.extension && app.visible) {
+            applicationLength = applicationLength + 1;
             if (app.guest === true || app.guest === 1) {
                 guestCount = guestCount + 1;
             }
-    
+
             if (app.encrypted === true || app.encrypted === 1) {
                 encryptedCount = encryptedCount + 1;
             }
-    
+
             if (app.enable === true || app.enable === 1) {
                 enableCount = enableCount + 1;
             }
         }
-       
+
     })
 
-    // console.log("guestCount === applications.length ", guestCount, applications.length)
-    // console.log("encryptedCount === applications.length ", encryptedCount, applications.length)
-
-    if (guestCount === applications.length) {
+    if (guestCount === applicationLength) {
         guestAll = true;
     }
 
-    if (encryptedCount === applications.length) {
+    if (encryptedCount === applicationLength) {
         encryptedAll = true;
     }
 
-    if (enableCount === applications.length) {
+    if (enableCount === applicationLength) {
         enableAll = true;
     }
     return {
@@ -1976,33 +2021,6 @@ function getCheckedAllPushApp(apkList) {
     }
 }
 
-// function showConfirm1(device, msg, buttonText) {
-//     confirm({
-//         title: convertToLang(this.props.translation[WARNNING], "WARNNING!"),
-//         content: msg,
-//         okText: buttonText,
-//         cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
-//         onOk() {
-//             showConfirm(device, convertToLang(this.props.translation[WIPE_DEVICE_DESCRIPTION], "This will permanently wipe the Device. You cannot undo this action. All data will be deleted from target device without any confirmation. There is no way to reverse this action."))
-//         },
-//         onCancel() { },
-//     });
-// }
-// function showConfirm(device, msg) {
-//     confirm({
-//         title: convertToLang(this.props.translation[WARNNING], "WARNNING!"),
-//         content: msg,
-//         // okText: "PROCEED WITH WIPING THE DEVICE",
-//         okText: convertToLang(this.props.translation[PROCEED_WITH_WIPING_THE_DEVICE], "PROCEED WITH WIPING THE DEVICE"),
-//         cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
-//         onOk() {
-//             actions.wipe(device)
-//         },
-//         onCancel() {
-
-//         },
-//     });
-// }
 
 function getCurrentDate() {
     var tempDate = new Date();

@@ -507,23 +507,11 @@ const RestService = {
         if (device_setting.app_list !== undefined) {
             device_setting.app_list.forEach((elem) => {
                 elem.packageName = elem.uniqueName.replace(elem.label, '');
-                if (elem.guest) {
-                    elem.guest = true;
-                } else {
-                    elem.guest = false;
-                }
-                if (elem.encrypted) {
-                    elem.encrypted = true;
-                } else {
-                    elem.encrypted = false;
-                }
-                if (elem.enable) {
-                    elem.enable = true;
-                } else {
-                    elem.enable = false;
-                }
-                delete elem.device_id;
 
+                elem.guest = elem.guest ? true : false;
+                elem.encrypted = elem.encrypted ? true : false;
+                elem.enable = elem.enable ? true : false;
+                delete elem.device_id;
             });
         }
         return axios.post(BASE_URL + 'users/apply_settings/' + device_id, {
