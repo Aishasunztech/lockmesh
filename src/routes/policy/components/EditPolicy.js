@@ -33,7 +33,7 @@ const columns = [{
     title: 'Name',
     dataIndex: 'name',
     key: 'name',
-    render: text => <a href="javascript:;">{text}</a>,
+    render: text => <a >{text}</a>,
 }, {
     title: 'Action',
     dataIndex: 'action',
@@ -123,7 +123,7 @@ class EditPolicy extends Component {
                 title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
                 dataIndex: 'app_name',
                 key: '1',
-                render: text => <a href="javascript:;">{text}</a>,
+                render: text => <a >{text}</a>,
             }]
     }
 

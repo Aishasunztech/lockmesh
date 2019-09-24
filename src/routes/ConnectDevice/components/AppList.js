@@ -160,7 +160,7 @@ class AppList extends Component {
                     title: convertToLang(this.props.translation[APK_APP_NAME], "APP NAME"),
                     dataIndex: 'app_name',
                     key: '1',
-                    render: text => <a href="javascript:;" style={{ fontSize: 12 }}>{text}</a>,
+                    render: text => <a style={{ fontSize: 12 }}>{text}</a>,
                 }, {
                     title: convertToLang(this.props.translation[Show_Hide], "SHOW/HIDE"),
                     dataIndex: 'guest',
@@ -177,7 +177,7 @@ class AppList extends Component {
                     title: convertToLang(this.props.translation[APK_APP_NAME], "APP NAME"),
                     dataIndex: 'app_name',
                     key: '1',
-                    render: text => <a href="javascript:;" style={{ fontSize: 12 }}>{text}</a>,
+                    render: text => <a style={{ fontSize: 12 }}>{text}</a>,
                 }, {
                     title: convertToLang(this.props.translation[Show_Hide], "SHOW/HIDE"),
                     dataIndex: 'encrypted',

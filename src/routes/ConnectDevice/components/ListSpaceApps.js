@@ -232,8 +232,8 @@ function mapDispatchToProps(dispatch) {
 
 
 var mapStateToProps = ({ device_details, settings }, ownProps) => {
-    let setting = device_details.controls.settings.find(setting => setting.uniqueName === Main_SETTINGS);
-    let extension = device_details.extensions.find(o => o.uniqueName === SECURE_SETTING);
+    let setting = device_details.app_list.find(setting => setting.uniqueName === Main_SETTINGS);
+    let extension = device_details.app_list.find(o => o.uniqueName === SECURE_SETTING);
     // console.log(extension);
     if (ownProps.isHistory !== undefined && ownProps.isHistory === true) {
         return {
