@@ -143,7 +143,8 @@ class Prices extends Component {
                         dataIndex: 'pkg_price',
                         key: 'pkg_price',
                         // ...this.getColumnSearchProps('status'),
-                        sorter: (a, b) => { return a.pkg_price - b.pkg_price },
+                        // sorter: (a, b) => { return a.pkg_price - b.pkg_price },
+                        sorter: (a, b) => { return a.pkg_price.localeCompare(b.pkg_price) },
 
                         sortDirections: ['ascend', 'descend'],
                     }

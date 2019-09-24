@@ -106,7 +106,7 @@ export default (state = initialState, action) => {
         }
 
         case GET_PACKAGES: {
-            console.log(action.response, 'response of get prices')
+            // console.log(action.response, 'response of get prices')
 
             return {
                 ...state,
