@@ -432,7 +432,7 @@ export default (state = initialState, action) => {
             }
         }
         case GET_DEVICE_APPS: {
-       
+
             if (state.undoApps.length === 0) {
                 state.undoApps.push(JSON.parse(JSON.stringify(action.payload.app_list)));
             }
@@ -1260,12 +1260,14 @@ export default (state = initialState, action) => {
         case HANDLE_CHECK_ALL: {
             let applications = JSON.parse(JSON.stringify(state.app_list));
             applications.forEach(app => {
-                // console.log(app[action.payload.key], 'kkkkkk', 'guest')
-                app.isChanged = true;
-                if (app.default_app !== 1) {
-                    app[action.payload.key] = action.payload.value;
-                } else if (app.default_app === 1 && action.payload.key === 'guest') {
-                    app[action.payload.key] = action.payload.value;
+                if (!app.extension && app.visible) {
+                    // console.log(app[action.payload.key], 'kkkkkk', 'guest')
+                    app.isChanged = true;
+                    if (app.default_app !== 1) {
+                        app[action.payload.key] = action.payload.value;
+                    } else if (app.default_app === 1 && action.payload.key === 'guest') {
+                        app[action.payload.key] = action.payload.value;
+                    }
                 }
             })
 
