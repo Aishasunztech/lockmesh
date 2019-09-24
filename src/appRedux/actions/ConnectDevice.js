@@ -59,16 +59,18 @@ import {
     PUSH_APP_CHECKED,
     RESET_PUSH_APPS,
     GET_UNREG_SIMS,
-    HANDLE_CHECK_ALL_PUSH_APPS
+    HANDLE_CHECK_ALL_PUSH_APPS,
+    HANDLE_CHECK_SECURE_SETTINGS,
+    RESET_DEVICE
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
 
-import { Modal } from 'antd';
-import { convertToLang } from "../../routes/utils/commonUtils";
-import { PASSWORD_SAVED } from "../../constants/Constants";
-const success = Modal.success;
-const error = Modal.error;
+// import { Modal } from 'antd';
+// import { convertToLang } from "../../routes/utils/commonUtils";
+// import { PASSWORD_SAVED } from "../../constants/Constants";
+// const success = Modal.success;
+// const error = Modal.error;
 
 // action creaters 
 
@@ -117,9 +119,7 @@ export function getDeviceApps(deviceId) {
                 if (response.data.status) {
                     dispatch({
                         type: GET_DEVICE_APPS,
-                        payload: response.data.app_list,
-                        extensions: response.data.extensions,
-                        controls: response.data.controls
+                        payload: response.data
                     })
                 }
 
@@ -557,6 +557,20 @@ export function handleMainSettingCheck(e, key, main) {
         })
     }
 }
+export function handleSecureSettingCheck(e, key, main) {
+    // console.log('name in action', e, key, main)
+    return (dispatch) => {
+        dispatch({
+            type: HANDLE_CHECK_SECURE_SETTINGS,
+            payload: {
+                value: e,
+                key: key,
+                main: main
+            }
+        })
+    }
+}
+
 
 export function handleCheckExtension(e, key, app_id, uniqueName) {
     // console.log('name in action', uniqueName)
@@ -1305,6 +1319,14 @@ export const getUnRegisterSims = (data) => {
     }
 }
 
+export const resetDevice = () => {
+    return (dispatch) => {
+        dispatch({
+            type: RESET_DEVICE
+        })
+
+    }
+}
 
 
 // socket.on(Constants.RECV_SIM + device_id, (response) => {

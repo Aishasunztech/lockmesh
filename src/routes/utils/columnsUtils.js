@@ -1879,7 +1879,7 @@ export function appsColumns(translation) {
             title: convertToLang(translation[APK_APP_NAME], "APP NAME"),
             dataIndex: 'app_name',
             key: '1',
-            render: text => <a href="javascript:;" style={{ fontSize: 12 }}>{text}</a>,
+            render: text => <a style={{ fontSize: 12 }}>{text}</a>,
         }, {
             title: convertToLang(translation[Guest], "Guest"),
             dataIndex: 'guest',
@@ -1902,7 +1902,7 @@ export function extensionColumns(translation) {
             title: convertToLang(translation[EXTENSION_NAME], "EXTENSION NAME"),
             dataIndex: 'label',
             key: '1',
-            render: text => <a href="javascript:;" style={{ fontSize: 12 }}> {text}</ a>,
+            render: text => <a style={{ fontSize: 12 }}> {text}</ a>,
         }, {
             title: convertToLang(translation[Guest], "Guest"),
             dataIndex: 'guest',
@@ -1921,7 +1921,7 @@ export function controlColumns(translation) {
             title: convertToLang(translation[PERMISSION_NAME], "PERMISSION NAME"),
             dataIndex: 'label',
             key: '1',
-            render: text => <a href="javascript:;" style={{ fontSize: 12 }}>{text}</a>,
+            render: text => <a style={{ fontSize: 12 }}>{text}</a>,
         }, {
             title: convertToLang(translation[DEVICE_STATUS], "STATUS"),
             dataIndex: 'status',

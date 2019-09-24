@@ -45,7 +45,7 @@ class TableHistory extends Component {
     renderList = (histories, type, callback) => {
         // console.log("list", histories);
         return histories.map((history) => {
-          
+
 
             return ({
                 key: history.id,
@@ -120,7 +120,7 @@ class TableHistory extends Component {
                     let app_list = (record.app_list !== undefined && record.app_list !== null && record.app_list !== '') ? record.app_list : [];
                     let extensions = (record.secure_apps !== undefined && record.secure_apps !== null && record.secure_apps !== '') ? record.secure_apps : [];
 
-                    let controls = (record.controls && record.controls.length) ? record.controls: [];
+                    let controls = (record.controls && record.controls.length) ? record.controls : [];
 
                     console.log("table history controls: ", controls);
                     let push_apps = record.push_apps === null || record.push_apps === 'null' ? [] : record.push_apps;
@@ -128,6 +128,7 @@ class TableHistory extends Component {
                     // console.log("app_list: ", app_list);
                     // console.log("extensions: ", extensions);
                     if (this.props.type === 'profile' && record.controls !== null && record.controls !== '' && record.controls !== undefined) {
+                        console.log("CONTROLS SETTINGS" , controls);
                         let cntrl = {};
                         cntrl = JSON.parse(JSON.stringify(record.controls))
                         controls = cntrl
@@ -145,14 +146,16 @@ class TableHistory extends Component {
                             // isGuestPwd={this.props.isGuestPwd}
                             passwords={passwords}
                             show_all_apps={true}
-                            controls={{ controls }}
+                            controls={controls}
                             isPushApps={true}
                             push_apps={push_apps}
                             type={this.props.type}
                             translation={this.props.translation}
+                            auth={{ authUser: this.props.auth }}
                         />
                     );
-                }}
+                }
+                }
             />
         )
     }
