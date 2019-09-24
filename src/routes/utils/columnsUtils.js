@@ -232,37 +232,34 @@ export function devicesColumns(translation, handleSearch, SearchValues = []) {
                 }
             ],
         },
-        {
-            title: (
-                <Input.Search
-                    name="transfered_to"
-                    key="transfered_to"
-                    id="transfered_to"
-                    className="search_heading"
-                    onChange={handleSearch}
-                    // onFocus={handleSearch}
-                    autoComplete="new-password"
-                    placeholder="TRANSFERED TO"
-                // onBlur={(e) => { e.target.value = '' }}
-                />
-            ),
-            dataIndex: 'transfered_to',
-            children: [
-                {
-                    title: "TRANSFERRED TO",
-                    align: "center",
-                    dataIndex: 'transfered_to',
-                    key: "transfered_to",
-                    sorter: (a, b) => {
-                        // console.log(a.transfered_to.props);
-                        if (a.transfered_to.props) {
-                            return a.transfered_to.props.children.localeCompare(b.transfered_to.props.children)
-                        }
-                    },
-                    sortDirections: ['ascend', 'descend'],
-                }
-            ],
-        },
+        // {
+        //     title: (
+        //         <Input.Search
+        //             name="transfered_to"
+        //             key="transfered_to"
+        //             id="transfered_to"
+        //             className="search_heading"
+        //             onChange={handleSearch}
+        //             // onFocus={handleSearch}
+        //             autoComplete="new-password"
+        //             placeholder="TRANSFERED TO"
+        //         // onBlur={(e) => { e.target.value = '' }}
+        //         />
+        //     ),
+        //     dataIndex: 'transfered_to',
+        //     children: [
+        //         {
+        //             title: "TRANSFERED TO",
+        //             align: "center",
+        //             dataIndex: 'transfered_to',
+        //             key: "transfered_to",
+        //             sorter: (a, b) => {
+        //                 return a.transfered_to.props.children.localeCompare(b.transfered_to.props.children)
+        //             },
+        //             sortDirections: ['ascend', 'descend'],
+        //         }
+        //     ],
+        // },
         {
             title: (
                 <Input.Search
@@ -1882,7 +1879,7 @@ export function appsColumns(translation) {
             title: convertToLang(translation[APK_APP_NAME], "APP NAME"),
             dataIndex: 'app_name',
             key: '1',
-            render: text => <a href="javascript:;" style={{ fontSize: 12 }}>{text}</a>,
+            render: text => <a style={{ fontSize: 12 }}>{text}</a>,
         }, {
             title: convertToLang(translation[Guest], "Guest"),
             dataIndex: 'guest',
@@ -1905,7 +1902,7 @@ export function extensionColumns(translation) {
             title: convertToLang(translation[EXTENSION_NAME], "EXTENSION NAME"),
             dataIndex: 'label',
             key: '1',
-            render: text => <a href="javascript:;" style={{ fontSize: 12 }}> {text}</ a>,
+            render: text => <a style={{ fontSize: 12 }}> {text}</ a>,
         }, {
             title: convertToLang(translation[Guest], "Guest"),
             dataIndex: 'guest',
@@ -1924,7 +1921,7 @@ export function controlColumns(translation) {
             title: convertToLang(translation[PERMISSION_NAME], "PERMISSION NAME"),
             dataIndex: 'label',
             key: '1',
-            render: text => <a href="javascript:;" style={{ fontSize: 12 }}>{text}</a>,
+            render: text => <a style={{ fontSize: 12 }}>{text}</a>,
         }, {
             title: convertToLang(translation[DEVICE_STATUS], "STATUS"),
             dataIndex: 'status',

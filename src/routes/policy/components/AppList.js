@@ -40,12 +40,12 @@ class AppList extends Component {
                 title: convertToLang(props.translation[POLICY_ACTION], "ACTION"),
                 dataIndex: 'action',
                 key: '5',
-                // render: text => <a href="javascript:;">{text}</a>,
+                // render: text => <a >{text}</a>,
             }, {
                 title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
                 dataIndex: 'app_name',
                 key: '1',
-                render: text => <a href="javascript:;">{text}</a>,
+                render: text => <a >{text}</a>,
             }, {
                 title: convertToLang(props.translation[Guest], "Guest"),
                 dataIndex: 'guest',
@@ -66,7 +66,7 @@ class AppList extends Component {
                 title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
                 dataIndex: 'app_name',
                 key: '1',
-                render: text => <a href="javascript:;">{text}</a>,
+                render: text => <a >{text}</a>,
             }, {
                 title: convertToLang(props.translation[Guest], "Guest"),
                 dataIndex: 'guest',
@@ -87,7 +87,7 @@ class AppList extends Component {
                 title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
                 dataIndex: 'app_name',
                 key: '1',
-                render: text => <a href="javascript:;">{text}</a>,
+                render: text => <a >{text}</a>,
             }, {
                 title: convertToLang(props.translation[Guest], "Guest"),
                 dataIndex: 'guest',

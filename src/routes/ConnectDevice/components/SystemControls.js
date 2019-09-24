@@ -11,8 +11,8 @@ export default class SystemControls extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      controls: props.controls.controls,
-      settings: props.controls.settings,
+      controls: props.controls,
+      app_list: props.app_list,
     }
   }
 
@@ -20,30 +20,20 @@ export default class SystemControls extends Component {
     console.log('SystemControls.componentDidMount: ', this.props.controls)
     if (this.props.controls) {
       this.setState({
-        controls: this.props.controls.controls,
-        settings: this.props.controls.settings,
+        controls: this.props.controls,
+        app_list: this.props.app_list,
         pageName: this.props.pageName,
         // secureSettingsMain: this.props.secureSettingsMain
       })
     }
   }
 
-  // componentDidUpdate(prevProps) {
-  //   console.log(this.props.controls, 'testig sdf')
-  //   if (this.props !== prevProps) {
-  //     this.setState({
-  //       controls: this.props.controls.controls,
-  //       settings: this.props.controls.settings,
-  //     })
-  //   }
-  // }
-
   componentWillReceiveProps(nextProps) {
     console.log('SystemControls.componentWillReceiveProps: ', nextProps)
-    if (this.props.controls !== nextProps.controls) {
+    if (this.props.controls !== nextProps.controls || this.props.app_list !== nextProps.app_list) {
       this.setState({
-        controls: nextProps.controls.controls,
-        settings: nextProps.controls.settings,
+        controls: nextProps.controls,
+        app_list: nextProps.app_list,
       })
     }
   }
@@ -56,7 +46,6 @@ export default class SystemControls extends Component {
 
   handleMainSettingCheck = (value, controlName) => {
     this.props.handleMainSettingCheck(value, controlName, Main_SETTINGS)
-
   }
   renderSystemPermissions = () => {
     console.log("controls:", this.state.controls)
@@ -85,14 +74,13 @@ export default class SystemControls extends Component {
   }
 
   render() {
-    // console.log("systemControls.render()", this.props.controls);
-    // console.log("this.state.settings ", this.state.settings);
-    // console.log("this.props.auth.authUser.type ", this.props.auth.authUser.type);
-    let objIndex = -1;
-    if (this.state.settings && this.state.settings.length) {
-      objIndex = this.state.settings.findIndex(item => item.uniqueName === Main_SETTINGS)
+
+    let setting = [];
+    console.log("main setting: ", this.state.app_list, Main_SETTINGS);
+    if (this.state.app_list && this.state.app_list.length) {
+      setting = this.state.app_list.filter(item => item.uniqueName === Main_SETTINGS)
     }
-    // console.log("object Index: ", objIndex);
+
 
     if (this.state.controls) {
 
@@ -102,7 +90,7 @@ export default class SystemControls extends Component {
             {/* this is android main settings with guest, encrypted and enable toggles */}
             {
               (this.props.auth.authUser.type === ADMIN) ?
-                (this.state.settings && this.state.settings.length && objIndex >= 0) ?
+                (setting.length) ?
                   <Fragment>
                     <Row className="first_head">
                       <Col span={4} className="pr-0">
@@ -117,19 +105,19 @@ export default class SystemControls extends Component {
                         <span>Guest</span>
                         <Switch onClick={(e) => {
                           this.handleMainSettingCheck(e, "guest");
-                        }} checked={this.state.settings[objIndex].guest === 1 || this.state.settings[objIndex].guest === true ? true : false} size="small" />
+                        }} checked={setting[0].guest === 1 || setting[0].guest === true ? true : false} size="small" />
                       </div>
                       <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
                         <span>Encrypt</span>
                         <Switch onClick={(e) => {
                           this.handleMainSettingCheck(e, "encrypted");
-                        }} checked={this.state.settings[objIndex].encrypted === 1 || this.state.settings[objIndex].encrypted === true ? true : false} size="small" />
+                        }} checked={setting[0].encrypted === 1 || setting[0].encrypted === true ? true : false} size="small" />
                       </div>
                       <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
                         <span>Enable</span>
                         <Switch onClick={(e) => {
                           this.handleMainSettingCheck(e, "enable");
-                        }} checked={this.state.settings[objIndex].enable === 1 || this.state.settings[objIndex].enable === true ? true : false} size="small" />
+                        }} checked={setting[0].enable === 1 || setting[0].enable === true ? true : false} size="small" />
                       </div>
                     </div>
                   </Fragment>
