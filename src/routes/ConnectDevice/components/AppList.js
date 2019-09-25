@@ -82,68 +82,75 @@ class AppList extends Component {
 
     renderApps = () => {
 
-        return this.state.app_list.map(app => {
-            // console.log(app.app_id);
-            return ({
-                key: app.app_id,
-                app_name:
-                    <Fragment>
-                        <Avatar
-                            size={"small"}
-                            src={`${BASE_URL}users/getFile/${app.icon}`}
-                        // style={{ width: "30px", height: "30px" }} 
-                        />
-                        <br />
-                        <div className="line_break2">{app.label}</div>
-                    </Fragment>,
-                guest: (this.props.isHistory === true) ?
-                    (app.guest === 1 || app.guest === true) ?
-                        (<span style={{ color: "green" }}>{convertToLang(this.props.translation[Button_On], "On")}</span>) :
-                        (<span style={{ color: "red" }}>{convertToLang(this.props.translation[Button_Off], "Off")}</span>) :
-                    <Switch
-                        size="small"
-                        ref={`guest_${app.app_id}`}
-                        name={`guest_${app.app_id}`}
-                        value={app.guest}
-                        disabled={this.props.disable ? true : false}
-                        checked={(app.guest === true || app.guest === 1) ? true : false}
-                        onClick={(e) => {
-                            this.handleChecked(e, "guest", app.app_id);
-                        }}
-                    />,
-                encrypted: app.default_app === 1 ? '' : (this.props.isHistory === true) ?
-                    (app.encrypted === 1 || app.encrypted === true) ?
-                        (<span style={{ color: "green" }}>{convertToLang(this.props.translation[Button_On], "On")}</span>) :
-                        (<span style={{ color: "red" }}>{convertToLang(this.props.translation[Button_Off], "Off")}</span>) :
-                    <Switch
-                        size="small"
-                        ref={`encrypted_${app.app_id}`}
-                        name={`encrypted_${app.app_id}`}
-                        disabled={this.props.disable ? true : false}
-                        value={app.encrypted}
-                        checked={(app.encrypted === true || app.encrypted === 1) ? true : false}
-                        onClick={(e) => {
-                            // console.log("encrypted", e);
-                            this.handleChecked(e, "encrypted", app.app_id);
-                        }}
-                    />,
-                enable: app.default_app === 1 ? '' : (this.props.isHistory === true) ?
-                    (app.enable === 1 || app.enable === true) ?
-                        (<span style={{ color: "green" }}>{convertToLang(this.props.translation[Button_On], "On")}</span>) :
-                        (<span style={{ color: "red" }}>{convertToLang(this.props.translation[Button_Off], "Off")}</span>) :
-                    <Switch
-                        size="small"
-                        ref={`enable_${app.app_id}`}
-                        name={`enable_${app.app_id}`}
-                        value={app.enable}
-                        disabled={this.props.disable ? true : false}
-                        checked={((app.enable === true) || (app.enable === 1)) ? true : false}
-                        onClick={(e) => {
-                            this.handleChecked(e, "enable", app.app_id);
-                        }}
-                    />
-            });
+        let appList = [];
+
+        this.state.app_list.map(app => {
+            // console.log(app);
+            if (!app.extension && app.visible) {
+                appList.push(
+                    {
+                        key: app.app_id,
+                        app_name:
+                            <Fragment>
+                                <Avatar
+                                    size={"small"}
+                                    src={`${BASE_URL}users/getFile/${app.icon}`}
+                                // style={{ width: "30px", height: "30px" }} 
+                                />
+                                <br />
+                                <div className="line_break2">{app.label}</div>
+                            </Fragment>,
+                        guest: (this.props.isHistory === true) ?
+                            (app.guest === 1 || app.guest === true) ?
+                                (<span style={{ color: "green" }}>{convertToLang(this.props.translation[Button_On], "On")}</span>) :
+                                (<span style={{ color: "red" }}>{convertToLang(this.props.translation[Button_Off], "Off")}</span>) :
+                            <Switch
+                                size="small"
+                                ref={`guest_${app.app_id}`}
+                                name={`guest_${app.app_id}`}
+                                value={app.guest}
+                                disabled={this.props.disable ? true : false}
+                                checked={(app.guest === true || app.guest === 1) ? true : false}
+                                onClick={(e) => {
+                                    this.handleChecked(e, "guest", app.app_id);
+                                }}
+                            />,
+                        encrypted: app.default_app === 1 ? '' : (this.props.isHistory === true) ?
+                            (app.encrypted === 1 || app.encrypted === true) ?
+                                (<span style={{ color: "green" }}>{convertToLang(this.props.translation[Button_On], "On")}</span>) :
+                                (<span style={{ color: "red" }}>{convertToLang(this.props.translation[Button_Off], "Off")}</span>) :
+                            <Switch
+                                size="small"
+                                ref={`encrypted_${app.app_id}`}
+                                name={`encrypted_${app.app_id}`}
+                                disabled={this.props.disable ? true : false}
+                                value={app.encrypted}
+                                checked={(app.encrypted === true || app.encrypted === 1) ? true : false}
+                                onClick={(e) => {
+                                    // console.log("encrypted", e);
+                                    this.handleChecked(e, "encrypted", app.app_id);
+                                }}
+                            />,
+                        enable: app.default_app === 1 ? '' : (this.props.isHistory === true) ?
+                            (app.enable === 1 || app.enable === true) ?
+                                (<span style={{ color: "green" }}>{convertToLang(this.props.translation[Button_On], "On")}</span>) :
+                                (<span style={{ color: "red" }}>{convertToLang(this.props.translation[Button_Off], "Off")}</span>) :
+                            <Switch
+                                size="small"
+                                ref={`enable_${app.app_id}`}
+                                name={`enable_${app.app_id}`}
+                                value={app.enable}
+                                disabled={this.props.disable ? true : false}
+                                checked={((app.enable === true) || (app.enable === 1)) ? true : false}
+                                onClick={(e) => {
+                                    this.handleChecked(e, "enable", app.app_id);
+                                }}
+                            />
+                    }
+                );
+            }
         });
+        return appList;
     }
 
     render() {
@@ -153,7 +160,7 @@ class AppList extends Component {
                     title: convertToLang(this.props.translation[APK_APP_NAME], "APP NAME"),
                     dataIndex: 'app_name',
                     key: '1',
-                    render: text => <a href="javascript:;" style={{ fontSize: 12 }}>{text}</a>,
+                    render: text => <a style={{ fontSize: 12 }}>{text}</a>,
                 }, {
                     title: convertToLang(this.props.translation[Show_Hide], "SHOW/HIDE"),
                     dataIndex: 'guest',
@@ -170,7 +177,7 @@ class AppList extends Component {
                     title: convertToLang(this.props.translation[APK_APP_NAME], "APP NAME"),
                     dataIndex: 'app_name',
                     key: '1',
-                    render: text => <a href="javascript:;" style={{ fontSize: 12 }}>{text}</a>,
+                    render: text => <a style={{ fontSize: 12 }}>{text}</a>,
                 }, {
                     title: convertToLang(this.props.translation[Show_Hide], "SHOW/HIDE"),
                     dataIndex: 'encrypted',

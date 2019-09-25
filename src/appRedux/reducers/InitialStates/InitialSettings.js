@@ -83,7 +83,7 @@ export var initialSettings = {
     { "key": "device_id", "value": DEVICE_ID },
     { "key": "user_id", "value": USER_ID },
     { "key": "validity", "value": DEVICE_REMAINING_DAYS },
-    { "key": "transfered_to", "value": DEVICE_TRANSFERED },
+    // { "key": "transfered_to", "value": DEVICE_TRANSFERED },
     { "key": "status", "value": DEVICE_STATUS },
     { "key": "lastOnline", "value": DEVICE_LASTONLINE },
     { "key": "online", "value": DEVICE_MODE },

@@ -113,7 +113,7 @@ export default class NewDevices extends Component {
 
 
     renderList1(list) {
-        console.log(list);
+        // console.log(list);
         return list.map((request) => {
             return {
                 key: request.id ? `${request.id}` : "N/A",
@@ -168,7 +168,7 @@ export default class NewDevices extends Component {
             let acceptButton = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.refs.add_device_modal.showModal(device, this.props.addDevice); this.setState({ visible: false }) }}> {convertToLang(this.props.translation[Button_ACCEPT], "ACCEPT")}</Button>;
 
             let actionButns;
-            console.log(this.state.sectionVisible, 'section visible state')
+            // console.log(this.state.sectionVisible, 'section visible state')
             if (this.state.sectionVisible) {
                 if (this.props.flaggedDevices !== undefined) {
                     if (flagged) {
@@ -216,7 +216,7 @@ export default class NewDevices extends Component {
 
     filterList = (devices) => {
         let dumyDevices = [];
-        console.log('check Devices at filterList ', devices)
+        // console.log('check Devices at filterList ', devices)
         if (devices !== undefined) {
             devices.filter(function (device) {
                 if (device.finalStatus !== DEVICE_UNLINKED) {
@@ -234,7 +234,7 @@ export default class NewDevices extends Component {
 
     render() {
         let flaggedDevices = this.filterList(this.props.flaggedDevices)
-        console.log('check flaggedDevices ', flaggedDevices, 'requests', this.props.requests, 'NewDevices', this.props.devices)
+        // console.log('check flaggedDevices ', flaggedDevices, 'requests', this.props.requests, 'NewDevices', this.props.devices)
         return (
             <div>
                 <Modal
@@ -259,7 +259,7 @@ export default class NewDevices extends Component {
                             />
                         </Fragment>
                     }
-                    {(this.state.sectionVisible) ?
+                    {/* {(this.state.sectionVisible) ?
                         <Fragment>
                             <h1>{convertToLang(this.props.translation[CREDITS_CASH_REQUESTS], "CREDITS CASH REQUESTS")}</h1>
                             <Table
@@ -271,7 +271,7 @@ export default class NewDevices extends Component {
 
                             />
                         </Fragment>
-                        : null}
+                        : null} */}
                 </Modal>
                 <AddDeviceModal ref='add_device_modal' translation={this.props.translation} />
 

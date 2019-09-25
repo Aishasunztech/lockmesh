@@ -21,7 +21,7 @@ export default class Activity extends Component {
                 title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
                 dataIndex: 'app_name',
                 key: '1',
-                render: text => <a href="javascript:;">{text}</a>,
+                render: text => <a >{text}</a>,
             }, {
                 title: convertToLang(props.translation[Guest], "GUEST"),
                 dataIndex: 'guest',
@@ -41,7 +41,7 @@ export default class Activity extends Component {
                 title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
                 dataIndex: 'app_name',
                 key: '1',
-                render: text => <a href="javascript:;">{text}</a>,
+                render: text => <a >{text}</a>,
             }
         ];
         this.policyColumns = [
@@ -49,7 +49,7 @@ export default class Activity extends Component {
                 title: convertToLang(props.translation[POLICY_NAME], "POLICY NAME"),
                 dataIndex: 'policy_name',
                 key: '1',
-                render: text => <a href="javascript:;">{text}</a>,
+                render: text => <a >{text}</a>,
             }
         ];
 
@@ -58,13 +58,13 @@ export default class Activity extends Component {
                 title: convertToLang(props.translation[DEVICE_IMEI_1], "IMEI1"),
                 dataIndex: 'imei1',
                 key: '1',
-                render: text => <a href="javascript:;">{text}</a>,
+                render: text => <a >{text}</a>,
             },
             {
                 title: convertToLang(props.translation[DEVICE_IMEI_2], "IMEI2"),
                 dataIndex: 'imei2',
                 key: '2',
-                render: text => <a href="javascript:;">{text}</a>,
+                render: text => <a >{text}</a>,
             },
         ];
         this.state = {
@@ -189,15 +189,15 @@ export default class Activity extends Component {
     }
 
     renderPasswords = (record) => {
-        if(record.data.passwords){
+        if (record.data.passwords) {
             let passwords = JSON.parse(record.data.passwords);
-            for(let key of Object.keys(passwords)){
-                if(passwords[key] !== null && passwords[key] !== 'null' && passwords[key]){
-                    return key.replace(/_/g,' ').toUpperCase() ;
+            for (let key of Object.keys(passwords)) {
+                if (passwords[key] !== null && passwords[key] !== 'null' && passwords[key]) {
+                    return key.replace(/_/g, ' ').toUpperCase();
                 }
             }
         }
-         
+
     }
 
     renderList = () => {
@@ -356,7 +356,7 @@ export default class Activity extends Component {
                                             title: convertToLang(this.props.translation[PROFILE_NAME], "PROFILE NAME"),
                                             dataIndex: 'profile_name',
                                             key: '1',
-                                            render: text => <a href="javascript:;">{text}</a>,
+                                            render: text => <a >{text}</a>,
                                         }]}
                                         align='center'
                                         dataSource={[
@@ -370,9 +370,8 @@ export default class Activity extends Component {
                                     />
                                 )
                             } else if (record.action_name === 'SETTING CHANGED') {
-                                let controls = {
-                                    'controls': JSON.parse(record.data.controls)
-                                }
+                                let controls = JSON.parse(record.data.controls)
+
                                 let passwords = JSON.parse(record.data.passwords)
                                 return (
                                     <DeviceSettings
@@ -388,16 +387,18 @@ export default class Activity extends Component {
                                         show_unchanged={true}
                                         translation={this.props.translation}
                                         showChangedControls={true}
+                                        auth={{ authUser: this.props.auth }}
+
                                     />
                                 )
 
-                            } else if(record.action_name === 'PASSWORD CHANGED'){
+                            } else if (record.action_name === 'PASSWORD CHANGED') {
                                 // console.log( 'password recoerd i sthe ', JSON.parse(record.data.passwords));
-                               
+
                                 return (
-                                   <div>
-                                       <p style={{margin: 'auto'}} >{this.renderPasswords(record)} is Changed</p>
-                                   </div>
+                                    <div>
+                                        <p style={{ margin: 'auto' }} >{this.renderPasswords(record)} is Changed</p>
+                                    </div>
                                 )
                             }
 

@@ -16,7 +16,7 @@ export default class PolicyInfo extends Component {
         title: convertToLang(this.props.translation[NAME], "NAME"),
         dataIndex: 'name',
         key: 'name',
-        render: text => <a href="javascript:;">{text}</a>,
+        render: text => <a >{text}</a>,
     }, {
         title: convertToLang(this.props.translation[POLICY_ACTION], "ACTION"),
         dataIndex: 'action',
@@ -27,7 +27,7 @@ export default class PolicyInfo extends Component {
         title: convertToLang(this.props.translation[POLICY_NAME], "POLICY NAME"),
         dataIndex: 'name',
         key: 'name',
-        render: text => <a href="javascript:;">{text}</a>,
+        render: text => <a >{text}</a>,
     }, {
         title: convertToLang(this.props.translation[POLICY_NOTE], "POLICY NOTE"),
         dataIndex: 'note',

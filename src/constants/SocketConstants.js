@@ -1,6 +1,8 @@
 export const CONNECT_SOCKET = 'CONNECT_SOCKET';
 export const DISCONNECT_SOCKET = 'DISCONNECT_SOCKET';
 
+export const SEND_ONLINE_OFFLINE_STATUS = 'send_online_offline_status_';
+
 export const GET_SYNC_STATUS = "get_sync_status_";
 export const GET_APPLIED_SETTINGS = "get_applied_settings_";
 export const DEVICE_STATUS = "device_status_";
