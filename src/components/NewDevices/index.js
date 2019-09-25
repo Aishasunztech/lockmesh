@@ -164,8 +164,8 @@ export default class NewDevices extends Component {
                 }>{convertToLang(this.props.translation[Button_Transfer], "TRANSFER")}</Button>;
             }
 
-            let declineButton = <Button type="danger" size="small" style={{ display: 'none', margin: '0 8px 0 8px' }} onClick={() => { this.rejectDevice(device); }}>{convertToLang(this.props.translation[Button_Decline], "DECLINE")}</Button>;
-            let acceptButton = <Button type="primary" size="small" style={{ display: 'none', margin: '0 8px 0 8px' }} onClick={() => { this.refs.add_device_modal.showModal(device, this.props.addDevice); this.setState({ visible: false }) }}> {convertToLang(this.props.translation[Button_ACCEPT], "ACCEPT")}</Button>;
+            let declineButton = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.rejectDevice(device); }}>{convertToLang(this.props.translation[Button_Decline], "DECLINE")}</Button>;
+            let acceptButton = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.refs.add_device_modal.showModal(device, this.props.addDevice); this.setState({ visible: false }) }}> {convertToLang(this.props.translation[Button_ACCEPT], "ACCEPT")}</Button>;
 
             let actionButns;
             // console.log(this.state.sectionVisible, 'section visible state')
