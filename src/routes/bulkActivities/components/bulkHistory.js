@@ -20,7 +20,7 @@ export default class Activity extends Component {
                 title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
                 dataIndex: 'app_name',
                 key: '1',
-                render: text => <a href="javascript:;">{text}</a>,
+                render: text => <a >{text}</a>,
             }, {
                 title: convertToLang(props.translation[Guest], "GUEST"),
                 dataIndex: 'guest',
@@ -40,7 +40,7 @@ export default class Activity extends Component {
                 title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
                 dataIndex: 'app_name',
                 key: '1',
-                render: text => <a href="javascript:;">{text}</a>,
+                render: text => <a >{text}</a>,
             }
         ];
         this.policyColumns = [
@@ -48,7 +48,7 @@ export default class Activity extends Component {
                 title: convertToLang(props.translation[POLICY_NAME], "POLICY NAME"),
                 dataIndex: 'policy_name',
                 key: '1',
-                render: text => <a href="javascript:;">{text}</a>,
+                render: text => <a >{text}</a>,
             }
         ];
 
@@ -57,13 +57,13 @@ export default class Activity extends Component {
                 title: convertToLang(props.translation[DEVICE_IMEI_1], "IMEI1"),
                 dataIndex: 'imei1',
                 key: '1',
-                render: text => <a href="javascript:;">{text}</a>,
+                render: text => <a >{text}</a>,
             },
             {
                 title: convertToLang(props.translation[DEVICE_IMEI_2], "IMEI2"),
                 dataIndex: 'imei2',
                 key: '1',
-                render: text => <a href="javascript:;">{text}</a>,
+                render: text => <a >{text}</a>,
             },
         ];
         this.state = {

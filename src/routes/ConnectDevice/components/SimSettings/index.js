@@ -116,7 +116,7 @@ class SimSettings extends Component {
     handleChecked = (e, obj, label) => {
         obj[label] = e ? 1 : 0;
         // console.log('status ', status);
-        if (status) {
+        if (status && this.props.sim_list && this.props.sim_list.length) {
             this.props.handleSimUpdate({ obj, label, value: e });
             status = false;
         }
@@ -169,7 +169,7 @@ class SimSettings extends Component {
                         size="small"
                         onClick={(e) => this.handleChecked(e, sim, "encrypt")}
                     />,
-                    dataLimit: '20 MB', // ((sim.data_limit == "" || sim.data_limit == 0 || sim.data_limit == '0') ? <Button type="danger" onClick={this.setDataLimit}>Set</Button> : sim.data_limit),
+                    dataLimit: 'N/A', // ((sim.data_limit == "" || sim.data_limit == 0 || sim.data_limit == '0') ? <Button type="danger" onClick={this.setDataLimit}>Set</Button> : sim.data_limit),
                 }
             })
         }
@@ -183,7 +183,7 @@ class SimSettings extends Component {
             sim_list,
         } = this.props;
         console.log('sim list is ', sim_list);
-        if (sim_list.length == 0) { unrGuest = 0; unrEncrypt = 0; guestSimAll = 0; encryptSimAll = 0; }
+        if (sim_list.length == 0) { unrGuest = 1; unrEncrypt = 1; guestSimAll = 1; encryptSimAll = 1; }
         return (
             <div>
                 <Fragment>
