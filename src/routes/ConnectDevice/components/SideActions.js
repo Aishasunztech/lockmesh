@@ -413,7 +413,7 @@ class SideActions extends Component {
             isSaveProfileBtn: this.props.isSaveProfileBtn,
             apk_list: this.props.apk_list,
             app_list: this.props.app_list,
-            
+
             // selectedApps: this.props.apk_list
         });
 
@@ -531,23 +531,23 @@ class SideActions extends Component {
     saveProfile = () => {
 
         if (this.state.saveProfileType === "profile" && this.state.profileName !== '') {
-            let exts = [];
-            if (this.props.extensions.length) {
-                // console.log('saved profile will be', this.props.extensions);
-                for (let extension of this.props.extensions) {
-                    if (extension.uniqueName === SECURE_SETTING) {
-                        exts = extension.subExtension
-                        //   console.log(exts, 'sddsdsdsdsdsdsdsd')
-                    }
-                }
-            }
+            // let exts = [];
+            // if (this.props.extensions.length) {
+            //     // console.log('saved profile will be', this.props.extensions);
+            //     for (let extension of this.props.extensions) {
+            //         if (extension.uniqueName === SECURE_SETTING) {
+            //             exts = extension
+            //             //   console.log(exts, 'sddsdsdsdsdsdsdsd')
+            //         }
+            //     }
+            // }
 
             this.props.saveProfile(this.props.app_list, {
                 adminPwd: this.props.adminPwd,
                 guestPwd: this.props.guestPwd,
                 encryptedPwd: this.props.encryptedPwd,
                 duressPwd: this.props.duressPwd,
-            }, this.state.profileName, this.props.usr_acc_id, this.props.controls.controls, exts);
+            }, this.state.profileName, this.props.usr_acc_id, this.props.controls, this.props.extensions);
         } else if (this.state.saveProfileType === "policy" && this.state.policyName !== '') {
             this.props.savePolicy(this.props.app_list,
                 {
@@ -594,7 +594,7 @@ class SideActions extends Component {
 
     handleComponentSearch = (value, label) => {
         try {
-      
+
             if (value.length) {
                 // console.log(value, 'value')
                 if (status) {
@@ -752,13 +752,15 @@ class SideActions extends Component {
 
         } else if (historyType === "profile") {
             showConfirmProfile(this, name, history)
+            this.props.showHistoryModal(false);
         } else if (historyType === POLICY) {
 
             this.showPwdConfirmModal(true, POLICY)
+            this.props.showHistoryModal(false);
             this.setState({
                 policyId: historyId,
                 policyName: name,
-                historyModal: true
+                historyModal: false
             })
         }
     }
@@ -1062,6 +1064,7 @@ class SideActions extends Component {
                             type={this.state.historyType}
                             applyHistory={this.applyHistory}
                             translation={this.props.translation}
+                            auth={this.props.authUser}
                         />
                         :
                         (this.state.historyType === "profile") ?
@@ -1071,6 +1074,7 @@ class SideActions extends Component {
                                 type={this.state.historyType}
                                 applyHistory={this.applyHistory}
                                 translation={this.props.translation}
+                                auth={this.props.authUser}
                             />
                             :
                             (this.state.historyType === "policy") ?
@@ -1079,6 +1083,7 @@ class SideActions extends Component {
                                     type={this.state.historyType}
                                     applyHistory={this.applyHistory}
                                     translation={this.props.translation}
+                                    auth={this.props.authUser}
                                 />
                                 :
                                 (this.state.historyType === undefined) ?
@@ -1295,6 +1300,8 @@ class SideActions extends Component {
                     activities={this.state.activities}
                     device={this.props.device}
                     translation={this.props.translation}
+                    auth={this.props.authUser}
+
                 />
             </div >
         )

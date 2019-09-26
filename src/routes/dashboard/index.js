@@ -28,6 +28,12 @@ import {
 } from "../../appRedux/actions/SideBar";
 import { transferDeviceProfile } from "../../appRedux/actions/ConnectDevice";
 import { Button_Yes, Button_No } from "../../constants/ButtonConstants";
+import { APP_MANAGE_APKs, APP_SECURE_MARKET, APP_MANAGE_POLICY } from "../../constants/AppConstants";
+import { Sidebar_users, Sidebar_sdealers, Sidebar_dealers, Sidebar_devices } from "../../constants/SidebarConstants";
+import { Tab_SET_PACKAGES_PRICES, Tab_PACKAGES, Tab_Active } from "../../constants/TabConstants";
+import { PACKAGES_AND_IDS, MANAGE_DATA } from "../../constants/AccountConstants";
+import { PURCHASE_CREDITS } from "../../constants/ActionTypes";
+import { ONLINE } from "../../constants/DeviceConstants";
 
 class Dashboard extends Component {
     constructor(props) {
@@ -55,8 +61,8 @@ class Dashboard extends Component {
     // }
 
 
-    componentWillReceiveProps(nextProps){
-        if(this.props !== nextProps){
+    componentWillReceiveProps(nextProps) {
+        if (this.props !== nextProps) {
             console.log(nextProps.devices, 'next props are')
         }
     }
@@ -123,7 +129,7 @@ class Dashboard extends Component {
                                 </Card>
                                 <div className="dash_btm_txt">
                                     <span className='db-span-qnty'>{this.props.items.activeDevices}</span>
-                                    <span className='db-span-text'>Active Devices</span>
+                                    <span className='db-span-text'>{convertToLang(this.props.translation[Tab_Active], "Active")} {convertToLang(this.props.translation[Sidebar_devices], "Devices")}</span>
                                 </div>
                             </Link>
                             </div>
@@ -131,7 +137,6 @@ class Dashboard extends Component {
                         <Col xl={4} lg={4} md={4} sm={12} xs={12}>
                             <div className='dashboard-item-div'>
                                 <Link to='devices' className="">
-
                                     <Card className='dashboard-card'>
                                         <Avatar
                                             src={require("../../assets/images/dashboard/online_device.png")}
@@ -141,35 +146,35 @@ class Dashboard extends Component {
                                     </Card>
                                     <div className="dash_btm_txt">
                                         <span className='db-span-qnty'>{this.props.items.onlineDevices}</span>
-                                        <span className='db-span-text'>Online Devices</span>
+                                        <span className='db-span-text'>{convertToLang(this.props.translation[ONLINE], "Online")} {convertToLang(this.props.translation[Sidebar_devices], "Devices")}</span>
                                     </div>
                                 </Link>
                             </div>
                         </Col>
                         {
-                            // this.props.authUser.type == DEALER || this.props.authUser.type == SDEALER ?
+                            this.props.authUser.type == DEALER || this.props.authUser.type == SDEALER ?
 
-                            //     <Col xl={4} lg={4} md={4} sm={12} xs={12}>
-                            //         <div className='dashboard-item-div'>
-                            //             {/* <Link to='devices'> */}
-                            //                 <a href="javascript:void(0)" onClick={this.handleLinkRequests} >
-                            //                 <Badge count={this.props.devices ? this.props.devices.length : 0} >
-                            //                     <Card className='dashboard-card head-example'>
-                            //                         <Avatar
-                            //                             src={require("../../assets/images/dashboard/link_device.png")}
-                            //                             // className="gx-size-40 gx-pointer gx-mr-3"
-                            //                             alt=""
-                            //                         />
-                            //                     </Card>
-                            //                 </Badge>
-                            //                 <div className="dash_btm_txt">
-                            //                     <span className='db-span-qnty'>{this.props.devices ? this.props.devices.length : 0}</span>
-                            //                     <span className='db-span-text'>Link Request</span>
-                            //                 </div>
-                            //                 </a>
-                            //             {/* </Link> */}
-                            //         </div>
-                            //     </Col> : null
+                                <Col xl={4} lg={4} md={4} sm={12} xs={12}>
+                                    <div className='dashboard-item-div'>
+                                        {/* <Link to='devices'> */}
+                                        <a href="javascript:void(0)" onClick={this.handleLinkRequests} >
+                                            <Badge count={this.props.devices ? this.props.devices.length : 0} >
+                                                <Card className='dashboard-card head-example'>
+                                                    <Avatar
+                                                        src={require("../../assets/images/dashboard/link_device.png")}
+                                                        // className="gx-size-40 gx-pointer gx-mr-3"
+                                                        alt=""
+                                                    />
+                                                </Card>
+                                            </Badge>
+                                            <div className="dash_btm_txt">
+                                                <span className='db-span-qnty'>{this.props.devices ? this.props.devices.length : 0}</span>
+                                                <span className='db-span-text'>Link Request</span>
+                                            </div>
+                                        </a>
+                                        {/* </Link> */}
+                                    </div>
+                                </Col> : null
                         }
 
                         <Col xl={4} lg={4} md={4} sm={12} xs={12}>
@@ -185,7 +190,7 @@ class Dashboard extends Component {
                                     </Card>
                                     <div className="dash_btm_txt">
                                         <span className='db-span-qnty'>{this.props.items.users}</span>
-                                        <span className='db-span-text'>Users</span>
+                                        <span className='db-span-text'>{convertToLang(this.props.translation[Sidebar_users], "Users")}</span>
                                     </div>
                                 </Link>
                             </div>
@@ -207,7 +212,7 @@ class Dashboard extends Component {
                                             </Card>
                                             <div className="dash_btm_txt">
                                                 <span className='db-span-qnty'>{this.props.items.dealers}</span>
-                                                <span className='db-span-text'>Dealers</span>
+                                                <span className='db-span-text'>{convertToLang(this.props.translation[Sidebar_dealers], "Dealers")}</span>
                                             </div>
                                         </Link>
                                     </div>
@@ -231,7 +236,7 @@ class Dashboard extends Component {
                                                 </Card>
                                                 <div className="dash_btm_txt">
                                                     <span className='db-span-qnty'>{this.props.items.sdealers}</span>
-                                                    <span className='db-span-text'>S-Dealers</span>
+                                                    <span className='db-span-text'>{convertToLang(this.props.translation[Sidebar_sdealers], "S-Dealers")}</span>
                                                 </div>
                                             </Link>
                                         </div>
@@ -250,7 +255,7 @@ class Dashboard extends Component {
                                                 </Card>
                                                 <div className="dash_btm_txt">
                                                     <span className='db-span-qnty'>{this.props.items.policies}</span>
-                                                    <span className='db-span-text'>Manage Policy</span>
+                                                    <span className='db-span-text'>{convertToLang(this.props.translation[APP_MANAGE_POLICY], "Manage Policy")}</span>
                                                 </div>
                                             </Link>
                                         </div>
@@ -269,7 +274,7 @@ class Dashboard extends Component {
                                                 </Card>
                                                 <div className="dash_btm_txt">
                                                     <span className='db-span-qnty'>{this.props.items.apks}</span>
-                                                    <span className='db-span-text'>Manage APK's</span>
+                                                    <span className='db-span-text'>{convertToLang(this.props.translation[APP_MANAGE_APKs], "Manage APK's")}</span>
                                                 </div>
                                             </Link>
                                         </div>
@@ -287,7 +292,7 @@ class Dashboard extends Component {
                                                 </Card>
                                                 <div className="dash_btm_txt">
                                                     {/* <span className='db-span-qnty'>12</span> */}
-                                                    <span className='db-span-text'>Secure Market</span>
+                                                    <span className='db-span-text'>{convertToLang(this.props.translation[APP_SECURE_MARKET], "Secure Market")}</span>
                                                 </div>
                                             </Link>
                                         </div>
@@ -309,7 +314,7 @@ class Dashboard extends Component {
                                                 </Card>
                                                 <div className="dash_btm_txt">
                                                     {/* <span className='db-span-qnty'>12</span> */}
-                                                    <span className='db-span-text'>Packages & ID</span>
+                                                    <span className='db-span-text'>{convertToLang(this.props.translation[PACKAGES_AND_IDS], "Packages & ID's")}</span>
                                                 </div>
                                             </Link>
                                         </div>
@@ -327,7 +332,7 @@ class Dashboard extends Component {
                                                 </Card>
                                                 <div className="dash_btm_txt">
                                                     {/* <span className='db-span-qnty'>12</span> */}
-                                                    <span className='db-span-text'>Manage Data</span>
+                                                    <span className='db-span-text'>{convertToLang(this.props.translation[MANAGE_DATA], "Manage Data")}</span>
                                                 </div>
                                             </Link>
                                         </div>
@@ -345,7 +350,7 @@ class Dashboard extends Component {
                                             </Card>
                                             <div className="dash_btm_txt">
                                                 {/* <span className='db-span-qnty'>12</span> */}
-                                                <span className='db-span-text'>Credits</span>
+                                                <span className='db-span-text'>{convertToLang(this.props.translation[""], "Credits")}</span>
                                             </div>
                                             {/* </Link> */}
                                         </div>

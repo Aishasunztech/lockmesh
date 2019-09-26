@@ -16,6 +16,7 @@ import { convertToLang } from '../../utils/commonUtils';
 import { Button_LoadProfile, Button_On, Button_Off } from '../../../constants/ButtonConstants';
 import { appsColumns } from '../../utils/columnsUtils';
 import AppList from './AppList';
+import { SECURE_SETTING, Main_SETTINGS } from '../../../constants/Constants';
 
 
 class ListSpaceApps extends Component {
@@ -103,7 +104,7 @@ class ListSpaceApps extends Component {
                 <div style={{ height: 335, overflow: 'overlay', borderTop: '1px solid #e8e8e8' }}>
                     <Row className="m-0">
                         {this.state.app_list.map(app => {
-                            if (!app.extension) {
+                            if (!app.extension && app.visible) {
                                 if (this.props.type === "guest") {
                                     if (app.guest === true || app.guest === 1) {
                                         return (
@@ -171,6 +172,36 @@ class ListSpaceApps extends Component {
                                 : null
                         }
 
+                        {/* System Setting in App Permission Space */}
+                        {
+                            (this.props.setting) ?
+                                this.props.type === "encrypted" ?
+                                    (this.props.setting.encrypted === true || this.props.setting.encrypted === 1) ?
+                                        <Col span={6} style={{ padding: 8, textAlign: "center" }}>
+                                            <Avatar
+                                                size={"small"}
+                                                src={require("assets/images/setting.png")}
+                                            // style={{ width: "30px", height: "30px" }} 
+                                            />
+                                            <br />
+                                            <div className="line_break2" style={{ fontSize: 10 }}>{this.props.setting.label}</div>
+                                            <div className="line_break2" style={{ fontSize: 10, color: 'red' }}>{(this.props.setting.enable === true || this.props.setting.enable === 1) ? "" : "(Disabled)"}</div>
+                                        </Col> : null
+                                    :
+                                    (this.props.setting.guest === true || this.props.setting.guest === 1) ?
+                                        <Col span={6} style={{ padding: 8, textAlign: "center" }}>
+                                            <Avatar
+                                                size={"small"}
+                                                src={require("assets/images/setting.png")}
+
+                                            // style={{ width: "30px", height: "30px" }} 
+                                            />
+                                            <br />
+                                            <div className="line_break2" style={{ fontSize: 10 }}>{this.props.setting.label}</div>
+                                            <div className="line_break2" style={{ fontSize: 10, color: 'red' }}>{(this.props.setting.enable === true || this.props.setting.enable === 1) ? "" : "(Disabled)"}</div>
+                                        </Col> : null
+                                : null
+                        }
                     </Row>
                 </div>
                 <Modal
@@ -201,7 +232,8 @@ function mapDispatchToProps(dispatch) {
 
 
 var mapStateToProps = ({ device_details, settings }, ownProps) => {
-    let extension = device_details.extensions.find(o => o.uniqueName === 'com.secureSetting.SecureSettingsMainSecure Settings');
+    let setting = device_details.app_list.find(setting => setting.uniqueName === Main_SETTINGS);
+    let extension = device_details.app_list.find(o => o.uniqueName === SECURE_SETTING);
     // console.log(extension);
     if (ownProps.isHistory !== undefined && ownProps.isHistory === true) {
         return {
@@ -219,7 +251,8 @@ var mapStateToProps = ({ device_details, settings }, ownProps) => {
             guestAll: device_details.guestAll,
             encryptedAll: device_details.encryptedAll,
             enableAll: device_details.enableAll,
-            extension: extension
+            extension: extension,
+            setting: setting
         };
     }
 }

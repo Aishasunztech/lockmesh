@@ -43,6 +43,7 @@ import {
   clearApplications,
   clearState,
   clearResyncFlag,
+  resetDevice
 } from "../../appRedux/actions/ConnectDevice";
 
 import { getDevicesList, editDevice } from '../../appRedux/actions/Devices';
@@ -64,7 +65,8 @@ import {
   ackInstalledApps,
   ackUninstalledApps,
   ackSettingApplied,
-  sendOnlineOfflineStatus
+  sendOnlineOfflineStatus,
+  deviceSynced
 } from "../../appRedux/actions/Socket";
 
 import imgUrl from '../../assets/images/mobile.png';
@@ -144,10 +146,13 @@ class ConnectDevice extends Component {
     if (this.props.device_details.finalStatus === DEVICE_ACTIVATED || this.props.device_details.finalStatus === DEVICE_TRIAL) {
       if (this.props.pageName === GUEST_PASSWORD || this.props.pageName === ENCRYPTED_PASSWORD || this.props.pageName === DURESS_PASSWORD || this.props.pageName === ADMIN_PASSWORD) {
         this.props.changePage(MANAGE_PASSWORD);
-      } else if (this.props.pageName === MANAGE_PASSWORD) {
-        this.setState({ dynamicBackButton: false })
-        this.props.changePage(MAIN_MENU);
-      } else {
+      } 
+      // else if (this.props.pageName === MANAGE_PASSWORD) {
+      //   this.setState({ dynamicBackButton: false })
+      //   this.props.changePage(MAIN_MENU);
+      // } 
+      
+      else {
         this.setState({ dynamicBackButton: false })
         this.props.changePage(MAIN_MENU);
       }
@@ -190,15 +195,6 @@ class ConnectDevice extends Component {
     // window.addEventListener('hashchange', this.componentGracefulUnmount);
   }
 
-  // componentGracefulUnmount = () => {
-  //   console.log("COMPONENT UNMOUNT");
-  //   window.removeEventListener('hashchange', this.componentGracefulUnmount);
-
-  // }
-  // componentWillUnmount() {
-  //   this.componentGracefulUnmount()
-  //   // this.props.clearState()
-  // }
 
   componentDidUpdate(prevProps) {
     // console.log('hi')
@@ -224,7 +220,7 @@ class ConnectDevice extends Component {
       const device_id = isBase64(this.props.match.params.device_id);
       this.props.getDeviceDetails(device_id);
     }
-   
+
 
   }
 
@@ -237,7 +233,7 @@ class ConnectDevice extends Component {
         this.subMenu = mobileManagePasswords(nextProps.translation);
       }
 
-      if(this.props.apk_list !== nextProps.apk_list){
+      if (this.props.apk_list !== nextProps.apk_list) {
         this.setState({
           apk_list: nextProps.apk_list
         })
@@ -262,7 +258,7 @@ class ConnectDevice extends Component {
         nextProps.ackUninstalledApps(nextProps.socket, device_id);
         nextProps.ackSettingApplied(nextProps.socket, device_id);
         nextProps.receiveSim(nextProps.socket, device_id);
-
+        nextProps.deviceSynced(nextProps.socket, device_id);
         // nextProps.hello_web(nextProps.socket);
       }
       // }
@@ -291,38 +287,6 @@ class ConnectDevice extends Component {
 
   }
 
-  // Old ComponentWillReceiveProps
-  // componentWillReceiveProps(nextProps) {
-  //   // if (this.props.controls !== nextProps.controls) {
-  //   //   this.setState({
-  //   //     controls: nextProps.controls
-  //   //   })
-  //     // this.setState({
-  //     //     pageName: nextProps.pageName
-  //     // });
-
-  //     // nextProps.showMessage(false);
-
-  //     // this.setState({
-  //     //     device_id: nextProps.match.params.device_id
-  //     // });
-  //     // const device_id = nextProps.match.params.device_id;
-  //     // if (device_id !== '') {
-
-  //     //     nextProps.getDeviceDetails(device_id);
-  //     //     nextProps.getDeviceApps(device_id);
-  //     //     nextProps.getProfiles();
-  //     //     nextProps.getDeviceHistories(device_id);
-  //     //     this.setState({
-  //     //         syncStatus: this.props.device_details.is_sync
-  //     //     })
-  //     // }
-  //     // this.props.endLoading();
-  //     // setTimeout(() => {
-  //     //     this.props.endLoading();
-  //     // }, 2000);
-  //   }
-  // }
 
   renderScreen = () => {
     const isSync = (this.props.isSync === 1 || this.props.isSync === true) ? true : false;
@@ -387,6 +351,7 @@ class ConnectDevice extends Component {
             <SystemControls
               auth={this.props.auth}
               controls={this.state.controls}
+              app_list={this.props.app_list}
               handleCheckAllExtension={this.props.handleCheckAllExtension}
               handleControlCheck={this.props.handleControlCheck}
               handleMainSettingCheck={this.props.handleMainSettingCheck}
@@ -455,7 +420,6 @@ class ConnectDevice extends Component {
   }
 
   applyActions = () => {
-    console.log('Secure Setting Permission', this.props.extensions);
     let obData;
     let objIndex = this.props.extensions.findIndex(item => item.uniqueName === SECURE_SETTING);
     let app_list = this.props.app_list;
@@ -471,27 +435,26 @@ class ConnectDevice extends Component {
       }
     }
 
-    console.log('System Permissions main', this.props.controls);
-    console.log('System Permissions', this.props.controls.settings);
 
-    if (this.props.controls && this.props.controls.settings) {
-      if (this.props.controls.settings.length) {
-        let index = this.props.controls.settings.findIndex(item => item.uniqueName === Main_SETTINGS)
-        if (index >= 0) {
-          app_list.push(this.props.controls.settings[index])
-        }
-      }
-    }
+    // if (this.props.controls && this.props.controls.settings) {
+    //   if (this.props.controls.settings.length) {
+    //     let index = this.props.controls.settings.findIndex(item => item.uniqueName === Main_SETTINGS)
+    //     if (index >= 0) {
+    //       app_list.push(this.props.controls.settings[index])
+    //     }
+    //   }
+    // }
 
-    if (this.props.extensions) {
-      if (this.props.extensions.length) {
-        let index = this.props.extensions.findIndex(item => item.uniqueName === SECURE_SETTING)
-        if (index >= 0) {
-          app_list.push(this.props.extensions[index])
-        }
-      }
-    }
-
+    // if (this.props.extensions) {
+    //   if (this.props.extensions.length) {
+    //     let index = this.props.extensions.findIndex(item => item.uniqueName === SECURE_SETTING)
+    //     if (index >= 0) {
+    //       app_list.push(this.props.extensions[index])
+    //     }
+    //   }
+    // }
+    console.log(app_list, this.state.controls, this.props.extensions);
+    
     this.props.applySetting(
       app_list, {
       adminPwd: this.props.adminPwd,
@@ -499,8 +462,8 @@ class ConnectDevice extends Component {
       encryptedPwd: this.props.encryptedPwd,
       duressPwd: this.props.duressPwd,
     },
-      (objIndex !== undefined && objIndex !== -1) ? this.props.extensions[objIndex].subExtension : [],
-      this.state.controls.controls,
+      this.props.extensions,
+      this.state.controls,
       this.state.device_id,
       this.props.user_acc_id,
       null, null,
@@ -513,20 +476,14 @@ class ConnectDevice extends Component {
     this.props.getDeviceApps(deviceId);
     // if (!this.props.device_details.online) {
 
-
     // }
     this.props.getActivities(deviceId);
-    this.setState({
-      controls: [],
-      changedCtrls: {},
-    })
-
-    // console.log('app after push ', app_list)
   }
 
   componentWillUnmount() {
     const device_id = isBase64(this.props.match.params.device_id);
     this.props.closeSocketEvents(this.props.socket, device_id);
+    this.props.resetDevice();
     this.onBackHandler();
   }
 
@@ -719,6 +676,7 @@ class ConnectDevice extends Component {
 
                 </Col>
               </Row>
+
               <Modal
                 maskClosable={false}
                 title={convertToLang(this.props.translation[SETTINGS_TO_BE_SENT_TO_DEVICE], "Confirm new Settings to be sent to Device ")}
@@ -740,10 +698,9 @@ class ConnectDevice extends Component {
                   showChangedControls={true}
                   translation={this.props.translation}
                   auth={this.props.auth}
-                  settings={this.props.controls.settings}
                   pageName={this.props.pageName}
                   controlsExists={this.props.pageName === SYSTEM_CONTROLS ? true : false}
-                // extensions={this.props.extensions}
+
                 />
               </Modal>
             </div>}
@@ -827,13 +784,15 @@ function mapDispatchToProps(dispatch) {
     ackUninstalledApps: ackUninstalledApps,
     ackSettingApplied: ackSettingApplied,
     sendOnlineOfflineStatus: sendOnlineOfflineStatus,
-    hello_web: hello_web,
+    deviceSynced: deviceSynced,
+    resetDevice: resetDevice
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, auth, socket, settings }, ownProps) => {
 
   // console.log("device_details.extensions ", device_details.extensions)
-  // console.log(device_details.pageName, "device_details.controls ", device_details.controls)
+  // console.log("device_details.controls ", device_details.controls)
+  // console.log("device_details.Apps ", device_details.app_list)
 
   return {
     getHistory: device_details.getHistory,
