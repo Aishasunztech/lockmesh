@@ -227,7 +227,7 @@ class EditSim extends Component {
                         }}
                     >
                         <Button type="button" style={cancelBtn} onClick={this.handleCancel}> {convertToLang(this.props.translation[Button_Cancel], "Cancel")} </Button>
-                        <Button type="primary" htmlType="submit"> {convertToLang(this.props.translation[Button_Update], "UPDATE")} </Button>
+                        <Button type="primary" htmlType="submit"> {(this.props.unRegSims) ? "Register" : convertToLang(this.props.translation[Button_Update], "UPDATE")} </Button>
                     </Form.Item>
                 </Form>
 
