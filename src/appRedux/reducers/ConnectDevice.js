@@ -437,11 +437,11 @@ export default (state = initialState, action) => {
                 state.undoApps.push(JSON.parse(JSON.stringify(action.payload.app_list)));
             }
 
-            if (state.undoApps.length === 0) {
+            if (state.undoExtensions.length === 0) {
                 state.undoExtensions.push(JSON.parse(JSON.stringify(action.payload.extensions)));
             }
 
-            if (state.undoApps.length === 0) {
+            if (state.undoControls.length === 0) {
                 state.undoControls.push(JSON.parse(JSON.stringify(action.payload.controls)));
             }
 
@@ -1151,7 +1151,7 @@ export default (state = initialState, action) => {
         }
 
         case UNDO_EXTENSIONS: {
-
+            console.log("length before: ", state.undoExtensions.length)
             if (state.undoExtensions.length > 1) {
 
                 let exten = state.undoExtensions[state.undoExtensions.length - 1];
@@ -1161,7 +1161,7 @@ export default (state = initialState, action) => {
 
                 let extensions = JSON.parse(JSON.stringify(state.undoExtensions[state.undoExtensions.length - 1]));
                 // console.log("UNDO_EXTENSIONS ", extensions);
-
+                console.log("length:",state.undoExtensions.length);
                 let check = handleCheckedAllExts(extensions);
 
                 if (state.undoExtensions.length === 1) {
