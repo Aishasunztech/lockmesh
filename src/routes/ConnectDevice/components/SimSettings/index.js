@@ -183,7 +183,15 @@ class SimSettings extends Component {
             sim_list,
         } = this.props;
         console.log('sim list is ', sim_list);
-        if (sim_list.length == 0) { unrGuest = 1; unrEncrypt = 1; guestSimAll = 1; encryptSimAll = 1; }
+
+        if (sim_list.length == 0) {
+            // if (this.props.unRegSims && this.props.unRegSims.length === 0) {
+            //     unrGuest = 1;
+            //     unrEncrypt = 1;
+            // }
+            guestSimAll = 1;
+            encryptSimAll = 1;
+        }
         return (
             <div>
                 <Fragment>
@@ -271,6 +279,8 @@ class SimSettings extends Component {
                             dataSource={this.renderSimList()}
                             columns={this.state.columns}
                             pagination={false}
+                            bordered
+                            scroll={{ x: true }}
                         />
                     </div>
 
