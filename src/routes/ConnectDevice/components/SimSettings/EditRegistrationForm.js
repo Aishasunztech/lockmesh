@@ -35,7 +35,7 @@ class EditSim extends Component {
             values['encrypt'] = this.state.encrypt ? 1 : 0;
             values['data_limit'] = "";
             values['device_id'] = this.props.deviceID;
-            if (this.props.unRegSims.length) {
+            if (this.props.unRegSims && this.props.unRegSims.length) {
                 values['status'] = "Active";
             }
 
@@ -44,9 +44,9 @@ class EditSim extends Component {
 
             if (!err) {
                 this.props.AddSimHandler(values);
-                this.setState({ componentHide: true });
-                
+
                 if (this.props.unRegSims) {
+                    this.setState({ componentHide: true });
                     if (this.props.unRegSims.length == this.props.indexUnr + 1) {
                         this.handleCancel();
                     }
