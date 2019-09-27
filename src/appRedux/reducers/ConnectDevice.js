@@ -971,7 +971,9 @@ export default (state = initialState, action) => {
             if (objIndex > -1) {
                 changedMainSetting[objIndex][action.payload.key] = action.payload.value;
                 changedMainSetting[objIndex]["isChanged"] = true;
-                // console.log(changedSettings[objIndex], 'app is the ', changedSettings[objIndex][action.payload.key])
+                // let mainSetting = changedMainSetting.find(item => item.uniqueName === action.payload.main);
+                // console.log("mainSetting:", mainSetting);
+                // state.undoExtensions.push(mainSetting);
             }
             state.app_list = JSON.parse(JSON.stringify(changedMainSetting));
             // state.undoControls.push(JSON.parse(JSON.stringify(changedMainSetting)));
