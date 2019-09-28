@@ -516,23 +516,23 @@ class DevicesList extends Component {
                                                 rowKey: title
                                             });
                                         } else {
-                                            if (dataIndex === "status" || dataIndex === "dealer_name" || dataIndex === "s_dealer_name") {
-                                                if (record[column.dataIndex][0]) {
-                                                    showRecord.push({
-                                                        name: title,
-                                                        values: record[column.dataIndex][0].toUpperCase() + record[column.dataIndex].substring(1, record[column.dataIndex].length).toLowerCase(),
-                                                        rowKey: title
-                                                    });
-                                                }
+                                            // if (dataIndex === "status" || dataIndex === "dealer_name" || dataIndex === "s_dealer_name") {
+                                            //     if (record[column.dataIndex][0]) {
+                                            //         showRecord.push({
+                                            //             name: title,
+                                            //             values: record[column.dataIndex][0].toUpperCase() + record[column.dataIndex].substring(1, record[column.dataIndex].length).toLowerCase(),
+                                            //             rowKey: title
+                                            //         });
+                                            //     }
 
-                                            } else {
+                                            // } else {
 
-                                                showRecord.push({
-                                                    name: title,
-                                                    values: record[column.dataIndex],
-                                                    rowKey: title
-                                                });
-                                            }
+                                            showRecord.push({
+                                                name: title,
+                                                values: record[column.dataIndex],
+                                                rowKey: title
+                                            });
+                                            // }
                                         }
                                     }
                                 });
