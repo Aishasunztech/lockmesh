@@ -389,7 +389,7 @@ class Prices extends Component {
                     key: item.id,
                     rowKey: index,
                     sr: ++i,
-                    action: (item.dealer_type === "super_admin" && this.props.auth.type === ADMIN) ?
+                    action: (item.dealer_type === "super_admin" && (this.props.auth.type === ADMIN || this.props.auth.type === DEALER)) ?
                         (<Fragment>{ModifyBtn}</Fragment>) :
                         (item.dealer_type === "admin" && this.props.auth.type === DEALER) ?
                             (<Fragment>{ModifyBtn}</Fragment>)

@@ -112,9 +112,9 @@ class App extends Component {
     if (location.pathname === '/') {
       if (authUser.id === null || authUser.email === null || authUser.token === null || authUser.type === null) {
         return (<Redirect to={'/login'} />);
-      } else if ((initURL === '' || initURL === '/' || initURL === '/login')) {
+      // } else if ((initURL === '' || initURL === '/' || initURL === '/login' || initURL === '/session_timeout')) {
+      } else if ((initURL === '' || initURL === '/' || initURL === '/login' )) {
         return (<Redirect to={'/dashboard'} />);
-
       } else {
         return (<Redirect to={initURL} />);
       }
