@@ -25,6 +25,15 @@ class EditSim extends Component {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (this.props.editSim !== nextProps.editSim) {
+            this.setState({
+                guest: nextProps.editSim.guest,
+                encrypt: nextProps.editSim.encrypt,
+            })
+        }
+    }
+
     handleSubmit = (e) => {
         e.preventDefault();
 
@@ -140,7 +149,10 @@ class EditSim extends Component {
                                 }
                             ],
                         })(
-                            <Input disabled={(this.props.unRegSims) ? false : true} />
+                            <Input
+                                disabled
+                            // disabled={(this.props.unRegSims) ? false : true} 
+                            />
                         )}
                     </Form.Item>
 

@@ -1163,7 +1163,7 @@ export default (state = initialState, action) => {
 
                 let extensions = JSON.parse(JSON.stringify(state.undoExtensions[state.undoExtensions.length - 1]));
                 // console.log("UNDO_EXTENSIONS ", extensions);
-                console.log("length:",state.undoExtensions.length);
+                console.log("length:", state.undoExtensions.length);
                 let check = handleCheckedAllExts(extensions);
 
                 if (state.undoExtensions.length === 1) {
@@ -1428,9 +1428,22 @@ export default (state = initialState, action) => {
                 success({
                     title: action.response.msg,
                 });
+
+                // console.log('ADD_SIM_REGISTER ', action.payload);
+                // console.log("state.sim_list ", state.sim_list);
+                let index = state.sim_list.findIndex(e => e.iccid === action.payload.iccid);
+
+                if (index === -1) {
+                    state.sim_list.push(action.payload);
+                }
+
+                let unRegSims = state.unRegSims.filter(e => e.iccid !== action.payload.iccid);
+
                 return {
                     ...state,
-                    simUpdated: new Date(),
+                    sim_list: state.sim_list,
+                    unRegSims: unRegSims
+                    // simUpdated: new Date(),
                     // sim_list: [...state.sim_list, action.payload]
                 }
             } else {
@@ -1452,7 +1465,9 @@ export default (state = initialState, action) => {
         }
 
         case GET_SIMS: {
-            // console.log('reducer call')
+            // console.log('reducer call', action.payload);
+            let unrSetting = action.payload.unRegisterSetting;
+
             let sims = action.payload.data;
             let checkEnc = sims.filter(e => e.encrypt != true);
             let checkGst = sims.filter(e => e.guest != true);
@@ -1462,13 +1477,13 @@ export default (state = initialState, action) => {
             if (checkGst.length > 0) guestSimAll = 0; else guestSimAll = 1;
             if (checkEnc.length > 0) encryptSimAll = 0; else encryptSimAll = 1;
 
-            let checkunrEncrypt = sims.filter(e => e.unrEncrypt != true);
-            let checkunrGuest = sims.filter(e => e.unrGuest != true);
+            // let checkunrEncrypt = sims.filter(e => e.unrEncrypt != true);
+            // let checkunrGuest = sims.filter(e => e.unrGuest != true);
 
-            let unrGuest;
-            let unrEncrypt;
-            if (checkunrGuest.length > 0) unrGuest = 0; else unrGuest = 1;
-            if (checkunrEncrypt.length > 0) unrEncrypt = 0; else unrEncrypt = 1;
+            // let unrGuest;
+            // let unrEncrypt;
+            // if (checkunrGuest.length > 0) unrGuest = 0; else unrGuest = 1;
+            // if (checkunrEncrypt.length > 0) unrEncrypt = 0; else unrEncrypt = 1;
 
 
             return {
@@ -1476,8 +1491,8 @@ export default (state = initialState, action) => {
                 sim_list: sims,
                 guestSimAll,
                 encryptSimAll,
-                unrEncrypt,
-                unrGuest,
+                unrGuest: unrSetting.unRegisterGuest,
+                unrEncrypt: unrSetting.unRegisterEncrypt,
             }
         }
         case RECEIVE_SIM_DATA: {

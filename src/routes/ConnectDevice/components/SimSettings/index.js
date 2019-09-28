@@ -116,7 +116,7 @@ class SimSettings extends Component {
     handleChecked = (e, obj, label) => {
         obj[label] = e ? 1 : 0;
         // console.log('status ', status);
-        if (status && this.props.sim_list && this.props.sim_list.length) {
+        if (status) {
             this.props.handleSimUpdate({ obj, label, value: e });
             status = false;
         }
@@ -189,8 +189,8 @@ class SimSettings extends Component {
             //     unrGuest = 1;
             //     unrEncrypt = 1;
             // }
-            guestSimAll = 1;
-            encryptSimAll = 1;
+            // guestSimAll = 1;
+            // encryptSimAll = 1;
         }
         return (
             <div>
@@ -205,7 +205,8 @@ class SimSettings extends Component {
                                 this.handleChecked(e, {
                                     id: "unrAll",
                                     device_id: this.props.deviceID,
-                                    unrEncrypt: unrEncrypt ? 1 : 0
+                                    unrEncrypt: unrEncrypt ? 1 : 0,
+                                    unrGuest: unrGuest ? 1 : 0,  // extra
                                 }, "unrGuest");
                             }}
                                 checked={unrGuest ? true : false}
@@ -217,7 +218,8 @@ class SimSettings extends Component {
                                 this.handleChecked(e, {
                                     id: "unrAll",
                                     device_id: this.props.deviceID,
-                                    unrGuest: unrGuest ? 1 : 0
+                                    unrGuest: unrGuest ? 1 : 0,
+                                    unrEncrypt: unrEncrypt ? 1 : 0, // extra
                                 }, "unrEncrypt");
                             }}
                                 checked={unrEncrypt ? true : false}
