@@ -130,6 +130,7 @@ class EditSim extends Component {
         return (
             <div>
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
+                    <h4>{(this.props.unRegSims && this.props.unRegSims.length) ? "Add Un-Register Sim" : null}</h4>
                     <p>(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")} </p>
 
                     <Form.Item
