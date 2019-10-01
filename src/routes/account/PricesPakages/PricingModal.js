@@ -192,6 +192,12 @@ function showConfirm(_this, data) {
                 <Col span={12}>
                     <p >{_this.state.pkg_features.sim_id ? 'yes' : 'No'}</p>
                 </Col>
+                <Col span={12}><p>Sim id 2</p>
+                    {/* <Button type="primary" onClick={() => this.setPrice('pkgName')}> {convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
+                </Col>
+                <Col span={12}>
+                    <p >{_this.state.pkg_features.sim_id2 ? 'yes' : 'No'}</p>
+                </Col>
 
 
                 <Col span={12}><p>Chat id</p>

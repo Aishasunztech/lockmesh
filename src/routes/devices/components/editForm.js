@@ -333,6 +333,7 @@ class EditDevice extends Component {
 
 
     render() {
+        // console.log(this.props.parent_packages, this.props.product_prices)
         // console.log('check edit device: ', this.props.device);
         // console.log('props of coming', this.props.device);
         const { visible, loading, isloading, addNewUserValue } = this.state;
