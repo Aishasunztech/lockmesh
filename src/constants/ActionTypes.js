@@ -242,6 +242,7 @@ export const UPDATE_SIM = "UPDATE_SIM";
 export const DELETE_SIM = "DELETE_SIM";
 export const SIM_HISTORY = "SIM_HISTORY";
 export const GET_UNREG_SIMS = "GET_UNREG_SIMS";
+export const SIM_LOADING = "SIM_LOADING";
 
 
 export const RECEIVE_SIM_DATA = "RECEIVE_SIM_DATA";

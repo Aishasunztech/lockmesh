@@ -72,7 +72,8 @@ import {
     GET_UNREG_SIMS,
     HANDLE_CHECK_ALL_PUSH_APPS,
     HANDLE_CHECK_SECURE_SETTINGS,
-    RESET_DEVICE
+    RESET_DEVICE,
+    SIM_LOADING
 } from "../../constants/ActionTypes";
 
 import {
@@ -184,9 +185,10 @@ const initialState = {
     reSync: false,
 
     // sim module
+    simloading: false,
     sim_list: [],
-    guestSimAll: 0,
-    encryptSimAll: 0,
+    guestSimAll: 1,
+    encryptSimAll: 1,
     unrGuest: 0,
     unrEncrypt: 0,
     simUpdated: false,
@@ -669,7 +671,8 @@ export default (state = initialState, action) => {
 
             return {
                 ...state,
-                isLoading: false
+                isLoading: false,
+                simloading: false
             }
         }
 
@@ -1163,7 +1166,7 @@ export default (state = initialState, action) => {
 
                 let extensions = JSON.parse(JSON.stringify(state.undoExtensions[state.undoExtensions.length - 1]));
                 // console.log("UNDO_EXTENSIONS ", extensions);
-                console.log("length:",state.undoExtensions.length);
+                console.log("length:", state.undoExtensions.length);
                 let check = handleCheckedAllExts(extensions);
 
                 if (state.undoExtensions.length === 1) {
@@ -1428,9 +1431,24 @@ export default (state = initialState, action) => {
                 success({
                     title: action.response.msg,
                 });
+
+                // console.log('ADD_SIM_REGISTER ', action.payload);
+                // console.log("state.sim_list ", state.sim_list);
+                let index = state.sim_list.findIndex(e => e.iccid === action.payload.iccid);
+
+                if (index === -1) {
+                    state.sim_list.push(action.payload);
+                }
+
+                let unRegSims = state.unRegSims.filter(e => e.iccid !== action.payload.iccid);
+                let getCheckAllValues = checkAllSims(state.sim_list);
+
                 return {
                     ...state,
-                    simUpdated: new Date(),
+                    sim_list: state.sim_list,
+                    unRegSims: unRegSims,
+                    ...getCheckAllValues,
+                    // simUpdated: new Date(),
                     // sim_list: [...state.sim_list, action.payload]
                 }
             } else {
@@ -1452,32 +1470,29 @@ export default (state = initialState, action) => {
         }
 
         case GET_SIMS: {
-            // console.log('reducer call')
+            // console.log('reducer call', action.payload);
+            let unrSetting = action.payload.unRegisterSetting;
+
             let sims = action.payload.data;
-            let checkEnc = sims.filter(e => e.encrypt != true);
-            let checkGst = sims.filter(e => e.guest != true);
+            let getCheckAllValues = checkAllSims(sims);
 
-            let guestSimAll;
-            let encryptSimAll;
-            if (checkGst.length > 0) guestSimAll = 0; else guestSimAll = 1;
-            if (checkEnc.length > 0) encryptSimAll = 0; else encryptSimAll = 1;
+            // let checkunrEncrypt = sims.filter(e => e.unrEncrypt != true);
+            // let checkunrGuest = sims.filter(e => e.unrGuest != true);
 
-            let checkunrEncrypt = sims.filter(e => e.unrEncrypt != true);
-            let checkunrGuest = sims.filter(e => e.unrGuest != true);
-
-            let unrGuest;
-            let unrEncrypt;
-            if (checkunrGuest.length > 0) unrGuest = 0; else unrGuest = 1;
-            if (checkunrEncrypt.length > 0) unrEncrypt = 0; else unrEncrypt = 1;
+            // let unrGuest;
+            // let unrEncrypt;
+            // if (checkunrGuest.length > 0) unrGuest = 0; else unrGuest = 1;
+            // if (checkunrEncrypt.length > 0) unrEncrypt = 0; else unrEncrypt = 1;
 
 
             return {
                 ...state,
                 sim_list: sims,
-                guestSimAll,
-                encryptSimAll,
-                unrEncrypt,
-                unrGuest,
+                // guestSimAll,
+                // encryptSimAll,
+                ...getCheckAllValues,
+                unrGuest: unrSetting.unRegisterGuest,
+                unrEncrypt: unrSetting.unRegisterEncrypt,
             }
         }
         case RECEIVE_SIM_DATA: {
@@ -1485,6 +1500,8 @@ export default (state = initialState, action) => {
                 // console.log('unRegSims red')
                 return {
                     ...state,
+                    simloading: false,
+                    simUpdated: new Date(),
                     unRegSims: action.payload.unRegSims
                 }
             } else {
@@ -1492,6 +1509,7 @@ export default (state = initialState, action) => {
                 return {
                     ...state,
                     simUpdated: new Date(),
+                    simloading: false,
                     unRegSims: []
                 }
             }
@@ -1503,11 +1521,18 @@ export default (state = initialState, action) => {
                     title: action.response.msg,
                 });
 
-                let sims = state.sim_list.filter(e => e.id != action.payload.id)
+                let stateSims = state.sim_list;
+                let getCheckAllValues = checkAllSims(stateSims);
+                let sims = stateSims.filter(e => e.id !== action.payload.id);
+                action.payload["created_at"] = new Date();
+                state.simHistoryList.push(action.payload);
+
                 return {
                     ...state,
                     sim_list: sims,
-                    simDeleted: new Date()
+                    ...getCheckAllValues,
+                    simHistoryList: state.simHistoryList
+                    // simDeleted: new Date()
                 }
             } else {
                 error({
@@ -1520,13 +1545,54 @@ export default (state = initialState, action) => {
         }
 
         case UPDATE_SIM: {
+            let simList = state.sim_list;
+            // console.log('== UPDATE_SIM ==> ', action)
+            // console.log('state sims:', simList);
+
             if (action.response.status) {
+
+
+                // if (action.payload.obj.id === "unrAll") {
+
+                //     if (action.payload.label === "unrGuest") {
+                //         state.unrGuest = action.payload.value;
+                //     } else if (action.payload.label === "unrEncrypt") {
+                //         state.unrEncrypt = action.payload.value;
+                //     }
+                // } else if (action.payload.obj.id === "all") {
+
+                //     if (action.payload.label === "guest") {
+                //         simList = simList.map((item) => {
+                //             item.guest = action.payload.value ? 1 : 0;
+                //             return item;
+                //         })
+                //     } else if (action.payload.label === "encrypt") {
+                //         simList = simList.map((item) => {
+                //             item.encrypt = action.payload.value ? 1 : 0;
+                //             return item;
+                //         })
+                //     }
+                // } else {
+                //     let index = simList.findIndex(e => e.iccid === action.payload.obj.iccid);
+                //     console.log("index ", index);
+                //     if (index !== -1) {
+                //         simList[index] = action.payload.obj;
+                //     }
+                // }
+                // console.log("index simList ", simList);
+                // let getCheckAllValues = checkAllSims(simList);
+
                 success({
                     title: action.response.msg,
                 });
+
                 return {
                     ...state,
-                    simUpdated: new Date()
+                    // sim_list: simList,
+                    // unrGuest: state.unrGuest,
+                    // unrEncrypt: state.unrEncrypt,
+                    simUpdated: new Date(),
+                    // ...getCheckAllValues,
                 }
             } else {
                 error({
@@ -1538,20 +1604,27 @@ export default (state = initialState, action) => {
             }
         }
 
+        case SIM_LOADING: {
+            return {
+                ...state,
+                simloading: true,
+            }
+        }
+
         case GET_UNREG_SIMS: {
             // console.log("action.payload.data ", action.payload.data);
 
-            if (action.response.status) {
+            if (action.payload.status) {
 
                 return {
                     ...state,
-                    isloading: false,
-                    unRegSims: action.payload.data
+                    simloading: false,
+                    unRegSims: []
                 }
             } else {
                 return {
                     ...state,
-                    isloading: false,
+                    // simloading: false,
                     unRegSims: []
                 }
             }
@@ -2028,4 +2101,33 @@ function getCurrentDate() {
     var tempDate = new Date();
     var date = tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' + tempDate.getDate() + ' ' + tempDate.getHours() + ':' + tempDate.getMinutes() + ':' + tempDate.getSeconds();
     return date
+}
+
+function checkAllSims(sims) {
+
+    let guestSimAll = 1;
+    let encryptSimAll = 1;
+
+    if (sims.obj && sims.obj.id === "all") {
+
+        if (sims.label === "guest") {
+            guestSimAll = sims.value;
+        } else if (sims.label === "encrypt") {
+            encryptSimAll = sims.value;
+        }
+    }
+    else
+        if (sims.length) {
+
+            let checkEnc = sims.filter(e => e.encrypt != true);
+            let checkGst = sims.filter(e => e.guest != true);
+
+            if (checkGst.length > 0) guestSimAll = 0; else guestSimAll = 1;
+            if (checkEnc.length > 0) encryptSimAll = 0; else encryptSimAll = 1;
+        }
+
+    return {
+        guestSimAll,
+        encryptSimAll
+    }
 }

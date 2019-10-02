@@ -61,7 +61,8 @@ import {
     GET_UNREG_SIMS,
     HANDLE_CHECK_ALL_PUSH_APPS,
     HANDLE_CHECK_SECURE_SETTINGS,
-    RESET_DEVICE
+    RESET_DEVICE,
+    SIM_LOADING
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -1297,15 +1298,18 @@ export const handleSimUpdate = (data) => {
 }
 
 export const getUnRegisterSims = (data) => {
-    // console.log('getUnRegisterSims data is: ', data)
+    console.log('getUnRegisterSims data is: ', data)
     return (dispatch) => {
+        dispatch({
+            type: SIM_LOADING
+        })
+
         RestService.getUnRegisterSims(data).then((response) => {
-            // console.log('response is: ', response);
+            console.log('response is: ', response);
             if (RestService.checkAuth(response.data)) {
-                // console.log(response.data);
+                console.log("getUnRegisterSims", response.data);
                 dispatch({
                     type: GET_UNREG_SIMS,
-                    // response: response.data,
                     payload: response.data
                 })
             } else {
