@@ -113,13 +113,20 @@ class SimSettings extends Component {
             this.props.getSims(nextProps.deviceID);
             status = true;
         }
+        // console.log( "RECEIVER" ,nextProps.sim_list)
+        if (this.props.sim_list !== nextProps.sim_list) {
+            this.setState({
 
-        if (this.props.guestSimAll !== nextProps.guestSimAll || this.props.encryptSimAll !== nextProps.encryptSimAll)
+            })
+        }
 
+        if (this.props.guestSimAll !== nextProps.guestSimAll || this.props.encryptSimAll !== nextProps.encryptSimAll) {
             this.setState({
                 guestSimAll: nextProps.guestSimAll,
                 encryptSimAll: nextProps.encryptSimAll,
             })
+        }
+
     }
 
     handleSimModal = () => {
@@ -169,6 +176,7 @@ class SimSettings extends Component {
     }
 
     renderSimList = () => {
+
         let sims = this.props.sim_list;
         // console.log("render list sims", sims);
         if (sims !== undefined && sims !== null && sims.length > 0) {
@@ -211,7 +219,7 @@ class SimSettings extends Component {
             guestSimAll,
             encryptSimAll,
         } = this.state;
-        // console.log("unrGuest", unrGuest,  'sim list is ', sim_list);
+        // console.log('sim list is ', sim_list);
         return (
             <div>
                 <Fragment>
@@ -349,7 +357,7 @@ function mapDispatchToProps(dispatch) {
 
 
 var mapStateToProps = ({ device_details }) => {
-    console.log(device_details.unrGuest, ' device_details.unrGuest ')
+    // console.log(device_details.sim_list, ' device_details.unrGuest ')
     return {
         encryptSimAll: device_details.encryptSimAll,
         guestSimAll: device_details.guestSimAll,

@@ -39,16 +39,16 @@ export default class RegisterSimModal extends Component {
     render() {
         const { visible } = this.state;
         let { simloading } = this.props;
-        console.log("simloading ", simloading)
-        if (simloading) {
-            let _this = this;
-            setTimeout(
-                function() {
-                    _this.props.endLoading();
-                    console.log("call time out function")
-                }
-            , 10000)
-        }
+        // console.log("simloading ", simloading)
+        // if (simloading) {
+        //     let _this = this;
+        //     setTimeout(
+        //         function() {
+        //             _this.props.endLoading();
+        //             console.log("call time out function")
+        //         }
+        //     , 10000)
+        // }
         return (
             <div>
                 <Modal
@@ -58,6 +58,7 @@ export default class RegisterSimModal extends Component {
                     visible={visible}
                     footer={null}
                     onCancel={this.handleCancel}
+                    destroyOnClose={true}
                 >
 
                     <AddRegistrationForm

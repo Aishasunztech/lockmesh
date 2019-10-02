@@ -1501,13 +1501,14 @@ export default (state = initialState, action) => {
                 return {
                     ...state,
                     simloading: false,
+                    simUpdated: new Date(),
                     unRegSims: action.payload.unRegSims
                 }
             } else {
                 // console.log('not unRegSims red')
                 return {
                     ...state,
-                    // simUpdated: new Date(),
+                    simUpdated: new Date(),
                     simloading: false,
                     unRegSims: []
                 }
@@ -1544,45 +1545,54 @@ export default (state = initialState, action) => {
         }
 
         case UPDATE_SIM: {
+            let simList = state.sim_list;
+            // console.log('== UPDATE_SIM ==> ', action)
+            // console.log('state sims:', simList);
 
             if (action.response.status) {
+
+
+                // if (action.payload.obj.id === "unrAll") {
+
+                //     if (action.payload.label === "unrGuest") {
+                //         state.unrGuest = action.payload.value;
+                //     } else if (action.payload.label === "unrEncrypt") {
+                //         state.unrEncrypt = action.payload.value;
+                //     }
+                // } else if (action.payload.obj.id === "all") {
+
+                //     if (action.payload.label === "guest") {
+                //         simList = simList.map((item) => {
+                //             item.guest = action.payload.value ? 1 : 0;
+                //             return item;
+                //         })
+                //     } else if (action.payload.label === "encrypt") {
+                //         simList = simList.map((item) => {
+                //             item.encrypt = action.payload.value ? 1 : 0;
+                //             return item;
+                //         })
+                //     }
+                // } else {
+                //     let index = simList.findIndex(e => e.iccid === action.payload.obj.iccid);
+                //     console.log("index ", index);
+                //     if (index !== -1) {
+                //         simList[index] = action.payload.obj;
+                //     }
+                // }
+                // console.log("index simList ", simList);
+                // let getCheckAllValues = checkAllSims(simList);
+
                 success({
                     title: action.response.msg,
                 });
 
-                if (action.payload.obj.id === "unrAll") {
-
-                    if (action.payload.label === "unrGuest") {
-                        state.unrGuest = action.payload.value;
-                    } else if (action.payload.label === "unrEncrypt") {
-                        state.unrEncrypt = action.payload.value;
-                    }
-                } else if (action.payload.obj.id === "all") {
-
-                    if (action.payload.label === "guest") {
-                        state.sim_list = state.sim_list.map((item) => {
-                            item.guest = action.payload.value ? 1 : 0;
-                            return item;
-                        })
-                    } else if (action.payload.label === "encrypt") {
-                        state.sim_list = state.sim_list.map((item) => {
-                            item.encrypt = action.payload.value ? 1 : 0;
-                            return item;
-                        })
-                    }
-                }
-                else {
-                    let index = state.sim_list.findIndex(e => e.iccid === action.payload.obj.id);
-                    state.sim_list[index] = action.payload.obj;
-                }
-                let getCheckAllValues = checkAllSims(state.sim_list);
-
                 return {
                     ...state,
-                    sim_list: state.sim_list,
-                    unrGuest: state.unrGuest,
-                    unrEncrypt: state.unrEncrypt,
-                    ...getCheckAllValues,
+                    // sim_list: simList,
+                    // unrGuest: state.unrGuest,
+                    // unrEncrypt: state.unrEncrypt,
+                    simUpdated: new Date(),
+                    // ...getCheckAllValues,
                 }
             } else {
                 error({
@@ -2106,14 +2116,15 @@ function checkAllSims(sims) {
             encryptSimAll = sims.value;
         }
     }
-    else if (sims.length) {
+    else
+        if (sims.length) {
 
-        let checkEnc = sims.filter(e => e.encrypt != true);
-        let checkGst = sims.filter(e => e.guest != true);
+            let checkEnc = sims.filter(e => e.encrypt != true);
+            let checkGst = sims.filter(e => e.guest != true);
 
-        if (checkGst.length > 0) guestSimAll = 0; else guestSimAll = 1;
-        if (checkEnc.length > 0) encryptSimAll = 0; else encryptSimAll = 1;
-    }
+            if (checkGst.length > 0) guestSimAll = 0; else guestSimAll = 1;
+            if (checkEnc.length > 0) encryptSimAll = 0; else encryptSimAll = 1;
+        }
 
     return {
         guestSimAll,

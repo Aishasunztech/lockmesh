@@ -116,12 +116,12 @@ class EditSim extends Component {
 
         if (this.state.componentHide) { return null }
         // console.log('props of editSim', this.props.editSim);
-        console.log("unRegSims console for edit form: ", this.props.unRegSims)
+        // console.log("unRegSims console for edit form: ", this.props.unRegSims)
         const { editSim } = this.props;
 
         let deviceSimIds = [];
         deviceSimIds[0] = editSim.sim_id;
-        console.log(deviceSimIds)
+        // console.log(deviceSimIds)
         if (deviceSimIds[0] === undefined || deviceSimIds[0] === 'undefined' || deviceSimIds[0] === "N/A" || deviceSimIds[0] === '' || deviceSimIds[0] === null) {
             deviceSimIds = []
         }
