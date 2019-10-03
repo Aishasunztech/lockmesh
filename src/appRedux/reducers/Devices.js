@@ -254,29 +254,29 @@ export default (state = initialState, action) => {
             }
 
 
-        // case UNLINK_DEVICE:
-        //     if (action.response.status) {
-        //         console.log('UNLINK_DEVICE', action.response)
-        //         let objIndex = state.devices.findIndex((obj => obj.device_id === action.response.data.device_id));
-        //         if (objIndex !== -1) {
-        //             state.devices[objIndex] = action.response.data;
-        //         }
-        //         success({
-        //             title: action.response.msg,
-        //         });
-        //     }
-        //     else {
-        //         error({
-        //             title: action.response.msg,
-        //         });
-        //     }
+        case UNLINK_DEVICE:
+            if (action.response.status) {
+                console.log('UNLINK_DEVICE', action.response)
+                let objIndex = state.devices.findIndex((obj => obj.device_id === action.response.data.device_id));
+                if (objIndex !== -1) {
+                    state.devices[objIndex] = action.response.data;
+                }
+                success({
+                    title: action.response.msg,
+                });
+            }
+            else {
+                error({
+                    title: action.response.msg,
+                });
+            }
 
 
-        //     return {
-        //         ...state,
-        //         devices: [...state.devices],
-        //         isLoading: false
-        //     }
+            return {
+                ...state,
+                devices: [...state.devices],
+                isLoading: false
+            }
 
 
         case ACTIVATE_DEVICE:
