@@ -42,9 +42,8 @@ class AddDealer extends Component {
     }
     handleSubmit = (e) => {
 
-
         this.props.form.validateFields((err, values) => {
-            if(values.name === ''){
+            if (values.name === '') {
                 this.setState({
                     validateStatus: 'error',
                     help: convertToLang(this.props.translation[User_Name_require], "Name is Required")
@@ -57,10 +56,10 @@ class AddDealer extends Component {
                         validateStatus: 'error',
                         help: convertToLang(this.props.translation[Only_alpha_numeric], "Please insert only alphabets and numbers")
                     })
-                }else{
+                } else {
                     values.pageType = window.location.pathname.split("/").pop();
                     // values.dealerId = this.props.profile.dealerId;
-    
+
                     this.props.addDealer(values);
                     // message.success('Action done Successfylly');
                     //  this.props.history.goBack();
@@ -70,8 +69,6 @@ class AddDealer extends Component {
                     }, 1000);
                 }
                 // console.log('form values',values);
-                
-
             }
         });
     }
@@ -137,7 +134,9 @@ class AddDealer extends Component {
 
                             >
                                 {getFieldDecorator('dealerId', {
-
+                                    rules: [{
+                                        required: true, message: "Dealer  is Required",
+                                    }],
                                 })(
                                     <Select placeholder={convertToLang(this.props.translation[SELECT_Dealer], "Select Dealer")}>
                                         {this.props.dealersList.map((dealer, index) => {
