@@ -950,7 +950,7 @@ class SideActions extends Component {
                     <Card>
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={12} className="gutter-row" justify="center" >
-                                <Tooltip title="Coming Soon">
+                                {/* <Tooltip title="Coming Soon"> */}
                                     {/* <Button
                                     type="default"
                                     onClick={() => this.handleTransfer()}
@@ -962,9 +962,9 @@ class SideActions extends Component {
 
                                     {/* <Button type="default" onClick={() => { if (flagged === "Unflag") { this.handleTransfer(this.props.device_id) } else { Modal.error({ title: 'Plaese Flag the device first to Transfer' }); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button> */}
                                     <Button type="default"
-                                        // onClick={() => this.handleTransferHistoryModal(true)}
+                                        onClick={() => this.handleTransferHistoryModal(true)}
                                         style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button>
-                                </Tooltip>
+                                {/* </Tooltip> */}
                                 <Button type={button_type}
                                     onClick={() => (device_status === "Unsuspend") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
                                     style={{ width: "100%", marginBottom: 16, fontSize: "12px" }}
