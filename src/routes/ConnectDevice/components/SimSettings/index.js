@@ -8,7 +8,8 @@ import {
     simHistory,
     getSims,
     deleteSim,
-    getUnRegisterSims
+    getUnRegisterSims,
+    endLoading
 } from "../../../../appRedux/actions/ConnectDevice";
 import { ENABLE, ENCRYPT, Guest, ENCRYPTED, IN_APP_MENU_DISPLAY } from '../../../../constants/TabConstants';
 import { checkValue, convertToLang } from '../../../utils/commonUtils';
@@ -17,7 +18,6 @@ import AddRegistrationModal from './AddRegistrationModal';
 import EditRegistrationModal from './EditRegistrationModal';
 import { ACTION, Enable_ALL } from '../../../../constants/Constants';
 import { ICC_ID, SIM_NAME, NOTE, DATA_LIMIT, ALERT_DELETE_REGISTERED_SIM, UNREGISTERED, REGISTERED, REGISTERED_SIM_CARDS, STATUS } from '../../../../constants/DeviceConstants';
-
 
 let status = true;
 
@@ -89,6 +89,9 @@ class SimSettings extends Component {
             encryptedAllExt: 0,
             unrGuest: 0,
             unrEncrypt: 0,
+
+            guestSimAll: true,
+            encryptSimAll: true,
         }
 
         this.confirm = Modal.confirm;
@@ -98,13 +101,32 @@ class SimSettings extends Component {
     componentDidMount() {
         this.props.getSims(this.props.deviceID);
         this.props.simHistory(this.props.deviceID);
+
+        this.setState({
+            guestSimAll: this.props.guestSimAll,
+            encryptSimAll: this.props.encryptSimAll,
+        })
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.simUpdated != nextProps.simUpdated) {
+        if (this.props.simUpdated !== nextProps.simUpdated) {
             this.props.getSims(nextProps.deviceID);
             status = true;
         }
+        // console.log( "RECEIVER" ,nextProps.sim_list)
+        if (this.props.sim_list !== nextProps.sim_list) {
+            this.setState({
+
+            })
+        }
+
+        if (this.props.guestSimAll !== nextProps.guestSimAll || this.props.encryptSimAll !== nextProps.encryptSimAll) {
+            this.setState({
+                guestSimAll: nextProps.guestSimAll,
+                encryptSimAll: nextProps.encryptSimAll,
+            })
+        }
+
     }
 
     handleSimModal = () => {
@@ -113,13 +135,24 @@ class SimSettings extends Component {
         this.props.getUnRegisterSims(this.props.deviceID);
     }
 
-    handleChecked = (e, obj, label) => {
+    handleChecked = (e, obj, label, checkAll = false) => {
         obj[label] = e ? 1 : 0;
         // console.log('status ', status);
-        if (status) {
-            this.props.handleSimUpdate({ obj, label, value: e });
-            status = false;
+        if (checkAll) {
+            if (label === "guest") {
+                this.setState({
+                    guestSimAll: e
+                })
+            } else if (label === "encrypt") {
+                this.setState({
+                    encryptSimAll: e
+                })
+            }
         }
+        // if (status) {
+        this.props.handleSimUpdate({ obj, label, value: e });
+        status = false;
+        // }
     }
 
     setDataLimit = () => {
@@ -143,6 +176,7 @@ class SimSettings extends Component {
     }
 
     renderSimList = () => {
+
         let sims = this.props.sim_list;
         // console.log("render list sims", sims);
         if (sims !== undefined && sims !== null && sims.length > 0) {
@@ -169,21 +203,23 @@ class SimSettings extends Component {
                         size="small"
                         onClick={(e) => this.handleChecked(e, sim, "encrypt")}
                     />,
-                    dataLimit: '20 MB', // ((sim.data_limit == "" || sim.data_limit == 0 || sim.data_limit == '0') ? <Button type="danger" onClick={this.setDataLimit}>Set</Button> : sim.data_limit),
+                    dataLimit: 'N/A', // ((sim.data_limit == "" || sim.data_limit == 0 || sim.data_limit == '0') ? <Button type="danger" onClick={this.setDataLimit}>Set</Button> : sim.data_limit),
                 }
             })
         }
     }
     render() {
         let {
-            guestSimAll,
-            encryptSimAll,
             unrGuest,
             unrEncrypt,
             sim_list,
         } = this.props;
-        console.log('sim list is ', sim_list);
-        if (sim_list.length == 0) { unrGuest = 1; unrEncrypt = 1; guestSimAll = 1; encryptSimAll = 1; }
+
+        let {
+            guestSimAll,
+            encryptSimAll,
+        } = this.state;
+        // console.log('sim list is ', sim_list);
         return (
             <div>
                 <Fragment>
@@ -197,7 +233,8 @@ class SimSettings extends Component {
                                 this.handleChecked(e, {
                                     id: "unrAll",
                                     device_id: this.props.deviceID,
-                                    unrEncrypt: unrEncrypt ? 1 : 0
+                                    unrEncrypt: unrEncrypt ? 1 : 0,
+                                    unrGuest: unrGuest ? 1 : 0,  // extra
                                 }, "unrGuest");
                             }}
                                 checked={unrGuest ? true : false}
@@ -209,7 +246,8 @@ class SimSettings extends Component {
                                 this.handleChecked(e, {
                                     id: "unrAll",
                                     device_id: this.props.deviceID,
-                                    unrGuest: unrGuest ? 1 : 0
+                                    unrGuest: unrGuest ? 1 : 0,
+                                    unrEncrypt: unrEncrypt ? 1 : 0, // extra
                                 }, "unrEncrypt");
                             }}
                                 checked={unrEncrypt ? true : false}
@@ -227,7 +265,7 @@ class SimSettings extends Component {
                                 this.handleChecked(e, {
                                     id: "all",
                                     device_id: this.props.deviceID,
-                                }, "guest");
+                                }, "guest", true);
                             }}
                                 checked={guestSimAll ? true : false}
                                 size="small"
@@ -239,7 +277,7 @@ class SimSettings extends Component {
                                     id: "all",
                                     device_id: this.props.deviceID,
                                     // iccid: sim_list ? sim_list[0].iccid : '',
-                                }, "encrypt");
+                                }, "encrypt", true);
                             }}
                                 checked={encryptSimAll ? true : false}
                                 size="small"
@@ -271,6 +309,8 @@ class SimSettings extends Component {
                             dataSource={this.renderSimList()}
                             columns={this.state.columns}
                             pagination={false}
+                            bordered
+                            scroll={{ x: true }}
                         />
                     </div>
 
@@ -282,6 +322,8 @@ class SimSettings extends Component {
                         device={this.props.device}
                         unRegSims={this.props.unRegSims}
                         total_dvc={this.props.sim_list}
+                        simloading={this.props.simloading}
+                        endLoading={this.props.endLoading}
                     />
                     <EditRegistrationModal
                         ref="edit_sim_reg"
@@ -308,13 +350,14 @@ function mapDispatchToProps(dispatch) {
         simHistory: simHistory,
         deleteSim: deleteSim,
         getSims: getSims,
-        getUnRegisterSims: getUnRegisterSims
+        getUnRegisterSims: getUnRegisterSims,
+        endLoading: endLoading
     }, dispatch);
 }
 
 
 var mapStateToProps = ({ device_details }) => {
-    console.log('device_details  unRegSims ', device_details.unRegSims)
+    // console.log(device_details.sim_list, ' device_details.unrGuest ')
     return {
         encryptSimAll: device_details.encryptSimAll,
         guestSimAll: device_details.guestSimAll,
@@ -325,6 +368,7 @@ var mapStateToProps = ({ device_details }) => {
         device: device_details.device,
         simHistoryList: device_details.simHistoryList,
         unRegSims: device_details.unRegSims,
+        simloading: device_details.simloading
     }
 }
 

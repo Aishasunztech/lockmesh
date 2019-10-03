@@ -25,6 +25,15 @@ class EditSim extends Component {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (this.props.editSim !== nextProps.editSim) {
+            this.setState({
+                guest: nextProps.editSim.guest,
+                encrypt: nextProps.editSim.encrypt,
+            })
+        }
+    }
+
     handleSubmit = (e) => {
         e.preventDefault();
 
@@ -35,7 +44,7 @@ class EditSim extends Component {
             values['encrypt'] = this.state.encrypt ? 1 : 0;
             values['data_limit'] = "";
             values['device_id'] = this.props.deviceID;
-            if (this.props.unRegSims.length) {
+            if (this.props.unRegSims && this.props.unRegSims.length) {
                 values['status'] = "Active";
             }
 
@@ -44,9 +53,9 @@ class EditSim extends Component {
 
             if (!err) {
                 this.props.AddSimHandler(values);
-                this.setState({ componentHide: true });
-                
+
                 if (this.props.unRegSims) {
+                    this.setState({ componentHide: true });
                     if (this.props.unRegSims.length == this.props.indexUnr + 1) {
                         this.handleCancel();
                     }
@@ -107,12 +116,12 @@ class EditSim extends Component {
 
         if (this.state.componentHide) { return null }
         // console.log('props of editSim', this.props.editSim);
-        console.log("unRegSims console for edit form: ", this.props.unRegSims)
+        // console.log("unRegSims console for edit form: ", this.props.unRegSims)
         const { editSim } = this.props;
 
         let deviceSimIds = [];
         deviceSimIds[0] = editSim.sim_id;
-        console.log(deviceSimIds)
+        // console.log(deviceSimIds)
         if (deviceSimIds[0] === undefined || deviceSimIds[0] === 'undefined' || deviceSimIds[0] === "N/A" || deviceSimIds[0] === '' || deviceSimIds[0] === null) {
             deviceSimIds = []
         }
@@ -121,6 +130,7 @@ class EditSim extends Component {
         return (
             <div>
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
+                    <h4>{(this.props.unRegSims && this.props.unRegSims.length) ? "Add Un-Register Sim" : null}</h4>
                     <p>(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")} </p>
 
                     <Form.Item
@@ -140,7 +150,10 @@ class EditSim extends Component {
                                 }
                             ],
                         })(
-                            <Input disabled={(this.props.unRegSims) ? false : true} />
+                            <Input
+                                disabled
+                            // disabled={(this.props.unRegSims) ? false : true} 
+                            />
                         )}
                     </Form.Item>
 

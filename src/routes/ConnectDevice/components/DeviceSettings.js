@@ -294,6 +294,7 @@ export default class DeviceSettings extends Component {
         if (this.props.app_list && this.props.app_list.length) {
             setting = this.props.app_list.filter(item => item.uniqueName === Main_SETTINGS)
         }
+
         let exten = [];
         if (this.props.app_list && this.props.app_list.length) {
             exten = this.props.app_list.filter(item => item.uniqueName === SECURE_SETTING)
@@ -357,19 +358,19 @@ export default class DeviceSettings extends Component {
                                 <Col span={8}>
                                     <span>{convertToLang(this.props.translation[Guest], "Guest")} </span>
                                     <Switch disabled
-                                        checked={exten[0].guest === 1 ? true : false}
+                                        checked={exten[0].guest ? true : false}
                                         size="small" />
                                 </Col>
                                 <Col span={8}>
                                     <span>{convertToLang(this.props.translation[ENCRYPT], "Encrypt")} </span>
                                     <Switch disabled
-                                        checked={exten[0].encrypted === 1 ? true : false}
+                                        checked={exten[0].encrypted ? true : false}
                                         size="small" />
                                 </Col>
                                 <Col span={8}>
                                     <span>{convertToLang(this.props.translation[ENABLE], "Enable")} </span>
                                     <Switch disabled
-                                        checked={exten[0].enable === 1 ? true : false}
+                                        checked={exten[0].enable ? true : false}
                                         size="small" />
                                 </Col>
                             </Row>
