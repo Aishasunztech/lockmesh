@@ -199,7 +199,6 @@ function mapDispatchToProps(dispatch) {
 var mapStateToProps = ({ device_details }, ownProps) => {
   // console.log(device_details, "applist ownprops", ownProps);
   const pageName = ownProps.pageName;
-  console.log(pageName);
   let secureSetting = device_details.app_list.find(o => o.uniqueName === pageName);
   // console.log("extensions_", device_details.secureSettingsMain);
   let isExtension = false

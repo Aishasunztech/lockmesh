@@ -76,7 +76,6 @@ export default class SystemControls extends Component {
   render() {
 
     let setting = [];
-    console.log("main setting: ", this.state.app_list, Main_SETTINGS);
     if (this.state.app_list && this.state.app_list.length) {
       setting = this.state.app_list.filter(item => item.uniqueName === Main_SETTINGS)
     }

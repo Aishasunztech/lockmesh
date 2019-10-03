@@ -25,6 +25,15 @@ class EditSim extends Component {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (this.props.editSim !== nextProps.editSim) {
+            this.setState({
+                guest: nextProps.editSim.guest,
+                encrypt: nextProps.editSim.encrypt,
+            })
+        }
+    }
+
     handleSubmit = (e) => {
         e.preventDefault();
 
@@ -107,12 +116,12 @@ class EditSim extends Component {
 
         if (this.state.componentHide) { return null }
         // console.log('props of editSim', this.props.editSim);
-        console.log("unRegSims console for edit form: ", this.props.unRegSims)
+        // console.log("unRegSims console for edit form: ", this.props.unRegSims)
         const { editSim } = this.props;
 
         let deviceSimIds = [];
         deviceSimIds[0] = editSim.sim_id;
-        console.log(deviceSimIds)
+        // console.log(deviceSimIds)
         if (deviceSimIds[0] === undefined || deviceSimIds[0] === 'undefined' || deviceSimIds[0] === "N/A" || deviceSimIds[0] === '' || deviceSimIds[0] === null) {
             deviceSimIds = []
         }
@@ -121,6 +130,7 @@ class EditSim extends Component {
         return (
             <div>
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
+                    <h4>{(this.props.unRegSims && this.props.unRegSims.length) ? "Add Un-Register Sim" : null}</h4>
                     <p>(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")} </p>
 
                     <Form.Item
@@ -140,7 +150,10 @@ class EditSim extends Component {
                                 }
                             ],
                         })(
-                            <Input disabled={(this.props.unRegSims) ? false : true} />
+                            <Input
+                                disabled
+                            // disabled={(this.props.unRegSims) ? false : true} 
+                            />
                         )}
                     </Form.Item>
 
@@ -227,7 +240,7 @@ class EditSim extends Component {
                         }}
                     >
                         <Button type="button" style={cancelBtn} onClick={this.handleCancel}> {convertToLang(this.props.translation[Button_Cancel], "Cancel")} </Button>
-                        <Button type="primary" htmlType="submit"> {convertToLang(this.props.translation[Button_Update], "UPDATE")} </Button>
+                        <Button type="primary" htmlType="submit"> {(this.props.unRegSims) ? "Register" : convertToLang(this.props.translation[Button_Update], "UPDATE")} </Button>
                     </Form.Item>
                 </Form>
 

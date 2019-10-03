@@ -197,7 +197,7 @@ class RegisterSimForm extends Component {
                         }}
                     >
                         <Button key="back" type="button" onClick={this.handleCancel}> {convertToLang(this.props.translation[Button_Cancel], "Cancel")} </Button>
-                        <Button type="primary" htmlType="submit"> {convertToLang(this.props.translation[Button_Add], "Add")} </Button>
+                        <Button type="primary" htmlType="submit"> {convertToLang(this.props.translation["Add Manual"], "Add Manual")} </Button>
                     </Form.Item>
                 </Form>
 
