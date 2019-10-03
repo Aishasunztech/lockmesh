@@ -43,13 +43,14 @@ class AddDealer extends Component {
     handleSubmit = (e) => {
 
         this.props.form.validateFields((err, values) => {
-            if (values.name === '') {
+            console.log(values, 'name is the ')
+            if (values.name === '' || values.name === undefined || (values.name != undefined ? values.name.trim() === '' : false)) {
                 this.setState({
                     validateStatus: 'error',
                     help: convertToLang(this.props.translation[User_Name_require], "Name is Required")
                 })
             }
-            if (!err) {
+            else if (!err) {
 
                 if (/[^A-Za-z \d]/.test(values.name)) {
                     this.setState({
@@ -59,7 +60,7 @@ class AddDealer extends Component {
                 } else {
                     values.pageType = window.location.pathname.split("/").pop();
                     // values.dealerId = this.props.profile.dealerId;
-
+                    values.name = values.name.trim();
                     this.props.addDealer(values);
                     // message.success('Action done Successfylly');
                     //  this.props.history.goBack();
@@ -157,8 +158,6 @@ class AddDealer extends Component {
                         {getFieldDecorator('name', {
                             rules: [{
                                 required: true, message: convertToLang(this.props.translation[User_Name_require], "Name is Required"),
-                            }, {
-                                validator: this.validateToNextPassword,
                             }],
                         })(
                             <Input onChange={(e) => this.handleNameValidation(e)} />
