@@ -802,7 +802,7 @@ export function savePolicy(app_list, passwords = null, profileType, profileName,
 }
 
 export const transferDeviceProfile = (data) => {
-    // console.log("transferDeviceProfile action file",data);
+    console.log("transferDeviceProfile action file",data);
     return (dispatch) => {
         RestService.transferDeviceProfile(data).then((response) => {
             if (RestService.checkAuth(response.data)) {

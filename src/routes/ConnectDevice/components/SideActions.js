@@ -1408,20 +1408,24 @@ function showConfirm(device, action, _this, msg, type, transfered = false) {
                 setTimeout(Math.random() > 0.5 ? resolve : reject);
                 if (type === 'wipe') {
                     action(device)
-                } else if (type === 'unlink') {
+                } 
+                else if (type === 'unlink') {
                     // console.log('unlink check =========> ', device)
                     action(device, transfered);
-                }
-                if (type === 'flagged') {
+
+                    _this.props.history.goBack();
+                    _this.props.getDevicesList();
+                } 
+                else if (type === 'flagged') {
                     action(device.device_id)
                     // _this.props.activateDevice(device)
                 }
-                if (type === 'unlink') {
-                    _this.props.history.goBack();
-                    _this.props.getDevicesList();
-                } else {
-                    // _this.props.refreshDevice(device.device_id);
-                }
+                // if (type === 'unlink') {
+                //     _this.props.history.goBack();
+                //     _this.props.getDevicesList();
+                // } else {
+                //     // _this.props.refreshDevice(device.device_id);
+                // }
                 //  message.success('Action Done Susscefully ');
 
             }).catch(() => console.log(''));

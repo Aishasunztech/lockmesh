@@ -73,7 +73,8 @@ import {
     HANDLE_CHECK_ALL_PUSH_APPS,
     HANDLE_CHECK_SECURE_SETTINGS,
     RESET_DEVICE,
-    SIM_LOADING
+    SIM_LOADING,
+    TRANSFER_DEVICE
 } from "../../constants/ActionTypes";
 
 import {
@@ -712,6 +713,22 @@ export default (state = initialState, action) => {
             }
         }
 
+        case TRANSFER_DEVICE: {
+
+            console.log(action.payload, 'check devices TRANSFER_DEVICE ', state.device)
+            if (action.response.status) {
+               
+                    state.device.finalStatus = 'Transfered';
+                    state.device.transfer_status = 1;
+            }
+            // console.log('unlink called');
+            return {
+                ...state,
+                isLoading: false,
+                device: state.device,
+                getHistory: new Date()
+            }
+        }
 
         case SHOW_MESSAGE: {
 

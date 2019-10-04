@@ -207,9 +207,9 @@ class DevicesList extends Component {
                         (<Fragment><Fragment>{DeleteBtnPreActive}</Fragment><Fragment>{EditBtn/* EditBtnPreActive */}</Fragment></Fragment>)
                         // : (device.flagged !== 'Not flagged') ?
                         //     (<Fragment><Fragment>{Unflagbtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                        : (device.flagged !== 'Not flagged' && device.transfer_status == 0 && device.finalStatus == "Flagged") ?
+                        : (device.flagged !== 'Not flagged' && device.transfer_status === 0 && device.finalStatus === "Flagged") ?
                             (<Fragment><Fragment>{Unflagbtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                            : (device.flagged !== 'Not flagged' && device.transfer_status == 1 && device.finalStatus == "Transfered") ?
+                            : (device.flagged !== 'Not flagged' && device.transfer_status === 1 && device.finalStatus === "Transfered") ?
                                 (<Fragment><Fragment>{Unflagbtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                                 : (status === DEVICE_SUSPENDED) ?
                                     (<Fragment><Fragment>{ActiveBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)

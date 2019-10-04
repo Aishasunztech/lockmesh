@@ -168,6 +168,7 @@ export default (state = initialState, action) => {
         }
 
         case UNLINK_DEVICE: {
+            console.log("UNLINK_DEVICE reducer:: ", action.payload)
             let devices = state.devices;
 
             if (action.response.status) {
@@ -175,9 +176,15 @@ export default (state = initialState, action) => {
                     title: action.response.msg,
                 });
 
-                if (action.isTransferred) {
-                    devices = state.devices.filter((obj => obj.device_id !== action.payload.device_id));
+                let objIndex = state.devices.findIndex((obj => obj.device_id === action.payload.device_id));
+                if (objIndex !== -1) {
+                    state.devices[objIndex].unlink_status = 1;
+                    state.devices[objIndex].finalStatus = "Unlinked";
                 }
+
+                // if (action.isTransferred) {
+                //     devices = state.devices.filter((obj => obj.device_id !== action.payload.device_id));
+                // }
             } else {
                 error({
                     title: action.response.msg,
