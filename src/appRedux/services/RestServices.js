@@ -376,6 +376,10 @@ const RestService = {
     checkApkName: (name, apk_id = '') => {
         return axios.post(BASE_URL + 'users/checkApkName', { name, apk_id }, RestService.getHeader());
     },
+    // For Service Remaining data 
+    getServiceRefund: (service_id) => {
+        return axios.post(BASE_URL + 'users/check-service-refund-credits', { service_id }, RestService.getHeader());
+    },
     // For check apk name 
     checkPolicyName: (name, policy_id = '') => {
         return axios.post(BASE_URL + 'users/check_policy_name', { name, policy_id }, RestService.getHeader());

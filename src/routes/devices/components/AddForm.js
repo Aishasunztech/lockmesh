@@ -342,7 +342,8 @@ class AddDevice extends Component {
                     id: item.id,
                     pkg_features: item.pkg_features,
                     pkg_price: item.pkg_price,
-                    pkg_dealer_type: item.dealer_type
+                    pkg_dealer_type: item.dealer_type,
+                    pkg_name: item.pkg_name
                 }
                 total_price = total_price + Number(item.pkg_price)
                 packagesData.push(data)

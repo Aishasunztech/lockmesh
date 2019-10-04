@@ -26,7 +26,8 @@ import {
     PACKAGE_PERMSSION_SAVED,
     DELETE_PACKAGE,
     EDIT_PACKAGE,
-    RESYNC_IDS
+    RESYNC_IDS,
+    USER_CREDITS
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -401,6 +402,12 @@ export const purchaseCreditsFromCC = (cardInfo, creditInfo) => {
                     type: PURCHASE_CREDITS,
                     response: response.data
                 })
+                if (response.data.status) {
+                    dispatch({
+                        type: USER_CREDITS,
+                        response: response.data
+                    })
+                }
             } else {
                 dispatch({
                     type: INVALID_TOKEN

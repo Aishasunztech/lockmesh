@@ -9,7 +9,7 @@ import { withRouter, Redirect, Link } from 'react-router-dom';
 import { Button_Cancel, Button_submit, Button_Add_User } from '../../../constants/ButtonConstants';
 import { SINGLE_DEVICE, DUPLICATE_DEVICES, Required_Fields, USER_ID, DEVICE_ID, USER_ID_IS_REQUIRED, SELECT_PGP_EMAILS, DEVICE_Select_CHAT_ID, SELECT_USER_ID, DEVICE_CLIENT_ID, DEVICE_Select_SIM_ID, DEVICE_MODE, DEVICE_MODEL, Device_Note, Device_Valid_For, Device_Valid_days_Required, DUPLICATE_DEVICES_REQUIRED, DEVICE_IMEI_1, DEVICE_SIM_1, DEVICE_IMEI_2, DEVICE_SIM_2 } from '../../../constants/DeviceConstants';
 import { LABEL_DATA_PGP_EMAIL, LABEL_DATA_SIM_ID, LABEL_DATA_CHAT_ID, DUMY_TRANS_ID } from '../../../constants/LabelConstants';
-import { Not_valid_Email, POLICY, Start_Date, Expire_Date, Expire_Date_Require } from '../../../constants/Constants';
+import { Not_valid_Email, POLICY, Start_Date, Expire_Date, Expire_Date_Require, DEVICE_PRE_ACTIVATION } from '../../../constants/Constants';
 import {
     PACKAGE_NAME,
     PACKAGE_TERM,
@@ -186,51 +186,74 @@ class ServicesList extends Component {
     renderList(type, list) {
         // console.log(list);
         if (type === 'package') {
-            return list.map((item, index) => {
-                let services = JSON.parse(item.pkg_features)
-                return {
-                    id: item.id,
-                    rowKey: item.id,
-                    pkg_name: `${item.pkg_name}`,
-                    dealer_type: `${item.dealer_type}`,
-                    sim_id: (services.sim_id) ? <span style={{ color: "#008000" }}> YES</span > : <span style={{ color: "Red" }}>NO</span >,
-                    sim_id2: (services.sim_id2) ? <span style={{ color: "#008000" }}> YES</span > : <span style={{ color: "Red" }}>NO</span >,
-                    chat_id: (services.chat_id) ? <span style={{ color: "#008000" }}> YES</span > : <span style={{ color: "Red" }}>NO</span >,
-                    pgp_email: (services.pgp_email) ? <span style={{ color: "#008000" }}> YES</span > : <span style={{ color: "Red" }}>NO</span >,
-                    vpn: (services.vpn) ? <span style={{ color: "#008000" }}> YES</span > : <span style={{ color: "Red" }}>NO</span >,
-                    pkg_price: item.pkg_price,
-                    pkg_features: services,
+            let packageIds = []
+            let packagesDataList = []
+            if (this.props.current_services) {
+                let current_services_packages = JSON.parse(this.props.current_services.packages)
+                current_services_packages.map(item => {
+                    packageIds.push(item.id)
+                })
+
+            }
+            list.map((item, index) => {
+                if (!packageIds.includes(item.id)) {
+                    let services = JSON.parse(item.pkg_features)
+                    packagesDataList.push({
+                        id: item.id,
+                        rowKey: item.id,
+                        pkg_name: `${item.pkg_name}`,
+                        dealer_type: `${item.dealer_type}`,
+                        sim_id: (services.sim_id) ? <span style={{ color: "#008000" }}> YES</span > : <span style={{ color: "Red" }}>NO</span >,
+                        sim_id2: (services.sim_id2) ? <span style={{ color: "#008000" }}> YES</span > : <span style={{ color: "Red" }}>NO</span >,
+                        chat_id: (services.chat_id) ? <span style={{ color: "#008000" }}> YES</span > : <span style={{ color: "Red" }}>NO</span >,
+                        pgp_email: (services.pgp_email) ? <span style={{ color: "#008000" }}> YES</span > : <span style={{ color: "Red" }}>NO</span >,
+                        vpn: (services.vpn) ? <span style={{ color: "#008000" }}> YES</span > : <span style={{ color: "Red" }}>NO</span >,
+                        pkg_price: item.pkg_price,
+                        pkg_features: services,
+                    })
                 }
             });
+            return packagesDataList
         } else if (type === 'product') {
-            return list.map((item, index) => {
-                let price_for = ''
-                switch (item.price_for) {
-                    case 'sim_id':
-                        price_for = "SIM ID"
-                        break;
-                    case 'pgp_email':
-                        price_for = "PGP EMAIL"
-                        break;
-                    case 'chat_id':
-                        price_for = "CHAT ID"
-                        break;
-                    case 'vpn':
-                        price_for = "VPN"
-                        break;
+            let productsIds = []
+            let productsDataList = []
+            // if (this.props.current_services) {
+            //     let current_services_packages = JSON.parse(this.props.current_services.products)
+            //     current_services_packages.map(item => {
+            //         productsIds.push(item.id)
+            //     })
+            // }
+            list.map((item, index) => {
+                if (!productsIds.includes(item.id)) {
+                    let price_for = ''
+                    switch (item.price_for) {
+                        case 'sim_id':
+                            price_for = "SIM ID"
+                            break;
+                        case 'pgp_email':
+                            price_for = "PGP EMAIL"
+                            break;
+                        case 'chat_id':
+                            price_for = "CHAT ID"
+                            break;
+                        case 'vpn':
+                            price_for = "VPN"
+                            break;
 
-                    default:
-                        break;
-                }
+                        default:
+                            break;
+                    }
 
-                return {
-                    id: item.id,
-                    rowKey: item.id,
-                    price_for: `${price_for}`,
-                    unit_price: item.unit_price,
-                    item: item.price_for
+                    productsDataList.push({
+                        id: item.id,
+                        rowKey: item.id,
+                        price_for: `${price_for}`,
+                        unit_price: item.unit_price,
+                        item: item.price_for
+                    })
                 }
             });
+            return productsDataList
         } else {
             let trialList = [
                 {
@@ -343,7 +366,13 @@ class ServicesList extends Component {
                     total_price = total_price + Number(item.pkg_price)
                 })
             }
+
+
+
             // console.log(total_price, this.props.user_credit);
+            if (this.props.creditsToRefund) {
+                total_price -= this.props.creditsToRefund
+            }
             if (total_price < this.props.user_credit || this.props.tabselect === '0') {
                 this.props.handleServicesSubmit(this.state.proSelectedRows, this.state.PkgSelectedRows, this.props.serviceTerm);
                 this.handleCancel()
@@ -458,8 +487,10 @@ class ServicesList extends Component {
             //  columnTitle: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
         };
 
+
         return (
             <Fragment>
+
                 {(this.props.tabselect === '0') ?
                     <div style={{ marginTop: 20 }} >
                         <h1 style={{ textAlign: "center" }}>PRODUCTS</h1>
@@ -704,8 +735,11 @@ class Services extends Component {
             <Fragment>
                 <div>
                     <Tabs type="card" className="dev_tabs" activeKey={this.props.tabselect} onChange={this.callback}>
-                        <TabPane tab={<span className="green">TRIAL</span>} key="0" >
-                        </TabPane>
+
+                        {(this.props.type !== 'edit' || (this.props.type === 'edit' && this.props.device.finalStatus === DEVICE_PRE_ACTIVATION)) ?
+                            <TabPane tab={<span className="green">TRIAL</span>} key="0" >
+                            </TabPane>
+                            : null}
                         <TabPane tab={<span className="green">1 MONTH</span>} key="1" >
                         </TabPane>
                         <TabPane tab={<span className="green">3 MONTH</span>} key="3" >
@@ -729,6 +763,9 @@ class Services extends Component {
                         serviceTerm={this.props.tabselect}
                         user_credit={this.props.user_credit}
                         history={this.props.history}
+                        current_services={this.props.current_services}
+                        creditsToRefund={this.props.creditsToRefund}
+                        type={this.props.type}
                     />
                 </div>
             </Fragment>

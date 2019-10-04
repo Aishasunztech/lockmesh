@@ -142,7 +142,7 @@ export default (state = initialState, action) => {
 
         case UNFLAG_DEVICE: {
             if (action.response.status) {
-                // console.log('unflaged', action.response.device_id)
+                // 
                 let objIndex = state.devices.findIndex((obj => obj.device_id === action.payload.device.device_id));
                 if (objIndex !== -1) {
                     state.devices[objIndex].flagged = 'Not flagged';
@@ -156,7 +156,7 @@ export default (state = initialState, action) => {
         }
 
         case NEW_DEVICES_LIST:
-            // console.log('reducer new device', action.payload);
+            // 
             return {
                 ...state,
                 isloading: false,
@@ -168,7 +168,7 @@ export default (state = initialState, action) => {
 
         case SUSPEND_DEVICE:
             if (action.response.status) {
-                // console.log('dedlksjaflkj', action.response)
+                // 
                 let objIndex = state.devices.findIndex((obj => obj.device_id === action.response.data.device_id));
                 if (objIndex !== -1) {
                     state.devices[objIndex] = action.response.data;
@@ -195,7 +195,7 @@ export default (state = initialState, action) => {
 
         // case UNLINK_DEVICE:
         //     if (action.response.status) {
-        //         console.log('UNLINK_DEVICE', action.response)
+        //         
         //         let objIndex = state.devices.findIndex((obj => obj.device_id === action.response.data.device_id));
         //         if (objIndex !== -1) {
         //             state.devices[objIndex] = action.response.data;
@@ -307,7 +307,7 @@ export default (state = initialState, action) => {
             }
 
         case ADD_DEVICE:
-            console.log(action.response, action.payload.formData.device_id);
+            
             var filteredNewDevices = state.newDevices;
             if (action.response.status) {
                 state.devices.unshift(action.response.data[0])
@@ -343,7 +343,7 @@ export default (state = initialState, action) => {
         case PRE_ACTIVATE_DEVICE:
             let devices = [...state.devices]
             if (action.response.status) {
-                // console.log('pre activated device', action.response.data.data)
+                // 
                 // state.devices.push(action.response.data.data)
                 success({
                     title: action.response.data.msg,
@@ -370,25 +370,25 @@ export default (state = initialState, action) => {
             break;
 
         case GET_DROPDOWN: {
-            // console.log( "Reducer " ,action.payload)
-            // console.log(GET_DROPDOWN);
+            // 
+            // 
             // console.log({
             //     ...state,
             //     selectedOptions: action.payload
             // });
-            // console.log('reducer selected options', action.payload);
+            // 
             if (action.payload.length === 0) {
-                // console.log('array add', )
+                // 
                 action.payload[0] = 'ACTIONS';
             }
-            // console.log('array', action.payload);
+            // 
             return {
                 ...state,
                 selectedOptions: action.payload
             }
         }
         case GET_PAGINATION: {
-            // console.log(GET_DROPDOWN);
+            // 
             // console.log({
             //     ...state,
             //     selectedOptions: action.payload
@@ -408,7 +408,7 @@ export default (state = initialState, action) => {
             return state
         }
         case GET_SIM_IDS: {
-            // console.log(GET_SIM_IDS);
+            // 
             // console.log(
             //     action.payload
             // )
@@ -435,7 +435,7 @@ export default (state = initialState, action) => {
             let filteredDevices = state.devices;
             let filteredNewDevices = state.newDevices;
             if (action.response.status) {
-                // console.log(state.newDevices, 'new devices from reducer')
+                // 
                 var alldevices = state.devices;
                 var device_id = action.device.device_id;
                 filteredDevices = alldevices.filter(device => device.device_id !== device_id);
@@ -457,14 +457,14 @@ export default (state = initialState, action) => {
         }
 
         case GET_PARENT_PACKAGES:
-            console.log(action.response.data);
+            
 
             return {
                 ...state,
                 parent_packages: action.response.data,
             }
         case GET_PRODUCT_PRICES:
-            // console.log(action.response.data);
+            // 
 
             return {
                 ...state,

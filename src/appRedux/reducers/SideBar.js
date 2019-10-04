@@ -75,7 +75,7 @@ export default (state = initialSidebar, action) => {
         }
 
         case USER_CREDITS: {
-            console.log("REMAINING CREDITS", action.response.credits);
+            // console.log("REMAINING CREDITS", action.response.credits);
             return {
                 ...state,
                 user_credit: action.response.credits,

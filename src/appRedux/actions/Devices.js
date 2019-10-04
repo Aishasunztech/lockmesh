@@ -32,10 +32,10 @@ export function getDevicesList() {
             isloading: true
         });
         RestService.DeviceList().then((response) => {
-            // console.log("data form server");
-            // console.log(response.data);
+            // 
+            // 
             if (RestService.checkAuth(response.data)) {
-                // console.log(response.data)
+                // 
                 if (response.data.status) {
 
                     dispatch({
@@ -56,7 +56,7 @@ export function getDevicesList() {
 }
 export function editDevice(formData) {
     return (dispatch) => {
-        // console.log('edit form data ', formData);
+        // 
         RestService.updateDeviceDetails(formData).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
@@ -66,6 +66,12 @@ export function editDevice(formData) {
                         formData: formData,
                     }
                 });
+                if (response.data.status && response.data.credits) {
+                    dispatch({
+                        type: USER_CREDITS,
+                        response: response.data
+                    });
+                }
             } else {
                 dispatch({
                     type: INVALID_TOKEN
@@ -78,10 +84,10 @@ export function editDevice(formData) {
 export function deleteUnlinkDevice(action, devices) {
     return (dispatch) => {
         // alert("hello");
-        // console.log(devices);
+        // 
         RestService.deleteUnlinkDevice(action, devices).then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // console.log('successfully ', response.data);
+                // 
                 dispatch({
                     type: DELETE_UNLINK_DEVICE,
                     response: response.data,
@@ -113,7 +119,7 @@ export function deleteUnlinkDevice(action, devices) {
 export function suspendDevice(device) {
 
     return (dispatch) => {
-        // console.log("suspendDevice action");
+        // 
 
         RestService.suspendDevice(device.usr_device_id).then((response) => {
 
@@ -150,7 +156,7 @@ export function activateDevice(device) {
 
         RestService.activateDevice(device.usr_device_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // console.log('response', response.data);
+                // 
                 device.account_status = '';
 
                 if (response.data.status) {
@@ -192,7 +198,7 @@ export function getSimIDs() {
 
         RestService.getSimIDs().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // console.log('response', response.data);
+                // 
                 dispatch({
                     type: GET_SIM_IDS,
                     payload: response.data.data
@@ -212,7 +218,7 @@ export function getChatIDs() {
 
         RestService.getChatIDs().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // console.log('response', response.data);
+                // 
                 dispatch({
                     type: GET_CHAT_IDS,
                     payload: response.data.data
@@ -232,7 +238,7 @@ export function getPGPEmails() {
         // alert("hello");
         RestService.getPGPEmails().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // console.log('response', response.data);
+                // 
                 dispatch({
                     type: GET_PGP_EMAILS,
                     payload: response.data.data
@@ -253,7 +259,7 @@ export function getAllSimIDs() {
 
         RestService.getAllSimIDs().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // console.log('response', response.data);
+                // 
                 dispatch({
                     type: GET_SIM_IDS,
                     payload: response.data.data
@@ -273,7 +279,7 @@ export function getAllChatIDs() {
 
         RestService.getAllChatIDs().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // console.log('response', response.data);
+                // 
                 dispatch({
                     type: GET_CHAT_IDS,
                     payload: response.data.data
@@ -293,7 +299,7 @@ export function getAllPGPEmails() {
         // alert("hello");
         RestService.getAllPGPEmails().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // console.log('response', response.data);
+                // 
                 dispatch({
                     type: GET_PGP_EMAILS,
                     payload: response.data.data
@@ -309,7 +315,7 @@ export function getAllPGPEmails() {
 }
 export function rejectDevice(device) {
     return (dispatch) => {
-        // console.log(device , 'action of reject device')
+        // 
         RestService.rejectDevice(device).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
@@ -355,11 +361,11 @@ export function addDevice(device) {
 }
 
 export function preActiveDevice(device) {
-    // console.log("action called", device);
+    // 
     return (dispatch) => {
         RestService.preActiveDevice(device).then((response) => {
             if (RestService.checkAuth(response.data)) {
-                console.log('action done ', response.data);
+
                 dispatch({
                     type: PRE_ACTIVATE_DEVICE,
                     response: response.data,
@@ -368,7 +374,7 @@ export function preActiveDevice(device) {
                     }
                 });
                 if (response.data.status) {
-                    // console.log("object");
+                    // 
                     dispatch({
                         type: USER_CREDITS,
                         response: response.data.data
@@ -387,7 +393,7 @@ export const getParentPackages = () => {
     return (dispatch) => {
         RestService.getParentPackages().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                console.log("Response", response.data);
+
                 dispatch({
                     type: GET_PARENT_PACKAGES,
                     response: response.data
@@ -406,7 +412,7 @@ export const getProductPrices = () => {
     return (dispatch) => {
         RestService.getProductPrices().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                console.log("Response", response.data);
+
                 dispatch({
                     type: GET_PRODUCT_PRICES,
                     response: response.data

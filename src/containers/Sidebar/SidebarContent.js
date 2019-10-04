@@ -212,14 +212,13 @@ class SidebarContent extends Component {
               <li>
                 <a className="head-example">
                   <Badge className="cred_badge" count={this.props.user_credit} overflowCount={99999}>
-                    {/* <Badge className="cred_badge" overflowCount={999}> */}
                     <i className="icon icon-dollar notification_icn" >
                       <Icon type="dollar" className="mb-10" />
                     </i>
                   </Badge>
                 </a>
               </li>
-              {/* Chat Icon */}
+              {/* {/* Chat Icon */}
               <li>
                 <i className="icon icon-chat-new" />
               </li>
@@ -339,7 +338,7 @@ class SidebarContent extends Component {
           }
           {/* </CustomScrollbars> */}
         </div>
-      </Auxiliary>
+      </Auxiliary >
     );
   }
 }
