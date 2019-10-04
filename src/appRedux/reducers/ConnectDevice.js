@@ -1528,7 +1528,7 @@ export default (state = initialState, action) => {
 
                 let stateSims = state.sim_list;
                 let getCheckAllValues = checkAllSims(stateSims);
-                let sims = stateSims.filter(e => e.id !== action.payload.id);
+                let sims = stateSims.filter(e => e.iccid !== action.payload.iccid);
                 action.payload["created_at"] = new Date();
                 state.simHistoryList.push(action.payload);
 
