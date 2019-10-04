@@ -1,3 +1,6 @@
+import moment_timezone from "moment-timezone";
+import moment from 'moment';
+
 import {
   DEVICE_ACTIVATED,
   DEVICE_EXPIRED,
@@ -18,15 +21,8 @@ import {
   DEALER_ACTION
 } from '../../constants/DealerConstants';
 
-
-
-
-import React, { Component } from 'react';
-import { Input } from 'antd';
 import { DEVICE_DEALER_ID, DEVICE_DEALER_PIN, DEVICE_DEALER_NAME } from '../../constants/DeviceConstants';
 
-import { cloneableGenerator } from 'redux-saga/utils';
-import moment from 'moment';
 import { isArray } from "util";
 
 export function getStatus(status, account_status, unlink_status, device_status, activation_status) {
@@ -70,6 +66,15 @@ export function getColor(status) {
       return { color: "grey" };
     default:
       return {};
+  }
+}
+
+export function getDateTimeOfClientTimeZone (dateTime){
+  console.log("timeZone: ", Intl.DateTimeFormat().resolvedOptions());
+  if(Intl.DateTimeFormat().resolvedOptions().timeZone){
+    return moment_timezone(dateTime).tz(Intl.DateTimeFormat().resolvedOptions().timeZone).format('YYYY/MM/DD H:m:s')
+  } else {
+    return dateTime;
   }
 }
 export function getSortOrder(status) {
