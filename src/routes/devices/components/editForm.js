@@ -166,18 +166,19 @@ class EditDevice extends Component {
                                 {this.props.form.getFieldDecorator('user_id', {
                                     initialValue: this.state.addNewUserModal ? lastObject.user_id : this.props.device.user_id,
 
-                                    rules: [
-                                        (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? {} :
-                                            {
-                                                required: true, message: convertToLang(this.props.translation[USER_ID_IS_REQUIRED], "User ID is Required !"),
-                                            }
-                                    ]
+                                    // rules: [
+                                    //     (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? {} :
+                                    //         {
+                                    //             required: true, message: convertToLang(this.props.translation[USER_ID_IS_REQUIRED], "User ID is Required !"),
+                                    //         }
+                                    // ]
                                 })(
                                     <Select
                                         className="pos_rel"
                                         setFieldsValue={this.state.addNewUserModal ? lastObject.user_id : addNewUserValue}
                                         showSearch
-                                        disabled={(this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? true : false}
+                                        disabled
+                                        // disabled={(this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? true : false}
                                         placeholder={convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}
                                         optionFilterProp="children"
                                         onChange={this.handleUserChange}
@@ -204,7 +205,7 @@ class EditDevice extends Component {
                                     //     Add User
                                     // </Button> */}
                                 )}
-                                {(this.props.user.type === ADMIN || (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1')) ? null :
+                                {/* {(this.props.user.type === ADMIN || (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1')) ? null :
                                     <Button
                                         className="add_user_btn"
                                         type="primary"
@@ -212,7 +213,7 @@ class EditDevice extends Component {
                                     >
                                         {convertToLang(this.props.translation[Button_Add_User], "Add User")}
                                     </Button>
-                                }
+                                } */}
 
                             </Form.Item>
 

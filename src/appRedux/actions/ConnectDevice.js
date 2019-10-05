@@ -59,6 +59,7 @@ import {
     PUSH_APP_CHECKED,
     RESET_PUSH_APPS,
     GET_UNREG_SIMS,
+    TRANSFER_DEVICE,
     HANDLE_CHECK_ALL_PUSH_APPS,
     HANDLE_CHECK_SECURE_SETTINGS,
     RESET_DEVICE,
@@ -287,8 +288,8 @@ export function wipe(device) {
     }
 }
 
-export function unlinkDevice(device) {
-    // console.log('you are at action file of unlinkDevice', device)
+export function unlinkDevice(device, transferred = false) {
+    // console.log(transferred, 'you are at action file of unlinkDevice', device)
     return (dispatch) => {
         RestService.unlinkDevice(device).then((response) => {
             // console.log('response to unlink device', response);
@@ -297,7 +298,8 @@ export function unlinkDevice(device) {
                     dispatch({
                         response: response.data,
                         type: UNLINK_DEVICE,
-                        payload: response.data.profiles
+                        payload: device,
+                        isTransferred: transferred
                     })
                 }
 
@@ -800,13 +802,14 @@ export function savePolicy(app_list, passwords = null, profileType, profileName,
 }
 
 export const transferDeviceProfile = (data) => {
-    // alert(data);
+    console.log("transferDeviceProfile action file",data);
     return (dispatch) => {
         RestService.transferDeviceProfile(data).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
-                    type: MESSAGE_HANDLER,
-                    payload: response.data
+                    type: TRANSFER_DEVICE,
+                    response: response.data,
+                    payload: data.flagged_device
                 })
             } else {
                 dispatch({

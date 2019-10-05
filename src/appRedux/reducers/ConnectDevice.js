@@ -73,7 +73,8 @@ import {
     HANDLE_CHECK_ALL_PUSH_APPS,
     HANDLE_CHECK_SECURE_SETTINGS,
     RESET_DEVICE,
-    SIM_LOADING
+    SIM_LOADING,
+    TRANSFER_DEVICE
 } from "../../constants/ActionTypes";
 
 import {
@@ -713,6 +714,22 @@ export default (state = initialState, action) => {
             }
         }
 
+        case TRANSFER_DEVICE: {
+
+            console.log(action.payload, 'check devices TRANSFER_DEVICE ', state.device)
+            if (action.response.status) {
+               
+                    state.device.finalStatus = 'Transfered';
+                    state.device.transfer_status = 1;
+            }
+            // console.log('unlink called');
+            return {
+                ...state,
+                isLoading: false,
+                device: state.device,
+                getHistory: new Date()
+            }
+        }
 
         case SHOW_MESSAGE: {
 
@@ -766,23 +783,28 @@ export default (state = initialState, action) => {
             }
         }
 
-        case UNLINK_DEVICE: {
-            if (action.response.status) {
-                success({
-                    title: action.response.msg,
-                });
-            } else {
-                error({
-                    title: action.response.msg,
-                });
-            }
-            // console.log('unlink called');
-            return {
-                ...state,
-                isLoading: false,
+        // case UNLINK_DEVICE: {
+        //     let devices = state.devices;
 
-            }
-        }
+        //     if (action.response.status) {
+        //         success({
+        //             title: action.response.msg,
+        //         });
+        //         if (action.isTransferred) {
+        //             devices = state.devices.filter((obj => obj.device_id !== action.payload.device_id));
+        //         }
+        //     } else {
+        //         error({
+        //             title: action.response.msg,
+        //         });
+        //     }
+        //     // console.log('unlink called');
+        //     return {
+        //         ...state,
+        //         isLoading: false,
+        //         devices
+        //     }
+        // }
         case GUEST_PASSWORD: {
             // console.log(GUEST_PASSWORD);
             // console.log(action.payload);
@@ -1524,7 +1546,7 @@ export default (state = initialState, action) => {
 
                 let stateSims = state.sim_list;
                 let getCheckAllValues = checkAllSims(stateSims);
-                let sims = stateSims.filter(e => e.id !== action.payload.id);
+                let sims = stateSims.filter(e => e.iccid !== action.payload.iccid);
                 action.payload["created_at"] = new Date();
                 state.simHistoryList.push(action.payload);
 
