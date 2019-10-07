@@ -97,6 +97,7 @@ export var initialSettings = {
     { "key": "activation_code", "value": DEVICE_ACTIVATION_CODE },
     { "key": "pgp_email", "value": DEVICE_PGP_EMAIL },
     { "key": "sim_id", "value": DEVICE_SIM_ID },
+    { "key": "sim_id2", "value": "SIM ID 2" },
     { "key": "chat_id", "value": DEVICE_CHAT_ID },
     { "key": "dealer_id", "value": DEVICE_DEALER_ID },
     { "key": "dealer_name", "value": DEVICE_DEALER_NAME },

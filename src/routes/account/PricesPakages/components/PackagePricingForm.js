@@ -28,7 +28,7 @@ import {
     Button_UNSET
 } from '../../../../constants/ButtonConstants'
 
-import { one_month, three_month, six_month, twelve_month, sim, chat, pgp, vpn } from '../../../../constants/Constants';
+import { one_month, three_month, six_month, twelve_month, sim, chat, pgp, vpn, sim2 } from '../../../../constants/Constants';
 
 class PackagePricingForm extends Component {
     constructor(props) {
@@ -36,16 +36,20 @@ class PackagePricingForm extends Component {
         this.state = {
             pkgPrice: 0,
             sim: false,
+            sim2: false,
             chat: false,
             pgp: false,
-            vpn: false
+            vpn: false,
+            help: '',
+            validateStatus: 'success',
+            pkgTerms: '1 month'
         }
     }
 
 
     setPrice = (fieldName, is_pkg_feature = false, pkg_feature_value = '', e) => {
-        // let value = e.target.value;
         let value = ''
+
         if (fieldName) {
 
             if (is_pkg_feature) {
@@ -54,16 +58,41 @@ class PackagePricingForm extends Component {
                     this.props.setPkgDetail(pkg_feature_value, fieldName, is_pkg_feature);
                 }
             } else {
-                // value = this.props.form.getFieldValue(fieldName)
-                console.log('fiels name', fieldName, 'value', value)
-                if (e !== '' && fieldName) {
+                if (fieldName) {
+                    value = e
+                    if (fieldName == 'pkgPrice') {
+                        e = +e;
+                        e = e.toString();
+                    }
                     this.props.setPkgDetail(e, fieldName, is_pkg_feature);
                 }
-                value = e
             }
-            this.setState({
-                [fieldName]: value
-            })
+
+            if (fieldName == 'pkgPrice') {
+                var isnum = /^\d+$/.test(value);
+                console.log(isnum, 'test ', value)
+                if (!isnum || value <= 0) {
+                    console.log(isnum, 'if test ', value)
+                    this.props.restrictPackageSubmit(false, fieldName)
+                    this.setState({
+                        validateStatus: 'error',
+                        help: value === '' ? 'Please Input Package Price' : 'Price must be in Numbers and greater than zero',
+                        [fieldName]: e
+                    })
+                } else {
+                    this.props.restrictPackageSubmit(true, fieldName)
+                    this.setState({
+                        validateStatus: 'success',
+                        help: '',
+                        [fieldName]: e
+                    })
+                }
+                // console.log(isnum, 'value', e)
+            } else {
+                this.setState({
+                    [fieldName]: value
+                })
+            }
         }
     }
 
@@ -83,9 +112,15 @@ class PackagePricingForm extends Component {
         });
         // console.log(response, 'respoinse ise  d')
         if (response) {
+            this.props.restrictPackageSubmit(true, 'pkgName')
             callback()
+            
         } else {
+             this.props.restrictPackageSubmit(false, 'pkgName')
             callback("Package name already taken please use another name.")
+        }
+        if(value == ''){
+            this.props.restrictPackageSubmit(false, 'pkgName')
         }
     }
 
@@ -106,7 +141,7 @@ class PackagePricingForm extends Component {
         return (
             <Form onSubmit={this.handleSubmit}>
                 <Row>
-                    <Col span={13}>
+                    <Col span={17}>
                         <Form.Item label={convertToLang(this.props.translation[PACKAGE_NAME], "PACKAGE NAME")}
                             labelCol={{ span: 11 }}
                             wrapperCol={{ span: 13 }}>
@@ -123,18 +158,17 @@ class PackagePricingForm extends Component {
                             })(<Input onChange={(e => this.setPrice('pkgName', '', '', e.target.value))} />)}
                         </Form.Item>
                     </Col>
-                    <Col span={4}>
-                        {/* <Button type="primary" onClick={() => this.setPrice('pkgName')}> {convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
-                    </Col>
+
                     <Col span={7}>
                         <h4 className='priceText'>{this.state.pkgName}</h4>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={13}>
+                    <Col span={17}>
                         <Form.Item label={convertToLang(this.props.translation[PACKAGE_TERM], "PACKAGE TERM")} labelCol={{ span: 11 }}
                             wrapperCol={{ span: 13 }}>
                             {getFieldDecorator('pkgTerms', {
+                                   initialValue: '1 month',
                                 rules: [
                                     {
                                         required: true,
@@ -162,16 +196,16 @@ class PackagePricingForm extends Component {
 
                         </Form.Item>
                     </Col>
-                    <Col span={4}>
-                        {/* <Button type="primary" onClick={() => this.setPrice('pkgTerms')}> {convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
-                    </Col>
+
                     <Col span={7}>
                         <h4 className='priceText'>{this.state.pkgTerms}</h4>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={13}>
+                    <Col span={17}>
                         <Form.Item label={convertToLang(this.props.translation[PACKAGE_PRICE], "PACKAGE PRICE")} labelCol={{ span: 11 }}
+                            validateStatus={this.state.validateStatus}
+                            help={this.state.help}
                             wrapperCol={{ span: 13 }}>
                             {getFieldDecorator('pkgPrice', {
                                 rules: [
@@ -184,9 +218,7 @@ class PackagePricingForm extends Component {
 
                         </Form.Item>
                     </Col>
-                    <Col span={4}>
-                        {/* <Button type="primary" onClick={() => this.setPrice('pkgPrice')} > {convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
-                    </Col>
+
                     <Col span={7}>
                         <h4 className='priceText'>Price: ${this.state.pkgPrice}</h4>
                     </Col>
@@ -201,6 +233,17 @@ class PackagePricingForm extends Component {
                     </Col>
                     <Col span={7}>
                         <span className='priceText' >{convertToLang(this.props.translation[LABEL_DATA_SIM_ID], "SIM ID")}: </span><span style={{ fontWeight: 'bold' }}>{this.state[sim] ? 'Yes' : 'No'}</span>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={13}>
+                        <h4 className="labelTypeText">{convertToLang(this.props.translation[""], "SIM ID 2")}:</h4>
+                    </Col>
+                    <Col span={4}>
+                        <Button type="primary" onClick={() => this.setPrice(sim2, true, !this.state[sim2])} >{this.state[sim2] ? convertToLang(this.props.translation[Button_UNSET], "UNSET") : convertToLang(this.props.translation[Button_SET], "SET")}</Button>
+                    </Col>
+                    <Col span={7}>
+                        <span className='priceText' >{convertToLang(this.props.translation[""], "SIM ID 2")}: </span><span style={{ fontWeight: 'bold' }}>{this.state[sim2] ? 'Yes' : 'No'}</span>
                     </Col>
                 </Row>
 

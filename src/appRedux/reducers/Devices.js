@@ -21,8 +21,10 @@ import {
     DELETE_UNLINK_DEVICE,
     UNFLAG_DEVICE,
     GET_PARENT_PACKAGES,
-    BULK_DEVICES_LIST,
+    GET_PRODUCT_PRICES,
     UNLINK_DEVICE,
+    ADD_DEVICE,
+    BULK_DEVICES_LIST,
     TRANSFER_DEVICE,
     FLAG_DEVICE
 } from "../../constants/ActionTypes";
@@ -63,6 +65,7 @@ import {
 
 import SettingStates from './InitialStates';
 import { message, Modal } from 'antd';
+import { DEVICE_PRE_ACTIVATION, DEVICE_UNLINKED } from "../../constants/Constants";
 
 var { translation } = SettingStates;
 
@@ -116,6 +119,7 @@ const initialState = {
     // ],
     // options: ["DEVICE ID", "REMAINING DAYS", "FLAGGED", "STATUS", "MODE", "DEVICE NAME", "ACCOUNT EMAIL", "ACTIVATION CODE", "PGP EMAIL", "CHAT ID", "CLIENT ID", "DEALER ID", "DEALER PIN", "MAC ADDRESS", "SIM ID", "IMEI 1", "SIM 1", "IMEI 2", "SIM 2", "SERIAL NUMBER", "MODEL", "START DATE", "EXPIRY DATE", "DEALER NAME", "S-DEALER", "S-DEALER NAME"],
     newDevices: [],
+    product_prices: [],
 };
 
 export default (state = initialState, action) => {
@@ -158,7 +162,7 @@ export default (state = initialState, action) => {
 
         case UNFLAG_DEVICE: {
             if (action.response.status) {
-                // console.log('unflaged', action.response.device_id)
+                // 
                 let objIndex = state.devices.findIndex((obj => obj.device_id === action.payload.device.device_id));
                 if (objIndex !== -1) {
                     state.devices[objIndex].flagged = 'Not flagged';
@@ -230,7 +234,7 @@ export default (state = initialState, action) => {
         }
 
         case NEW_DEVICES_LIST:
-            // console.log('reducer new device', action.payload);
+            // 
             return {
                 ...state,
                 isloading: false,
@@ -242,7 +246,7 @@ export default (state = initialState, action) => {
 
         case SUSPEND_DEVICE:
             if (action.response.status) {
-                // console.log('dedlksjaflkj', action.response)
+                // 
                 let objIndex = state.devices.findIndex((obj => obj.device_id === action.response.data.device_id));
                 if (objIndex !== -1) {
                     state.devices[objIndex] = action.response.data;
@@ -269,7 +273,7 @@ export default (state = initialState, action) => {
 
         // case UNLINK_DEVICE:
         //     if (action.response.status) {
-        //         console.log('UNLINK_DEVICE', action.response)
+        //         
         //         let objIndex = state.devices.findIndex((obj => obj.device_id === action.response.data.device_id));
         //         if (objIndex !== -1) {
         //             state.devices[objIndex] = action.response.data;
@@ -317,9 +321,14 @@ export default (state = initialState, action) => {
             }
 
         case DELETE_UNLINK_DEVICE:
+            let type = DEVICE_UNLINKED
             if (action.response.status) {
+                if (action.payload.type === 'pre-active') {
+                    type = DEVICE_PRE_ACTIVATION
+                }
+                console.log(action.response.data);
                 for (let id of action.response.data) {
-                    let objIndex = state.devices.findIndex((obj => obj.id === id));
+                    let objIndex = state.devices.findIndex((obj => obj.id === id && obj.finalStatus == type));
                     state.devices.splice(objIndex, 1);
                 }
                 success({
@@ -376,12 +385,44 @@ export default (state = initialState, action) => {
                 // devices: action.payload,
             }
 
+        case ADD_DEVICE:
+
+            var filteredNewDevices = state.newDevices;
+            if (action.response.status) {
+                state.devices.unshift(action.response.data[0])
+                var alldevices = state.newDevices;
+                var device_id = action.payload.formData.device_id;
+                filteredNewDevices = alldevices.filter(device => device.device_id !== device_id);
+
+                success({
+                    title: action.response.msg,
+                });
+            }
+            else {
+                error({
+                    title: action.response.msg,
+                });
+            }
+
+            return {
+                ...state,
+                devices: [...state.devices],
+                newDevices: filteredNewDevices,
+                //    selectedOptions: [...state.selectedOptions],
+                // options: state.options,
+                isloading: false,
+                msg: state.msg,
+                showMsg: "hello",
+                options: state.options,
+                // devices: action.payload,
+            }
+
             break;
 
         case PRE_ACTIVATE_DEVICE:
             let devices = [...state.devices]
             if (action.response.status) {
-                // console.log('pre activated device', action.response.data.data)
+                // 
                 // state.devices.push(action.response.data.data)
                 success({
                     title: action.response.data.msg,
@@ -408,25 +449,25 @@ export default (state = initialState, action) => {
             break;
 
         case GET_DROPDOWN: {
-            // console.log( "Reducer " ,action.payload)
-            // console.log(GET_DROPDOWN);
+            // 
+            // 
             // console.log({
             //     ...state,
             //     selectedOptions: action.payload
             // });
-            // console.log('reducer selected options', action.payload);
+            // 
             if (action.payload.length === 0) {
-                // console.log('array add', )
+                // 
                 action.payload[0] = 'ACTIONS';
             }
-            // console.log('array', action.payload);
+            // 
             return {
                 ...state,
                 selectedOptions: action.payload
             }
         }
         case GET_PAGINATION: {
-            // console.log(GET_DROPDOWN);
+            // 
             // console.log({
             //     ...state,
             //     selectedOptions: action.payload
@@ -446,7 +487,7 @@ export default (state = initialState, action) => {
             return state
         }
         case GET_SIM_IDS: {
-            // console.log(GET_SIM_IDS);
+            // 
             // console.log(
             //     action.payload
             // )
@@ -473,7 +514,7 @@ export default (state = initialState, action) => {
             let filteredDevices = state.devices;
             let filteredNewDevices = state.newDevices;
             if (action.response.status) {
-                // console.log(state.newDevices, 'new devices from reducer')
+                // 
                 var alldevices = state.devices;
                 var device_id = action.device.device_id;
                 filteredDevices = alldevices.filter(device => device.device_id !== device_id);
@@ -495,11 +536,18 @@ export default (state = initialState, action) => {
         }
 
         case GET_PARENT_PACKAGES:
-            console.log(action.response.data);
+
 
             return {
                 ...state,
                 parent_packages: action.response.data,
+            }
+        case GET_PRODUCT_PRICES:
+            // 
+
+            return {
+                ...state,
+                product_prices: action.response.data,
             }
         default:
             return state;

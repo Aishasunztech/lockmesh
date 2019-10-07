@@ -73,6 +73,7 @@ export const SC = "com.secure.systemcontrol";
 // Prices Constants
 
 export const sim = 'sim_id';
+export const sim2 = 'sim_id2';
 export const chat = 'chat_id';
 export const pgp = 'pgp_email';
 export const vpn = 'vpn';
@@ -80,6 +81,7 @@ export const vpn = 'vpn';
 export const pkg_features = {
     chat_id: false,
     sim_id: false,
+    sim_id2: false,
     pgp_email: false,
     vpn: false
 }

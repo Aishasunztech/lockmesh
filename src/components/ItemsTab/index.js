@@ -63,6 +63,9 @@ export default class ItemTabs extends Component {
                         innerTab={this.state.tabSelected}
                         innerTabData={this.props.prices ? this.props.prices[this.state.tabSelected] : {}}
                         translation={this.props.translation}
+                        restrictSubmit={this.props.restrictSubmit}
+                        submitAvailable={this.props.submitAvailable}
+                        pricesFormErrors={this.props.pricesFormErrors}
                     />
                 </div>
 
