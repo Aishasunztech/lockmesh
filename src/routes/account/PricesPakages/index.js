@@ -165,7 +165,8 @@ class Prices extends Component {
                         dataIndex: 'pkg_price',
                         key: 'pkg_price',
                         // ...this.getColumnSearchProps('status'),
-                        sorter: (a, b) => { return a.pkg_price - b.pkg_price },
+                        // sorter: (a, b) => { return a.pkg_price - b.pkg_price },
+                        sorter: (a, b) => { return a.pkg_price.localeCompare(b.pkg_price) },
 
                         sortDirections: ['ascend', 'descend'],
                     }
@@ -210,7 +211,7 @@ class Prices extends Component {
             expandTabSelected: [],
             expandedByCustom: [],
             modifyPackageModal: false,
-            modify_package_id: null,
+            modify_package: null,
             isModify: false,
         }
     }
@@ -322,10 +323,10 @@ class Prices extends Component {
     // }
 
     componentWillReceiveProps(nextProps) {
-        // console.log(nextProps.prices, 'next props of prices ')
-        // console.log(nextProps.prices, 'next props of prices ')
-        if (this.props.prices !== nextProps.prices && this.state.prices !== nextProps.prices) {
-            // console.log("props");
+        // console.log(nextProps.packages, 'next props of prices ')
+        if (this.props !== nextProps) {
+            // console.log(nextProps.prices, 'next props of prices ')
+
             this.setState({
                 prices: nextProps.prices,
                 copyStatus: true
@@ -364,12 +365,12 @@ class Prices extends Component {
         });
         // this.props.deletePackage(id)
     }
-    modifyPackage = (id, isModify) => {
+    modifyPackage = (packageData, isModify) => {
 
 
         this.setState({
             modifyPackageModal: true,
-            modify_package_id: id,
+            modify_package: packageData,
             isModify: isModify
         })
     }
@@ -383,7 +384,7 @@ class Prices extends Component {
             return this.state.packages.map((item, index) => {
                 let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px ', textTransform: 'uppercase' }} onClick={() => { this.deletePackage(item.id, item.pkg_name) }} >{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
                 // let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "EDIT")}</Button>
-                let ModifyBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.modifyPackage(item.id, true) }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "MODIFY PRICE")}</Button>
+                let ModifyBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.modifyPackage(item, true) }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "MODIFY PRICE")}</Button>
                 return {
                     id: item.id,
                     key: item.id,
@@ -459,7 +460,7 @@ class Prices extends Component {
                     let dump = {
                         name: name.replace(/_/g, ' '),
                         f_value: data[key] ? "yes" : 'No',
-                        rowKey: key
+                        rowKey: name
                     }
 
                     features.push(dump)
@@ -508,7 +509,7 @@ class Prices extends Component {
         })
     }
     render() {
-        // console.log(this.state.expandedRowKeys, 'prices are coming')
+        // console.log(this.state.packages, 'prices are coming', this.props.packages)
         return (
             <div>
                 <div>
@@ -640,7 +641,7 @@ class Prices extends Component {
                     className="set_price_modal"
                 >
                     <ModifyPrice
-                        package_id={this.state.modify_package_id}
+                        package={this.state.modify_package}
                         isModify={this.state.isModify}
                         translation={this.props.translation}
                         handleCancel={this.handleCancel}
@@ -670,7 +671,7 @@ function mapDispatchToProps(dispatch) {
 
 
 var mapStateToProps = ({ account, auth, settings }, otherprops) => {
-    // console.log(account.packages, ' PACKAGES')
+    // console.log(account.packages, ' authUser props are')
     return {
         auth: auth.authUser,
         prices: account.prices,

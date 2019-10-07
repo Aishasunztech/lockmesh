@@ -12,6 +12,9 @@ export default class SimTabContent extends Component {
                     price_for={this.props.innerTab}
                     innerTabData={this.props.innerTabData}
                     translation= {this.props.translation}
+                    restrictSubmit={this.props.restrictSubmit}
+                    submitAvailable={this.props.submitAvailable}
+                    pricesFormErrors={this.props.pricesFormErrors}
                 />
             </div>
         )

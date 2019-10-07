@@ -82,6 +82,7 @@ export default class EditDealer extends Component {
                         hideModal={this.handleCancel}
                         editDeviceFunc={this.state.func}
                         handleCancel={this.handleCancel}
+                        history={this.props.history}
                     // translation={this.props.translation}
                     />
 

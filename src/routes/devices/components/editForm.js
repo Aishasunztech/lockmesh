@@ -292,17 +292,19 @@ class EditDevice extends Component {
         console.log(this.props.device);
         let creditsToRefund = 0
         let serviceRemainingDays = 0
-        await RestService.getServiceRefund(prevService.id).then((response) => {
-            if (RestService.checkAuth(response.data)) {
-                if (response.data.status) {
-                    creditsToRefund = response.data.creditsToRefund
-                    serviceRemainingDays = response.data.serviceRemainingDays
+        if (prevService) {
+            await RestService.getServiceRefund(prevService.id).then((response) => {
+                if (RestService.checkAuth(response.data)) {
+                    if (response.data.status) {
+                        creditsToRefund = response.data.creditsToRefund
+                        serviceRemainingDays = response.data.serviceRemainingDays
+                    }
+                    else {
+                        return false
+                    }
                 }
-                else {
-                    return false
-                }
-            }
-        });
+            });
+        }
 
         if (creditsToRefund !== null) {
             this.setState({
@@ -562,7 +564,7 @@ class EditDevice extends Component {
     render() {
         // console.log(this.props.parent_packages, this.props.product_prices)
         // console.log('check edit device: ', this.props.device);
-        // console.log('props of coming', this.props.device);
+        console.log('props of coming', this.props);
         const { visible, loading, isloading, addNewUserValue } = this.state;
         const { users_list } = this.props;
         var lastObject = users_list[0]
@@ -1065,8 +1067,8 @@ export default connect(mapStateToProps, mapDispatchToProps, null, { withRef: tru
 
 
 function showConfirmCredit(_this, values) {
-    let prevPackages = JSON.parse(_this.props.device.services.packages)
-    let prevProducts = JSON.parse(_this.props.device.services.products)
+    let prevPackages = (_this.props.device.services) ? JSON.parse(_this.props.device.services.packages) : []
+    let prevProducts = (_this.props.device.services) ? JSON.parse(_this.props.device.services.products) : []
     confirm({
         width: 900,
         title: <span style={{ fontWeight: "bold" }}>Do You Really want to apply selected services on device ? </span>,

@@ -30,13 +30,15 @@ export default class PricingModal extends Component {
             [chat]: {},
             [pgp]: {},
             [vpn]: {},
-            pkg_features: pkg_features,
+            pkg_features: JSON.parse(JSON.stringify(pkg_features)),
             outerTab: '1',
             pkgName: '',
-            pkgTerms: '',
-            pkgPrice: 0
+            pkgTerms: '1 month',
+            pkgPrice: 0,
+            submitAvailable: true,
+            pricesFormErrors: [],
+            packageFormErrors: ['pkgName', 'pkgPrice', 'pkg_features'],
         }
-
     }
 
     componentDidMount() {
@@ -47,28 +49,59 @@ export default class PricingModal extends Component {
 
     }
 
+
+    restrictPackageSubmit = (available, item) => {
+        if (!available) {
+            if (!this.state.packageFormErrors.includes(item)) {
+                this.state.packageFormErrors.push(item)
+            }
+        } else {
+            let index = this.state.packageFormErrors.indexOf(item);
+            if (index > -1) {
+                this.state.packageFormErrors.splice(index, 1)
+            }
+        }
+        this.setState({
+            packageFormErrors: this.state.packageFormErrors
+        })
+    }
+
     handleSubmit = () => {
 
         if (this.state.outerTab === '1') {
-            let data = this.props.prices
-            // console.log(this.props.whitelabel_id)
-            console.log(this.props.prices, 'prices are to save')
-            this.props.saveIDPrices({ data: data, dealer_id: this.props.dealer_id })
-            this.props.showPricingModal(false);
-            this.setState({
-                [sim]: {},
-                [chat]: {},
-                [pgp]: {},
-                [vpn]: {},
-                innerTab: sim
-            })
-        } else if (this.state.outerTab === '2') {
-            // console.log('ref is hte ', this.form);
-            // this.form.props.form.validateFields((err, values) => {
-            // if (!err) {
-            // console.log('no error found', values);
+            let data = this.props.prices;
+            let errors = 0;
+            for (let key in data) {
+                Object.values(data[key]).map(value => {
 
-            if (this.state.pkg_features && this.state.pkgName && this.state.pkgTerms && this.state.pkgName !== '' && this.state.pkgTerms !== '') {
+                    if (value < 1) {
+                        errors++;
+                    }
+                })
+                if (Object.values(data[key]).length < 4) {
+                    errors++;
+                }
+            }
+            // console.log(errors, 'errors are')
+
+            if (errors === 0) {
+                this.props.saveIDPrices({ data: data, dealer_id: this.props.dealer_id })
+                this.props.showPricingModal(false);
+                this.setState({
+                    [sim]: {},
+                    [chat]: {},
+                    [pgp]: {},
+                    [vpn]: {},
+                    innerTab: sim,
+                    outerTab: '1',
+                    submitAvailable: true
+                })
+            }
+        } else if (this.state.outerTab === '2') {
+
+            var isnum = /^\d+$/.test(this.state.pkgPrice);
+            // console.log(isnum, 'name', this.state.pkgName, 'term', this.state.pkgTerms, 'list of error', this.state.packageFormErrors)
+            if (this.state.packageFormErrors && !this.state.packageFormErrors.length && isnum && this.state.pkgPrice > 0 && this.state.pkg_features && this.state.pkgName && this.state.pkgTerms && this.state.pkgName !== '' && this.state.pkgTerms !== '') {
                 let pkgName = this.state.pkgName;
                 let pkgTerm = this.state.pkgTerms;
                 let pkgPrice = this.state.pkgPrice;
@@ -89,11 +122,49 @@ export default class PricingModal extends Component {
 
     setPkgDetail = (value, field, is_pkg_feature = false) => {
         if (is_pkg_feature) {
-            // console.log(this.state.pkg_features, 'pkg features')
-            this.state.pkg_features[field] = value
+            this.state.pkg_features[field] = value;
+            // let arr = Object.values(this.state.pkg_features);
+            // console.log(arr, 'arr', this.state.pkg_features);
+            // arr.filter(item => item !== false)
+            console.log('arr', this.state.packageFormErrors);
+
+            if (!value) {
+                let arr = Object.values(this.state.pkg_features);
+                console.log(arr, 'arr', arr.includes(true));
+                console.log(this.state.packageFormErrors, 'error 1')
+                if (!arr.includes(true)) {
+                    // console.log('object includes', arr)
+                    this.restrictPackageSubmit(false, 'pkg_features');
+                    console.log(this.state.packageFormErrors, 'error')
+                } else {
+                    this.restrictPackageSubmit(true, 'pkg_features')
+                }
+                console.log(this.state.packageFormErrors, 'error 2')
+
+            } else {
+                this.restrictPackageSubmit(true, 'pkg_features')
+            }
+
         } else {
             this.state[field] = value
         }
+    }
+
+    restrictSubmit = (available, item) => {
+        if (!available) {
+            if (!this.state.pricesFormErrors.includes(item)) {
+                this.state.pricesFormErrors.push(item)
+            }
+        } else {
+            let index = this.state.pricesFormErrors.indexOf(item);
+            if (index > -1) {
+                this.state.pricesFormErrors.splice(index, 1)
+            }
+        }
+        this.setState({
+            pricesFormErrors: this.state.pricesFormErrors,
+            submitAvailable: this.state.pricesFormErrors.length ? false : true
+        })
     }
 
     setPrice = (price, field, price_for) => {
@@ -101,7 +172,6 @@ export default class PricingModal extends Component {
         if (price >= 0 || price == '') {
             this.state[price_for][field] = price
         }
-        console.log('price', price, 'field', field, 'price_for', price_for)
     }
 
     innerTabChanged = (e) => {
@@ -121,8 +191,20 @@ export default class PricingModal extends Component {
                 visible={this.props.pricing_modal}
                 onOk={() => { this.handleSubmit() }}
                 okText={convertToLang(this.props.translation[Button_Save], "Save")}
-                okButtonProps={{ disabled: this.state.outerTab === '1' ? !this.props.isPriceChanged : false }}
-                onCancel={() => { this.props.showPricingModal(false); this.props.resetPrice(); this.setState({ outerTab: '1' }) }}
+                okButtonProps={{ disabled: this.state.outerTab == '1' ? (!this.props.isPriceChanged || !this.state.submitAvailable) ? true : false : this.state.packageFormErrors && this.state.packageFormErrors.length ? true : false }}
+                onCancel={() => {
+                    this.props.showPricingModal(false);
+                    this.props.resetPrice();
+                    this.setState({
+                        outerTab: '1',
+                        pkgPrice: 0,
+                        pkg_features: JSON.parse(JSON.stringify(pkg_features)),
+                        pkgTerms: '1 month',
+                        pkgName: '',
+                        submitAvailable: true,
+                        packageFormErrors: ['pkgName', 'pkgPrice', 'pkg_features']
+                    })
+                }}
                 // footer={null}
                 width='650px'
                 className="set_price_modal"
@@ -138,6 +220,9 @@ export default class PricingModal extends Component {
                             setPrice={this.props.setPrice}
                             prices={this.props.prices}
                             translation={this.props.translation}
+                            restrictSubmit={this.restrictSubmit}
+                            submitAvailable={this.state.submitAvailable}
+                            pricesFormErrors={this.state.pricesFormErrors}
                         />
                     </TabPane>
                     <TabPane tab={convertToLang(this.props.translation[Tab_SET_PACKAGES_PRICES], "Set Packages Price")} key="2">
@@ -146,6 +231,7 @@ export default class PricingModal extends Component {
                             setPkgDetail={this.setPkgDetail}
                             wrappedComponentRef={(form) => this.form = form}
                             translation={this.props.translation}
+                            restrictPackageSubmit={this.restrictPackageSubmit}
                         />
                     </TabPane>
                 </Tabs>
@@ -228,10 +314,11 @@ function showConfirm(_this, data) {
             _this.props.showPricingModal(false);
             _this.setState({
                 pkgPrice: 0,
-                pkg_features: pkg_features,
-                pkgTerm: '',
+                pkg_features: JSON.parse(JSON.stringify(pkg_features)),
+                pkgTerms: '1 month',
                 pkgName: '',
-                outerTab: '1'
+                outerTab: '1',
+                packageFormErrors: ['pkgName', 'pkgPrice', 'pkg_features']
             })
         },
         onCancel() {

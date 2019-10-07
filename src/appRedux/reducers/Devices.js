@@ -248,6 +248,7 @@ export default (state = initialState, action) => {
                 if (action.payload.type === 'pre-active') {
                     type = DEVICE_PRE_ACTIVATION
                 }
+                console.log(action.response.data);
                 for (let id of action.response.data) {
                     let objIndex = state.devices.findIndex((obj => obj.id === id && obj.finalStatus == type));
                     state.devices.splice(objIndex, 1);
@@ -307,7 +308,7 @@ export default (state = initialState, action) => {
             }
 
         case ADD_DEVICE:
-            
+
             var filteredNewDevices = state.newDevices;
             if (action.response.status) {
                 state.devices.unshift(action.response.data[0])
@@ -457,7 +458,7 @@ export default (state = initialState, action) => {
         }
 
         case GET_PARENT_PACKAGES:
-            
+
 
             return {
                 ...state,

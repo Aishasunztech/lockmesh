@@ -708,9 +708,11 @@ class DevicesList extends Component {
                     getSimIDs={this.props.getSimIDs}
                     getChatIDs={this.props.getChatIDs}
                     getPgpEmails={this.props.getPgpEmails}
+                    history={this.props.history}
                 />
                 <AddDevice ref="add_device"
                     translation={this.props.translation}
+                    history={this.props.history}
                 />
             </div >
 

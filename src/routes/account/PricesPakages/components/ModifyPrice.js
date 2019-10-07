@@ -20,25 +20,27 @@ class PackagePricingForm extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
-            console.log(this.props.package_id);
-            if (this.props.package_id) {
-                this.props.modifyPackage(this.props.package_id, values.pkgPrice, this.props.isModify);
-                this.props.handleCancel()
+            if (!err) {
+                console.log(this.props.package.id);
+                if (this.props.package.id) {
+                    this.props.modifyPackage(this.props.package.id, values.pkgPrice, this.props.isModify);
+                    this.props.handleCancel()
+                }
             }
 
         })
     }
 
-    setPrice = (fieldName) => {
-        let value = this.props.form.getFieldValue(fieldName)
-        if (fieldName) {
-            if (fieldName === 'pkgPrice' && value > 0) {
-                this.setState({
-                    pkgPrice: value
-                })
-            }
-        }
-    }
+    // setPrice = (fieldName) => {
+    //     let value = this.props.form.getFieldValue(fieldName)
+    //     if (fieldName) {
+    //         if (fieldName === 'pkgPrice' && value > 0) {
+    //             this.setState({
+    //                 pkgPrice: value
+    //             })
+    //         }
+    //     }
+    // }
 
 
 
@@ -46,28 +48,26 @@ class PackagePricingForm extends Component {
         const { getFieldDecorator } = this.props.form;
         return (
             <Form onSubmit={this.handleSubmit} >
-                <Row>
-                    <Col span={13}>
-                        <Form.Item label={convertToLang(this.props.translation[PACKAGE_PRICE], "PACKAGE PRICE")} labelCol={{ span: 11 }}
-                            wrapperCol={{ span: 13 }}>
-                            {getFieldDecorator('pkgPrice', {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: 'Please Input Package Price',
-                                    },
-                                ],
-                            })(<Input type='number' min={0} />)}
+                <Form.Item label={convertToLang(this.props.translation[PACKAGE_PRICE], "PACKAGE PRICE")} labelCol={{ span: 8 }}
+                    wrapperCol={{ span: 14 }}>
+                    {getFieldDecorator('pkgPrice', {
+                        initialValue: this.props.package.pkg_price,
+                        rules: [
+                            {
+                                required: true,
+                                message: 'Please Input Package Price',
+                            },
+                        ],
+                    })(<Input type='number' min={0} />)}
 
-                        </Form.Item>
-                    </Col>
-                    <Col span={4}>
+                </Form.Item>
+                {/* <Col span={4}>
                         <Button type="primary" onClick={() => this.setPrice('pkgPrice')} > {convertToLang(this.props.translation[Button_SET], "SET")} </Button>
-                    </Col>
-                    <Col span={7}>
+                    </Col> */}
+                {/* <Col span={7}>
                         <h4 className='priceText'>Price: ${this.state.pkgPrice}</h4>
-                    </Col>
-                </Row>
+                    </Col> */}
+                {/* </Row> */}
 
                 <Form.Item className="edit_ftr_btn"
                     wrapperCol={{
@@ -79,7 +79,7 @@ class PackagePricingForm extends Component {
                     <Button type="primary" htmlType="submit">{convertToLang(this.props.translation[Button_Save], "Save")}</Button>
                 </Form.Item>
 
-            </Form>
+            </Form >
         )
     }
 }
