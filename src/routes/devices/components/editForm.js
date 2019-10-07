@@ -587,14 +587,14 @@ class EditDevice extends Component {
                         )}
                     </Form.Item>
 
-                    {(isloading ?
+                    {/* {(isloading ?
 
                         <div className="addUserSpin">
                             <Spin />
                         </div>
                         :
                         // (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? null :
-                        <Fragment>
+                        <Fragment> */}
                             {/* <Form.Item
                                 label={convertToLang(this.props.translation[USER_ID], "USER ID")}
                                 labelCol={{ span: 8, xs: 24, md: 8, sm: 24 }}
@@ -636,7 +636,7 @@ class EditDevice extends Component {
                                         })}
                                     </Select>
                                 )}
-                                {/* {(this.props.user.type === ADMIN || (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1')) ? null :
+                                 {(this.props.user.type === ADMIN || (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1')) ? null :
                                     <Button
                                         className="add_user_btn"
                                         type="primary"
@@ -644,12 +644,12 @@ class EditDevice extends Component {
                                     >
                                         {convertToLang(this.props.translation[Button_Add_User], "Add User")}
                                     </Button>
-                                } */}
+                                } 
 
                             </Form.Item> */}
 
-                        </Fragment>
-                    )}
+                        {/* </Fragment>
+                    )} */}
                     < Form.Item style={{ marginBottom: 0 }}
                     >
                         {this.props.form.getFieldDecorator('dealer_id', {
