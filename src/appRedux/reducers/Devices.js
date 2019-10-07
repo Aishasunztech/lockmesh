@@ -23,7 +23,10 @@ import {
     GET_PARENT_PACKAGES,
     GET_PRODUCT_PRICES,
     UNLINK_DEVICE,
-    ADD_DEVICE
+    ADD_DEVICE,
+    BULK_DEVICES_LIST,
+    TRANSFER_DEVICE,
+    FLAG_DEVICE
 } from "../../constants/ActionTypes";
 
 // import { convertToLang } from '../../routes/utils/commonUtils';
@@ -73,6 +76,9 @@ const error = Modal.error
 
 const initialState = {
     devices: [],
+    bulkDevices: [],
+    // allDealers: [],
+    // allUsers: [],
     msg: "",
     showMsg: false,
     isloading: true,
@@ -140,6 +146,20 @@ export default (state = initialState, action) => {
                 devices: action.payload,
             }
 
+        case FLAG_DEVICE: {
+            if (action.response.status) {
+                let objIndex = state.devices.findIndex((obj => obj.device_id === action.payload.device.device_id));
+                if (objIndex !== -1) {
+                    state.devices[objIndex].flagged = action.payload.device.flagged;
+                    state.devices[objIndex].finalStatus = action.payload.device.finalStatus;
+                }
+            }
+            return {
+                ...state,
+                devices: [...state.devices]
+            }
+        }
+
         case UNFLAG_DEVICE: {
             if (action.response.status) {
                 // 
@@ -148,10 +168,68 @@ export default (state = initialState, action) => {
                     state.devices[objIndex].flagged = 'Not flagged';
                     state.devices[objIndex].finalStatus = action.payload.device.finalStatus;
                 }
-                return {
-                    ...state,
-                    devices: [...state.devices]
+            }
+            return {
+                ...state,
+                devices: [...state.devices]
+            }
+        }
+
+        case UNLINK_DEVICE: {
+            // console.log("UNLINK_DEVICE reducer:: ", action.payload)
+            let devices = state.devices;
+
+            if (action.response.status) {
+                success({
+                    title: action.response.msg,
+                });
+
+                let objIndex = state.devices.findIndex((obj => obj.device_id === action.payload.device_id));
+                // console.log("objIndex ", objIndex)
+                if (objIndex !== -1) {
+                    state.devices[objIndex].unlink_status = 1;
+                    state.devices[objIndex].finalStatus = "Unlinked";
                 }
+
+                // if (action.isTransferred) {
+                //     devices = state.devices.filter((obj => obj.device_id !== action.payload.device_id));
+                // }
+                // console.log("state.devices", state.devices)
+            } else {
+                error({
+                    title: action.response.msg,
+                });
+            }
+            // console.log('unlink called');
+            return {
+                ...state,
+                isLoading: false,
+                devices: [...state.devices]
+            }
+        }
+
+        case TRANSFER_DEVICE: {
+
+            // console.log('check devices', state.devices)
+            if (action.response.status) {
+                success({
+                    title: action.response.msg,
+                });
+                let objIndex = state.devices.findIndex((obj => obj.device_id === action.payload.device_id));
+                if (objIndex !== -1) {
+                    state.devices[objIndex].finalStatus = 'Transfered';
+                    state.devices[objIndex].transfer_status = 1;
+                }
+            } else {
+                error({
+                    title: action.response.msg,
+                });
+            }
+            // console.log('unlink called');
+            return {
+                ...state,
+                isLoading: false,
+                devices: [...state.devices]
             }
         }
 

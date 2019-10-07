@@ -93,9 +93,6 @@ class PasswordModal extends Component {
                     this.refs.pswdForm.resetFields()
                 }
                 }
-                // okText="Push Apps"
-                okText={convertToLang(this.props.translation[PUSH_APP_TEXT], "PUSH APP")}
-                cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
             >
                 <PasswordForm
                     checkPass={this.props.checkPass}

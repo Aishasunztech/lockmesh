@@ -17,7 +17,8 @@ import {
     GET_PRODUCT_PRICES,
     USER_CREDITS,
     TRANSFER_DEVICE,
-    ADD_DEVICE
+    ADD_DEVICE,
+    BULK_DEVICES_LIST
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -118,8 +119,8 @@ export function deleteUnlinkDevice(action, devices) {
 
 export function suspendDevice(device) {
 
+    console.log("suspendDevice action file =========> ", device);
     return (dispatch) => {
-        // 
 
         RestService.suspendDevice(device.usr_device_id).then((response) => {
 
@@ -426,3 +427,80 @@ export const getProductPrices = () => {
 
     }
 }
+
+// export function getBulkDevicesList(data) {
+//     console.log('at action file ', data)
+
+//     return (dispatch) => {
+//         dispatch({
+//             type: LOADING,
+//             isloading: true
+//         });
+//         RestService.getBulkDevicesList(data).then((response) => {
+//             if (RestService.checkAuth(response.data)) {
+//                 if (response.data.status) {
+//                     console.log('at action file on response')
+//                     dispatch({
+//                         type: BULK_DEVICES_LIST,
+//                         payload: response.data.data,
+//                         response: response.data,
+
+//                     });
+//                 }
+//             } else {
+//                 dispatch({
+//                     type: INVALID_TOKEN
+//                 });
+//             }
+//         })
+
+//     };
+// }
+
+// export function getBulkDealers(data) {
+
+//     return (dispatch) => {
+//         RestService.getBulkDealers(data).then((response) => {
+//             if (RestService.checkAuth(response.data)) {
+//                 if (response.data.status) {
+
+//                     dispatch({
+//                         type: BULK_DEALERS_LIST,
+//                         payload: response.data.data,
+//                         response: response.data,
+
+//                     });
+//                 }
+//             } else {
+//                 dispatch({
+//                     type: INVALID_TOKEN
+//                 });
+//             }
+//         })
+
+//     };
+// }
+
+// export function getBulkUsers(data) {
+
+//     return (dispatch) => {
+//         RestService.getBulkUsers(data).then((response) => {
+//             if (RestService.checkAuth(response.data)) {
+//                 if (response.data.status) {
+
+//                     dispatch({
+//                         type: BULK_USERS_LIST,
+//                         payload: response.data.data,
+//                         response: response.data,
+
+//                     });
+//                 }
+//             } else {
+//                 dispatch({
+//                     type: INVALID_TOKEN
+//                 });
+//             }
+//         })
+
+//     };
+// }

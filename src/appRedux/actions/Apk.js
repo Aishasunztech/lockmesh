@@ -9,11 +9,15 @@ import {
     RESET_UPLOAD_FORM,
     // CHECK_APK_NAME,
     AUTHENTICATE_UPDATE_USER,
-    RESET_AUTH_UPDATE
+    RESET_AUTH_UPDATE,
+    CHECKPASS,
+    CHECK_BULK_PASS,
+    RESET_BULK_FLAG
 } from "../../constants/ActionTypes"
 // import AuthFailed from './Auth';
 
 import RestService from '../services/RestServices';
+import { history } from '../store/index'
 
 export function getApkList() {
     return (dispatch) => {
@@ -214,5 +218,36 @@ export function resetAuthUpdate() {
         dispatch({
             type: RESET_AUTH_UPDATE,
         });
+    }
+}
+export const checkPass = (user) => {
+    // console.log(user);
+    return (dispatch) => {
+        RestService.checkPass(user).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                // if (response.data.password_matched) {
+                //     history.push('/bulk-activities')
+                // }
+                dispatch({
+                    type: CHECK_BULK_PASS,
+                    payload: {
+                        PasswordMatch: response.data,
+                        msg: response.data.msg
+                    }
+                })
+            }
+            else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+export const resetBulkFlag = () => {
+    return (dispatch) => {
+        dispatch({
+            type: RESET_BULK_FLAG
+        })
     }
 }

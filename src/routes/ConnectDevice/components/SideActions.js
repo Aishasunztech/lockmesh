@@ -564,7 +564,7 @@ class SideActions extends Component {
         // console.log('at transferDeviceProfile')
         let _this = this;
         confirm({ // Are You Sure, You want to Transfer Flagged Device to this Requested Device ?
-            content: `Are you sure you want to transfer, Flagged ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
+            content: `Are you sure you want to Transfer, from ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
             onOk() {
                 // console.log('OK');
                 _this.props.transferDeviceProfile(obj);
@@ -728,7 +728,7 @@ class SideActions extends Component {
         // console.log('-----', this.props.device_details.finalStatus == "Transfered")
         // transfer_user_status
         if (this.props.device_details.finalStatus == "Transfered") {
-            showConfirm(this.props.device, this.props.unlinkDevice, this, convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_UNLINK_THE_DEVICE], "Do you really want to unlink the device "), 'unlink')
+            showConfirm(this.props.device, this.props.unlinkDevice, this, convertToLang(this.props.translation[""], "Do you really want to unlink the transfered device "), 'unlink', true)
         } else {
             if (flagged === 'Unflag') {
                 showConfirm(this.props.device, this.props.unflagged, this, convertToLang(this.props.translation[DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE], 'Do you really want to unflag the device '), 'flagged')
@@ -931,11 +931,11 @@ class SideActions extends Component {
                                     {/* <IntlMessages id="button.Activity" /> */}
                                     {convertToLang(this.props.translation[Button_Activity], "Activity")}
                                 </Button>
-                                <Tooltip placement="left" title="Coming Soon">
+                                {/* <Tooltip placement="left" title="Coming Soon"> */}
                                 <Button
                                     type="default"
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
-                                    // onClick={this.handleSimModule}
+                                    onClick={this.handleSimModule}
                                     disabled={(this.props.device_details.finalStatus == "Transfered") ? true : false}
                                 >
                                     <Icon type="file" />
@@ -943,14 +943,14 @@ class SideActions extends Component {
                                     {/* <IntlMessages id="button.SIM" /> */}
                                     {convertToLang(this.props.translation[Button_SIM], "SIM")}
                                 </Button>
-                                </Tooltip>
+                                {/* </Tooltip> */}
                             </Col>
                         </Row>
                     </Card>
                     <Card>
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={12} className="gutter-row" justify="center" >
-                                <Tooltip title="Coming Soon">
+                                {/* <Tooltip title="Coming Soon"> */}
                                     {/* <Button
                                     type="default"
                                     onClick={() => this.handleTransfer()}
@@ -962,9 +962,9 @@ class SideActions extends Component {
 
                                     {/* <Button type="default" onClick={() => { if (flagged === "Unflag") { this.handleTransfer(this.props.device_id) } else { Modal.error({ title: 'Plaese Flag the device first to Transfer' }); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button> */}
                                     <Button type="default"
-                                        // onClick={() => this.handleTransferHistoryModal(true)}
+                                        onClick={() => this.handleTransferHistoryModal(true)}
                                         style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button>
-                                </Tooltip>
+                                {/* </Tooltip> */}
                                 <Button type={button_type}
                                     onClick={() => (device_status === "Unsuspend") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
                                     style={{ width: "100%", marginBottom: 16, fontSize: "12px" }}
@@ -1398,7 +1398,7 @@ var mapStateToProps = ({ device_details, auth, settings, devices, sidebar }, oth
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(SideActions);
-function showConfirm(device, action, _this, msg, type) {
+function showConfirm(device, action, _this, msg, type, transfered = false) {
     confirm({
         title: msg + device.device_id,
         onOk() {
@@ -1408,20 +1408,24 @@ function showConfirm(device, action, _this, msg, type) {
                 setTimeout(Math.random() > 0.5 ? resolve : reject);
                 if (type === 'wipe') {
                     action(device)
-                } else if (type === 'unlink') {
+                } 
+                else if (type === 'unlink') {
                     // console.log('unlink check =========> ', device)
-                    action(device);
-                }
-                if (type === 'flagged') {
+                    action(device, transfered);
+
+                    _this.props.history.goBack();
+                    _this.props.getDevicesList();
+                } 
+                else if (type === 'flagged') {
                     action(device.device_id)
                     // _this.props.activateDevice(device)
                 }
-                if (type === 'unlink') {
-                    _this.props.history.goBack();
-                    _this.props.getDevicesList();
-                } else {
-                    // _this.props.refreshDevice(device.device_id);
-                }
+                // if (type === 'unlink') {
+                //     _this.props.history.goBack();
+                //     _this.props.getDevicesList();
+                // } else {
+                //     // _this.props.refreshDevice(device.device_id);
+                // }
                 //  message.success('Action Done Susscefully ');
 
             }).catch(() => console.log(''));
