@@ -89,6 +89,7 @@ export function deleteUnlinkDevice(action, devices) {
         RestService.deleteUnlinkDevice(action, devices).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 // 
+                console.log(action);
                 dispatch({
                     type: DELETE_UNLINK_DEVICE,
                     response: response.data,
