@@ -326,9 +326,10 @@ export default (state = initialState, action) => {
                 if (action.payload.type === 'pre-active') {
                     type = DEVICE_PRE_ACTIVATION
                 }
-                console.log(action.response.data);
+                // console.log(action.response.data, type, action);
                 for (let id of action.response.data) {
                     let objIndex = state.devices.findIndex((obj => obj.id === id && obj.finalStatus == type));
+                    console.log(objIndex);
                     state.devices.splice(objIndex, 1);
                 }
                 success({
