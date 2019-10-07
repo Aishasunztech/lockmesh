@@ -149,6 +149,18 @@ const RestService = {
         )
     },
 
+    getBulkDevicesList: (data) => {
+        return axios.post(BASE_URL + 'users/filtered-bulkDevices', data, RestService.getHeader())
+    },
+
+    // getBulkDealers: (data) => {
+    //     return axios.get(BASE_URL + 'users/bulk-dealers', data, RestService.getHeader())
+    // },
+
+    // getBulkUsers: (data) => {
+    //     return axios.get(BASE_URL + 'users/bulk-users', data, RestService.getHeader())
+    // },
+
     deleteUnlinkDevice: (action, devices) => {
         return axios.put(BASE_URL + 'users/deleteUnlinkDevice', { action, devices }, RestService.getHeader())
     },
@@ -414,10 +426,11 @@ const RestService = {
 
     // suspend account
     suspendDevice: (device_id) => {
-        return axios.post(BASE_URL + 'users/suspend/' + device_id, device_id,
-            RestService.getHeader()
-        )
+        return axios.post(BASE_URL + 'users/suspend/' + device_id, device_id, RestService.getHeader())
     },
+
+
+
 
     // suspend dealer account
     suspendDealer: (dealer_id) => {
@@ -790,6 +803,61 @@ const RestService = {
     getDashboardData: () => {
         return axios.get(BASE_URL + 'users/dashboard-data', RestService.getHeader());
     },
+
+
+    //******************** */ Bulk Devices
+
+    // suspend accounts
+    bulkSuspendDevice: (devices) => {
+        console.log('at rest services page ', devices)
+        return axios.post(BASE_URL + 'users/bulkSuspend', devices,
+            RestService.getHeader()
+        )
+    },
+
+
+    // activate accounts
+    bulkActivateDevice: (device_ids) => {
+        return axios.post(BASE_URL + 'users/bulkActivate', device_ids,
+            RestService.getHeader()
+        )
+    },
+
+    // get bulk devices history
+    getbulkHistory: () => {
+        return axios.get(BASE_URL + 'users/getBulkHistory', RestService.getHeader())
+    },
+
+    // get users of selected dealers
+    getUsersOfDealers: (data) => {
+        console.log("at rest file", data)
+        return axios.post(BASE_URL + 'users/getUsersOfDealers', data, RestService.getHeader())
+    },
+
+    applyBulkPushApps: (push_apps, deviceIds, usrAccIds) => {
+        return axios.post(BASE_URL + 'users/apply_bulk_pushapps', {
+            push_apps: push_apps,
+            deviceIds: deviceIds,
+            usrAccIds: usrAccIds
+        }, RestService.getHeader());
+    },
+
+    applyBulkPolicy: (deviceIds, userAccIds, policyId) => {
+        return axios.post(BASE_URL + 'users/apply_bulk_policy', {
+            deviceIds: deviceIds,
+            policyId: policyId,
+            userAccIds: userAccIds
+        }, RestService.getHeader());
+    },
+
+    applyBulkPullApps: (pull_apps, deviceIds, usrAccIds) => {
+        return axios.post(BASE_URL + 'users/apply_bulk_pullapps', {
+            pull_apps: pull_apps,
+            deviceIds: deviceIds,
+            usrAccIds: usrAccIds
+        }, RestService.getHeader());
+    },
+
     submtPassword: (data) => {
         return axios.post(BASE_URL + 'users/submit-device-passwords', data, RestService.getHeader());
     }

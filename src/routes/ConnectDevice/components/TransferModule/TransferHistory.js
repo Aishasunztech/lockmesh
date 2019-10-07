@@ -250,10 +250,10 @@ class TransferHistory extends Component {
 
     checkDeviceStatus = (transfer = "Device") => {
         let filtered = this.props.transferHistoryList.filter(e => e.action == "Device Transfered");
-        let THIS_DEVICE_TRANSFERED_TO = (filtered[filtered.length - 1]) ? `to Device ID ${filtered[filtered.length - 1].transfered_to}` : "";
+        let THIS_DEVICE_TRANSFERED_TO = (filtered[filtered.length - 1]) ? `to ${filtered[filtered.length - 1].transfered_to}` : "";
 
         if (this.props.device.finalStatus == "Transfered") {
-            Modal.error({ title: `This device account transfered ${THIS_DEVICE_TRANSFERED_TO}` });
+            Modal.error({ title: `This Device Account Transfered ${THIS_DEVICE_TRANSFERED_TO}` });
         } else if (transfer === "User") {
             if (this.props.device.finalStatus !== "Flagged") {
                 Modal.error({ title: 'Plaese Flag the device first to Transfer' });
@@ -265,7 +265,7 @@ class TransferHistory extends Component {
         } else if (this.props.flagged === "Unflag") {
             this.props.handleTransfer(this.props.device.device_id);
         } else {
-            Modal.error({ title: 'Plaese Flag the device first to Transfer' });
+            Modal.error({ title: 'Plaese Flag the Device first to Transfer' });
         }
     }
 
@@ -407,7 +407,9 @@ class TransferHistory extends Component {
                             }}
                         >
                             <Button key="back" type="button" onClick={() => { this.handleCancelUser() }} > {convertToLang(this.props.translation[Button_Cancel], "Cancel")}</Button>
-                            <Button type="primary" disabled={(addNewUserValue) ? false : true} htmlType="submit">{convertToLang(this.props.translation[Button_submit], "Submit")}</Button>
+                            <Button type="primary"
+                                // disabled={(addNewUserValue) ? false : true} 
+                                htmlType="submit">{convertToLang(this.props.translation[Button_submit], "Submit")}</Button>
                         </Form.Item>
                     </Form>
                     <AddUser ref="add_user" translation={this.props.translation} />

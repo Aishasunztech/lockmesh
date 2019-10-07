@@ -342,7 +342,7 @@ class Apk extends Component {
     }
 
     render() {
-        // console.log(this.state.columns);
+
         if (this.props.user.type === 'dealer') {
             this.state.columns[1].className = 'hide';
         } else {

@@ -361,7 +361,8 @@ class Devices extends Component {
                 })
                 break;
             case DEVICE_TRANSFERED:
-                devices = this.state.transferredDevices;
+                // devices = this.state.transferredDevices;
+                devices = this.filterList(DEVICE_TRANSFERED, this.props.devices);
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
@@ -371,7 +372,8 @@ class Devices extends Component {
                 })
                 break;
             case DEVICE_FLAGGED:
-                devices = this.state.flaggedDevices;
+                // devices = this.state.flaggedDevices;
+                devices = this.filterList(DEVICE_FLAGGED, this.props.devices);
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
@@ -673,7 +675,8 @@ class Devices extends Component {
                 })
                 break;
             case "8":
-                devices = this.state.transferredDevices
+                // devices = this.state.transferredDevices
+                devices = this.filterList(DEVICE_TRANSFERED, this.props.devices);
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
@@ -683,7 +686,8 @@ class Devices extends Component {
                 })
                 break;
             case "10":
-                devices = this.state.flaggedDevices
+                // devices = this.state.flaggedDevices
+                devices = this.filterList(DEVICE_FLAGGED, this.props.devices);
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
