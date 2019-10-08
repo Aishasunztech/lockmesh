@@ -802,14 +802,12 @@ export default class Tab extends Component {
     componentDidUpdate(prevProps) {
 
         if (this.props !== prevProps) {
-
             this.setState({
                 devices: this.props.devices,
                 columns: this.props.columns,
                 tabselect: this.props.tabselect,
                 selectedOptions: this.props.selectedOptions
             })
-            // this.refs.devciesList.handlePagination(this.state.tabselect);
         }
     }
 
