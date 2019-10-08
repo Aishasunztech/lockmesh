@@ -9,7 +9,8 @@ import { PREVIOUSLY_USED_SIMS, ICC_ID, USER_ID, USER_ID_IS_REQUIRED, SELECT_USER
 import { Button_Add_User, Button_Ok, Button_Cancel, Button_submit } from '../../../../constants/ButtonConstants';
 import {
     addUser,
-    getUserList
+    getUserList,
+    getDeaerUsers
 } from "../../../../appRedux/actions/Users";
 
 import {
@@ -119,7 +120,8 @@ class TransferHistory extends Component {
     }
 
     componentDidMount() {
-        this.props.getUserList();
+        // this.props.getUserList();
+        this.props.getDeaerUsers(this.props.device.dealer_id);
         if (this.props.device.device_id) {
             this.props.transferHistory(this.props.device.device_id);
         }
@@ -249,17 +251,20 @@ class TransferHistory extends Component {
     }
 
     checkDeviceStatus = (transfer = "Device") => {
+
+        this.props.getDeaerUsers(this.props.device.dealer_id);
+
         let filtered = this.props.transferHistoryList.filter(e => e.action == "Device Transfered");
         let THIS_DEVICE_TRANSFERED_TO = (filtered[filtered.length - 1]) ? `to ${filtered[filtered.length - 1].transfered_to}` : "";
 
         if (this.props.device.finalStatus == "Transfered") {
             Modal.error({ title: `This Device Account Transfered ${THIS_DEVICE_TRANSFERED_TO}` });
         } else if (transfer === "User") {
-            if (this.props.device.finalStatus !== "Flagged") {
-                Modal.error({ title: 'Plaese Flag the device first to Transfer' });
-            } else {
-                this.setState({ visibleUser: true });
-            }
+            // if (this.props.device.finalStatus !== "Flagged") {
+            //     Modal.error({ title: 'Plaese Flag the device first to Transfer' });
+            // } else {
+            this.setState({ visibleUser: true });
+            // }
         } else if (this.props.user.type === ADMIN && transfer === "Device") {
             Modal.error({ title: 'Sorry, Not Allowed for Admin to Transfer the Dealer Device.' });
         } else if (this.props.flagged === "Unflag") {
@@ -274,11 +279,12 @@ class TransferHistory extends Component {
         let { isloading, users_list, device, flagged } = this.props;
         var lastObject = users_list[0];
 
+        console.log("transfer history page device dealer_id is: ", this.props.device.dealer_id)
         // console.log('users_list ', users_list[0]);
         // console.log('this.props.device.user_id ', this.props.device)
-        if (this.props.user.type === ADMIN) {
-            users_list = users_list.filter(e => e.dealer_id === this.props.device.dealer_id)
-        }
+        // if (this.props.user.type === ADMIN) {
+        //     users_list = users_list.filter(e => e.dealer_id === this.props.device.dealer_id)
+        // }
 
         return (
             <div>
@@ -423,15 +429,15 @@ class TransferHistory extends Component {
 const WrappedUserList = Form.create({ name: 'transfer-user' })(TransferHistory);
 
 var mapStateToProps = ({ users, settings, device_details }) => {
-    // console.log('transferHistoryList ', device_details.transferHistoryList)
+    console.log('transferHistoryList users.dealer_users', users.dealer_users)
 
     return {
         transferHistoryList: device_details.transferHistoryList,
         getHistory: device_details.getHistory,
-        users_list: users.users_list,
+        users_list: users.dealer_users,
         isloading: users.addUserFlag,
         translation: settings.translation
     };
 }
 
-export default connect(mapStateToProps, { getUserList, addUser, transferUser, transferHistory }, null, { withRef: true })(WrappedUserList);
+export default connect(mapStateToProps, { getDeaerUsers, getUserList, addUser, transferUser, transferHistory }, null, { withRef: true })(WrappedUserList);
