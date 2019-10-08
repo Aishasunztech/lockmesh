@@ -595,7 +595,7 @@ class EditDevice extends Component {
                         :
                         // (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? null :
                         <Fragment> */}
-                            {/* <Form.Item
+                    {/* <Form.Item
                                 label={convertToLang(this.props.translation[USER_ID], "USER ID")}
                                 labelCol={{ span: 8, xs: 24, md: 8, sm: 24 }}
                                 wrapperCol={{ span: 14, md: 14, xs: 24 }}
@@ -648,7 +648,7 @@ class EditDevice extends Component {
 
                             </Form.Item> */}
 
-                        {/* </Fragment>
+                    {/* </Fragment>
                     )} */}
                     < Form.Item style={{ marginBottom: 0 }}
                     >
@@ -1002,6 +1002,7 @@ class EditDevice extends Component {
                     title={convertToLang(this.props.translation[DUMY_TRANS_ID], "SEVCIES")}
                     maskClosable={false}
                     onOk={this.handleOk}
+                    closable={false}
                     // onCancel={this.handleCancel}
                     footer={null}
                     className="edit_form"

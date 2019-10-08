@@ -378,12 +378,12 @@ class ServicesList extends Component {
                 this.handleCancel()
             }
             else {
-                let _this = this;
+                let _this = this.props;
                 confirm({
                     title: "Your Credits are not enough to apply these services. Please select other services OR Purchase Credits.",
                     okText: "PURCHASE CREDITS",
                     onOk() {
-                        _this.props.history.push('/account')
+                        _this.history.push('/account')
                     },
                     onCancel() {
 
