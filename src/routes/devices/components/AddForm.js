@@ -343,7 +343,8 @@ class AddDevice extends Component {
                     pkg_features: item.pkg_features,
                     pkg_price: item.pkg_price,
                     pkg_dealer_type: item.dealer_type,
-                    pkg_name: item.pkg_name
+                    pkg_name: item.pkg_name,
+                    pkg_term: item.pkg_term
                 }
                 total_price = total_price + Number(item.pkg_price)
                 packagesData.push(data)
@@ -372,8 +373,9 @@ class AddDevice extends Component {
             products.map((item) => {
                 let data = {
                     id: item.id,
-                    item: item.item,
-                    price: item.unit_price
+                    price_for: item.item,
+                    unit_price: item.unit_price,
+                    price_term: item.price_term
                 }
                 total_price = total_price + Number(item.unit_price)
                 productData.push(data)
@@ -628,7 +630,7 @@ class AddDevice extends Component {
 
     render() {
         // console.log(this.props);
-        console.log('id is', this.state.products, this.state.packages);
+        // console.log('id is', this.state.products, this.state.packages);
         const { visible, loading, isloading, addNewUserValue } = this.state;
         const { users_list } = this.props;
         var lastObject = users_list[0]

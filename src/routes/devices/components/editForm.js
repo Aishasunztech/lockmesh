@@ -351,7 +351,7 @@ class EditDevice extends Component {
                 rowKey: item.id,
                 item: `Package`,
                 description: item.pkg_name,
-                term: this.state.term + " Month",
+                term: item.pkg_term,
                 unit_price: item.pkg_price,
                 quantity: (this.state.duplicate > 0) ? 1 * this.state.duplicate : 1,
                 line_total: (this.state.duplicate > 0) ? item.pkg_price * this.state.duplicate : item.pkg_price
@@ -366,7 +366,7 @@ class EditDevice extends Component {
                 rowKey: item.id,
                 item: `Product`,
                 description: item.price_for,
-                term: (this.state.term === '0') ? "TRIAL" : this.state.term + " Month",
+                term: (this.state.term === '0') ? "TRIAL" : item.price_term,
                 unit_price: item.unit_price,
                 quantity: (this.state.duplicate > 0) ? 1 * this.state.duplicate : 1,
                 line_total: (this.state.duplicate > 0) ? item.unit_price * this.state.duplicate : item.unit_price
@@ -480,6 +480,7 @@ class EditDevice extends Component {
                     id: item.id,
                     pkg_features: item.pkg_features,
                     pkg_price: item.pkg_price,
+                    pkg_dealer_type: item.dealer_type,
                     pkg_name: item.pkg_name
                 }
                 total_price = total_price + Number(item.pkg_price)
