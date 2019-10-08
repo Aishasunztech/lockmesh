@@ -2138,16 +2138,14 @@ function checkAllSims(sims) {
         } else if (sims.label === "encrypt") {
             encryptSimAll = sims.value;
         }
+    } else if (sims.length) {
+
+        let checkEnc = sims.filter(e => e.encrypt != true);
+        let checkGst = sims.filter(e => e.guest != true);
+
+        if (checkGst.length > 0) guestSimAll = 0; else guestSimAll = 1;
+        if (checkEnc.length > 0) encryptSimAll = 0; else encryptSimAll = 1;
     }
-    else
-        if (sims.length) {
-
-            let checkEnc = sims.filter(e => e.encrypt != true);
-            let checkGst = sims.filter(e => e.guest != true);
-
-            if (checkGst.length > 0) guestSimAll = 0; else guestSimAll = 1;
-            if (checkEnc.length > 0) encryptSimAll = 0; else encryptSimAll = 1;
-        }
 
     return {
         guestSimAll,

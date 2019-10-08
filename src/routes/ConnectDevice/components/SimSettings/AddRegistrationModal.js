@@ -43,11 +43,11 @@ export default class RegisterSimModal extends Component {
         if (simloading) {
             let _this = this;
             setTimeout(
-                function() {
+                function () {
                     _this.props.endLoading();
                     // console.log("call time out function")
                 }
-            , 10000)
+                , 10000)
         }
         return (
             <div>
@@ -60,16 +60,6 @@ export default class RegisterSimModal extends Component {
                     onCancel={this.handleCancel}
                     destroyOnClose={true}
                 >
-
-                    <AddRegistrationForm
-                        AddSimHandler={this.handleSubmitReg}
-                        handleCancel={this.handleCancel}
-                        translation={this.props.translation}
-                        deviceID={this.props.deviceID}
-                        device={this.props.device}
-                        total_dvc={this.props.total_dvc}
-                        ref="add_sim_reg_form"
-                    />
 
                     {(!this.props.simloading) ?
                         (this.props.unRegSims.length) ?
@@ -89,9 +79,19 @@ export default class RegisterSimModal extends Component {
                                 )
                             })
 
-                            : <div style={{ textAlign: "center" }}><hr /><h4>No have any un-register sim</h4></div>
-                        : <div style={{ textAlign: "center" }}><hr /><h4>Un-Register Sims Loading... </h4><Spin /></div>
+                            : <div style={{ textAlign: "center" }}><hr /><h4>Un-Register sims not found! </h4></div>
+                        : <div style={{ textAlign: "center" }}><hr /><h4>Loading Un-Register Sims ... </h4><Spin /></div>
                     }
+
+                    <AddRegistrationForm
+                        AddSimHandler={this.handleSubmitReg}
+                        handleCancel={this.handleCancel}
+                        translation={this.props.translation}
+                        deviceID={this.props.deviceID}
+                        device={this.props.device}
+                        total_dvc={this.props.total_dvc}
+                        ref="add_sim_reg_form"
+                    />
 
                 </Modal >
             </div>
