@@ -338,7 +338,7 @@ export default (state = initialState, action) => {
                 isloading: false,
                 device: state.device,
                 activities: state.activities,
-                pageName: NOT_AVAILABLE
+                pageName: MAIN_MENU
             }
 
         }
