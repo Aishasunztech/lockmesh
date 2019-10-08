@@ -711,6 +711,11 @@ const RestService = {
         )
     },
 
+    //GET User List against device dealer
+    userListOfDevice: (dealerId) => {
+        return axios.post(BASE_URL + 'users/userListOfDevice', { dealerId }, RestService.getHeader())
+    },
+
     writeImei(device_id, usrAccId, type, imeiNo, device) {
         return axios.post(BASE_URL + 'users/writeImei/' + device_id, { usrAccId, type, imeiNo, device }, RestService.getHeader());
     },
