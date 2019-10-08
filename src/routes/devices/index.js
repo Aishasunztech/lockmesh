@@ -403,7 +403,8 @@ class Devices extends Component {
                 })
                 break;
             case DEVICE_UNLINKED:
-                devices = this.state.unlinkedDevices;
+                // devices = this.state.unlinkedDevices;
+                devices = this.filterList(DEVICE_UNLINKED, this.props.devices);
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
@@ -645,7 +646,8 @@ class Devices extends Component {
                 })
                 break;
             case "5":
-                devices = this.state.unlinkedDevices
+                // devices = this.state.unlinkedDevices
+                devices = this.filterList(DEVICE_UNLINKED, this.props.devices);
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearch12(devices),
