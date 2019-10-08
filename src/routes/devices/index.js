@@ -792,10 +792,47 @@ class Devices extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
-            // console.log('this.props ', this.props.DisplayPages);
+            let devicesList = []
+            switch (this.state.tabselect) {
+                case '4':
+                    devicesList = this.filterList(DEVICE_ACTIVATED, this.props.devices);
+                    break;
+                case '9':
+                    devicesList = this.filterList(DEVICE_TRIAL, this.props.devices);
+                    break;
+                case '7':
+                    devicesList = this.filterList(DEVICE_SUSPENDED, this.props.devices);
+                    break;
+                case '6':
+                    devicesList = this.filterList(DEVICE_EXPIRED, this.props.devices)
+                    break;
+                case '1':
+                    devicesList = this.props.devices;
+                    break;
+                case "5":
+                    devicesList = this.filterList(DEVICE_UNLINKED, this.props.devices)
+                    break;
+                case "2":
+                    devicesList = this.filterList(DEVICE_PENDING_ACTIVATION, this.props.devices)
+                    break;
+                case "3":
+                    devicesList = this.filterList(DEVICE_PRE_ACTIVATION, this.props.devices)
+                    break;
+                case "8":
+                    // devicesList = this.state.transferredDevices
+                    devicesList = this.filterList(DEVICE_TRANSFERED, this.props.devices);
+
+                case "10":
+                    // devicesList = this.state.flaggedDevices
+                    devicesList = this.filterList(DEVICE_FLAGGED, this.props.devices);
+                    break;
+                default:
+                    devicesList = this.filterList(DEVICE_ACTIVATED, this.props.devices);
+                    break;
+            }
             this.setState({
                 translation: this.props.translation,
-                devices: this.filterList(DEVICE_ACTIVATED, this.props.devices),
+                devices: devicesList,
                 columns: this.state.columns,
                 defaultPagingValue: this.props.DisplayPages,
                 selectedOptions: this.props.selectedOptions,
@@ -809,11 +846,8 @@ class Devices extends Component {
                 unlinkedDevices: this.filterList(DEVICE_UNLINKED, this.props.devices),
                 flaggedDevices: this.filterList(DEVICE_FLAGGED, this.props.devices),
                 transferredDevices: this.filterList(DEVICE_TRANSFERED, this.props.devices),
-                // transferDevices: this.filterList(DEVICE_TRANSFERED,this.props.devices),
-
-
             })
-            this.handleChangetab(this.state.tabselect);
+            // this.handleChangetab(this.state.tabselect);
 
         }
 
