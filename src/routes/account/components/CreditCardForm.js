@@ -106,7 +106,7 @@ class CreditCardForm extends Component {
 
 
     render() {
-        
+
         return (
             <Fragment>
                 <Modal
@@ -230,11 +230,11 @@ export default CreditCardForm;
 
 function showConfirm(_this, msg, values, creditInfo) {
     confirm({
-        title: convertToLang(this.props.translation[WARNING], "WARNING!"),
+        title: convertToLang(_this.props.translation[WARNING], "WARNING!"),
         content: msg,
         // okText: "Confirm",
-        okText:  convertToLang(this.props.translation[Button_Confirm], "Confirm"),
-        cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
+        okText: convertToLang(_this.props.translation[Button_Confirm], "Confirm"),
+        cancelText: convertToLang(_this.props.translation[Button_Cancel], "Cancel"),
         onOk() {
             _this.props.purchaseCreditsFromCC(values, creditInfo)
             _this.props.cancelPurchaseModal()

@@ -43,7 +43,6 @@ export default (state = initialSidebar, action) => {
                 });
             }
 
-console.log('reducers filterddevices', filteredRequests)
             return {
                 ...state,
                 newRequests: filteredRequests,
@@ -76,6 +75,7 @@ console.log('reducers filterddevices', filteredRequests)
         }
 
         case USER_CREDITS: {
+            // console.log("REMAINING CREDITS", action.response.credits);
             return {
                 ...state,
                 user_credit: action.response.credits,

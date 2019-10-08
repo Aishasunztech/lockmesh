@@ -23,7 +23,11 @@ import {
     GET_PACKAGES,
     PURCHASE_CREDITS,
     GET_PARENT_PACKAGES,
-    RESYNC_IDS
+    PACKAGE_PERMSSION_SAVED,
+    DELETE_PACKAGE,
+    EDIT_PACKAGE,
+    RESYNC_IDS,
+    USER_CREDITS
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -398,12 +402,86 @@ export const purchaseCreditsFromCC = (cardInfo, creditInfo) => {
                     type: PURCHASE_CREDITS,
                     response: response.data
                 })
+                if (response.data.status) {
+                    dispatch({
+                        type: USER_CREDITS,
+                        response: response.data
+                    })
+                }
             } else {
                 dispatch({
                     type: INVALID_TOKEN
                 })
             }
         });
+    }
+}
+
+export function savePermission(package_id, dealers, action) {
+    // alert(package_id);
+
+    return (dispatch) => {
+        RestService.savePackagePermissions(package_id, dealers, action).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+
+                dispatch({
+                    type: PACKAGE_PERMSSION_SAVED,
+                    payload: response.data.msg,
+                    permission_count: response.data.permission_count,
+                    package_id: package_id,
+                    dealers: dealers
+                })
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+    }
+
+}
+export function deletePackage(id) {
+    // alert(package_id);
+
+    return (dispatch) => {
+        RestService.deletePackage(id).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+
+                dispatch({
+                    type: DELETE_PACKAGE,
+                    payload: response.data,
+                    package_id: id
+                })
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+    }
+}
+export function modifyPackage(id, price, isModify = false) {
+    // alert(package_id);
+
+    return (dispatch) => {
+        RestService.editPackage(id, price, isModify).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+
+                dispatch({
+                    type: EDIT_PACKAGE,
+                    payload: response.data,
+                    package_id: id,
+                    price: price
+                })
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
     }
 }
 export const resyncIds = () => {
