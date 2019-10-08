@@ -168,7 +168,7 @@ class Dealers extends Component {
         let dealers = [];
         switch (value) {
             case 'active':
-                dealers = this.filterList('active', this.props.dealers);
+                dealers = this.filterList('active', this.state.allDealers);
                 this.setState({
                     dealers: this.handleSearch12(dealers),
                     column: this.state.columns,
@@ -177,7 +177,7 @@ class Dealers extends Component {
 
                 break;
             case 'suspended':
-                dealers = this.filterList('suspended', this.props.dealers);
+                dealers = this.filterList('suspended', this.state.allDealers);
                 this.setState({
                     dealers: this.handleSearch12(dealers),
                     column: this.state.columns,
@@ -186,7 +186,7 @@ class Dealers extends Component {
                 break;
 
             case 'all':
-                dealers = this.props.dealers;
+                dealers = this.state.allDealers;
                 this.setState({
                     dealers: this.handleSearch12(dealers),
                     column: this.state.columns,
@@ -194,7 +194,7 @@ class Dealers extends Component {
                 })
                 break;
             case "unlinked":
-                dealers = this.filterList('unlinked', this.props.dealers);
+                dealers = this.filterList('unlinked', this.state.allDealers);
                 this.setState({
                     dealers: this.handleSearch12(dealers),
                     column: this.state.columns,
@@ -203,7 +203,7 @@ class Dealers extends Component {
                 break;
 
             default:
-                dealers = this.props.dealers;
+                dealers = this.state.allDealers;
                 this.setState({
                     dealers: this.handleSearch12(dealers),
                     column: this.state.columns,
@@ -295,7 +295,7 @@ class Dealers extends Component {
 
     componentDidMount() {
         const dealer_type = window.location.pathname.split("/").pop();
-        // console.log('device type', dealer_type);
+        // console.log('device type didmount', dealer_type);
         this.props.getDealerList(dealer_type);
         // this.props.getDevicesList();
         this.props.getDropdown(dealer_type);
@@ -332,9 +332,12 @@ class Dealers extends Component {
         if (this.state.dealer_type !== dealer_type) {
             this.props.getDealerList(dealer_type);
             // this.props.getDevicesList();
+            let dealers = this.props.dealers;
+           let filteredDealers = dealers.filter(item => item.type !== (this.state.dealer_type === 'dealer' ? 2 : 3))
+            // console.log(this.props.dealers, 'dealer list willRecieve')
             this.setState({
                 dealer_type: dealer_type,
-                dealers: this.props.dealers,
+                dealers: filteredDealers,
             })
             this.props.getDropdown(dealer_type);
             this.handleCheckChange(this.props.selectedOptions)
@@ -400,18 +403,36 @@ class Dealers extends Component {
 
 
         if (this.props.dealers !== prevProps.dealers) {
-            this.setState({
-                dealers: this.props.dealers
+            let dealers = JSON.parse(JSON.stringify(this.props.dealers));
+            let filteredDealers = dealers.filter(item => {
+                console.log(item.type != (window.location.pathname.split("/").pop() === 'dealer' ? '3' : '2'))
+                return item.type != (window.location.pathname.split("/").pop() === 'dealer' ? '3' : '2')
             })
+            console.log(filteredDealers, 'dealer list didupdate')
+            this.setState({
+                dealers: filteredDealers,
+            })
+            // this.setState({
+            //     dealers: this.props.dealers
+            // })
         }
         if (this.props !== prevProps) {
-            this.setState({
-                allDealers: this.props.dealers,
-                activeDealers: this.filterList('active', this.props.dealers),
-                suspendDealers: this.filterList('suspended', this.props.dealers),
-                unlinkedDealers: this.filterList('unlinked', this.props.dealers),
+            let dealers = JSON.parse(JSON.stringify(this.props.dealers));
+            // console.log('check', window.location.pathname.split("/").pop(), window.location.pathname.split("/").pop() === 'dealer' ? 3 : 2)
+            let filteredDealers = dealers.filter(item => {
+                // console.log(item.type != (window.location.pathname.split("/").pop() === 'dealer' ? '3' : '2'))
+                return item.type != (window.location.pathname.split("/").pop() === 'dealer' ? '3' : '2')
             })
-            this.handleChangetab(this.state.tabselect);
+            // console.log(filteredDealers, 'dealer list didupdate')
+            this.setState({
+                allDealers: filteredDealers,
+                activeDealers: this.filterList('active', filteredDealers),
+                suspendDealers: this.filterList('suspended', filteredDealers),
+                unlinkedDealers: this.filterList('unlinked', filteredDealers),
+            }, () => {
+                this.handleChangetab(this.state.tabselect);
+            })
+           
         }
         if (this.props.translation !== prevProps.translation) {
             this.setState({
@@ -443,7 +464,7 @@ class Dealers extends Component {
         switch (value) {
             case '2':
                 this.setState({
-                    dealers: this.handleSearch12(this.filterList('active', this.props.dealers)),
+                    dealers: this.handleSearch12(this.filterList('active', this.state.allDealers)),
                     column: this.state.columns,
                     tabselect: '2'
                 })
@@ -451,28 +472,28 @@ class Dealers extends Component {
                 break;
             case '4':
                 this.setState({
-                    dealers: this.handleSearch12(this.filterList('suspended', this.props.dealers)),
+                    dealers: this.handleSearch12(this.filterList('suspended', this.state.allDealers)),
                     column: this.state.columns,
                     tabselect: '4'
                 })
                 break;
             case '1':
                 this.setState({
-                    dealers: this.handleSearch12(this.props.dealers),
+                    dealers: this.handleSearch12(this.state.allDealers),
                     column: this.state.columns,
                     tabselect: '1'
                 })
                 break;
             case "3":
                 this.setState({
-                    dealers: this.handleSearch12(this.filterList('unlinked', this.props.dealers)),
+                    dealers: this.handleSearch12(this.filterList('unlinked', this.state.allDealers)),
                     column: this.state.columns,
                     tabselect: '3'
                 })
                 break;
             default:
                 this.setState({
-                    dealers: this.handleSearch12(this.props.dealers),
+                    dealers: this.handleSearch12(this.state.allDealers),
                     column: this.state.columns,
                     tabselect: '1'
                 })
@@ -480,7 +501,6 @@ class Dealers extends Component {
         }
 
         // this.handleCheckChange(this.props.selectedOptions)
-
     }
 
 
