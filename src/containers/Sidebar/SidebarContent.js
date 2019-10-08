@@ -108,11 +108,13 @@ class SidebarContent extends Component {
       languageData: this.props.languageData
     })
 
+
+
     // console.log('get new device', this.props.getNewDevicesList())
     this.props.getNewDevicesList();
     this.props.getNewCashRequests();
     this.props.getUserCredit();
-
+    this.props.getDevicesList();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -165,7 +167,7 @@ class SidebarContent extends Component {
     console.log('at req transferDeviceProfile')
     let _this = this;
     Modal.confirm({
-      content: "Are You Sure, You want to Transfer Flagged Device to this Requested Device ?", //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
+      content: `Are you sure you want to Transfer, from ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
       onOk() {
         // console.log('OK');
         _this.props.transferDeviceProfile(obj);
@@ -211,15 +213,14 @@ class SidebarContent extends Component {
               {/* Price */}
               <li>
                 <a className="head-example">
-                  {/* <Badge className="cred_badge" count={this.props.user_credit} overflowCount={99999}> */}
-                  <Badge className="cred_badge" overflowCount={999}>
+                  <Badge className="cred_badge" count={this.props.user_credit} overflowCount={99999}>
                     <i className="icon icon-dollar notification_icn" >
                       <Icon type="dollar" className="mb-10" />
                     </i>
                   </Badge>
                 </a>
               </li>
-              {/* Chat Icon */}
+              {/* {/* Chat Icon */}
               <li>
                 <i className="icon icon-chat-new" />
               </li>
@@ -339,7 +340,7 @@ class SidebarContent extends Component {
           }
           {/* </CustomScrollbars> */}
         </div>
-      </Auxiliary>
+      </Auxiliary >
     );
   }
 }

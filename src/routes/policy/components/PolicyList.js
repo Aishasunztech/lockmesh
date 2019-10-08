@@ -204,7 +204,7 @@ class PolicyList extends Component {
     }
 
     customExpandIcon(props) {
-
+        // console.log(props);
         if (props.expanded) {
             // if (this.state.expandedByCustom[props.record.rowKey]) {
                 if(!this.state.expandedRowKeys.includes(props.record.rowKey)){

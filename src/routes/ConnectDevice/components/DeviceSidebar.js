@@ -178,6 +178,12 @@ export default class DeviceSidebar extends Component {
                 value: checkValue(device_details.mac_address)
             },
             {
+                key: 1222,
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[""], "SIM ID 2"))}:</a>),
+                value: checkValue(device_details.sim_id2)
+            },
+
+            {
                 key: 17,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_IMEI_1], "IMEI-1"))}:</a>),
                 value: checkValue(device_details.imei)

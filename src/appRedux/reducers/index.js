@@ -3,6 +3,7 @@ import { routerReducer } from "react-router-redux";
 import Settings from "./Settings";
 import Auth from "./Auth";
 import Devices from "./Devices"
+import BulkDevices from "./BulkDevices"
 import Dealers from "./Dealer";
 import Apk_List from "./Apk";
 import ConnectDevice from "./ConnectDevice";
@@ -20,6 +21,7 @@ const reducers = combineReducers({
   settings: Settings,
   auth: Auth,
   devices: Devices,
+  bulkDevices: BulkDevices,
   dealers: Dealers,
   apk_list: Apk_List,
   device_details: ConnectDevice,

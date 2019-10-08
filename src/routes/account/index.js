@@ -93,9 +93,6 @@ class PasswordModal extends Component {
                     this.refs.pswdForm.resetFields()
                 }
                 }
-                // okText="Push Apps"
-                okText={convertToLang(this.props.translation[PUSH_APP_TEXT], "PUSH APP")}
-                cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
             >
                 <PasswordForm
                     checkPass={this.props.checkPass}
@@ -1117,9 +1114,9 @@ class Account extends Component {
                             <div>
                                 <div>
                                     <a href="javascript:void(0)"
-                                    // onClick={(e) => {
-                                    //     this.showPurchaseModal(e, true);
-                                    // }}
+                                        onClick={(e) => {
+                                            this.showPurchaseModal(e, true);
+                                        }}
                                     >
                                         <Card style={{ borderRadius: 12 }} className="manage_ac">
                                             <div className="profile_table image_1">

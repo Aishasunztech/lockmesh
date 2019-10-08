@@ -38,7 +38,6 @@
 
 .edit_form .ant-modal-body {
     padding: 16px 16px 16px;
-    
 }
 
 .wipe_device .ant-modal-content {
@@ -142,7 +141,7 @@
     font-size: 32px;
     vertical-align: text-bottom;
     margin-left: 4px;
-    margin-right: 2px;
+    margin-right: 5px;
     line-height: 25px;
 }
 
