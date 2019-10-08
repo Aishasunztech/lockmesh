@@ -40,11 +40,14 @@ export default (state = initialState, action) => {
         case SAVE_USERS:
             // console.log('item added is:', action.response.user)
             let result = []
+            let dealerUsersResult = state.dealer_users;
             if (action.response.status) {
                 success({
                     title: action.response.msg,
                 });
                 result = [...action.response.user, ...state.users_list]
+                action.response.user[0].isChanged = true;
+                dealerUsersResult.unshift(action.response.user[0]); // [...action.response.user, ...state.dealer_users]
             }
             else {
                 error({
@@ -58,6 +61,7 @@ export default (state = initialState, action) => {
                 isloading: false,
                 addUserFlag: false,
                 users_list: result,
+                dealer_users: dealerUsersResult
             }
         case EDIT_USERS:
             // console.log('item added is:', action.response)
@@ -97,7 +101,7 @@ export default (state = initialState, action) => {
             }
 
         case DEALER_USERS:
-            console.log('item added is:', action.payload)
+            // console.log('item added is:', action.payload)
             return {
                 ...state,
                 isloading: false,

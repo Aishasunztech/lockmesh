@@ -151,6 +151,12 @@ class TransferHistory extends Component {
                 HistoryList: nextProps.transferHistoryList
             })
         }
+
+        // if (JSON.stringify(this.props.users_list) !== JSON.stringify(nextProps.users_list)) {
+        //     this.setState({
+        //         addNewUserValue: true
+        //     })
+        // }
     }
 
     handleCancel = () => {
@@ -279,12 +285,28 @@ class TransferHistory extends Component {
         let { isloading, users_list, device, flagged } = this.props;
         var lastObject = users_list[0];
 
-        console.log("transfer history page device dealer_id is: ", this.props.device.dealer_id)
+        // console.log("transfer history page device dealer_id is: ", this.props.device.dealer_id)
+        // console.log("addNewUserValue ", addNewUserValue, "lastObject ", lastObject ? lastObject.user_id : "ff", "this.props.device.user_id ", this.props.device.user_id, "this.state.user_id ", this.state.user_id)
         // console.log('users_list ', users_list[0]);
         // console.log('this.props.device.user_id ', this.props.device)
         // if (this.props.user.type === ADMIN) {
         //     users_list = users_list.filter(e => e.dealer_id === this.props.device.dealer_id)
         // }
+
+        let submitBtnDisable = true;
+
+        if (addNewUserValue) {
+            if (addNewUserValue === this.props.device.user_id) {
+                submitBtnDisable = true;
+            } else {
+                submitBtnDisable = false;
+            }
+        }
+        else if (lastObject && lastObject.isChanged) {
+            submitBtnDisable = false;
+        }
+
+        // (addNewUserValue) ? ((this.props.device.user_id == addNewUserValue) ? true : false) : ((this.state.user_id == this.props.device.user_id) ? false : true)
 
         return (
             <div>
@@ -365,14 +387,14 @@ class TransferHistory extends Component {
                                     wrapperCol={{ span: 14, md: 14, xs: 24 }}
                                 >
                                     {this.props.form.getFieldDecorator('user_id', {
-                                        initialValue: addNewUserModal ? lastObject.user_id : this.props.device.user_id,
+                                        initialValue: addNewUserModal && lastObject ? lastObject.user_id : this.props.device.user_id,
                                         rules: [{
                                             required: true, message: convertToLang(this.props.translation[USER_ID_IS_REQUIRED], "User ID is Required !"),
                                         }]
                                     })(
                                         <Select
                                             className="pos_rel"
-                                            setFieldsValue={addNewUserModal ? lastObject.user_id : addNewUserValue}
+                                            setFieldsValue={addNewUserModal && lastObject ? lastObject.user_id : addNewUserValue}
                                             showSearch
                                             placeholder={convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}
                                             optionFilterProp="children"
@@ -414,7 +436,8 @@ class TransferHistory extends Component {
                         >
                             <Button key="back" type="button" onClick={() => { this.handleCancelUser() }} > {convertToLang(this.props.translation[Button_Cancel], "Cancel")}</Button>
                             <Button type="primary"
-                                // disabled={(addNewUserValue) ? false : true} 
+                                disabled={submitBtnDisable}
+                                // disabled={(addNewUserValue) ? ((this.props.device.user_id == addNewUserValue) ? true : false) : ((this.state.user_id == this.props.device.user_id) ? false : true)}
                                 htmlType="submit">{convertToLang(this.props.translation[Button_submit], "Submit")}</Button>
                         </Form.Item>
                     </Form>
