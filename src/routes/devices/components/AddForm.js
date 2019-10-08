@@ -1118,6 +1118,7 @@ class AddDevice extends Component {
                     title={convertToLang(this.props.translation[DUMY_TRANS_ID], "SEVCIES")}
                     maskClosable={false}
                     onOk={this.handleOk}
+                    closable={false}
                     // onCancel={this.handleCancel}
                     footer={null}
                     className="edit_form"
