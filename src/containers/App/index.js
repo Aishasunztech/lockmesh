@@ -114,7 +114,6 @@ class App extends Component {
         return (<Redirect to={'/login'} />);
       } else if ((initURL === '' || initURL === '/' || initURL === '/login' || initURL === '/session_timeout')) {
         return (<Redirect to={'/dashboard'} />);
-
       } else {
         return (<Redirect to={initURL} />);
       }

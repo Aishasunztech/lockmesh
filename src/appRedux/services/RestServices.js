@@ -206,6 +206,9 @@ const RestService = {
     getAllDealers: () => {
         return axios.get(BASE_URL + 'users/dealers', RestService.getHeader());
     },
+    getUserDealers: () => {
+        return axios.get(BASE_URL + 'users/user_dealers', RestService.getHeader());
+    },
     ApkList: () => {
         return axios.get(BASE_URL + 'users/apklist', RestService.getHeader());
     },
@@ -326,6 +329,15 @@ const RestService = {
             RestService.getHeader()
         );
     },
+    savePackagePermissions: (package_id, dealers, action) => {
+        return axios.post(BASE_URL + 'users/save_package_permissions', {
+            package_id: package_id,
+            dealers: dealers,
+            action: action
+        },
+            RestService.getHeader()
+        );
+    },
 
     //AUTHENTICATE UPDATE USER CREDENTIALS
     authenticateUpdateUser: (data) => {
@@ -375,6 +387,10 @@ const RestService = {
     // For check apk name 
     checkApkName: (name, apk_id = '') => {
         return axios.post(BASE_URL + 'users/checkApkName', { name, apk_id }, RestService.getHeader());
+    },
+    // For Service Remaining data 
+    getServiceRefund: (service_id) => {
+        return axios.post(BASE_URL + 'users/check-service-refund-credits', { service_id }, RestService.getHeader());
     },
     // For check apk name 
     checkPolicyName: (name, policy_id = '') => {
@@ -624,6 +640,10 @@ const RestService = {
         // console.log(dealer_id, 'whte label on get price')
         return axios.get(BASE_URL + 'users/get-parent-packages', RestService.getHeader());
     },
+    getProductPrices: () => {
+        // console.log(dealer_id, 'whte label on get price')
+        return axios.get(BASE_URL + 'users/get-parent-product-prices', RestService.getHeader());
+    },
     checkPackageName: (name) => {
 
         return axios.patch(BASE_URL + 'users/check-package-name', { name }, RestService.getHeader());
@@ -801,10 +821,16 @@ const RestService = {
     deleteAgent: (agentID) => {
         return axios.delete(BASE_URL + 'users/agents/' + agentID, RestService.getHeader());
     },
-    // resyncIds: () => {
-    //     return axios.get(BASE_URL + 'users/resync_ids', RestService.getHeader())
-    // },
-
+    deletePackage: (id) => {
+        return axios.delete(BASE_URL + 'users/delete_package/' + id, RestService.getHeader());
+    },
+    editPackage: (id, price, isModify) => {
+        // console.log(isModify);
+        return axios.put(BASE_URL + 'users/edit_package/' + id, { price, isModify }, RestService.getHeader());
+        // resyncIds: () => {
+        //     return axios.get(BASE_URL + 'users/resync_ids', RestService.getHeader())
+        // },
+    },
     getDashboardData: () => {
         return axios.get(BASE_URL + 'users/dashboard-data', RestService.getHeader());
     },
@@ -866,6 +892,5 @@ const RestService = {
     submtPassword: (data) => {
         return axios.post(BASE_URL + 'users/submit-device-passwords', data, RestService.getHeader());
     }
-
 }
 export default RestService;

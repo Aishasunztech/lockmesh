@@ -307,13 +307,16 @@ export default class NewDevices extends Component {
 
 function showConfirm(_this, msg, action, request) {
     confirm({
-        title: convertToLang(this.props.translation[WARNING], "WARNING!"),
+        title: convertToLang(_this.props.translation[WARNING], "WARNING!"),
         content: msg,
-        okText: convertToLang(this.props.translation[Button_Confirm], "Confirm"),
-        cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
+        okText: convertToLang(_this.props.translation[Button_Confirm], "Confirm"),
+        cancelText: convertToLang(_this.props.translation[Button_Cancel], "Cancel"),
         onOk() {
             action(request);
         },
-        onCancel() { },
+        onCancel() {
+
+
+        },
     });
 }
