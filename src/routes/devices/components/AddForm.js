@@ -192,7 +192,7 @@ class AddDevice extends Component {
                     }
 
 
-                    if (this.state.total_price < this.props.user_credit) {
+                    if (this.state.total_price <= this.props.user_credit) {
                         // console.log(this.state.products);
                         values.products = this.state.products;
                         values.packages = this.state.packages;
@@ -206,22 +206,9 @@ class AddDevice extends Component {
                         //     this.handleReset();
                         // }
                     } else {
-                        let _this = this;
-                        confirm({
-                            title: "Your Credits are not enough to apply these services. Please select other services OR Purchase Credits.",
-                            okText: "PURCHASE CREDITS",
-                            onOk() {
-                                _this.props.history.push('/account')
-                            },
-                            onCancel() {
-
-                            },
-
-                        })
+                        showCreditPurchase(this)
                     }
-                    // console.log(this.state.products);
                 }
-                // console.log('Received values of form: ', values);
             }
             else {
                 this.setState({
@@ -1228,4 +1215,17 @@ function showConfirmCredit(_this, values) {
 
         },
     });
+}
+function showCreditPurchase(_this) {
+    confirm({
+        title: "Your Credits are not enough to apply these services. Please select other services OR Purchase Credits.",
+        okText: "PURCHASE CREDITS",
+        onOk() {
+            _this.props.history.push('/account')
+        },
+        onCancel() {
+
+        },
+
+    })
 }
