@@ -46,7 +46,7 @@ class Dashboard extends Component {
     }
 
     transferDeviceProfile = (obj) => {
-        // console.log('at req transferDeviceProfile')
+        console.log('at req transferDeviceProfile', obj)
         let _this = this;
         Modal.confirm({
             content: `Are you sure you want to Transfer, from ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),

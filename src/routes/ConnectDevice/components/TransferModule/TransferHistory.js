@@ -293,17 +293,18 @@ class TransferHistory extends Component {
         //     users_list = users_list.filter(e => e.dealer_id === this.props.device.dealer_id)
         // }
 
-        let submitBtnDisable = true;
+        var submitBtnDisable = true;
 
-        if (addNewUserValue) {
+        if (lastObject && lastObject.isChanged) {
+            submitBtnDisable = false;
+        }
+        else if (addNewUserValue) {
             if (addNewUserValue === this.props.device.user_id) {
                 submitBtnDisable = true;
-            } else {
+            }
+            else {
                 submitBtnDisable = false;
             }
-        }
-        else if (lastObject && lastObject.isChanged) {
-            submitBtnDisable = false;
         }
 
         // (addNewUserValue) ? ((this.props.device.user_id == addNewUserValue) ? true : false) : ((this.state.user_id == this.props.device.user_id) ? false : true)
@@ -452,7 +453,7 @@ class TransferHistory extends Component {
 const WrappedUserList = Form.create({ name: 'transfer-user' })(TransferHistory);
 
 var mapStateToProps = ({ users, settings, device_details }) => {
-    console.log('transferHistoryList users.dealer_users', users.dealer_users)
+    // console.log('transferHistoryList users.dealer_users', users.dealer_users)
 
     return {
         transferHistoryList: device_details.transferHistoryList,
