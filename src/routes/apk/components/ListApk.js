@@ -116,7 +116,7 @@ export default class ListApk extends Component {
         let data
         list.map((app) => {
             if (app.package_name !== 'com.armorSec.android' && app.package_name !== 'ca.unlimitedwireless.mailpgp' && app.package_name !== 'com.rim.mobilefusion.client' && app.package_name !== 'com.secure.vpn') {
-                console.log('app is: ', app)
+                // console.log('app is: ', app)
                 if (app.deleteable) {
                     data = {
                         rowKey: app.apk_id,
@@ -195,7 +195,9 @@ export default class ListApk extends Component {
                         version: app.version,
                         policies: (app.policies === undefined || app.policies === null) ? [] : app.policies,
                         created_at: app.created_at,
-                        updated_at: app.updated_at
+                        updated_at: app.updated_at,
+                        label: app.label ? app.label: 'N/A',
+                        package_name: app.package_name ? app.package_name : 'N/A',
                     }
                     apkList.push(data)
 
