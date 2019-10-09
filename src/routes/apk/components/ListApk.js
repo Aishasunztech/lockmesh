@@ -195,7 +195,9 @@ export default class ListApk extends Component {
                         version: app.version,
                         policies: (app.policies === undefined || app.policies === null) ? [] : app.policies,
                         created_at: app.created_at,
-                        updated_at: app.updated_at
+                        updated_at: app.updated_at,
+                        label: app.label ? app.label: 'N/A',
+                        package_name: app.package_name ? app.package_name : 'N/A',
                     }
                     apkList.push(data)
 
