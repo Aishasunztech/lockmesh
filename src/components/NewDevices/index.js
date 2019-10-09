@@ -79,12 +79,10 @@ export default class NewDevices extends Component {
         }
     }
     rejectDevice(device) {
-        // console.log('reject device called')
         this.props.rejectDevice(device);
     }
 
     flaggedDevices = (reqDevice) => {
-        // console.log('reqDevice ', reqDevice);
         this.setState({
             flaggedDevicesModal: true,
             reqDevice,
@@ -92,28 +90,36 @@ export default class NewDevices extends Component {
     }
 
     transferDevice = (device, requestedDevice = false) => {
-        // console.log('flagged_device ', device)
-        // console.log('reqDevice ', (requestedDevice) ? requestedDevice : this.state.reqDevice)
-
         let DEVICE_REQUEST_IS = (requestedDevice) ? requestedDevice : this.state.reqDevice;
-        // console.log('requestedDevice ', requestedDevice)
         this.props.transferDeviceProfile({ flagged_device: device, reqDevice: DEVICE_REQUEST_IS });
         this.setState({ flaggedDevicesModal: false, visible: false })
     }
     rejectRequest(request) {
         showConfirm(this, convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_TO_DECLINE_THIS_REQUEST], "Are you sure you want to decline this request ?"), this.props.rejectRequest, request)
-
-        // this.setState({ visible: false })
     }
+
     acceptRequest(request) {
         showConfirm(this, convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST], "Are you sure you want to accept this request ?"), this.props.acceptRequest, request)
-        // this.props.rejectRequest(request);
-        // this.setState({ visible: false })
+    }
+
+
+    filterList = (devices) => {
+        let dumyDevices = [];
+        if (devices !== undefined) {
+            devices.filter(function (device) {
+                if (device.finalStatus !== DEVICE_UNLINKED) {
+                    let deviceStatus = device.flagged;
+                    if ((deviceStatus === 'Defective' || deviceStatus === 'Lost' || deviceStatus === 'Stolen' || deviceStatus === 'Other') && (device.finalStatus === "Flagged")) {
+                        dumyDevices.push(device);
+                    }
+                }
+            });
+        }
+        return dumyDevices;
     }
 
 
     renderList1(list) {
-        // console.log(list);
         return list.map((request) => {
             return {
                 key: request.id ? `${request.id}` : "N/A",
@@ -135,40 +141,19 @@ export default class NewDevices extends Component {
     }
     renderList(list, flagged = false) {
         return list.map((device) => {
-            const device_status = (device.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";
-            // const device_status =  "SUSPEND";
-            const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
-            // var status = getStatus(device.status, device.account_status, device.unlink_status, device.device_status);
-            var status = 'new-device';
-            // console.log("not avail", status);
-            var style = { margin: '0', width: '60px' }
-            var text = "EDIT";
-            // var icon = "edit";
-
-            if ((status === 'new-device') || (device.unlink_status === 1)) {
-                // console.log('device name', device.name, 'status', device.unlink_status)
-                style = { margin: '0 8px 0 0', width: '60px', display: 'none' }
-                text = "Accept";
-                // icon = 'add'
-            }
 
             let transferButton;
-            if (this.state.sectionVisible) {
+            if (this.state.sectionVisible || this.state.showLInkRequest) {
                 transferButton = <Button type="default" size="small" style={{ margin: '0 8px 0 8px', textTransform: "uppercase" }} onClick={(flagged) ? () => this.transferDevice(device) : () => this.flaggedDevices(device)}>{convertToLang(this.props.translation[Button_Transfer], "TRANSFER")}</Button>;
-            } else {
-                transferButton = <Button type="default" size="small" style={{ margin: '0 8px 0 8px', textTransform: "uppercase" }} onClick={() =>
-                    this.transferDevice(this.props.device_details, device)
-                    // this.setState({
-                    //     reqDevice: device
-                    // })
-                }>{convertToLang(this.props.translation[Button_Transfer], "TRANSFER")}</Button>;
+            }
+            else {
+                transferButton = <Button type="default" size="small" style={{ margin: '0 8px 0 8px', textTransform: "uppercase" }} onClick={() => this.transferDevice(this.props.device_details, device)}>{convertToLang(this.props.translation[Button_Transfer], "TRANSFER")}</Button>;
             }
 
             let declineButton = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.rejectDevice(device); }}>{convertToLang(this.props.translation[Button_Decline], "DECLINE")}</Button>;
             let acceptButton = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.refs.add_device_modal.showModal(device, this.props.addDevice); this.setState({ visible: false }) }}> {convertToLang(this.props.translation[Button_ACCEPT], "ACCEPT")}</Button>;
 
             let actionButns;
-            // console.log(this.state.sectionVisible, 'section visible state')
             if (this.state.sectionVisible) {
                 if (this.props.flaggedDevices !== undefined) {
                     if (flagged) {
@@ -189,11 +174,16 @@ export default class NewDevices extends Component {
 
             } else {
                 if (this.state.showLInkRequest) {
-                    actionButns = (<Fragment>
-                        <Fragment>{declineButton}</Fragment>
-                        <Fragment>{acceptButton}</Fragment>
-                        <Fragment>{transferButton}</Fragment>
-                    </Fragment>);
+                    if (flagged) {
+                        actionButns = (<Fragment>{transferButton}</Fragment>);
+                    }
+                    else {
+                        actionButns = (<Fragment>
+                            <Fragment>{declineButton}</Fragment>
+                            <Fragment>{acceptButton}</Fragment>
+                            <Fragment>{transferButton}</Fragment>
+                        </Fragment>);
+                    }
                 } else {
                     actionButns = (<Fragment>{transferButton}</Fragment>);
                 }
@@ -214,23 +204,7 @@ export default class NewDevices extends Component {
 
     }
 
-    filterList = (devices) => {
-        let dumyDevices = [];
-        // console.log('check Devices at filterList ', devices)
-        if (devices !== undefined) {
-            devices.filter(function (device) {
-                if (device.finalStatus !== DEVICE_UNLINKED) {
-                    // let deviceStatus = getStatus(device.status, device.account_status, device.unlink_status, device.device_status, device.activation_status);
-                    let deviceStatus = device.flagged;
-                    // console.log('22222 flagged', device.flagged)
-                    if ((deviceStatus === 'Defective' || deviceStatus === 'Lost' || deviceStatus === 'Stolen' || deviceStatus === 'Other') && (device.finalStatus === "Flagged")) {
-                        dumyDevices.push(device);
-                    }
-                }
-            });
-        }
-        return dumyDevices;
-    }
+
 
     render() {
         let flaggedDevices = this.filterList(this.props.flaggedDevices)
@@ -275,7 +249,7 @@ export default class NewDevices extends Component {
                 </Modal>
                 <AddDeviceModal ref='add_device_modal' translation={this.props.translation} />
 
-                {(this.state.sectionVisible) ?
+                {(this.state.sectionVisible || this.state.showLInkRequest) ?
                     <Modal
                         width={1000}
                         maskClosable={false}

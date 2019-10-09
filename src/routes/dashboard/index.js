@@ -45,20 +45,20 @@ class Dashboard extends Component {
         this.props.getDashboardData();
     }
 
-    // transferDeviceProfile = (obj) => {
-    //     // console.log('at req transferDeviceProfile')
-    //     let _this = this;
-    //     Modal.confirm({
-    //         content: `Are you sure you want to Transfer, from ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
-    //         onOk() {
-    //             // console.log('OK');
-    //             _this.props.transferDeviceProfile(obj);
-    //         },
-    //         onCancel() { },
-    //         okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
-    //         cancelText: convertToLang(this.props.translation[Button_No], 'No'),
-    //     });
-    // }
+    transferDeviceProfile = (obj) => {
+        console.log('at req transferDeviceProfile', obj)
+        let _this = this;
+        Modal.confirm({
+            content: `Are you sure you want to Transfer, from ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
+            onOk() {
+                // console.log('OK');
+                _this.props.transferDeviceProfile(obj);
+            },
+            onCancel() { },
+            okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
+            cancelText: convertToLang(this.props.translation[Button_No], 'No'),
+        });
+    }
 
 
     componentWillReceiveProps(nextProps) {
@@ -111,7 +111,7 @@ class Dashboard extends Component {
                     rejectRequest={this.props.rejectRequest}
                     translation={this.props.translation}
                     flaggedDevices={this.props.flaggedDevices}
-                    // transferDeviceProfile={this.transferDeviceProfile}
+                    transferDeviceProfile={this.transferDeviceProfile}
                 />
 
                 <Auxiliary>
@@ -376,7 +376,7 @@ function mapDispatchToProps(dispatch) {
         rejectDevice: rejectDevice, // for link requests
         acceptRequest: acceptRequest,  // for credit requests
         rejectRequest: rejectRequest, // for credit requests
-        // transferDeviceProfile: transferDeviceProfile,
+        transferDeviceProfile: transferDeviceProfile,
 
         getNewCashRequests: getNewCashRequests,
         getUserCredit: getUserCredit,
