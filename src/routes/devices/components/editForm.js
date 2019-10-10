@@ -234,7 +234,7 @@ class EditDevice extends Component {
                         showCreditPurchase(this)
                     }
                 } else {
-                    console.log("Device Details ", values)
+                    // console.log("Device Details ", values)
                     this.props.editDeviceFunc(values);
                     this.props.hideModal();
                     this.handleReset();

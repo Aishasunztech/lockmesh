@@ -153,7 +153,9 @@ class AddDevice extends Component {
             invoiceColumns: invoiceColumns,
             PkgSelectedRows: [],
             proSelectedRows: [],
-            duplicate: 0
+            duplicate: 0,
+            showConfirmCredit: false,
+            serviceData: {}
         }
     }
 
@@ -192,22 +194,28 @@ class AddDevice extends Component {
                     }
 
 
-                    if (this.state.total_price <= this.props.user_credit) {
-                        // console.log(this.state.products);
-                        values.products = this.state.products;
-                        values.packages = this.state.packages;
-                        values.term = this.state.term;
-                        values.total_price = this.state.total_price
-                        // if (this.state.type == 1) {
-                        showConfirmCredit(this, values);
-                        // } else {
-                        //     this.props.AddDeviceHandler(values);
-                        //     this.props.hideModal();
-                        //     this.handleReset();
-                        // }
-                    } else {
-                        showCreditPurchase(this)
-                    }
+                    // if (this.state.total_price <= this.props.user_credit) {
+                    // console.log(this.state.products);
+                    values.products = this.state.products;
+                    values.packages = this.state.packages;
+                    values.term = this.state.term;
+                    values.total_price = this.state.total_price
+
+                    this.setState({
+                        serviceData: values,
+                        showConfirmCredit: true
+
+                    })
+                    // if (this.state.type == 1) {
+                    // showConfirmCredit(this, values);
+                    // } else {
+                    //     this.props.AddDeviceHandler(values);
+                    //     this.props.hideModal();
+                    //     this.handleReset();
+                    // }
+                    // } else {
+                    //     showCreditPurchase(this)
+                    // }
                 }
             }
             else {
@@ -614,6 +622,20 @@ class AddDevice extends Component {
         })
     }
 
+    submitServicesConfirm(pay_now) {
+        this.state.serviceData.pay_now = pay_now
+        if (this.state.total_price <= this.props.user_credit) {
+            this.props.AddDeviceHandler(this.state.serviceData);
+            this.props.hideModal();
+            this.handleReset();
+            this.setState({
+                serviceData: {},
+                showConfirmCredit: false
+            })
+        } else {
+            showCreditPurchase(this)
+        }
+    }
 
     render() {
         // console.log(this.props);
@@ -1124,7 +1146,56 @@ class AddDevice extends Component {
                         history={this.props.history}
                     />
                 </Modal>
-            </div>
+                <Modal
+                    width={900}
+                    visible={this.state.showConfirmCredit}
+                    title={<span style={{ fontWeight: "bold" }}> {convertToLang(this.props.translation[DUMY_TRANS_ID], "Do You Really want to apply selected services on device ?")} </span>}
+                    maskClosable={false}
+                    // onOk={this.handleOk}
+                    closable={false}
+                    onCancel={
+                        () => {
+                            this.setState({
+                                showConfirmCredit: false
+                            })
+                        }
+                    }
+                    footer={null}
+                    className="edit_form"
+                >
+                    <Fragment>
+                        <div style={{ marginTop: 20 }}>
+                            <Table
+                                id='packages'
+                                className={"devices mb-20"}
+                                // rowSelection={packageRowSelection}
+                                size="middle"
+                                bordered
+                                columns={this.state.invoiceColumns}
+                                dataSource={this.confirmRenderList(this.state.PkgSelectedRows, this.state.proSelectedRows)}
+                                pagination={
+                                    false
+                                }
+                            />
+                        </div >
+                        <div>
+                            <h5 style={{ textAlign: "right" }}><b>Sub Total :  {this.state.serviceData.total_price} Credits</b></h5>
+                            <h4 style={{ textAlign: "center" }}><b>There will be a charge of {this.state.serviceData.total_price} Credits</b></h4>
+                        </div>
+                        {(this.state.term !== '0') ?
+                            <div>
+                                <h4 style={{ textAlign: "center", color: 'red' }}><b>If you PAY NOW you will get 5% discount.There will be a charge of {this.state.serviceData.total_price - (this.state.serviceData.total_price * (5 / 100))} Credits</b></h4>
+                            </div>
+                            : null}
+
+                        <div className="edit_ftr_btn" >
+                            <Button onClick={() => { this.setState({ showConfirmCredit: false }) }}>CANCEL</Button>
+                            <Button type='primary' onClick={() => { this.submitServicesConfirm(false) }}>PAY LATER</Button>
+                            <Button style={{ backgroundColor: "green", color: "white" }} onClick={() => { this.submitServicesConfirm(true) }}>PAY NOW</Button>
+                        </div >
+                    </Fragment>
+                </Modal>
+            </div >
         )
 
     }
@@ -1179,43 +1250,6 @@ function showConfirm(_this, values) {
     });
 }
 
-function showConfirmCredit(_this, values) {
-    confirm({
-        width: 900,
-        title: <span style={{ fontWeight: "bold" }}>Do You Really want to apply selected services on device ? </span>,
-        content:
-            <Fragment>
-                <div style={{ marginTop: 20 }}>
-                    <Table
-                        id='packages'
-                        className={"devices mb-20"}
-                        // rowSelection={packageRowSelection}
-                        size="middle"
-                        bordered
-                        columns={_this.state.invoiceColumns}
-                        dataSource={_this.confirmRenderList(_this.state.PkgSelectedRows, _this.state.proSelectedRows)}
-                        pagination={
-                            false
-                        }
-                    />
-                </div >
-                {(_this.state.term !== '0') ?
-                    <div>
-                        <h5 style={{ textAlign: "right" }}><b>Sub Total :  {values.total_price} Credits</b></h5>
-                        <h4 style={{ textAlign: "center" }}><b>There will be a charge of {values.total_price} Credits</b></h4>
-                    </div>
-                    : null}
-            </Fragment>,
-        onOk() {
-            _this.props.AddDeviceHandler(values);
-            _this.props.hideModal();
-            _this.handleReset();
-        },
-        onCancel() {
-
-        },
-    });
-}
 function showCreditPurchase(_this) {
     confirm({
         title: "Your Credits are not enough to apply these services. Please select other services OR Purchase Credits.",

@@ -13,6 +13,7 @@ import UserProfile from "./UserProfile";
 // import AppsNavigation from "./AppsNavigation";
 
 import NewDevice from '../../components/NewDevices';
+import CreditsModal from '../../components/CreditsModal';
 
 import { getNewDevicesList } from "../../appRedux/actions/Common";
 import {
@@ -96,6 +97,15 @@ class SidebarContent extends Component {
       this.props.getNewDevicesList()
       this.props.getUserCredit()
       this.refs.new_device.showModal();
+      // this.props.getDevicesList();
+    }
+
+    // alert('its working');
+  }
+  showCreditsModal = () => {
+    if (this.props.authUser.type !== ADMIN) {
+      // this.props.getCreditsHistory();
+      this.refs.credits_modal.showModal();
       // this.props.getDevicesList();
     }
 
@@ -191,6 +201,10 @@ class SidebarContent extends Component {
         <div className="gx-sidebar-content ">
           <div className={`gx-sidebar-notifications text-center ${this.getNoHeaderClass(navStyle)} `}>
             <UserProfile />
+            <CreditsModal
+              ref='credits_modal'
+              translation={this.props.translation}
+            />
             <NewDevice
               ref='new_device'
               devices={this.props.devices}
@@ -214,7 +228,7 @@ class SidebarContent extends Component {
               <li>
                 <a className="head-example">
                   <Badge className="cred_badge" count={this.props.user_credit} overflowCount={99999}>
-                    <i className="icon icon-dollar notification_icn" >
+                    <i className="icon icon-dollar notification_icn" onClick={() => this.showCreditsModal()} >
                       <Icon type="dollar" className="mb-10" />
                     </i>
                   </Badge>

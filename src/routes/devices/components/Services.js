@@ -370,16 +370,16 @@ class ServicesList extends Component {
 
 
             // console.log(total_price, this.props.user_credit);
-            if (this.props.creditsToRefund) {
-                total_price -= this.props.creditsToRefund
-            }
-            if (total_price < this.props.user_credit || this.props.tabselect === '0') {
-                this.props.handleServicesSubmit(this.state.proSelectedRows, this.state.PkgSelectedRows, this.props.serviceTerm);
-                this.handleCancel()
-            }
-            else {
-                showConfirm(this);
-            }
+            // if (this.props.creditsToRefund) {
+            //     total_price -= this.props.creditsToRefund
+            // }
+            // if (total_price < this.props.user_credit || this.props.tabselect === '0') {
+            this.props.handleServicesSubmit(this.state.proSelectedRows, this.state.PkgSelectedRows, this.props.serviceTerm);
+            this.handleCancel()
+            // }
+            // else {
+            //     showConfirm(this);
+            // }
         }
     }
 
