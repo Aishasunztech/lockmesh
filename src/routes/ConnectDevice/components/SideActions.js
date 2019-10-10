@@ -45,7 +45,8 @@ import {
     simHistory,
     handleChecked,
     resetPushApps,
-    handleCheckedAllPushApps
+    handleCheckedAllPushApps,
+    transferHistory
 } from "../../../appRedux/actions/ConnectDevice";
 
 import { getNewDevicesList } from "../../../appRedux/actions/Common";
@@ -792,6 +793,9 @@ class SideActions extends Component {
     }
 
     handleTransferHistoryModal = (visible) => {
+        if (this.props.device_details.device_id) {
+            this.props.transferHistory(this.props.device_details.device_id);
+        }
         this.setState({
             transferHistoryModal: visible,
         })
@@ -951,7 +955,7 @@ class SideActions extends Component {
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={12} className="gutter-row" justify="center" >
                                 {/* <Tooltip title="Coming Soon"> */}
-                                    {/* <Button
+                                {/* <Button
                                     type="default"
                                     onClick={() => this.handleTransfer()}
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }}
@@ -960,10 +964,10 @@ class SideActions extends Component {
                                     <Icon type="swap" />
                                     {convertToLang(this.props.translation[Button_Transfer], "Transfer")} </Button> */}
 
-                                    {/* <Button type="default" onClick={() => { if (flagged === "Unflag") { this.handleTransfer(this.props.device_id) } else { Modal.error({ title: 'Plaese Flag the device first to Transfer' }); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button> */}
-                                    <Button type="default"
-                                        onClick={() => this.handleTransferHistoryModal(true)}
-                                        style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button>
+                                {/* <Button type="default" onClick={() => { if (flagged === "Unflag") { this.handleTransfer(this.props.device_id) } else { Modal.error({ title: 'Plaese Flag the device first to Transfer' }); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button> */}
+                                <Button type="default"
+                                    onClick={() => this.handleTransferHistoryModal(true)}
+                                    style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button>
                                 {/* </Tooltip> */}
                                 <Button type={button_type}
                                     onClick={() => (device_status === "Unsuspend") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
@@ -1347,7 +1351,8 @@ function mapDispatchToProps(dispatch) {
         getPgpEmails: getPGPEmails,
         handleChecked: handleChecked,
         resetPushApps: resetPushApps,
-        handleCheckedAllPushApps: handleCheckedAllPushApps
+        handleCheckedAllPushApps: handleCheckedAllPushApps,
+        transferHistory: transferHistory
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth, settings, devices, sidebar }, otherProps) => {
@@ -1408,14 +1413,14 @@ function showConfirm(device, action, _this, msg, type, transfered = false) {
                 setTimeout(Math.random() > 0.5 ? resolve : reject);
                 if (type === 'wipe') {
                     action(device)
-                } 
+                }
                 else if (type === 'unlink') {
                     // console.log('unlink check =========> ', device)
                     action(device, transfered);
 
                     _this.props.history.goBack();
                     _this.props.getDevicesList();
-                } 
+                }
                 else if (type === 'flagged') {
                     action(device.device_id)
                     // _this.props.activateDevice(device)

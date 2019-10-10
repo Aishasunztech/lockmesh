@@ -105,7 +105,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isloading: false,
-                dealer_users: action.payload,
+                dealer_users: action.payload.data,
             }
         case DELETE_USER:
             if (action.payload.status) {
