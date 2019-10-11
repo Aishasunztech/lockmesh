@@ -1184,7 +1184,7 @@ class AddDevice extends Component {
                         </div>
                         {(this.state.term !== '0') ?
                             <div>
-                                <h4 style={{ textAlign: "center", color: 'red' }}><b>If you PAY NOW you will get 5% discount.There will be a charge of {this.state.serviceData.total_price - (this.state.serviceData.total_price * (5 / 100))} Credits</b></h4>
+                                <h4 style={{ textAlign: "center", color: 'red' }}>If you PAY NOW you will get 5% discount.</h4>
                             </div>
                             : null}
 

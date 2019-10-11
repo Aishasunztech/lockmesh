@@ -13,29 +13,21 @@ export default class NewDevices extends Component {
     constructor(props) {
         super(props);
         const columns = [
-            { title: convertToLang(props.translation[""], "AVAIALABLE CREDITS"), dataIndex: 'action', key: 'action', align: "center" },
-            { title: convertToLang(props.translation[""], "CREDITS DUE"), dataIndex: 'device_id', key: 'device_id', align: "center" },
+            { title: convertToLang(props.translation[""], "AVAIALABLE CREDITS"), dataIndex: 'user_credit', key: 'user_credit', align: "center" },
+            { title: convertToLang(props.translation[""], "CREDITS DUE"), dataIndex: 'due_credit', key: 'due_credit', align: "center" },
         ];
 
         this.state = {
             columns: columns,
             visible: false,
-            NewDevices: [],
-            NewRequests: [],
-            sectionVisible: true,
-            flaggedDevicesModal: false,
-            reqDevice: '',
-            showLInkRequest: false
         }
     }
 
 
 
-    showModal = (sectionVisible = true, showLInkRequest = false) => {
+    showModal = () => {
         this.setState({
             visible: true,
-            sectionVisible,
-            showLInkRequest: showLInkRequest
         });
     }
 
@@ -53,26 +45,17 @@ export default class NewDevices extends Component {
         });
     }
     componentDidMount() {
-        this.setState({
-            NewDevices: this.props.devices,
-            NewRequests: this.props.requests
-
-        })
     }
     componentWillReceiveProps(nextProps) {
 
     }
 
-    renderList(list) {
-        return list.map((request, index) => {
-            return {
-                key: index,
-                action: 171035,
-                device_id: 600,
-
-            }
-        });
-
+    renderList() {
+        return [{
+            key: 1,
+            user_credit: this.props.user_credit,
+            due_credit: this.props.due_credit,
+        }]
     }
     render() {
         return (
@@ -94,12 +77,16 @@ export default class NewDevices extends Component {
                             bordered
                             columns={this.state.columns}
                             style={{ marginTop: 20 }}
-                            dataSource={this.renderList([{}])}
+                            dataSource={this.renderList()}
                             pagination={false}
 
                         />
                         <div className="edit_ftr_btn11">
-                            <Button type="primary" >{convertToLang(this.props.translation[""], "OK")}</Button>
+                            <Button type="primary" onClick={() => {
+                                this.setState({
+                                    visible: false
+                                })
+                            }} >{convertToLang(this.props.translation[""], "OK")}</Button>
                         </div>
                     </Fragment>
                 </Modal>
@@ -110,18 +97,18 @@ export default class NewDevices extends Component {
 }
 
 
-function showConfirm(_this, msg, action, request) {
-    confirm({
-        title: convertToLang(_this.props.translation[WARNING], "WARNING!"),
-        content: msg,
-        okText: convertToLang(_this.props.translation[Button_Confirm], "Confirm"),
-        cancelText: convertToLang(_this.props.translation[Button_Cancel], "Cancel"),
-        onOk() {
-            action(request);
-        },
-        onCancel() {
+// function showConfirm(_this, msg, action, request) {
+//     confirm({
+//         title: convertToLang(_this.props.translation[WARNING], "WARNING!"),
+//         content: msg,
+//         okText: convertToLang(_this.props.translation[Button_Confirm], "Confirm"),
+//         cancelText: convertToLang(_this.props.translation[Button_Cancel], "Cancel"),
+//         onOk() {
+//             action(request);
+//         },
+//         onCancel() {
 
 
-        },
-    });
-}
+//         },
+//     });
+// }

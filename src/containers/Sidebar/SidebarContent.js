@@ -104,9 +104,8 @@ class SidebarContent extends Component {
   }
   showCreditsModal = () => {
     if (this.props.authUser.type !== ADMIN) {
-      // this.props.getCreditsHistory();
+      this.props.getUserCredit()
       this.refs.credits_modal.showModal();
-      // this.props.getDevicesList();
     }
 
     // alert('its working');
@@ -204,6 +203,8 @@ class SidebarContent extends Component {
             <CreditsModal
               ref='credits_modal'
               translation={this.props.translation}
+              user_credit={this.props.user_credit}
+              due_credit={this.props.due_credit}
             />
             <NewDevice
               ref='new_device'
@@ -375,6 +376,7 @@ const mapStateToProps = ({ settings, devices, sidebar }) => {
     devices: devices.newDevices,
     requests: sidebar.newRequests,
     user_credit: sidebar.user_credit,
+    due_credit: sidebar.due_credit,
     languageData: languages,
     translation: translation,
     lng_id: translation["lng_id"],
