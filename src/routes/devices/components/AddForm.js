@@ -623,18 +623,28 @@ class AddDevice extends Component {
     }
 
     submitServicesConfirm(pay_now) {
-        this.state.serviceData.pay_now = pay_now
-        if (this.state.total_price <= this.props.user_credit) {
-            this.props.AddDeviceHandler(this.state.serviceData);
-            this.props.hideModal();
-            this.handleReset();
-            this.setState({
-                serviceData: {},
-                showConfirmCredit: false
-            })
-        } else {
-            showCreditPurchase(this)
+
+        
+
+        let total_price = this.state.total_price;
+        console.log("total_price ", total_price)
+        if (pay_now) {
+            console.log("at pay now....")
+            total_price = total_price - 0.05 * total_price;
         }
+        console.log("5 % total_price ", total_price)
+        this.state.serviceData.pay_now = pay_now
+        // if (this.state.total_price <= this.props.user_credit) {
+        //     this.props.AddDeviceHandler(this.state.serviceData);
+        //     this.props.hideModal();
+        //     this.handleReset();
+        //     this.setState({
+        //         serviceData: {},
+        //         showConfirmCredit: false
+        //     })
+        // } else {
+        //     showCreditPurchase(this)
+        // }
     }
 
     render() {

@@ -4,6 +4,7 @@ import AddForm from './AddForm';
 import { ADD_DEVICE } from '../../../constants/ActionTypes';
 import { convertToLang } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel, Button_Add_Device } from '../../../constants/ButtonConstants';
+import Invoice from './invoice';
 
 export default class AddDevice extends Component {
 
@@ -14,7 +15,8 @@ export default class AddDevice extends Component {
             expiry_date: 1,
             device: null,
             handleSubmit: null,
-            preActive: false
+            preActive: false,
+            invoiceVisible: false
         }
     }
 
@@ -66,7 +68,7 @@ export default class AddDevice extends Component {
     }
 
     handleCancel = () => {
-        this.setState({ visible: false });
+        this.setState({ visible: false, invoiceVisible: true });
     }
 
     createdDate = () => {
@@ -100,6 +102,11 @@ export default class AddDevice extends Component {
                         history={this.props.history}
                     />
                 </Modal>
+
+                <Invoice
+                    invoiceVisible={this.state.invoiceVisible}
+                    translation={this.props.translation}
+                />
             </div>
         )
 
