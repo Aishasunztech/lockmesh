@@ -22,6 +22,8 @@ import { SINGLE_DEVICE, DUPLICATE_DEVICES, Required_Fields, USER_ID, DEVICE_ID, 
 import { Not_valid_Email, POLICY, Start_Date, Expire_Date, Expire_Date_Require, SELECT_POLICY } from '../../../constants/Constants';
 import { DEALER_PIN } from '../../../constants/DealerConstants';
 import moment from 'moment';
+import Invoice from './invoice';
+import { inventorySales } from '../../utils/columnsUtils';
 
 const confirm = Modal.confirm;
 const success = Modal.success
@@ -33,93 +35,13 @@ class AddDevice extends Component {
         super(props);
         this.sim_id2_added = false;
         this.sim_id2_included = false;
-        const invoiceColumns = [
-            {
-                dataIndex: 'counter',
-                className: '',
-                title: '#',
-                align: "center",
-                key: 'counter',
-                sorter: (a, b) => { return a.counter - b.counter },
-                sortDirections: ['ascend', 'descend'],
-
-            },
-            {
-                dataIndex: 'item',
-                className: '',
-                title: convertToLang(this.props.translation["ITEM"], "ITEM"),
-                align: "center",
-                key: 'item',
-                sorter: (a, b) => { return a.item.localeCompare(b.item) },
-
-                sortDirections: ['ascend', 'descend'],
-
-            },
-            {
-                title: convertToLang(this.props.translation[DUMY_TRANS_ID], "DESCRPTION"),
-                dataIndex: 'description',
-                className: '',
-                align: "center",
-                className: '',
-                key: 'description',
-                // ...this.getColumnSearchProps('status'),
-                sorter: (a, b) => { return a.description.localeCompare(b.description) },
-                sortDirections: ['ascend', 'descend'],
-
-            },
-            {
-                title: convertToLang(this.props.translation[DUMY_TRANS_ID], "SERVICE TERM"),
-                dataIndex: 'term',
-                className: '',
-                align: "center",
-                className: '',
-                key: 'term',
-                // ...this.getColumnSearchProps('status'),
-                sorter: (a, b) => { return a.term.localeCompare(b.term) },
-                sortDirections: ['ascend', 'descend'],
-
-            },
-            {
-                title: convertToLang(this.props.translation[DUMY_TRANS_ID], "UNIT PRICE (CREDITS)"),
-                dataIndex: 'unit_price',
-                className: '',
-                align: "center",
-                className: '',
-                key: 'unit_price',
-                // ...this.getColumnSearchProps('status'),
-                sorter: (a, b) => { return a.unit_price - b.unit_price },
-
-                sortDirections: ['ascend', 'descend'],
-            },
-            {
-                title: convertToLang(this.props.translation[DUMY_TRANS_ID], "QUANTITY"),
-                dataIndex: 'quantity',
-                className: '',
-                align: "center",
-                className: '',
-                key: 'quantity',
-                // ...this.getColumnSearchProps('status'),
-                sorter: (a, b) => { return a.quantity - b.quantity },
-
-                sortDirections: ['ascend', 'descend'],
-            },
-            {
-                title: convertToLang(this.props.translation[DUMY_TRANS_ID], "LINE TOTAL"),
-                dataIndex: 'line_total',
-                className: '',
-                align: "center",
-                className: '',
-                key: 'line_total',
-                // ...this.getColumnSearchProps('status'),
-                sorter: (a, b) => { return a.line_total - b.line_total },
-                sortDirections: ['ascend', 'descend'],
-
-            },
-        ];
+        const invoiceColumns = inventorySales(props.translation);
 
 
         this.state = {
             visible: false,
+            invoiceVisible: false,
+            invoiceType: '',
             type: 0,
             addNewUserModal: false,
             isloading: false,
@@ -254,8 +176,8 @@ class AddDevice extends Component {
         this.props.form.resetFields();
     }
 
-    confirmRenderList(packages, products) {
-
+    confirmRenderList(packages, products, term = this.state.term, duplicate = this.state.duplicate) {
+        // console.log('state is: ', this.state)
         let counter = 0
         let packagesList = packages.map((item, index) => {
             // let services = JSON.parse(item.pkg_features)
@@ -266,10 +188,10 @@ class AddDevice extends Component {
                 rowKey: item.rowKey,
                 item: `Package`,
                 description: item.pkg_name,
-                term: this.state.term + " Month",
+                term: term + " Month",
                 unit_price: item.pkg_price,
-                quantity: (this.state.duplicate > 0) ? 1 * this.state.duplicate : 1,
-                line_total: (this.state.duplicate > 0) ? item.pkg_price * this.state.duplicate : item.pkg_price
+                quantity: (duplicate > 0) ? 1 * duplicate : 1,
+                line_total: (duplicate > 0) ? item.pkg_price * duplicate : item.pkg_price
             }
         });
         let productList = products.map((item, index) => {
@@ -281,10 +203,10 @@ class AddDevice extends Component {
                 rowKey: item.rowKey,
                 item: `Product`,
                 description: item.price_for,
-                term: (this.state.term === '0') ? "TRIAL" : this.state.term + " Month",
+                term: (term === '0') ? "TRIAL" : term + " Month",
                 unit_price: item.unit_price,
-                quantity: (this.state.duplicate > 0) ? 1 * this.state.duplicate : 1,
-                line_total: (this.state.duplicate > 0) ? item.unit_price * this.state.duplicate : item.unit_price
+                quantity: (duplicate > 0) ? 1 * duplicate : 1,
+                line_total: (duplicate > 0) ? item.unit_price * duplicate : item.unit_price
             }
         });
         return [...packagesList, ...productList]
@@ -624,16 +546,23 @@ class AddDevice extends Component {
 
     submitServicesConfirm(pay_now) {
 
-        
+        // this.refs.invoice_modal.getWrappedInstance().showModal(true);
 
-        let total_price = this.state.total_price;
-        console.log("total_price ", total_price)
+
+        // let total_price = this.state.total_price;
+        // console.log("total_price ", total_price)
+        // console.log("at pay now....")
+        // total_price = total_price - 0.05 * total_price;
         if (pay_now) {
-            console.log("at pay now....")
-            total_price = total_price - 0.05 * total_price;
+            this.setState({ invoiceVisible: true, invoiceType: "pay_now" })
+        } else {
+            this.setState({ invoiceVisible: true, invoiceType: "pay_later" })
         }
-        console.log("5 % total_price ", total_price)
-        this.state.serviceData.pay_now = pay_now
+
+        // console.log("after 5 % total_price ", total_price)
+        // console.log("5 % total_price ", Math.ceil(total_price))
+
+        // this.state.serviceData.pay_now = pay_now
         // if (this.state.total_price <= this.props.user_credit) {
         //     this.props.AddDeviceHandler(this.state.serviceData);
         //     this.props.hideModal();
@@ -647,6 +576,14 @@ class AddDevice extends Component {
         // }
     }
 
+    handleOkInvoice = () => {
+        console.log("handleOk for invoice")
+    }
+
+    handleCancelInvoice = () => {
+        this.setState({ invoiceVisible: false })
+    }
+
     render() {
         // console.log(this.props);
         // console.log('id is', this.state.products, this.state.packages);
@@ -657,6 +594,8 @@ class AddDevice extends Component {
 
         return (
             <div>
+
+
                 {(this.props.preActive) ?
                     <Radio.Group className="width_100 text-center" onChange={this.handleChange} ref='option' defaultValue="0" buttonStyle="solid">
                         <Radio.Button className="dev_radio_btn" value="0">{convertToLang(this.props.translation[SINGLE_DEVICE], "Single Device")}</Radio.Button>
@@ -1204,6 +1143,33 @@ class AddDevice extends Component {
                             <Button style={{ backgroundColor: "green", color: "white" }} onClick={() => { this.submitServicesConfirm(true) }}>PAY NOW</Button>
                         </div >
                     </Fragment>
+                </Modal>
+                <Modal
+                    width="850px"
+                    visible={this.state.invoiceVisible}
+                    maskClosable={false}
+                    closable={false}
+                    // title={convertToLang(this.props.translation[""], "MDM PANEL SERVICES")}
+                    onOk={this.handleOkInvoice}
+                    onCancel={this.handleCancelInvoice}
+                    className="edit_form"
+                    bodyStyle={{ overflow: "overlay" }}
+                    okText={convertToLang(this.props.translation[""], "CHECKOUT")}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                >
+                    <Invoice
+                        // ref="invoice_modal"
+                        PkgSelectedRows={this.state.PkgSelectedRows}
+                        proSelectedRows={this.state.proSelectedRows}
+                        renderInvoiceList={this.confirmRenderList}
+                        subTotal={this.state.serviceData.total_price}
+                        invoiceType={this.state.invoiceType}
+                        term={this.state.term}
+                        duplicate={this.state.duplicate}
+                        deviceAction={"Add"}
+                        user_id={this.state.addNewUserValue}
+                        translation={this.props.translation}
+                    />
                 </Modal>
             </div >
         )
