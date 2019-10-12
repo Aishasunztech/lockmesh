@@ -14,7 +14,8 @@ import { getSimIDs, getChatIDs, getPGPEmails, getParentPackages, getProductPrice
 import { getPolicies } from "../../../appRedux/actions/ConnectDevice";
 import {
     addUser,
-    getUserList
+    getUserList,
+    getInvoiceId
 } from "../../../appRedux/actions/Users";
 import { Button_Cancel, Button_submit, Button_Add_User } from '../../../constants/ButtonConstants';
 import { LABEL_DATA_PGP_EMAIL, LABEL_DATA_SIM_ID, LABEL_DATA_CHAT_ID, DUMY_TRANS_ID } from '../../../constants/LabelConstants';
@@ -165,6 +166,10 @@ class AddDevice extends Component {
             this.setState({ addNewUserModal: true })
         }
         this.setState({ isloading: nextProps.isloading })
+
+        if (this.props.invoiceID !== nextProps.invoiceID) {
+            this.setState({ invoiceID: nextProps.invoiceID })
+        }
     }
 
     handleReset = () => {
@@ -545,39 +550,37 @@ class AddDevice extends Component {
     }
 
     submitServicesConfirm(pay_now) {
+        this.props.getInvoiceId();
+        this.state.serviceData.pay_now = pay_now;
 
-        // this.refs.invoice_modal.getWrappedInstance().showModal(true);
-
-
-        // let total_price = this.state.total_price;
-        // console.log("total_price ", total_price)
-        // console.log("at pay now....")
-        // total_price = total_price - 0.05 * total_price;
         if (pay_now) {
             this.setState({ invoiceVisible: true, invoiceType: "pay_now" })
         } else {
             this.setState({ invoiceVisible: true, invoiceType: "pay_later" })
         }
 
-        // console.log("after 5 % total_price ", total_price)
-        // console.log("5 % total_price ", Math.ceil(total_price))
-
-        // this.state.serviceData.pay_now = pay_now
-        // if (this.state.total_price <= this.props.user_credit) {
-        //     this.props.AddDeviceHandler(this.state.serviceData);
-        //     this.props.hideModal();
-        //     this.handleReset();
-        //     this.setState({
-        //         serviceData: {},
-        //         showConfirmCredit: false
-        //     })
-        // } else {
-        //     showCreditPurchase(this)
-        // }
     }
 
     handleOkInvoice = () => {
-        console.log("handleOk for invoice")
+        console.log("handleOk for invoice", this.state.serviceData)
+
+        if (this.state.total_price <= this.props.user_credit) {
+            this.props.AddDeviceHandler(this.state.serviceData);
+            this.props.hideModal();
+            this.handleReset();
+            this.setState({
+                serviceData: {},
+                showConfirmCredit: false
+            })
+        } else {
+            showCreditPurchase(this)
+        }
+
+        this.setState({
+            invoiceVisible: false,
+            showConfirmCredit: false,
+            servicesModal: false
+        })
     }
 
     handleCancelInvoice = () => {
@@ -1168,6 +1171,7 @@ class AddDevice extends Component {
                         duplicate={this.state.duplicate}
                         deviceAction={"Add"}
                         user_id={this.state.addNewUserValue}
+                        invoiceID={this.state.invoiceID}
                         translation={this.props.translation}
                     />
                 </Modal>
@@ -1191,14 +1195,16 @@ function mapDispatchToProps(dispatch) {
         getPolicies: getPolicies,
         addUser: addUser,
         getUserList: getUserList,
+        getInvoiceId: getInvoiceId,
         getParentPackages: getParentPackages,
         getProductPrices: getProductPrices,
         addSimPermission: null
     }, dispatch);
 }
 var mapStateToProps = ({ routing, devices, device_details, users, settings, sidebar }) => {
-    // console.log("sdfsaf", users.users_list);
+    // console.log("users.invoiceID at componente", users.invoiceID);
     return {
+        invoiceID: users.invoiceID,
         routing: routing,
         sim_ids: devices.sim_ids,
         chat_ids: devices.chat_ids,

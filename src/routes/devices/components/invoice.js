@@ -146,7 +146,7 @@ class Invoice extends Component {
                 }}>
                     <Row>
                         <Col span={5}>Invoice Number:</Col>
-                        <Col span={7}>{invoiceData.invoice_nr}</Col>
+                        <Col span={7}>{this.props.invoiceID}</Col>
                         <Col span={5}>Dealer Name:</Col>
                         <Col span={7}>{user.name}</Col>
                     </Row>

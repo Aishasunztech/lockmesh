@@ -16,7 +16,6 @@ export default class AddDevice extends Component {
             device: null,
             handleSubmit: null,
             preActive: false,
-            // invoiceVisible: false
         }
     }
 
@@ -102,11 +101,6 @@ export default class AddDevice extends Component {
                         history={this.props.history}
                     />
                 </Modal>
-
-                {/* <Invoice
-                    invoiceVisible={this.state.invoiceVisible}
-                    translation={this.props.translation}
-                /> */}
             </div>
         )
 

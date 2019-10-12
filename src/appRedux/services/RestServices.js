@@ -711,6 +711,11 @@ const RestService = {
         )
     },
 
+    //GET invoice id
+    getInvoiceId: () => {
+        return axios.get(BASE_URL + 'users/getInvoiceId', RestService.getHeader())
+    },
+
     //GET User List against device dealer
     userListOfDevice: (dealerId) => {
         return axios.post(BASE_URL + 'users/userListOfDevice', { dealerId }, RestService.getHeader())
