@@ -10,6 +10,7 @@ import AboveHeader from "../Topbar/AboveHeader/index";
 import BelowHeader from "../Topbar/BelowHeader/index";
 import Topbar from "../Topbar/index";
 import Customizer from "./Customizer";
+import RightSidebar from "../rightSidebar";
 // import Chat from "../../components/Chat";
 import { footerText } from "../../util/config";
 import App from "../../routes/index";
@@ -215,6 +216,7 @@ export class MainApp extends Component {
             </Content>
           </Layout>
           <Customizer />
+          <RightSidebar />
         </Layout>
       </div>
     )
