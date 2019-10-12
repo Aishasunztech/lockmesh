@@ -1,8 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import Highlighter from 'react-highlight-words';
-import { Input, Button, Icon, Select } from "antd";
-
+import { Input, Button, Icon, Select, Modal } from "antd";
 
 import { bindActionCreators } from "redux";
 
@@ -46,7 +45,7 @@ import {
 } from '../../constants/AppFilterConstants';
 
 import {
-    Button_Add_Device
+    Button_Add_Device, Button_Yes, Button_No
 } from '../../constants/ButtonConstants'
 
 import {
@@ -75,7 +74,7 @@ import {
     getPagination
 } from '../../appRedux/actions/Common';
 
-import { unflagged, unlinkDevice } from '../../appRedux/actions/ConnectDevice';
+import { unflagged, unlinkDevice, transferDeviceProfile } from '../../appRedux/actions/ConnectDevice';
 
 import {
     getNotification
@@ -159,6 +158,21 @@ class Devices extends Component {
 
     deleteAllUnlinked = () => {
         alert('Its working')
+    }
+
+    transferDeviceProfile = (obj) => {
+        // console.log('at req transferDeviceProfile', obj)
+        let _this = this;
+        Modal.confirm({
+            content: `Are you sure you want to Transfer, from ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
+            onOk() {
+                // console.log('OK');
+                _this.props.transferDeviceProfile(obj);
+            },
+            onCancel() { },
+            okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
+            cancelText: convertToLang(this.props.translation[Button_No], 'No'),
+        });
     }
 
     filterList = (type, devices) => {
@@ -1049,6 +1063,7 @@ class Devices extends Component {
                                 pageHeading={convertToLang(this.props.translation[Sidebar_devices], "Devices")}
                             />
                             <DevicesList
+                                transferDeviceProfile={this.transferDeviceProfile}
                                 onChangeTableSorting={this.handleTableChange}
                                 devices={this.state.devices}
                                 allDevices={this.state.allDevices}
@@ -1227,7 +1242,8 @@ function mapDispatchToProps(dispatch) {
         unlinkDevice: unlinkDevice,
         getSimIDs: getSimIDs,
         getChatIDs: getChatIDs,
-        getPgpEmails: getPGPEmails
+        getPgpEmails: getPGPEmails,
+        transferDeviceProfile: transferDeviceProfile
     }, dispatch);
 }
 

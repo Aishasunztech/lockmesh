@@ -26,7 +26,8 @@ import {
     ADD_DEVICE,
     BULK_DEVICES_LIST,
     TRANSFER_DEVICE,
-    FLAG_DEVICE
+    FLAG_DEVICE,
+    ACCEPT_REQUEST
 } from "../../constants/ActionTypes";
 
 // import { convertToLang } from '../../routes/utils/commonUtils';
@@ -146,6 +147,22 @@ export default (state = initialState, action) => {
                 devices: action.payload,
             }
 
+        case ACCEPT_REQUEST: {
+            console.log("ACCEPT_REQUEST at devices" , action);
+            if (action.response.status) {
+                // let objIndex = state.devices.findIndex((obj => obj.device_id === action.payload.device.device_id));
+                // if (objIndex !== -1) {
+                //     state.devices[objIndex].flagged = action.payload.device.flagged;
+                //     state.devices[objIndex].finalStatus = action.payload.device.finalStatus;
+                // }
+            }
+            return {
+                ...state,
+                // devices: [...state.devices]
+            }
+
+        }
+
         case FLAG_DEVICE: {
             if (action.response.status) {
                 let objIndex = state.devices.findIndex((obj => obj.device_id === action.payload.device.device_id));
@@ -177,24 +194,24 @@ export default (state = initialState, action) => {
 
         case UNLINK_DEVICE: {
             // console.log("UNLINK_DEVICE reducer:: ", action.payload)
-            let devices = state.devices;
+            let stateDevices = state.devices;
 
             if (action.response.status) {
                 success({
                     title: action.response.msg,
                 });
 
-                let objIndex = state.devices.findIndex((obj => obj.device_id === action.payload.device_id));
+                let objIndex = stateDevices.findIndex((obj => obj.device_id === action.payload.device_id));
                 // console.log("objIndex ", objIndex)
                 if (objIndex !== -1) {
-                    state.devices[objIndex].unlink_status = 1;
-                    state.devices[objIndex].finalStatus = "Unlinked";
+                    stateDevices[objIndex].unlink_status = 1;
+                    stateDevices[objIndex].finalStatus = "Unlinked";
                 }
 
                 // if (action.isTransferred) {
-                //     devices = state.devices.filter((obj => obj.device_id !== action.payload.device_id));
+                //     devices = stateDevices.filter((obj => obj.device_id !== action.payload.device_id));
                 // }
-                // console.log("state.devices", state.devices)
+                // console.log("stateDevices", stateDevices)
             } else {
                 error({
                     title: action.response.msg,
@@ -204,21 +221,21 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                devices: [...state.devices]
+                devices: [...stateDevices]
             }
         }
 
         case TRANSFER_DEVICE: {
-
-            // console.log('check devices', state.devices)
+            let stateDevices = state.devices;
+            // console.log('check devices', stateDevices)
             if (action.response.status) {
                 success({
                     title: action.response.msg,
                 });
-                let objIndex = state.devices.findIndex((obj => obj.device_id === action.payload.device_id));
+                let objIndex = stateDevices.findIndex((obj => obj.device_id === action.payload.device_id));
                 if (objIndex !== -1) {
-                    state.devices[objIndex].finalStatus = 'Transfered';
-                    state.devices[objIndex].transfer_status = 1;
+                    stateDevices[objIndex].finalStatus = 'Transfered';
+                    stateDevices[objIndex].transfer_status = 1;
                 }
             } else {
                 error({
@@ -229,7 +246,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                devices: [...state.devices]
+                devices: [...stateDevices]
             }
         }
 
