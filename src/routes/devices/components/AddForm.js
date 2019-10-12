@@ -78,7 +78,8 @@ class AddDevice extends Component {
             proSelectedRows: [],
             duplicate: 0,
             showConfirmCredit: false,
-            serviceData: {}
+            serviceData: {},
+            invoiceID: 'PI00001'
         }
     }
 
@@ -578,7 +579,7 @@ class AddDevice extends Component {
 
         this.setState({
             invoiceVisible: false,
-            showConfirmCredit: false,
+            // showConfirmCredit: false,
             servicesModal: false
         })
     }

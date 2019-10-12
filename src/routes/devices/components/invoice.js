@@ -7,6 +7,7 @@ import { convertToLang } from '../../utils/commonUtils';
 import { DUMY_TRANS_ID } from '../../../constants/LabelConstants';
 import { inventorySales } from '../../utils/columnsUtils';
 import moment from 'moment';
+import { APP_TITLE } from '../../../constants/Application';
 
 
 // const invoice = {
@@ -64,40 +65,19 @@ class Invoice extends Component {
 
 
     showModal = (visible) => {
-        console.log("invoice showModal ", visible);
+        // console.log("invoice showModal ", visible);
         this.setState({
             visible: visible
         });
     }
 
     componentDidUpdate() {
-        // this.setState({
-        //     visible: this.props.invoiceVisible
-        // })
+
     }
 
     componentWillReceiveProps(nextProps) {
-        // this.setState({
-        //     visible: nextProps.invoiceVisible
-        // })
+
     }
-
-    // renderInvoiceList(invoiceList) {
-
-    //     console.log("invoiceList ", invoiceList)
-    //     return invoiceList.map((item, index) => {
-    //         return {
-    //             id: item.id,
-    //             rowKey: item.rowKey,
-    //             item: item.item,
-    //             description: item.description,
-    //             term: "0", // (this.state.term === '0') ? "TRIAL" : this.state.term + " Month",
-    //             unit_price: `$ ${item.unit_price}.00`,
-    //             quantity: (item.quantity > 0) ? 1 * item.quantity : 1,
-    //             line_total: (item.quantity > 0) ? item.unit_price * item.quantity : item.unit_price
-    //         }
-    //     })
-    // }
 
     handleOk = () => {
         console.log("handleOk for invoice")
@@ -108,32 +88,33 @@ class Invoice extends Component {
     }
 
     render() {
-        const { visible, loading } = this.state;
-        const { user } = this.props;
+        const { user, deviceAction } = this.props;
 
+        let total;
         let discount = Math.ceil(Number(this.props.subTotal) * 0.05);
-        let total = this.props.subTotal - discount;
         let balanceDue = this.props.subTotal;
         let paid = 0;
-        if (this.props.invoiceType === "pay_now") {
-            balanceDue = 0;
+
+
+        if (deviceAction === "Edit") {
+            total = this.props.total;
             paid = total;
+
+            if (this.props.invoiceType === "pay_now") {
+                paid = balanceDue = total = total - discount;
+            } else {
+                balanceDue = this.props.subTotal - this.props.creditsToRefund
+            }
+        } else {
+            total = this.props.subTotal - discount;
+            if (this.props.invoiceType === "pay_now") {
+                balanceDue = total;
+                paid = total;
+            }
         }
 
+
         return (
-            // <div>
-            //     <Modal
-            //         width="850px"
-            //         visible={this.state.visible}
-            //         maskClosable={false}
-            //         title={convertToLang(this.props.translation[""], "MDM PANEL SERVICES")}
-            //         onOk={this.handleOk}
-            //         onCancel={this.handleCancel}
-            //         className="edit_form"
-            //         bodyStyle={{ overflow: "overlay" }}
-            //         okText={convertToLang(this.props.translation[""], "CHECKOUT")}
-            //         cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
-            //     >
             <div>
                 <h1 style={{ textAlign: 'center' }}>MDM PANEL SERVICES</h1>
                 <h4 style={{ textAlign: 'center' }}>FLAT/RM H 15/F  SIU KING BLDG 6 ON WAH ST <br /> NGAU TAU KOK KLN, HONG KONG</h4>
@@ -145,34 +126,63 @@ class Invoice extends Component {
                     paddingBottom: "10px"
                 }}>
                     <Row>
-                        <Col span={5}>Invoice Number:</Col>
-                        <Col span={7}>{this.props.invoiceID}</Col>
-                        <Col span={5}>Dealer Name:</Col>
-                        <Col span={7}>{user.name}</Col>
+                        <Col span={6}>Invoice Number:</Col>
+                        <Col span={6}>{this.props.invoiceID}</Col>
+                        <Col span={6}>Dealer Name:</Col>
+                        <Col span={6}>{`${user.name.toUpperCase()} (${APP_TITLE})`}</Col>
                     </Row>
                     <Row>
-                        <Col span={5}>Invoice Date:</Col>
-                        <Col span={7}>{moment().format("YYYY/MM/DD")} </Col>
-                        <Col span={5}>User ID:</Col>
-                        <Col span={7}>{this.props.user_id}</Col>
+                        <Col span={6}>Invoice Date:</Col>
+                        <Col span={6}>{moment().format("YYYY/MM/DD")} </Col>
+                        <Col span={6}>User ID:</Col>
+                        <Col span={6}>{this.props.user_id}</Col>
                     </Row>
                     <Row>
-                        <Col span={5}>Balance Due:</Col>
-                        <Col span={7}>$ {balanceDue}.00</Col>
-                        <Col span={5}>Dealer PIN:</Col>
-                        <Col span={7}>{user.dealer_pin}</Col>
+                        <Col span={6}>Balance Due:</Col>
+                        <Col span={6}>{balanceDue}.00 Credits</Col>
+                        <Col span={6}>Dealer PIN:</Col>
+                        <Col span={6}>{user.dealer_pin}</Col>
                     </Row>
                     <Row>
                         <Col span={12} />
-                        <Col span={5}>Device ID:</Col>
-                        <Col span={7}>{(this.props.deviceAction === "Add") ? "Pre-Activation" : "ASDF123456"}</Col>
+                        <Col span={6}>Device ID:</Col>
+                        <Col span={6}>{(this.props.deviceAction === "Add") ? "Pre-Activation" : ((this.props.device_id) ? this.props.device_id : "ABCD123456")}</Col>
                     </Row>
                 </div>
 
                 <Fragment>
+                    {(deviceAction === "Edit") ?
+                        <div style={{ marginTop: 40 }}>
+                            <h3 style={{ textAlign: "center" }}><b>CURRENT SERVICES</b></h3>
+                            <Table
+                                size="middle"
+                                columns={this.state.invoiceColumns}
+                                dataSource={this.props.renderInvoiceList((this.props.currentPakages) ? JSON.parse(this.props.currentPakages.packages) : [], (this.props.currentPakages) ? JSON.parse(this.props.currentPakages.products) : [], this.props.term, this.props.duplicate)}
+                                pagination={false}
+                            />
+                            <br />
+                            <div style={{ textAlign: 'right' }}>
+                                <Row style={{ fontWeight: 'bold' }}>
+                                    <Col span={12} />
+                                    <Col span={8}>Remaining days of services : </Col>
+                                    <Col span={4}>{this.props.serviceRemainingDays}</Col>
+                                </Row>
+                                <Row>
+                                    <Col span={12} />
+                                    <Col span={8}>Previous service refund credits : </Col>
+                                    <Col span={4}>{this.props.creditsToRefund}.00 Credits</Col>
+                                </Row>
+                            </div>
+                        </div >
+                        : null}
+
                     <div style={{ marginTop: 20 }}>
+                        {(deviceAction === "Edit") ?
+                            <h3 style={{ textAlign: "center" }}><b>NEW SERVICES</b></h3>
+                            : null}
                         <Table
-                            width='850px'
+                            // width='850px'
+                            size="middle"
                             columns={this.state.invoiceColumns}
                             dataSource={this.props.renderInvoiceList(this.props.PkgSelectedRows, this.props.proSelectedRows, this.props.term, this.props.duplicate)}
                             pagination={false}
@@ -180,43 +190,54 @@ class Invoice extends Component {
                     </div >
                 </Fragment>
 
-                <div style={{ marginTop: 20, marginBottom: 70 }}>
+                <div style={{ marginTop: 20, textAlign: 'right' }}>
                     <Row>
                         <Col span={16} />
-                        <Col span={5}>Subtotal</Col>
-                        <Col span={3}>$ {this.props.subTotal}</Col>
+                        <Col span={4}>Subtotal : </Col>
+                        <Col span={4}>{this.props.subTotal} Credits</Col>
                     </Row>
+                    {(deviceAction === "Edit") ?
+                        <Row>
+                            <Col span={12} />
+                            <Col span={8}>Previous service refund credits : </Col>
+                            <Col span={4}>{this.props.creditsToRefund} Credits</Col>
+                        </Row>
+                        : null}
                     {(this.props.invoiceType === "pay_now") ?
                         <Fragment>
                             <Row>
-                                <Col span={16} />
-                                <Col span={5}>Discount</Col>
-                                <Col span={3}>$ {discount}</Col>
+                                <Col span={12} />
+                                <Col span={8}>Discount % : </Col>
+                                <Col span={4}> 5 % </Col>
                             </Row>
                             <Row>
-                                <Col span={16} />
-                                <Col span={5}>Total</Col>
-                                <Col span={3}>$ {total}.00</Col>
+                                <Col span={12} />
+                                <Col span={8}>Discount Credits : </Col>
+                                <Col span={4}>{discount} Credits</Col>
+                            </Row>
+                            <Row>
+                                <Col span={12} />
+                                <Col span={8}>Total : </Col>
+                                <Col span={4}>{total}.00 Credits</Col>
                             </Row>
                         </Fragment>
                         : null}
                     <Row>
                         <Col span={16} />
-                        <Col span={5}>Paid To Date</Col>
-                        <Col span={3}>{`$ ${paid}.00`}</Col>
+                        <Col span={4}>Paid To Date : </Col>
+                        <Col span={4}>{`${paid}.00 Credits`}</Col>
                     </Row>
                     <Row>
                         <Col span={16} />
-                        <Col span={5}><b>Balance Due</b></Col>
-                        <Col span={3}><b>{`$ ${balanceDue}`}</b></Col>
+                        <Col span={4}>Balance Due : </Col>
+                        <Col span={4}>{`${balanceDue}.00 Credits`}</Col>
                     </Row>
+                    <h5><b>Equivalent USD Price</b></h5>
+
                 </div>
-                <p style={{ textAlign: 'center' }}>Thank you for your business.</p>
+                <p style={{ textAlign: 'center', marginTop: 70 }}>Thank you for your business.</p>
 
             </div>
-            //     </Modal>
-
-            // </div>
         )
 
     }
@@ -230,11 +251,9 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ auth }) => {
-    console.log("invoice component ", auth.authUser);
+    // console.log("invoice component ", auth.authUser);
     return {
         user: auth.authUser,
-        // routing: routing,
-        // user_credit: sidebar.user_credit,
     };
 }
 
