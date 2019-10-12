@@ -163,7 +163,9 @@ class EditDevice extends Component {
             PkgSelectedRows: [],
             proSelectedRows: [],
             creditsToRefund: 0,
-            serviceRemainingDays: 0
+            serviceRemainingDays: 0,
+            showConfirmCredit: false,
+            serviceData: {},
         }
     }
     handleUserChange = (e) => {
@@ -198,7 +200,8 @@ class EditDevice extends Component {
                                 rowKey: sim_id_price[0].id,
                                 unit_price: sim_id_price[0].unit_price,
                                 rowKey: sim_id_price[0].id,
-                                price_for: "SIM ID 2"
+                                price_for: "SIM ID 2",
+                                pkg_term: this.state.term + " Months"
                             }
 
                             this.state.proSelectedRows.push(data);
@@ -215,24 +218,28 @@ class EditDevice extends Component {
                     let priceToCharge = this.state.total_price - this.state.creditsToRefund
 
 
-                    if (priceToCharge <= this.props.user_credit) {
-                        // console.log(this.state.products);
-                        values.products = this.state.products;
-                        values.packages = this.state.packages;
-                        values.expiry_date = this.state.term;
-                        values.total_price = priceToCharge
-                        values.service = true
+                    // if (priceToCharge <= this.props.user_credit) {
+                    // console.log(this.state.products);
+                    values.products = this.state.products;
+                    values.packages = this.state.packages;
+                    values.expiry_date = this.state.term;
+                    values.total_price = priceToCharge
+                    values.service = true
+                    this.setState({
+                        serviceData: values,
+                        showConfirmCredit: true
 
-                        // if (this.state.type == 1) {
-                        showConfirmCredit(this, values);
-                        // } else {
-                        //     this.props.AddDeviceHandler(values);
-                        //     this.props.hideModal();
-                        //     this.handleReset();
-                        // }
-                    } else {
-                        showCreditPurchase(this)
-                    }
+                    })
+                    // if (this.state.type == 1) {
+                    // showConfirmCredit(this, values);
+                    // } else {
+                    //     this.props.AddDeviceHandler(values);
+                    //     this.props.hideModal();
+                    //     this.handleReset();
+                    // }
+                    // } else {
+                    //     showCreditPurchase(this)
+                    // }
                 } else {
                     // console.log("Device Details ", values)
                     this.props.editDeviceFunc(values);
@@ -278,7 +285,6 @@ class EditDevice extends Component {
 
 
         let prevService = this.props.device.services
-        console.log(this.props.device);
         let creditsToRefund = 0
         let serviceRemainingDays = 0
         if (prevService) {
@@ -462,7 +468,7 @@ class EditDevice extends Component {
         let packagesData = []
         let productData = []
         let total_price = 0
-        // console.log(products, packages);
+        console.log(products, packages);
         if (packages && packages.length) {
             packages.map((item) => {
                 let data = {
@@ -470,7 +476,8 @@ class EditDevice extends Component {
                     pkg_features: item.pkg_features,
                     pkg_price: item.pkg_price,
                     pkg_dealer_type: item.dealer_type,
-                    pkg_name: item.pkg_name
+                    pkg_name: item.pkg_name,
+                    pkg_term: item.pkg_term
                 }
                 total_price = total_price + Number(item.pkg_price)
                 packagesData.push(data)
@@ -500,7 +507,8 @@ class EditDevice extends Component {
                 let data = {
                     id: item.id,
                     price_for: item.item,
-                    unit_price: item.unit_price
+                    unit_price: item.unit_price,
+                    price_term: item.price_term
                 }
                 total_price = total_price + Number(item.unit_price)
                 productData.push(data)
@@ -548,6 +556,22 @@ class EditDevice extends Component {
             PkgSelectedRows: packages,
             proSelectedRows: products
         })
+    }
+
+    submitServicesConfirm(pay_now) {
+        this.state.serviceData.pay_now = pay_now
+        console.log(this.state.serviceData);
+        if (this.state.total_price <= this.props.user_credit) {
+            this.props.editDeviceFunc(this.state.serviceData)
+            this.props.hideModal();
+            this.handleReset();
+            this.setState({
+                serviceData: {},
+                showConfirmCredit: false
+            })
+        } else {
+            showCreditPurchase(this)
+        }
     }
 
 
@@ -1013,6 +1037,77 @@ class EditDevice extends Component {
                         device={this.props.device}
                     />
                 </Modal>
+
+                <Modal
+                    width={900}
+                    visible={this.state.showConfirmCredit}
+                    title={<span style={{ fontWeight: "bold" }}> {convertToLang(this.props.translation[DUMY_TRANS_ID], "Do You Really want to apply selected services on device ?")} </span>}
+                    maskClosable={false}
+                    // onOk={this.handleOk}
+                    closable={false}
+                    onCancel={
+                        () => {
+                            this.setState({
+                                showConfirmCredit: false
+                            })
+                        }
+                    }
+                    footer={null}
+                    className="edit_form"
+                >
+                    <Fragment>
+                        <div style={{ marginTop: 20 }}>
+                            <h3 style={{ textAlign: "center" }}><b>CURRENT SERVICES</b></h3>
+                            <Table
+                                id='packages'
+                                className={"devices mb-20"}
+                                // rowSelection={packageRowSelection}
+                                size="middle"
+                                bordered
+                                columns={this.state.invoiceColumns}
+                                dataSource={this.confirmRenderList((this.props.device.services) ? JSON.parse(this.props.device.services.packages) : [], (this.props.device.services) ? JSON.parse(this.props.device.services.products) : [])}
+                                pagination={
+                                    false
+                                }
+                            />
+                            <h5 style={{ textAlign: "right" }}><b>Remaining days of services : {this.state.serviceRemainingDays}</b></h5>
+                            <h5 style={{ textAlign: "right" }}>Previous service refund credits :  {this.state.creditsToRefund} Credits</h5>
+                        </div >
+
+                        <div style={{ marginTop: 20 }}>
+                            <h3 style={{ textAlign: "center" }}><b>NEW SERVICES</b></h3>
+                            <Table
+                                id='packages'
+                                className={"devices mb-20"}
+                                // rowSelection={packageRowSelection}
+                                size="middle"
+                                bordered
+                                columns={this.state.invoiceColumns}
+                                dataSource={this.confirmRenderList(this.state.PkgSelectedRows, this.state.proSelectedRows)}
+                                pagination={
+                                    false
+                                }
+                            />
+                        </div >
+                        <div>
+                            <h5 style={{ textAlign: "right" }}>Sub Total :  {this.state.total_price} Credits</h5>
+
+                            <h5 style={{ textAlign: "right" }}>Previous service refund credits :  {this.state.creditsToRefund} Credits</h5>
+                            <h5 style={{ textAlign: "right" }}><b>Total :  {this.state.serviceData.total_price} Credits</b></h5>
+                            <h4 style={{ textAlign: "center" }}><b>There will be a charge of {this.state.serviceData.total_price} Credits</b></h4>
+                        </div>
+                        {(this.state.term !== '0') ?
+                            <div>
+                                <h4 style={{ textAlign: "center", color: 'red' }}>If you PAY NOW you will get 5% discount.</h4>
+                            </div>
+                            : null}
+                        <div className="edit_ftr_btn" >
+                            <Button onClick={() => { this.setState({ showConfirmCredit: false }) }}>CANCEL</Button>
+                            <Button type='primary' onClick={() => { this.submitServicesConfirm(false) }}>PAY LATER</Button>
+                            <Button style={{ backgroundColor: "green", color: "white" }} onClick={() => { this.submitServicesConfirm(true) }}>PAY NOW</Button>
+                        </div >
+                    </Fragment>
+                </Modal>
             </div >
 
         )
@@ -1058,68 +1153,68 @@ export default connect(mapStateToProps, mapDispatchToProps, null, { withRef: tru
 
 
 
-function showConfirmCredit(_this, values) {
-    let prevPackages = (_this.props.device.services) ? JSON.parse(_this.props.device.services.packages) : []
-    let prevProducts = (_this.props.device.services) ? JSON.parse(_this.props.device.services.products) : []
-    confirm({
-        width: 900,
-        title: <span style={{ fontWeight: "bold" }}>Do You Really want to apply selected services on device ? </span>,
-        content:
-            <Fragment>
-                <div style={{ marginTop: 20 }}>
-                    <h3 style={{ textAlign: "center" }}><b>CURRENT SERVICES</b></h3>
-                    <Table
-                        id='packages'
-                        className={"devices mb-20"}
-                        // rowSelection={packageRowSelection}
-                        size="middle"
-                        bordered
-                        columns={_this.state.invoiceColumns}
-                        dataSource={_this.confirmRenderList(prevPackages, prevProducts)}
-                        pagination={
-                            false
-                        }
-                    />
-                    <h5 style={{ textAlign: "right" }}><b>Remaining days of services : {_this.state.serviceRemainingDays}</b></h5>
-                    <h5 style={{ textAlign: "right" }}>Previous service refund credits :  {_this.state.creditsToRefund} Credits</h5>
-                </div >
+// function showConfirmCredit(_this, values) {
+//     let prevPackages =
+//         let prevProducts =
+//             confirm({
+//                 width: 900,
+//                 title: <span style={{ fontWeight: "bold" }}>Do You Really want to apply selected services on device ? </span>,
+//                 content:
+//                     <Fragment>
+//                         <div style={{ marginTop: 20 }}>
+//                             <h3 style={{ textAlign: "center" }}><b>CURRENT SERVICES</b></h3>
+//                             <Table
+//                                 id='packages'
+//                                 className={"devices mb-20"}
+//                                 // rowSelection={packageRowSelection}
+//                                 size="middle"
+//                                 bordered
+//                                 columns={_this.state.invoiceColumns}
+//                                 dataSource={_this.confirmRenderList(prevPackages, prevProducts)}
+//                                 pagination={
+//                                     false
+//                                 }
+//                             />
+//                             <h5 style={{ textAlign: "right" }}><b>Remaining days of services : {_this.state.serviceRemainingDays}</b></h5>
+//                             <h5 style={{ textAlign: "right" }}>Previous service refund credits :  {_this.state.creditsToRefund} Credits</h5>
+//                         </div >
 
 
-                <div style={{ marginTop: 20 }}>
-                    <h3 style={{ textAlign: "center" }}><b>NEW SERVICES</b></h3>
-                    <Table
-                        id='packages'
-                        className={"devices mb-20"}
-                        // rowSelection={packageRowSelection}
-                        size="middle"
-                        bordered
-                        columns={_this.state.invoiceColumns}
-                        dataSource={_this.confirmRenderList(_this.state.PkgSelectedRows, _this.state.proSelectedRows)}
-                        pagination={
-                            false
-                        }
-                    />
-                </div >
-                {(_this.state.term !== '0') ?
-                    <div>
-                        <h5 style={{ textAlign: "right" }}>Sub Total :  {_this.state.total_price} Credits</h5>
+//                         <div style={{ marginTop: 20 }}>
+//                             <h3 style={{ textAlign: "center" }}><b>NEW SERVICES</b></h3>
+//                             <Table
+//                                 id='packages'
+//                                 className={"devices mb-20"}
+//                                 // rowSelection={packageRowSelection}
+//                                 size="middle"
+//                                 bordered
+//                                 columns={_this.state.invoiceColumns}
+//                                 dataSource={_this.confirmRenderList(_this.state.PkgSelectedRows, _this.state.proSelectedRows)}
+//                                 pagination={
+//                                     false
+//                                 }
+//                             />
+//                         </div >
+//                         {(_this.state.term !== '0') ?
+//                             <div>
+//                                 <h5 style={{ textAlign: "right" }}>Sub Total :  {_this.state.total_price} Credits</h5>
 
-                        <h5 style={{ textAlign: "right" }}>Previous service refund credits :  {_this.state.creditsToRefund} Credits</h5>
-                        <h5 style={{ textAlign: "right" }}><b>Total :  {values.total_price} Credits</b></h5>
-                        <h4 style={{ textAlign: "center" }}><b>There will be a charge of {values.total_price} Credits</b></h4>
-                    </div>
-                    : null}
-            </Fragment>,
-        onOk() {
-            _this.props.editDeviceFunc(values)
-            _this.props.hideModal();
-            _this.handleReset();
-        },
-        onCancel() {
+//                                 <h5 style={{ textAlign: "right" }}>Previous service refund credits :  {_this.state.creditsToRefund} Credits</h5>
+//                                 <h5 style={{ textAlign: "right" }}><b>Total :  {values.total_price} Credits</b></h5>
+//                                 <h4 style={{ textAlign: "center" }}><b>There will be a charge of {values.total_price} Credits</b></h4>
+//                             </div>
+//                             : null}
+//                     </Fragment>,
+//                 onOk() {
+//                     _this.props.editDeviceFunc(values)
+//                     _this.props.hideModal();
+//                     _this.handleReset();
+//                 },
+//                 onCancel() {
 
-        },
-    });
-}
+//                 },
+//             });
+// }
 function showCreditPurchase(_this) {
     confirm({
         title: "Your Credits are not enough to apply these services. Please select other services OR Purchase Credits.",
