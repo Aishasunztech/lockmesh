@@ -1458,7 +1458,7 @@ function showConfirmProfile(_this, name, profile) {
         title: convertToLang(_this.props.translation[DO_YOU_WANT_TO_APPLY], "Do you want to apply ") + name + convertToLang(_this.props.translation[POLICY_ON_DEVICE], " profile on device?"),
         onOk() {
             _this.props.applySetting(profile.app_list, profile.passwords, profile.secure_apps, profile.controls, _this.props.device.device_id, _this.props.device.id, 'profile', name)
-            _this.props.refreshDevice(_this.props.device.device_id, true)
+            // _this.props.refreshDevice(_this.props.device.device_id, true)
             _this.props.showHistoryModal(false);
         },
         okText: convertToLang(_this.props.translation[Button_Ok], "Ok"),

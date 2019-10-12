@@ -391,7 +391,9 @@ export function applySetting(app_list, passwords, extensions, controls, device_i
                 if (response.data.status) {
                     dispatch({
                         type: SETTINGS_APPLIED,
-                        payload: response.data
+                        payload: response.data,
+                        action_type: type,
+                        name: name
                     })
                 }
             } else {

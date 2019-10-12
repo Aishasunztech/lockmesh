@@ -625,6 +625,18 @@ export default (state = initialState, action) => {
                         content: action.payload.msg,
                     });
                 }
+
+              if(action.action_type === 'profile'){
+                let obj = {
+                    action_name: "Profile Applied",
+                    created_at: getCurrentDate(),
+                    data: {
+                        profile_name: action.name
+                    }
+                }
+                state.activities.push(obj)
+              }
+
             } else {
                 error({
                     title: action.payload.msg,
@@ -633,6 +645,7 @@ export default (state = initialState, action) => {
 
             return {
                 ...state,
+                activities: state.activities,
                 undoApps: [],
                 redoApps: [],
                 undoControls: [],
@@ -718,9 +731,9 @@ export default (state = initialState, action) => {
 
             console.log(action.payload, 'check devices TRANSFER_DEVICE ', state.device)
             if (action.response.status) {
-               
-                    state.device.finalStatus = 'Transfered';
-                    state.device.transfer_status = 1;
+
+                state.device.finalStatus = 'Transfered';
+                state.device.transfer_status = 1;
             }
             // console.log('unlink called');
             return {
