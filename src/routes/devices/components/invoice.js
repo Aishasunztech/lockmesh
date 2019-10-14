@@ -139,7 +139,7 @@ class Invoice extends Component {
                     </Row>
                     <Row>
                         <Col span={6}>Balance Due:</Col>
-                        <Col span={6}>{balanceDue}.00 Credits</Col>
+                        <Col span={6}>{balanceDue}.00&nbsp;Credits</Col>
                         <Col span={6}>Dealer PIN:</Col>
                         <Col span={6}>{user.dealer_pin}</Col>
                     </Row>
@@ -218,21 +218,22 @@ class Invoice extends Component {
                             <Row>
                                 <Col span={12} />
                                 <Col span={8}>Total : </Col>
-                                <Col span={4}>{total}.00 Credits</Col>
+                                <Col span={4}>{total}.00&nbsp;Credits</Col>
                             </Row>
                         </Fragment>
                         : null}
                     <Row>
                         <Col span={16} />
                         <Col span={4}>Paid To Date : </Col>
-                        <Col span={4}>{`${paid}.00 Credits`}</Col>
+                        <Col span={4}>{paid}.00&nbsp;Credits</Col>
                     </Row>
                     <Row>
                         <Col span={16} />
                         <Col span={4}>Balance Due : </Col>
-                        <Col span={4}>{`${balanceDue}.00 Credits`}</Col>
+                        <Col span={4}>{balanceDue}.00&nbsp;Credits</Col>
                     </Row>
-                    <h5><b>Equivalent USD Price</b></h5>
+                    <br />
+                    <h5><b>Equivalent USD Price: {balanceDue}.00&nbsp;Credits</b></h5>
 
                 </div>
                 <p style={{ textAlign: 'center', marginTop: 70 }}>Thank you for your business.</p>
