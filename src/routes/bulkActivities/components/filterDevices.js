@@ -158,9 +158,9 @@ class FilterDevices extends Component {
 
       if (action !== "NOT SELECTED" && updateSelectedDevices.length) {
         if (action === "SUSPEND DEVICES") {
-          updateSelectedDevices = copySelectedDevices.filter((device) => device.finalStatus != DEVICE_SUSPENDED)
+          updateSelectedDevices = copySelectedDevices.filter((device) => device.finalStatus !== DEVICE_SUSPENDED)
         } else if (action === "ACTIVATE DEVICES") {
-          updateSelectedDevices = copySelectedDevices.filter((device) => device.finalStatus != DEVICE_ACTIVATED)
+          updateSelectedDevices = copySelectedDevices.filter((device) => device.finalStatus !== DEVICE_ACTIVATED)
         } else {
           updateSelectedDevices = copySelectedDevices;
         }
@@ -693,10 +693,11 @@ class FilterDevices extends Component {
     let updateSelectedDevices = devices;
 
     if (action === "SUSPEND DEVICES") {
-      updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED)
+      updateSelectedDevices = devices.filter((device) => device.finalStatus === DEVICE_TRIAL || device.finalStatus === DEVICE_ACTIVATED)
     } else if (action === "ACTIVATE DEVICES") {
-      updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED)
+      updateSelectedDevices = devices.filter((device) => device.finalStatus === DEVICE_SUSPENDED)
     }
+    this.state.selectedDevices = updateSelectedDevices;
 
     // this.setState({
     //   selectedDevices: updateSelectedDevices
