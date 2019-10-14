@@ -34,7 +34,8 @@ class RightSidebar extends Component {
 
   genExtra = () => (
     <div style={{ lineHeight: 1 }}>
-      <i class="fa fa-check-circle" aria-hidden="true"></i>
+      <i class="fa fa-check" aria-hidden="true"></i>
+      <i class="fa fa-check" aria-hidden="true"></i>
       <br></br>
       <i class="fa fa-times" aria-hidden="true" onClick={() => alert('canceled')}></i>
     </div>
