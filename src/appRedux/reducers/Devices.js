@@ -148,7 +148,7 @@ export default (state = initialState, action) => {
             }
 
         case ACCEPT_REQUEST: {
-            console.log("ACCEPT_REQUEST at devices" , action);
+            console.log("ACCEPT_REQUEST at devices", action);
             if (action.response.status) {
                 // let objIndex = state.devices.findIndex((obj => obj.device_id === action.payload.device.device_id));
                 // if (objIndex !== -1) {
@@ -406,12 +406,21 @@ export default (state = initialState, action) => {
         case ADD_DEVICE:
 
             var filteredNewDevices = state.newDevices;
+            let devicess = JSON.parse(JSON.stringify(state.devices))
             if (action.response.status) {
-                state.devices.unshift(action.response.data[0])
-                var alldevices = state.newDevices;
                 var device_id = action.payload.formData.device_id;
+                // console.log(state.devices, 'add device reducer', action.response)
+                let index = state.devices.findIndex(dev => dev.device_id == device_id)
+                // console.log(index, 'index is the');
+              
+                if(index > -1){
+                    devicess[index] = action.response.data[0]
+                }
+                var alldevices = state.newDevices;
+
                 filteredNewDevices = alldevices.filter(device => device.device_id !== device_id);
 
+                // console.log(filteredNewDevices, 'filtered new devices', alldevices)
                 success({
                     title: action.response.msg,
                 });
@@ -424,7 +433,7 @@ export default (state = initialState, action) => {
 
             return {
                 ...state,
-                devices: [...state.devices],
+                devices: devicess,
                 newDevices: filteredNewDevices,
                 //    selectedOptions: [...state.selectedOptions],
                 // options: state.options,
