@@ -1182,6 +1182,8 @@ class Account extends Component {
                                     <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
                                     {/* </a> */}
                                 </Link>
+
+
                                 {/* <div className="middle">
                                         <SetPricingModal
                                             showPricingModal={this.showPricingModal}
@@ -1198,6 +1200,36 @@ class Account extends Component {
                                     </div> */}
                             </div>
                         </Col>
+
+                      <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                        <div>
+                          <Link to={"/reporting"}>
+                            <Card style={{ borderRadius: 12 }} className="manage_ac">
+                              <div className="profile_table image_1">
+                                <Fragment>
+                                  <Row>
+                                    <div className="col-md-12 ac_card">
+                                      <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[''], "Reporting")} </h2>
+                                      <Divider className="mb-0" />
+                                      <Row style={{ padding: '12px 0 0px' }}>
+                                        <Col span={8} className="" style={{ textAlign: "center" }}>
+                                          <Icon type="dollar" className="and_icon" />
+                                        </Col>
+                                        <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
+                                          <div className="crd_txt">
+                                            <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], "and more...")}</h5>
+                                          </div>
+                                        </Col>
+                                      </Row>
+                                    </div>
+                                  </Row>
+                                </Fragment>
+                              </div>
+                            </Card>
+                            <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
+                          </Link>
+                        </div>
+                      </Col>
                     </Row>
                 </div>
                 <PasswordModal
