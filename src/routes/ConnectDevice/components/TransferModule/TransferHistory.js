@@ -121,10 +121,10 @@ class TransferHistory extends Component {
 
     componentDidMount() {
         // this.props.getUserList();
-        this.props.getDeaerUsers(this.props.device.dealer_id);
-        if (this.props.device.device_id) {
-            this.props.transferHistory(this.props.device.device_id);
-        }
+        // this.props.getDeaerUsers(this.props.device.dealer_id);
+        // if (this.props.device.device_id) {
+        //     this.props.transferHistory(this.props.device.device_id);
+        // }
         this.setState({
             user_id: this.props.device.user_id
         })
@@ -409,9 +409,11 @@ class TransferHistory extends Component {
                                             }
                                         >
                                             <Select.Option value="">{convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}</Select.Option>
-                                            {users_list.map((item, index) => {
-                                                return (<Select.Option key={index} value={item.user_id}>{`${item.user_id} (${item.user_name})`}</Select.Option>)
-                                            })}
+                                            {users_list ?
+                                                users_list.map((item, index) => {
+                                                    return (<Select.Option key={index} value={item.user_id}>{`${item.user_id} (${item.user_name})`}</Select.Option>)
+                                                })
+                                                : null}
                                         </Select>
 
                                     )}

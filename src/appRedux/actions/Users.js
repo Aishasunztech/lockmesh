@@ -61,6 +61,9 @@ export function getInvoiceId() {
 //GET User List against device dealer
 export function getDeaerUsers(dealerId) {
     return (dispatch) => {
+        dispatch({
+            type: LOADING
+        });
         RestService.userListOfDevice(dealerId).then((response) => {
             // console.log("data form server");
             // console.log(response.data);
@@ -69,7 +72,7 @@ export function getDeaerUsers(dealerId) {
                 if (response.data.status) {
                     dispatch({
                         type: DEALER_USERS,
-                        payload: response.data.data,
+                        payload: response.data,
                     });
                 }
             } else {

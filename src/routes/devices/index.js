@@ -855,7 +855,7 @@ class Devices extends Component {
 
         if (this.props.translation !== prevProps.translation) {
             this.setState({
-                columns: devicesColumns(this.props.translation, this.handleSearch, this.state.SearchValues)
+                columns: devicesColumns(this.props.translation, this.handleSearch)
             })
         }
 
@@ -1105,7 +1105,7 @@ class Devices extends Component {
         // console.log()
         let response = handleMultipleSearch(e, this.state.copy_status, copyDevices, this.state.SearchValues, this.state.filteredDevices)
 
-        console.log(response.SearchValues, "response is: ===========> ", response)
+        // console.log(response.SearchValues, "response is: ===========> ", response)
         this.setState({
             devices: response.demoData,
             SearchValues: response.SearchValues

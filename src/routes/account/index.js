@@ -65,7 +65,7 @@ import {
 
 import PasswordForm from '../ConnectDevice/components/PasswordForm';
 import PurchaseCredit from "./components/PurchaseCredit";
-import { ADMIN, PUSH_APP_TEXT } from "../../constants/Constants";
+import { ADMIN, PUSH_APP_TEXT, DEALER, SDEALER } from "../../constants/Constants";
 import { APP_ADD_MORE } from "../../constants/AppConstants";
 // import SetPricingModal from './PricesPakages/SetPricingModal';
 
@@ -429,9 +429,32 @@ class Account extends Component {
                 </Row>
                 <div style={{ marginTop: -60 }}>
                     <Row>
-                        {(this.props.user.type === ADMIN) ?
-                            <Fragment>
+
+                        <Fragment>
+                            {(this.props.user.type === ADMIN || this.props.user.type === DEALER || this.props.user.type === SDEALER) ?
                                 <Col xs={24} sm={24} md={8} lg={8} xl={8} >
+                                    <Link to="/account/managedata" onClick={this.showModal}>
+                                        {/* <Link to="#" > */}
+                                        <Card className="manage_ac" style={{ borderRadius: 12 }}>
+                                            <div>
+                                                <h2 style={{ textAlign: "center" }}>{convertToLang(this.props.translation[MANAGE_DATA], "Manage Data")} </h2>
+                                                <Divider className="mb-0" />
+                                                <Row style={{ padding: '12px 0 0px' }}>
+                                                    <Col span={7} className="" style={{ textAlign: "center" }}>
+                                                        <Icon type="form" className="and_icon" />
+                                                    </Col>
+                                                    <Col span={16} style={{ padding: 0 }} className="crd_txt">
+                                                        <h5 className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_01], "Manage data such as SIM ID, <br style={{ marginLeft: 4 }} />CHAT ID, PGP Email, etc..")} />  </h5>
+                                                        <h5 className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_02], "View/Edit your data")} /> </h5>
+                                                        <h5 className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_03], "Release previously used data back to system")} />  </h5>
+                                                        <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], "and more...")}</h5>
+                                                    </Col>
+                                                </Row>
+                                            </div>
+                                        </Card>
+                                        <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
+                                    </Link>
+
                                     <Modal
                                         maskClosable={false}
                                         title={<div><Icon type="question-circle" className='warning' /><span>
@@ -517,27 +540,7 @@ class Account extends Component {
                                     </Modal>
                                     <div>
 
-                                        <Link to="/account/managedata" onClick={this.showModal}>
-                                            {/* <Link to="#" > */}
-                                            <Card className="manage_ac" style={{ borderRadius: 12 }}>
-                                                <div>
-                                                    <h2 style={{ textAlign: "center" }}>{convertToLang(this.props.translation[MANAGE_DATA], "Manage Data")} </h2>
-                                                    <Divider className="mb-0" />
-                                                    <Row style={{ padding: '12px 0 0px' }}>
-                                                        <Col span={7} className="" style={{ textAlign: "center" }}>
-                                                            <Icon type="form" className="and_icon" />
-                                                        </Col>
-                                                        <Col span={16} style={{ padding: 0 }} className="crd_txt">
-                                                            <h5 className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_01], "Manage data such as SIM ID, <br style={{ marginLeft: 4 }} />CHAT ID, PGP Email, etc..")} />  </h5>
-                                                            <h5 className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_02], "View/Edit your data")} /> </h5>
-                                                            <h5 className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_03], "Release previously used data back to system")} />  </h5>
-                                                            <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], "and more...")}</h5>
-                                                        </Col>
-                                                    </Row>
-                                                </div>
-                                            </Card>
-                                            <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
-                                        </Link>
+
 
                                         <Modal
                                             maskClosable={false}
@@ -1058,6 +1061,10 @@ class Account extends Component {
                                         </Modal>
                                     </div>
                                 </Col>
+
+
+                                : null}
+                            {(this.props.user.type === ADMIN) ?
                                 <Col xs={24} sm={24} md={8} lg={8} xl={8} >
 
                                     <Modal
@@ -1108,8 +1115,8 @@ class Account extends Component {
                                         </div>
                                     </div>
                                 </Col>
-                            </Fragment>
-                            : null}
+                                : null}
+                        </Fragment>
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
                                 <div>

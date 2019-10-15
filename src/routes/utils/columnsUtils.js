@@ -128,9 +128,8 @@ import { DUMY_TRANS_ID } from "../../constants/LabelConstants";
 // **************************************
 /////////////////////////////////////////
 
-export function devicesColumns(translation, handleSearch, SearchValues = []) {
+export function devicesColumns(translation, handleSearch) {
 
-    // console.log('devicesColumns SearchValues ', SearchValues)
     return ([
         {
             title: "#",
@@ -1089,7 +1088,7 @@ export function usersColumns(translation, handleSearch) {
                             {convertToLang(translation[DEVICE_ID], "DEVICE ID")}
                             <Popover placement="top" content={(<Markup content={convertToLang(translation[USER_DEVICES_HELPING_TEXT],
                                 `   <p>Press <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;">
-                                <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                <i className="fa fa-caret-right" aria-hidden="true"></i>
                                 </a> to View Devices<br/> list of this User</p>`)} />)}>
                                 <span className="helping_txt"><Icon type="info-circle" /></span>
                             </Popover>
@@ -2225,7 +2224,7 @@ export function apkColumns(translation) {
                     {convertToLang(translation[APK_PERMISSION], "PERMISSION")}
                     <Popover placement="top" content={(<Markup content={convertToLang(translation[APK_PERMISSION_HELPING_TEXT],
                         `   <p>Press <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;">
-                            <i class="fa fa-caret-right" aria-hidden="true"></i> 
+                            <i className="fa fa-caret-right" aria-hidden="true"></i> 
                             </a> to Add, remove or View
                             <br/> the Dealers who have permission
                             <br/>to use this App</p>`)} />)}>
@@ -2314,7 +2313,7 @@ export function featureApkColumns(translation) {
                     {convertToLang(translation[APK_PERMISSION], "PERMISSION")}
                     <Popover placement="top" content={(<Markup content={convertToLang(translation[APK_PERMISSION_HELPING_TEXT],
                         `   <p>Press <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;">
-                            <i class="fa fa-caret-right" aria-hidden="true"></i> 
+                            <i className="fa fa-caret-right" aria-hidden="true"></i> 
                             </a> to Add, remove or View
                             <br/> the Dealers who have permission
                             <br/>to use this App</p>`)} />)}>
