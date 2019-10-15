@@ -9,6 +9,7 @@ import FilterDevicesList from "./filterDevicesList";
 import CircularProgress from "components/CircularProgress/index";
 import BulkSuspendDevices from './bulkSuspendDevices';
 import BulkActivateDevices from './bulkActivateDevices';
+import { setSelectedDevices } from "../../../appRedux/actions/BulkDevices";
 import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, titleCase, convertToLang, checkRemainTermDays } from '../../utils/commonUtils'
 
 import { bulkDevicesColumns, devicesColumns, userDevicesListColumns } from '../../utils/columnsUtils';
@@ -333,29 +334,6 @@ class FilterDevices extends Component {
       return originalData;
     }
   }
-  // handleSearch = (e, global = false) => {
-
-  //   let fieldName = e.target.name;
-  //   let fieldValue = e.target.value;
-  //   console.log("fieldName", fieldName);
-  //   console.log("fieldValue", fieldValue);
-  //   console.log("global", global);
-  //   if (global) {
-  //     let searchedData = this.searchAllFields(this.state.selectedDevices, fieldValue, fieldName)
-  //     // console.log("searchedData", searchedData);
-  //     this.setState({
-  //       selectedDevices: searchedData,
-  //       copySelectedDevices: searchedData
-  //     });
-  //   } else {
-
-  //     let searchedData = this.searchField(this.props.dealerList, fieldName, fieldValue);
-  //     // console.log("searchedData", searchedData);
-  //     this.setState({
-  //       dealerList: searchedData
-  //     });
-  //   }
-  // }
 
 
   handleSearchInModal = (e, global = false) => {
@@ -397,15 +375,15 @@ class FilterDevices extends Component {
           Object.keys(device).map(key => {
 
             if (device[key] !== undefined && key != 'status' && key != 'account_status') {
-              if ((typeof device[key]) === 'string') { 
+              if ((typeof device[key]) === 'string') {
                 if (device[key].toUpperCase().includes(e.target.value.toUpperCase())) {
-                  if(!demoDevices.includes(device)){
+                  if (!demoDevices.includes(device)) {
                     demoDevices.push(device);
                   }
                 }
               } else if (device[key] !== null && key != 'status' && key != 'account_status') {
                 if (device[key].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
-                  if(!demoDevices.includes(device)){
+                  if (!demoDevices.includes(device)) {
                     demoDevices.push(device);
                   }
                 }
@@ -904,14 +882,17 @@ class FilterDevices extends Component {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     getAllDealers: getAllDealers,
-    savePermission: savePermission
+    savePermission: savePermission,
+    setSelectedDevices: setSelectedDevices
   }, dispatch);
 }
 
 
-const mapStateToProps = ({ dealers, settings, devices, auth }, props) => {
+const mapStateToProps = ({ dealers, settings, devices, auth, bulkDevices }, props) => {
+  console.log("at component selectedDevices", bulkDevices.selectedDevices);
 
   return {
+    // selectedDevices: bulkDevices.selectedDevices,
     user: auth.authUser,
     dealerList: dealers.dealers,
     record: props.record,

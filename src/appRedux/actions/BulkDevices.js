@@ -1,4 +1,4 @@
-import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS } from "../../constants/ActionTypes";
+import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SELECTED_DEVICES } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
 
@@ -114,7 +114,7 @@ export function getbulkHistory() {
 }
 
 export function getUsersOfDealers(data) {
-console.log("getUsersOfDealers ", data)
+    console.log("getUsersOfDealers ", data)
     return (dispatch) => {
         RestService.getUsersOfDealers(data).then((response) => {
             if (RestService.checkAuth(response.data)) {
@@ -132,6 +132,20 @@ console.log("getUsersOfDealers ", data)
                     type: INVALID_TOKEN
                 });
             }
+        });
+    }
+
+}
+
+
+// Set Selected Devices after Filter
+export function setSelectedDevices(data) {
+    console.log("setSelectedDevices ", data)
+
+    return (dispatch) => {
+        dispatch({
+            type: SELECTED_DEVICES,
+            payload: data,
         });
     }
 

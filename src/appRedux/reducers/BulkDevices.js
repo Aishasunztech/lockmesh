@@ -1,6 +1,6 @@
 
 import {
-    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS,
+    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SELECTED_DEVICES,
 } from "../../constants/ActionTypes";
 import { message, Modal } from 'antd';
 
@@ -12,6 +12,7 @@ const warning = Modal.warning;
 
 const initialState = {
     bulkDevices: [],
+    selectedDevices: [],
     bulkDevicesHistory: [],
     msg: "",
     showMsg: false,
@@ -42,6 +43,14 @@ export default (state = initialState, action) => {
                 isloading: false,
                 bulkDevicesHistory: action.payload,
             }
+
+        case SELECTED_DEVICES: {
+            console.log("at reducer action.payload ", action.payload)
+            return {
+                ...state,
+                selectedDevices: action.payload
+            }
+        }
 
         case BULK_USERS:
 
