@@ -65,7 +65,7 @@ import {
 
 import PasswordForm from '../ConnectDevice/components/PasswordForm';
 import PurchaseCredit from "./components/PurchaseCredit";
-import { ADMIN, PUSH_APP_TEXT, DEALER } from "../../constants/Constants";
+import { ADMIN, PUSH_APP_TEXT, DEALER, SDEALER } from "../../constants/Constants";
 import { APP_ADD_MORE } from "../../constants/AppConstants";
 // import SetPricingModal from './PricesPakages/SetPricingModal';
 
@@ -431,7 +431,7 @@ class Account extends Component {
                     <Row>
 
                         <Fragment>
-                            {(this.props.user.type === ADMIN || this.props.user.type === DEALER) ?
+                            {(this.props.user.type === ADMIN || this.props.user.type === DEALER || this.props.user.type === SDEALER) ?
                                 <Col xs={24} sm={24} md={8} lg={8} xl={8} >
                                     <Link to="/account/managedata" onClick={this.showModal}>
                                         {/* <Link to="#" > */}
