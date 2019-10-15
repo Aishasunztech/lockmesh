@@ -5,6 +5,7 @@ import {
     UNINSTALL_PERMISSION_CHANGED
 } from "constants/ActionTypes";
 import { message, Modal } from 'antd';
+import { REMOVE_APPS } from "../../constants/ActionTypes";
 
 const initialState = {
     isloading: false,
@@ -21,6 +22,36 @@ export default (state = initialState, action) => {
                 ...state,
                 isloading: true,
             }
+
+        case REMOVE_APPS: {
+            let smApps = state.secureMarketList;
+
+            if (action.payload.status) {
+                message.success(action.payload.msg);
+                console.log('at REMOVE_APPS reducer:: ', action.response[0])
+                console.log(state.secureMarketList)
+                if (action.response.length > 1) {
+                    smApps = [];
+                    // let apps = [];
+                    // state.secureMarketList.forEach((app) => {
+                    //     if (!action.response.includes(app.id)) {
+                    //         apps.push(app);
+                    //         smApps = apps;
+                    //     }
+                    // })
+                    // smApps = state.secureMarketList.filter((app) => app.id !== action.response[0])
+                } else {
+                    smApps = state.secureMarketList.filter((app) => app.id !== action.response[0])
+                }
+                console.log(smApps)
+            } else {
+                message.error(action.payload.msg)
+            }
+            return {
+                ...state,
+                secureMarketList: smApps
+            }
+        }
         case TRANSFER_APPS:
             if (action.status) {
                 message.success(action.msg)

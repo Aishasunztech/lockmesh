@@ -16,7 +16,7 @@ const AppMarketList = (props) => {
             size="middle"
             bordered
             // onChange={props.onChangeTableSorting}
-            dataSource={props.availableApps}
+            dataSource={props.dataSource}
             columns={props.columns}
             hideDefaultSelections={props.hideDefaultSelections}
             pagination={false}

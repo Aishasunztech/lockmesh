@@ -3,14 +3,37 @@ import {
     INVALID_TOKEN,
     GET_MARKET_APPS,
     LOADING,
-    UNINSTALL_PERMISSION_CHANGED
+    UNINSTALL_PERMISSION_CHANGED,
+    REMOVE_APPS
 
 } from "../../constants/ActionTypes"
 // import AuthFailed from './Auth';
 
 import RestService from '../services/RestServices';
 
+export function removeSMapps(data) {
+    return (dispatch) => {
+
+        RestService.removeSMapps(data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+
+                dispatch({
+                    type: REMOVE_APPS,
+                    payload: response.data,
+                    response: data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+    }
+}
+
 export function transferApps(data) {
+    console.log('transferApps ', data);
+    // return;
     return (dispatch) => {
         dispatch({
             type: LOADING

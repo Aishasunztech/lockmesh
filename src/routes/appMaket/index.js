@@ -7,7 +7,7 @@ import CircularProgress from "components/CircularProgress/index";
 import { BASE_URL } from '../../constants/Application';
 
 import { getApkList, changeAppStatus, deleteApk, editApk } from "../../appRedux/actions/Apk";
-import { transferApps, getMarketApps, handleUninstall } from "../../appRedux/actions/AppMarket";
+import { transferApps, getMarketApps, handleUninstall, removeSMapps } from "../../appRedux/actions/AppMarket";
 import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
 import { ADMIN, DEALER } from "../../constants/Constants";
 import AppMarketList from './appMarketList';
@@ -42,28 +42,6 @@ class ApkMarket extends React.Component {
 
         const columns = [
             {
-                title: '#',
-                dataIndex: 'counter',
-                align: 'center',
-                className: 'row',
-                render: (text, record, index) => ++index,
-            },
-            {
-                title: <Button type="danger" size="small">Remove All</Button>,
-                dataIndex: 'remove',
-                align: 'center',
-                className: '',
-                // width: 50,
-            },
-            {
-                title: "LOGO", // convertToLang(translation[ACTION], "ACTION"),
-                dataIndex: 'logo',
-                align: 'center',
-                className: '',
-                // width: 800,
-                key: "logo"
-            },
-            {
                 title: (
                     <Input.Search
                         name="app_name"
@@ -73,20 +51,49 @@ class ApkMarket extends React.Component {
                         // onChange={handleSearch}
                         autoComplete="new-password"
                         // placeholder={titleCase(props.convertToLang(props.translation[""], "APP NAME"))}
-                        placeholder="APP NAME"
+                        placeholder="Search here"
                     />
                 ),
-                dataIndex: 'app_name',
+                dataIndex: '',
                 children: [
                     {
-                        title: "APP NAME", // props.convertToLang(props.translation[""], "APP NAME"),
-                        align: "center",
+                        title: '#',
+                        dataIndex: 'counter',
+                        align: 'center',
+                        className: 'row',
+                        render: (text, record, index) => ++index,
+                    },
+                    {
+                        title: <Button type="danger" size="small" onClick={() => this.removeSMapps("all")}>Remove All</Button>,
+                        dataIndex: 'remove',
+                        align: 'center',
+                        className: '',
+                        // width: 50,
+                    },
+                    {
+                        title: "LOGO", // convertToLang(translation[ACTION], "ACTION"),
+                        dataIndex: 'logo',
+                        align: 'center',
+                        className: '',
+                        // width: 800,
+                        key: "logo"
+                    },
+                    {
+                        title: "APP NAME",
+                        align: 'center',
                         dataIndex: 'app_name',
-                        sorter: (a, b) => { return a.app_name.localeCompare(b.app_name) },
-                        sortDirections: ['ascend', 'descend'],
-                    }
+
+                    },
+                    {
+                        title: "",
+                        dataIndex: 'uninstall',
+                        align: 'center',
+                        className: '',
+                        // width: 800,
+                        key: "uninstall"
+                    },
                 ]
-            },
+            }
         ]
 
         this.state = {
@@ -96,6 +103,7 @@ class ApkMarket extends React.Component {
             availbleAppList: props.availbleAppList,
             targetKeys: [],
             guestModal: false,
+            space: '',
             app_ids: [],
             selectedRowKeys: [],
             hideDefaultSelections: false,
@@ -104,31 +112,88 @@ class ApkMarket extends React.Component {
         this.confirm = Modal.confirm;
     }
 
-    renderAppList(list) {
-        console.log('renderAppList ', list)
+    filterAvailableApp = (availableApps, secureApps) => {
+        let apps = [];
+        let secureIds = secureApps.map((app) => app.id);
 
-        return list.map((app, index) => {
+        availableApps.map((app) => {
+            if (!secureIds.includes(app.id)) {
+                apps.push(app);
+            }
+        })
+        return apps;
+    }
+
+    renderAppList(list) {
+        let availableApps = this.filterAvailableApp(list, this.state.secureMarketList);
+
+        return availableApps.map((app, index) => {
             // console.log('renderAppList single app', app)
             return {
                 key: app.id,
-                remove: <Button type="danger" size="small">Remove</Button>,
                 logo:
                     <Fragment>
                         <Avatar size="medium" src={BASE_URL + "users/getFile/" + app.logo} />
                     </Fragment>,
                 app_name: `${app.app_name}`,
             }
-
         })
 
     }
 
-    renderList = (secureMarketList) => {
+    removeSMapps = (app) => {
+        console.log('removeSMapps ', app);
+
+        let appIds = []
+        if (app === "all") {
+            appIds = this.state.secureMarketList.map((app) => app.id);
+        } else {
+            appIds = [app.id];
+        }
+        this.props.removeSMapps(appIds);
+    }
+
+
+
+    renderGuestAppList = (secureMarketList) => {
+
+        let smApps = secureMarketList // secureMarketList.filter((app) => app.space_type === "guest");
+
+        // console.log("smApps ", smApps)
+        smApps.forEach((item) => {
+            if (item.dealer_type === ADMIN) {
+                item.disabled = true
+            }
+            else {
+                item.disabled = false
+            }
+        })
+        let apkList = smApps.map((app, index) => {
+            let data = {
+                key: app.id,
+                remove: <Button type="danger" size="small" onClick={() => this.removeSMapps(app)}>Remove</Button>,
+                logo:
+                    <Fragment>
+                        <Avatar size="medium" src={BASE_URL + "users/getFile/" + app.logo} />
+                    </Fragment>,
+                app_name: <span className="sm_labels"> {app.app_name} </span>,
+                uninstall: <Fragment>
+                    {(app.dealer_type !== undefined) ? <span>
+                        <Switch className="sm_uninstall" size='small' unCheckedChildren={convertToLang(this.props.translation[Switch_Button_Uninstall], "Uninstall")} checkedChildren={convertToLang(this.props.translation[Switch_Button_Uninstall], "Uninstall")} onChange={(e) => { this.handleCheckChange(app.id, e) }} defaultChecked={(app.is_restrict_uninstall === 0) ? true : false} disabled={(this.props.user.type === ADMIN) ? false : app.disabled}></Switch>
+                    </span> : null}
+                </Fragment>,
+            }
+            return data
+        })
+        return apkList
+    }
+
+    renderList = (availbleAppList, secureMarketList) => {
 
         // console.log(availbleAppList, ' objext data ', secureMarketList)
         let combinedList = [];
 
-        combinedList = [...secureMarketList];
+        combinedList = [...availbleAppList, ...secureMarketList];
 
 
         // let combinedList = availbleAppList;
@@ -144,7 +209,7 @@ class ApkMarket extends React.Component {
         let apkList = combinedList.map((app, index) => {
             let data = {
                 key: app.id,
-                logo:
+                title:
                     <Fragment>
                         <Avatar size="medium" src={BASE_URL + "users/getFile/" + app.logo} />
                         <span className="sm_labels"> {app.app_name} </span>
@@ -222,19 +287,20 @@ class ApkMarket extends React.Component {
     }
 
     saveGuestApps = () => {
-        console.log('hi saveGuestApps', "this.state.app_ids", this.state.app_ids)
-        console.log("this.state.availbleAppList", this.state.availbleAppList)
-        console.log("this.state.secureMarketList", this.state.secureMarketList)
+        // console.log('hi saveGuestApps', "this.state.app_ids", this.state.app_ids)
+        // console.log("this.state.availbleAppList", this.state.availbleAppList)
+        // console.log("this.state.secureMarketList", this.state.secureMarketList)
 
 
         if (this.state.app_ids.length) {
-            this.state.availbleAppList.map((apps) => {
-                if (this.state.app_ids.includes(apps.app.id)) {
-                    this.state.secureMarketList.push(apps.app);
+            this.state.availbleAppList.map((app) => {
+                if (this.state.app_ids.includes(app.id)) {
+                    app.space_type = "guest";
+                    this.state.secureMarketList.push(app);
                 }
                 else {
-                    if (this.state.secureMarketList.includes(apps.app.id)) {
-                        this.state.app_ids.push(apps.app);
+                    if (this.state.secureMarketList.includes(app.id)) {
+                        this.state.app_ids.push(app.id);
 
                     }
                 }
@@ -243,6 +309,8 @@ class ApkMarket extends React.Component {
                 app_ids: [],
                 secureMarketList: this.state.secureMarketList
             })
+
+            this.props.transferApps(this.state.secureMarketList.map((app) => app.id))
 
             // // console.log(this.state.selectedRowKeys);
             // this.props.savePermission(this.props.record.apk_id, JSON.stringify(this.state.selectedRowKeys), 'save');
@@ -257,7 +325,7 @@ class ApkMarket extends React.Component {
     addIntoSpace = (space) => {
         console.log("spance is: ", space)
 
-        this.setState({ guestModal: true });
+        this.setState({ guestModal: true, space });
     }
 
     onSelectChange = (selectedRowKeys, selectedRows) => {
@@ -265,7 +333,7 @@ class ApkMarket extends React.Component {
         let app_ids = []
         selectedRows.forEach(row => {
             console.log("selected row", row)
-            // app_ids.push(row.id);
+            app_ids.push(row.key);
         });
         this.setState({
             app_ids: app_ids,
@@ -282,7 +350,13 @@ class ApkMarket extends React.Component {
                     this.props.isloading ? <CircularProgress /> :
                         <Card >
                             <Row>
-                                <h4 className="sm_top_heading"> <Markup content={convertToLang(this.props.translation[SPA_NOTIFICATION_BAR], "Move <b>(Available Apps)</b> to <b>(Secure Market)</b> to make them appear on your user's Secure Market apps on their devices.")} /> </h4>
+                                <Col md={2} sm={2} xs={2} className="text-center">
+                                    <Avatar size="large" src={BASE_URL + "users/getFile/icon_com.secureMarket.SecureMarketActivity_Secure%20Market.png"} />
+                                    <span className="sm_labels"> Secure Market </span>
+                                </Col>
+                                <Col md={22} sm={22} xs={22} className="text-center">
+                                    <h4 className="sm_top_heading"> <Markup content={convertToLang(this.props.translation[SPA_NOTIFICATION_BAR], "Move <b>(Available Apps)</b> to <b>(Secure Market)</b> to make them appear on your user's Secure Market apps on their devices.")} /> </h4>
+                                </Col>
                                 <Col md={12} sm={24} xs={24} className="text-center">
                                     <h4 className="sm_heading1"><b>{convertToLang(this.props.translation[SPA_TITEL_AVAILABLE_APPS], "Guest Space Apps")}</b></h4>
 
@@ -291,7 +365,7 @@ class ApkMarket extends React.Component {
                                     <div style={{ border: '1px solid lightgray', borderRadius: '8px' }}>
                                         <Table
                                             size="middle"
-                                            dataSource={this.renderAppList(this.state.secureMarketList)}
+                                            dataSource={this.renderGuestAppList(this.state.secureMarketList)}
                                             columns={this.state.columns}
                                             pagination={false}
                                         />
@@ -300,6 +374,18 @@ class ApkMarket extends React.Component {
                                 </Col>
                                 <Col md={12} sm={24} xs={24} className="text-center sec_market">
                                     <h4 className="sm_heading1"><b>{convertToLang(this.props.translation[SPA_TITLE_SECURE_MARKET], "Encrpted Space Apps")}</b></h4>
+
+                                    <Button onClick={() => this.addIntoSpace('guest')}>Add Available Apps</Button>
+                                    <br /><br />
+                                    <div style={{ border: '1px solid lightgray', borderRadius: '8px' }}>
+                                        <Table
+                                            size="middle"
+                                            dataSource={this.renderGuestAppList(this.state.availbleAppList, this.state.secureMarketList)}
+                                            columns={this.state.columns}
+                                            pagination={false}
+                                        />
+
+                                    </div>
                                 </Col>
                             </Row>
 
@@ -346,25 +432,21 @@ class ApkMarket extends React.Component {
 
                             <Modal
                                 maskClosable={false}
-                                width='665px'
                                 title={convertToLang(this.props.translation["Add Available Apps To Guest Space"], "Add Available Apps To Guest Space")}
                                 visible={this.state.guestModal}
                                 onOk={() => {
                                     this.saveGuestApps()
                                 }}
-                                okText={convertToLang(this.props.translation[Button_Save], "Save")}
+                                okText={convertToLang(this.props.translation[""], "Add")}
                                 cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                                 onCancel={() => {
                                     this.setState({ guestModal: false })
                                 }}
-                                bodyStyle={{ height: 500, overflow: "overlay" }}
+                            // bodyStyle={{ height: 500, overflow: "overlay" }}
                             >
                                 <AppMarketList
-                                    availableApps={this.renderAppList(this.state.availbleAppList)}
-                                    columns={this.state.columns}
-                                    // user={this.props.user}
-                                    // history={this.props.history}
-                                    // translation={this.props.translation}
+                                    dataSource={this.renderAppList(this.state.availbleAppList)}
+                                    columns={this.state.columns[0].children.filter((item) => (item.dataIndex !== "remove" && item.dataIndex !== "counter" && item.dataIndex !== "uninstall"))}
                                     onChangeTableSorting={this.props.onChangeTableSorting}
                                     onSelectChange={this.onSelectChange}
                                     hideDefaultSelections={this.state.hideDefaultSelections}
@@ -406,6 +488,7 @@ function mapDispatchToProps(dispatch) {
         postPagination: postPagination,
         getPagination: getPagination,
         transferApps: transferApps,
+        removeSMapps: removeSMapps,
         getMarketApps: getMarketApps,
         handleUninstall: handleUninstall
     }, dispatch);
