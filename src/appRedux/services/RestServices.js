@@ -105,6 +105,10 @@ const RestService = {
 
     },
 
+    getQueJobs: () => {
+        return axios.get(BASE_URL + 'users/queJobs', RestService.getHeader());
+    },
+
     // isAdmin
     isAdmin: () => {
         // var self = this;

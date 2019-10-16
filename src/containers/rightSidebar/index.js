@@ -3,6 +3,7 @@ import { Button, Drawer, Form, message, Icon, Tabs, Collapse, } from "antd";
 import { connect } from "react-redux";
 import Auxiliary from "util/Auxiliary";
 import CustomScrollbars from "util/CustomScrollbars";
+import {getQueJobs} from '../../appRedux/actions/rightSidebar';
 import styles from './rightSidebar.css'
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
@@ -109,6 +110,10 @@ class RightSidebar extends Component {
     )
   };
 
+  componentDidMount(){
+    this.props.getQueJobs()
+  }
+
   toggleRightSidebar = () => {
     this.setState(previousState => (
       {
@@ -117,6 +122,7 @@ class RightSidebar extends Component {
   };
 
   render() {
+    console.log(this.props)
     return (
       <Auxiliary>
         <Drawer
@@ -146,4 +152,11 @@ class RightSidebar extends Component {
 
 RightSidebar = Form.create()(RightSidebar);
 
-export default RightSidebar;
+// export default RightSidebar;
+const mapStateToProps = ({settings, auth}) => {
+  return {
+    
+
+  }
+};
+export default connect(mapStateToProps, {getQueJobs})(RightSidebar);
