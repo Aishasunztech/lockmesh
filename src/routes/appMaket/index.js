@@ -29,6 +29,7 @@ import {
 } from '../../constants/ButtonConstants';
 
 import { convertToLang, titleCase, initCap } from "../utils/commonUtils";
+import { appMarketColumns } from "../utils/columnsUtils";
 
 const UNINSTALL_HELPING_TEXT = (
     <span>Turn toggle OFF to restrict app <br /> from being uninstalled by user</span>
@@ -40,88 +41,92 @@ class ApkMarket extends React.Component {
         super(props);
         let self = this;
 
-        const columns = [
-            {
-                // title: (
-                //     <Input.Search
-                //         name="app_name"
-                //         key="app_name"
-                //         id="app_name"
-                //         className="search_heading"
-                //         // onChange={handleSearch}
-                //         autoComplete="new-password"
-                //         // placeholder={titleCase(props.convertToLang(props.translation[""], "APP NAME"))}
-                //         placeholder="Search here"
-                //     />
-                // ),
-                dataIndex: '',
-                children: [
-                    {
-                        title: '#',
-                        dataIndex: 'counter',
-                        align: 'center',
-                        className: 'row',
-                        render: (text, record, index) => ++index,
-                    },
-                    {
-                        title: <Button type="danger" size="small" onClick={() => this.removeSMapps("all", "guest")}>Remove All</Button>,
-                        dataIndex: 'removeAllGuest',
-                        align: 'center',
-                        className: '',
-                        // width: 50,
-                    },
-                    {
-                        title: <Button type="danger" size="small" onClick={() => this.removeSMapps("all", "encrypted")}>Remove All</Button>,
-                        dataIndex: 'removeAllEncrypted',
-                        align: 'center',
-                        className: '',
-                        // width: 50,
-                    },
-                    {
-                        title: "LOGO", // convertToLang(translation[ACTION], "ACTION"),
-                        dataIndex: 'logo',
-                        align: 'center',
-                        className: '',
-                        // width: 800,
-                        key: "logo"
-                    },
-                    {
-                        title: (
-                            <Input.Search
-                                name="app_name"
-                                key="app_name"
-                                id="app_name"
-                                className="search_heading"
-                                onChange={this.handleSearch}
-                                autoComplete="new-password"
-                                // placeholder={titleCase(props.convertToLang(props.translation[""], "APP NAME"))}
-                                placeholder="Search here"
-                            />
-                        ),
-                        align: 'center',
-                        dataIndex: 'app_name',
-                        children: [
-                            {
-                                title: "APP NAME",
-                                dataIndex: 'app_name',
-                            }
-                        ]
+        // const columns = [
+        //     {
+        //         // title: (
+        //         //     <Input.Search
+        //         //         name="app_name"
+        //         //         key="app_name"
+        //         //         id="app_name"
+        //         //         className="search_heading"
+        //         //         // onChange={handleSearch}
+        //         //         autoComplete="new-password"
+        //         //         // placeholder={titleCase(props.convertToLang(props.translation[""], "APP NAME"))}
+        //         //         placeholder="Search here"
+        //         //     />
+        //         // ),
+        //         dataIndex: '',
+        //         children: [
+        //             {
+        //                 title: '#',
+        //                 dataIndex: 'counter',
+        //                 align: 'center',
+        //                 className: 'row',
+        //                 render: (text, record, index) => ++index,
+        //             },
+        //             {
+        //                 title: <Button type="danger" size="small" onClick={() => this.removeSMapps("all", "guest")}>Remove All</Button>,
+        //                 dataIndex: 'removeAllGuest',
+        //                 align: 'center',
+        //                 className: '',
+        //                 // width: 50,
+        //             },
+        //             {
+        //                 title: <Button type="danger" size="small" onClick={() => this.removeSMapps("all", "encrypted")}>Remove All</Button>,
+        //                 dataIndex: 'removeAllEncrypted',
+        //                 align: 'center',
+        //                 className: '',
+        //                 // width: 50,
+        //             },
+        //             {
+        //                 title: "LOGO", // convertToLang(translation[ACTION], "ACTION"),
+        //                 dataIndex: 'logo',
+        //                 align: 'center',
+        //                 className: '',
+        //                 // width: 800,
+        //                 key: "logo"
+        //             },
+        //             {
+        //                 title: (
+        //                     <Input.Search
+        //                         name="app_name"
+        //                         key="app_name"
+        //                         id="app_name"
+        //                         className="search_heading"
+        //                         onChange={this.handleSearch}
+        //                         autoComplete="new-password"
+        //                         // placeholder={titleCase(props.convertToLang(props.translation[""], "APP NAME"))}
+        //                         placeholder="Search here"
+        //                     />
+        //                 ),
+        //                 align: 'center',
+        //                 dataIndex: 'app_name',
+        //                 children: [
+        //                     {
+        //                         title: "APP NAME",
+        //                         dataIndex: 'app_name',
+        //                     }
+        //                 ]
 
-                    },
-                    {
-                        title: "",
-                        dataIndex: 'uninstall',
-                        align: 'center',
-                        className: '',
-                        // width: 800,
-                        key: "uninstall"
-                    },
-                ]
-            }
-        ]
+        //             },
+        //             {
+        //                 title: "",
+        //                 dataIndex: 'uninstall',
+        //                 align: 'center',
+        //                 className: '',
+        //                 // width: 800,
+        //                 key: "uninstall"
+        //             },
+        //         ]
+        //     }
+        // ]
+
+        var columns = appMarketColumns(props.translation, this.handleSearch, this.removeSMapps);
+        // var columns = appMarketColumns(props.translation, this.handleSearch, this.removeSMapps);
 
         this.state = {
-            columns: columns[0].children,
+            // columns: columns[0].children,
+            columns: columns,
             apk_list: [],
             secureMarketList: [],
             availbleAppList: props.availbleAppList,
@@ -137,18 +142,37 @@ class ApkMarket extends React.Component {
     }
 
     filterAvailableApp = (availableApps, secureApps) => {
+        console.log('space type is: ', this.state.space)
+        console.log("filterAvailableApp availableApps ", availableApps);
+        console.log("filterAvailableApp secureApps ", secureApps);
+
         let apps = [];
-        let secureIds = secureApps.map((app) => {
-            if (app.space_type === this.state.space) {
-                return app.id
-            }
-        });
+        let secureIds = [];
+        let type = this.props.user.type;
+
+        if (type === ADMIN) {
+            secureApps.forEach((app) => {
+                if (app.space_type === this.state.space && app.dealer_type === type) {
+                    secureIds.push(app.id);
+                }
+            });
+        } else {
+            secureApps.forEach((app) => {
+                if (app.space_type === this.state.space) {
+                    secureIds.push(app.id);
+                }
+            });
+        }
+
+
+        console.log("filterAvailableApp secureIds ", secureIds);
 
         availableApps.map((app) => {
             if (!secureIds.includes(app.id)) {
                 apps.push(app);
             }
         })
+        console.log("filterAvailableApp apps ", apps);
         return apps;
     }
 
@@ -180,11 +204,45 @@ class ApkMarket extends React.Component {
     }
 
 
+    find_duplicate_in_array = (arra1) => {
+        // console.log('array is: ', arra1)
+        var object = {};
+        var result = [];
+
+        arra1.forEach(function (item) {
+            if (!object[item])
+                object[item] = 0;
+            object[item] += 1;
+        })
+
+        for (var prop in object) {
+            if (object[prop] >= 2) {
+                result.push(Number(prop));
+            }
+        }
+
+        return result;
+
+    }
 
     renderAppList = (secureMarketList, spaceType) => {
+        console.log("secureMarketList is: ", secureMarketList)
         let smApps = [];
-        smApps = secureMarketList.filter((app) => app.space_type === spaceType);
+        if (this.props.user.type === ADMIN) {
+            smApps = secureMarketList.filter((app) => app.space_type === spaceType && app.dealer_type === this.props.user.type);
+        } else {
 
+            smApps = secureMarketList.filter((app) => app.space_type === spaceType);
+            // smApps = secureMarketList.filter((app) => {
+            //     console.log("hi ===> ", app.space_type === spaceType , (duplicateIds.length) ? (duplicateIds.includes(app.id) && app.dealer_type === ADMIN) : true);
+            //     return (app.space_type === spaceType && (duplicateIds.length) ? (duplicateIds.includes(app.id) && app.dealer_type === ADMIN) : true)
+            // });
+        }
+
+        // let duplicateIds = this.find_duplicate_in_array(smApps.map((app) => app.id));
+
+
+        // console.log('get duplicate values: ', this.find_duplicate_in_array(smApps.map((app) => app.id)))
         smApps.forEach((item) => {
             if (item.dealer_type === ADMIN) {
                 item.disabled = true
@@ -197,8 +255,8 @@ class ApkMarket extends React.Component {
         let apkList = smApps.map((app, index) => {
             let data = {
                 key: app.id,
-                removeAllGuest: <Button type="danger" size="small" onClick={() => this.removeSMapps(app, spaceType)}>Remove</Button>,
-                removeAllEncrypted: <Button type="danger" size="small" onClick={() => this.removeSMapps(app, spaceType)}>Remove</Button>,
+                removeAllGuest: <Button type="danger" size="small" disabled={(this.props.user.type === ADMIN) ? false : app.disabled} onClick={() => this.removeSMapps(app, spaceType)}>Remove</Button>,
+                removeAllEncrypted: <Button type="danger" size="small" disabled={(this.props.user.type === ADMIN) ? false : app.disabled} onClick={() => this.removeSMapps(app, spaceType)}>Remove</Button>,
                 logo:
                     <Fragment>
                         <Avatar size="medium" src={BASE_URL + "users/getFile/" + app.logo} />
@@ -280,11 +338,11 @@ class ApkMarket extends React.Component {
         console.log("fieldName", fieldName);
         console.log("fieldValue", fieldValue);
 
-        // let searchedData = this.searchField(this.state.secureMarketList, fieldName, fieldValue);
-        // // console.log("searchedData", searchedData);
-        // this.setState({
-        //     apkList: searchedData
-        // });
+        let searchedData = this.searchField(this.state.secureMarketList, fieldName, fieldValue);
+        // console.log("searchedData", searchedData);
+        this.setState({
+            secureMarketList: searchedData
+        });
 
     }
 
@@ -415,8 +473,8 @@ class ApkMarket extends React.Component {
     }
 
     render() {
-        console.log("this.state.availbleAppList ", this.state.availbleAppList)
-        console.log("this.state.secureMarketList ", this.state.secureMarketList)
+        // console.log("this.state.availbleAppList ", this.state.availbleAppList)
+        // console.log("this.state.secureMarketList ", this.state.secureMarketList)
 
         let { columns } = this.state;
         // console.log("columns:: ",columns);
@@ -450,6 +508,9 @@ class ApkMarket extends React.Component {
                                     <br /><br />
                                     <div style={{ border: '1px solid lightgray', borderRadius: '8px' }}>
                                         <Table
+                                            name="guestTable"
+
+                                            className="guestTable"
                                             key="guest"
                                             size="middle"
                                             bordered
@@ -554,7 +615,7 @@ class ApkMarket extends React.Component {
 }
 
 const mapStateToProps = ({ apk_list, auth, appMarket, settings }) => {
-    // console.log(appMarket.isloading);
+    // console.log("auth.authUser ", auth.authUser);
     return {
         isloading: appMarket.isloading,
         apk_list: apk_list.apk_list,

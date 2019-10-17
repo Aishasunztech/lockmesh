@@ -3191,3 +3191,87 @@ export function bulkDevicesColumns(translation, handleSearch) {
         },
     ]);
 }
+
+export function appMarketColumns(translation, handleSearch, removeSMapps) {
+    return (
+        [
+            // {
+            // title: (
+            //     <Input.Search
+            //         name="app_name"
+            //         key="app_name"
+            //         id="app_name"
+            //         className="search_heading"
+            //         // onChange={handleSearch}
+            //         autoComplete="new-password"
+            //         // placeholder={titleCase(props.convertToLang(props.translation[""], "APP NAME"))}
+            //         placeholder="Search here"
+            //     />
+            // ),
+            // dataIndex: '',
+            // children: [
+            {
+                title: '#',
+                dataIndex: 'counter',
+                align: 'center',
+                className: 'row',
+                render: (text, record, index) => ++index,
+            },
+            {
+                title: <Button type="danger" size="small" onClick={() => removeSMapps("all", "guest")}>Remove All</Button>,
+                dataIndex: 'removeAllGuest',
+                align: 'center',
+                className: '',
+                // width: 50,
+            },
+            {
+                title: <Button type="danger" size="small" onClick={() => removeSMapps("all", "encrypted")}>Remove All</Button>,
+                dataIndex: 'removeAllEncrypted',
+                align: 'center',
+                className: '',
+                // width: 50,
+            },
+            {
+                title: "LOGO", // convertToLang(translation[ACTION], "ACTION"),
+                dataIndex: 'logo',
+                align: 'center',
+                className: '',
+                // width: 800,
+                key: "logo"
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="app_name"
+                        key="app_name"
+                        id="app_name"
+                        className="search_heading"
+                        onChange={handleSearch}
+                        autoComplete="new-password"
+                        // placeholder={titleCase(props.convertToLang(props.translation[""], "APP NAME"))}
+                        placeholder="Search here"
+                    />
+                ),
+                align: 'center',
+                dataIndex: 'app_name',
+                children: [
+                    {
+                        title: "APP NAME",
+                        dataIndex: 'app_name',
+                    }
+                ]
+
+            },
+            {
+                title: "",
+                dataIndex: 'uninstall',
+                align: 'center',
+                className: '',
+                // width: 800,
+                key: "uninstall"
+            },
+            // ]
+            // }
+        ]
+    )
+}
