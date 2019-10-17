@@ -636,6 +636,11 @@ const RestService = {
         // console.log(dealer_id, 'whte label on get price')
         return axios.get(BASE_URL + 'users/get-packages', RestService.getHeader());
     },
+
+    getHardwares: () => {
+        // console.log(dealer_id, 'whte label on get price')
+        return axios.get(BASE_URL + 'users/get-Hardwares', RestService.getHeader());
+    },
     getParentPackages: () => {
         // console.log(dealer_id, 'whte label on get price')
         return axios.get(BASE_URL + 'users/get-parent-packages', RestService.getHeader());
@@ -814,28 +819,30 @@ const RestService = {
             ...agent
         }, RestService.getHeader());
     },
+
     changeAgentStatus(agent, status) {
         return axios.put(BASE_URL + 'users/agents/' + agent.id + '/status', {
             status: status
         }, RestService.getHeader());
     },
+
     resetAgentPwd: (agentID) => {
         return axios.put(BASE_URL + 'users/agents/' + agentID + '/reset-pwd', {
         }, RestService.getHeader());
     },
+
     deleteAgent: (agentID) => {
         return axios.delete(BASE_URL + 'users/agents/' + agentID, RestService.getHeader());
     },
+
     deletePackage: (id) => {
         return axios.delete(BASE_URL + 'users/delete_package/' + id, RestService.getHeader());
     },
-    editPackage: (id, price, isModify) => {
-        // console.log(isModify);
-        return axios.put(BASE_URL + 'users/edit_package/' + id, { price, isModify }, RestService.getHeader());
-        // resyncIds: () => {
-        //     return axios.get(BASE_URL + 'users/resync_ids', RestService.getHeader())
-        // },
+
+    modifyItemPrice: (id, price, isModify, type) => {
+        return axios.put(BASE_URL + 'users/modify_item_price/' + id, { price, isModify, type }, RestService.getHeader());
     },
+
     getDashboardData: () => {
         return axios.get(BASE_URL + 'users/dashboard-data', RestService.getHeader());
     },
