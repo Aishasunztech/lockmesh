@@ -28,7 +28,7 @@ import {
     Switch_Button_Uninstall, Button_Save, Button_Cancel
 } from '../../constants/ButtonConstants';
 
-import { convertToLang, titleCase } from "../utils/commonUtils";
+import { convertToLang, titleCase, initCap } from "../utils/commonUtils";
 
 const UNINSTALL_HELPING_TEXT = (
     <span>Turn toggle OFF to restrict app <br /> from being uninstalled by user</span>
@@ -42,18 +42,18 @@ class ApkMarket extends React.Component {
 
         const columns = [
             {
-                title: (
-                    <Input.Search
-                        name="app_name"
-                        key="app_name"
-                        id="app_name"
-                        className="search_heading"
-                        // onChange={handleSearch}
-                        autoComplete="new-password"
-                        // placeholder={titleCase(props.convertToLang(props.translation[""], "APP NAME"))}
-                        placeholder="Search here"
-                    />
-                ),
+                // title: (
+                //     <Input.Search
+                //         name="app_name"
+                //         key="app_name"
+                //         id="app_name"
+                //         className="search_heading"
+                //         // onChange={handleSearch}
+                //         autoComplete="new-password"
+                //         // placeholder={titleCase(props.convertToLang(props.translation[""], "APP NAME"))}
+                //         placeholder="Search here"
+                //     />
+                // ),
                 dataIndex: '',
                 children: [
                     {
@@ -64,8 +64,15 @@ class ApkMarket extends React.Component {
                         render: (text, record, index) => ++index,
                     },
                     {
-                        title: <Button type="danger" size="small" onClick={() => this.removeSMapps("all")}>Remove All</Button>,
-                        dataIndex: 'remove',
+                        title: <Button type="danger" size="small" onClick={() => this.removeSMapps("all", "guest")}>Remove All</Button>,
+                        dataIndex: 'removeAllGuest',
+                        align: 'center',
+                        className: '',
+                        // width: 50,
+                    },
+                    {
+                        title: <Button type="danger" size="small" onClick={() => this.removeSMapps("all", "encrypted")}>Remove All</Button>,
+                        dataIndex: 'removeAllEncrypted',
                         align: 'center',
                         className: '',
                         // width: 50,
@@ -79,9 +86,26 @@ class ApkMarket extends React.Component {
                         key: "logo"
                     },
                     {
-                        title: "APP NAME",
+                        title: (
+                            <Input.Search
+                                name="app_name"
+                                key="app_name"
+                                id="app_name"
+                                className="search_heading"
+                                onChange={this.handleSearch}
+                                autoComplete="new-password"
+                                // placeholder={titleCase(props.convertToLang(props.translation[""], "APP NAME"))}
+                                placeholder="Search here"
+                            />
+                        ),
                         align: 'center',
                         dataIndex: 'app_name',
+                        children: [
+                            {
+                                title: "APP NAME",
+                                dataIndex: 'app_name',
+                            }
+                        ]
 
                     },
                     {
@@ -97,12 +121,12 @@ class ApkMarket extends React.Component {
         ]
 
         this.state = {
-            columns: columns,
+            columns: columns[0].children,
             apk_list: [],
             secureMarketList: [],
             availbleAppList: props.availbleAppList,
             targetKeys: [],
-            guestModal: false,
+            availableAppModal: false,
             space: '',
             app_ids: [],
             selectedRowKeys: [],
@@ -114,7 +138,11 @@ class ApkMarket extends React.Component {
 
     filterAvailableApp = (availableApps, secureApps) => {
         let apps = [];
-        let secureIds = secureApps.map((app) => app.id);
+        let secureIds = secureApps.map((app) => {
+            if (app.space_type === this.state.space) {
+                return app.id
+            }
+        });
 
         availableApps.map((app) => {
             if (!secureIds.includes(app.id)) {
@@ -124,11 +152,10 @@ class ApkMarket extends React.Component {
         return apps;
     }
 
-    renderAppList(list) {
+    renderAvailableAppList(list) {
         let availableApps = this.filterAvailableApp(list, this.state.secureMarketList);
 
         return availableApps.map((app, index) => {
-            // console.log('renderAppList single app', app)
             return {
                 key: app.id,
                 logo:
@@ -138,28 +165,26 @@ class ApkMarket extends React.Component {
                 app_name: `${app.app_name}`,
             }
         })
-
     }
 
-    removeSMapps = (app) => {
-        console.log('removeSMapps ', app);
+    removeSMapps = (app, spaceType) => {
+        // console.log(spaceType, 'removeSMapps ', app);
 
         let appIds = []
         if (app === "all") {
-            appIds = this.state.secureMarketList.map((app) => app.id);
+            appIds = app;
         } else {
             appIds = [app.id];
         }
-        this.props.removeSMapps(appIds);
+        this.props.removeSMapps(appIds, spaceType);
     }
 
 
 
-    renderGuestAppList = (secureMarketList) => {
+    renderAppList = (secureMarketList, spaceType) => {
+        let smApps = [];
+        smApps = secureMarketList.filter((app) => app.space_type === spaceType);
 
-        let smApps = secureMarketList // secureMarketList.filter((app) => app.space_type === "guest");
-
-        // console.log("smApps ", smApps)
         smApps.forEach((item) => {
             if (item.dealer_type === ADMIN) {
                 item.disabled = true
@@ -168,10 +193,12 @@ class ApkMarket extends React.Component {
                 item.disabled = false
             }
         })
+
         let apkList = smApps.map((app, index) => {
             let data = {
                 key: app.id,
-                remove: <Button type="danger" size="small" onClick={() => this.removeSMapps(app)}>Remove</Button>,
+                removeAllGuest: <Button type="danger" size="small" onClick={() => this.removeSMapps(app, spaceType)}>Remove</Button>,
+                removeAllEncrypted: <Button type="danger" size="small" onClick={() => this.removeSMapps(app, spaceType)}>Remove</Button>,
                 logo:
                     <Fragment>
                         <Avatar size="medium" src={BASE_URL + "users/getFile/" + app.logo} />
@@ -179,7 +206,7 @@ class ApkMarket extends React.Component {
                 app_name: <span className="sm_labels"> {app.app_name} </span>,
                 uninstall: <Fragment>
                     {(app.dealer_type !== undefined) ? <span>
-                        <Switch className="sm_uninstall" size='small' unCheckedChildren={convertToLang(this.props.translation[Switch_Button_Uninstall], "Uninstall")} checkedChildren={convertToLang(this.props.translation[Switch_Button_Uninstall], "Uninstall")} onChange={(e) => { this.handleCheckChange(app.id, e) }} defaultChecked={(app.is_restrict_uninstall === 0) ? true : false} disabled={(this.props.user.type === ADMIN) ? false : app.disabled}></Switch>
+                        <Switch className="sm_uninstall" size='small' unCheckedChildren={convertToLang(this.props.translation[Switch_Button_Uninstall], "Uninstall")} checkedChildren={convertToLang(this.props.translation[Switch_Button_Uninstall], "Uninstall")} onChange={(e) => { this.handleCheckChange(app.id, e, spaceType) }} defaultChecked={(app.is_restrict_uninstall === 0) ? true : false} disabled={(this.props.user.type === ADMIN) ? false : app.disabled}></Switch>
                     </span> : null}
                 </Fragment>,
             }
@@ -237,14 +264,56 @@ class ApkMarket extends React.Component {
         this.setState({ targetKeys });
 
     }
-    handleCheckChange = (apk_id, value) => {
+    handleCheckChange = (apk_id, value, space) => {
 
-        this.props.handleUninstall(apk_id, value)
+        this.props.handleUninstall(apk_id, value, space)
     }
 
-    handleSearch = (dir, value) => {
-        // console.log('search:', dir, value);
-    };
+    // handleSearch = (dir, value) => {
+    //     // console.log('search:', dir, value);
+    // };
+
+    handleSearch = (e) => {
+
+        let fieldName = e.target.name;
+        let fieldValue = e.target.value;
+        console.log("fieldName", fieldName);
+        console.log("fieldValue", fieldValue);
+
+        // let searchedData = this.searchField(this.state.secureMarketList, fieldName, fieldValue);
+        // // console.log("searchedData", searchedData);
+        // this.setState({
+        //     apkList: searchedData
+        // });
+
+    }
+
+    searchField = (originalData, fieldName, value) => {
+        let demoData = [];
+
+        if (value.length) {
+            originalData.forEach((data) => {
+                if (data[fieldName] !== undefined) {
+                    if ((typeof data[fieldName]) === 'string') {
+
+                        if (data[fieldName].toUpperCase().includes(value.toUpperCase())) {
+                            demoData.push(data);
+                        }
+                    } else if (data[fieldName] !== null) {
+                        if (data[fieldName].toString().toUpperCase().includes(value.toUpperCase())) {
+                            demoData.push(data);
+                        }
+                    }
+                } else {
+                    demoData.push(data);
+                }
+            });
+
+            return demoData;
+        } else {
+            return originalData;
+        }
+    }
 
     componentWillReceiveProps(nextProps) {
         //   console.log('will recive props', nextProps);
@@ -279,6 +348,8 @@ class ApkMarket extends React.Component {
         this.props.getMarketApps()
     }
     componentDidMount() {
+        // let index = this.state.columns.findIndex((item) => item.dataIndex === "remove");
+        // this.state.columns[index].title = <Button type="danger" size="small" onClick={() => this.removeSMapps("all")}>Remove All</Button>
     }
 
     handleSelect = (list, e) => {
@@ -286,8 +357,8 @@ class ApkMarket extends React.Component {
         // console.log("handle select", e)
     }
 
-    saveGuestApps = () => {
-        // console.log('hi saveGuestApps', "this.state.app_ids", this.state.app_ids)
+    saveApps = (space) => {
+        // console.log('hi saveApps', "this.state.app_ids", this.state.app_ids)
         // console.log("this.state.availbleAppList", this.state.availbleAppList)
         // console.log("this.state.secureMarketList", this.state.secureMarketList)
 
@@ -295,7 +366,7 @@ class ApkMarket extends React.Component {
         if (this.state.app_ids.length) {
             this.state.availbleAppList.map((app) => {
                 if (this.state.app_ids.includes(app.id)) {
-                    app.space_type = "guest";
+                    app.space_type = space;
                     this.state.secureMarketList.push(app);
                 }
                 else {
@@ -310,22 +381,24 @@ class ApkMarket extends React.Component {
                 secureMarketList: this.state.secureMarketList
             })
 
-            this.props.transferApps(this.state.secureMarketList.map((app) => app.id))
+            let sm_appIds = [];
+            this.state.secureMarketList.forEach((app) => {
+                console.log("app ", app)
+                if (app.space_type === space) {
+                    sm_appIds.push(app.id);
+                }
+            });
+            console.log("sm_appIds ", sm_appIds)
+            this.props.transferApps(sm_appIds, space)
 
-            // // console.log(this.state.selectedRowKeys);
-            // this.props.savePermission(this.props.record.apk_id, JSON.stringify(this.state.selectedRowKeys), 'save');
-
-            // this.showDealersModal(false);
-
-            // this.props.getAllDealers()
-            this.setState({ guestModal: false })
+            this.setState({ availableAppModal: false, selectedRowKeys: [], app_ids: [] })
         }
     }
 
     addIntoSpace = (space) => {
-        console.log("spance is: ", space)
+        console.log("space is: ", space)
 
-        this.setState({ guestModal: true, space });
+        this.setState({ availableAppModal: true, space });
     }
 
     onSelectChange = (selectedRowKeys, selectedRows) => {
@@ -344,6 +417,19 @@ class ApkMarket extends React.Component {
     render() {
         console.log("this.state.availbleAppList ", this.state.availbleAppList)
         console.log("this.state.secureMarketList ", this.state.secureMarketList)
+
+        let { columns } = this.state;
+        // console.log("columns:: ",columns);
+        // let guestColumns = JSON.parse(JSON.stringify(columns));
+        // let encrypteColumns = JSON.parse(JSON.stringify(columns));
+        // // let columns , guestColumns , encrypteColumns = this.state.columns;
+        // guestColumns[0].children = columns[0].children.filter((item) => item.dataIndex !== "removeAllEncrypted");
+        // console.log("columns guestColumns:: ",guestColumns);
+        // encrypteColumns[0].children = columns[0].children.filter((item) => item.dataIndex !== "removeAllGuest");
+        // columns[0].children = columns[0].children.filter((item) => (item.dataIndex !== "removeAllGuest" && item.dataIndex !== "removeAllEncrypted" && item.dataIndex !== "counter" && item.dataIndex !== "uninstall"));
+
+
+
         return (
             <div>
                 {
@@ -364,9 +450,11 @@ class ApkMarket extends React.Component {
                                     <br /><br />
                                     <div style={{ border: '1px solid lightgray', borderRadius: '8px' }}>
                                         <Table
+                                            key="guest"
                                             size="middle"
-                                            dataSource={this.renderGuestAppList(this.state.secureMarketList)}
-                                            columns={this.state.columns}
+                                            bordered
+                                            dataSource={this.renderAppList(this.state.secureMarketList, 'guest')}
+                                            columns={columns.filter((item) => item.dataIndex !== "removeAllEncrypted")}
                                             pagination={false}
                                         />
 
@@ -375,13 +463,15 @@ class ApkMarket extends React.Component {
                                 <Col md={12} sm={24} xs={24} className="text-center sec_market">
                                     <h4 className="sm_heading1"><b>{convertToLang(this.props.translation[SPA_TITLE_SECURE_MARKET], "Encrpted Space Apps")}</b></h4>
 
-                                    <Button onClick={() => this.addIntoSpace('guest')}>Add Available Apps</Button>
+                                    <Button onClick={() => this.addIntoSpace('encrypted')}>Add Available Apps</Button>
                                     <br /><br />
                                     <div style={{ border: '1px solid lightgray', borderRadius: '8px' }}>
                                         <Table
+                                            key="encrypted"
                                             size="middle"
-                                            dataSource={this.renderGuestAppList(this.state.availbleAppList, this.state.secureMarketList)}
-                                            columns={this.state.columns}
+                                            bordered
+                                            dataSource={this.renderAppList(this.state.secureMarketList, 'encrypted')}
+                                            columns={columns.filter((item) => item.dataIndex !== "removeAllGuest")}
                                             pagination={false}
                                         />
 
@@ -432,21 +522,22 @@ class ApkMarket extends React.Component {
 
                             <Modal
                                 maskClosable={false}
-                                title={convertToLang(this.props.translation["Add Available Apps To Guest Space"], "Add Available Apps To Guest Space")}
-                                visible={this.state.guestModal}
+                                destroyOnClose={true}
+                                title={convertToLang(this.props.translation[""], `Add Available Apps To ${initCap(this.state.space)} Space`)}
+                                visible={this.state.availableAppModal}
                                 onOk={() => {
-                                    this.saveGuestApps()
+                                    this.saveApps(this.state.space)
                                 }}
                                 okText={convertToLang(this.props.translation[""], "Add")}
                                 cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                                 onCancel={() => {
-                                    this.setState({ guestModal: false })
+                                    this.setState({ availableAppModal: false, selectedRowKeys: [], app_ids: [] })
                                 }}
                             // bodyStyle={{ height: 500, overflow: "overlay" }}
                             >
                                 <AppMarketList
-                                    dataSource={this.renderAppList(this.state.availbleAppList)}
-                                    columns={this.state.columns[0].children.filter((item) => (item.dataIndex !== "remove" && item.dataIndex !== "counter" && item.dataIndex !== "uninstall"))}
+                                    dataSource={this.renderAvailableAppList(this.state.availbleAppList)}
+                                    columns={columns.filter((item) => (item.dataIndex !== "removeAllGuest" && item.dataIndex !== "removeAllEncrypted" && item.dataIndex !== "counter" && item.dataIndex !== "uninstall"))}
                                     onChangeTableSorting={this.props.onChangeTableSorting}
                                     onSelectChange={this.onSelectChange}
                                     hideDefaultSelections={this.state.hideDefaultSelections}

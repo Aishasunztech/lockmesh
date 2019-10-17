@@ -11,16 +11,17 @@ import {
 
 import RestService from '../services/RestServices';
 
-export function removeSMapps(data) {
+export function removeSMapps(data, spaceType) {
     return (dispatch) => {
 
-        RestService.removeSMapps(data).then((response) => {
+        RestService.removeSMapps(data, spaceType).then((response) => {
             if (RestService.checkAuth(response.data)) {
 
                 dispatch({
                     type: REMOVE_APPS,
                     payload: response.data,
-                    response: data
+                    response: data,
+                    space: spaceType
                 })
             } else {
                 dispatch({
@@ -31,7 +32,7 @@ export function removeSMapps(data) {
     }
 }
 
-export function transferApps(data) {
+export function transferApps(data, space) {
     console.log('transferApps ', data);
     // return;
     return (dispatch) => {
@@ -39,7 +40,7 @@ export function transferApps(data) {
             type: LOADING
         })
         // console.log(data);
-        RestService.transferApps(data).then((response) => {
+        RestService.transferApps(data, space).then((response) => {
             if (RestService.checkAuth(response.data)) {
 
                 dispatch({
@@ -73,14 +74,15 @@ export function getMarketApps() {
         })
     }
 }
-export function handleUninstall(apk_id, value) {
+export function handleUninstall(apk_id, value, space) {
+    console.log('handleUninstall ', space)
     return (dispatch) => {
-        RestService.handleUninstall(apk_id, value).then((response) => {
+        RestService.handleUninstall(apk_id, value, space).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: UNINSTALL_PERMISSION_CHANGED,
                     msg: response.data.msg,
-                    payload: response.data.data,
+                    payload: { apk_id, value, space },
                     status: response.data.status
                 })
             } else {

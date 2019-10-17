@@ -28,10 +28,11 @@ export default (state = initialState, action) => {
 
             if (action.payload.status) {
                 message.success(action.payload.msg);
-                console.log('at REMOVE_APPS reducer:: ', action.response[0])
+                console.log('at REMOVE_APPS reducer:: ', action)
                 console.log(state.secureMarketList)
-                if (action.response.length > 1) {
-                    smApps = [];
+                if (action.response === "all") {
+                    smApps = state.secureMarketList.filter((app) => app.space_type !== action.space)
+
                     // let apps = [];
                     // state.secureMarketList.forEach((app) => {
                     //     if (!action.response.includes(app.id)) {
@@ -74,14 +75,24 @@ export default (state = initialState, action) => {
                 availbleAppList: action.payload.availableApps
             }
         case UNINSTALL_PERMISSION_CHANGED:
+            // console.log(state.secureMarketList, 'UNINSTALL_PERMISSION_CHANGED ', action.payload)
+
             if (action.status) {
+
+                let index = state.secureMarketList.findIndex((app) => app.id === action.payload.apk_id && app.space_type === action.payload.space)
+                if (index !== -1) {
+                    state.secureMarketList[index].is_restrict_uninstall = action.payload.value;
+                }
+
                 message.success(action.msg)
+
             } else {
                 message.error(action.msg)
             }
 
             return {
                 ...state,
+                secureMarketList: [...state.secureMarketList]
             }
 
         default:
