@@ -84,7 +84,7 @@ class ApkMarket extends React.Component {
     }
 
     filterAvailableApp = (availableApps, secureApps, spaceType = this.state.space) => {
-        // console.log('space type is: ', this.state.space)
+        console.log('filterAvailableApp space type is: ', this.state.space)
         // console.log("filterAvailableApp availableApps ", availableApps);
         // console.log("filterAvailableApp secureApps ", secureApps);
 
@@ -120,6 +120,15 @@ class ApkMarket extends React.Component {
 
     renderAvailableAppList(appList) {
         let availableApps = this.filterAvailableApp(appList, this.state.secureMarketList);
+
+        // this.state.availbleAppList = availableApps;
+        // this.setState({ availbleAppList: availableApps })
+        // if (this.state.space === "guest") {
+        //     mGuestCopySearch = availableApps;
+        // }
+        // else if (this.state.space === "encrypted") {
+        //     mEncryptedCopySearch = availableApps;
+        // }
 
         return availableApps.map((app, index) => {
             return {
@@ -334,23 +343,25 @@ class ApkMarket extends React.Component {
         let fieldValue = e.target.value;
         console.log("fieldName", fieldName);
         console.log("fieldValue", fieldValue);
+        console.log('space type check;; ', this.state.space);
 
         let availableApps = this.filterAvailableApp(this.state.availbleAppList, this.state.secureMarketList);
+        console.log('check available apps lenght:: ', availableApps.length);
         let searchedData = [];
 
         if (this.state.space === 'guest') {
             if (mGueststatus) {
-                mGuestCopySearch = availableApps;
+                mGuestCopySearch = (mGuestCopySearch.length) ? mGuestCopySearch : availableApps;
                 mGueststatus = false;
             }
             searchedData = this.searchField(mGuestCopySearch, fieldName, fieldValue);
             this.setState({
-                guestAvailableApps: searchedData
+                availbleAppList: searchedData
             });
         }
         else if (this.state.space === 'encrypted') {
             if (mEncryptedstatus) {
-                mEncryptedCopySearch = availableApps;
+                mEncryptedCopySearch = (mEncryptedCopySearch.length) ? mEncryptedCopySearch : availableApps;
                 mEncryptedstatus = false;
             }
             searchedData = this.searchField(mEncryptedCopySearch, fieldName, fieldValue);
@@ -432,6 +443,9 @@ class ApkMarket extends React.Component {
 
             guestCopySearch = guestApps;
             encryptedCopySearch = encryptedApps;
+
+            mGuestCopySearch = guestAvailableApps;
+            mEncryptedCopySearch = encryptedAvailableApps;
 
             this.setState({
                 secureMarketList: this.props.secureMarketList,
@@ -625,7 +639,7 @@ class ApkMarket extends React.Component {
 
                             <Modal
                                 maskClosable={false}
-                                destroyOnClose={true}
+                                // destroyOnClose={true}
                                 title={convertToLang(this.props.translation[""], `Add Available Apps To ${initCap(this.state.space)} Space`)}
                                 visible={this.state.availableAppModal}
                                 onOk={() => {
