@@ -25,32 +25,30 @@ export default (state = initialState, action) => {
 
         case REMOVE_APPS: {
             let smApps = state.secureMarketList;
+            let availableApps = state.availbleAppList;
 
             if (action.payload.status) {
                 message.success(action.payload.msg);
-                console.log('at REMOVE_APPS reducer:: ', action)
-                console.log(state.secureMarketList)
-                if (action.response === "all") {
-                    smApps = state.secureMarketList.filter((app) => app.space_type !== action.space)
 
-                    // let apps = [];
-                    // state.secureMarketList.forEach((app) => {
-                    //     if (!action.response.includes(app.id)) {
-                    //         apps.push(app);
-                    //         smApps = apps;
-                    //     }
-                    // })
-                    // smApps = state.secureMarketList.filter((app) => app.id !== action.response[0])
-                } else {
-                    smApps = state.secureMarketList.filter((app) => app.id !== action.response[0])
-                }
-                console.log(smApps)
+                console.log('at REMOVE_APPS reducer:: ', action)
+                // console.log(state.secureMarketList)
+
+                smApps = action.payload.data.marketApplist;
+                availableApps = action.payload.data.availableApps;
+
+                // if (action.response === "all") {
+                //     smApps = state.secureMarketList.filter((app) => app.space_type !== action.space)
+                // } else {
+                //     smApps = state.secureMarketList.filter((app) => app.id !== action.response[0] && app.space_type === action.space)
+                // }
+                // console.log(smApps)
             } else {
                 message.error(action.payload.msg)
             }
             return {
                 ...state,
-                secureMarketList: smApps
+                secureMarketList: smApps,
+                availbleAppList: availableApps
             }
         }
         case TRANSFER_APPS:

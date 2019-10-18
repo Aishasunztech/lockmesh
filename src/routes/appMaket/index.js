@@ -144,11 +144,13 @@ class ApkMarket extends React.Component {
         let appIds = []
         if (app === "all") {
             appIds = app;
+            this.setState({ selectedRowKeys: [], app_ids: [] })
         } else {
             appIds = [app.id];
         }
         this.props.removeSMapps(appIds, spaceType);
-        this.props.getMarketApps()
+
+        // this.props.getMarketApps()
         // } else {
         //     Modal.error({ title: "Sorry, You can't remove these apps" })
 
@@ -182,10 +184,10 @@ class ApkMarket extends React.Component {
         console.log("secureMarketList is: ", secureMarketList)
         let smApps = [];
         if (this.props.user.type === ADMIN) {
-            smApps = secureMarketList.filter((app) => app.space_type === spaceType && app.dealer_type === this.props.user.type);
+            smApps = secureMarketList.filter((app) => app.dealer_type === this.props.user.type);
         } else {
 
-            smApps = secureMarketList.filter((app) => app.space_type === spaceType);
+            smApps = secureMarketList //.filter((app) => app.space_type === spaceType);
             // smApps = secureMarketList.filter((app) => {
             //     console.log("hi ===> ", app.space_type === spaceType , (duplicateIds.length) ? (duplicateIds.includes(app.id) && app.dealer_type === ADMIN) : true);
             //     return (app.space_type === spaceType && (duplicateIds.length) ? (duplicateIds.includes(app.id) && app.dealer_type === ADMIN) : true)
@@ -333,12 +335,12 @@ class ApkMarket extends React.Component {
         console.log("fieldName", fieldName);
         console.log("fieldValue", fieldValue);
 
-        // let availableApps = this.filterAvailableApp(this.state.availbleAppList, this.state.secureMarketList);
+        let availableApps = this.filterAvailableApp(this.state.availbleAppList, this.state.secureMarketList);
         let searchedData = [];
 
         if (this.state.space === 'guest') {
             if (mGueststatus) {
-                mGuestCopySearch = this.state.guestAvailableApps;
+                mGuestCopySearch = availableApps;
                 mGueststatus = false;
             }
             searchedData = this.searchField(mGuestCopySearch, fieldName, fieldValue);
@@ -348,12 +350,12 @@ class ApkMarket extends React.Component {
         }
         else if (this.state.space === 'encrypted') {
             if (mEncryptedstatus) {
-                mEncryptedCopySearch = this.state.encryptedAvailableApps;
+                mEncryptedCopySearch = availableApps;
                 mEncryptedstatus = false;
             }
             searchedData = this.searchField(mEncryptedCopySearch, fieldName, fieldValue);
             this.setState({
-                encryptedAvailableApps: searchedData
+                availbleAppList: searchedData
             });
         }
 
@@ -386,32 +388,35 @@ class ApkMarket extends React.Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        //   console.log('will recive props', nextProps);
+    // componentWillReceiveProps(nextProps) {
+    //     //   console.log('will recive props', nextProps);
 
-        if (this.props.apk_list !== nextProps.apk_list) {
-            let keys = nextProps.secureMarketList.map((app) => {
-                return app.id
-            })
-            // console.log(keys);
+    //     if (this.props.apk_list !== nextProps.apk_list) {
+    //         let keys = nextProps.secureMarketList.map((app) => {
+    //             return app.id
+    //         })
+    //         // console.log(keys);
 
-            let guestApps = nextProps.secureMarketList.filter((app) => app.space_type === "guest");
-            let encryptedApps = nextProps.secureMarketList.filter((app) => app.space_type === "encrypted");
+    //         let guestApps = nextProps.secureMarketList.filter((app) => app.space_type === "guest");
+    //         let encryptedApps = nextProps.secureMarketList.filter((app) => app.space_type === "encrypted");
 
-            let guestAvailableApps = this.filterAvailableApp(nextProps.availbleAppList, nextProps.secureMarketList, "guest");
-            let encryptedAvailableApps = this.filterAvailableApp(nextProps.availbleAppList, nextProps.secureMarketList, "encrypted");
+    //         let guestAvailableApps = this.filterAvailableApp(nextProps.availbleAppList, nextProps.secureMarketList, "guest");
+    //         let encryptedAvailableApps = this.filterAvailableApp(nextProps.availbleAppList, nextProps.secureMarketList, "encrypted");
 
-            this.setState({
-                secureMarketList: nextProps.secureMarketList,
-                availbleAppList: nextProps.availbleAppList,
-                guest_SM: guestApps,
-                encrypted_SM: encryptedApps,
-                guestAvailableApps: guestAvailableApps,
-                encryptedAvailableApps: encryptedAvailableApps,
-                targetKeys: keys
-            })
-        }
-    }
+    //         guestCopySearch = guestApps;
+    //         encryptedCopySearch = encryptedApps;
+
+    //         this.setState({
+    //             secureMarketList: nextProps.secureMarketList,
+    //             availbleAppList: nextProps.availbleAppList,
+    //             guest_SM: guestApps,
+    //             encrypted_SM: encryptedApps,
+    //             guestAvailableApps: guestAvailableApps,
+    //             encryptedAvailableApps: encryptedAvailableApps,
+    //             targetKeys: keys
+    //         })
+    //     }
+    // }
 
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
@@ -424,6 +429,9 @@ class ApkMarket extends React.Component {
 
             let guestAvailableApps = this.filterAvailableApp(this.props.availbleAppList, this.props.secureMarketList, "guest");
             let encryptedAvailableApps = this.filterAvailableApp(this.props.availbleAppList, this.props.secureMarketList, "encrypted");
+
+            guestCopySearch = guestApps;
+            encryptedCopySearch = encryptedApps;
 
             this.setState({
                 secureMarketList: this.props.secureMarketList,
@@ -486,6 +494,7 @@ class ApkMarket extends React.Component {
 
             this.setState({ availableAppModal: false, selectedRowKeys: [], app_ids: [] })
         }
+        // this.props.getMarketApps()
     }
 
     addIntoSpace = (space) => {
@@ -508,20 +517,18 @@ class ApkMarket extends React.Component {
     }
 
     render() {
-        // console.log("this.state.availbleAppList ", this.state.availbleAppList)
-        // console.log("this.state.secureMarketList ", this.state.secureMarketList)
-
         let { columnsGuest, columnsEncrypted, columnsModal } = this.state;
-        // console.log("columns:: ",columns);
-        // let guestColumns = JSON.parse(JSON.stringify(columns));
-        // let encrypteColumns = JSON.parse(JSON.stringify(columns));
-        // // let columns , guestColumns , encrypteColumns = this.state.columns;
-        // guestColumns[0].children = columns[0].children.filter((item) => item.dataIndex !== "removeAllEncrypted");
-        // console.log("columns guestColumns:: ",guestColumns);
-        // encrypteColumns[0].children = columns[0].children.filter((item) => item.dataIndex !== "removeAllGuest");
-        // columns[0].children = columns[0].children.filter((item) => (item.dataIndex !== "removeAllGuest" && item.dataIndex !== "removeAllEncrypted" && item.dataIndex !== "counter" && item.dataIndex !== "uninstall"));
 
+        if (this.props.user.type !== ADMIN) {
+            let dealerGuest = this.state.secureMarketList.filter((app) => app.space_type === "guest" && app.dealer_type === DEALER);
+            let dealerEncrypted = this.state.secureMarketList.filter((app) => app.space_type === "encrypted" && app.dealer_type === DEALER);
 
+            let guestindex = columnsGuest.findIndex((obj) => obj.dataIndex == "removeAllGuest");
+            columnsGuest[guestindex].title = <Button type="danger" size="small" disabled={(dealerGuest.length) ? false : true} onClick={() => this.removeSMapps("all", "guest")}>Remove All</Button>
+
+            let index = columnsEncrypted.findIndex((obj) => obj.dataIndex == "removeAllEncrypted");
+            columnsEncrypted[index].title = <Button type="danger" size="small" disabled={(dealerEncrypted.length) ? false : true} onClick={() => this.removeSMapps("all", "encrypted")}>Remove All</Button>
+        }
 
         return (
             <div>

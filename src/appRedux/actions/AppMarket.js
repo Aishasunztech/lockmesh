@@ -20,8 +20,8 @@ export function removeSMapps(data, spaceType) {
                 dispatch({
                     type: REMOVE_APPS,
                     payload: response.data,
-                    response: data,
-                    space: spaceType
+                    // response: data,
+                    // space: spaceType
                 })
             } else {
                 dispatch({
