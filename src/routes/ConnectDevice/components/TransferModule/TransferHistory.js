@@ -12,6 +12,7 @@ import {
     getUserList,
     getDeaerUsers
 } from "../../../../appRedux/actions/Users";
+import { getNewDevicesList } from "../../../../appRedux/actions/Common";
 
 import {
     transferUser,
@@ -120,6 +121,7 @@ class TransferHistory extends Component {
     }
 
     componentDidMount() {
+        this.props.getNewDevicesList();
         // this.props.getUserList();
         // this.props.getDeaerUsers(this.props.device.dealer_id);
         // if (this.props.device.device_id) {
@@ -257,7 +259,7 @@ class TransferHistory extends Component {
     }
 
     checkDeviceStatus = (transfer = "Device") => {
-
+        this.props.getNewDevicesList();
         this.props.getDeaerUsers(this.props.device.dealer_id);
 
         let filtered = this.props.transferHistoryList.filter(e => e.action == "Device Transfered");
@@ -466,4 +468,4 @@ var mapStateToProps = ({ users, settings, device_details }) => {
     };
 }
 
-export default connect(mapStateToProps, { getDeaerUsers, getUserList, addUser, transferUser, transferHistory }, null, { withRef: true })(WrappedUserList);
+export default connect(mapStateToProps, { getDeaerUsers, getUserList, addUser, transferUser, transferHistory, getNewDevicesList }, null, { withRef: true })(WrappedUserList);
