@@ -105,8 +105,8 @@ const RestService = {
 
     },
 
-    getQueJobs: () => {
-        return axios.get(BASE_URL + 'users/queJobs', RestService.getHeader());
+    getQueJobs: (status, filter, offset, limit) => {
+        return axios.get(BASE_URL + "users/queJobs/?status="+status+"&start="+offset+"&limit="+limit+"&filter="+filter, RestService.getHeader());
     },
 
     // isAdmin

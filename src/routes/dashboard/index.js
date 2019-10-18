@@ -63,7 +63,7 @@ class Dashboard extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.props !== nextProps) {
-            console.log(nextProps.devices, 'next props are')
+            // console.log(nextProps.devices, 'next props are')
         }
     }
 
@@ -79,7 +79,7 @@ class Dashboard extends Component {
     }
 
     render() {
-        console.log(this.props.devices, 'devices or new link request')
+        // console.log(this.props.devices, 'devices or new link request')
         return (
             <div>
                 <AppFilter
@@ -384,7 +384,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ dashboard, auth, devices, sidebar, settings }) => {
-    console.log("dashboard::", devices.newDevices);
+    // console.log("dashboard::", devices.newDevices);
     return {
         items: dashboard.dashboard_items,
         authUser: auth.authUser,

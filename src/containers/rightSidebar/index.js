@@ -3,7 +3,7 @@ import { Button, Drawer, Form, message, Icon, Tabs, Collapse, } from "antd";
 import { connect } from "react-redux";
 import Auxiliary from "util/Auxiliary";
 import CustomScrollbars from "util/CustomScrollbars";
-import {getQueJobs} from '../../appRedux/actions/rightSidebar';
+import { getQueJobs } from '../../appRedux/actions/rightSidebar';
 import styles from './rightSidebar.css'
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
@@ -33,12 +33,12 @@ class RightSidebar extends Component {
     console.log(key);
   }
 
-  genExtra = () => (
+  genExtra = (type) => (
     <div style={{ lineHeight: 1 }}>
       <i class="fa fa-check" aria-hidden="true"></i>
       <i class="fa fa-check" aria-hidden="true"></i>
       <br></br>
-      <i class="fa fa-times" aria-hidden="true" onClick={() => alert('canceled')}></i>
+      {type === 'completed' ? <i class="fa fa-times" aria-hidden="true" onClick={() => alert('canceled')}></i> : null}
     </div>
 
     // <Icon
@@ -50,13 +50,13 @@ class RightSidebar extends Component {
     // />
   );
 
-  renderList = (data) => {
+  renderList = (data, type) => {
     if (data) {
       return data.map((item, index) => {
         return (
-          <Panel header={item.heading} style={customPanelStyle} key={item.heading} extra={this.genExtra()}>
+          <Panel header={item.type + ' (' + item.device_id + ')'} style={customPanelStyle} key={item.id} extra={this.genExtra(type)}>
             <div>
-              <p>{item.description}</p>
+              <p>{item.created_at}</p>
             </div>
           </Panel>
         )
@@ -69,19 +69,32 @@ class RightSidebar extends Component {
     return (
       // <CustomScrollbars className="gx-customizer">
       <div className="gx-customizer-item">
+
         <Tabs onChange={() => this.callback()} type="card" className='rightSidebar-header'>
           <TabPane tab="Pending" key="1">
             <CustomScrollbars className="gx-customizer">
+
               <Collapse
                 // defaultActiveKey={['1']}
                 bordered={false}
                 expandIconPosition='right'
                 onChange={() => this.callback()}
-
+              // style={{ height: 400 }}
               >
-                {this.renderList(this.datalist)}
+                {this.renderList(this.props.pendingTasks, 'pending')}
+                {/* <div style={{ height: 50 }}></div> */}
               </Collapse>
+
             </CustomScrollbars>
+
+            <div className='rightSidebar-footer'>
+              <Icon
+                type="reload"
+                style={{ height: 10, width: 10 }}
+                onClick={() => this.props.getQueJobs('pending', '', this.props.pendingTasks.length, 50)}
+
+              />
+            </div>
           </TabPane>
           <TabPane tab="Completed" key="2">
             <CustomScrollbars className="gx-customizer">
@@ -92,26 +105,29 @@ class RightSidebar extends Component {
                 onChange={() => this.callback()}
 
               >
-                {this.renderList(this.datalist)}
+                {this.renderList(this.props.completedTasks, 'completed')}
               </Collapse>
             </CustomScrollbars>
-          </TabPane>
-        </Tabs>
-        <div className='rightSidebar-footer'>
-          <Icon
-            type="reload"
-            style={{ height: 10, width: 10 }}
+            <div className='rightSidebar-footer'>
+              <Icon
+                type="reload"
+                style={{ height: 10, width: 10 }}
+                onClick={() => this.props.getQueJobs('completed', '', this.props.completedTasks.length, 10)}
 
-          />
-        </div>
+              />
+            </div>
+          </TabPane>
+
+        </Tabs>
       </div>
 
       // </CustomScrollbars>
     )
   };
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.getQueJobs()
+    // console.log('index of rightsidebar')
   }
 
   toggleRightSidebar = () => {
@@ -122,7 +138,7 @@ class RightSidebar extends Component {
   };
 
   render() {
-    console.log(this.props)
+    // console.log(this.props)
     return (
       <Auxiliary>
         <Drawer
@@ -153,10 +169,11 @@ class RightSidebar extends Component {
 RightSidebar = Form.create()(RightSidebar);
 
 // export default RightSidebar;
-const mapStateToProps = ({settings, auth}) => {
+const mapStateToProps = ({ rightSidebar, auth }) => {
   return {
-    
+    completedTasks: rightSidebar.completedTasks,
+    pendingTasks: rightSidebar.pendingTasks
 
   }
 };
-export default connect(mapStateToProps, {getQueJobs})(RightSidebar);
+export default connect(mapStateToProps, { getQueJobs })(RightSidebar);
