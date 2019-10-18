@@ -739,12 +739,18 @@ const RestService = {
     },
 
     // Transfer Secure market Apps 
-    transferApps: (data) => {
-        return axios.post(BASE_URL + 'users/transferApps', { data }, RestService.getHeader())
+    transferApps: (data, space) => {
+        return axios.post(BASE_URL + 'users/transferApps', { data, spaceType: space }, RestService.getHeader())
     },
+
+    // Remove Secure market Apps 
+    removeSMapps: (data, spaceType) => {
+        return axios.post(BASE_URL + 'users/remove_sm_apps', { data, spaceType }, RestService.getHeader())
+    },
+
     // Change unistall app restriction for Secure market apps 
-    handleUninstall: (apk_id, value) => {
-        return axios.put(BASE_URL + 'users/handleUninstall/' + apk_id, { value }, RestService.getHeader())
+    handleUninstall: (apk_id, value, space) => {
+        return axios.put(BASE_URL + 'users/handleUninstall/' + apk_id, { value, spaceType: space }, RestService.getHeader())
     },
     getMarketApps: () => {
         return axios.get(BASE_URL + 'users/marketApplist', RestService.getHeader())
