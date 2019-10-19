@@ -14,6 +14,7 @@ import {
     Tab_USED,
     Tab_UNUSED,
 } from '../../../../constants/TabConstants';
+import { ADMIN } from '../../../../constants/Constants';
 
 // import EditApk from './editDealer';
 const TabPane = Tabs.TabPane;
@@ -112,8 +113,8 @@ export default class Tab extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            dataList: this.props.dataList,
-            tabselect: this.props.tabselect,
+            dataList: props.dataList,
+            tabselect: props.tabselect,
             // selectedOptions: this.props.selectedOptions,
             // innerTabSelect: this.props.innerTabSelect
 
@@ -145,13 +146,15 @@ export default class Tab extends Component {
         // console.log(this.state.dataList);
         return (
             <Fragment>
-                <Tabs defaultActiveKey="all" type='card' className="dev_tabs dev_tabs1" activeKey={this.state.tabselect} onChange={this.callback}>
-                    <TabPane tab={convertToLang(this.props.translation[Tab_All], "All")} key="all" >
-                    </TabPane>
-                    <TabPane tab={convertToLang(this.props.translation[Tab_USED], "USED")} key="1" forceRender={true} > </TabPane>
-                    <TabPane tab={convertToLang(this.props.translation[Tab_UNUSED], "UNUSED")} key="0" forceRender={true} > </TabPane>
+                {this.props.user.type === ADMIN ?
+                    <Tabs defaultActiveKey="all" type='card' className="dev_tabs dev_tabs1" activeKey={this.state.tabselect} onChange={this.callback}>
+                        <TabPane tab={convertToLang(this.props.translation[Tab_All], "All")} key="all" >
+                        </TabPane>
+                        <TabPane tab={convertToLang(this.props.translation[Tab_USED], "USED")} key="1" forceRender={true} > </TabPane>
+                        <TabPane tab={convertToLang(this.props.translation[Tab_UNUSED], "UNUSED")} key="0" forceRender={true} > </TabPane>
 
-                </Tabs>
+                    </Tabs>
+                    : null}
                 <AccountList
                     dataList={this.state.dataList}
                     innerTabSelect={this.props.innerTabSelect}

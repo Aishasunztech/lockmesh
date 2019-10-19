@@ -6,7 +6,8 @@ import {
     EDIT_USERS,
     DELETE_USER,
     UNDO_DELETE_USER,
-    DEALER_USERS
+    DEALER_USERS,
+    INVOICE_ID
 } from "../../constants/ActionTypes";
 
 import { message, Modal } from 'antd';
@@ -23,6 +24,7 @@ const initialState = {
 
     action: '',
     msg: 'no message',
+    invoiceID: ''
 
 };
 
@@ -37,6 +39,13 @@ export default (state = initialState, action) => {
                 isloading: true,
                 users: [],
             }
+
+        case INVOICE_ID: {
+            return {
+                ...state,
+                invoiceID: action.payload
+            }
+        }
         case SAVE_USERS:
             // console.log('item added is:', action.response.user)
             let result = []
@@ -105,7 +114,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isloading: false,
-                dealer_users: action.payload,
+                dealer_users: action.payload.data,
             }
         case DELETE_USER:
             if (action.payload.status) {

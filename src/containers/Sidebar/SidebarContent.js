@@ -63,9 +63,13 @@ class SidebarContent extends Component {
     this.state = {
       languageData: [],
       flaggedDevices: props.flaggedDevices,
+      clicked: false,
     }
   }
 
+  handleClickChange = visible => {
+    this.setState({ clicked: visible });
+  }
 
   languageMenu = () => (
     <ul className="gx-sub-popover">
@@ -157,6 +161,9 @@ class SidebarContent extends Component {
 
   changeLng = (language) => {
     let _this = this;
+
+    this.setState({ clicked: false });
+
     Modal.confirm({
       title: convertToLang(this.props.translation[Alert_Change_Language], "Are you sure you want to change the language?"),
       okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
@@ -251,8 +258,14 @@ class SidebarContent extends Component {
 
               {/* Language Dropdown */}
               <li>
-                <Popover overlayClassName="gx-popover-horizantal lang_icon" placement="bottomRight"
-                  content={this.languageMenu()} trigger="click">
+                <Popover
+                  overlayClassName="gx-popover-horizantal lang_icon"
+                  placement="bottomRight"
+                  content={this.languageMenu()}
+                  trigger="click"
+                  visible={this.state.clicked}
+                  onVisibleChange={this.handleClickChange}
+                >
                   <i className="icon icon-global" >
                     <Icon type="global" className="mb-10" />
                   </i>

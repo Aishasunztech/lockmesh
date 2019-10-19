@@ -4,24 +4,27 @@ import { bindActionCreators } from "redux";
 import AddUser from '../../users/components/AddUser';
 import { convertToLang } from '../../utils/commonUtils';
 import Services from './Services'
-
+import Picky from 'react-picky';
 import AddSimPermission from './AddSimPermission'
 import { Markup } from 'interweave';
-import { Modal, Button, Form, Input, Select, Radio, InputNumber, Popover, Icon, Row, Col, Spin, Table } from 'antd';
+import { Modal, Button, Form, Input, Select, Radio, InputNumber, Popover, Icon, Row, Col, Spin, Table, Checkbox } from 'antd';
 import { withRouter, Redirect, Link } from 'react-router-dom';
 
-import { getSimIDs, getChatIDs, getPGPEmails, getParentPackages, getProductPrices } from "../../../appRedux/actions/Devices";
+import { getSimIDs, getChatIDs, getPGPEmails, getParentPackages, getProductPrices, getHardwaresPrices } from "../../../appRedux/actions/Devices";
 import { getPolicies } from "../../../appRedux/actions/ConnectDevice";
 import {
     addUser,
-    getUserList
+    getUserList,
+    getInvoiceId
 } from "../../../appRedux/actions/Users";
 import { Button_Cancel, Button_submit, Button_Add_User } from '../../../constants/ButtonConstants';
 import { LABEL_DATA_PGP_EMAIL, LABEL_DATA_SIM_ID, LABEL_DATA_CHAT_ID, DUMY_TRANS_ID } from '../../../constants/LabelConstants';
 import { SINGLE_DEVICE, DUPLICATE_DEVICES, Required_Fields, USER_ID, DEVICE_ID, USER_ID_IS_REQUIRED, SELECT_PGP_EMAILS, DEVICE_Select_CHAT_ID, SELECT_USER_ID, DEVICE_CLIENT_ID, DEVICE_Select_SIM_ID, DEVICE_MODE, DEVICE_MODEL, Device_Note, Device_Valid_For, Device_Valid_days_Required, DUPLICATE_DEVICES_REQUIRED, DEVICE_IMEI_1, DEVICE_SIM_1, DEVICE_IMEI_2, DEVICE_SIM_2, DUPLICATE_DEVICES_HELPING_TEXT } from '../../../constants/DeviceConstants';
-import { Not_valid_Email, POLICY, Start_Date, Expire_Date, Expire_Date_Require, SELECT_POLICY } from '../../../constants/Constants';
+import { Not_valid_Email, POLICY, Start_Date, Expire_Date, Expire_Date_Require, SELECT_POLICY, ADMIN } from '../../../constants/Constants';
 import { DEALER_PIN } from '../../../constants/DealerConstants';
 import moment from 'moment';
+import Invoice from './invoice';
+import { inventorySales } from '../../utils/columnsUtils';
 
 const confirm = Modal.confirm;
 const success = Modal.success
@@ -32,94 +35,15 @@ class AddDevice extends Component {
     constructor(props) {
         super(props);
         this.sim_id2_added = false;
+        this.hardware_added = false;
         this.sim_id2_included = false;
-        const invoiceColumns = [
-            {
-                dataIndex: 'counter',
-                className: '',
-                title: '#',
-                align: "center",
-                key: 'counter',
-                sorter: (a, b) => { return a.counter - b.counter },
-                sortDirections: ['ascend', 'descend'],
-
-            },
-            {
-                dataIndex: 'item',
-                className: '',
-                title: convertToLang(this.props.translation["ITEM"], "ITEM"),
-                align: "center",
-                key: 'item',
-                sorter: (a, b) => { return a.item.localeCompare(b.item) },
-
-                sortDirections: ['ascend', 'descend'],
-
-            },
-            {
-                title: convertToLang(this.props.translation[DUMY_TRANS_ID], "DESCRPTION"),
-                dataIndex: 'description',
-                className: '',
-                align: "center",
-                className: '',
-                key: 'description',
-                // ...this.getColumnSearchProps('status'),
-                sorter: (a, b) => { return a.description.localeCompare(b.description) },
-                sortDirections: ['ascend', 'descend'],
-
-            },
-            {
-                title: convertToLang(this.props.translation[DUMY_TRANS_ID], "SERVICE TERM"),
-                dataIndex: 'term',
-                className: '',
-                align: "center",
-                className: '',
-                key: 'term',
-                // ...this.getColumnSearchProps('status'),
-                sorter: (a, b) => { return a.term.localeCompare(b.term) },
-                sortDirections: ['ascend', 'descend'],
-
-            },
-            {
-                title: convertToLang(this.props.translation[DUMY_TRANS_ID], "UNIT PRICE (CREDITS)"),
-                dataIndex: 'unit_price',
-                className: '',
-                align: "center",
-                className: '',
-                key: 'unit_price',
-                // ...this.getColumnSearchProps('status'),
-                sorter: (a, b) => { return a.unit_price - b.unit_price },
-
-                sortDirections: ['ascend', 'descend'],
-            },
-            {
-                title: convertToLang(this.props.translation[DUMY_TRANS_ID], "QUANTITY"),
-                dataIndex: 'quantity',
-                className: '',
-                align: "center",
-                className: '',
-                key: 'quantity',
-                // ...this.getColumnSearchProps('status'),
-                sorter: (a, b) => { return a.quantity - b.quantity },
-
-                sortDirections: ['ascend', 'descend'],
-            },
-            {
-                title: convertToLang(this.props.translation[DUMY_TRANS_ID], "LINE TOTAL"),
-                dataIndex: 'line_total',
-                className: '',
-                align: "center",
-                className: '',
-                key: 'line_total',
-                // ...this.getColumnSearchProps('status'),
-                sorter: (a, b) => { return a.line_total - b.line_total },
-                sortDirections: ['ascend', 'descend'],
-
-            },
-        ];
+        const invoiceColumns = inventorySales(props.translation);
 
 
         this.state = {
             visible: false,
+            invoiceVisible: false,
+            invoiceType: '',
             type: 0,
             addNewUserModal: false,
             isloading: false,
@@ -155,7 +79,11 @@ class AddDevice extends Component {
             proSelectedRows: [],
             duplicate: 0,
             showConfirmCredit: false,
-            serviceData: {}
+            serviceData: {},
+            invoiceID: 'PI00001',
+            selectedHardwareValues: [],
+            hardwarePrice: 0,
+            hardwares: []
         }
     }
 
@@ -193,29 +121,17 @@ class AddDevice extends Component {
                         this.sim_id2_added = false
                     }
 
-
-                    // if (this.state.total_price <= this.props.user_credit) {
-                    // console.log(this.state.products);
                     values.products = this.state.products;
                     values.packages = this.state.packages;
                     values.term = this.state.term;
                     values.total_price = this.state.total_price
-
+                    values.hardwarePrice = this.state.hardwarePrice
+                    values.hardwares = this.state.hardwares
                     this.setState({
                         serviceData: values,
                         showConfirmCredit: true
 
                     })
-                    // if (this.state.type == 1) {
-                    // showConfirmCredit(this, values);
-                    // } else {
-                    //     this.props.AddDeviceHandler(values);
-                    //     this.props.hideModal();
-                    //     this.handleReset();
-                    // }
-                    // } else {
-                    //     showCreditPurchase(this)
-                    // }
                 }
             }
             else {
@@ -235,14 +151,21 @@ class AddDevice extends Component {
         this.props.getPGPEmails();
         this.props.getPolicies();
         this.props.getUserList();
-        this.props.getParentPackages();
-        this.props.getProductPrices();
+        if (this.props.user.type !== ADMIN) {
+            this.props.getProductPrices();
+            this.props.getParentPackages();
+            this.props.getHardwaresPrices();
+        }
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.isloading) {
             this.setState({ addNewUserModal: true })
         }
         this.setState({ isloading: nextProps.isloading })
+
+        if (this.props.invoiceID !== nextProps.invoiceID) {
+            this.setState({ invoiceID: nextProps.invoiceID })
+        }
     }
 
     handleReset = () => {
@@ -254,9 +177,25 @@ class AddDevice extends Component {
         this.props.form.resetFields();
     }
 
-    confirmRenderList(packages, products) {
-
+    confirmRenderList(packages, products, hardwares, term = this.state.term, duplicate = this.state.duplicate) {
+        // console.log('state is: ', this.state)
         let counter = 0
+        let hardwareList = hardwares.map((item, index) => {
+            // let services = JSON.parse(item.pkg_features)
+            counter++
+            return {
+                counter: counter,
+                id: item.id,
+                rowKey: item.id,
+                item: `Hardware`,
+                description: item.hardware_name,
+                term: '---',
+                unit_price: item.hardware_price,
+                quantity: (duplicate > 0) ? 1 * duplicate : 1,
+                line_total: (duplicate > 0) ? item.hardware_price * duplicate : item.hardware_price
+            }
+        });
+
         let packagesList = packages.map((item, index) => {
             // let services = JSON.parse(item.pkg_features)
             counter++
@@ -266,10 +205,10 @@ class AddDevice extends Component {
                 rowKey: item.rowKey,
                 item: `Package`,
                 description: item.pkg_name,
-                term: this.state.term + " Month",
+                term: term + " Month",
                 unit_price: item.pkg_price,
-                quantity: (this.state.duplicate > 0) ? 1 * this.state.duplicate : 1,
-                line_total: (this.state.duplicate > 0) ? item.pkg_price * this.state.duplicate : item.pkg_price
+                quantity: (duplicate > 0) ? 1 * duplicate : 1,
+                line_total: (duplicate > 0) ? item.pkg_price * duplicate : item.pkg_price
             }
         });
         let productList = products.map((item, index) => {
@@ -281,13 +220,14 @@ class AddDevice extends Component {
                 rowKey: item.rowKey,
                 item: `Product`,
                 description: item.price_for,
-                term: (this.state.term === '0') ? "TRIAL" : this.state.term + " Month",
+                term: (term === '0') ? "TRIAL" : term + " Month",
                 unit_price: item.unit_price,
-                quantity: (this.state.duplicate > 0) ? 1 * this.state.duplicate : 1,
-                line_total: (this.state.duplicate > 0) ? item.unit_price * this.state.duplicate : item.unit_price
+                quantity: (duplicate > 0) ? 1 * duplicate : 1,
+                line_total: (duplicate > 0) ? item.unit_price * duplicate : item.unit_price
             }
         });
-        return [...packagesList, ...productList]
+
+        return [...packagesList, ...productList, ...hardwareList]
     }
 
     handleCancel = () => {
@@ -316,6 +256,7 @@ class AddDevice extends Component {
         let handleSubmit = this.props.addUser;
         this.refs.add_user.showModal(handleSubmit);
     }
+
     handleSimPermissionModal = () => {
         let handleSubmit = this.props.addSimPermission;
         this.refs.add_sim_permission.showModal(handleSubmit);
@@ -623,8 +564,21 @@ class AddDevice extends Component {
     }
 
     submitServicesConfirm(pay_now) {
-        this.state.serviceData.pay_now = pay_now
-        if (this.state.total_price <= this.props.user_credit) {
+        this.props.getInvoiceId();
+        this.state.serviceData.pay_now = pay_now;
+
+        if (pay_now) {
+            this.setState({ invoiceVisible: true, invoiceType: "pay_now" })
+        } else {
+            this.setState({ invoiceVisible: true, invoiceType: "pay_later" })
+        }
+
+    }
+
+    handleOkInvoice = () => {
+        // console.log("handleOk for invoice", this.state.serviceData)
+
+        if ((this.state.total_price + this.state.hardwarePrice) <= this.props.user_credit) {
             this.props.AddDeviceHandler(this.state.serviceData);
             this.props.hideModal();
             this.handleReset();
@@ -635,6 +589,43 @@ class AddDevice extends Component {
         } else {
             showCreditPurchase(this)
         }
+
+        this.setState({
+            invoiceVisible: false,
+            // showConfirmCredit: false,
+            servicesModal: false
+        })
+    }
+
+    handleCancelInvoice = () => {
+        this.setState({ invoiceVisible: false })
+    }
+
+    setDropdowns(values) {
+        // console.log('setDropdowns val : ', values)
+        this.setState({
+            selectedHardwareValues: values,
+        });
+    }
+
+    handleHardwareChange = (e, added) => {
+
+        let hardware = this.props.parent_hardwares.find((item) => item.id === e)
+        if (hardware) {
+            // console.log(hardware);
+            if (added) {
+                this.state.hardwarePrice += hardware.hardware_price
+                this.state.hardwares.push(hardware)
+
+            } else {
+                this.state.hardwares.splice(this.state.hardwares.findIndex((item) => item.id === hardware.id), 1)
+                this.state.hardwarePrice -= hardware.hardware_price
+            }
+            this.setState({
+                hardwarePrice: this.state.hardwarePrice,
+                hardwares: this.state.hardwares
+            })
+        }
     }
 
     render() {
@@ -643,10 +634,16 @@ class AddDevice extends Component {
         const { visible, loading, isloading, addNewUserValue } = this.state;
         const { users_list } = this.props;
         var lastObject = users_list[0]
+        let allSelectedOpt = false
+        if (this.props.parent_hardwares.length === this.state.selectedHardwareValues.length) {
+            allSelectedOpt = true;
+        } else { allSelectedOpt = false }
         // console.log(users_list[0]);
 
         return (
             <div>
+
+
                 {(this.props.preActive) ?
                     <Radio.Group className="width_100 text-center" onChange={this.handleChange} ref='option' defaultValue="0" buttonStyle="solid">
                         <Radio.Button className="dev_radio_btn" value="0">{convertToLang(this.props.translation[SINGLE_DEVICE], "Single Device")}</Radio.Button>
@@ -672,7 +669,6 @@ class AddDevice extends Component {
                             {this.props.form.getFieldDecorator('device_id', {
                                 initialValue: this.props.new ? "" : this.props.device.device_id,
                             })(
-
                                 <Input disabled />
                             )}
                         </Form.Item>
@@ -792,7 +788,35 @@ class AddDevice extends Component {
                                     <Input type='hidden' disabled />
                                 )}
                             </Form.Item>
-
+                            <Form.Item
+                                label={convertToLang(this.props.translation[""], "SELECT HARDWARE")}
+                                labelCol={{ span: 8 }}
+                                wrapperCol={{ span: 14 }}
+                            >
+                                {this.props.form.getFieldDecorator('hardwares')(
+                                    <Select
+                                        mode="multiple"
+                                        showSearch
+                                        style={{ width: '100%' }}
+                                        placeholder="Select hardwares"
+                                        mode="multiple"
+                                        onChange={(e) => this.setState({ hardware: e })}
+                                        onSelect={(e) => {
+                                            this.handleHardwareChange(e, true)
+                                        }
+                                        }
+                                        onDeselect={(e) => {
+                                            this.handleHardwareChange(e, false)
+                                        }
+                                        }
+                                    >
+                                        {this.props.parent_hardwares.map((hardware) => {
+                                            return (<Select.Option key={hardware.id} value={hardware.id}>{hardware.hardware_name + " ( PRICE: " + hardware.hardware_price + " Credits ) "}</Select.Option>)
+                                        })}
+                                    </Select>
+                                    // <Input />
+                                )}
+                            </Form.Item>
                             <Form.Item
                                 label={convertToLang(this.props.translation[LABEL_DATA_PGP_EMAIL], "PGP Email ")}
                                 labelCol={{ span: 8 }}
@@ -1121,6 +1145,7 @@ class AddDevice extends Component {
                         <Button type="primary" htmlType="submit">{convertToLang(this.props.translation[Button_submit], Button_submit)}</Button>
                     </Form.Item>
                 </Form>
+
                 <AddUser ref="add_user" translation={this.props.translation} />
                 {/* <AddSimPermission ref="add_sim_permission" /> */}
                 <Modal
@@ -1172,15 +1197,15 @@ class AddDevice extends Component {
                                 size="middle"
                                 bordered
                                 columns={this.state.invoiceColumns}
-                                dataSource={this.confirmRenderList(this.state.PkgSelectedRows, this.state.proSelectedRows)}
+                                dataSource={this.confirmRenderList(this.state.PkgSelectedRows, this.state.proSelectedRows, this.state.hardwares)}
                                 pagination={
                                     false
                                 }
                             />
                         </div >
                         <div>
-                            <h5 style={{ textAlign: "right" }}><b>Sub Total :  {this.state.serviceData.total_price} Credits</b></h5>
-                            <h4 style={{ textAlign: "center" }}><b>There will be a charge of {this.state.serviceData.total_price} Credits</b></h4>
+                            <h5 style={{ textAlign: "right" }}><b>Sub Total :  {this.state.serviceData.total_price + this.state.hardwarePrice} Credits</b></h5>
+                            <h4 style={{ textAlign: "center" }}><b>There will be a charge of {this.state.serviceData.total_price + this.state.hardwarePrice} Credits</b></h4>
                         </div>
                         {(this.state.term !== '0') ?
                             <div>
@@ -1194,6 +1219,36 @@ class AddDevice extends Component {
                             <Button style={{ backgroundColor: "green", color: "white" }} onClick={() => { this.submitServicesConfirm(true) }}>PAY NOW</Button>
                         </div >
                     </Fragment>
+                </Modal>
+                <Modal
+                    width="850px"
+                    visible={this.state.invoiceVisible}
+                    maskClosable={false}
+                    closable={false}
+                    // title={convertToLang(this.props.translation[""], "MDM PANEL SERVICES")}
+                    onOk={this.handleOkInvoice}
+                    onCancel={this.handleCancelInvoice}
+                    className="edit_form"
+                    bodyStyle={{ overflow: "overlay" }}
+                    okText={convertToLang(this.props.translation[""], "CHECKOUT")}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                >
+                    <Invoice
+                        // ref="invoice_modal"
+                        PkgSelectedRows={this.state.PkgSelectedRows}
+                        proSelectedRows={this.state.proSelectedRows}
+                        renderInvoiceList={this.confirmRenderList}
+                        subTotal={this.state.serviceData.total_price + this.state.hardwarePrice}
+                        invoiceType={this.state.invoiceType}
+                        term={this.state.term}
+                        duplicate={this.state.duplicate}
+                        deviceAction={"Add"}
+                        hardwarePrice={this.state.hardwarePrice}
+                        hardwares={this.state.hardwares}
+                        user_id={this.state.addNewUserValue}
+                        invoiceID={this.state.invoiceID}
+                        translation={this.props.translation}
+                    />
                 </Modal>
             </div >
         )
@@ -1215,14 +1270,17 @@ function mapDispatchToProps(dispatch) {
         getPolicies: getPolicies,
         addUser: addUser,
         getUserList: getUserList,
+        getInvoiceId: getInvoiceId,
         getParentPackages: getParentPackages,
         getProductPrices: getProductPrices,
+        getHardwaresPrices: getHardwaresPrices,
         addSimPermission: null
     }, dispatch);
 }
-var mapStateToProps = ({ routing, devices, device_details, users, settings, sidebar }) => {
-    // console.log("sdfsaf", users.users_list);
+var mapStateToProps = ({ routing, devices, device_details, users, settings, sidebar, auth }) => {
+    // console.log("users.invoiceID at componente", users.invoiceID);
     return {
+        invoiceID: users.invoiceID,
         routing: routing,
         sim_ids: devices.sim_ids,
         chat_ids: devices.chat_ids,
@@ -1233,7 +1291,9 @@ var mapStateToProps = ({ routing, devices, device_details, users, settings, side
         translation: settings.translation,
         parent_packages: devices.parent_packages,
         product_prices: devices.product_prices,
+        parent_hardwares: devices.parent_hardwares,
         user_credit: sidebar.user_credit,
+        user: auth.authUser,
     };
 }
 

@@ -569,6 +569,7 @@ class ManageData extends Component {
                                 </Row>
                             </Card>
                             <AccountList
+                                user={this.props.user}
                                 whiteLables={this.state.whiteLables}
                                 columns={this.state.columns}
                                 dataList={this.state.innerContent}
@@ -649,12 +650,15 @@ var mapStateToProps = (state) => {
     // console.log("mapStateToProps");
     // console.log(state.dealers.isloading);
     // console.log('state.dealer', state.dealers);
-    // console.log("state, ", state);
+    console.log("state.devices.chat_ids , ", state.devices.chat_ids);
+    console.log("state.devices.pgp_emails , ", state.devices.pgp_emails);
+    console.log("state.devices.sim_ids , ", state.devices.sim_ids);
     return {
         chat_ids: state.devices.chat_ids,
         pgp_emails: state.devices.pgp_emails,
         sim_ids: state.devices.sim_ids,
         translation: state.settings.translation,
+        user: state.auth.authUser
     };
 }
 

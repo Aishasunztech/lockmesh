@@ -106,6 +106,7 @@ import {
     POLICY_STATUS_HELPING_TEXT,
     POLICY_SIZE
 } from "../../constants/PolicyConstants";
+import { DUMY_TRANS_ID } from "../../constants/LabelConstants";
 
 
 
@@ -127,9 +128,8 @@ import {
 // **************************************
 /////////////////////////////////////////
 
-export function devicesColumns(translation, handleSearch, SearchValues = []) {
+export function devicesColumns(translation, handleSearch) {
 
-    // console.log('devicesColumns SearchValues ', SearchValues)
     return ([
         {
             title: "#",
@@ -1088,7 +1088,7 @@ export function usersColumns(translation, handleSearch) {
                             {convertToLang(translation[DEVICE_ID], "DEVICE ID")}
                             <Popover placement="top" content={(<Markup content={convertToLang(translation[USER_DEVICES_HELPING_TEXT],
                                 `   <p>Press <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;">
-                                <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                <i className="fa fa-caret-right" aria-hidden="true"></i>
                                 </a> to View Devices<br/> list of this User</p>`)} />)}>
                                 <span className="helping_txt"><Icon type="info-circle" /></span>
                             </Popover>
@@ -2224,7 +2224,7 @@ export function apkColumns(translation) {
                     {convertToLang(translation[APK_PERMISSION], "PERMISSION")}
                     <Popover placement="top" content={(<Markup content={convertToLang(translation[APK_PERMISSION_HELPING_TEXT],
                         `   <p>Press <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;">
-                            <i class="fa fa-caret-right" aria-hidden="true"></i> 
+                            <i className="fa fa-caret-right" aria-hidden="true"></i> 
                             </a> to Add, remove or View
                             <br/> the Dealers who have permission
                             <br/>to use this App</p>`)} />)}>
@@ -2313,7 +2313,7 @@ export function featureApkColumns(translation) {
                     {convertToLang(translation[APK_PERMISSION], "PERMISSION")}
                     <Popover placement="top" content={(<Markup content={convertToLang(translation[APK_PERMISSION_HELPING_TEXT],
                         `   <p>Press <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;">
-                            <i class="fa fa-caret-right" aria-hidden="true"></i> 
+                            <i className="fa fa-caret-right" aria-hidden="true"></i> 
                             </a> to Add, remove or View
                             <br/> the Dealers who have permission
                             <br/>to use this App</p>`)} />)}>
@@ -3191,4 +3191,99 @@ export function bulkDevicesColumns(translation, handleSearch) {
             ]
         },
     ]);
+}
+
+
+export function inventorySales(translation) {
+    return (
+        [
+            // {
+            //     dataIndex: 'counter',
+            //     className: '',
+            //     title: '#',
+            //     align: "center",
+            //     key: 'counter',
+            //     sorter: (a, b) => { return a.counter - b.counter },
+            //     sortDirections: ['ascend', 'descend'],
+
+            // },
+            {
+                title: "#",
+                dataIndex: 'counter',
+                align: 'center',
+                className: 'row',
+                key: 'counter',
+                render: (text, record, index) => ++index,
+            },
+            {
+                dataIndex: 'item',
+                className: '',
+                title: convertToLang(translation["ITEM"], "ITEM"),
+                align: "center",
+                key: 'item',
+                // sorter: (a, b) => { return a.item.localeCompare(b.item) },
+                // sortDirections: ['ascend', 'descend'],
+
+            },
+            {
+                title: convertToLang(translation[DUMY_TRANS_ID], "DESCRPTION"),
+                dataIndex: 'description',
+                className: '',
+                align: "center",
+                className: '',
+                key: 'description',
+                // ...this.getColumnSearchProps('status'),
+                // sorter: (a, b) => { return a.description.localeCompare(b.description) },
+                // sortDirections: ['ascend', 'descend'],
+
+            },
+            {
+                title: convertToLang(translation[DUMY_TRANS_ID], "SERVICE TERM"),
+                dataIndex: 'term',
+                className: '',
+                align: "center",
+                className: '',
+                key: 'term',
+                // ...this.getColumnSearchProps('status'),
+                // sorter: (a, b) => { return a.term.localeCompare(b.term) },
+                // sortDirections: ['ascend', 'descend'],
+
+            },
+            {
+                title: convertToLang(translation[DUMY_TRANS_ID], "UNIT PRICE (CREDITS)"),
+                dataIndex: 'unit_price',
+                className: '',
+                align: "center",
+                className: '',
+                key: 'unit_price',
+                // ...this.getColumnSearchProps('status'),
+                // sorter: (a, b) => { return a.unit_price - b.unit_price },
+                // sortDirections: ['ascend', 'descend'],
+            },
+            {
+                title: convertToLang(translation[DUMY_TRANS_ID], "QUANTITY"),
+                dataIndex: 'quantity',
+                className: '',
+                align: "center",
+                className: '',
+                key: 'quantity',
+                // ...this.getColumnSearchProps('status'),
+                // sorter: (a, b) => { return a.quantity - b.quantity },
+                // sortDirections: ['ascend', 'descend'],
+            },
+            {
+                title: convertToLang(translation[DUMY_TRANS_ID], "TOTAL"),
+                dataIndex: 'line_total',
+                className: '',
+                align: "center",
+                className: '',
+                key: 'line_total',
+                // ...this.getColumnSearchProps('status'),
+                // sorter: (a, b) => { return a.line_total - b.line_total },
+                // sortDirections: ['ascend', 'descend'],
+
+            },
+        ]
+    );
+
 }
