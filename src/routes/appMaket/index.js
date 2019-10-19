@@ -146,24 +146,36 @@ class ApkMarket extends React.Component {
         // console.log(spaceType, 'removeSMapps ', app);
         // console.log("user ", this.props.user.type)
 
-        let check = this.state.secureMarketList.filter((app) => app.space_type === spaceType && app.dealer_type !== ADMIN && this.props.user.type !== ADMIN)
+        let check = [];
+        if (this.props.user.type !== ADMIN) {
+            check = this.state.secureMarketList.filter((app) => app.space_type === spaceType && app.dealer_type !== ADMIN)
+        } else {
+            check = this.state.secureMarketList.filter((app) => app.space_type === spaceType && app.dealer_type === ADMIN)
+        }
+
+
         // console.log("check ", check);
 
-        // if (check.length > 0 || this.props.user.type === ADMIN) {
-        let appIds = []
-        if (app === "all") {
-            appIds = app;
-            this.setState({ selectedRowKeys: [], app_ids: [] })
-        } else {
-            appIds = [app.id];
+        if (check.length) {
+            let appIds = []
+            if (app === "all") {
+                appIds = app;
+                this.setState({
+                    selectedRowKeys: [],
+                    app_ids: [],
+                    guestAvailableApps: mGuestCopySearch,
+                    encryptedAvailableApps: mEncryptedCopySearch
+                })
+            } else {
+                appIds = [app.id];
+            }
+            this.props.removeSMapps(appIds, spaceType);
+
+            // this.props.getMarketApps()
+            // } else {
+            //     Modal.error({ title: "Sorry, You can't remove these apps" })
+
         }
-        this.props.removeSMapps(appIds, spaceType);
-
-        // this.props.getMarketApps()
-        // } else {
-        //     Modal.error({ title: "Sorry, You can't remove these apps" })
-
-        // }
 
     }
 
@@ -282,12 +294,12 @@ class ApkMarket extends React.Component {
 
     }
 
-    handleChange = (targetKeys, direction, moveKeys) => {
-        let marketApps = targetKeys;
-        this.props.transferApps(marketApps)
-        this.setState({ targetKeys });
+    // handleChange = (targetKeys, direction, moveKeys) => {
+    //     let marketApps = targetKeys;
+    //     this.props.transferApps(marketApps)
+    //     this.setState({ targetKeys });
 
-    }
+    // }
     handleCheckChange = (apk_id, value, space) => {
 
         this.props.handleUninstall(apk_id, value, space)
@@ -473,10 +485,6 @@ class ApkMarket extends React.Component {
     }
 
     saveApps = (space) => {
-        // console.log('hi saveApps', "this.state.app_ids", this.state.app_ids)
-        // console.log("this.state.availbleAppList", this.state.availbleAppList)
-        // console.log("this.state.secureMarketList", this.state.secureMarketList)
-
 
         if (this.state.app_ids.length) {
             this.state.availbleAppList.map((app) => {
@@ -491,43 +499,48 @@ class ApkMarket extends React.Component {
                     }
                 }
             })
-            this.setState({
-                app_ids: [],
-                secureMarketList: this.state.secureMarketList
-            })
 
             let sm_appIds = [];
             this.state.secureMarketList.forEach((app) => {
-                // console.log("app ", app)
-                if (app.space_type === space) {
+                if (app.space_type === space) { // && this.props.user.type == app.dealer_type
                     sm_appIds.push(app.id);
                 }
             });
-            // console.log(this.state.app_ids, "sm_appIds ", sm_appIds)
-            this.props.transferApps(sm_appIds, space)
+            console.log(this.state.secureMarketList, "sm_appIds ", sm_appIds)
+
+            let duplicateIds = this.find_duplicate_in_array(sm_appIds);
+            let removeDuplicateIds = sm_appIds.filter((item) => !duplicateIds.includes(item));
+            this.props.transferApps([...removeDuplicateIds, ...duplicateIds], space)
 
             this.setState({
                 availableAppModal: false,
                 selectedRowKeys: [],
                 app_ids: [],
+                secureMarketList: this.state.secureMarketList,
                 guestAvailableApps: mGuestCopySearch,
                 encryptedAvailableApps: mEncryptedCopySearch
             })
         }
-        // this.props.getMarketApps()
     }
 
     addIntoSpace = (space) => {
-        // console.log("space is: ", space)
-
         this.setState({ availableAppModal: true, space });
     }
 
     onSelectChange = (selectedRowKeys, selectedRows) => {
-        // console.log(selectedRowKeys, 'selected', selectedRows);
+        console.log(selectedRowKeys, 'selected', selectedRows);
+
+        // let sm_appIds = [];
+        // this.state.secureMarketList.forEach((app) => {
+        //     if (app.space_type === "encrypted" && this.props.user.dealerId == app.dealer_id) {
+        //         sm_appIds.push(app.id);
+        //     }
+        // });
+        // console.log("sm_appIds ", sm_appIds)
+
         let app_ids = []
         selectedRows.forEach(row => {
-            // console.log("selected row", row)
+            console.log("selected row", row)
             app_ids.push(row.key);
         });
         this.setState({
@@ -540,12 +553,15 @@ class ApkMarket extends React.Component {
         let { columnsGuest, columnsEncrypted, columnsModal } = this.state;
 
         if (this.props.user.type !== ADMIN) {
+            // get secure market apps of dealers
             let dealerGuest = this.state.secureMarketList.filter((app) => app.space_type === "guest" && app.dealer_type === DEALER);
             let dealerEncrypted = this.state.secureMarketList.filter((app) => app.space_type === "encrypted" && app.dealer_type === DEALER);
 
+            // hide "Remove All" button for Guest space if dealer not contain any own apk
             let guestindex = columnsGuest.findIndex((obj) => obj.dataIndex == "removeAllGuest");
             columnsGuest[guestindex].title = <Button type="danger" size="small" disabled={(dealerGuest.length) ? false : true} onClick={() => this.removeSMapps("all", "guest")}>Remove All</Button>
 
+            // hide "Remove All" button for Encrypted space if dealer not contain any own apk
             let index = columnsEncrypted.findIndex((obj) => obj.dataIndex == "removeAllEncrypted");
             columnsEncrypted[index].title = <Button type="danger" size="small" disabled={(dealerEncrypted.length) ? false : true} onClick={() => this.removeSMapps("all", "encrypted")}>Remove All</Button>
         }
