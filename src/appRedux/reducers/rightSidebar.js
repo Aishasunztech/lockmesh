@@ -16,7 +16,6 @@ export default (state = initialStates, action) => {
             if (action.response.status) {
                  pendingTasks = [...state.pendingTasks, ...action.response.data.pendingTasks];
                  completedTasks = [...state.completedTasks, ...action.response.data.completedTasks];
-    
             }
             return {
                 ...state,

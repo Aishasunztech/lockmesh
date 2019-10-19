@@ -203,6 +203,7 @@ export class MainApp extends Component {
           timeout={3600000} />
         <Layout className="gx-app-layout">
           {this.getSidebar(navStyle, width)}
+          <RightSidebar />
           <Layout>
             {this.getNavStyles(navStyle)}
             <Content className={`gx-layout-content ${this.getContainerClass(navStyle)} `}>
@@ -216,7 +217,7 @@ export class MainApp extends Component {
             </Content>
           </Layout>
           <Customizer />
-          <RightSidebar />
+         
         </Layout>
       </div>
     )

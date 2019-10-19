@@ -126,7 +126,7 @@ class RightSidebar extends Component {
   };
 
   componentDidMount() {
-    this.props.getQueJobs()
+    // this.props.getQueJobs()
     // console.log('index of rightsidebar')
   }
 

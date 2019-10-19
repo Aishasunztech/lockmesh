@@ -14,6 +14,7 @@ import { setInitUrl } from "appRedux/actions/Auth";
 import { onLayoutTypeChange, onNavStyleChange, setThemeType, getLanguage, languages } from "../../appRedux/actions/Setting";
 
 import { checkComponent } from "../../appRedux/actions/Auth";
+import {getQueJobs} from '../../appRedux/actions/rightSidebar'
 
 import {
   LAYOUT_TYPE_BOXED,
@@ -92,6 +93,8 @@ class App extends Component {
     document.title = APP_TITLE + ' - Admin Dashboard';
     this.props.getLanguage();
     this.props.languages();
+    this.props.getQueJobs()
+
   }
 
 
@@ -158,4 +161,4 @@ const mapStateToProps = ({ settings, auth }) => {
   const { authUser, initURL, isAllowed } = auth;
   return { locale, navStyle, layoutType, authUser, initURL, isAllowed, isSwitched }
 };
-export default connect(mapStateToProps, { setInitUrl, setThemeType, onNavStyleChange, onLayoutTypeChange, checkComponent, getLanguage, languages })(App);
+export default connect(mapStateToProps, {getQueJobs, setInitUrl, setThemeType, onNavStyleChange, onLayoutTypeChange, checkComponent, getLanguage, languages })(App);
