@@ -3,69 +3,89 @@ import { Table, Avatar, Switch, Button, Icon, Card, Modal, Tabs, Col, Input, For
 import moment from 'moment';
 import styles from '../reporting.css'
 import {convertToLang} from "../../../utils/commonUtils";
+import {
+  DEVICE_PRE_ACTIVATION, sim
+} from "../../../../constants/Constants";
+
+import { BASE_URL
+} from "../../../../constants/Application";
 
 class Invoice extends Component {
   constructor(props) {
     super(props);
     this.columns = [
       {
-        title: "Sr.#",
-        dataIndex: 'sr',
-        key: 'sr',
-        align: "center",
-        render: (text, record, index) => ++index,
+        title: '#',
+        dataIndex: 'count',
+        align: 'center',
+        className: 'row',
+        width: 50,
       },
 
       {
         title: convertToLang(props.translation[''], "INVOICE ID"),
         align: "center",
         className: '',
-        dataIndex: 'transection_data',
-        key: 'transection_data',
+        dataIndex: 'invoice_id',
+        key: 'invoice_id',
       },
 
       {
         title: convertToLang(props.translation[''], "DEVICE ID"),
         align: "center",
         className: '',
-        dataIndex: 'transection_data',
-        key: 'transection_data',
+        dataIndex: 'device_id',
+        key: 'device_id',
       },
 
       {
         title: convertToLang(props.translation[''], "DEALER ID"),
         align: "center",
         className: '',
-        dataIndex: 'transection_data',
-        key: 'transection_data',
+        dataIndex: 'dealer_id',
+        key: 'dealer_id',
       },
 
       {
         title: convertToLang(props.translation[''], "GENERATED AT"),
         align: "center",
         className: '',
-        dataIndex: 'pkg_term',
-        key: 'pkg_term',
+        dataIndex: 'created_at',
+        key: 'created_at',
       },
 
+      {
+        title: convertToLang(props.translation[''], "ACTION"),
+        align: "center",
+        className: '',
+        dataIndex: 'file_name',
+        key: 'file_name',
+      },
     ];
+
+    this.state = {
+      reportCard: false,
+    };
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
-
     this.props.form.validateFieldsAndScroll((err, values) => {
-      console.log()
-      let fromDate = values.from._d;
-      let toDate = values.from._d;
-      console.log('form', fromDate, toDate);
-      if (!err) {
-
-      }
+      this.props.generateInvoiceReport(values)
     });
   };
+
   componentDidMount() {
 
+  };
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.props.invoiceReport !== prevProps.invoiceReport){
+      this.setState({
+        reportCard:  true,
+        productType: this.props.productType
+      })
+    }
   }
 
   handleReset = () => {
@@ -76,12 +96,26 @@ class Invoice extends Component {
     return current && current > moment().endOf('day');
   };
 
-  renderList = () => {
+  renderList = (list) => {
 
+    let data = [];
+    if (list) {
+      list.map((item, index) => {
+        data.push({
+          'row_key': `${index}Key`,
+          'count': ++index,
+          'invoice_id': item.inv_no ? item.inv_no : 'N/A',
+          'device_id': item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
+          'dealer_id': item.dealer_id ? item.dealer_id : 'N/A',
+          'created_at': item.created_at ? item.created_at : 'N/A',
+          'file_name': <a href={BASE_URL+'users/getFile/'+item.file_name} target="_blank" download><Button type="primary" size="small">Download</Button></a>,
+        })
+      });
+    }
+    return data;
   };
 
   render() {
-    // console.log(this.props.dealerList, "Dealer List");
     return (
       <Row>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
@@ -111,7 +145,7 @@ class Invoice extends Component {
                   <Select style={{ width: '100%' }}>
                     <Select.Option value=''>ALL</Select.Option>
                     {this.props.dealerList.map((dealer, index) => {
-                      return (<Select.Option key={dealer.link_code} value={dealer.link_code}>{dealer.dealer_name} ({dealer.link_code})</Select.Option>)
+                      return (<Select.Option key={dealer.dealer_id} value={dealer.dealer_id}>{dealer.dealer_name} ({dealer.link_code})</Select.Option>)
                     })}
                   </Select>
                 )}
@@ -169,13 +203,14 @@ class Invoice extends Component {
         </Col>
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
           <Card style={{ height: '500px' }}>
+            {(this.state.reportCard) ?
             <Table
               columns={this.columns}
-              dataSource={this.renderList()}
+              dataSource={this.renderList(this.props.invoiceReport)}
               bordered
               pagination={false}
-
             />
+            : null }
           </Card>
         </Col>
       </Row>

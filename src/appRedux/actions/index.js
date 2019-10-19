@@ -18,4 +18,4 @@ export * from './Socket';
 
 export * from './Users';
 
-export * from './Reporting';
+export * from './Reports';

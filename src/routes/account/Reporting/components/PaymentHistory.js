@@ -1,15 +1,11 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal, Tabs, Col, Input, Form, Row, DatePicker, Select } from "antd";
 import moment from 'moment';
-import styles from '../reporting.css'
-import {convertToLang} from "../../../utils/commonUtils";
 import {
-  PACKAGE_EXPIRY,
-  PACKAGE_NAME,
-  PACKAGE_PRICE,
-  PACKAGE_SERVICES,
-  PACKAGE_TERM
-} from "../../../../constants/AccountConstants";
+  DEVICE_PRE_ACTIVATION
+} from "../../../../constants/Constants";
+import styles from '../reporting.css'
+import {convertToLang, getFormattedDate} from "../../../utils/commonUtils";
 
 class PaymentHistory extends Component {
   constructor(props) {
@@ -28,32 +24,32 @@ class PaymentHistory extends Component {
         title: convertToLang(props.translation[''], "DEALER ID"),
         align: "center",
         className: '',
-        dataIndex: 'transection_data',
-        key: 'transection_data',
+        dataIndex: 'user_id',
+        key: 'user_id',
       },
 
       {
         title: convertToLang(props.translation[''], "DEVICE ID"),
         align: "center",
         className: '',
-        dataIndex: 'transection_data',
-        key: 'transection_data',
-      },
-
-      {
-        title: convertToLang(props.translation[''], "TRANSACTION DATE"),
-        align: "center",
-        className: '',
-        dataIndex: 'transection_data',
-        key: 'transection_data',
+        dataIndex: 'device_id',
+        key: 'device_id',
       },
 
       {
         title: convertToLang(props.translation[''], "TYPE"),
         align: "center",
         className: '',
-        dataIndex: 'pkg_term',
-        key: 'pkg_term',
+        dataIndex: 'type',
+        key: 'type',
+      },
+
+      {
+        title: convertToLang(props.translation[''], "TRANSACTION TYPE"),
+        align: "center",
+        className: '',
+        dataIndex: 'transection_type',
+        key: 'transection_type',
       },
 
       {
@@ -61,8 +57,8 @@ class PaymentHistory extends Component {
           <span>{convertToLang(props.translation[''], "CREDITS")}</span>
         ),
         align: 'center',
-        dataIndex: 'services',
-        key: 'services',
+        dataIndex: 'credits',
+        key: 'credits',
         className: 'row '
       },
 
@@ -71,30 +67,42 @@ class PaymentHistory extends Component {
           <span>{convertToLang(props.translation[''], "STATUS")}</span>
         ),
         align: 'center',
-        dataIndex: 'services',
-        key: 'services',
+        dataIndex: 'status',
+        key: 'status',
         className: 'row '
+      },
+
+      {
+        title: convertToLang(props.translation[''], "TRANSACTION DATE"),
+        align: "center",
+        className: '',
+        dataIndex: 'created_at',
+        key: 'created_at',
       },
     ];
 
     this.state = {
-      searchText: '',
+      reportCard: false,
     };
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-      let fromDate = values.from._d;
-      let toDate = values.from._d;
-      console.log('form', fromDate, toDate);
-      if (!err) {
-
-      }
+      this.props.generatePaymentHistoryReport(values)
     });
   };
+
   componentDidMount() {
 
+  };
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.props.paymentHistoryReport !== prevProps.paymentHistoryReport){
+      this.setState({
+        reportCard: true
+      })
+    }
   }
 
   handleReset = () => {
@@ -105,17 +113,20 @@ class PaymentHistory extends Component {
     return current && current > moment().endOf('day');
   };
 
-  renderList = () => {
-    if (this.state.packages) {
-      return this.state.packages.map((item, index) => {
+  renderList = (list) => {
+    if (list) {
+      return list.map((item, index) => {
         return {
           rowKey: index,
           key: item.id,
           sr: ++index,
-          pkg_name: item.pkg_name,
-          pkg_price: "$" + item.pkg_price,
-          pkg_term: item.pkg_term,
-          pkg_expiry: item.pkg_expiry
+          user_id: item.user_id,
+          credits: item.credits,
+          device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
+          status: item.status,
+          type: item.type,
+          transection_type: item.transection_type,
+          created_at: item.created_at
         }
       })
     }
@@ -210,13 +221,15 @@ class PaymentHistory extends Component {
         </Col>
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
           <Card style={{ height: '500px' }}>
+            {(this.state.reportCard) ?
             <Table
               columns={this.columns}
-              dataSource={this.renderList()}
+              dataSource={this.renderList(this.props.paymentHistoryReport)}
               bordered
               pagination={false}
 
             />
+            : null }
           </Card>
         </Col>
       </Row>

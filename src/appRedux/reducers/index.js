@@ -15,7 +15,7 @@ import socket from "./Socket";
 import SideBar from "./SideBar"
 import Agents from './Agent';
 import Dashboard from './Dashboard';
-import Reporting from './Reporting';
+import Reporting from './Reports';
 
 const reducers = combineReducers({
   routing: routerReducer,

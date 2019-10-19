@@ -70,7 +70,6 @@ export function getColor(status) {
 }
 
 export function getDateTimeOfClientTimeZone (dateTime){
-  console.log("timeZone: ", Intl.DateTimeFormat().resolvedOptions());
   if(Intl.DateTimeFormat().resolvedOptions().timeZone){
     return moment_timezone(dateTime).tz(Intl.DateTimeFormat().resolvedOptions().timeZone).format('YYYY/MM/DD H:m:s')
   } else {

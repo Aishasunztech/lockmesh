@@ -893,9 +893,19 @@ const RestService = {
         return axios.post(BASE_URL + 'users/submit-device-passwords', data, RestService.getHeader());
     },
 
-    //reporting
+    //product report
   generateProductReport: (data) => {
       return axios.post(BASE_URL + 'users/reporting/product', data, RestService.getHeader());
     },
+
+  //invoice report
+  generateInvoiceReport: (data) => {
+    return axios.post(BASE_URL + 'users/reports/invoice', data, RestService.getHeader());
+  },
+
+  //payment history report
+  generatePaymentHistoryReport: (data) => {
+    return axios.post(BASE_URL + 'users/reports/payment-history', data, RestService.getHeader());
+  },
 }
 export default RestService;

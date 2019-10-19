@@ -6,7 +6,7 @@ import Invoice from "./components/Invoice";
 import ProductInventory  from './components/ProductInventory';
 import HardwareInventory  from './components/HardwareInventory';
 import PaymentHistory  from './components/PaymentHistory';
-import { getAllDealers, generateProductReport } from '../../../appRedux/actions/';
+import { getAllDealers, generateProductReport, generateInvoiceReport, generatePaymentHistoryReport } from '../../../appRedux/actions/';
 import styles from './reporting.css'
 
 
@@ -58,6 +58,7 @@ class Reporting extends Component {
                       dealerList={this.props.dealerList}
                       translation={this.props.translation}
                       productReport={this.props.productReport}
+                      productType={this.props.productType}
                       generateProductReport={this.props.generateProductReport}
 
                     />
@@ -74,6 +75,8 @@ class Reporting extends Component {
                     <PaymentHistory
                       dealerList={this.props.dealerList}
                       translation={this.props.translation}
+                      generatePaymentHistoryReport={this.props.generatePaymentHistoryReport}
+                      paymentHistoryReport={this.props.paymentHistoryReport}
                     />
                   </TabPane>
 
@@ -81,6 +84,8 @@ class Reporting extends Component {
                     <Invoice
                       dealerList={this.props.dealerList}
                       translation={this.props.translation}
+                      generateInvoiceReport={this.props.generateInvoiceReport}
+                      invoiceReport={this.props.invoiceReport}
                     />
                   </TabPane>
                 </Tabs>
@@ -103,19 +108,26 @@ class Reporting extends Component {
 
 
 var mapStateToProps = ({ dealers, settings, reporting  }) => {
+
+  console.log(reporting)
   return {
     dealerList: dealers.dealers,
-    productReport: reporting.data,
+    productReport: reporting.productData,
+    invoiceReport: reporting.invoiceData,
+    paymentHistoryReport: reporting.paymentHistoryData,
+    productType: reporting.productType,
     translation: settings.translation,
   };
-}
+};
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     getDealerList: getAllDealers,
     generateProductReport: generateProductReport,
+    generateInvoiceReport: generateInvoiceReport,
+    generatePaymentHistoryReport: generatePaymentHistoryReport,
   }, dispatch);
-}
+};
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Reporting)

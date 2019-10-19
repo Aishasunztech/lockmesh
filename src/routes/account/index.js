@@ -1209,14 +1209,19 @@ class Account extends Component {
                                 <Fragment>
                                   <Row>
                                     <div className="col-md-12 ac_card">
-                                      <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[''], "Reporting")} </h2>
+                                      <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[''], "Reports")} </h2>
                                       <Divider className="mb-0" />
                                       <Row style={{ padding: '12px 0 0px' }}>
                                         <Col span={8} className="" style={{ textAlign: "center" }}>
                                           <Icon type="dollar" className="and_icon" />
+
                                         </Col>
                                         <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
                                           <div className="crd_txt">
+                                            <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Run Reports on Sales, Inventory, Profit/loss, Payment history, etc...")}</h5>
+                                            <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Ability to select date range for each reports")}</h5>
+                                            <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Run reports on individual Dealers/SDealers")}</h5>
+                                            <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Export Reports in PDF format")}</h5>
                                             <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], "and more...")}</h5>
                                           </div>
                                         </Col>

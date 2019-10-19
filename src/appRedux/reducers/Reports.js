@@ -1,6 +1,7 @@
 import {
-  PRODUCT_REPORTING,
-  DEALERS_LIST,
+  PRODUCT_REPORT,
+  INVOICE_REPORT,
+  PAYMENT_HISTORY_REPORT,
   LOADING,
 } from "../../constants/ActionTypes";
 
@@ -8,7 +9,10 @@ import { message, Modal } from 'antd';
 
 const initialState = {
   isloading: true,
-  data: ''
+  productData: {},
+  invoiceData: {},
+  paymentHistoryData: {},
+  productType:""
 };
 
 export default (state = initialState, action) => {
@@ -23,20 +27,24 @@ export default (state = initialState, action) => {
         dealers: [],
       };
 
-    case PRODUCT_REPORTING:
+    case PRODUCT_REPORT:
 
       return {
         ...state,
-        spinloading: true,
+        productData: action.payload.data,
+        productType: action.productType
       };
 
-    case DEALERS_LIST:
+    case INVOICE_REPORT:
       return {
         ...state,
-        isloading: false,
-        spinloading: false,
-        dealers: action.payload,
-        // options: state.options
+        invoiceData: action.payload.data
+      };
+
+    case PAYMENT_HISTORY_REPORT:
+      return {
+        ...state,
+        paymentHistoryData: action.payload.data
       };
 
     default:
