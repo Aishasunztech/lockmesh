@@ -26,7 +26,8 @@ import {
     ADD_DEVICE,
     BULK_DEVICES_LIST,
     TRANSFER_DEVICE,
-    FLAG_DEVICE
+    FLAG_DEVICE,
+    GET_PARENT_HARDWARES
 } from "../../constants/ActionTypes";
 
 // import { convertToLang } from '../../routes/utils/commonUtils';
@@ -88,6 +89,7 @@ const initialState = {
     pgp_emails: [],
 
     parent_packages: [],
+    parent_hardwares: [],
     // options: [
     //     { "key": DEVICE_ID, "value": convertToLang(translation[DEVICE_ID], DEVICE_ID) },
     //     { "key": USER_ID, "value": convertToLang(translation[USER_ID], USER_ID) },
@@ -542,6 +544,14 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 parent_packages: action.response.data,
+            }
+
+        case GET_PARENT_HARDWARES:
+
+
+            return {
+                ...state,
+                parent_hardwares: action.response.data,
             }
         case GET_PRODUCT_PRICES:
             // 

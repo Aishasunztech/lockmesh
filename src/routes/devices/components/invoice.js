@@ -129,7 +129,8 @@ class Invoice extends Component {
                         <Col span={6}>Invoice Number:</Col>
                         <Col span={6}>{this.props.invoiceID}</Col>
                         <Col span={6}>Dealer Name:</Col>
-                        <Col span={6}>{`${user.name.toUpperCase()} (${APP_TITLE})`}</Col>
+                        {/* <Col span={6}>{`${user.name.toUpperCase()} (${APP_TITLE})`}</Col> */}
+                        <Col span={6}>{`${user.name.toUpperCase()} `}</Col>
                     </Row>
                     <Row>
                         <Col span={6}>Invoice Date:</Col>
@@ -157,7 +158,7 @@ class Invoice extends Component {
                             <Table
                                 size="middle"
                                 columns={this.state.invoiceColumns}
-                                dataSource={this.props.renderInvoiceList((this.props.currentPakages) ? JSON.parse(this.props.currentPakages.packages) : [], (this.props.currentPakages) ? JSON.parse(this.props.currentPakages.products) : [], this.props.term, this.props.duplicate)}
+                                dataSource={this.props.renderInvoiceList((this.props.currentPakages) ? JSON.parse(this.props.currentPakages.packages) : [], (this.props.currentPakages) ? JSON.parse(this.props.currentPakages.products) : [], [], this.props.term, this.props.duplicate)}
                                 pagination={false}
                             />
                             <br />
@@ -184,7 +185,7 @@ class Invoice extends Component {
                             // width='850px'
                             size="middle"
                             columns={this.state.invoiceColumns}
-                            dataSource={this.props.renderInvoiceList(this.props.PkgSelectedRows, this.props.proSelectedRows, this.props.term, this.props.duplicate)}
+                            dataSource={this.props.renderInvoiceList(this.props.PkgSelectedRows, this.props.proSelectedRows, this.props.hardwares ? this.props.hardwares : [], this.props.term, this.props.duplicate)}
                             pagination={false}
                         />
                     </div >
@@ -218,26 +219,30 @@ class Invoice extends Component {
                             <Row>
                                 <Col span={12} />
                                 <Col span={8}>Total : </Col>
-                                <Col span={4}>{total}.00&nbsp;Credits</Col>
+                                <Col span={4}>{total}&nbsp;Credits</Col>
                             </Row>
                         </Fragment>
                         : null}
                     <Row>
                         <Col span={16} />
                         <Col span={4}>Paid To Date : </Col>
-                        <Col span={4}>{paid}.00&nbsp;Credits</Col>
+                        <Col span={4}>{paid}&nbsp;Credits</Col>
                     </Row>
                     <Row>
                         <Col span={16} />
                         <Col span={4}>Balance Due : </Col>
-                        <Col span={4}>{balanceDue}.00&nbsp;Credits</Col>
+                        <Col span={4}>{balanceDue}&nbsp;Credits</Col>
                     </Row>
                     <br />
-                    <h5><b>Equivalent USD Price: {balanceDue}.00&nbsp;Credits</b></h5>
+                    <Row>
+                        <Col span={14} />
+                        <Col span={6}><b>Equivalent USD Price: </b></Col>
+                        <Col span={4}><b>${balanceDue}.00</b></Col>
+                    </Row>
 
                 </div>
                 <p style={{ textAlign: 'center', marginTop: 70 }}>Thank you for your business.</p>
-
+                
             </div>
         )
 
