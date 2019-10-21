@@ -272,8 +272,8 @@ class EditDevice extends Component {
                 description: item.pkg_name,
                 term: item.pkg_term,
                 unit_price: item.pkg_price,
-                quantity: (duplicate > 0) ? 1 * duplicate : 1,
-                line_total: (duplicate > 0) ? item.pkg_price * duplicate : item.pkg_price
+                quantity: 1,
+                line_total: item.pkg_price
             }
         });
         let productList = products.map((item, index) => {
@@ -287,8 +287,8 @@ class EditDevice extends Component {
                 description: item.price_for,
                 term: (term === '0') ? "TRIAL" : item.price_term,
                 unit_price: item.unit_price,
-                quantity: (duplicate > 0) ? 1 * duplicate : 1,
-                line_total: (duplicate > 0) ? item.unit_price * duplicate : item.unit_price
+                quantity: 1,
+                line_total: item.unit_price
             }
         });
         // console.log(packagesList)
@@ -510,7 +510,6 @@ class EditDevice extends Component {
     }
 
     handleOkInvoice = () => {
-        console.log("handleOk for invoice", this.state.serviceData)
 
         if (this.state.total_price <= this.props.user_credit) {
             this.props.editDeviceFunc(this.state.serviceData)
@@ -518,16 +517,14 @@ class EditDevice extends Component {
             this.handleReset();
             this.setState({
                 serviceData: {},
-                showConfirmCredit: false
+                showConfirmCredit: false,
+                invoiceVisible: false,
+                servicesModal: false
             })
         } else {
             showCreditPurchase(this)
         }
 
-        this.setState({
-            invoiceVisible: false,
-            servicesModal: false
-        })
     }
 
     handleCancelInvoice = () => {
@@ -1090,7 +1087,7 @@ class EditDevice extends Component {
                         total={this.state.serviceData.total_price}
                         invoiceType={this.state.invoiceType}
                         term={this.state.term}
-                        duplicate={this.state.duplicate}
+                        duplicate={1}
                         deviceAction={"Edit"}
                         device_id={this.props.device.device_id}
                         user_id={this.props.device.user_id}

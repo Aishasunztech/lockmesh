@@ -10,44 +10,6 @@ import moment from 'moment';
 import { APP_TITLE } from '../../../constants/Application';
 
 
-// const invoice = {
-//     shipping: {
-//         name: requestData.dealer_name.toUpperCase() + ` (${requestData.label})`,
-//         dealer_id: requestData.dealer_id,
-//         dealer_pin: requestData.dealer_pin,
-//     },
-//     items: [
-//         {
-//             item: "Credits",
-//             description: "Credits puchased on cash",
-//             quantity: requestData.credits,
-//             amount: requestData.credits * 100
-//         },
-//     ],
-//     subtotal: requestData.credits * 100,
-//     paid: 0,
-//     invoice_nr: inv_no
-// };
-
-const invoiceData = {
-    shipping: {
-        name: "Hamza Dawood".toUpperCase() + ` (LockMesh)`,
-        dealer_id: "225",
-        dealer_pin: "123456",
-    },
-    items: [
-        {
-            item: "Credits",
-            description: "Credits puchased on cash",
-            unit_price: 1,
-            quantity: 1500,
-            amount: 1500 * 100
-        },
-    ],
-    subtotal: 1500 * 100,
-    paid: 0,
-    invoice_nr: "PI000018"
-};
 
 class Invoice extends Component {
 
