@@ -95,8 +95,7 @@ export function generateHardwareReport(data) {
       if (RestService.checkAuth(response.data)) {
         dispatch({
           type: HARDWARE_REPORT,
-          payload: response.data,
-          productType: data.product
+          payload: response.data
         });
       } else {
         dispatch({

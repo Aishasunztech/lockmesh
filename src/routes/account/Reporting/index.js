@@ -68,8 +68,8 @@ class Reporting extends Component {
                     <HardwareInventory
                       dealerList={this.props.dealerList}
                       translation={this.props.translation}
-                      generatePaymentHistoryReport={this.props.generatePaymentHistoryReport}
-                      paymentHistoryReport={this.props.paymentHistoryReport}
+                      generateHardwareReport={this.props.generateHardwareReport}
+                      hardwareReport={this.props.hardwareReport}
                     />
                   </TabPane>
 
@@ -115,6 +115,7 @@ var mapStateToProps = ({ dealers, settings, reporting  }) => {
   return {
     dealerList: dealers.dealers,
     productReport: reporting.productData,
+    hardwareReport: reporting.hardwareData,
     invoiceReport: reporting.invoiceData,
     paymentHistoryReport: reporting.paymentHistoryData,
     productType: reporting.productType,

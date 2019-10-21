@@ -1,32 +1,80 @@
-import React, {Component} from 'react'
-import {Button, Card, Col, DatePicker, Form, Row, Select, Table, Tabs} from "antd";
+import React, { Component, Fragment } from 'react'
+import { Table, Avatar, Switch, Button, Icon, Card, Modal, Tabs, Col, Input, Form, Row, DatePicker, Select } from "antd";
 import moment from 'moment';
-import {convertToLang} from "../../../utils/commonUtils";
-import {TAB_CHAT_ID, TAB_PGP_EMAIL, TAB_SIM_ID, TAB_VPN} from "../../../../constants/TabConstants";
-const TabPane = Tabs.TabPane;
+import {
+  DEVICE_PRE_ACTIVATION
+} from "../../../../constants/Constants";
+import styles from '../reporting.css'
+import { convertToLang, getFormattedDate } from "../../../utils/commonUtils";
 
-class Inventory extends Component {
+class PaymentHistory extends Component {
   constructor(props) {
     super(props);
 
+    this.columns = [
+      {
+        title: "Sr.#",
+        dataIndex: 'sr',
+        key: 'sr',
+        align: "center",
+        render: (text, record, index) => ++index,
+      },
+
+      {
+        title: convertToLang(props.translation[''], "HARDWARE"),
+        align: "center",
+        className: '',
+        dataIndex: 'hardware',
+        key: 'hardware',
+      },
+
+      {
+        title: convertToLang(props.translation[''], "DEALER ID"),
+        align: "center",
+        className: '',
+        dataIndex: 'dealer_id',
+        key: 'dealer_id',
+      },
+
+      {
+        title: convertToLang(props.translation[''], "DEVICE ID"),
+        align: "center",
+        className: '',
+        dataIndex: 'device_id',
+        key: 'device_id',
+      },
+
+      {
+        title: convertToLang(props.translation[''], "CREATED AT"),
+        align: "center",
+        className: '',
+        dataIndex: 'created_at',
+        key: 'created_at',
+      },
+    ];
+
     this.state = {
-      searchText: '',
+      reportCard: false,
     };
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-      let fromDate = values.from._d;
-      let toDate = values.from._d;
-      console.log('form', fromDate, toDate);
-      if (!err) {
-
-      }
+      this.props.generateHardwareReport(values)
     });
   };
+
   componentDidMount() {
 
+  };
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.props.hardwareReport !== prevProps.hardwareReport) {
+      this.setState({
+        reportCard: true
+      })
+    }
   }
 
   handleReset = () => {
@@ -37,54 +85,28 @@ class Inventory extends Component {
     return current && current > moment().endOf('day');
   };
 
-  componentDidUpdate(prevProps) {
-
-  }
-
-  handleChangeCardTabs = (value) => {
-
-    switch (value) {
-      case '1':
-        this.setState({
-          innerContent: this.props.chat_ids,
-          columns: this.state.columnsChatids,
-          innerTabSelect: '1'
-        });
-        break;
-
-      case '2':
-        this.setState({
-          innerContent: this.props.pgp_emails,
-          columns: this.state.columnsPgpemails,
-          innerTabSelect: '2'
-        });
-
-        break;
-      case "3":
-        this.setState({
-          innerContent: this.props.sim_ids,
-          columns: this.state.columnsSimids,
-          innerTabSelect: '3'
-        });
-        break;
-      case '4':
-        this.setState({
-          innerContent: [],
-          columns: this.state.columnsVpn,
-          innerTabSelect: '4'
-        });
-        break;
-
-
-      default:
-        this.setState({
-          innerContent: this.props.chat_ids,
-          columns: this.state.columnsChatids,
-          innerTabSelect: '1'
-        });
-        break;
+  renderList = (list) => {
+    if (list) {
+      let data = []
+      let counter = 1;
+      list.map((item, index) => {
+        let hardwares = JSON.parse(item.hardwares)
+        hardwares.map((hardware, i) => {
+          data.push( {
+            rowKey: counter++,
+            key: counter++,
+            sr: counter++,
+            dealer_id: item.dealer_id,
+            device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
+            hardware: hardware.hardware_name,
+            created_at: item.created_at
+          })
+        })
+      })
+      return data;
     }
   };
+
 
   render() {
     return (
@@ -124,28 +146,6 @@ class Inventory extends Component {
               </Form.Item>
 
               <Form.Item
-                label="Type"
-                labelCol={{ span: 8 }}
-                wrapperCol={{ span: 14 }}
-                width='100%'
-              >
-                {this.props.form.getFieldDecorator('type', {
-                  initialValue: '',
-                  rules: [
-                    {
-                      required: false
-                    },
-                  ],
-                })(
-                  <Select style={{ width: '100%' }}>
-                    <Select.Option value=''>ALL</Select.Option>
-                    <Select.Option value='USED'>USED</Select.Option>
-                    <Select.Option value='UNUSED'>UNUSED</Select.Option>
-                  </Select>
-                )}
-              </Form.Item>
-
-              <Form.Item
                 label="Dealer/Sdealer"
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 14 }}
@@ -162,7 +162,7 @@ class Inventory extends Component {
                   <Select style={{ width: '100%' }}>
                     <Select.Option value=''>ALL</Select.Option>
                     {this.props.dealerList.map((dealer, index) => {
-                      return (<Select.Option key={dealer.link_code} value={dealer.link_code}>{dealer.dealer_name} ({dealer.link_code})</Select.Option>)
+                      return (<Select.Option key={dealer.dealer_id} value={dealer.dealer_id}>{dealer.dealer_name} ({dealer.link_code})</Select.Option>)
                     })}
                   </Select>
                 )}
@@ -206,24 +206,23 @@ class Inventory extends Component {
                 )}
               </Form.Item>
               <Form.Item className="edit_ftr_btn"
-                         wrapperCol={{
-                           xs: { span: 22, offset: 0 },
-                         }}
+                wrapperCol={{
+                  xs: { span: 22, offset: 0 },
+                }}
               >
                 <Button key="back" type="button" onClick={this.handleReset}>CANCEL</Button>
                 <Button type="primary" htmlType="submit">GENERATE</Button>
               </Form.Item>
             </Form>
-
           </Card>
-
         </Col>
+
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
           <Card style={{ height: '500px', overflow: 'scroll' }}>
             {(this.state.reportCard) ?
               <Table
                 columns={this.columns}
-                dataSource={this.renderList(this.props.paymentHistoryReport)}
+                dataSource={this.renderList(this.props.hardwareReport)}
                 bordered
                 pagination={false}
 
@@ -236,5 +235,5 @@ class Inventory extends Component {
   }
 }
 
-const WrappedAddDeviceForm = Form.create()(Inventory);
+const WrappedAddDeviceForm = Form.create()(PaymentHistory);
 export default WrappedAddDeviceForm;
