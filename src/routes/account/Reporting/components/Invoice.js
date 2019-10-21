@@ -47,6 +47,14 @@ class Invoice extends Component {
       },
 
       {
+        title: convertToLang(props.translation[''], "USER PAYMENT STATUS"),
+        align: "center",
+        className: '',
+        dataIndex: 'end_user_payment_status',
+        key: 'end_user_payment_status',
+      },
+
+      {
         title: convertToLang(props.translation[''], "GENERATED AT"),
         align: "center",
         className: '',
@@ -108,6 +116,7 @@ class Invoice extends Component {
           'device_id': item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
           'dealer_id': item.dealer_id ? item.dealer_id : 'N/A',
           'created_at': item.created_at ? item.created_at : 'N/A',
+          'end_user_payment_status': item.end_user_payment_status ? item.end_user_payment_status : 'N/A',
           'file_name': <a href={BASE_URL+'users/getFile/'+item.file_name} target="_blank" download><Button type="primary" size="small">Download</Button></a>,
         })
       });

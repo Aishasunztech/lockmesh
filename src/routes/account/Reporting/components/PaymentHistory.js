@@ -170,12 +170,12 @@ class PaymentHistory extends Component {
               </Form.Item>
 
               <Form.Item
-                label="Type"
+                label="Product Type"
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 14 }}
                 width='100%'
               >
-                {this.props.form.getFieldDecorator('payment_status', {
+                {this.props.form.getFieldDecorator('type', {
                   initialValue: '',
                   rules: [
                     {
@@ -185,8 +185,9 @@ class PaymentHistory extends Component {
                 })(
                   <Select style={{ width: '100%' }}>
                     <Select.Option value=''>ALL</Select.Option>
-                    <Select.Option value='PAID'>PAID</Select.Option>
-                    <Select.Option value='PGP'>UNPAID</Select.Option>
+                    <Select.Option value='hardwares'>HARDWARES</Select.Option>
+                    <Select.Option value='services'>SERVICES</Select.Option>
+                    <Select.Option value='credits'>CREDITS</Select.Option>
                   </Select>
                 )}
               </Form.Item>
@@ -197,7 +198,7 @@ class PaymentHistory extends Component {
                 wrapperCol={{ span: 14 }}
                 width='100%'
               >
-                {this.props.form.getFieldDecorator('payment_status', {
+                {this.props.form.getFieldDecorator('transaction_type', {
                   initialValue: '',
                   rules: [
                     {
@@ -207,8 +208,8 @@ class PaymentHistory extends Component {
                 })(
                   <Select style={{ width: '100%' }}>
                     <Select.Option value=''>ALL</Select.Option>
-                    <Select.Option value='PAID'>PAID</Select.Option>
-                    <Select.Option value='PGP'>UNPAID</Select.Option>
+                    <Select.Option value='debit'>DEBIT</Select.Option>
+                    <Select.Option value='credit'>CREDIT</Select.Option>
                   </Select>
                 )}
               </Form.Item>
