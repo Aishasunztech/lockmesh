@@ -81,8 +81,14 @@ export default (state = initialState, action) => {
                 if (index !== -1) {
                     state.secureMarketList[index].is_restrict_uninstall = action.payload.value;
                 }
+                // console.log("action.payload.value ", action.payload.value)
 
-                message.success(action.msg)
+                if (action.payload.value) {
+                    message.success("Unintall permission granted");
+                } else {
+                    message.success("Uninstall permission denied");
+                }
+                // message.success(action.msg)
 
             } else {
                 message.error(action.msg)
