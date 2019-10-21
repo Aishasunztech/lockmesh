@@ -160,20 +160,19 @@ class ApkMarket extends React.Component {
             let appIds = []
             if (app === "all") {
                 appIds = app;
-                this.setState({
-                    selectedRowKeys: [],
-                    app_ids: [],
-                    guestAvailableApps: mGuestCopySearch,
-                    encryptedAvailableApps: mEncryptedCopySearch
-                })
+
             } else {
                 appIds = [app.id];
             }
             this.props.removeSMapps(appIds, spaceType);
 
-            // this.props.getMarketApps()
-            // } else {
-            //     Modal.error({ title: "Sorry, You can't remove these apps" })
+
+            this.setState({
+                selectedRowKeys: [],
+                app_ids: [],
+                guestAvailableApps: mGuestCopySearch,
+                encryptedAvailableApps: mEncryptedCopySearch
+            })
 
         }
 
@@ -223,6 +222,7 @@ class ApkMarket extends React.Component {
         // console.log('get duplicate values: ', this.find_duplicate_in_array(smApps.map((app) => app.id)))
         smApps.forEach((item) => {
             if (item.dealer_type === ADMIN) {
+                // console.log('check app detail: ', item)
                 item.disabled = true
             }
             else {
@@ -231,6 +231,7 @@ class ApkMarket extends React.Component {
         })
 
         let apkList = smApps.map((app, index) => {
+            // console.log("app.is_restrict_uninstall ==> ",app.is_restrict_uninstall)
             let data = {
                 key: app.id,
                 removeAllGuest: <Button type="danger" size="small" disabled={(this.props.user.type === ADMIN) ? false : app.disabled} onClick={() => this.removeSMapps(app, spaceType)}>Remove</Button>,
@@ -251,48 +252,48 @@ class ApkMarket extends React.Component {
         return apkList
     }
 
-    renderList = (availbleAppList, secureMarketList) => {
+    // renderList = (availbleAppList, secureMarketList) => {
 
-        // console.log(availbleAppList, ' objext data ', secureMarketList)
-        let combinedList = [];
+    //     // console.log(availbleAppList, ' objext data ', secureMarketList)
+    //     let combinedList = [];
 
-        combinedList = [...availbleAppList, ...secureMarketList];
+    //     combinedList = [...availbleAppList, ...secureMarketList];
 
 
-        // let combinedList = availbleAppList;
-        // console.log('combined', combinedList)
-        combinedList.forEach((item) => {
-            if (item.dealer_type === ADMIN) {
-                item.disabled = true
-            }
-            else {
-                item.disabled = false
-            }
-        })
-        let apkList = combinedList.map((app, index) => {
-            let data = {
-                key: app.id,
-                title:
-                    <Fragment>
-                        <Avatar size="medium" src={BASE_URL + "users/getFile/" + app.logo} />
-                        <span className="sm_labels"> {app.app_name} </span>
-                        {(app.dealer_type !== undefined) ? <span>
-                            <Switch className="sm_uninstall" size='small' unCheckedChildren={convertToLang(this.props.translation[Switch_Button_Uninstall], "Uninstall")} checkedChildren={convertToLang(this.props.translation[Switch_Button_Uninstall], "Uninstall")} onChange={(e) => { this.handleCheckChange(app.id, e) }} defaultChecked={(app.is_restrict_uninstall === 0) ? true : false} disabled={(this.props.user.type === ADMIN) ? false : app.disabled}></Switch>
-                        </span> : null}
-                    </Fragment>,
-                description: `${app.app_name + index + 1}`,
-                disabled: (this.props.user.type === ADMIN) ? false : app.disabled,
-                // className: (this.props.user.type !== ADMIN) ? 'sm_chk' : false
-            }
-            return data
-        })
-        return apkList
-    }
-    filterOption = (inputValue, option) => {
-        // console.log(option, 'object', inputValue)
-        return option.description.toLowerCase().indexOf(inputValue.toLowerCase()) > -1
+    //     // let combinedList = availbleAppList;
+    //     // console.log('combined', combinedList)
+    //     combinedList.forEach((item) => {
+    //         if (item.dealer_type === ADMIN) {
+    //             item.disabled = true
+    //         }
+    //         else {
+    //             item.disabled = false
+    //         }
+    //     })
+    //     let apkList = combinedList.map((app, index) => {
+    //         let data = {
+    //             key: app.id,
+    //             title:
+    //                 <Fragment>
+    //                     <Avatar size="medium" src={BASE_URL + "users/getFile/" + app.logo} />
+    //                     <span className="sm_labels"> {app.app_name} </span>
+    //                     {(app.dealer_type !== undefined) ? <span>
+    //                         <Switch className="sm_uninstall" size='small' unCheckedChildren={convertToLang(this.props.translation[Switch_Button_Uninstall], "Uninstall")} checkedChildren={convertToLang(this.props.translation[Switch_Button_Uninstall], "Uninstall")} onChange={(e) => { this.handleCheckChange(app.id, e) }} defaultChecked={(app.is_restrict_uninstall === 0) ? true : false} disabled={(this.props.user.type === ADMIN) ? false : app.disabled}></Switch>
+    //                     </span> : null}
+    //                 </Fragment>,
+    //             description: `${app.app_name + index + 1}`,
+    //             disabled: (this.props.user.type === ADMIN) ? false : app.disabled,
+    //             // className: (this.props.user.type !== ADMIN) ? 'sm_chk' : false
+    //         }
+    //         return data
+    //     })
+    //     return apkList
+    // }
+    // filterOption = (inputValue, option) => {
+    //     // console.log(option, 'object', inputValue)
+    //     return option.description.toLowerCase().indexOf(inputValue.toLowerCase()) > -1
 
-    }
+    // }
 
     // handleChange = (targetKeys, direction, moveKeys) => {
     //     let marketApps = targetKeys;
@@ -474,17 +475,19 @@ class ApkMarket extends React.Component {
         // this.props.getApkList();
         this.props.getMarketApps()
     }
-    componentDidMount() {
-        // let index = this.state.columns.findIndex((item) => item.dataIndex === "remove");
-        // this.state.columns[index].title = <Button type="danger" size="small" onClick={() => this.removeSMapps("all")}>Remove All</Button>
-    }
+    // componentDidMount() {
+    //     // let index = this.state.columns.findIndex((item) => item.dataIndex === "remove");
+    //     // this.state.columns[index].title = <Button type="danger" size="small" onClick={() => this.removeSMapps("all")}>Remove All</Button>
+    // }
 
-    handleSelect = (list, e) => {
-        // alert("asdsa")
-        // console.log("handle select", e)
-    }
+    // handleSelect = (list, e) => {
+    //     // alert("asdsa")
+    //     // console.log("handle select", e)
+    // }
 
     saveApps = (space) => {
+
+        // console.log("this.state.app_ids ", this.state.app_ids)
 
         if (this.state.app_ids.length) {
             this.state.availbleAppList.map((app) => {
@@ -492,21 +495,31 @@ class ApkMarket extends React.Component {
                     app.space_type = space;
                     this.state.secureMarketList.push(app);
                 }
-                else {
-                    if (this.state.secureMarketList.includes(app.id)) {
-                        this.state.app_ids.push(app.id);
+                // else {
+                //     if (this.state.secureMarketList.includes(app.id)) {
+                //         this.state.app_ids.push(app.id);
 
-                    }
-                }
+                //     }
+                // }
             })
 
+
             let sm_appIds = [];
-            this.state.secureMarketList.forEach((app) => {
-                if (app.space_type === space) { // && this.props.user.type == app.dealer_type
-                    sm_appIds.push(app.id);
-                }
-            });
-            console.log(this.state.secureMarketList, "sm_appIds ", sm_appIds)
+
+            if (this.props.user.type !== ADMIN) {
+                this.state.secureMarketList.forEach((app) => {
+                    if (app.space_type === space && app.dealer_type !== ADMIN) {
+                        sm_appIds.push(app.id);
+                    }
+                });
+            } else {
+                this.state.secureMarketList.forEach((app) => {
+                    if (app.space_type === space && app.dealer_type !== DEALER) { // && this.props.user.type == app.dealer_type
+                        sm_appIds.push(app.id);
+                    }
+                });
+            }
+            // console.log(this.state.secureMarketList, "sm_appIds ", sm_appIds)
 
             let duplicateIds = this.find_duplicate_in_array(sm_appIds);
             let removeDuplicateIds = sm_appIds.filter((item) => !duplicateIds.includes(item));
@@ -530,17 +543,9 @@ class ApkMarket extends React.Component {
     onSelectChange = (selectedRowKeys, selectedRows) => {
         console.log(selectedRowKeys, 'selected', selectedRows);
 
-        // let sm_appIds = [];
-        // this.state.secureMarketList.forEach((app) => {
-        //     if (app.space_type === "encrypted" && this.props.user.dealerId == app.dealer_id) {
-        //         sm_appIds.push(app.id);
-        //     }
-        // });
-        // console.log("sm_appIds ", sm_appIds)
-
         let app_ids = []
         selectedRows.forEach(row => {
-            console.log("selected row", row)
+            // console.log("selected row", row)
             app_ids.push(row.key);
         });
         this.setState({
