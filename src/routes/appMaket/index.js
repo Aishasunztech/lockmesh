@@ -471,10 +471,10 @@ class ApkMarket extends React.Component {
             })
         }
     }
-    // componentWillMount() {
-    //     // this.props.getApkList();
-    //     this.props.getMarketApps()
-    // }
+    componentWillMount() {
+        // this.props.getApkList();
+        this.props.getMarketApps()
+    }
     // componentDidMount() {
     //     // let index = this.state.columns.findIndex((item) => item.dataIndex === "remove");
     //     // this.state.columns[index].title = <Button type="danger" size="small" onClick={() => this.removeSMapps("all")}>Remove All</Button>
