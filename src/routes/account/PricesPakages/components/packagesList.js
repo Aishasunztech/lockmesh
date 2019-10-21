@@ -97,7 +97,7 @@ export default class Prices extends Component {
         }
     }
 
-    renderList = () => {
+    2 = () => {
         if (this.state.packages) {
             return this.state.packages.map((item, index) => {
                 return {

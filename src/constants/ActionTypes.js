@@ -96,7 +96,7 @@ export const CHECK_APK_NAME = 'CHECK_APK_NAME';
 export const AUTHENTICATE_UPDATE_USER = 'AUTHENTICATE_UPDATE_USER';
 
 
-// Connect Device 
+// Connect Device
 export const RESET_DEVICE = 'RESET_DEVICE';
 export const PASSWORD_CHANGED = 'PASSWORD_CHANGED';
 export const GET_DEVICE_DETAILS = 'GET_DEVICE_DETAILS';
@@ -281,6 +281,12 @@ export const RESET_AGENT_PWD = 'RESET_AGENT_PWD'
 
 
 
-// Dashboard constants 
+// Dashboard constants
 
 export const GET_DASHBOARD_DATA = 'GET_DASHBOARD_DATA';
+
+//Rerpoting
+export const PRODUCT_REPORT         = 'PRODUCT_REPORT';
+export const INVOICE_REPORT         = 'INVOICE_REPORT';
+export const PAYMENT_HISTORY_REPORT = 'PAYMENT_HISTORY_REPORT';
+export const HARDWARE_REPORT        = 'HARDWARE_REPORT';

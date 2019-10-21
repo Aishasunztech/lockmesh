@@ -100,7 +100,7 @@ const RestService = {
 
     },
 
-    // 
+    //
     getAllowedComponents: () => {
 
     },
@@ -384,15 +384,15 @@ const RestService = {
         return axios.post(BASE_URL + 'users/edit/apk', formData, RestService.getHeader());
 
     },
-    // For check apk name 
+    // For check apk name
     checkApkName: (name, apk_id = '') => {
         return axios.post(BASE_URL + 'users/checkApkName', { name, apk_id }, RestService.getHeader());
     },
-    // For Service Remaining data 
+    // For Service Remaining data
     getServiceRefund: (service_id) => {
         return axios.post(BASE_URL + 'users/check-service-refund-credits', { service_id }, RestService.getHeader());
     },
-    // For check apk name 
+    // For check apk name
     checkPolicyName: (name, policy_id = '') => {
         return axios.post(BASE_URL + 'users/check_policy_name', { name, policy_id }, RestService.getHeader());
     },
@@ -615,7 +615,7 @@ const RestService = {
         // });
     },
 
-    // Check pass 
+    // Check pass
     checkPass: (user) => {
         return axios.post(BASE_URL + 'users/check_pass', { user }, RestService.getHeader());
     },
@@ -753,11 +753,11 @@ const RestService = {
         return axios.put(BASE_URL + 'users/undo_delete_user/' + userId, {}, RestService.getHeader())
     },
 
-    // Transfer Secure market Apps 
+    // Transfer Secure market Apps
     transferApps: (data) => {
         return axios.post(BASE_URL + 'users/transferApps', { data }, RestService.getHeader())
     },
-    // Change unistall app restriction for Secure market apps 
+    // Change unistall app restriction for Secure market apps
     handleUninstall: (apk_id, value) => {
         return axios.put(BASE_URL + 'users/handleUninstall/' + apk_id, { value }, RestService.getHeader())
     },
@@ -908,6 +908,26 @@ const RestService = {
 
     submtPassword: (data) => {
         return axios.post(BASE_URL + 'users/submit-device-passwords', data, RestService.getHeader());
-    }
+    },
+
+    //product report
+    generateProductReport: (data) => {
+      return axios.post(BASE_URL + 'users/reporting/product', data, RestService.getHeader());
+    },
+
+  //invoice report
+  generateInvoiceReport: (data) => {
+    return axios.post(BASE_URL + 'users/reports/invoice', data, RestService.getHeader());
+  },
+
+  //payment history report
+  generatePaymentHistoryReport: (data) => {
+    return axios.post(BASE_URL + 'users/reports/payment-history', data, RestService.getHeader());
+    },
+  
+  //hardware report
+  generateHardwareReport: (data) => {
+    return axios.post(BASE_URL + 'users/reports/hardware', data, RestService.getHeader());
+  },
 }
 export default RestService;

@@ -18,7 +18,7 @@ export const PACKAGES_AND_IDS_01 = "packages.and.ids.01.id"; // Distribute token
 export const PACKAGES_AND_IDS_02 = "packages.and.ids.02.id"; // Set prices and delay for each token
 export const PACKAGES_AND_IDS_03 = "packages.and.ids.03.id"; // Set permissions for Tokens
 export const DUPLICATE_DATA = "WARNING_Duplicate_Data.id"; // WARNING! Duplicate Data New.Data.id New Data
-export const NEW_DATA = "New.Data.id"; // WARNING! Duplicate Data  
+export const NEW_DATA = "New.Data.id"; // WARNING! Duplicate Data
 
 
 // ********************** Set prices and Packages
@@ -41,3 +41,5 @@ export const SELECT_PRICE = "select.price.id"; // SELECT PRICE
 export const PRICE = "price.id"; // PRICE
 
 
+//reporting
+export const REPORTING = "reporting";
