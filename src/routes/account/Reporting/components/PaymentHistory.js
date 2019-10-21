@@ -264,14 +264,14 @@ class PaymentHistory extends Component {
 
         </Col>
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
-          <Card style={{ height: '500px', overflow: 'scroll'}}>
+          <Card style={{ height: '500px', overflow: 'overlay'}}>
             {(this.state.reportCard) ?
             <Table
               columns={this.columns}
               dataSource={this.renderList(this.props.paymentHistoryReport)}
               bordered
               pagination={false}
-
+              scroll={{x:true}}
             />
             : null }
           </Card>

@@ -1,9 +1,9 @@
-import React, {Component, Fragment} from 'react'
-import {Button, Card, Col, DatePicker, Form, Input, Row, Select, Table, Tabs} from "antd";
+import React, { Component, Fragment } from 'react'
+import { Button, Card, Col, DatePicker, Form, Input, Row, Select, Table, Tabs } from "antd";
 import moment from 'moment';
-import {convertToLang} from "../../../utils/commonUtils";
-import {TAB_CHAT_ID, TAB_PGP_EMAIL, TAB_SIM_ID, TAB_VPN} from "../../../../constants/TabConstants";
-import {generateProductReport} from "../../../../appRedux/actions";
+import { convertToLang } from "../../../utils/commonUtils";
+import { TAB_CHAT_ID, TAB_PGP_EMAIL, TAB_SIM_ID, TAB_VPN } from "../../../../constants/TabConstants";
+import { generateProductReport } from "../../../../appRedux/actions";
 import {
   LABEL_DATA_CHAT_ID,
   LABEL_DATA_CREATED_AT, LABEL_DATA_PGP_EMAIL,
@@ -168,22 +168,22 @@ class ProductInventory extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.productReport !== prevProps.productReport) {
-      if (this.props.productType === 'ALL' || this.props.productType === 'CHAT' ){
+      if (this.props.productType === 'ALL' || this.props.productType === 'CHAT') {
         this.setState({
           columns: this.state.columnsChatIDs,
           innerTabSelect: '1'
         })
-      }else if(this.props.productType === 'ALL' || this.props.productType === 'PGP' ){
+      } else if (this.props.productType === 'ALL' || this.props.productType === 'PGP') {
         this.setState({
           columns: this.state.columnsPgpemails,
           innerTabSelect: '2'
         })
-      }else if (this.props.productType === 'ALL' || this.props.productType === 'SIM'){
+      } else if (this.props.productType === 'ALL' || this.props.productType === 'SIM') {
         this.setState({
           columns: this.state.columnsSimIDs,
           innerTabSelect: '3'
         })
-      }else if(this.props.productType === 'ALL' || this.props.productType === 'VPN'){
+      } else if (this.props.productType === 'ALL' || this.props.productType === 'VPN') {
         this.setState({
           columns: this.state.columnsVpn,
           innerTabSelect: '4'
@@ -191,7 +191,7 @@ class ProductInventory extends Component {
       }
 
       this.setState({
-        reportCard:  true,
+        reportCard: true,
         productType: this.props.productType
       })
     }
@@ -244,10 +244,10 @@ class ProductInventory extends Component {
   };
 
   renderList(list) {
-    let data  = [];
-    let i     = 0;
+    let data = [];
+    let i = 0;
 
-    if (list.CHAT && this.state.innerTabSelect ==='1'){
+    if (list.CHAT && this.state.innerTabSelect === '1') {
       list.CHAT.map((item, index) => {
         data.push({
           'row_key': `${i}Key`,
@@ -257,7 +257,7 @@ class ProductInventory extends Component {
           'created_at': item.created_at ? item.created_at : 'N/A',
         })
       });
-    }else if (list.PGP && this.state.innerTabSelect ==='2'){
+    } else if (list.PGP && this.state.innerTabSelect === '2') {
       list.PGP.map((item, index) => {
         data.push({
           'row_key': `${i}Key`,
@@ -267,7 +267,7 @@ class ProductInventory extends Component {
           'created_at': item.created_at ? item.created_at : 'N/A',
         })
       });
-    }else if (list.SIM && this.state.innerTabSelect ==='3'){
+    } else if (list.SIM && this.state.innerTabSelect === '3') {
       list.SIM.map((item, index) => {
         data.push({
           'row_key': `${i}Key`,
@@ -279,7 +279,7 @@ class ProductInventory extends Component {
           'created_at': item.created_at ? item.created_at : 'N/A',
         })
       });
-    }else if (list.VPN && this.state.innerTabSelect ==='4'){
+    } else if (list.VPN && this.state.innerTabSelect === '4') {
       list.VPN.map((item, index) => {
         data.push({
           'row_key': `${i}Key`,
@@ -417,9 +417,9 @@ class ProductInventory extends Component {
                 )}
               </Form.Item>
               <Form.Item className="edit_ftr_btn"
-                         wrapperCol={{
-                           xs: { span: 22, offset: 0 },
-                         }}
+                wrapperCol={{
+                  xs: { span: 22, offset: 0 },
+                }}
               >
                 <Button key="back" type="button" onClick={this.handleReset}>CANCEL</Button>
                 <Button type="primary" htmlType="submit" onClick={this.handleSubmit}>GENERATE</Button>
@@ -433,31 +433,31 @@ class ProductInventory extends Component {
           <Card bordered={false} style={{ height: '500px', overflow: 'scroll' }} >
             {(this.state.reportCard) ?
               <Fragment>
-                <Tabs defaultActiveKey="1" activeKey={this.state.innerTabSelect} type="card" tabPosition="left" className="m_d_table_tabs" onChange={this.handleChangeCardTabs}>
+                <Tabs defaultActiveKey="1" activeKey={this.state.innerTabSelect} type="card" tabPosition="left" className="" onChange={this.handleChangeCardTabs}>
 
                   {(this.state.productType === 'ALL' || this.state.productType === 'CHAT') ?
                     < TabPane tab={convertToLang(this.props.translation[TAB_CHAT_ID], "CHAT")} key="1" forceRender={true}>
                     </TabPane>
-                    : null }
+                    : null}
                   {(this.state.productType === 'ALL' || this.state.productType === 'PGP') ?
-                    < TabPane tab = {
+                    < TabPane tab={
                       convertToLang(
                         this.props.translation[TAB_PGP_EMAIL],
                         "PGP")} key="2" forceRender={true}>
                     </TabPane>
-                    : null }
+                    : null}
                   {(this.state.productType === 'ALL' || this.state.productType === 'SIM') ?
                     <TabPane tab={convertToLang(this.props.translation[TAB_SIM_ID], "SIM")} key="3" forceRender={true}>
                     </TabPane>
-                    : null }
+                    : null}
                   {(this.state.productType === 'ALL' || this.state.productType === 'VPN') ?
                     <TabPane tab={convertToLang(this.props.translation[TAB_VPN], "VPN")} key="4" forceRender={true}>
                     </TabPane>
-                    : null }
+                    : null}
                 </Tabs>
                 <Table
                   size="middle"
-                  className="gx-table-responsive devices table m_d_table"
+                  className="gx-table-responsive devices table m_d_table m_d_table1"
                   bordered
                   columns={this.state.columns}
                   rowKey='row_key'
@@ -466,7 +466,7 @@ class ProductInventory extends Component {
                   dataSource={this.renderList(this.props.productReport)}
                 />
               </Fragment>
-              : null }
+              : null}
           </Card>
         </Col>
       </Row>
