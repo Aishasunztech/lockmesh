@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Modal, message, Col, Row, Table } from 'antd';
+import { Modal, message, Col, Row, Table, Switch } from 'antd';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
@@ -140,7 +140,7 @@ class Invoice extends Component {
                     </Row>
                     <Row>
                         <Col span={6}>Balance Due:</Col>
-                        <Col span={6}>{balanceDue}.00&nbsp;Credits</Col>
+                        <Col span={6}>{balanceDue} Credits</Col>
                         <Col span={6}>Dealer PIN:</Col>
                         <Col span={6}>{user.dealer_pin}</Col>
                     </Row>
@@ -243,6 +243,7 @@ class Invoice extends Component {
                 </div>
                 <p style={{ textAlign: 'center', marginTop: 70 }}>Thank you for your business.</p>
                 
+
             </div>
         )
 
