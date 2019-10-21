@@ -36,9 +36,9 @@ export function transferApps(data, space) {
     console.log('transferApps ', data);
     // return;
     return (dispatch) => {
-        dispatch({
-            type: LOADING
-        })
+        // dispatch({
+        //     type: LOADING
+        // })
         // console.log(data);
         RestService.transferApps(data, space).then((response) => {
             if (RestService.checkAuth(response.data)) {

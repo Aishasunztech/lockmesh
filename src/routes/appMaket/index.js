@@ -223,6 +223,7 @@ class ApkMarket extends React.Component {
         // console.log('get duplicate values: ', this.find_duplicate_in_array(smApps.map((app) => app.id)))
         smApps.forEach((item) => {
             if (item.dealer_type === ADMIN) {
+                // console.log('check app detail: ', item)
                 item.disabled = true
             }
             else {
@@ -231,6 +232,7 @@ class ApkMarket extends React.Component {
         })
 
         let apkList = smApps.map((app, index) => {
+            // console.log("app.is_restrict_uninstall ==> ",app.is_restrict_uninstall)
             let data = {
                 key: app.id,
                 removeAllGuest: <Button type="danger" size="small" disabled={(this.props.user.type === ADMIN) ? false : app.disabled} onClick={() => this.removeSMapps(app, spaceType)}>Remove</Button>,
@@ -486,26 +488,38 @@ class ApkMarket extends React.Component {
 
     saveApps = (space) => {
 
+        console.log("this.state.app_ids ", this.state.app_ids)
+
         if (this.state.app_ids.length) {
             this.state.availbleAppList.map((app) => {
                 if (this.state.app_ids.includes(app.id)) {
                     app.space_type = space;
                     this.state.secureMarketList.push(app);
                 }
-                else {
-                    if (this.state.secureMarketList.includes(app.id)) {
-                        this.state.app_ids.push(app.id);
+                // else {
+                //     if (this.state.secureMarketList.includes(app.id)) {
+                //         this.state.app_ids.push(app.id);
 
-                    }
-                }
+                //     }
+                // }
             })
 
+
             let sm_appIds = [];
-            this.state.secureMarketList.forEach((app) => {
-                if (app.space_type === space) { // && this.props.user.type == app.dealer_type
-                    sm_appIds.push(app.id);
-                }
-            });
+
+            if (this.props.user.type !== ADMIN) {
+                this.state.secureMarketList.forEach((app) => {
+                    if (app.space_type === space && app.dealer_type !== ADMIN) {
+                        sm_appIds.push(app.id);
+                    }
+                });
+            } else {
+                this.state.secureMarketList.forEach((app) => {
+                    if (app.space_type === space) { // && this.props.user.type == app.dealer_type
+                        sm_appIds.push(app.id);
+                    }
+                });
+            }
             console.log(this.state.secureMarketList, "sm_appIds ", sm_appIds)
 
             let duplicateIds = this.find_duplicate_in_array(sm_appIds);
