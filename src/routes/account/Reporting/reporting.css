@@ -32,7 +32,14 @@
   float: right;
   width: 93.8%;
 }
-
+.m_d_table1 {
+  height: auto;
+  overflow: overlay;
+  float: right;
+  width: auto;
+  left: 72px;
+  top: 16px;
+}
 .manage_data .ant-tabs-tab {
   margin-right: 0 !important;
 }

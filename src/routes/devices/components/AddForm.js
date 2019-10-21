@@ -7,7 +7,7 @@ import Services from './Services'
 import Picky from 'react-picky';
 import AddSimPermission from './AddSimPermission'
 import { Markup } from 'interweave';
-import { Modal, Button, Form, Input, Select, Radio, InputNumber, Popover, Icon, Row, Col, Spin, Table, Checkbox } from 'antd';
+import { Modal, Button, Form, Input, Select, Radio, InputNumber, Popover, Icon, Row, Col, Spin, Table, Checkbox, Switch } from 'antd';
 import { withRouter, Redirect, Link } from 'react-router-dom';
 
 import { getSimIDs, getChatIDs, getPGPEmails, getParentPackages, getProductPrices, getHardwaresPrices } from "../../../appRedux/actions/Devices";
@@ -83,7 +83,8 @@ class AddDevice extends Component {
             invoiceID: 'PI00001',
             selectedHardwareValues: [],
             hardwarePrice: 0,
-            hardwares: []
+            hardwares: [],
+            paidByUser: "PAID"
         }
     }
 
@@ -125,7 +126,7 @@ class AddDevice extends Component {
                     values.packages = this.state.packages;
                     values.term = this.state.term;
                     values.total_price = this.state.total_price
-                    values.hardwarePrice = this.state.hardwarePrice
+                    values.hardwarePrice = this.state.duplicate > 0 ? this.state.hardwarePrice * this.state.duplicate : this.state.hardwarePrice
                     values.hardwares = this.state.hardwares
                     this.setState({
                         serviceData: values,
@@ -579,6 +580,7 @@ class AddDevice extends Component {
         // console.log("handleOk for invoice", this.state.serviceData)
 
         if ((this.state.total_price + this.state.hardwarePrice) <= this.props.user_credit) {
+            this.state.serviceData.paid_by_user = this.state.paidByUser
             this.props.AddDeviceHandler(this.state.serviceData);
             this.props.hideModal();
             this.handleReset();
@@ -624,6 +626,19 @@ class AddDevice extends Component {
             this.setState({
                 hardwarePrice: this.state.hardwarePrice,
                 hardwares: this.state.hardwares
+            })
+        }
+    }
+
+    handlePaidUser = (e) => {
+        // console.log(e);
+        if (e) {
+            this.setState({
+                paidByUser: "PAID"
+            })
+        } else {
+            this.setState({
+                paidByUser: "UNPAID"
             })
         }
     }
@@ -750,6 +765,36 @@ class AddDevice extends Component {
                             </Fragment>
                         )}
                     </Form.Item>
+                    <Form.Item
+                        label={convertToLang(this.props.translation[""], "SELECT HARDWARE")}
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 14 }}
+                    >
+                        {this.props.form.getFieldDecorator('hardwares')(
+                            <Select
+                                mode="multiple"
+                                showSearch
+                                style={{ width: '100%' }}
+                                placeholder="Select hardwares"
+                                mode="multiple"
+                                onChange={(e) => this.setState({ hardware: e })}
+                                onSelect={(e) => {
+                                    this.handleHardwareChange(e, true)
+                                }
+                                }
+                                onDeselect={(e) => {
+                                    this.handleHardwareChange(e, false)
+                                }
+                                }
+                            >
+                                {this.props.parent_hardwares.map((hardware) => {
+                                    return (<Select.Option key={hardware.id} value={hardware.id}>{hardware.hardware_name + " ( PRICE: " + hardware.hardware_price + " Credits ) "}</Select.Option>)
+                                })}
+                            </Select>
+                            // <Input />
+                        )}
+                    </Form.Item>
+
                     {(this.state.type == 0 && lastObject) ?
                         <Fragment>
                             <Form.Item style={{ marginBottom: 0 }}
@@ -786,35 +831,6 @@ class AddDevice extends Component {
                                 })(
 
                                     <Input type='hidden' disabled />
-                                )}
-                            </Form.Item>
-                            <Form.Item
-                                label={convertToLang(this.props.translation[""], "SELECT HARDWARE")}
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}
-                            >
-                                {this.props.form.getFieldDecorator('hardwares')(
-                                    <Select
-                                        mode="multiple"
-                                        showSearch
-                                        style={{ width: '100%' }}
-                                        placeholder="Select hardwares"
-                                        mode="multiple"
-                                        onChange={(e) => this.setState({ hardware: e })}
-                                        onSelect={(e) => {
-                                            this.handleHardwareChange(e, true)
-                                        }
-                                        }
-                                        onDeselect={(e) => {
-                                            this.handleHardwareChange(e, false)
-                                        }
-                                        }
-                                    >
-                                        {this.props.parent_hardwares.map((hardware) => {
-                                            return (<Select.Option key={hardware.id} value={hardware.id}>{hardware.hardware_name + " ( PRICE: " + hardware.hardware_price + " Credits ) "}</Select.Option>)
-                                        })}
-                                    </Select>
-                                    // <Input />
                                 )}
                             </Form.Item>
                             <Form.Item
@@ -1204,8 +1220,8 @@ class AddDevice extends Component {
                             />
                         </div >
                         <div>
-                            <h5 style={{ textAlign: "right" }}><b>Sub Total :  {this.state.serviceData.total_price + this.state.hardwarePrice} Credits</b></h5>
-                            <h4 style={{ textAlign: "center" }}><b>There will be a charge of {this.state.serviceData.total_price + this.state.hardwarePrice} Credits</b></h4>
+                            <h5 style={{ textAlign: "right" }}><b>Sub Total :  {this.state.serviceData.total_price + this.state.serviceData.hardwarePrice} Credits</b></h5>
+                            <h4 style={{ textAlign: "center" }}><b>There will be a charge of {this.state.serviceData.total_price + this.state.serviceData.hardwarePrice} Credits</b></h4>
                         </div>
                         {(this.state.term !== '0') ?
                             <div>
@@ -1238,7 +1254,7 @@ class AddDevice extends Component {
                         PkgSelectedRows={this.state.PkgSelectedRows}
                         proSelectedRows={this.state.proSelectedRows}
                         renderInvoiceList={this.confirmRenderList}
-                        subTotal={this.state.serviceData.total_price + this.state.hardwarePrice}
+                        subTotal={this.state.serviceData.total_price + this.state.serviceData.hardwarePrice}
                         invoiceType={this.state.invoiceType}
                         term={this.state.term}
                         duplicate={this.state.duplicate}
@@ -1249,6 +1265,7 @@ class AddDevice extends Component {
                         invoiceID={this.state.invoiceID}
                         translation={this.props.translation}
                     />
+                    <div style={{ float: "right" }}><b>PAID BY USER: </b> <Switch size="small" defaultChecked onChange={this.handlePaidUser} /></div>
                 </Modal>
             </div >
         )
