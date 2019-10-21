@@ -1,5 +1,6 @@
 import {
   PRODUCT_REPORT,
+  HARDWARE_REPORT,
   INVOICE_REPORT,
   PAYMENT_HISTORY_REPORT,
   INVALID_TOKEN,
@@ -70,6 +71,30 @@ export function generatePaymentHistoryReport(data) {
       if (RestService.checkAuth(response.data)) {
         dispatch({
           type: PAYMENT_HISTORY_REPORT,
+          payload: response.data,
+          productType: data.product
+        });
+      } else {
+        dispatch({
+          type: INVALID_TOKEN
+        });
+      }
+    });
+
+  };
+}
+
+export function generateHardwareReport(data) {
+  return (dispatch) => {
+    dispatch({
+      type: SPIN_lOADING,
+      spinloading: true
+    });
+
+    RestService.generateHardwareReport(data).then((response) => {
+      if (RestService.checkAuth(response.data)) {
+        dispatch({
+          type: HARDWARE_REPORT,
           payload: response.data,
           productType: data.product
         });

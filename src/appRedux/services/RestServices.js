@@ -911,7 +911,7 @@ const RestService = {
     },
 
     //product report
-  generateProductReport: (data) => {
+    generateProductReport: (data) => {
       return axios.post(BASE_URL + 'users/reporting/product', data, RestService.getHeader());
     },
 
@@ -923,6 +923,11 @@ const RestService = {
   //payment history report
   generatePaymentHistoryReport: (data) => {
     return axios.post(BASE_URL + 'users/reports/payment-history', data, RestService.getHeader());
+    },
+  
+  //hardware report
+  generateHardwareReport: (data) => {
+    return axios.post(BASE_URL + 'users/reports/hardware', data, RestService.getHeader());
   },
 }
 export default RestService;

@@ -6,7 +6,7 @@ import Invoice from "./components/Invoice";
 import ProductInventory  from './components/ProductInventory';
 import HardwareInventory  from './components/HardwareInventory';
 import PaymentHistory  from './components/PaymentHistory';
-import { getAllDealers, generateProductReport, generateInvoiceReport, generatePaymentHistoryReport } from '../../../appRedux/actions/';
+import { getAllDealers, generateProductReport, generateInvoiceReport, generatePaymentHistoryReport, generateHardwareReport } from '../../../appRedux/actions/';
 import styles from './reporting.css'
 
 
@@ -68,6 +68,8 @@ class Reporting extends Component {
                     <HardwareInventory
                       dealerList={this.props.dealerList}
                       translation={this.props.translation}
+                      generatePaymentHistoryReport={this.props.generatePaymentHistoryReport}
+                      paymentHistoryReport={this.props.paymentHistoryReport}
                     />
                   </TabPane>
 
@@ -126,6 +128,7 @@ function mapDispatchToProps(dispatch) {
     generateProductReport: generateProductReport,
     generateInvoiceReport: generateInvoiceReport,
     generatePaymentHistoryReport: generatePaymentHistoryReport,
+    generateHardwareReport: generateHardwareReport,
   }, dispatch);
 };
 

@@ -1,5 +1,6 @@
 import {
   PRODUCT_REPORT,
+  HARDWARE_REPORT,
   INVOICE_REPORT,
   PAYMENT_HISTORY_REPORT,
   LOADING,
@@ -10,6 +11,7 @@ import { message, Modal } from 'antd';
 const initialState = {
   isloading: true,
   productData: {},
+  hardwareData: {},
   invoiceData: {},
   paymentHistoryData: {},
   productType:""
@@ -45,6 +47,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         paymentHistoryData: action.payload.data
+      };
+    
+    case HARDWARE_REPORT:
+      return {
+        ...state,
+        hardwareData: action.payload.data
       };
 
     default:

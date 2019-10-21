@@ -170,6 +170,50 @@ class PaymentHistory extends Component {
               </Form.Item>
 
               <Form.Item
+                label="Type"
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 14 }}
+                width='100%'
+              >
+                {this.props.form.getFieldDecorator('payment_status', {
+                  initialValue: '',
+                  rules: [
+                    {
+                      required: false
+                    },
+                  ],
+                })(
+                  <Select style={{ width: '100%' }}>
+                    <Select.Option value=''>ALL</Select.Option>
+                    <Select.Option value='PAID'>PAID</Select.Option>
+                    <Select.Option value='PGP'>UNPAID</Select.Option>
+                  </Select>
+                )}
+              </Form.Item>
+
+              <Form.Item
+                label="Transaction Type"
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 14 }}
+                width='100%'
+              >
+                {this.props.form.getFieldDecorator('payment_status', {
+                  initialValue: '',
+                  rules: [
+                    {
+                      required: false
+                    },
+                  ],
+                })(
+                  <Select style={{ width: '100%' }}>
+                    <Select.Option value=''>ALL</Select.Option>
+                    <Select.Option value='PAID'>PAID</Select.Option>
+                    <Select.Option value='PGP'>UNPAID</Select.Option>
+                  </Select>
+                )}
+              </Form.Item>
+
+              <Form.Item
                 label="FROM (DATE) "
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 14 }}
@@ -220,7 +264,7 @@ class PaymentHistory extends Component {
 
         </Col>
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
-          <Card style={{ height: '500px' }}>
+          <Card style={{ height: '500px', overflow: 'scroll'}}>
             {(this.state.reportCard) ?
             <Table
               columns={this.columns}

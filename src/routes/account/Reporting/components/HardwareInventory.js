@@ -219,26 +219,16 @@ class Inventory extends Component {
 
         </Col>
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
-          <Card bordered={false} style={{ height: '500px' }}>
-            <Tabs defaultActiveKey="1" type="card" tabPosition="left" className="m_d_table_tabs" onChange={this.handleChangeCardTabs}>
-              <TabPane tab={convertToLang(this.props.translation[TAB_CHAT_ID], "CHAT")} key="1" >
-              </TabPane>
-              <TabPane tab={convertToLang(this.props.translation[TAB_PGP_EMAIL], "PGP")} key="2" forceRender={true}>
-              </TabPane>
-              <TabPane tab={convertToLang(this.props.translation[TAB_SIM_ID], "SIM")} key="3" forceRender={true}>
-              </TabPane>
-              <TabPane tab={convertToLang(this.props.translation[TAB_VPN], "VPN")} key="4" forceRender={true}>
-              </TabPane>
-            </Tabs>
-            <Table
-              size="middle"
-              className="gx-table-responsive devices table m_d_table"
-              bordered
-              columns={this.state.columns}
-              rowKey='row_key'
-              align='center'
-              pagination={false}
-            />
+          <Card style={{ height: '500px', overflow: 'scroll' }}>
+            {(this.state.reportCard) ?
+              <Table
+                columns={this.columns}
+                dataSource={this.renderList(this.props.paymentHistoryReport)}
+                bordered
+                pagination={false}
+
+              />
+              : null}
           </Card>
         </Col>
       </Row>
