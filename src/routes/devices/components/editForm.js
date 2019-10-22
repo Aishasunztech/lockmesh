@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { Button, Form, Input, Select, InputNumber, Spin, Modal, Table } from 'antd';
+import { Button, Form, Input, Select, InputNumber, Spin, Modal, Table, Switch } from 'antd';
 import { checkValue, convertToLang } from '../../utils/commonUtils'
 
 import { getSimIDs, getChatIDs, getPGPEmails, getParentPackages, getProductPrices } from "../../../appRedux/actions/Devices";
@@ -86,7 +86,8 @@ class EditDevice extends Component {
             serviceRemainingDays: 0,
             showConfirmCredit: false,
             serviceData: {},
-            invoiceID: 'PI00001'
+            invoiceID: 'PI00001',
+            paidByUser: "PAID"
         }
     }
     handleUserChange = (e) => {
@@ -512,6 +513,7 @@ class EditDevice extends Component {
     handleOkInvoice = () => {
 
         if (this.state.total_price <= this.props.user_credit) {
+            this.state.serviceData.paid_by_user = this.state.paidByUser
             this.props.editDeviceFunc(this.state.serviceData)
             this.props.hideModal();
             this.handleReset();
@@ -531,6 +533,18 @@ class EditDevice extends Component {
         this.setState({ invoiceVisible: false })
     }
 
+    handlePaidUser = (e) => {
+        // console.log(e);
+        if (e) {
+            this.setState({
+                paidByUser: "PAID"
+            })
+        } else {
+            this.setState({
+                paidByUser: "UNPAID"
+            })
+        }
+    }
 
     render() {
         // console.log(this.props.parent_packages, this.props.product_prices)
@@ -1097,6 +1111,7 @@ class EditDevice extends Component {
                         creditsToRefund={this.state.creditsToRefund}
                         translation={this.props.translation}
                     />
+                    <div style={{ float: "right" }}><b>PAID BY USER: </b> <Switch size="small" defaultChecked onChange={this.handlePaidUser} /></div>
                 </Modal>
             </div >
 
