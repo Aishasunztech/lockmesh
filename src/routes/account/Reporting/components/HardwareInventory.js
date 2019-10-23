@@ -1,0 +1,239 @@
+import React, { Component, Fragment } from 'react'
+import { Table, Avatar, Switch, Button, Icon, Card, Modal, Tabs, Col, Input, Form, Row, DatePicker, Select } from "antd";
+import moment from 'moment';
+import {
+  DEVICE_PRE_ACTIVATION
+} from "../../../../constants/Constants";
+import styles from '../reporting.css'
+import { convertToLang, getFormattedDate } from "../../../utils/commonUtils";
+
+class PaymentHistory extends Component {
+  constructor(props) {
+    super(props);
+
+    this.columns = [
+      {
+        title: "Sr.#",
+        dataIndex: 'sr',
+        key: 'sr',
+        align: "center",
+        render: (text, record, index) => ++index,
+      },
+
+      {
+        title: convertToLang(props.translation[''], "HARDWARE"),
+        align: "center",
+        className: '',
+        dataIndex: 'hardware',
+        key: 'hardware',
+      },
+
+      {
+        title: convertToLang(props.translation[''], "DEALER ID"),
+        align: "center",
+        className: '',
+        dataIndex: 'dealer_id',
+        key: 'dealer_id',
+      },
+
+      {
+        title: convertToLang(props.translation[''], "DEVICE ID"),
+        align: "center",
+        className: '',
+        dataIndex: 'device_id',
+        key: 'device_id',
+      },
+
+      {
+        title: convertToLang(props.translation[''], "CREATED AT"),
+        align: "center",
+        className: '',
+        dataIndex: 'created_at',
+        key: 'created_at',
+      },
+    ];
+
+    this.state = {
+      reportCard: false,
+    };
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      this.props.generateHardwareReport(values)
+    });
+  };
+
+  componentDidMount() {
+
+  };
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.props.hardwareReport !== prevProps.hardwareReport) {
+      this.setState({
+        reportCard: true
+      })
+    }
+  }
+
+  handleReset = () => {
+    this.props.form.resetFields();
+  };
+
+  disabledDate = (current) => {
+    return current && current > moment().endOf('day');
+  };
+
+  renderList = (list) => {
+    if (list) {
+      let data = []
+      let counter = 1;
+      list.map((item, index) => {
+        let hardwares = JSON.parse(item.hardwares)
+        hardwares.map((hardware, i) => {
+          data.push( {
+            rowKey: counter++,
+            key: counter++,
+            sr: counter++,
+            dealer_id: item.dealer_id,
+            device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
+            hardware: hardware.hardware_name,
+            created_at: item.created_at
+          })
+        })
+      })
+      return data;
+    }
+  };
+
+
+  render() {
+    return (
+      <Row>
+        <Col xs={24} sm={24} md={9} lg={9} xl={9}>
+          <Card style={{ height: '500px', paddingTop: '50px' }}>
+            <Form onSubmit={this.handleSubmit} autoComplete="new-password">
+
+              <Form.Item
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 14 }}
+              >
+              </Form.Item>
+
+              <Form.Item
+                label="Hardware"
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 14 }}
+                width='100%'
+              >
+                {this.props.form.getFieldDecorator('hardware', {
+                  initialValue: '',
+                  rules: [
+                    {
+                      required: false
+                    },
+                  ],
+                })(
+                  <Select style={{ width: '100%' }}>
+                    <Select.Option value=''>ALL</Select.Option>
+                    <Select.Option value='CHAT'>CHAT</Select.Option>
+                    <Select.Option value='PGP'>PGP</Select.Option>
+                    <Select.Option value='SIM'>SIM</Select.Option>
+                    <Select.Option value='VPN'>VPN</Select.Option>
+                  </Select>
+                )}
+              </Form.Item>
+
+              <Form.Item
+                label="Dealer/Sdealer"
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 14 }}
+                width='100%'
+              >
+                {this.props.form.getFieldDecorator('dealer', {
+                  initialValue: '',
+                  rules: [
+                    {
+                      required: false,
+                    },
+                  ],
+                })(
+                  <Select style={{ width: '100%' }}>
+                    <Select.Option value=''>ALL</Select.Option>
+                    {this.props.dealerList.map((dealer, index) => {
+                      return (<Select.Option key={dealer.dealer_id} value={dealer.dealer_id}>{dealer.dealer_name} ({dealer.link_code})</Select.Option>)
+                    })}
+                  </Select>
+                )}
+              </Form.Item>
+
+              <Form.Item
+                label="FROM (DATE) "
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 14 }}
+              >
+                {this.props.form.getFieldDecorator('from', {
+                  rules: [
+                    {
+                      required: false
+                    }],
+                })(
+                  <DatePicker
+                    format="DD-MM-YYYY"
+                    disabledDate={this.disabledDate}
+                  />
+                )}
+              </Form.Item>
+
+              <Form.Item
+                label="TO (DATE)"
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 14 }}
+              >
+                {this.props.form.getFieldDecorator('to', {
+                  rules: [
+                    {
+                      required: false,
+                    }],
+                })(
+                  <DatePicker
+                    format="DD-MM-YYYY"
+                    onChange={this.saveExpiryDate}
+                    disabledDate={this.disabledDate}
+
+                  />
+                )}
+              </Form.Item>
+              <Form.Item className="edit_ftr_btn"
+                wrapperCol={{
+                  xs: { span: 22, offset: 0 },
+                }}
+              >
+                <Button key="back" type="button" onClick={this.handleReset}>CANCEL</Button>
+                <Button type="primary" htmlType="submit">GENERATE</Button>
+              </Form.Item>
+            </Form>
+          </Card>
+        </Col>
+
+        <Col xs={24} sm={24} md={15} lg={15} xl={15}>
+          <Card style={{ height: '500px', overflow: 'scroll' }}>
+            {(this.state.reportCard) ?
+              <Table
+                columns={this.columns}
+                dataSource={this.renderList(this.props.hardwareReport)}
+                bordered
+                pagination={false}
+
+              />
+              : null}
+          </Card>
+        </Col>
+      </Row>
+    )
+  }
+}
+
+const WrappedAddDeviceForm = Form.create()(PaymentHistory);
+export default WrappedAddDeviceForm;

@@ -210,6 +210,7 @@ class ServicesList extends Component {
                         vpn: (services.vpn) ? <span style={{ color: "#008000" }}> YES</span > : <span style={{ color: "Red" }}>NO</span >,
                         pkg_price: item.pkg_price,
                         pkg_features: services,
+                        pkg_term: item.pkg_term,
                     })
                 }
             });
@@ -249,7 +250,8 @@ class ServicesList extends Component {
                         rowKey: item.id,
                         price_for: `${price_for}`,
                         unit_price: item.unit_price,
-                        item: item.price_for
+                        item: item.price_for,
+                        price_term: item.price_term
                     })
                 }
             });
@@ -370,16 +372,16 @@ class ServicesList extends Component {
 
 
             // console.log(total_price, this.props.user_credit);
-            if (this.props.creditsToRefund) {
-                total_price -= this.props.creditsToRefund
-            }
-            if (total_price < this.props.user_credit || this.props.tabselect === '0') {
-                this.props.handleServicesSubmit(this.state.proSelectedRows, this.state.PkgSelectedRows, this.props.serviceTerm);
-                this.handleCancel()
-            }
-            else {
-                showConfirm(this);
-            }
+            // if (this.props.creditsToRefund) {
+            //     total_price -= this.props.creditsToRefund
+            // }
+            // if (total_price < this.props.user_credit || this.props.tabselect === '0') {
+            this.props.handleServicesSubmit(this.state.proSelectedRows, this.state.PkgSelectedRows, this.props.serviceTerm);
+            this.handleCancel()
+            // }
+            // else {
+            //     showConfirm(this);
+            // }
         }
     }
 

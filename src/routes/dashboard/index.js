@@ -49,12 +49,12 @@ class Dashboard extends Component {
     }
 
     transferDeviceProfile = (obj) => {
-        console.log('at req transferDeviceProfile', obj)
+        
         let _this = this;
         Modal.confirm({
             content: `Are you sure you want to Transfer, from ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
             onOk() {
-                // console.log('OK');
+                // 
                 _this.props.transferDeviceProfile(obj);
             },
             onCancel() { },
@@ -66,7 +66,7 @@ class Dashboard extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.props !== nextProps) {
-            console.log(nextProps.devices, 'next props are')
+            
         }
     }
 
@@ -82,7 +82,7 @@ class Dashboard extends Component {
     }
 
     render() {
-        console.log(this.props.devices, 'devices or new link request')
+        
         return (
             <div>
                 <AppFilter
@@ -388,7 +388,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ dashboard, auth, devices, sidebar, settings }) => {
-    console.log("dashboard::", devices.newDevices);
+    
     return {
         items: dashboard.dashboard_items,
         authUser: auth.authUser,

@@ -5,6 +5,7 @@ import { ADD_DEVICE } from '../../../constants/ActionTypes';
 import { convertToLang } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel, Button_Add_Device } from '../../../constants/ButtonConstants';
 
+
 export default class AddDevice extends Component {
 
     constructor(props) {
@@ -14,7 +15,7 @@ export default class AddDevice extends Component {
             expiry_date: 1,
             device: null,
             handleSubmit: null,
-            preActive: false
+            preActive: false,
         }
     }
 
