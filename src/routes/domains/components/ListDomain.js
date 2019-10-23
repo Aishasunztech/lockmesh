@@ -1,20 +1,18 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col } from "antd";
-import { BASE_URL } from '../../../constants/Application';
-import styles from './app.css';
-import CustomScrollbars from "../../../util/CustomScrollbars";
-import { Link } from 'react-router-dom';
+// import { BASE_URL } from '../../../constants/Application';
+// import styles from './app.css';
+// import CustomScrollbars from "../../../util/CustomScrollbars";
+// import { Link } from 'react-router-dom';
 
-import {
-    convertToLang
-} from '../../utils/commonUtils'
-import EditApk from './EditApk';
-import UpdateFeatureApk from './UpdateFeatureApk';
-import { Button_Edit, Button_Delete } from '../../../constants/ButtonConstants';
-import { ADMIN } from '../../../constants/Constants';
+// import {
+//     convertToLang
+// } from '../../utils/commonUtils'
+// import { Button_Edit, Button_Delete } from '../../../constants/ButtonConstants';
+// import { ADMIN } from '../../../constants/Constants';
 import Permissions from '../../utils/Components/Permissions';
-const TabPane = Tabs.TabPane;
-export default class ListApk extends Component {
+// const TabPane = Tabs.TabPane;
+export default class ListDomain extends Component {
     state = { visible: false }
 
     showModal = () => {
@@ -112,7 +110,7 @@ export default class ListApk extends Component {
 
     // renderList
     renderList(list) {
-        let apkList = [];
+        let domainList = [];
         let data
         list.map((app) => {
             // if (app.package_name !== 'com.armorSec.android' && app.package_name !== 'ca.unlimitedwireless.mailpgp' && app.package_name !== 'com.rim.mobilefusion.client' && app.package_name !== 'com.secure.vpn') {
@@ -120,7 +118,7 @@ export default class ListApk extends Component {
 
             data = {
                 rowKey: app.id,
-                // apk_id: app.apk_id,
+                id: app.id,
                 action: (
                     <div data-column="ACTION" style={{ display: "inline-flex" }}>
                         <Fragment>
@@ -139,17 +137,17 @@ export default class ListApk extends Component {
                         {app.permission_count}
                     </div>
                 ),
-                permissions: app.permissions,
+                permissions: [], // app.permissions,
 
                 domain_name: app.name ? app.name : 'N/A',
 
                 created_at: app.created_at,
                 updated_at: app.updated_at
             }
-            apkList.push(data)
+            domainList.push(data)
             // }
         });
-        return apkList
+        return domainList
     }
 
     onSelectChange = (selectedRowKeys) => {
@@ -194,11 +192,13 @@ export default class ListApk extends Component {
                         rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
+                            // console.log("record ", record);
                             return (
                                 <Fragment>
                                     <Permissions
                                         className="exp_row22"
                                         record={record}
+                                        permissionType="domain"
                                         savePermissionAction={this.props.savePermission}
                                         translation={this.props.translation}
                                     />
@@ -216,7 +216,7 @@ export default class ListApk extends Component {
                         pagination={false
                         }
                         scroll={{ x: true }}
-                        rowKey="apk_id"
+                        rowKey="domain_id"
                     />
                     {/* <EditApk ref='editApk' getApkList={this.props.getApkList} /> */}
                 </Card>

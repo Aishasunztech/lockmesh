@@ -309,6 +309,7 @@ export default class PolicyInfo extends Component {
                     <TabPane tab={convertToLang(this.props.translation[Tab_POLICY_Dealer_PERMISSIONS], "Dealer PERMISSIONS")} key="6">
                         <Permissions
                             record={this.props.policy}
+                            permissionType="policy"
                             savePermissionAction={this.props.savePermission}
                             translation={this.props.translation}
                         />

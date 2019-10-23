@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import styles from './app.css'
 import { connect } from "react-redux";
-import ConfirmAutoUpdate from './ConfirmAutoUpdate'
 import { authenticateUpdateUser, resetAuthUpdate, resetBulkFlag } from "../../../appRedux/actions/Apk";
 import { Markup } from 'interweave';
 import { Redirect } from 'react-router-dom';

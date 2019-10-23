@@ -120,7 +120,7 @@ export default class ListApk extends Component {
                 if (app.deleteable) {
                     data = {
                         rowKey: app.apk_id,
-                        apk_id: app.apk_id,
+                        id: app.apk_id,
                         action: (
                             <div data-column="ACTION" style={{ display: "inline-flex" }}>
                                 <Fragment>
@@ -173,7 +173,7 @@ export default class ListApk extends Component {
                 } else {
                     data = {
                         rowKey: app.apk_id,
-                        apk_id: app.apk_id,
+                        id: app.apk_id,
                         action: (
                             <Fragment>
                                 <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px", textTransform: "uppercase" }}
@@ -213,7 +213,7 @@ export default class ListApk extends Component {
             if (app.package_name === 'com.armorSec.android' || app.package_name === 'ca.unlimitedwireless.mailpgp' || app.package_name === 'com.rim.mobilefusion.client' || app.package_name === 'com.secure.vpn') {
                 let data = {
                     'rowKey': app.apk_id,
-                    'apk_id': app.apk_id,
+                    'id': app.apk_id,
                     'permission': <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>{app.permission_count}</span>,
                     "permissions": app.permissions,
                     'apk_name': app.apk_name,
@@ -380,6 +380,7 @@ export default class ListApk extends Component {
                                 rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
                                 expandIcon={(props) => this.customExpandIcon(props)}
                                 expandedRowRender={(record) => {
+                                    console.log('record is: ', record);
                                     return (
                                         // <Permissions className="exp_row22" record={record} translation={this.props.translation} />
                                         <Fragment>
@@ -391,6 +392,7 @@ export default class ListApk extends Component {
                                                     <Permissions
                                                         className="exp_row22"
                                                         record={record}
+                                                        permissionType="apk"
                                                         savePermissionAction={this.props.savePermission}
                                                         translation={this.props.translation}
                                                     />
@@ -482,6 +484,7 @@ export default class ListApk extends Component {
                                                     <Permissions
                                                         className="exp_row22"
                                                         record={record}
+                                                        permissionType="apk"
                                                         savePermissionAction={this.props.savePermission}
                                                         translation={this.props.translation}
                                                     />

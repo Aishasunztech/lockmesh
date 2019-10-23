@@ -96,6 +96,7 @@ export default class PackagesInfo extends Component {
                     <TabPane tab={convertToLang(this.props.translation[Tab_POLICY_Dealer_PERMISSIONS], "Dealer PERMISSIONS")} key="2">
                         <Permissions
                             record={this.props.package}
+                            permissionType="package"
                             savePermissionAction={this.props.savePermission}
                             translation={this.props.translation}
                         />

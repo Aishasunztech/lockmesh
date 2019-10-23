@@ -115,7 +115,7 @@ class PolicyList extends Component {
                 key: policy.id,
                 rowKey: policy.id,
                 isChangedPolicy: policy.isChangedPolicy ? policy.isChangedPolicy : false,
-                policy_id: policy.id,
+                id: policy.id,
                 action:
                     (policy.dealer_id === this.props.user.id || this.props.user.type === ADMIN) ?
                         (

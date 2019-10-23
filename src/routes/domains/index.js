@@ -4,13 +4,13 @@ import { bindActionCreators } from "redux";
 import { Input, Icon, Modal, Select, Button, Tooltip, Popover, Avatar, Row, Col } from "antd";
 import { Link } from 'react-router-dom';
 import Highlighter from 'react-highlight-words';
-import { savePermission } from "../../appRedux/actions/Apk";
+// import { savePermission } from "../../appRedux/actions/Apk";
 // import {Route, Switch} from "react-router-dom";
 // import Apk from "../../containers/ApkList"
 import CircularProgress from "components/CircularProgress";
 //import {getDevicesList} from '../../appRedux/actions/Devices';
 
-import { getDomains } from "../../appRedux/actions/Account";
+import { getDomains, saveDomainPermission } from "../../appRedux/actions/Account";
 
 import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
 import { getPolicies } from "../../appRedux/actions/Policy";
@@ -24,7 +24,7 @@ import {
 } from '../utils/commonUtils'
 
 import { BASE_URL } from '../../constants/Application';
-import ListApk from './components/ListApk';
+import ListDomain from './components/ListDomain';
 
 import {
     APK_SHOW_ON_DEVICE,
@@ -200,7 +200,7 @@ class Domains extends Component {
 
 
     handlePagination = (value) => {
-        this.refs.listApk.handlePagination(value);
+        this.refs.list_domain.handlePagination(value);
         // this.props.postPagination(value, 'apk');
     }
 
@@ -372,8 +372,8 @@ class Domains extends Component {
                                 pageHeading={convertToLang(this.props.translation[""], "Manage Domains")}
                             />
 
-                            <ListApk
-                                savePermission={this.props.savePermission}
+                            <ListDomain
+                                savePermission={this.props.saveDomainPermission}
                                 onChangeTableSorting={this.handleTableChange}
                                 handleStatusChange={this.handleStatusChange}
                                 domainList={this.state.domainList}
@@ -385,7 +385,7 @@ class Domains extends Component {
                                 getApkList={this.props.getApkList}
                                 pagination={this.props.DisplayPages}
                                 user={this.props.user}
-                                ref="listApk"
+                                ref="list_domain"
                                 translation={this.props.translation}
                             />
 
@@ -485,7 +485,7 @@ class Domains extends Component {
 
 // export default Apk;
 const mapStateToProps = ({ account, auth, settings }) => {
-    console.log("account.domainList ", account.domainList)
+    // console.log("account.domainList ", account.domainList)
     return {
         domainList: account.domainList,
         isloading: account.isloading,
@@ -513,7 +513,7 @@ function mapDispatchToProps(dispatch) {
         // addApk: addApk,
         // resetUploadForm: resetUploadForm,
         // getPolicies: getPolicies,
-        // savePermission: savePermission
+        saveDomainPermission: saveDomainPermission
         //  getDevicesList: getDevicesList
     }, dispatch);
 }

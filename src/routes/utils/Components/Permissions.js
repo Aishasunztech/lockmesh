@@ -89,20 +89,20 @@ class Permissions extends Component {
 
     columns.forEach(column => {
       // if (column.children) {
-        if (Object.keys(sorter).length > 0) {
-          if (column.dataIndex == sorter.field) {
-            if (this.state.sorterKey == sorter.field) {
-              column['sortOrder'] = sorter.order;
-            } else {
-              column['sortOrder'] = "ascend";
-            }
+      if (Object.keys(sorter).length > 0) {
+        if (column.dataIndex == sorter.field) {
+          if (this.state.sorterKey == sorter.field) {
+            column['sortOrder'] = sorter.order;
           } else {
-            column['sortOrder'] = "";
+            column['sortOrder'] = "ascend";
           }
-          this.setState({ sorterKey: sorter.field });
         } else {
-          if (this.state.sorterKey == column.dataIndex) column['sortOrder'] = "ascend";
+          column['sortOrder'] = "";
         }
+        this.setState({ sorterKey: sorter.field });
+      } else {
+        if (this.state.sorterKey == column.dataIndex) column['sortOrder'] = "ascend";
+      }
       // }
     })
     this.setState({
@@ -131,7 +131,7 @@ class Permissions extends Component {
       })
     }
 
-    if (this.props.record.apk_id !== nextProps.record.apk_id) {
+    if (this.props.record.id !== nextProps.record.id) {
       this.props.getAllDealers();
       this.setState({
         dealerListForModal: this.props.dealerList,
@@ -188,7 +188,7 @@ class Permissions extends Component {
       permissions,
       addSelectedDealersModal: false
     })
-    this.props.savePermissionAction(this.props.record.apk_id, JSON.stringify(addUnSelected_IDs), 'save');
+    this.props.savePermissionAction(this.props.record.id, JSON.stringify(addUnSelected_IDs), 'save');
   }
 
   saveAllDealersConfirm = () => {
@@ -213,11 +213,8 @@ class Permissions extends Component {
     });
     this.setState({ permissions: dealer_ids })
 
-    this.props.savePermissionAction(this.props.record.apk_id, JSON.stringify(dealer_ids), 'save');
-
-    // this.setState({
-    //   dealer_ids: dealer_ids
-    // });
+    // this.props.savePermissionAction(this.props.record.id, JSON.stringify(dealer_ids), 'save');
+    this.props.savePermissionAction(this.props.record.id, 'all', 'save');
   }
   savePermission = () => {
     // console.log(this.props.dealerList, "dealer ids", this.state.dealer_ids);
@@ -240,7 +237,7 @@ class Permissions extends Component {
       })
 
       // console.log(this.state.selectedRowKeys);
-      this.props.savePermissionAction(this.props.record.apk_id, JSON.stringify(this.state.selectedRowKeys), 'save');
+      this.props.savePermissionAction(this.props.record.id, JSON.stringify(this.state.selectedRowKeys), 'save');
 
       this.showDealersModal(false);
 
@@ -380,7 +377,7 @@ class Permissions extends Component {
       dealers.splice(index, 1);
     }
     // console.log("permissions",dealers);
-    this.props.savePermissionAction(this.props.record.apk_id, JSON.stringify([dealer_id]), 'delete');
+    this.props.savePermissionAction(this.props.record.id, JSON.stringify([dealer_id]), 'delete');
     this.setState({
       dealerList: this.props.dealerList,
       dealerListForModal: this.props.dealerList
@@ -410,7 +407,7 @@ class Permissions extends Component {
     this.setState({
       permissions: []
     })
-    this.props.savePermissionAction(this.props.record.apk_id, JSON.stringify(permittedDealers), 'delete');
+    this.props.savePermissionAction(this.props.record.id, JSON.stringify(permittedDealers), 'delete');
     // this.state.dealerList.map((dealer)=>{
     //   console.log(dealer);
     // })
@@ -433,7 +430,7 @@ class Permissions extends Component {
       permissions: selectedRows
     })
 
-    this.props.savePermissionAction(this.props.record.apk_id, JSON.stringify(remove_ids), 'delete');
+    this.props.savePermissionAction(this.props.record.id, JSON.stringify(remove_ids), 'delete');
   }
 
   goToDealer = (dealer) => {
@@ -593,7 +590,7 @@ class Permissions extends Component {
           maskClosable={false}
           width='665px'
           className="permiss_tabl"
-          title={convertToLang(this.props.translation[PERMISSION_Add_Modal_Title], "Add Dealer to permissions list for this App")}
+          title={convertToLang(this.props.translation["PERMISSION_Add_Modal_Title"], `Add Dealer to permissions list for this ${this.props.permissionType}`)}
           visible={this.state.showDealersModal}
           onOk={() => {
             this.savePermission()
@@ -622,7 +619,7 @@ class Permissions extends Component {
           maskClosable={false}
           width='665px'
           className="permiss_tabl"
-          title={convertToLang(this.props.translation[PERMISSION_Remove_Modal_Title], "Remove Dealers from permissions list for this App")}
+          title={convertToLang(this.props.translation["PERMISSION_Remove_Modal_Title"], `Remove Dealers from permissions list for this ${this.props.permissionType}`)}
           visible={this.state.removeSelectedDealersModal}
           okText={convertToLang(this.props.translation[Button_DeleteExceptSelected], "Delete Except Selected")}
           cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
@@ -650,7 +647,7 @@ class Permissions extends Component {
           maskClosable={false}
           width='665px'
           className="permiss_tabl"
-          title={convertToLang(this.props.translation[PERMISSION_Add_Except_Selected_Modal_Title], "Add Except Dealers from permissions list for this App")}
+          title={convertToLang(this.props.translation["PERMISSION_Add_Except_Selected_Modal_Title"], `Add Except Dealers from permissions list for this ${this.props.permissionType}`)}
           visible={this.state.addSelectedDealersModal}
           okText={convertToLang(this.props.translation[Button_AddExceptSelected], "Add Except Selected")}
           cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}

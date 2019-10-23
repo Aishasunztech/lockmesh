@@ -28,7 +28,8 @@ import {
     EDIT_PACKAGE,
     RESYNC_IDS,
     USER_CREDITS,
-    GET_DOMAINS
+    GET_DOMAINS,
+    PERMISSION_SAVED
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -515,4 +516,27 @@ export function getDomains() {
         });
 
     };
+}
+
+export function saveDomainPermission(apk_id, dealers, action) {
+    return (dispatch) => {
+        RestService.saveAPKPermissions(apk_id, dealers, action).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+
+                dispatch({
+                    type: PERMISSION_SAVED,
+                    payload: response.data.msg,
+                    permission_count: response.data.permission_count,
+                    apk_id: apk_id,
+                    dealers: dealers
+                })
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+    }
+
 }
