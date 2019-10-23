@@ -7,7 +7,7 @@ import ProductInventory  from './components/ProductInventory';
 import HardwareInventory  from './components/HardwareInventory';
 import PaymentHistory from './components/PaymentHistory';
 import AppFilter from '../../../components/AppFilter';
-import { convertToLang, getFormattedDate } from "../../utils/commonUtils";
+import { convertToLang } from "../../utils/commonUtils";
 import { getAllDealers, generateProductReport, generateInvoiceReport, generatePaymentHistoryReport, generateHardwareReport } from '../../../appRedux/actions/';
 import styles from './reporting.css'
 
@@ -66,7 +66,7 @@ class Reporting extends Component {
                       productReport={this.props.productReport}
                       productType={this.props.productType}
                       generateProductReport={this.props.generateProductReport}
-
+                      user={this.props.user}
                     />
                   </TabPane>
 
@@ -76,6 +76,7 @@ class Reporting extends Component {
                       translation={this.props.translation}
                       generateHardwareReport={this.props.generateHardwareReport}
                       hardwareReport={this.props.hardwareReport}
+                      user={this.props.user}
                     />
                   </TabPane>
 
@@ -85,6 +86,7 @@ class Reporting extends Component {
                       translation={this.props.translation}
                       generatePaymentHistoryReport={this.props.generatePaymentHistoryReport}
                       paymentHistoryReport={this.props.paymentHistoryReport}
+                      user={this.props.user}
                     />
                   </TabPane>
 
@@ -94,6 +96,7 @@ class Reporting extends Component {
                       translation={this.props.translation}
                       generateInvoiceReport={this.props.generateInvoiceReport}
                       invoiceReport={this.props.invoiceReport}
+                      user={this.props.user}
                     />
                   </TabPane>
                 </Tabs>
@@ -115,10 +118,11 @@ class Reporting extends Component {
 
 
 
-var mapStateToProps = ({ dealers, settings, reporting  }) => {
+var mapStateToProps = ({ dealers, settings, reporting  , auth}) => {
 
   console.log(reporting)
   return {
+    user: auth.authUser,
     dealerList: dealers.dealers,
     productReport: reporting.productData,
     hardwareReport: reporting.hardwareData,

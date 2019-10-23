@@ -470,6 +470,7 @@ class ProductInventory extends Component {
                 })(
                   <Select style={{ width: '100%' }}>
                     <Select.Option value=''>ALL</Select.Option>
+                    <Select.Option value={this.props.user.dealerId}>My Report</Select.Option>
                     {this.props.dealerList.map((dealer, index) => {
                       return (<Select.Option key={dealer.dealer_id} value={dealer.dealer_id}>{dealer.dealer_name} ({dealer.link_code})</Select.Option>)
                     })}
