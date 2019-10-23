@@ -1,9 +1,8 @@
 import React, { Component, Fragment } from 'react'
 import { Button, Card, Col, DatePicker, Form, Input, Row, Select, Table, Tabs } from "antd";
 import moment from 'moment';
-import { convertToLang } from "../../../utils/commonUtils";
+import { convertToLang, generatePDF, generateExcel } from "../../../utils/commonUtils";
 import { TAB_CHAT_ID, TAB_PGP_EMAIL, TAB_SIM_ID, TAB_VPN } from "../../../../constants/TabConstants";
-import { generateProductReport } from "../../../../appRedux/actions";
 import {
   LABEL_DATA_CHAT_ID,
   LABEL_DATA_CREATED_AT, LABEL_DATA_PGP_EMAIL,
@@ -11,6 +10,10 @@ import {
   LABEL_DATA_VPN
 } from "../../../../constants/LabelConstants";
 const TabPane = Tabs.TabPane;
+var columns = [];
+var rows = [];
+var fileName = '';
+var title = '';
 
 class ProductInventory extends Component {
   constructor(props) {
@@ -194,6 +197,92 @@ class ProductInventory extends Component {
         reportCard: true,
         productType: this.props.productType
       })
+
+      if (this.props.productReport.CHAT && this.state.innerTabSelect === '1') {
+        this.props.productReport.CHAT.map((item, index) => {
+          rows.push({
+            'count': ++index,
+            'chat_id': item.chat_id ? item.chat_id : 'N/A',
+            'used': item.used == 1 ? 'USED' : 'UNUSED',
+            'created_at': item.created_at ? item.created_at : 'N/A',
+          })
+        });
+        columns.push(
+          { title: '#', dataKey: "count" },
+          { title: convertToLang(this.props.translation[''], "CHAT ID"), dataKey: "chat_id" },
+          { title: convertToLang(this.props.translation[''], "USED"), dataKey: "used" },
+          { title: convertToLang(this.props.translation[''], "CREATED AT"), dataKey: "created_at" },
+        )
+        fileName  = 'product_inventory_CHAT_' + new Date().getTime()
+        title     = 'Product Inventory Report - CHAT'
+
+      } else if (this.props.productReport.PGP && this.state.innerTabSelect === '2') {
+        this.props.productReport.PGP.map((item, index) => {
+          rows.push({
+            'count': ++index,
+            'used': item.used == 1 ? 'USED' : 'UNUSED',
+            'pgp_email': item.pgp_email ? item.pgp_email : 'N/A',
+            'created_at': item.created_at ? item.created_at : 'N/A',
+          })
+        });
+        columns.push(
+          { title: '#', dataKey: "count" },
+          { title: convertToLang(this.props.translation[''], "PGP EMAIL"), dataKey: "pgp_email" },
+          { title: convertToLang(this.props.translation[''], "USED"), dataKey: "used" },
+          { title: convertToLang(this.props.translation[''], "CREATED AT"), dataKey: "created_at" },
+        )
+        fileName  = 'product_inventory_PGP_' + new Date().getTime()
+        title     = 'Product Inventory Report - PGP';
+
+
+      } else if (this.props.productReport.SIM && this.state.innerTabSelect === '3') {
+        this.props.productReport.SIM.map((item, index) => {
+          rows.push({
+            'count': ++index,
+            'used': item.used ? item.used : 'N/A',
+            'used': item.used == 1 ? 'USED' : 'UNUSED',
+            'pgp_email': item.pgp_email ? item.pgp_email : 'N/A',
+            'start_date': item.start_date ? item.start_date : 'N/A',
+            'expiry_date': item.expiry_date ? item.expiry_date : 'N/A',
+            'created_at': item.created_at ? item.created_at : 'N/A',
+          })
+        });
+        columns.push(
+          { title: '#', dataKey: "count" },
+          { title: convertToLang(this.props.translation[''], "SIM"), dataKey: "sim_id" },
+          { title: convertToLang(this.props.translation[''], "USED"), dataKey: "used" },
+          { title: convertToLang(this.props.translation[''], "START DATE"), dataKey: "start_date" },
+          { title: convertToLang(this.props.translation[''], "EXPIRY DATE"), dataKey: "expiry_date" },
+          { title: convertToLang(this.props.translation[''], "CREATED AT"), dataKey: "created_at" },
+        )
+
+        fileName  = 'product_inventory_SIM_' + new Date().getTime()
+        title     = 'Product Inventory Report - SIM';
+
+
+      } else if (this.props.productReport.VPN && this.state.innerTabSelect === '4') {
+        this.props.productReport.VPN.map((item, index) => {
+          rows.push({
+            'count': ++index,
+            'vpn_id': item.vpn_id ? item.vpn_id : 'N/A',
+            'dealer_id': item.dealer_id ? item.dealer_id : 'N/A',
+            'start_date': item.start_date ? item.start_date : 'N/A',
+            'end_date': item.end_date ? item.end_date : 'N/A',
+            'created_at': item.created_at ? item.created_at : 'N/A',
+          })
+        });
+        columns.push(
+          { title: '#', dataKey: "count" },
+          { title: convertToLang(this.props.translation[''], "CHAT ID"), dataKey: "vpn_id" },
+          { title: convertToLang(this.props.translation[''], "DEALER ID"), dataKey: "dealer_id" },
+          { title: convertToLang(this.props.translation[''], "START DATE"), dataKey: "start_date" },
+          { title: convertToLang(this.props.translation[''], "END DATE"), dataKey: "end_date" },
+          { title: convertToLang(this.props.translation[''], "CREATED AT"), dataKey: "created_at" },
+        )
+        fileName  = 'product_inventory_VPN_' + new Date().getTime()
+        title     = 'Product Inventory Report - VPN';
+
+      }
     }
   }
 
@@ -297,6 +386,15 @@ class ProductInventory extends Component {
     return (data);
   }
 
+
+  createPDFReport = () => {
+    generatePDF(columns, rows, title, fileName);
+  }
+
+  createExcelReport = () => {
+    generateExcel(rows, fileName);
+  }
+
   render() {
     return (
       <Row>
@@ -372,6 +470,7 @@ class ProductInventory extends Component {
                 })(
                   <Select style={{ width: '100%' }}>
                     <Select.Option value=''>ALL</Select.Option>
+                    <Select.Option value={this.props.user.dealerId}>My Report</Select.Option>
                     {this.props.dealerList.map((dealer, index) => {
                       return (<Select.Option key={dealer.dealer_id} value={dealer.dealer_id}>{dealer.dealer_name} ({dealer.link_code})</Select.Option>)
                     })}
@@ -433,6 +532,17 @@ class ProductInventory extends Component {
           <Card bordered={false} style={{ height: '500px', overflow: 'scroll' }} >
             {(this.state.reportCard) ?
               <Fragment>
+                  <Row>
+                    <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                      <h3>Hardware Invenotory Report</h3>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                      <div className="pull-right">
+                        <Button type="dotted" icon="download" size="small" onClick={this.createPDFReport}>Download PDF</Button>
+                        <Button type="primary" icon="download" size="small" onClick={this.createExcelReport}>Download Excel</Button>
+                      </div>
+                    </Col>
+                  </Row>
                 <Tabs defaultActiveKey="1" activeKey={this.state.innerTabSelect} type="card" tabPosition="left" className="" onChange={this.handleChangeCardTabs}>
 
                   {(this.state.productType === 'ALL' || this.state.productType === 'CHAT') ?
