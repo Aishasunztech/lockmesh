@@ -20,7 +20,9 @@ import {
     PACKAGE_PERMSSION_SAVED,
     DELETE_PACKAGE,
     EDIT_PACKAGE,
-    RESYNC_IDS
+    RESYNC_IDS,
+    GET_HARDWARE,
+    MODIFY_ITEM_PRICE
 } from "../../constants/ActionTypes";
 import { message, Modal } from "antd";
 
@@ -52,7 +54,8 @@ const initialState = {
         vpn: {}
     },
     packages: [],
-    packagesCopy: []
+    packagesCopy: [],
+    hardwares: []
 };
 
 export default (state = initialState, action) => {
@@ -76,13 +79,13 @@ export default (state = initialState, action) => {
             }
         }
         case SAVE_PACKAGE: {
-           let dump = [];
+            let dump = [];
             if (action.response.status) {
                 success({
                     title: action.response.msg
                 })
                 if (action.response.data.length) {
-                     dump = JSON.parse(JSON.stringify(state.packages));
+                    dump = JSON.parse(JSON.stringify(state.packages));
                     dump.push(action.response.data[0])
                 }
             } else {
@@ -93,7 +96,7 @@ export default (state = initialState, action) => {
             // console.log(state.packages, 'test deff',action.response, 'response form save id prices')
             return {
                 ...state,
-                packages: dump 
+                packages: dump
             }
         }
 
@@ -115,6 +118,16 @@ export default (state = initialState, action) => {
                 ...state,
                 packages: action.response.data,
                 packagesCopy: JSON.parse(JSON.stringify(action.response.data))
+
+            }
+        }
+
+        case GET_HARDWARE: {
+            // console.log(action.response, 'response of get prices')
+
+            return {
+                ...state,
+                hardwares: action.response.data,
 
             }
         }
@@ -336,25 +349,48 @@ export default (state = initialState, action) => {
                 packages: [...packages]
             }
         }
-        case EDIT_PACKAGE: {
-            let packages = state.packages
-            if (action.payload.status) {
-                success({
-                    title: action.payload.msg
-                });
-                let objIndex = packages.findIndex((obj => obj.id === action.package_id));
-                if (objIndex > -1) {
-                    state.packages[objIndex].pkg_price = action.price;
+        case MODIFY_ITEM_PRICE: {
+            // console.log(action.item_type);
+            if (action.item_type === 'package') {
+                let packages = state.packages
+                if (action.payload.status) {
+                    success({
+                        title: action.payload.msg
+                    });
+                    let objIndex = packages.findIndex((obj => obj.id === action.package_id));
+                    if (objIndex > -1) {
+                        state.packages[objIndex].pkg_price = action.price;
+                    }
+                } else {
+                    error({
+                        title: action.payload.msg
+                    });
                 }
-            } else {
-                error({
-                    title: action.payload.msg
-                });
-            }
 
-            return {
-                ...state,
-                packages: [...state.packages]
+                return {
+                    ...state,
+                    packages: [...state.packages]
+                }
+            } else if (action.item_type === "hardware") {
+                let hardwares = state.hardwares
+                if (action.payload.status) {
+                    success({
+                        title: action.payload.msg
+                    });
+                    let objIndex = hardwares.findIndex((obj => obj.id === action.item_id));
+                    if (objIndex > -1) {
+                        state.hardwares[objIndex].hardware_price = action.price;
+                    }
+                } else {
+                    error({
+                        title: action.payload.msg
+                    });
+                }
+
+                return {
+                    ...state,
+                    hardwares: [...state.hardwares]
+                }
             }
         }
 

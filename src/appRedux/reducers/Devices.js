@@ -27,6 +27,7 @@ import {
     BULK_DEVICES_LIST,
     TRANSFER_DEVICE,
     FLAG_DEVICE,
+    GET_PARENT_HARDWARES,
     ACCEPT_REQUEST
 } from "../../constants/ActionTypes";
 
@@ -89,6 +90,7 @@ const initialState = {
     pgp_emails: [],
 
     parent_packages: [],
+    parent_hardwares: [],
     // options: [
     //     { "key": DEVICE_ID, "value": convertToLang(translation[DEVICE_ID], DEVICE_ID) },
     //     { "key": USER_ID, "value": convertToLang(translation[USER_ID], USER_ID) },
@@ -412,8 +414,8 @@ export default (state = initialState, action) => {
                 // console.log(state.devices, 'add device reducer', action.response)
                 let index = state.devices.findIndex(dev => dev.device_id == device_id)
                 // console.log(index, 'index is the');
-              
-                if(index > -1){
+
+                if (index > -1) {
                     devicess[index] = action.response.data[0]
                 }
                 var alldevices = state.newDevices;
@@ -568,6 +570,14 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 parent_packages: action.response.data,
+            }
+
+        case GET_PARENT_HARDWARES:
+
+
+            return {
+                ...state,
+                parent_hardwares: action.response.data,
             }
         case GET_PRODUCT_PRICES:
             // 

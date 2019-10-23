@@ -12,7 +12,8 @@ const error = Modal.error
 const initialSidebar = {
     whiteLabels: [],
     newRequests: [],
-    user_credit: 0
+    user_credit: 0,
+    due_credit: 0
 };
 
 export default (state = initialSidebar, action) => {
@@ -79,6 +80,7 @@ export default (state = initialSidebar, action) => {
             return {
                 ...state,
                 user_credit: action.response.credits,
+                due_credit: action.response.due_credits
             }
         }
 

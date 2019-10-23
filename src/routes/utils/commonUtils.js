@@ -1,5 +1,8 @@
 import moment_timezone from "moment-timezone";
 import moment from 'moment';
+import jsPDF from 'jspdf';
+import XLSX from 'xlsx';
+import jsPDFautotable from 'jspdf-autotable';
 
 import {
   DEVICE_ACTIVATED,
@@ -70,7 +73,6 @@ export function getColor(status) {
 }
 
 export function getDateTimeOfClientTimeZone (dateTime){
-  console.log("timeZone: ", Intl.DateTimeFormat().resolvedOptions());
   if(Intl.DateTimeFormat().resolvedOptions().timeZone){
     return moment_timezone(dateTime).tz(Intl.DateTimeFormat().resolvedOptions().timeZone).format('YYYY/MM/DD H:m:s')
   } else {
@@ -348,4 +350,35 @@ export function filterData_RelatedToMultipleSearch(devices, SearchValues) {
   } else {
     return devices;
   }
+}
+
+export function generatePDF(columns, rows, title, fileName) {
+
+  var doc = new jsPDF('p', 'pt');
+  doc.setFontSize(20);
+  doc.setTextColor(40);
+  doc.setFontStyle('normal');
+  doc.text(title, 10, 20);
+
+  doc.autoTable(columns, rows, {
+    startY: doc.autoTableEndPosY() + 40,
+    margin: { horizontal: 10 },
+    styles: { overflow: 'linebreak' },
+    bodyStyles: { valign: 'top' },
+    columnStyles: { email: { columnWidth: 'wrap' } },
+    theme: "striped"
+  });
+
+  doc.save(fileName+'.pdf');
+}
+
+export function generateExcel(rows, fileName) {
+  var wb          = XLSX.utils.book_new();
+  let ws          = XLSX.utils.json_to_sheet(rows);
+  let fileNameCSV = fileName + ".xlsx";
+  
+  XLSX.utils.book_append_sheet(wb, ws, 'Devices');
+  console.log(wb);
+  XLSX.writeFile(wb, fileNameCSV)
+  
 }

@@ -488,10 +488,8 @@ class ManageData extends Component {
                 status = true;
                 break;
         }
+    };
 
-        // this.handleCheckChange(this.props.selectedOptions)
-
-    }
     resyncIds = () => {
         this.props.getAllSimIDs();
         this.props.getAllPGPEmails();
