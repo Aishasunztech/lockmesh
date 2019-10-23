@@ -5,7 +5,9 @@ import { Card, Button, Row, Col, Select, Input, Checkbox, Icon, Tabs, Table, Inp
 import Invoice from "./components/Invoice";
 import ProductInventory  from './components/ProductInventory';
 import HardwareInventory  from './components/HardwareInventory';
-import PaymentHistory  from './components/PaymentHistory';
+import PaymentHistory from './components/PaymentHistory';
+import AppFilter from '../../../components/AppFilter';
+import { convertToLang } from "../../utils/commonUtils";
 import { getAllDealers, generateProductReport, generateInvoiceReport, generatePaymentHistoryReport, generateHardwareReport } from '../../../appRedux/actions/';
 import styles from './reporting.css'
 
@@ -50,8 +52,12 @@ class Reporting extends Component {
       return (
 
         <div>
+          <AppFilter
+            pageHeading={convertToLang(this.props.translation[''], "REPORTS")}
+          />
           {
-              <div style={{ marginTop: 50 }}>
+          
+              <div>
                 <Tabs defaultActiveKey="1" type='card' className="dev_tabs" activeKey={this.state.tabselect} onChange={this.handleChangeTab}>
                   <TabPane tab="PRODUCT INVENTORY" key="1">
                     <ProductInventory
@@ -60,7 +66,7 @@ class Reporting extends Component {
                       productReport={this.props.productReport}
                       productType={this.props.productType}
                       generateProductReport={this.props.generateProductReport}
-
+                      user={this.props.user}
                     />
                   </TabPane>
 
@@ -70,6 +76,7 @@ class Reporting extends Component {
                       translation={this.props.translation}
                       generateHardwareReport={this.props.generateHardwareReport}
                       hardwareReport={this.props.hardwareReport}
+                      user={this.props.user}
                     />
                   </TabPane>
 
@@ -79,6 +86,7 @@ class Reporting extends Component {
                       translation={this.props.translation}
                       generatePaymentHistoryReport={this.props.generatePaymentHistoryReport}
                       paymentHistoryReport={this.props.paymentHistoryReport}
+                      user={this.props.user}
                     />
                   </TabPane>
 
@@ -88,6 +96,7 @@ class Reporting extends Component {
                       translation={this.props.translation}
                       generateInvoiceReport={this.props.generateInvoiceReport}
                       invoiceReport={this.props.invoiceReport}
+                      user={this.props.user}
                     />
                   </TabPane>
                 </Tabs>
@@ -109,10 +118,11 @@ class Reporting extends Component {
 
 
 
-var mapStateToProps = ({ dealers, settings, reporting  }) => {
+var mapStateToProps = ({ dealers, settings, reporting  , auth}) => {
 
   console.log(reporting)
   return {
+    user: auth.authUser,
     dealerList: dealers.dealers,
     productReport: reporting.productData,
     hardwareReport: reporting.hardwareData,

@@ -2,14 +2,16 @@ import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal, Tabs, Col, Input, Form, Row, DatePicker, Select } from "antd";
 import moment from 'moment';
 import styles from '../reporting.css'
-import {convertToLang} from "../../../utils/commonUtils";
+import { convertToLang, generatePDF, generateExcel} from "../../../utils/commonUtils";
 import {
   DEVICE_PRE_ACTIVATION, sim
 } from "../../../../constants/Constants";
 
 import { BASE_URL
 } from "../../../../constants/Application";
-
+var columns;
+var rows;
+var fileName = 'invoice_' + new Date().getTime()
 class Invoice extends Component {
   constructor(props) {
     super(props);
@@ -47,6 +49,14 @@ class Invoice extends Component {
       },
 
       {
+        title: convertToLang(props.translation[''], "USER PAYMENT STATUS"),
+        align: "center",
+        className: '',
+        dataIndex: 'end_user_payment_status',
+        key: 'end_user_payment_status',
+      },
+
+      {
         title: convertToLang(props.translation[''], "GENERATED AT"),
         align: "center",
         className: '',
@@ -76,7 +86,7 @@ class Invoice extends Component {
   };
 
   componentDidMount() {
-
+    
   };
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -85,6 +95,25 @@ class Invoice extends Component {
         reportCard:  true,
         productType: this.props.productType
       })
+
+      rows = this.props.invoiceReport.map((item, index) => {
+        return {
+          count: ++index,
+          invoice_id: item.inv_no ? item.inv_no : 'N/A',
+          device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
+          dealer_id: item.dealer_id ? item.dealer_id : 'N/A',
+          created_at: item.created_at ? item.created_at : 'N/A',
+          end_user_payment_status: item.end_user_payment_status ? item.end_user_payment_status : 'N/A',
+        }
+      }); 
+
+      columns = [
+        { title: '#', dataKey: "count" },
+        { title: convertToLang(this.props.translation[''], "INVOICE ID"), dataKey: "invoice_id" },
+        { title: convertToLang(this.props.translation[''], "DEVICE ID"), dataKey: "device_id" },
+        { title: convertToLang(this.props.translation[''], "USER PAYMENT STATUS"), dataKey: "end_user_payment_status" },
+        { title: convertToLang(this.props.translation[''], "GENERATED AT"), dataKey: "created_at" },
+      ];
     }
   }
 
@@ -102,18 +131,42 @@ class Invoice extends Component {
     if (list) {
       list.map((item, index) => {
         data.push({
-          'row_key': `${index}Key`,
           'count': ++index,
           'invoice_id': item.inv_no ? item.inv_no : 'N/A',
           'device_id': item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
           'dealer_id': item.dealer_id ? item.dealer_id : 'N/A',
           'created_at': item.created_at ? item.created_at : 'N/A',
+          'end_user_payment_status': item.end_user_payment_status ? item.end_user_payment_status : 'N/A',
           'file_name': <a href={BASE_URL+'users/getFile/'+item.file_name} target="_blank" download><Button type="primary" size="small">Download</Button></a>,
         })
       });
     }
     return data;
   };
+  
+  createPDF = () => {
+    var columns = [
+      { title: '#', dataKey: "count" },
+      { title: convertToLang(this.props.translation[''], "INVOICE ID"), dataKey: "invoice_id" },
+      { title: convertToLang(this.props.translation[''], "DEVICE ID"), dataKey: "device_id" },
+      { title: convertToLang(this.props.translation[''], "USER PAYMENT STATUS"), dataKey: "end_user_payment_status" },
+      { title: convertToLang(this.props.translation[''], "GENERATED AT"), dataKey: "created_at" },
+    ];
+
+    var rows = this.props.invoiceReport.map((item, index) => {
+      return {
+        count: ++index,
+        invoice_id: item.inv_no ? item.inv_no : 'N/A',
+        device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
+        dealer_id: item.dealer_id ? item.dealer_id : 'N/A',
+        created_at: item.created_at ? item.created_at : 'N/A',
+        end_user_payment_status: item.end_user_payment_status ? item.end_user_payment_status : 'N/A',
+      }
+    });
+
+    let fileName = 'invoice_' + new Date().getTime()
+    generatePDF(columns, rows, 'Invoice Report', fileName);
+  }
 
   render() {
     return (
@@ -144,6 +197,7 @@ class Invoice extends Component {
                 })(
                   <Select style={{ width: '100%' }}>
                     <Select.Option value=''>ALL</Select.Option>
+                    <Select.Option value={this.props.user.dealerId}>My Report</Select.Option>
                     {this.props.dealerList.map((dealer, index) => {
                       return (<Select.Option key={dealer.dealer_id} value={dealer.dealer_id}>{dealer.dealer_name} ({dealer.link_code})</Select.Option>)
                     })}
@@ -226,12 +280,25 @@ class Invoice extends Component {
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
           <Card style={{ height: '500px', overflow: 'scroll' }}>
             {(this.state.reportCard) ?
+              <Fragment>
+              <Row>
+                <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                  <h3>Invoice Report</h3>
+                </Col>
+                  <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                    <div className="pull-right">
+                      <Button type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Invoice Report', fileName) }}>Download PDF</Button>
+                    <Button type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName) }}>Download Excel</Button>
+                    </div>
+                </Col>
+              </Row>
             <Table
               columns={this.columns}
               dataSource={this.renderList(this.props.invoiceReport)}
               bordered
               pagination={false}
-            />
+                />
+              </Fragment>
             : null }
           </Card>
         </Col>
