@@ -21,11 +21,7 @@ class RightSidebar extends Component {
     this.state = {
       isRightSidebarOpened: false
     };
-    this.datalist = [{ heading: 'PUSH APPS (ABCD123456)', description: 'A dog is a type of domesticated animal.Known for its loyalty and faithfulness,it can be found as a welcome guest in many households across the world' },
-    { heading: 'PUSH APPS (ABCD123656)', description: 'A dog is a type of domesticated animal.Known for its loyalty and faithfulness,it can be found as a welcome guest in many households across the world' },
-    { heading: 'PULL APPS (ABCD133456)', description: 'A dog is a type of domesticated animal.Known for its loyalty and faithfulness,it can be found as a welcome guest in many households across the world' },
-    { heading: 'PUSH APPS (AvCD123456)', description: 'A dog is a type of domesticated animal.Known for its loyalty and faithfulness,it can be found as a welcome guest in many households across the world' }
-    ]
+    this.datalist = []
   }
 
 
@@ -38,7 +34,7 @@ class RightSidebar extends Component {
       <i class="fa fa-check" aria-hidden="true"></i>
       <i class="fa fa-check" aria-hidden="true"></i>
       <br></br>
-      {type === 'completed' ? <i class="fa fa-times" aria-hidden="true" onClick={() => alert('canceled')}></i> : null}
+      {type === 'completed' ? <i class="fa fa-times" aria-hidden="true" onClick={() => { }}></i> : null}
     </div>
 
     // <Icon
@@ -54,7 +50,12 @@ class RightSidebar extends Component {
     if (data) {
       return data.map((item, index) => {
         return (
-          <Panel header={item.type + ' (' + item.device_id + ')'} style={customPanelStyle} key={item.id} extra={this.genExtra(type)}>
+          <Panel
+            header={item.type + ' (' + item.device_id + ')'}
+            style={customPanelStyle}
+            key={item.id}
+            extra={this.genExtra(type)}
+          >
             <div>
               <p>{item.created_at}</p>
             </div>
@@ -170,6 +171,7 @@ RightSidebar = Form.create()(RightSidebar);
 
 // export default RightSidebar;
 const mapStateToProps = ({ rightSidebar, auth }) => {
+  console.log("right sidebar:", rightSidebar, auth)
   return {
     completedTasks: rightSidebar.completedTasks,
     pendingTasks: rightSidebar.pendingTasks
