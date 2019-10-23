@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col } from "antd";
 import { BASE_URL } from '../../../constants/Application';
-import Permissions from './Permissions';
 import styles from './app.css';
 import CustomScrollbars from "../../../util/CustomScrollbars";
 import { Link } from 'react-router-dom';
@@ -13,6 +12,7 @@ import EditApk from './EditApk';
 import UpdateFeatureApk from './UpdateFeatureApk';
 import { Button_Edit, Button_Delete } from '../../../constants/ButtonConstants';
 import { ADMIN } from '../../../constants/Constants';
+import Permissions from '../../utils/Components/Permissions';
 const TabPane = Tabs.TabPane;
 export default class ListApk extends Component {
     state = { visible: false }
@@ -391,6 +391,7 @@ export default class ListApk extends Component {
                                                     <Permissions
                                                         className="exp_row22"
                                                         record={record}
+                                                        savePermissionAction={this.props.savePermission}
                                                         translation={this.props.translation}
                                                     />
                                                 </Tabs.TabPane>
@@ -481,6 +482,7 @@ export default class ListApk extends Component {
                                                     <Permissions
                                                         className="exp_row22"
                                                         record={record}
+                                                        savePermissionAction={this.props.savePermission}
                                                         translation={this.props.translation}
                                                     />
                                                 </Tabs.TabPane>

@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { Input, Icon, Modal, Select, Button, Tooltip, Popover, Avatar, Row, Col } from "antd";
 import { Link } from 'react-router-dom';
 import Highlighter from 'react-highlight-words';
-
+import { savePermission } from "../../appRedux/actions/Apk";
 // import {Route, Switch} from "react-router-dom";
 // import Apk from "../../containers/ApkList"
 import CircularProgress from "components/CircularProgress/index";
@@ -387,6 +387,7 @@ class Apk extends Component {
 
 
                             <ListApk
+                                savePermission={this.props.savePermission}
                                 onChangeTableSorting={this.handleTableChange}
                                 handleStatusChange={this.handleStatusChange}
                                 apk_list={this.state.apk_list}
@@ -523,7 +524,8 @@ function mapDispatchToProps(dispatch) {
         getPagination: getPagination,
         addApk: addApk,
         resetUploadForm: resetUploadForm,
-        getPolicies: getPolicies
+        getPolicies: getPolicies,
+        savePermission: savePermission
         //  getDevicesList: getDevicesList
     }, dispatch);
 }

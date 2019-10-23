@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Tabs, Table, Switch, Row, Col, Avatar } from 'antd';
-import Permissions from "./Permissions";
+import Permissions from "../../../utils/Components/Permissions";
 import { convertToLang } from '../../../utils/commonUtils';
 import { Tab_POLICY_SELECTED_APPS, Tab_POLICY_Dealer_PERMISSIONS, Guest, ENCRYPTED, ENABLE } from '../../../../constants/TabConstants';
 
@@ -96,6 +96,7 @@ export default class PackagesInfo extends Component {
                     <TabPane tab={convertToLang(this.props.translation[Tab_POLICY_Dealer_PERMISSIONS], "Dealer PERMISSIONS")} key="2">
                         <Permissions
                             record={this.props.package}
+                            savePermissionAction={this.props.savePermission}
                             translation={this.props.translation}
                         />
                     </TabPane>

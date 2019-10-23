@@ -316,6 +316,7 @@ class PolicyList extends Component {
                                             enableAllallExtensions={this.props.enableAllallExtension}
                                             handleAppGotted={this.props.handleAppGotted}
                                             appsGotted={this.props.appsGotted}
+                                            savePermissionAction={this.props.savePermission}
                                             translation={this.props.translation}
                                         />
                                     </div>

@@ -2,7 +2,9 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Button, Tabs, Table, Card, Input, Icon, Modal } from 'antd';
-
+import {
+    savePermission
+} from "../../../appRedux/actions/Account";
 import {
     getPrices, resetPrice, setPackage,
     saveIDPrices, setPrice, getPackages, deletePackage, modifyPackage
@@ -586,6 +588,7 @@ class Prices extends Component {
                                                     <PackagesInfo
                                                         selected={this.state.expandTabSelected[record.rowKey]}
                                                         package={record}
+                                                        savePermissionAction={this.props.savePermission}
                                                         translation={this.props.translation}
 
                                                     />
@@ -665,7 +668,8 @@ function mapDispatchToProps(dispatch) {
         setPrice: setPrice,
         getPackages: getPackages,
         deletePackage: deletePackage,
-        modifyPackage: modifyPackage
+        modifyPackage: modifyPackage,
+        savePermission: savePermission
     }, dispatch)
 }
 

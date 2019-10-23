@@ -3,13 +3,13 @@ import { Table, Button, Modal, Row, Col, Spin, Input } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { getAllDealers } from "../../../appRedux/actions/Dealers";
-import { savePermission } from "../../../appRedux/actions/Apk";
+// import { savePermission } from "../../../appRedux/actions/Apk";
 import DealerList from "./DealerList";
 import { Redirect } from 'react-router-dom';
-import CircularProgress from "components/CircularProgress/index";
+import CircularProgress from "components/CircularProgress";
 
-import { titleCase, convertToLang } from '../../utils/commonUtils';
-import { dealerColsWithSearch } from '../../utils/columnsUtils';
+import { titleCase, convertToLang } from '../commonUtils';
+import { dealerColsWithSearch } from '../columnsUtils';
 import {
   DEALER_ID,
   DEALER_NAME,
@@ -188,7 +188,7 @@ class Permissions extends Component {
       permissions,
       addSelectedDealersModal: false
     })
-    this.props.savePermission(this.props.record.apk_id, JSON.stringify(addUnSelected_IDs), 'save');
+    this.props.savePermissionAction(this.props.record.apk_id, JSON.stringify(addUnSelected_IDs), 'save');
   }
 
   saveAllDealersConfirm = () => {
@@ -213,7 +213,7 @@ class Permissions extends Component {
     });
     this.setState({ permissions: dealer_ids })
 
-    this.props.savePermission(this.props.record.apk_id, JSON.stringify(dealer_ids), 'save');
+    this.props.savePermissionAction(this.props.record.apk_id, JSON.stringify(dealer_ids), 'save');
 
     // this.setState({
     //   dealer_ids: dealer_ids
@@ -240,7 +240,7 @@ class Permissions extends Component {
       })
 
       // console.log(this.state.selectedRowKeys);
-      this.props.savePermission(this.props.record.apk_id, JSON.stringify(this.state.selectedRowKeys), 'save');
+      this.props.savePermissionAction(this.props.record.apk_id, JSON.stringify(this.state.selectedRowKeys), 'save');
 
       this.showDealersModal(false);
 
@@ -380,7 +380,7 @@ class Permissions extends Component {
       dealers.splice(index, 1);
     }
     // console.log("permissions",dealers);
-    this.props.savePermission(this.props.record.apk_id, JSON.stringify([dealer_id]), 'delete');
+    this.props.savePermissionAction(this.props.record.apk_id, JSON.stringify([dealer_id]), 'delete');
     this.setState({
       dealerList: this.props.dealerList,
       dealerListForModal: this.props.dealerList
@@ -410,7 +410,7 @@ class Permissions extends Component {
     this.setState({
       permissions: []
     })
-    this.props.savePermission(this.props.record.apk_id, JSON.stringify(permittedDealers), 'delete');
+    this.props.savePermissionAction(this.props.record.apk_id, JSON.stringify(permittedDealers), 'delete');
     // this.state.dealerList.map((dealer)=>{
     //   console.log(dealer);
     // })
@@ -433,7 +433,7 @@ class Permissions extends Component {
       permissions: selectedRows
     })
 
-    this.props.savePermission(this.props.record.apk_id, JSON.stringify(remove_ids), 'delete');
+    this.props.savePermissionAction(this.props.record.apk_id, JSON.stringify(remove_ids), 'delete');
   }
 
   goToDealer = (dealer) => {
@@ -694,7 +694,7 @@ const mapStateToProps = ({ dealers, settings }, props) => {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     getAllDealers: getAllDealers,
-    savePermission: savePermission
+    // savePermission: savePermission
   }, dispatch);
 }
 
