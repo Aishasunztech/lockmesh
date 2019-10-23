@@ -131,6 +131,7 @@ class Invoice extends Component {
     if (list) {
       list.map((item, index) => {
         data.push({
+          'key': index,
           'count': ++index,
           'invoice_id': item.inv_no ? item.inv_no : 'N/A',
           'device_id': item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
@@ -181,29 +182,42 @@ class Invoice extends Component {
               >
               </Form.Item>
 
-              <Form.Item
-                label="Dealer/Sdealer"
-                labelCol={{ span: 8 }}
-                wrapperCol={{ span: 14 }}
-                width='100%'
-              >
-                {this.props.form.getFieldDecorator('dealer', {
-                  initialValue: '',
-                  rules: [
-                    {
-                      required: false,
-                    },
-                  ],
-                })(
-                  <Select style={{ width: '100%' }}>
-                    <Select.Option value=''>ALL</Select.Option>
-                    <Select.Option value={this.props.user.dealerId}>My Report</Select.Option>
-                    {this.props.dealerList.map((dealer, index) => {
-                      return (<Select.Option key={dealer.dealer_id} value={dealer.dealer_id}>{dealer.dealer_name} ({dealer.link_code})</Select.Option>)
-                    })}
-                  </Select>
-                )}
-              </Form.Item>
+              {(this.props.user.type === 'sdealer') ?
+                
+                <Form.Item style={{ marginBottom: 0 }}
+                >
+                  {this.props.form.getFieldDecorator('dealer', {
+                    initialValue: this.props.user.dealerId,
+                  })(
+
+                    <Input type='hidden' disabled />
+                  )}
+                </Form.Item>
+
+                : <Form.Item
+                  label="Dealer/Sdealer"
+                  labelCol={{ span: 8 }}
+                  wrapperCol={{ span: 14 }}
+                  width='100%'
+                >
+                  {this.props.form.getFieldDecorator('dealer', {
+                    initialValue: '',
+                    rules: [
+                      {
+                        required: false,
+                      },
+                    ],
+                  })(
+                    <Select style={{ width: '100%' }}>
+                      <Select.Option value=''>ALL</Select.Option>
+                      <Select.Option value={this.props.user.dealerId}>My Report</Select.Option>
+                      {this.props.dealerList.map((dealer, index) => {
+                        return (<Select.Option key={dealer.dealer_id} value={dealer.dealer_id}>{dealer.dealer_name} ({dealer.link_code})</Select.Option>)
+                      })}
+                    </Select>
+                  )}
+                </Form.Item>
+              }
 
               <Form.Item
                 label="Payment Status"
