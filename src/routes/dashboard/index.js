@@ -26,6 +26,8 @@ import {
     rejectRequest,
     acceptRequest
 } from "../../appRedux/actions/SideBar";
+import { getNewDevicesList } from "../../appRedux/actions/Common";
+
 import { transferDeviceProfile } from "../../appRedux/actions/ConnectDevice";
 import { Button_Yes, Button_No } from "../../constants/ButtonConstants";
 import { APP_MANAGE_APKs, APP_SECURE_MARKET, APP_MANAGE_POLICY } from "../../constants/AppConstants";
@@ -43,6 +45,7 @@ class Dashboard extends Component {
 
     componentDidMount() {
         this.props.getDashboardData();
+        this.props.getNewDevicesList();
     }
 
     transferDeviceProfile = (obj) => {
@@ -70,7 +73,7 @@ class Dashboard extends Component {
     handleLinkRequests = () => {
 
         // this.props.getNewCashRequests();
-        // this.props.getNewDevicesList()
+        this.props.getNewDevicesList()
         // this.props.getUserCredit()
 
         this.refs.new_device.showModal(false, true); // sectionvisible, showLInkRequest
@@ -381,6 +384,7 @@ function mapDispatchToProps(dispatch) {
         getNewCashRequests: getNewCashRequests,
         getUserCredit: getUserCredit,
         getDevicesList: getDevicesList,
+        getNewDevicesList: getNewDevicesList
     }, dispatch);
 }
 var mapStateToProps = ({ dashboard, auth, devices, sidebar, settings }) => {

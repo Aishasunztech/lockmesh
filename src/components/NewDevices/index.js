@@ -215,10 +215,11 @@ export default class NewDevices extends Component {
                     width={1000}
                     maskClosable={false}
                     visible={this.state.visible}
-                    onOk={this.handleOk}
+                    // onOk={this.handleOk}
                     onCancel={this.handleCancel}
-                    okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
-                    cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
+                    footer={null}
+                // okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
+                // cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     {(this.props.authUser.type === ADMIN) ? null :
                         <Fragment>
@@ -254,10 +255,11 @@ export default class NewDevices extends Component {
                         width={1000}
                         maskClosable={false}
                         visible={this.state.flaggedDevicesModal}
-                        onOk={this.handleOk}
+                        // onOk={this.handleOk}
+                        footer={null}
                         onCancel={() => this.setState({ flaggedDevicesModal: false })}
-                        okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
-                        cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
+                    // okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
+                    // cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                     >
                         <Fragment>
                             <h1>{convertToLang(this.props.translation["FLAGGED DEVICES"], "FLAGGED DEVICES")}</h1>
