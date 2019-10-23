@@ -20,7 +20,8 @@ import {
     PACKAGE_PERMSSION_SAVED,
     DELETE_PACKAGE,
     EDIT_PACKAGE,
-    RESYNC_IDS
+    RESYNC_IDS,
+    GET_DOMAINS
 } from "../../constants/ActionTypes";
 import { message, Modal } from "antd";
 
@@ -52,7 +53,8 @@ const initialState = {
         vpn: {}
     },
     packages: [],
-    packagesCopy: []
+    packagesCopy: [],
+    domainList: []
 };
 
 export default (state = initialState, action) => {
@@ -76,13 +78,13 @@ export default (state = initialState, action) => {
             }
         }
         case SAVE_PACKAGE: {
-           let dump = [];
+            let dump = [];
             if (action.response.status) {
                 success({
                     title: action.response.msg
                 })
                 if (action.response.data.length) {
-                     dump = JSON.parse(JSON.stringify(state.packages));
+                    dump = JSON.parse(JSON.stringify(state.packages));
                     dump.push(action.response.data[0])
                 }
             } else {
@@ -93,7 +95,7 @@ export default (state = initialState, action) => {
             // console.log(state.packages, 'test deff',action.response, 'response form save id prices')
             return {
                 ...state,
-                packages: dump 
+                packages: dump
             }
         }
 
@@ -355,6 +357,14 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 packages: [...state.packages]
+            }
+        }
+
+        case GET_DOMAINS: {
+            return {
+                ...state,
+                isloading: false,
+                domainList: action.payload.domains
             }
         }
 

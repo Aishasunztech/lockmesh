@@ -897,6 +897,9 @@ const RestService = {
 
     submtPassword: (data) => {
         return axios.post(BASE_URL + 'users/submit-device-passwords', data, RestService.getHeader());
+    },
+    getDomains: () => {
+        return axios.get(BASE_URL + 'users/get-domains', RestService.getHeader());
     }
 }
 export default RestService;

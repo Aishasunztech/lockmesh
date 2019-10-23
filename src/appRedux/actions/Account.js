@@ -27,7 +27,8 @@ import {
     DELETE_PACKAGE,
     EDIT_PACKAGE,
     RESYNC_IDS,
-    USER_CREDITS
+    USER_CREDITS,
+    GET_DOMAINS
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -490,4 +491,28 @@ export const resyncIds = () => {
             type: RESYNC_IDS,
         })
     }
+}
+
+export function getDomains() {
+    return (dispatch) => {
+        dispatch({
+            type: LOADING,
+            isloading: true
+        });
+        RestService.getDomains().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                if (response.data.status) {
+                    dispatch({
+                        type: GET_DOMAINS,
+                        payload: response.data
+                    });
+                }
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        });
+
+    };
 }

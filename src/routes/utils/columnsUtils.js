@@ -3275,3 +3275,84 @@ export function appMarketColumns(translation, handleSearch, removeSMapps) {
         ]
     )
 }
+
+export function domainColumns(translation) {
+    return ([
+        {
+            title: "#",
+            dataIndex: 'counter',
+            align: 'center',
+            className: 'row',
+            render: (text, record, index) => ++index,
+        },
+        {
+            title: convertToLang(translation[ACTION], "ACTION"),
+            dataIndex: 'action',
+            key: 'action',
+            className: 'row m-0'
+        },
+        {
+            // title: (
+            //     <Input.Search
+            //         name="permission"
+            //         key="permission"
+            //         id="permission"
+            //         className="search_heading"
+            //         // onChange={handleSearch}
+            //         autoComplete="new-password"
+            //         // placeholder={titleCase(props.convertToLang(props.translation[""], "APP NAME"))}
+            //         placeholder="PERMISSION"
+            //     />
+            // ),
+            // dataIndex: 'permission',
+            // className: '',
+            // key: 'permission',
+            // children: [
+            //     {
+                    title: (
+                        <span>
+                            {convertToLang(translation[APK_PERMISSION], "PERMISSION")}
+                            <Popover placement="top" content={(<Markup content={convertToLang(translation[""],
+                                `   <p>Press <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;">
+                                    <i className="fa fa-caret-right" aria-hidden="true"></i> 
+                                    </a> to Add, remove or View
+                                    <br/> the Dealers who have permission
+                                    <br/>to use this Domain</p>`)} />)}>
+                                <span className="helping_txt"><Icon type="info-circle" /></span>
+                            </Popover>
+                        </span>),
+                    dataIndex: 'permission',
+                    key: 'permission',
+                    // className: ''
+            //     }
+            // ]
+        },
+
+        {
+            title: (
+                <Input.Search
+                    name="domain_name"
+                    key="domain_name"
+                    id="domain_name"
+                    className="search_heading"
+                    // onChange={handleSearch}
+                    autoComplete="new-password"
+                    // placeholder={titleCase(props.convertToLang(props.translation[""], "APP NAME"))}
+                    placeholder="DOMAIN NAME"
+                />
+            ),
+            dataIndex: 'domain_name',
+            className: '',
+            key: 'domain_name',
+            children: [
+                {
+                    title: convertToLang(translation[""], "DOMAIN NAME"),
+                    dataIndex: 'domain_name',
+                    key: 'domain_name',
+                    // className: ''
+                }
+            ]
+
+        },
+    ])
+}
