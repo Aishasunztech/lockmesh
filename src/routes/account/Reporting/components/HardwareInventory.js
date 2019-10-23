@@ -1,11 +1,14 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal, Tabs, Col, Input, Form, Row, DatePicker, Select } from "antd";
-import moment from 'moment';
+import moment, { now } from 'moment';
 import {
   DEVICE_PRE_ACTIVATION
 } from "../../../../constants/Constants";
 import styles from '../reporting.css'
-import { convertToLang, getFormattedDate } from "../../../utils/commonUtils";
+import { convertToLang, generatePDF, generateExcel } from "../../../utils/commonUtils";
+let fileName = 'hardware_report_' + new Date().getTime()
+var columns;
+var rows;
 
 class PaymentHistory extends Component {
   constructor(props) {
@@ -74,6 +77,25 @@ class PaymentHistory extends Component {
       this.setState({
         reportCard: true
       })
+
+      columns = [
+        { title: '#', dataKey: "count" },
+        { title: convertToLang(this.props.translation[''], "DEALER ID"), dataKey: "dealer_id" },
+        { title: convertToLang(this.props.translation[''], "DEVICE ID"), dataKey: "device_id" },
+        { title: convertToLang(this.props.translation[''], "USER PAYMENT STATUS"), dataKey: "hardware" },
+        { title: convertToLang(this.props.translation[''], "CREATED AT"), dataKey: "created_at" },
+      ];
+
+      rows = this.props.hardwareReport.map((item, index) => {
+        return {
+          count: ++index,
+          dealer_id: item.dealer_id,
+          device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
+          hardware: item.dealer_id,
+          created_at: item.created_at
+        }
+      })
+
     }
   }
 
@@ -106,7 +128,6 @@ class PaymentHistory extends Component {
       return data;
     }
   };
-
 
   render() {
     return (
@@ -220,13 +241,26 @@ class PaymentHistory extends Component {
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
           <Card style={{ height: '500px', overflow: 'scroll' }}>
             {(this.state.reportCard) ?
+              <Fragment>
+                <Row>
+                  <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                    <h3>Hardware Invenotory Report</h3>
+                  </Col>
+                  <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                    <div className="pull-right">
+                      <Button type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Invoice Report', fileName);}}>Download PDF</Button>
+                      <Button type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName)}}>Download Excel</Button>
+                    </div>
+                  </Col>
+                </Row>
               <Table
                 columns={this.columns}
                 dataSource={this.renderList(this.props.hardwareReport)}
                 bordered
                 pagination={false}
 
-              />
+                />
+              </Fragment>
               : null}
           </Card>
         </Col>

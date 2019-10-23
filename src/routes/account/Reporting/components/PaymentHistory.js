@@ -5,7 +5,11 @@ import {
   DEVICE_PRE_ACTIVATION
 } from "../../../../constants/Constants";
 import styles from '../reporting.css'
-import {convertToLang, getFormattedDate} from "../../../utils/commonUtils";
+import { convertToLang, generateExcel, generatePDF} from "../../../utils/commonUtils";
+var fileName = 'payment_history_' + new Date().getTime()
+var columns;
+var rows;
+
 
 class PaymentHistory extends Component {
   constructor(props) {
@@ -102,6 +106,30 @@ class PaymentHistory extends Component {
       this.setState({
         reportCard: true
       })
+
+      columns = [
+        { title: '#', dataKey: "count" },
+        { title: convertToLang(this.props.translation[''], "DEALER ID"), dataKey: "user_id" },
+        { title: convertToLang(this.props.translation[''], "DEVICE ID"), dataKey: "device_id" },
+        { title: convertToLang(this.props.translation[''], "PRODUCT TYPE"), dataKey: "type" },
+        { title: convertToLang(this.props.translation[''], "TRANSACTION TYPE"), dataKey: "transection_type" },
+        { title: convertToLang(this.props.translation[''], "CREDITS"), dataKey: "credits" },
+        { title: convertToLang(this.props.translation[''], "STATUS"), dataKey: "status" },
+        { title: convertToLang(this.props.translation[''], "TRANSACTION DATE"), dataKey: "created_at" },
+      ];
+
+      rows = this.props.paymentHistoryReport.map((item, index) => {
+        return {
+          count: ++index,
+          user_id: item.user_id,
+          credits: item.credits,
+          device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
+          status: item.status,
+          type: item.type,
+          transection_type: item.transection_type,
+          created_at: item.created_at
+        }
+      });
     }
   }
 
@@ -267,13 +295,26 @@ class PaymentHistory extends Component {
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
           <Card style={{ height: '500px', overflow: 'overlay'}}>
             {(this.state.reportCard) ?
-            <Table
-              columns={this.columns}
-              dataSource={this.renderList(this.props.paymentHistoryReport)}
-              bordered
-              pagination={false}
-              scroll={{x:true}}
-            />
+              <Fragment>
+                <Row>
+                  <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                    <h3>Payment History Report</h3>
+                  </Col>
+                  <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                    <div className="pull-right">
+                      <Button type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Payment History Report', fileName)}}>Download PDF</Button>
+                      <Button type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName)}}>Download Excel</Button>
+                    </div>
+                  </Col>
+                </Row>
+              <Table
+                columns={this.columns}
+                dataSource={this.renderList(this.props.paymentHistoryReport)}
+                bordered
+                pagination={false}
+                scroll={{x:true}}
+                  />
+              </Fragment>
             : null }
           </Card>
         </Col>

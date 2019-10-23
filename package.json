@@ -13,6 +13,8 @@
     "instantsearch.css": "^7.1.0",
     "interweave": "^11.1.0",
     "jquery": "^3.4.1",
+    "jspdf": "^1.5.3",
+    "jspdf-autotable": "^3.2.8",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "less-vars-to-js": "^1.2.1",

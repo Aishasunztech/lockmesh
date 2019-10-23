@@ -5,7 +5,9 @@ import { Card, Button, Row, Col, Select, Input, Checkbox, Icon, Tabs, Table, Inp
 import Invoice from "./components/Invoice";
 import ProductInventory  from './components/ProductInventory';
 import HardwareInventory  from './components/HardwareInventory';
-import PaymentHistory  from './components/PaymentHistory';
+import PaymentHistory from './components/PaymentHistory';
+import AppFilter from '../../../components/AppFilter';
+import { convertToLang, getFormattedDate } from "../../utils/commonUtils";
 import { getAllDealers, generateProductReport, generateInvoiceReport, generatePaymentHistoryReport, generateHardwareReport } from '../../../appRedux/actions/';
 import styles from './reporting.css'
 
@@ -50,8 +52,12 @@ class Reporting extends Component {
       return (
 
         <div>
+          <AppFilter
+            pageHeading={convertToLang(this.props.translation[''], "REPORTS")}
+          />
           {
-              <div style={{ marginTop: 50 }}>
+          
+              <div>
                 <Tabs defaultActiveKey="1" type='card' className="dev_tabs" activeKey={this.state.tabselect} onChange={this.handleChangeTab}>
                   <TabPane tab="PRODUCT INVENTORY" key="1">
                     <ProductInventory
