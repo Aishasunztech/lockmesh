@@ -2,16 +2,26 @@ import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Input, Icon, Modal, Select, Button, Tooltip, Popover, Avatar, Row, Col } from "antd";
-import { Link } from 'react-router-dom';
 import Highlighter from 'react-highlight-words';
-import { savePermission } from "../../appRedux/actions/Apk";
 // import {Route, Switch} from "react-router-dom";
 // import Apk from "../../containers/ApkList"
 import CircularProgress from "components/CircularProgress/index";
 //import {getDevicesList} from '../../appRedux/actions/Devices';
 
-import { getApkList, changeAppStatus, deleteApk, editApk, addApk, resetUploadForm } from "../../appRedux/actions/Apk";
-import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
+import { 
+    saveDealersPermission, 
+    getApkList, 
+    changeAppStatus, 
+    getDropdown, 
+    postDropdown, 
+    postPagination, 
+    getPagination, 
+    deleteApk, 
+    editApk, 
+    addApk, 
+    resetUploadForm 
+} from "../../appRedux/actions";
+
 import { getPolicies } from "../../appRedux/actions/Policy";
 // import {getDeviceList} from 
 
@@ -372,22 +382,8 @@ class Apk extends Component {
                                 pageHeading={convertToLang(this.props.translation[APP_MANAGE_APKs], "Manage APK's")}
                             />
 
-                            {
-                                (this.props.user.type === 'admin') ?
-                                    <div style={{ textAlign: "center" }}>
-                                        {/* <Button
-                                            type="primary"
-                                            // disabled={(this.props.disableAddButton === true) ? true : false}
-                                            style={{ width: '12%', marginBottom:16 }}
-                                        >
-                                            <Link to='/upload-apk'>Upload apk</Link>
-                                        </Button> */}
-                                    </div> : false
-                            }
-
-
                             <ListApk
-                                savePermission={this.props.savePermission}
+                                saveDealersPermission={this.props.saveDealersPermission}
                                 onChangeTableSorting={this.handleTableChange}
                                 handleStatusChange={this.handleStatusChange}
                                 apk_list={this.state.apk_list}
@@ -525,7 +521,7 @@ function mapDispatchToProps(dispatch) {
         addApk: addApk,
         resetUploadForm: resetUploadForm,
         getPolicies: getPolicies,
-        savePermission: savePermission
+        saveDealersPermission: saveDealersPermission
         //  getDevicesList: getDevicesList
     }, dispatch);
 }

@@ -10,15 +10,7 @@ import CircularProgress from "components/CircularProgress";
 
 import { titleCase, convertToLang } from '../commonUtils';
 import { dealerColsWithSearch } from '../columnsUtils';
-import {
-  DEALER_ID,
-  DEALER_NAME,
-  DEALER_EMAIL,
-  DEALER_PIN,
-  DEALER_DEVICES,
-  DEALER_TOKENS,
-  DEALER_ACTION
-} from '../../../constants/DealerConstants';
+
 import { Button_Remove, Button_Add, Button_AddAll, Button_AddExceptSelected, Button_RemoveAll, Button_RemoveExcept, Button_Save, Button_Cancel, Button_DeleteExceptSelected, Button_Yes, Button_No } from '../../../constants/ButtonConstants';
 import { Permission_List, PERMISSION_Add_Modal_Title, PERMISSION_Remove_Modal_Title, PERMISSION_Add_Except_Selected_Modal_Title } from '../../../constants/ApkConstants';
 import { Alert_Allow_Permission_Delaer, Alert_Remove_Permission_Delaer } from '../../../constants/Constants';
@@ -52,7 +44,6 @@ class Permissions extends Component {
 
 
   }
-
 
   handleTableChange = (pagination, query, sorter) => {
     // console.log('check sorter func: ', sorter)
@@ -110,7 +101,6 @@ class Permissions extends Component {
     });
   }
 
-
   componentDidMount() {
     this.props.getAllDealers()
     this.setState({
@@ -119,7 +109,6 @@ class Permissions extends Component {
       permissions: this.props.record.permissions
     })
   }
-
 
   componentWillReceiveProps(nextProps) {
 
@@ -188,7 +177,7 @@ class Permissions extends Component {
       permissions,
       addSelectedDealersModal: false
     })
-    this.props.savePermissionAction(this.props.record.apk_id, JSON.stringify(addUnSelected_IDs), 'save');
+    this.props.savePermissionAction(this.props.record.apk_id, JSON.stringify(addUnSelected_IDs), 'save', 'apk');
   }
 
   saveAllDealersConfirm = () => {
@@ -213,7 +202,7 @@ class Permissions extends Component {
     });
     this.setState({ permissions: dealer_ids })
 
-    this.props.savePermissionAction(this.props.record.apk_id, JSON.stringify(dealer_ids), 'save');
+    this.props.savePermissionAction(this.props.record.apk_id, JSON.stringify(dealer_ids), 'save', 'apk');
 
     // this.setState({
     //   dealer_ids: dealer_ids
@@ -240,7 +229,7 @@ class Permissions extends Component {
       })
 
       // console.log(this.state.selectedRowKeys);
-      this.props.savePermissionAction(this.props.record.apk_id, JSON.stringify(this.state.selectedRowKeys), 'save');
+      this.props.savePermissionAction(this.props.record.apk_id, JSON.stringify(this.state.selectedRowKeys), 'save', 'apk');
 
       this.showDealersModal(false);
 
@@ -380,7 +369,7 @@ class Permissions extends Component {
       dealers.splice(index, 1);
     }
     // console.log("permissions",dealers);
-    this.props.savePermissionAction(this.props.record.apk_id, JSON.stringify([dealer_id]), 'delete');
+    this.props.savePermissionAction(this.props.record.apk_id, JSON.stringify([dealer_id]), 'delete', 'apk');
     this.setState({
       dealerList: this.props.dealerList,
       dealerListForModal: this.props.dealerList
@@ -410,7 +399,7 @@ class Permissions extends Component {
     this.setState({
       permissions: []
     })
-    this.props.savePermissionAction(this.props.record.apk_id, JSON.stringify(permittedDealers), 'delete');
+    this.props.savePermissionAction(this.props.record.apk_id, JSON.stringify(permittedDealers), 'delete', 'apk');
     // this.state.dealerList.map((dealer)=>{
     //   console.log(dealer);
     // })
@@ -433,7 +422,7 @@ class Permissions extends Component {
       permissions: selectedRows
     })
 
-    this.props.savePermissionAction(this.props.record.apk_id, JSON.stringify(remove_ids), 'delete');
+    this.props.savePermissionAction(this.props.record.apk_id, JSON.stringify(remove_ids), 'delete', 'apk');
   }
 
   goToDealer = (dealer) => {

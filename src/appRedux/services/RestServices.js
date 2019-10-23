@@ -311,9 +311,10 @@ const RestService = {
         // console.log('rest ser')
         return axios.get(BASE_URL + "users/get_usr_acc_id/" + d, RestService.getHeader());
     },
-    saveAPKPermissions: (apkId, dealers, action) => {
-        return axios.post(BASE_URL + 'users/save_apk_permissions', {
-            apkId: apkId,
+
+    saveDealersPermission: (permissionId, dealers, action, permissionType) => {
+        return axios.post(BASE_URL + 'users/dealer-permissions/' + permissionType, {
+            permissionId: permissionId,
             dealers: dealers,
             action: action
         },

@@ -136,3 +136,27 @@ export function getPagination(pageName) {
 
     };
 }
+
+export function saveDealersPermission(permission_id, dealers, action, permissionType) {
+    // alert("saveDealersPermission")
+    return (dispatch) => {
+        RestService.saveDealersPermission(permission_id, dealers, action, permissionType).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+
+                // dispatch({
+                //     type: PERMISSION_SAVED,
+                //     payload: response.data.msg,
+                //     permission_count: response.data.permission_count,
+                //     apk_id: apk_id,
+                //     dealers: dealers
+                // })
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+    }
+
+}

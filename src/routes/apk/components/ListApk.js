@@ -212,17 +212,17 @@ export default class ListApk extends Component {
             // console.log(app);
             if (app.package_name === 'com.armorSec.android' || app.package_name === 'ca.unlimitedwireless.mailpgp' || app.package_name === 'com.rim.mobilefusion.client' || app.package_name === 'com.secure.vpn') {
                 let data = {
-                    'rowKey': app.apk_id,
-                    'apk_id': app.apk_id,
-                    'permission': <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>{app.permission_count}</span>,
-                    "permissions": app.permissions,
-                    'apk_name': app.apk_name,
-                    'apk_logo': (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
-                    'apk_version': app.version,
-                    'apk_size': app.size ? app.size : "N/A",
-                    'updated_date': app.updated_at,
-                    'package_name': app.package_name,
-                    'policies': (app.policies === undefined || app.policies === null) ? [] : app.policies,
+                    rowKey: app.apk_id,
+                    apk_id: app.apk_id,
+                    permission: <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>{app.permission_count}</span>,
+                    permissions: app.permissions,
+                    apk_name: app.apk_name,
+                    apk_logo: (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
+                    apk_version: app.version,
+                    apk_size: app.size ? app.size : "N/A",
+                    updated_date: app.updated_at,
+                    package_name: app.package_name,
+                    policies: (app.policies === undefined || app.policies === null) ? [] : app.policies,
                 }
                 featureApk.push(data)
             }
@@ -391,7 +391,7 @@ export default class ListApk extends Component {
                                                     <Permissions
                                                         className="exp_row22"
                                                         record={record}
-                                                        savePermissionAction={this.props.savePermission}
+                                                        savePermissionAction={this.props.saveDealersPermission}
                                                         translation={this.props.translation}
                                                     />
                                                 </Tabs.TabPane>
