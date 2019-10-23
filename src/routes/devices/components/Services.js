@@ -739,7 +739,7 @@ class Services extends Component {
                             product_prices={this.props.product_prices}
                             ref="services"
                             tabselect={this.props.tabselect}
-                            // resetTabSelected={this.resetTabSelected}
+                            // resetTabSelected={this.resetTabSelected} 
                             user={this.props.user}
                             history={this.props.history}
                             translation={this.props.translation}
