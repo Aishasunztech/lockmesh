@@ -155,17 +155,68 @@ export default (state = initialState, action) => {
 				options: state.options
 			}
 		}
+		// case PERMISSION_SAVED: {
+		// 	success({
+		// 		title: action.payload
+		// 	});;
+		// 	let dealers = JSON.parse(action.dealers)
+		// 	// console.log(dealers.length ,'itrititt',action.apk_id);
+		// 	let objIndex = state.apk_list.findIndex((obj => obj.apk_id === action.apk_id));
+		// 	state.apk_list[objIndex].permission_count = action.permission_count;
+
+		// 	return {
+		// 		...state,
+		// 		apk_list: [...state.apk_list]
+		// 	}
+		// }
+
 		case PERMISSION_SAVED: {
-			success({
-				title: action.payload
-			});;
-			let dealers = JSON.parse(action.dealers)
-			// console.log(dealers.length ,'itrititt',action.apk_id);
-			let objIndex = state.apk_list.findIndex((obj => obj.apk_id === action.apk_id));
-			state.apk_list[objIndex].permission_count = action.permission_count;
+
+			console.log("at reducer PERMISSION_SAVED:: ", state.apk_list, action);
+			if (action.payload.status) {
+				success({
+					title: action.payload.msg
+				});
+				let index = state.apk_list.findIndex((item) => item.apk_id == action.formData.id);
+				let newDealers = JSON.parse(action.formData.dealers);
+				let oldDealers = state.apk_list[index].permissions;
+				console.log('index is: ', index);
+
+				// Save permission for new dealers
+				if (action.formData.action == "save") {
+
+					if (index !== -1) {
+						if (!action.formData.statusAll) {
+							let allDealers = [...oldDealers, ...newDealers];
+							console.log("allDealers ", allDealers);
+
+							state.apk_list[index].permissions = allDealers;
+						} else {
+							state.apk_list[index].permissions = newDealers;
+						}
+					}
+				}
+				else if (action.formData.action == "delete") {
+					// delete permission for dealers
+
+					if (index !== -1) {
+						if (!action.formData.statusAll) {
+							let allDealers = oldDealers.filter((item) => !newDealers.includes(item));
+							state.apk_list[index].permissions = allDealers;
+						} else {
+							state.apk_list[index].permissions = [];
+						}
+					}
+				}
+			} else {
+				error({
+					title: action.payload.msg
+				});
+			}
 
 			return {
 				...state,
+				isloading: false,
 				apk_list: [...state.apk_list]
 			}
 		}

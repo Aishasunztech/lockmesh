@@ -14,7 +14,8 @@ import {
     getAppPermissions, addAppsToPolicies,
     removeAppsFromPolicies, checktogglebuttons,
     resetPlicies, resetAddPolicyForm,
-    handleAppGotted
+    handleAppGotted,
+    policyPermission
 } from "../../appRedux/actions/Policy";
 
 import {
@@ -365,6 +366,7 @@ class Policy extends Component {
 
                 {/* Policy List */}
                 <PolicyList
+                    savePermission={this.props.policyPermission}
                     onChangeTableSorting={this.handleTableChange}
                     user={this.props.user}
                     columns={this.state.columns}
@@ -446,7 +448,7 @@ function mapDispatchToProps(dispatch) {
 
     return bindActionCreators({
         getPolicies: getPolicies,
-
+        policyPermission: policyPermission,
         // dropdown actions
         getDropdown: getDropdown,
         postDropdown: postDropdown,

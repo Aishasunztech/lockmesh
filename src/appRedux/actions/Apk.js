@@ -162,17 +162,21 @@ export function checkApkName(name, apk_id = '') {
 
 }
 
-export function savePermission(apk_id, dealers, action) {
+export function apkPermission(id, dealers, action, statusAll = false) {
+    // console.log('at domainPermission action ', id, dealers, action, statusAll)
     return (dispatch) => {
-        RestService.saveAPKPermissions(apk_id, dealers, action).then((response) => {
+        RestService.dealerPermissions(id, dealers, action, statusAll, 'apk').then((response) => {
             if (RestService.checkAuth(response.data)) {
 
                 dispatch({
                     type: PERMISSION_SAVED,
-                    payload: response.data.msg,
-                    permission_count: response.data.permission_count,
-                    apk_id: apk_id,
-                    dealers: dealers
+                    payload: response.data,
+                    formData: {
+                        id,
+                        dealers,
+                        action,
+                        statusAll
+                    }
                 })
 
             } else {
@@ -184,6 +188,29 @@ export function savePermission(apk_id, dealers, action) {
     }
 
 }
+
+// export function savePermission(apk_id, dealers, action) {
+//     return (dispatch) => {
+//         RestService.saveAPKPermissions(apk_id, dealers, action).then((response) => {
+//             if (RestService.checkAuth(response.data)) {
+
+//                 dispatch({
+//                     type: PERMISSION_SAVED,
+//                     payload: response.data.msg,
+//                     permission_count: response.data.permission_count,
+//                     apk_id: apk_id,
+//                     dealers: dealers
+//                 })
+
+//             } else {
+//                 dispatch({
+//                     type: INVALID_TOKEN
+//                 });
+//             }
+//         })
+//     }
+
+// }
 export function resetUploadForm(visible) {
     return (dispatch) => {
         dispatch({

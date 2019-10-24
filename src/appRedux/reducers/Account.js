@@ -376,16 +376,17 @@ export default (state = initialState, action) => {
                 success({
                     title: action.payload.msg
                 });
+                let index = state.domainList.findIndex((item) => item.id == action.formData.id);
+                let newDealers = JSON.parse(action.formData.dealers);
+                let oldDealers = JSON.parse(state.domainList[index].dealers);
+                console.log('index is: ', index);
 
                 // Save permission for new dealers
                 if (action.formData.action == "save") {
-                    let index = state.domainList.findIndex((item) => item.id == action.formData.id);
                     if (index !== -1) {
                         if (!action.formData.statusAll) {
-                            let newDealers = JSON.parse(action.formData.dealers);
-                            let oldDealers = JSON.parse(state.domainList[index].dealers);
                             let allDealers = [...oldDealers, ...newDealers];
-                            console.log(allDealers, 'index is: ', index);
+                            console.log("allDealers ", allDealers);
 
                             state.domainList[index].dealers = JSON.stringify(allDealers);
                         } else {
@@ -394,17 +395,12 @@ export default (state = initialState, action) => {
                     } else {
                         state.domainList[index].dealers = action.formData.dealers;
                     }
-
                 }
                 else if (action.formData.action == "delete") {
                     // delete permission for dealers
 
-                    let index = state.domainList.findIndex((item) => item.id == action.formData.id);
-
                     if (index !== -1) {
                         if (!action.formData.statusAll) {
-                            let newDealers = JSON.parse(action.formData.dealers);
-                            let oldDealers = JSON.parse(state.domainList[index].dealers);
                             let allDealers = oldDealers.filter((item) => !newDealers.includes(item));
                             state.domainList[index].dealers = JSON.stringify(allDealers);
                         } else {

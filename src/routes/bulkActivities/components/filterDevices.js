@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import styles from './devices.css'
 import { getAllDealers } from "../../../appRedux/actions/Dealers";
-import { savePermission } from "../../../appRedux/actions/Apk";
+// import { savePermission } from "../../../appRedux/actions/Apk";
 import FilterDevicesList from "./filterDevicesList";
 import CircularProgress from "components/CircularProgress/index";
 import BulkSuspendDevices from './bulkSuspendDevices';
@@ -903,7 +903,7 @@ class FilterDevices extends Component {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     getAllDealers: getAllDealers,
-    savePermission: savePermission
+    // savePermission: savePermission
   }, dispatch);
 }
 

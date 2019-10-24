@@ -131,7 +131,7 @@ export default (state = initialState, action) => {
             }
         }
 
-        
+
 
         case GET_PAGINATION: {
             return {
@@ -291,13 +291,13 @@ export default (state = initialState, action) => {
 
             let changeSysPermissions = state.systemPermissions;
 
-            let index  = changeSysPermissions.findIndex(sysPermission=>sysPermission.setting_name === action.payload.key);
+            let index = changeSysPermissions.findIndex(sysPermission => sysPermission.setting_name === action.payload.key);
             //  console.log(changeSysPermissions[action.payload.key], 'REDUCER INS PERMISDFAO', action.payload.key)   
             changeSysPermissions[index].setting_status = action.payload.value
             // console.log(changeSysPermissions, 'relst')
             return {
                 ...state,
-                systemPermissions: [ ...changeSysPermissions ],
+                systemPermissions: [...changeSysPermissions],
             }
         }
 
@@ -364,7 +364,7 @@ export default (state = initialState, action) => {
                     // }
                 } else if (stateToUpdate === 'controls') {
                     console.log('key', key)
-                    let index = changedState[rowId][stateToUpdate].findIndex(control=> control.setting_name === key);
+                    let index = changedState[rowId][stateToUpdate].findIndex(control => control.setting_name === key);
                     console.log("index", index)
                     changedState[rowId][stateToUpdate][index].setting_status = action.payload.value;
                 }
@@ -653,23 +653,80 @@ export default (state = initialState, action) => {
             }
         }
 
-        case POLICY_PERMISSION_SAVED: {
-            // console.log("dasdasdad");
-            success({
-                title: action.payload
-            });
-            // let dealers = JSON.parse(action.dealers)
-            // console.log(dealers.length ,'itrititt',action.apk_id);
+        // case POLICY_PERMISSION_SAVED: {
+        //     // console.log("dasdasdad");
+        //     success({
+        //         title: action.payload
+        //     });
+        //     // let dealers = JSON.parse(action.dealers)
+        //     // console.log(dealers.length ,'itrititt',action.apk_id);
 
-            let objIndex = state.policies.findIndex((obj => obj.id === action.policy_id));
-            state.policies[objIndex].permission_count = action.permission_count;
+        //     let objIndex = state.policies.findIndex((obj => obj.id === action.policy_id));
+        //     state.policies[objIndex].permission_count = action.permission_count;
+
+        //     return {
+        //         ...state,
+        //         policies: [...state.policies]
+        //     }
+        // }
+
+        case POLICY_PERMISSION_SAVED: {
+
+            // console.log("at reducer POLICY_PERMISSION_SAVED:: ", state.policies, action);
+            if (action.payload.status) {
+                success({
+                    title: action.payload.msg
+                });
+                let index = state.policies.findIndex((item) => item.id == action.formData.id);
+                let newDealers = JSON.parse(action.formData.dealers);
+                let oldDealers = state.policies[index].dealer_permission;
+                // console.log('index is: ', index);
+                // console.log('newDealers : ', newDealers);
+                // console.log('oldDealers : ', oldDealers);
+
+                // Save permission for new dealers
+                if (action.formData.action == "save") {
+
+                    if (index !== -1) {
+                        if (!action.formData.statusAll) {
+                            let allDealers = [...oldDealers, ...newDealers];
+                            // console.log("allDealers ", allDealers);
+
+                            state.policies[index].permission_count = allDealers.length;
+                            state.policies[index].dealer_permission = allDealers;
+                        } else {
+                            state.policies[index].permission_count = "All";
+                            state.policies[index].dealer_permission = newDealers;
+                        }
+                    }
+                }
+                else if (action.formData.action == "delete") {
+                    // delete permission for dealers
+
+                    if (index !== -1) {
+                        if (!action.formData.statusAll) {
+                            let allDealers = oldDealers.filter((item) => !newDealers.includes(item));
+                            state.policies[index].dealer_permission = allDealers;
+                            state.policies[index].permission_count = allDealers.length;
+                        } else {
+                            state.policies[index].dealer_permission = [];
+                            state.policies[index].permission_count = 0;
+                        }
+                    }
+                }
+            } else {
+                error({
+                    title: action.payload.msg
+                });
+            }
 
             return {
                 ...state,
+                isloading: false,
                 policies: [...state.policies]
             }
         }
-        
+
         case DEFAULT_POLICY_CHANGE: {
 
             // success({
