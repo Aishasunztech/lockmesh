@@ -470,19 +470,17 @@ class Domains extends Component {
         let fieldName = e.target.name;
         let fieldValue = e.target.value;
 
-        console.log("fieldName", fieldName, "fieldValue", fieldValue)
-
-        console.log("this.props.domainList ", this.props.domainList)
         if (domainStatus) {
             copyDomainList = this.props.domainList
             domainStatus = false;
         }
 
+        // console.log("copyDomainList ", copyDomainList)
         let searchedData = this.searchField(copyDomainList, fieldName, fieldValue);
+        // console.log("searchedData ", searchedData)
         this.setState({
             domainList: searchedData
         });
-
 
     }
 

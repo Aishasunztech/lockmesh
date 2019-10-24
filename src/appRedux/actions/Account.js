@@ -520,7 +520,7 @@ export function getDomains() {
 }
 
 export function domainPermission(id, dealers, action, statusAll = false) {
-    console.log('at domainPermission action ', id, dealers, action, statusAll)
+    // console.log('at domainPermission action ', id, dealers, action, statusAll)
     return (dispatch) => {
         RestService.dealerPermissions(id, dealers, action, statusAll).then((response) => {
             if (RestService.checkAuth(response.data)) {

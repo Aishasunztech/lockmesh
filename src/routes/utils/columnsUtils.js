@@ -3309,21 +3309,21 @@ export function domainColumns(translation, handleSearch) {
             // key: 'permission',
             // children: [
             //     {
-                    title: (
-                        <span>
-                            {convertToLang(translation[APK_PERMISSION], "PERMISSION")}
-                            <Popover placement="top" content={(<Markup content={convertToLang(translation[""],
-                                `   <p>Press <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;">
+            title: (
+                <span>
+                    {convertToLang(translation[APK_PERMISSION], "PERMISSION")}
+                    <Popover placement="top" content={(<Markup content={convertToLang(translation[""],
+                        `   <p>Press <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;">
                                     <i className="fa fa-caret-right" aria-hidden="true"></i> 
                                     </a> to Add, remove or View
                                     <br/> the Dealers who have permission
                                     <br/>to use this Domain</p>`)} />)}>
-                                <span className="helping_txt"><Icon type="info-circle" /></span>
-                            </Popover>
-                        </span>),
-                    dataIndex: 'permission',
-                    key: 'permission',
-                    // className: ''
+                        <span className="helping_txt"><Icon type="info-circle" /></span>
+                    </Popover>
+                </span>),
+            dataIndex: 'permission',
+            key: 'permission',
+            // className: ''
             //     }
             // ]
         },
@@ -3331,9 +3331,9 @@ export function domainColumns(translation, handleSearch) {
         {
             title: (
                 <Input.Search
-                    name="domain_name"
-                    key="domain_name"
-                    id="domain_name"
+                    name="name"
+                    key="name"
+                    id="name"
                     className="search_heading"
                     onChange={handleSearch}
                     autoComplete="new-password"
@@ -3341,14 +3341,14 @@ export function domainColumns(translation, handleSearch) {
                     placeholder="DOMAIN NAME"
                 />
             ),
-            dataIndex: 'domain_name',
+            dataIndex: 'name',
             className: '',
-            key: 'domain_name',
+            key: 'name',
             children: [
                 {
                     title: convertToLang(translation[""], "DOMAIN NAME"),
-                    dataIndex: 'domain_name',
-                    key: 'domain_name',
+                    dataIndex: 'name',
+                    key: 'name',
                     // className: ''
                 }
             ]

@@ -139,7 +139,7 @@ export default class ListDomain extends Component {
                 ),
                 permissions: app.dealers ? JSON.parse(app.dealers) : [],
 
-                domain_name: app.name ? app.name : 'N/A',
+                name: app.name ? app.name : 'N/A',
 
                 created_at: app.created_at,
                 updated_at: app.updated_at
