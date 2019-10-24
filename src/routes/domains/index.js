@@ -10,7 +10,7 @@ import Highlighter from 'react-highlight-words';
 import CircularProgress from "components/CircularProgress";
 //import {getDevicesList} from '../../appRedux/actions/Devices';
 
-import { getDomains, saveDomainPermission } from "../../appRedux/actions/Account";
+import { getDomains, domainPermission } from "../../appRedux/actions/Account";
 
 import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
 import { getPolicies } from "../../appRedux/actions/Policy";
@@ -50,12 +50,14 @@ import { APP_MANAGE_APKs } from '../../constants/AppConstants';
 
 var status = true;
 var coppyApks = [];
+var domainStatus = true;
+var copyDomainList = [];
 
 class Domains extends Component {
 
     constructor(props) {
         super(props);
-        var columns = domainColumns(props.translation);
+        var columns = domainColumns(props.translation, this.handleSearch);
 
         this.state = {
             sorterKey: '',
@@ -373,7 +375,7 @@ class Domains extends Component {
                             />
 
                             <ListDomain
-                                savePermission={this.props.saveDomainPermission}
+                                savePermission={this.props.domainPermission}
                                 onChangeTableSorting={this.handleTableChange}
                                 handleStatusChange={this.handleStatusChange}
                                 domainList={this.state.domainList}
@@ -464,9 +466,54 @@ class Domains extends Component {
         ),
     })
 
-    handleSearch = (selectedKeys, confirm) => {
-        confirm();
-        this.setState({ searchText: selectedKeys[0] });
+    handleSearch = (e) => {
+        let fieldName = e.target.name;
+        let fieldValue = e.target.value;
+
+        console.log("fieldName", fieldName, "fieldValue", fieldValue)
+
+        console.log("this.props.domainList ", this.props.domainList)
+        if (domainStatus) {
+            copyDomainList = this.props.domainList
+            domainStatus = false;
+        }
+
+        let searchedData = this.searchField(copyDomainList, fieldName, fieldValue);
+        this.setState({
+            domainList: searchedData
+        });
+
+
+    }
+
+    searchField = (originalData, fieldName, value) => {
+        let demoData = [];
+        if (value.length) {
+            originalData.forEach((data) => {
+                // console.log(data);
+                if (data[fieldName] !== undefined) {
+                    if ((typeof data[fieldName]) === 'string') {
+
+                        if (data[fieldName].toUpperCase().includes(value.toUpperCase())) {
+                            demoData.push(data);
+                        }
+                    } else if (data[fieldName] != null) {
+                        if (data[fieldName].toString().toUpperCase().includes(value.toUpperCase())) {
+                            demoData.push(data);
+                        }
+                    }
+                    // else {
+                    //     // demoDevices.push(device);
+                    // }
+                } else {
+                    demoData.push(data);
+                }
+            });
+
+            return demoData;
+        } else {
+            return originalData;
+        }
     }
 
     handleReset = (clearFilters) => {
@@ -513,7 +560,7 @@ function mapDispatchToProps(dispatch) {
         // addApk: addApk,
         // resetUploadForm: resetUploadForm,
         // getPolicies: getPolicies,
-        saveDomainPermission: saveDomainPermission
+        domainPermission: domainPermission
         //  getDevicesList: getDevicesList
     }, dispatch);
 }

@@ -97,6 +97,7 @@ export const AUTHENTICATE_UPDATE_USER = 'AUTHENTICATE_UPDATE_USER';
 
 // Domains
 export const GET_DOMAINS = 'GET_DOMAINS';
+export const PERMISSION_DOMAINS = 'PERMISSION_DOMAINS';
 
 // Connect Device 
 export const RESET_DEVICE = 'RESET_DEVICE';

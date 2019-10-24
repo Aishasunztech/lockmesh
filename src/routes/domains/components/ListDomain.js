@@ -134,10 +134,10 @@ export default class ListDomain extends Component {
                 ),
                 permission: (
                     <div data-column="PERMISSION" style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
-                        {app.permission_count}
+                        {app.dealers ? JSON.parse(app.dealers).length : 0}
                     </div>
                 ),
-                permissions: [], // app.permissions,
+                permissions: app.dealers ? JSON.parse(app.dealers) : [],
 
                 domain_name: app.name ? app.name : 'N/A',
 

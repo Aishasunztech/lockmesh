@@ -21,7 +21,8 @@ import {
     DELETE_PACKAGE,
     EDIT_PACKAGE,
     RESYNC_IDS,
-    GET_DOMAINS
+    GET_DOMAINS,
+    PERMISSION_DOMAINS
 } from "../../constants/ActionTypes";
 import { message, Modal } from "antd";
 
@@ -365,6 +366,62 @@ export default (state = initialState, action) => {
                 ...state,
                 isloading: false,
                 domainList: action.payload.domains
+            }
+        }
+
+        case PERMISSION_DOMAINS: {
+
+            // console.log("at reducer PERMISSION_DOMAINS:: ", state.domainList, action.formData.id, action.formData.dealers);
+            if (action.payload.status) {
+                success({
+                    title: action.payload.msg
+                });
+
+                // Save permission for new dealers
+                if (action.formData.action == "save") {
+                    let index = state.domainList.findIndex((item) => item.id == action.formData.id);
+                    if (index !== -1) {
+                        if (!action.formData.statusAll) {
+                            let newDealers = JSON.parse(action.formData.dealers);
+                            let oldDealers = JSON.parse(state.domainList[index].dealers);
+                            let allDealers = [...oldDealers, ...newDealers];
+                            console.log(allDealers, 'index is: ', index);
+
+                            state.domainList[index].dealers = JSON.stringify(allDealers);
+                        } else {
+                            state.domainList[index].dealers = action.formData.dealers;
+                        }
+                    } else {
+                        state.domainList[index].dealers = action.formData.dealers;
+                    }
+
+                }
+                else if (action.formData.action == "delete") {
+                    // delete permission for dealers
+
+                    let index = state.domainList.findIndex((item) => item.id == action.formData.id);
+
+                    if (index !== -1) {
+                        if (!action.formData.statusAll) {
+                            let newDealers = JSON.parse(action.formData.dealers);
+                            let oldDealers = JSON.parse(state.domainList[index].dealers);
+                            let allDealers = oldDealers.filter((item) => !newDealers.includes(item));
+                            state.domainList[index].dealers = JSON.stringify(allDealers);
+                        } else {
+                            state.domainList[index].dealers = '[]';
+                        }
+                    }
+                }
+            } else {
+                error({
+                    title: action.payload.msg
+                });
+            }
+
+            return {
+                ...state,
+                isloading: false,
+                domainList: [...state.domainList]
             }
         }
 

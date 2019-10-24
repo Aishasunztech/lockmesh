@@ -3276,7 +3276,7 @@ export function appMarketColumns(translation, handleSearch, removeSMapps) {
     )
 }
 
-export function domainColumns(translation) {
+export function domainColumns(translation, handleSearch) {
     return ([
         {
             title: "#",
@@ -3335,7 +3335,7 @@ export function domainColumns(translation) {
                     key="domain_name"
                     id="domain_name"
                     className="search_heading"
-                    // onChange={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     // placeholder={titleCase(props.convertToLang(props.translation[""], "APP NAME"))}
                     placeholder="DOMAIN NAME"

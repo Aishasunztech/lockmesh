@@ -213,8 +213,8 @@ class Permissions extends Component {
     });
     this.setState({ permissions: dealer_ids })
 
-    // this.props.savePermissionAction(this.props.record.id, JSON.stringify(dealer_ids), 'save');
-    this.props.savePermissionAction(this.props.record.id, 'all', 'save');
+    this.props.savePermissionAction(this.props.record.id, JSON.stringify(dealer_ids), 'save', true); // last param is statusAll
+    // this.props.savePermissionAction(this.props.record.id, 'all', 'save');
   }
   savePermission = () => {
     // console.log(this.props.dealerList, "dealer ids", this.state.dealer_ids);

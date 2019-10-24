@@ -900,6 +900,16 @@ const RestService = {
     },
     getDomains: () => {
         return axios.get(BASE_URL + 'users/get-domains', RestService.getHeader());
-    }
+    },
+    dealerPermissions: (permissionId, dealers, action, statusAll) => {
+        return axios.post(BASE_URL + 'users/dealer-permissions/domain', {
+            permissionId: permissionId,
+            dealers: dealers,
+            action: action,
+            statusAll: statusAll
+        },
+            RestService.getHeader()
+        );
+    },
 }
 export default RestService;
