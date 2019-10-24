@@ -16,6 +16,7 @@ import SideBar from "./SideBar"
 import Agents from './Agent';
 import Dashboard from './Dashboard';
 import Reporting from './Reports';
+import RightSidebar from './rightSidebar'
 
 const reducers = combineReducers({
   routing: routerReducer,
@@ -34,7 +35,7 @@ const reducers = combineReducers({
   socket: socket,
   sidebar: SideBar,
   dashboard: Dashboard,
-  reporting: Reporting,
+  rightSidebar: RightSidebar
 });
 
 export default reducers;

@@ -5,6 +5,10 @@ export const SWITCH_LANGUAGE = 'SWITCH-LANGUAGE';
 export const GET_LANGUAGE = 'GET_LANGUAGE';
 export const LANGUAGES = 'LANGUAGES';
 
+
+// Right Sidebar
+export const GET_QUE_JOBS = 'GET_QUE_JOBS';
+
 // AppFilter
 export const GET_DROPDOWN = 'GET_DROPDOWN';
 export const POST_DROPDOWN = 'POST_DROPDOWN';
