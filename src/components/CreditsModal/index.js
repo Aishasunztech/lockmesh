@@ -13,7 +13,7 @@ export default class NewDevices extends Component {
     constructor(props) {
         super(props);
         const columns = [
-            { title: convertToLang(props.translation[""], "AVAIALABLE CREDITS"), dataIndex: 'user_credit', key: 'user_credit', align: "center" },
+            { title: convertToLang(props.translation[""], "AVAILABLE CREDITS"), dataIndex: 'user_credit', key: 'user_credit', align: "center" },
             { title: convertToLang(props.translation[""], "CREDITS DUE"), dataIndex: 'due_credit', key: 'due_credit', align: "center" },
         ];
 
@@ -72,7 +72,7 @@ export default class NewDevices extends Component {
                 // cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     <Fragment>
-                        <h1>{convertToLang(this.props.translation[" "], "CREDITS")}</h1>
+                        <h1>{convertToLang(this.props.translation[""], "CREDITS")}</h1>
                         <Table
                             bordered
                             columns={this.state.columns}

@@ -3197,16 +3197,6 @@ export function bulkDevicesColumns(translation, handleSearch) {
 export function inventorySales(translation) {
     return (
         [
-            // {
-            //     dataIndex: 'counter',
-            //     className: '',
-            //     title: '#',
-            //     align: "center",
-            //     key: 'counter',
-            //     sorter: (a, b) => { return a.counter - b.counter },
-            //     sortDirections: ['ascend', 'descend'],
-
-            // },
             {
                 title: "#",
                 dataIndex: 'counter',
@@ -3281,11 +3271,88 @@ export function inventorySales(translation) {
                 // ...this.getColumnSearchProps('status'),
                 // sorter: (a, b) => { return a.line_total - b.line_total },
                 // sortDirections: ['ascend', 'descend'],
-
             },
         ]
     );
 }
+export function refundServiceColumns(translation) {
+    return (
+        [
+            {
+                title: "#",
+                dataIndex: 'counter',
+                align: 'center',
+                className: 'row',
+                key: 'counter',
+                render: (text, record, index) => ++index,
+            },
+            {
+                dataIndex: 'item',
+                className: '',
+                title: convertToLang(translation["ITEM"], "ITEM"),
+                align: "center",
+                key: 'item',
+                // sorter: (a, b) => { return a.item.localeCompare(b.item) },
+                // sortDirections: ['ascend', 'descend'],
+
+            },
+            {
+                title: convertToLang(translation[DUMY_TRANS_ID], "DESCRPTION"),
+                dataIndex: 'description',
+                className: '',
+                align: "center",
+                className: '',
+                key: 'description',
+                // ...this.getColumnSearchProps('status'),
+                // sorter: (a, b) => { return a.description.localeCompare(b.description) },
+                // sortDirections: ['ascend', 'descend'],
+
+            },
+            {
+                title: convertToLang(translation[DUMY_TRANS_ID], "SERVICE TERM"),
+                dataIndex: 'term',
+                className: '',
+                align: "center",
+                className: '',
+                key: 'term',
+            },
+
+            {
+                title: convertToLang(translation[DUMY_TRANS_ID], "CREDIT TERM (DAYS)"),
+                dataIndex: 'remaining_term',
+                className: '',
+                align: "center",
+                className: '',
+                key: 'remaining_term',
+            },
+
+            {
+                title: convertToLang(translation[DUMY_TRANS_ID], "UNIT PRICE (CREDITS)"),
+                dataIndex: 'unit_price',
+                className: '',
+                align: "center",
+                className: '',
+                key: 'unit_price',
+                // ...this.getColumnSearchProps('status'),
+                // sorter: (a, b) => { return a.unit_price - b.unit_price },
+                // sortDirections: ['ascend', 'descend'],
+            },
+            {
+                title: convertToLang(translation[DUMY_TRANS_ID], "TOTAL"),
+                dataIndex: 'line_total',
+                className: '',
+                align: "center",
+                className: '',
+                key: 'line_total',
+                // ...this.getColumnSearchProps('status'),
+                // sorter: (a, b) => { return a.line_total - b.line_total },
+                // sortDirections: ['ascend', 'descend'],
+            }
+        ]
+    );
+}
+
+
 export function appMarketColumns(translation, handleSearch, removeSMapps) {
     return (
         [

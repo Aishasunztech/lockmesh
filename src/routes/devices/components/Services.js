@@ -199,6 +199,7 @@ class ServicesList extends Component {
                 if (!packageIds.includes(item.id)) {
                     let services = JSON.parse(item.pkg_features)
                     packagesDataList.push({
+                        key: index,
                         id: item.id,
                         rowKey: item.id,
                         pkg_name: `${item.pkg_name}`,
@@ -246,6 +247,7 @@ class ServicesList extends Component {
                     }
 
                     productsDataList.push({
+                        key: index,
                         id: item.id,
                         rowKey: item.id,
                         price_for: `${price_for}`,

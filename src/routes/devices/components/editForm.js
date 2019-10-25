@@ -36,7 +36,7 @@ import moment from 'moment';
 import axios from 'axios';
 import RestService from '../../../appRedux/services/RestServices';
 import { async } from 'q';
-import { inventorySales } from '../../utils/columnsUtils';
+import { inventorySales, refundServiceColumns } from '../../utils/columnsUtils';
 import Invoice from './invoice';
 
 const { TextArea } = Input;
@@ -47,6 +47,7 @@ class EditDevice extends Component {
         super(props);
 
         const invoiceColumns = inventorySales(props.translation);
+        const refundServicesColumns = refundServiceColumns(props.translation);
 
         this.state = {
             visible: false,
@@ -80,10 +81,12 @@ class EditDevice extends Component {
             unit_servcies_price: 0,
             total_price: 0,
             invoiceColumns: invoiceColumns,
+            refundServicesColumns: refundServicesColumns,
             PkgSelectedRows: [],
             proSelectedRows: [],
             creditsToRefund: 0,
             serviceRemainingDays: 0,
+            prevService_totalDays: 0,
             showConfirmCredit: false,
             serviceData: {},
             invoiceID: 'PI00001',
@@ -212,12 +215,15 @@ class EditDevice extends Component {
         let prevService = this.props.device.services
         let creditsToRefund = 0
         let serviceRemainingDays = 0
+        let totalDays = 0
         if (prevService) {
             await RestService.getServiceRefund(prevService.id).then((response) => {
                 if (RestService.checkAuth(response.data)) {
                     if (response.data.status) {
                         creditsToRefund = response.data.creditsToRefund
                         serviceRemainingDays = response.data.serviceRemainingDays
+                        totalDays = response.data.totalDays
+
                     }
                     else {
                         return false
@@ -230,7 +236,9 @@ class EditDevice extends Component {
             this.setState({
                 servicesModal: true,
                 creditsToRefund: creditsToRefund,
-                serviceRemainingDays: serviceRemainingDays
+                serviceRemainingDays: serviceRemainingDays,
+                prevService_totalDays: totalDays
+
             })
         }
     }
@@ -294,6 +302,31 @@ class EditDevice extends Component {
         });
         // console.log(packagesList)
         return [...packagesList, ...productList]
+    }
+    refundServiceRenderList(services, serviceRemainingDays, creditsToRefund, prevService_totalDays) {
+        if (services) {
+            let service_term = ''
+            if (services.packages) {
+                let packages = JSON.parse(services.packages)
+                service_term = packages[0].pkg_term
+            } else if (services.products) {
+                let products = JSON.parse(services.products)
+                service_term = products[0].price_term
+            }
+            return [{
+                counter: 1,
+                id: services.id,
+                rowKey: 1,
+                item: `REFUND`,
+                description: "Previous Service Refund",
+                term: service_term,
+                remaining_term: serviceRemainingDays,
+                unit_price: "-" + (services.total_credits / prevService_totalDays).toFixed(2),
+                line_total: "-" + creditsToRefund
+            }]
+        } else {
+            return []
+        }
     }
 
     handleCancelForm = () => {
@@ -676,7 +709,7 @@ class EditDevice extends Component {
                                     onClick={() => this.handleServicesModal()}
                                     style={{ width: '100%' }}
                                 >
-                                    {convertToLang(this.props.translation[DUMY_TRANS_ID], "CHANGE SERVICES")}
+                                    {convertToLang(this.props.translation[DUMY_TRANS_ID], "APPLY SERVICES")}
                                 </Button>
                                 <span style={this.state.checkServices}>YOUR SERVICES CHANGED.</span>
                             </Fragment>
@@ -984,7 +1017,7 @@ class EditDevice extends Component {
                 <Modal
                     width={750}
                     visible={this.state.servicesModal}
-                    title={convertToLang(this.props.translation[DUMY_TRANS_ID], "SEVCIES")}
+                    title={convertToLang(this.props.translation[DUMY_TRANS_ID], "SERVICES")}
                     maskClosable={false}
                     onOk={this.handleOk}
                     closable={false}
@@ -1012,7 +1045,7 @@ class EditDevice extends Component {
                 <Modal
                     width={900}
                     visible={this.state.showConfirmCredit}
-                    title={<span style={{ fontWeight: "bold" }}> {convertToLang(this.props.translation[DUMY_TRANS_ID], "Do You Really want to apply selected services on device ?")} </span>}
+                    title={<span style={{ fontWeight: "bold" }}> {convertToLang(this.props.translation[DUMY_TRANS_ID], "SERVICE CHANGE DETAILS")} </span>}
                     maskClosable={false}
                     // onOk={this.handleOk}
                     closable={false}
@@ -1028,25 +1061,26 @@ class EditDevice extends Component {
                 >
                     <Fragment>
                         <div style={{ marginTop: 20 }}>
-                            <h3 style={{ textAlign: "center" }}><b>CURRENT SERVICES</b></h3>
+                            {/* <h4 style={{ textAlign: "center" }}><b>CURRENT SERVICES</b></h4> */}
+                            <h4>REFUND APPLIED ON EXISTING SERVICE</h4>
                             <Table
                                 id='packages'
                                 className={"devices mb-20"}
                                 // rowSelection={packageRowSelection}
                                 size="middle"
                                 bordered
-                                columns={this.state.invoiceColumns}
-                                dataSource={this.confirmRenderList((this.props.device && this.props.device.services) ? JSON.parse(this.props.device.services.packages) : [], (this.props.device && this.props.device.services) ? JSON.parse(this.props.device.services.products) : [])}
+                                columns={this.state.refundServicesColumns}
+                                dataSource={this.refundServiceRenderList(this.props.device.services, this.state.serviceRemainingDays, this.state.creditsToRefund, this.state.prevService_totalDays)}
                                 pagination={
                                     false
                                 }
                             />
-                            <h5 style={{ textAlign: "right" }}><b>Remaining days of services : {this.state.serviceRemainingDays}</b></h5>
-                            <h5 style={{ textAlign: "right" }}>Previous service refund credits :  {this.state.creditsToRefund} Credits</h5>
+                            {/* <h5 style={{ textAlign: "right" }}>Remaining days of services : {this.state.serviceRemainingDays}</h5> */}
+                            <h5 style={{ textAlign: "right" }}><b>TOTAL REFUND CREDITS :  -{this.state.creditsToRefund} Credits </b></h5>
                         </div >
 
                         <div style={{ marginTop: 20 }}>
-                            <h3 style={{ textAlign: "center" }}><b>NEW SERVICES</b></h3>
+                            <h4><b>NEW SERVICES</b></h4>
                             <Table
                                 id='packages'
                                 className={"devices mb-20"}
@@ -1063,19 +1097,19 @@ class EditDevice extends Component {
                         <div>
                             <h5 style={{ textAlign: "right" }}>Sub Total :  {this.state.total_price} Credits</h5>
 
-                            <h5 style={{ textAlign: "right" }}>Previous service refund credits :  {this.state.creditsToRefund} Credits</h5>
-                            <h5 style={{ textAlign: "right" }}><b>Total :  {this.state.serviceData.total_price} Credits</b></h5>
-                            <h4 style={{ textAlign: "center" }}><b>There will be a charge of {this.state.serviceData.total_price} Credits</b></h4>
+                            <h5 style={{ textAlign: "right" }}>REFUND :  -{this.state.creditsToRefund} Credits</h5>
+                            <h5 style={{ textAlign: "right" }}><b>TOTAL :  {this.state.serviceData.total_price} Credits</b></h5>
+                            {/* <h4 style={{ textAlign: "center" }}><b>There will be a charge of {this.state.serviceData.total_price} Credits</b></h4> */}
                         </div>
-                        {(this.state.term !== '0') ?
+                        {/* {(this.state.term !== '0') ?
                             <div>
-                                <h4 style={{ textAlign: "center", color: 'red' }}>If you PAY NOW you will get 5% discount.</h4>
+                                <h4 style={{ textAlign: "center", color: 'red' }}>If you PAY NOW you will get 3% discount.</h4>
                             </div>
-                            : null}
+                            : null} */}
                         <div className="edit_ftr_btn" >
                             <Button onClick={() => { this.setState({ showConfirmCredit: false }) }}>CANCEL</Button>
                             <Button type='primary' onClick={() => { this.submitServicesConfirm(false) }}>PAY LATER</Button>
-                            <Button style={{ backgroundColor: "green", color: "white" }} onClick={() => { this.submitServicesConfirm(true) }}>PAY NOW</Button>
+                            <Button style={{ backgroundColor: "green", color: "white" }} onClick={() => { this.submitServicesConfirm(true) }}>PAY NOW (-3%)</Button>
                         </div >
                     </Fragment>
                 </Modal>
@@ -1110,6 +1144,8 @@ class EditDevice extends Component {
                         serviceRemainingDays={this.state.serviceRemainingDays}
                         creditsToRefund={this.state.creditsToRefund}
                         translation={this.props.translation}
+                        refundServiceRenderList={this.refundServiceRenderList}
+                        prevService_totalDays={this.state.prevService_totalDays}
                     />
                     <div style={{ float: "right" }}><b>PAID BY USER: </b> <Switch size="small" defaultChecked onChange={this.handlePaidUser} /></div>
                 </Modal>
