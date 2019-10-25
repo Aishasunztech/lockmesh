@@ -1,21 +1,27 @@
 import React, { Component } from "react";
 import { Layout } from "antd";
 import { connect } from "react-redux";
+import IdleTimer from 'react-idle-timer'
 
 import Sidebar from "../Sidebar/index";
+import RightSidebar from "../RightSidebar";
+
 import HorizontalDefault from "../Topbar/HorizontalDefault/index";
 import HorizontalDark from "../Topbar/HorizontalDark/index";
 import InsideHeader from "../Topbar/InsideHeader/index";
 import AboveHeader from "../Topbar/AboveHeader/index";
 import BelowHeader from "../Topbar/BelowHeader/index";
 import Topbar from "../Topbar/index";
+
 import Customizer from "./Customizer";
-import RightSidebar from "../rightSidebar";
-// import Chat from "../../components/Chat";
+
 import { footerText } from "../../util/config";
 import App from "../../routes/index";
 
-import IdleTimer from 'react-idle-timer'
+import {
+  connectSocket,
+  hello_web
+} from '../../appRedux/actions'
 
 import {
   NAV_STYLE_ABOVE_HEADER,
@@ -50,58 +56,18 @@ export class MainApp extends Component {
   }
 
   componentDidMount() {
-    // Active
-    // window.addEventListener('focus', this.stopTimer);
-
-    // // Inactive
-    // window.addEventListener('blur', this.startTimer);
+    this.props.connectSocket();
   }
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.socket){
+      this.props.hello_web(nextProps.socket)
+    }
+  }
+
   componentWillUnmount() {
-    // this.setState({
-    //   seconds: 0
-    // })
+
   }
-
-  // timerHandler = () => {
-  //   // 60 * 60 * 3
-  //   if (this.state.seconds >= (60 * 60 * 3)) {
-  //     this.setState({
-  //       seconds: 0
-  //     });
-  //     localStorage.removeItem("id");
-  //     localStorage.removeItem("name");
-  //     localStorage.removeItem("lastName");
-  //     localStorage.removeItem("firstName");
-  //     localStorage.removeItem("email");
-  //     localStorage.removeItem("type");
-  //     localStorage.removeItem("token");
-
-  //     this.props.history.push('/login')
-
-  //   }else{
-  //     let seconds = this.state.seconds;
-  //     seconds++;
-  //     this.setState({
-  //       seconds: seconds
-  //     })
-  //   }
-  // }
-
-  // Start timer
-  // startTimer = () => {
-  //   let interval = window.setInterval(this.timerHandler, 1000);
-  //   this.setState({
-  //     interval: interval
-  //   })
-  // }
-
-  // // Stop timer
-  // stopTimer = () => {
-  //   this.setState({
-  //     seconds: 0
-  //   })
-  //   window.clearInterval(this.state.interval);
-  // }
 
   getContainerClass = (navStyle) => {
     switch (navStyle) {
@@ -203,31 +169,32 @@ export class MainApp extends Component {
           timeout={3600000} />
         <Layout className="gx-app-layout">
           {this.getSidebar(navStyle, width)}
-          <RightSidebar />
           <Layout>
             {this.getNavStyles(navStyle)}
             <Content className={`gx-layout-content ${this.getContainerClass(navStyle)} `}>
               <App match={match} />
+              <RightSidebar />
               <Footer>
                 <div className="gx-layout-footer-content">
                   {footerText}
                 </div>
               </Footer>
-              {/* <Chat/> */}
             </Content>
           </Layout>
           <Customizer />
-         
+
         </Layout>
       </div>
     )
   }
 }
 
-const mapStateToProps = ({ settings }) => {
-  // console.log('style:', settings)
+const mapStateToProps = ({ settings, socket }) => {
+
+
   const { width, navStyle } = settings;
-  return { width, navStyle }
+  return { width, navStyle, socket: socket.socket }
 };
-export default connect(mapStateToProps)(MainApp);
+
+export default connect(mapStateToProps, { connectSocket, hello_web })(MainApp);
 

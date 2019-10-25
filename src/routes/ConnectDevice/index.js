@@ -61,7 +61,7 @@ import {
   ackFinishedPolicyStep,
   receiveSim,
   hello_web,
-  closeSocketEvents,
+  closeConnectPageSocketEvents,
   ackInstalledApps,
   ackUninstalledApps,
   ackSettingApplied,
@@ -162,7 +162,7 @@ class ConnectDevice extends Component {
 
     const device_id = isBase64(this.props.match.params.device_id);
 
-    if (device_id !== '') {
+    if (device_id && device_id !== '') {
 
       // this.setState({
       //   pageName: this.props.pageName,
@@ -174,7 +174,7 @@ class ConnectDevice extends Component {
       this.props.startLoading();
 
 
-      this.props.connectSocket()
+      // this.props.connectSocket()
 
       this.props.getDeviceDetails(device_id);
       this.props.getAppJobQueue(device_id);
@@ -240,9 +240,10 @@ class ConnectDevice extends Component {
       // there is no use of pathname under device id section
       // if(this.props.history.location.pathname !== nextProps.history.location.pathname){
       // if(this.props.pathName !== nextProps.pathName){
-      if (this.props.socket === null && nextProps.socket !== null) {
+      if (nextProps.socket) {
+      // if (this.props.socket === null && nextProps.socket !== null) {
 
-        // console.log("socket connected component")
+        console.log("socket connected component", nextProps.socket)
         nextProps.sendOnlineOfflineStatus(nextProps.socket, device_id);
         nextProps.actionInProcess(nextProps.socket, device_id);
         nextProps.ackFinishedPushApps(nextProps.socket, device_id);
@@ -258,7 +259,6 @@ class ConnectDevice extends Component {
         nextProps.ackSettingApplied(nextProps.socket, device_id);
         nextProps.receiveSim(nextProps.socket, device_id);
         nextProps.deviceSynced(nextProps.socket, device_id);
-        // nextProps.hello_web(nextProps.socket);
       }
       // }
     }
@@ -481,20 +481,20 @@ class ConnectDevice extends Component {
 
   componentWillUnmount() {
     const device_id = isBase64(this.props.match.params.device_id);
-    this.props.closeSocketEvents(this.props.socket, device_id);
+    this.props.closeConnectPageSocketEvents(this.props.socket, device_id);
     this.props.resetDevice();
     this.onBackHandler();
   }
 
-  refreshDevice = (deviceId, resync = false) => {
+  refreshDevice = (deviceId, reSync = false) => {
 
     this.props.startLoading();
 
-    if (deviceId === undefined || deviceId === null) {
+    if (!deviceId || deviceId == '') {
       deviceId = isBase64(this.props.match.params.device_id);
     }
-    // console.log('ref', deviceId)
-    if (resync) {
+    
+    if (reSync) {
       this.props.reSyncDevice(deviceId);
       setTimeout(() => {
         this.props.getDeviceDetails(deviceId);
@@ -777,7 +777,7 @@ function mapDispatchToProps(dispatch) {
     receiveSim: receiveSim,
     clearState: clearState,
     clearResyncFlag: clearResyncFlag,
-    closeSocketEvents: closeSocketEvents,
+    closeConnectPageSocketEvents: closeConnectPageSocketEvents,
     connectSocket: connectSocket,
     ackInstalledApps: ackInstalledApps,
     ackUninstalledApps: ackUninstalledApps,

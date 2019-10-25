@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { Button, Drawer, Form, message, Icon, Tabs, Collapse, } from "antd";
 import { connect } from "react-redux";
-import Auxiliary from "util/Auxiliary";
-import CustomScrollbars from "util/CustomScrollbars";
-import { getQueJobs } from '../../appRedux/actions/rightSidebar';
+import Auxiliary from "../../util/Auxiliary";
+import CustomScrollbars from "../../util/CustomScrollbars";
+import { getSocketProcesses, getNotification } from '../../appRedux/actions';
 import styles from './rightSidebar.css'
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
+
 const customPanelStyle = {
   background: '#f7f7f7',
   borderRadius: 4,
@@ -14,6 +15,7 @@ const customPanelStyle = {
   border: 0,
   overflow: 'hidden',
 };
+
 class RightSidebar extends Component {
 
   constructor(props) {
@@ -24,46 +26,19 @@ class RightSidebar extends Component {
     this.datalist = []
   }
 
-
   callback = (key) => {
     console.log(key);
   }
 
-  genExtra = (type) => (
-    <div style={{ lineHeight: 1 }}>
+  genExtra = (type) => {
+    return (<div style={{ lineHeight: 1 }}>
       <i class="fa fa-check" aria-hidden="true"></i>
       <i class="fa fa-check" aria-hidden="true"></i>
       <br></br>
       {type === 'completed' ? <i class="fa fa-times" aria-hidden="true" onClick={() => { }}></i> : null}
-    </div>
-
-    // <Icon
-    //   type="delete"
-    //   onClick={event => {
-    //     // If you don't want click extra trigger collapse, you can prevent this:
-    //     event.stopPropagation();
-    //   }}
-    // />
-  );
-
-  renderList = (data, type) => {
-    if (data) {
-      return data.map((item, index) => {
-        return (
-          <Panel
-            header={item.type + ' (' + item.device_id + ')'}
-            style={customPanelStyle}
-            key={item.id}
-            extra={this.genExtra(type)}
-          >
-            <div>
-              <p>{item.created_at}</p>
-            </div>
-          </Panel>
-        )
-      })
-    }
+    </div>)
   }
+
 
   getCustomizerContent = () => {
 
@@ -72,7 +47,7 @@ class RightSidebar extends Component {
       <div className="gx-customizer-item">
 
         <Tabs onChange={() => this.callback()} type="card" className='rightSidebar-header'>
-          <TabPane tab="Pending" key="1">
+          <TabPane tab="Pending" key="pending">
             <CustomScrollbars className="gx-customizer">
 
               <Collapse
@@ -82,7 +57,7 @@ class RightSidebar extends Component {
                 onChange={() => this.callback()}
               // style={{ height: 400 }}
               >
-                {this.renderList(this.props.pendingTasks, 'pending')}
+                {this.renderList(this.props.tasks, 'pending', 'pending')}
                 {/* <div style={{ height: 50 }}></div> */}
               </Collapse>
 
@@ -92,12 +67,12 @@ class RightSidebar extends Component {
               <Icon
                 type="reload"
                 style={{ height: 10, width: 10 }}
-                onClick={() => this.props.getQueJobs('pending', '', this.props.pendingTasks.length, 50)}
+              // onClick={() => this.props.getSocketProcesses('pending', '', this.props.pendingTasks.length, 50)}
 
               />
             </div>
           </TabPane>
-          <TabPane tab="Completed" key="2">
+          <TabPane tab="Completed" key="completed_successfully">
             <CustomScrollbars className="gx-customizer">
               <Collapse
                 bordered={false}
@@ -106,14 +81,14 @@ class RightSidebar extends Component {
                 onChange={() => this.callback()}
 
               >
-                {this.renderList(this.props.completedTasks, 'completed')}
+                {this.renderList(this.props.tasks, 'completed_successfully', 'completed')}
               </Collapse>
             </CustomScrollbars>
             <div className='rightSidebar-footer'>
               <Icon
                 type="reload"
                 style={{ height: 10, width: 10 }}
-                onClick={() => this.props.getQueJobs('completed', '', this.props.completedTasks.length, 10)}
+              // onClick={() => this.props.getSocketProcesses('completed', '', this.props.completedTasks.length, 10)}
 
               />
             </div>
@@ -126,10 +101,7 @@ class RightSidebar extends Component {
     )
   };
 
-  componentDidMount() {
-    // this.props.getQueJobs()
-    // console.log('index of rightsidebar')
-  }
+  
 
   toggleRightSidebar = () => {
     this.setState(previousState => (
@@ -138,6 +110,40 @@ class RightSidebar extends Component {
       }));
   };
 
+  renderList = (data, type, title) => {
+    let taskList = [];
+
+    if (data.length) {
+      data.map((item, index) => {
+        if (item.status === type) {
+          taskList.push(item);
+        }
+      })
+    }
+    return taskList.map((task) => {
+      return (
+        <Panel
+          header={task.type + ' (' + task.device_id + ')'}
+          style={customPanelStyle}
+          key={task.id}
+          extra={this.genExtra(title)}
+        >
+          <div>
+            <p>{task.created_at}</p>
+          </div>
+        </Panel>
+      )
+    })
+  }
+  
+  componentDidMount() {
+    this.props.getSocketProcesses();
+  }
+  componentWillReceiveProps(nextProps){
+    if(nextProps.socket){
+      nextProps.getNotification()
+    }
+  }
   render() {
     // console.log(this.props)
     return (
@@ -167,15 +173,16 @@ class RightSidebar extends Component {
   }
 }
 
-RightSidebar = Form.create()(RightSidebar);
-
 // export default RightSidebar;
-const mapStateToProps = ({ rightSidebar, auth }) => {
-  console.log("right sidebar:", rightSidebar, auth)
+const mapStateToProps = ({ rightSidebar, auth, socket }) => {
+  // console.log("right sidebar:", rightSidebar, auth)
   return {
-    completedTasks: rightSidebar.completedTasks,
-    pendingTasks: rightSidebar.pendingTasks
+    tasks: rightSidebar.tasks,
+    socket: socket.socket
 
   }
 };
-export default connect(mapStateToProps, { getQueJobs })(RightSidebar);
+
+RightSidebar = Form.create()(RightSidebar);
+
+export default connect(mapStateToProps, { getSocketProcesses, getNotification })(RightSidebar);

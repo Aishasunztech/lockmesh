@@ -29,11 +29,13 @@ import {
     ACK_SETTING_APPLIED,
     ACK_INSTALLED_APPS,
     ACK_UNINSTALLED_APPS,
-    FINISH_WIPE
+    FINISH_WIPE,
+    SEND_JOB_TO_PANEL
 } from "../../constants/SocketConstants";
 
 import RestService from '../services/RestServices'
 
+// socket should connect on login
 export const connectSocket = () => {
     return (dispatch) => {
         let socket = RestService.connectSocket();
@@ -45,71 +47,52 @@ export const connectSocket = () => {
     }
 }
 
-export const getNotification = (socket) => {
-    return (dispatch) => {
-        if (socket) {
-            socket.on('getNotification', (data) => {
-                // dispatch(
-                //     action: 
-                // )
-            })
-        } else {
+//==========> Connect Device events
 
+export const sendOnlineOfflineStatus = (socket, deviceId) => {
+    return (dispatch) => {
+        if (socket && socket._callbacks[SEND_ONLINE_OFFLINE_STATUS + deviceId] == undefined) {
+            socket.on(SEND_ONLINE_OFFLINE_STATUS + deviceId, (response) => {
+                dispatch({
+                    type: SEND_ONLINE_OFFLINE_STATUS,
+                    payload: response.status
+                })
+            })
         }
     }
 }
 
-export const sendOnlineOfflineStatus = (socket, deviceId) => {
-    return (dispatch) => {
-        socket.on(SEND_ONLINE_OFFLINE_STATUS + deviceId, (response) => {
-            dispatch({
-                type: SEND_ONLINE_OFFLINE_STATUS,
-                payload: response.status
-            })
-        })
-    }
-}
 export const deviceSynced = (socket, deviceId) => {
     return (dispatch) => {
-        socket.on("device_synced_" + deviceId, (response) => {
-            dispatch({
-                type: DEVICE_SYNCED,
-                payload: response.status
+        if (socket && socket._callbacks["device_synced_" + deviceId] == undefined) {
+            socket.on("device_synced_" + deviceId, (response) => {
+                dispatch({
+                    type: DEVICE_SYNCED,
+                    payload: response.status
+                })
             })
-        })
+        }
     }
 }
 
 export const ackSettingApplied = (socket, deviceId) => {
     return (dispatch) => {
-        socket.on(ACK_SETTING_APPLIED + deviceId, (response) => {
-            dispatch({
-                type: ACK_SETTING_APPLIED,
-                payload: response
-            })
-        })
-    }
-}
-
-export const ackSinglePushApp = (socket, deviceId) => {
-    return (dispatch) => {
-        if (socket) {
-            socket.on(ACK_SINGLE_PUSH_APP + deviceId, (response) => {
-                // console.log("SOCKET WEB SINGLE");
+        if (socket && socket._callbacks[ACK_SETTING_APPLIED + deviceId] == undefined) {
+        
+            socket.on(ACK_SETTING_APPLIED + deviceId, (response) => {
                 dispatch({
-                    type: SINGLE_APP_PUSHED,
+                    type: ACK_SETTING_APPLIED,
                     payload: response
                 })
             })
-        } else {
-
         }
     }
 }
 
+// after install app anywhere from device acknowledgement
 export const ackInstalledApps = (socket, deviceId) => {
     return (dispatch) => {
-        if (socket) {
+        if (socket && socket._callbacks[ACK_INSTALLED_APPS + deviceId] == undefined) {
             socket.on(ACK_INSTALLED_APPS + deviceId, (response) => {
                 console.log("ackInstalledApps", response);
                 dispatch({
@@ -123,9 +106,10 @@ export const ackInstalledApps = (socket, deviceId) => {
     }
 }
 
+// after uninstall app anywhere from device acknowledgement
 export const ackUninstalledApps = (socket, deviceId) => {
     return (dispatch) => {
-        if (socket) {
+        if (socket && socket._callbacks[ACK_UNINSTALLED_APPS + deviceId] == undefined) {
             socket.on(ACK_UNINSTALLED_APPS + deviceId, (response) => {
                 console.log("ackUninstalledApps", response);
                 dispatch({
@@ -139,9 +123,26 @@ export const ackUninstalledApps = (socket, deviceId) => {
     }
 }
 
+// Push apps processes
+export const ackSinglePushApp = (socket, deviceId) => {
+    return (dispatch) => {
+        if (socket && socket._callbacks[ACK_SINGLE_PUSH_APP + deviceId] == undefined) {
+            socket.on(ACK_SINGLE_PUSH_APP + deviceId, (response) => {
+                // console.log("SOCKET WEB SINGLE");
+                dispatch({
+                    type: SINGLE_APP_PUSHED,
+                    payload: response
+                })
+            })
+        } else {
+
+        }
+    }
+}
+
 export const ackFinishedPushApps = (socket, deviceId) => {
     return (dispatch) => {
-        if (socket) {
+        if (socket && socket._callbacks[ACK_FINISHED_PUSH_APPS + deviceId] == undefined) {
             socket.on(ACK_FINISHED_PUSH_APPS + deviceId, (response) => {
                 // console.log("jkshdksa");
                 dispatch({
@@ -155,9 +156,10 @@ export const ackFinishedPushApps = (socket, deviceId) => {
     }
 }
 
+// pull apps processes
 export const ackSinglePullApp = (socket, deviceId) => {
     return (dispatch) => {
-        if (socket) {
+        if (socket && socket._callbacks[ACK_SINGLE_PULL_APP + deviceId] == undefined) {
             socket.on(ACK_SINGLE_PULL_APP + deviceId, (response) => {
                 // console.log("SOCKET WEB SINGLE");
                 dispatch({
@@ -174,7 +176,7 @@ export const ackSinglePullApp = (socket, deviceId) => {
 
 export const ackFinishedPullApps = (socket, deviceId) => {
     return (dispatch) => {
-        if (socket) {
+        if (socket && socket._callbacks[ACK_FINISHED_PULL_APPS + deviceId] == undefined) {
             socket.on(ACK_FINISHED_PULL_APPS + deviceId, (response) => {
                 dispatch({
                     type: FINISHED_PULL_APPS,
@@ -188,9 +190,41 @@ export const ackFinishedPullApps = (socket, deviceId) => {
     }
 }
 
+// Policy processes
+export const ackFinishedPolicyStep = (socket, deviceId) => {
+    // console.log("ssad");
+    return (dispatch) => {
+        if (socket && socket._callbacks[FINISH_POLICY_STEP + deviceId] == undefined) {
+            socket.on(FINISH_POLICY_STEP + deviceId, (response) => {
+                dispatch({
+                    type: FINISHED_POLICY_STEP,
+                    payload: true
+                })
+            })
+        } else {
+
+        }
+    }
+}
+
+export const ackFinishedPolicy = (socket, deviceId) => {
+    return (dispatch) => {
+        if (socket && socket._callbacks[FINISH_POLICY + deviceId] == undefined) {
+            socket.on(FINISH_POLICY + deviceId, (response) => {
+                dispatch({
+                    type: FINISHED_POLICY,
+                    payload: true
+                })
+            })
+        } else {
+
+        }
+    }
+}
+
 export const actionInProcess = (socket, deviceId) => {
     return (dispatch) => {
-        if (socket) {
+        if (socket && socket._callbacks[ACTION_IN_PROCESS + deviceId] == undefined) {
             socket.on(ACTION_IN_PROCESS + deviceId, (response) => {
                 dispatch({
                     type: IN_PROCESS,
@@ -205,8 +239,7 @@ export const actionInProcess = (socket, deviceId) => {
 
 export const ackFinishedWipe = (socket, deviceId) => {
     return (dispatch) => {
-        if (socket) {
-            console.log("Socket connected wipe device function ");
+        if (socket && socket._callbacks[FINISH_WIPE + deviceId] == undefined) {
             socket.on(FINISH_WIPE + deviceId, (response) => {
                 dispatch({
                     type: FINISHED_WIPE,
@@ -218,40 +251,10 @@ export const ackFinishedWipe = (socket, deviceId) => {
         }
     }
 }
-export const ackFinishedPolicy = (socket, deviceId) => {
-    return (dispatch) => {
-        if (socket) {
-            socket.on(FINISH_POLICY + deviceId, (response) => {
-                dispatch({
-                    type: FINISHED_POLICY,
-                    payload: true
-                })
-            })
-        } else {
-
-        }
-    }
-}
-
-export const ackFinishedPolicyStep = (socket, deviceId) => {
-    // console.log("ssad");
-    return (dispatch) => {
-        if (socket) {
-            socket.on(FINISH_POLICY_STEP + deviceId, (response) => {
-                dispatch({
-                    type: FINISHED_POLICY_STEP,
-                    payload: true
-                })
-            })
-        } else {
-
-        }
-    }
-}
 
 export const ackImeiChanged = (socket, deviceId) => {
     return (dispatch) => {
-        if (socket) {
+        if (socket && socket._callbacks[FINISH_IMEI + deviceId] == undefined) {
             socket.on(FINISH_IMEI + deviceId, (response) => {
                 dispatch({
                     type: FINISHED_IMEI,
@@ -264,12 +267,11 @@ export const ackImeiChanged = (socket, deviceId) => {
     }
 }
 
-
 // sim button
 export const receiveSim = (socket, deviceId) => {
     // console.log("1: RECEIVE_SIM_DATA fro mobile at client side");
     return (dispatch) => {
-        if (socket) {
+        if (socket && socket._callbacks[RECV_SIM_DATA + deviceId] == undefined) {
             socket.on(RECV_SIM_DATA + deviceId, (response) => {
                 console.log("2: RECEIVE_SIM_DATA fro mobile at client side", response);
                 dispatch({
@@ -283,23 +285,25 @@ export const receiveSim = (socket, deviceId) => {
     }
 }
 
-export const hello_web = (socket) => {
-
-
+export function getAppJobQueue(deviceId) {
     return (dispatch) => {
-        if (socket) {
-            // socket.emit('join', 'testRoom');
-            socket.on('hello_web', function () {
-                console.log("hello world");
-            })
+        RestService.getAppJobQueue(deviceId).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                if (response.data) {
+                    dispatch({
+                        type: GET_APP_JOBS,
+                        payload: response.data.data,
+                        data_type: response.data.type
+                    })
+                }
 
-        } else {
+            }
+        });
 
-        }
-    }
+    };
 }
 
-export const closeSocketEvents = (socket, deviceId) => {
+export const closeConnectPageSocketEvents = (socket, deviceId) => {
     return (dispatch) => {
         if (socket) {
             // push apps
@@ -335,20 +339,35 @@ export const closeSocketEvents = (socket, deviceId) => {
     }
 }
 
-export function getAppJobQueue(deviceId) {
+// ===> panel events
+export const getNotification = (socket) => {
     return (dispatch) => {
-        RestService.getAppJobQueue(deviceId).then((response) => {
-            if (RestService.checkAuth(response.data)) {
-                if (response.data) {
-                    dispatch({
-                        type: GET_APP_JOBS,
-                        payload: response.data.data,
-                        data_type: response.data.type
-                    })
-                }
+        if (socket && socket._callbacks[SEND_JOB_TO_PANEL] == undefined) {
+            socket.on(SEND_JOB_TO_PANEL, (data) => {
+                // dispatch(
+                //     action: 
+                // )
+            })
+        } else {
 
-            }
-        });
+        }
+    }
+}
+export const hello_web = (socket) => {
 
-    };
+    return (dispatch) => {
+        if (socket && socket._callbacks['hello_web'] == undefined) {
+            // socket.emit('join', 'testRoom');
+            socket.on('hello_web', function () {
+                console.log("hello world");
+            })
+
+        } else {
+
+        }
+    }
+}
+
+export const closeAllSocketEvents = (socket) => {
+
 }

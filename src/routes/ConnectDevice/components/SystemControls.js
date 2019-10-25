@@ -17,7 +17,7 @@ export default class SystemControls extends Component {
   }
 
   componentDidMount() {
-    console.log('SystemControls.componentDidMount: ', this.props.controls)
+    // console.log('SystemControls.componentDidMount: ', this.props.controls)
     if (this.props.controls) {
       this.setState({
         controls: this.props.controls,
@@ -29,7 +29,7 @@ export default class SystemControls extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('SystemControls.componentWillReceiveProps: ', nextProps)
+    // console.log('SystemControls.componentWillReceiveProps: ', nextProps)
     if (this.props.controls !== nextProps.controls || this.props.app_list !== nextProps.app_list) {
       this.setState({
         controls: nextProps.controls,

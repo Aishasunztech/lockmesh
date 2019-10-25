@@ -3,14 +3,15 @@ import {
 } from "../../constants/ActionTypes"
 import RestService from '../services/RestServices';
 
-export function getQueJobs(status, filter, offset, limit) {
+export function getSocketProcesses(status=false, filter=false, offset=false, limit=false) {
     return (dispatch) => {
-        RestService.getQueJobs(status, filter, offset, limit).then((response) => {
+        RestService.getSocketProcesses(status, filter, offset, limit).then((response) => {
             if (RestService.checkAuth(response.data)) {
+                
                 if (response.data.status) {
                     dispatch({
                         type: GET_QUE_JOBS,
-                        response: response.data,
+                        payload: response.data.tasks,
                     });
                 }
             } else {
