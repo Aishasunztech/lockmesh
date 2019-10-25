@@ -36,7 +36,7 @@ deploy_LiveLM:
     - eval $(ssh-agent -s)
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
-    - echo "Deploy to live LM server"
+    - echo "Deploy to live server"
     - ssh-add <(echo "$PRIVATE_KEY")
     - rm -rf .git
     - ssh -o StrictHostKeyChecking=no web@178.128.202.140 "cd /var/www/html/${WORK_DIR}; git reset --hard; git pull origin ${BRANCH}; npm install; npm run build"
@@ -54,10 +54,48 @@ deploy_LiveTitan:
     - eval $(ssh-agent -s)
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
-    - echo "Deploy to live Titan server"
+    - echo "Deploy to live server"
     - ssh-add <(echo "$PRIVATE_KEY")
     - rm -rf .git
     - ssh -o StrictHostKeyChecking=no web@165.22.65.173 "cd /var/www/html/${WORK_DIR}; git reset --hard; git pull origin ${BRANCH}; npm install; npm run build"
+  only:
+    - master
+
+
+deploy_LiveCryptPhoneC:
+  stage: deploy
+  environment:
+    name: LiveCryptPhoneC
+    url: https://cryptc.lockmesh.com
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - mkdir -p ~/.ssh
+    - eval $(ssh-agent -s)
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  script:
+    - echo "Deploy to live server"
+    - ssh-add <(echo "$PRIVATE_KEY")
+    - rm -rf .git
+    - ssh -o StrictHostKeyChecking=no web@46.101.218.40 "cd /var/www/html/${WORK_DIR}; git reset --hard; git pull origin ${BRANCH}; npm install; npm run build"
+  only:
+    - master
+
+
+deploy_LiveCryptPhoneK:
+  stage: deploy
+  environment:
+    name: LiveCryptPhoneK
+    url: https://cryptk.lockmesh.com
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - mkdir -p ~/.ssh
+    - eval $(ssh-agent -s)
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  script:
+    - echo "Deploy to live server"
+    - ssh-add <(echo "$PRIVATE_KEY")
+    - rm -rf .git
+    - ssh -o StrictHostKeyChecking=no web@46.101.248.37 "cd /var/www/html/${WORK_DIR}; git reset --hard; git pull origin ${BRANCH}; npm install; npm run build"
   only:
     - master
 

@@ -15,52 +15,47 @@ switch (hostName) {
         break;
 
     case "lockmesh.com":
-        URL = "https://api.lockmesh.com/"
-        SUPERADMIN = 'https://api.meshguard.co/'
-        TITLE = "LockMesh"
-        break;
     case "www.lockmesh.com":
-        URL = "https://api.lockmesh.com/"
-        SUPERADMIN = 'https://api.meshguard.co/'
-        TITLE = "LockMesh"
-        break;
     case "http://www.lockmesh.com":
-        URL = "https://api.lockmesh.com/"
-        SUPERADMIN = 'https://api.meshguard.co/'
-        TITLE = "LockMesh"
-        break;
     case "https://www.lockmesh.com":
         URL = "https://api.lockmesh.com/"
         SUPERADMIN = 'https://api.meshguard.co/'
         TITLE = "LockMesh"
         break;
-        
+
     case "titansecureserver.com":
-        URL = "https://api.titansecureserver.com/"
-        SUPERADMIN = 'https://api.meshguard.co/'
-        TITLE = "TitanLocker"
-        break;
     case "www.titansecureserver.com":
-            URL = "https://api.titansecureserver.com/"
-            SUPERADMIN = 'https://api.meshguard.co/'
-            TITLE = "TitanLocker"
-            break;
     case "http://www.titansecureserver.com":
-        URL = "https://api.titansecureserver.com/"
-        SUPERADMIN = 'https://api.meshguard.co/'
-        TITLE = "TitanLocker"
-        break;
     case "https://www.titansecureserver.com":
         URL = "https://api.titansecureserver.com/"
         SUPERADMIN = 'https://api.meshguard.co/'
         TITLE = "TitanLocker"
-        break;    
-    
+        break;
+
     case "dev.lockmesh.com":
+    case "http://dev.lockmesh.com":
+    case "https://dev.lockmesh.com":
         URL = "https://devapi.lockmesh.com/"
         SUPERADMIN = 'https://devapi.meshguard.co/'
         TITLE = "LockMesh"
         break;
+
+    case "cryptc.lockmesh.com":
+    case "http://cryptc.lockmesh.com":
+    case "https://cryptc.lockmesh.com":
+        URL = "https://cryptcapi.lockmesh.com/"
+        SUPERADMIN = 'https://api.meshguard.co/'
+        TITLE = "CryptPhoneC"
+        break;
+
+    case "cryptk.lockmesh.com":
+    case "http://cryptk.lockmesh.com":
+    case "https://cryptk.lockmesh.com":
+        URL = "https://cryptkapi.lockmesh.com/"
+        SUPERADMIN = 'https://api.meshguard.co/'
+        TITLE = "CryptPhoneK"
+        break;
+
     default:
         // URL = "http://localhost:3000/";
         // TITLE = "LockMesh"
