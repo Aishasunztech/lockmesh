@@ -1206,40 +1206,41 @@ class Account extends Component {
                             </div>
                         </Col>
 
-                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                            <div>
-                                {/* <a href="javascript:void(0)" onClick={() => this.showPricingModal(true)}> */}
-                                <Link to={"/domains"}>
-                                    {/* <Link to={"/set-prices/" + this.props.whiteLabelInfo.name}> */}
-                                    <Card style={{ borderRadius: 12 }} className="manage_ac">
-                                        <div className="profile_table image_1">
-                                            <Fragment>
-                                                <Row>
-                                                    <div className="col-md-12 ac_card">
-                                                        <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[""], "Domains")} </h2>
-                                                        <Divider className="mb-0" />
-                                                        <Row style={{ padding: '12px 0 0px' }}>
-                                                            <Col span={8} className="" style={{ textAlign: "center" }}>
-                                                                <Icon type="dollar" className="and_icon" />
-                                                            </Col>
-                                                            <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
-                                                                <div className="crd_txt">
-                                                                    {/* <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_01], "Distribute tokens")}</h5>
+                        {(this.props.user.type === ADMIN || this.props.user.type === DEALER) ?
+                            <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                                <div>
+                                    {/* <a href="javascript:void(0)" onClick={() => this.showPricingModal(true)}> */}
+                                    <Link to={"/domains"}>
+                                        {/* <Link to={"/set-prices/" + this.props.whiteLabelInfo.name}> */}
+                                        <Card style={{ borderRadius: 12 }} className="manage_ac">
+                                            <div className="profile_table image_1">
+                                                <Fragment>
+                                                    <Row>
+                                                        <div className="col-md-12 ac_card">
+                                                            <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[""], "Manage Domains")} </h2>
+                                                            <Divider className="mb-0" />
+                                                            <Row style={{ padding: '12px 0 0px' }}>
+                                                                <Col span={8} className="" style={{ textAlign: "center" }}>
+                                                                    <Icon type="dollar" className="and_icon" />
+                                                                </Col>
+                                                                <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
+                                                                    <div className="crd_txt">
+                                                                        {/* <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_01], "Distribute tokens")}</h5>
                                                                     <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_02], "Set prices and delay for each token")}</h5>
                                                                     <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_03], "Set permissions for Tokens")}</h5> */}
-                                                                    <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], "and more...")}</h5>
-                                                                </div>
-                                                            </Col>
-                                                        </Row>
-                                                    </div>
-                                                </Row>
-                                            </Fragment>
-                                        </div>
-                                    </Card>
-                                    <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
-                                    {/* </a> */}
-                                </Link>
-                                {/* <div className="middle">
+                                                                        <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], "and more...")}</h5>
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </div>
+                                                    </Row>
+                                                </Fragment>
+                                            </div>
+                                        </Card>
+                                        <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
+                                        {/* </a> */}
+                                    </Link>
+                                    {/* <div className="middle">
                                         <SetPricingModal
                                             showPricingModal={this.showPricingModal}
                                             pricing_modal={this.state.pricing_modal}
@@ -1250,11 +1251,12 @@ class Account extends Component {
 
                                         />
                                     </div> */}
-                                {/* <div className="middle">
+                                    {/* <div className="middle">
                                         <div className="text">Coming Soon</div>
                                     </div> */}
-                            </div>
-                        </Col>
+                                </div>
+                            </Col>
+                            : null}
                     </Row>
                 </div>
                 <PasswordModal

@@ -17,7 +17,7 @@ import { getPolicies } from "../../appRedux/actions/Policy";
 // import {getDeviceList} from 
 
 import AppFilter from "../../components/AppFilter";
-import AddApk from '../addApk/index'
+// import AddApk from '../addApk/index'
 
 import {
     convertToLang
@@ -382,7 +382,7 @@ class Domains extends Component {
                                 // tableChangeHandler={this.tableChangeHandler}
                                 handleConfirmDelete={this.handleConfirmDelete}
                                 editApk={this.props.editApk}
-                                addApk={this.props.addApk}
+                                // addApk={this.props.addApk}
                                 columns={this.state.columns}
                                 getApkList={this.props.getApkList}
                                 pagination={this.props.DisplayPages}
@@ -391,7 +391,7 @@ class Domains extends Component {
                                 translation={this.props.translation}
                             />
 
-                            <Modal
+                            {/* <Modal
                                 maskClosable={false}
                                 width="620px"
                                 className="upload_apk_popup"
@@ -409,7 +409,7 @@ class Domains extends Component {
                                     hideUploadApkModal={this.hideUploadApkModal}
                                     ref='uploadApk'
                                 />
-                            </Modal>
+                            </Modal> */}
                         </div>}
             </div>
         )
@@ -538,7 +538,7 @@ const mapStateToProps = ({ account, auth, settings }) => {
         // options: settings.APKOptions,
         // selectedOptions: apk_list.selectedOptions,
         // DisplayPages: apk_list.DisplayPages,
-        // user: auth.authUser,
+        user: auth.authUser,
         translation: settings.translation,
         // policies: policies.policies,
     };

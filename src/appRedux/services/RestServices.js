@@ -902,7 +902,7 @@ const RestService = {
         return axios.get(BASE_URL + 'users/get-domains', RestService.getHeader());
     },
     dealerPermissions: (permissionId, dealers, action, statusAll, permissionType) => {
-        console.log("url ===========> ", BASE_URL + 'users/dealer-permissions/' + permissionType);
+        // console.log("url ===========> ", BASE_URL + 'users/dealer-permissions/' + permissionType);
         return axios.post(BASE_URL + 'users/dealer-permissions/' + permissionType, {
             permissionId: permissionId,
             dealers: dealers,

@@ -31,7 +31,7 @@ import {
 } from "../../constants/PolicyConstants";
 
 import { message, Modal } from 'antd';
-import { convertToLang } from "../../routes/utils/commonUtils";
+import { convertToLang, findAndRemove_duplicate_in_array } from "../../routes/utils/commonUtils";
 import { POLICY_DELETED_SUCCESSFULLY, STATUS_UPDATED } from "../../constants/Constants";
 
 const success = Modal.success
@@ -271,7 +271,7 @@ export default (state = initialState, action) => {
             console.log(policies);
             return {
                 ...state,
-                policies: policies,
+                policies: [...policies],
                 guestAlldealerApps: false,
                 encryptedAlldealerApps: false,
                 enableAlldealerApps: false,
@@ -672,25 +672,28 @@ export default (state = initialState, action) => {
 
         case POLICY_PERMISSION_SAVED: {
 
-            // console.log("at reducer POLICY_PERMISSION_SAVED:: ", state.policies, action);
+            console.log("at reducer POLICY_PERMISSION_SAVED:: ", state.policies, action);
             if (action.payload.status) {
                 success({
                     title: action.payload.msg
                 });
                 let index = state.policies.findIndex((item) => item.id == action.formData.id);
-                let newDealers = JSON.parse(action.formData.dealers);
-                let oldDealers = state.policies[index].dealer_permission;
-                // console.log('index is: ', index);
-                // console.log('newDealers : ', newDealers);
-                // console.log('oldDealers : ', oldDealers);
+                let newDealers = (JSON.parse(action.formData.dealers)) ? JSON.parse(action.formData.dealers) : [];
+                let oldDealers = (state.policies[index].dealer_permission) ? state.policies[index].dealer_permission : [];
+                console.log('index is: ', index);
+                console.log('newDealers : ', newDealers);
+                console.log('oldDealers : ', oldDealers);
 
                 // Save permission for new dealers
                 if (action.formData.action == "save") {
 
                     if (index !== -1) {
                         if (!action.formData.statusAll) {
-                            let allDealers = [...oldDealers, ...newDealers];
-                            // console.log("allDealers ", allDealers);
+                            let allDealers = findAndRemove_duplicate_in_array([...oldDealers, ...newDealers]);
+                            console.log("allDealers ", allDealers);
+
+                            console.log('remove duplicate ', findAndRemove_duplicate_in_array(allDealers));
+                            
 
                             state.policies[index].permission_count = allDealers.length;
                             state.policies[index].dealer_permission = allDealers;

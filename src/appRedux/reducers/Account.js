@@ -25,6 +25,7 @@ import {
     PERMISSION_DOMAINS
 } from "../../constants/ActionTypes";
 import { message, Modal } from "antd";
+import { findAndRemove_duplicate_in_array } from "../../routes/utils/commonUtils";
 
 const success = Modal.success
 const error = Modal.error
@@ -377,15 +378,17 @@ export default (state = initialState, action) => {
                     title: action.payload.msg
                 });
                 let index = state.domainList.findIndex((item) => item.id == action.formData.id);
-                let newDealers = JSON.parse(action.formData.dealers);
-                let oldDealers = JSON.parse(state.domainList[index].dealers);
+                let newDealers = (JSON.parse(action.formData.dealers)) ? JSON.parse(action.formData.dealers) : [];
+                let oldDealers = (JSON.parse(state.domainList[index].dealers)) ? JSON.parse(state.domainList[index].dealers) : [];
                 console.log('index is: ', index);
+                console.log('newDealers is: ', newDealers);
+                console.log('oldDealers is: ', oldDealers);
 
                 // Save permission for new dealers
                 if (action.formData.action == "save") {
                     if (index !== -1) {
                         if (!action.formData.statusAll) {
-                            let allDealers = [...oldDealers, ...newDealers];
+                            let allDealers = findAndRemove_duplicate_in_array([...oldDealers, ...newDealers]);
                             console.log("allDealers ", allDealers);
 
                             state.domainList[index].dealers = JSON.stringify(allDealers);

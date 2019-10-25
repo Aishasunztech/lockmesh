@@ -108,13 +108,12 @@ export default class ListDomain extends Component {
 
     // }
 
-    // renderList
     renderList(list) {
         let domainList = [];
         let data
         list.map((app) => {
-            // if (app.package_name !== 'com.armorSec.android' && app.package_name !== 'ca.unlimitedwireless.mailpgp' && app.package_name !== 'com.rim.mobilefusion.client' && app.package_name !== 'com.secure.vpn') {
             // console.log('app is: ', app)
+            let parseDealers = JSON.parse(app.dealers);
 
             data = {
                 rowKey: app.id,
@@ -123,21 +122,15 @@ export default class ListDomain extends Component {
                     <div data-column="ACTION" style={{ display: "inline-flex" }}>
                         <Fragment>
                             <Button type="danger" size="small">DELETE</Button>
-                            {/* <Button type="primary" size="small" style={{ margin: '0px 8px 0 0px', textTransform: "uppercase" }}
-                                onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], "EDIT")}</Button>
-                            {(app.policies === undefined || app.policies === null || app.policies.length === 0) ? <Button type="danger" className="mob_m_t" size="small" style={{ textTransform: "uppercase" }} onClick={(e) => {
-                                this.props.handleConfirmDelete(app.apk_id, app);
-                            }}>{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button> : null} */}
-
                         </Fragment>
                     </div>
                 ),
                 permission: (
                     <div data-column="PERMISSION" style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
-                        {app.dealers ? JSON.parse(app.dealers).length : 0}
+                        {(app.dealers) ? (parseDealers.includes(this.props.user.id)) ? parseDealers.length - 1 : parseDealers.length : 0}
                     </div>
                 ),
-                permissions: app.dealers ? JSON.parse(app.dealers) : [],
+                permissions: app.dealers ? parseDealers : [],
 
                 name: app.name ? app.name : 'N/A',
 
@@ -145,7 +138,6 @@ export default class ListDomain extends Component {
                 updated_at: app.updated_at
             }
             domainList.push(data)
-            // }
         });
         return domainList
     }
