@@ -308,10 +308,14 @@ class EditDevice extends Component {
             let service_term = ''
             if (services.packages) {
                 let packages = JSON.parse(services.packages)
-                service_term = packages[0].pkg_term
+                if (packages.length) {
+                    service_term = packages[0].pkg_term
+                }
             } else if (services.products) {
                 let products = JSON.parse(services.products)
-                service_term = products[0].price_term
+                if (products.length) {
+                    service_term = products[0].price_term
+                }
             }
             return [{
                 counter: 1,

@@ -1225,14 +1225,14 @@ class AddDevice extends Component {
                         </div>
                         {(this.state.term !== '0') ?
                             <div>
-                                <h4 style={{ textAlign: "center", color: 'red' }}>If you PAY NOW you will get 5% discount.</h4>
+                                <h4 style={{ textAlign: "center", color: 'red' }}>If you PAY NOW you will get 3% discount.</h4>
                             </div>
                             : null}
 
                         <div className="edit_ftr_btn" >
                             <Button onClick={() => { this.setState({ showConfirmCredit: false }) }}>CANCEL</Button>
                             <Button type='primary' onClick={() => { this.submitServicesConfirm(false) }}>PAY LATER</Button>
-                            <Button style={{ backgroundColor: "green", color: "white" }} onClick={() => { this.submitServicesConfirm(true) }}>PAY NOW</Button>
+                            <Button style={{ backgroundColor: "green", color: "white" }} onClick={() => { this.submitServicesConfirm(true) }}>PAY NOW (-3%)</Button>
                         </div >
                     </Fragment>
                 </Modal>
