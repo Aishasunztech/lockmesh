@@ -113,7 +113,7 @@ export default (state = initialState, action) => {
         }
 
         case GET_PACKAGES: {
-            // console.log(action.response, 'response of get prices')
+            // console.log(action.response.data, JSON.stringify(action.response.data), 'response of get prices')
 
             return {
                 ...state,
@@ -304,20 +304,77 @@ export default (state = initialState, action) => {
                 ...state,
             }
 
-        case PACKAGE_PERMSSION_SAVED: {
-            // console.log("dasdasdad");
-            success({
-                title: action.payload
-            });
+        // case PACKAGE_PERMSSION_SAVED: {
+        //     // console.log("dasdasdad");
+        //     success({
+        //         title: action.payload
+        //     });
 
-            let objIndex = state.packages.findIndex((obj => obj.id === action.package_id));
-            state.packages[objIndex].permission_count = action.permission_count;
+        //     let objIndex = state.packages.findIndex((obj => obj.id === action.package_id));
+        //     state.packages[objIndex].permission_count = action.permission_count;
+
+        //     return {
+        //         ...state,
+        //         packages: [...state.packages]
+        //     }
+        // }
+
+        case PACKAGE_PERMSSION_SAVED: {
+
+            // console.log("at reducer PACKAGE_PERMSSION_SAVED:: ", state.packages, action);
+            if (action.payload.status) {
+                success({
+                    title: action.payload.msg
+                });
+                let index = state.packages.findIndex((item) => item.id == action.formData.id);
+                let newDealers = (JSON.parse(action.formData.dealers)) ? JSON.parse(action.formData.dealers) : [];
+                let oldDealers = (state.packages[index].dealer_permission) ? state.packages[index].dealer_permission : [];
+                // console.log('index is: ', index);
+
+                // Save permission for new dealers
+                if (action.formData.action == "save") {
+
+                    if (index !== -1) {
+                        if (!action.formData.statusAll) {
+                            let allDealers = findAndRemove_duplicate_in_array([...oldDealers, ...newDealers]);
+                            // console.log("allDealers ", allDealers);
+
+                            state.packages[index].permission_count = allDealers.length;
+                            state.packages[index].dealer_permission = allDealers;
+                        } else {
+                            state.packages[index].permission_count = "All";
+                            state.packages[index].dealer_permission = newDealers;
+                        }
+                    }
+                }
+                else if (action.formData.action == "delete") {
+                    // delete permission for dealers
+
+                    if (index !== -1) {
+                        if (!action.formData.statusAll) {
+                            let allDealers = oldDealers.filter((item) => !newDealers.includes(item));
+                            state.packages[index].dealer_permission = allDealers;
+                            state.packages[index].permission_count = allDealers.length;
+                        } else {
+                            state.packages[index].dealer_permission = [];
+                            state.packages[index].permission_count = 0;
+                        }
+                    }
+                }
+            } else {
+                error({
+                    title: action.payload.msg
+                });
+            }
 
             return {
                 ...state,
+                isloading: false,
                 packages: [...state.packages]
             }
         }
+
+
         case DELETE_PACKAGE: {
             let packages = state.packages
             if (action.payload.status) {
@@ -391,13 +448,16 @@ export default (state = initialState, action) => {
                             let allDealers = findAndRemove_duplicate_in_array([...oldDealers, ...newDealers]);
                             console.log("allDealers ", allDealers);
 
+                            state.domainList[index].permission_count = allDealers.length;
                             state.domainList[index].dealers = JSON.stringify(allDealers);
                         } else {
+                            state.domainList[index].permission_count = "All";
                             state.domainList[index].dealers = action.formData.dealers;
                         }
-                    } else {
-                        state.domainList[index].dealers = action.formData.dealers;
                     }
+                    // else {
+                    //     state.domainList[index].dealers = action.formData.dealers;
+                    // }
                 }
                 else if (action.formData.action == "delete") {
                     // delete permission for dealers
@@ -406,8 +466,10 @@ export default (state = initialState, action) => {
                         if (!action.formData.statusAll) {
                             let allDealers = oldDealers.filter((item) => !newDealers.includes(item));
                             state.domainList[index].dealers = JSON.stringify(allDealers);
+                            state.domainList[index].permission_count = allDealers.length;
                         } else {
                             state.domainList[index].dealers = '[]';
+                            state.domainList[index].permission_count = 0;
                         }
                     }
                 }

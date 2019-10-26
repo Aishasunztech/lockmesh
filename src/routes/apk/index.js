@@ -387,6 +387,7 @@ class Apk extends Component {
 
 
                             <ListApk
+                                totalDealers={this.props.dealerList.length}
                                 savePermission={this.props.apkPermission}
                                 onChangeTableSorting={this.handleTableChange}
                                 handleStatusChange={this.handleStatusChange}
@@ -499,8 +500,9 @@ class Apk extends Component {
 // );
 
 // export default Apk;
-const mapStateToProps = ({ apk_list, auth, settings, policies }) => {
+const mapStateToProps = ({ apk_list, auth, settings, policies, dealers }) => {
     return {
+        dealerList: dealers.dealers,
         isloading: apk_list.isloading,
         apk_list: apk_list.apk_list,
         options: settings.APKOptions,

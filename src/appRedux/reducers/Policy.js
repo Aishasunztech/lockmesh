@@ -672,7 +672,7 @@ export default (state = initialState, action) => {
 
         case POLICY_PERMISSION_SAVED: {
 
-            console.log("at reducer POLICY_PERMISSION_SAVED:: ", state.policies, action);
+            // console.log("at reducer POLICY_PERMISSION_SAVED:: ", state.policies, action);
             if (action.payload.status) {
                 success({
                     title: action.payload.msg
@@ -680,9 +680,9 @@ export default (state = initialState, action) => {
                 let index = state.policies.findIndex((item) => item.id == action.formData.id);
                 let newDealers = (JSON.parse(action.formData.dealers)) ? JSON.parse(action.formData.dealers) : [];
                 let oldDealers = (state.policies[index].dealer_permission) ? state.policies[index].dealer_permission : [];
-                console.log('index is: ', index);
-                console.log('newDealers : ', newDealers);
-                console.log('oldDealers : ', oldDealers);
+                // console.log('index is: ', index);
+                // console.log('newDealers : ', newDealers);
+                // console.log('oldDealers : ', oldDealers);
 
                 // Save permission for new dealers
                 if (action.formData.action == "save") {
@@ -690,9 +690,9 @@ export default (state = initialState, action) => {
                     if (index !== -1) {
                         if (!action.formData.statusAll) {
                             let allDealers = findAndRemove_duplicate_in_array([...oldDealers, ...newDealers]);
-                            console.log("allDealers ", allDealers);
+                            // console.log("allDealers ", allDealers);
 
-                            console.log('remove duplicate ', findAndRemove_duplicate_in_array(allDealers));
+                            // console.log('remove duplicate ', findAndRemove_duplicate_in_array(allDealers));
                             
 
                             state.policies[index].permission_count = allDealers.length;
@@ -732,10 +732,10 @@ export default (state = initialState, action) => {
 
         case DEFAULT_POLICY_CHANGE: {
 
-            // success({
-            //     title: action.payload
-            // });
-            message.success(action.payload)
+            success({
+                title: action.payload
+            });
+            // message.success(action.payload)
             let objIndex = state.policies.findIndex((obj => obj.id === action.policy_id));
             let defaultPolicyIndex = state.policies.findIndex((obj => obj.is_default === true));
             if (defaultPolicyIndex === -1) {

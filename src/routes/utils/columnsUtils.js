@@ -3285,12 +3285,12 @@ export function domainColumns(translation, handleSearch) {
             className: 'row',
             render: (text, record, index) => ++index,
         },
-        {
-            title: convertToLang(translation[ACTION], "ACTION"),
-            dataIndex: 'action',
-            key: 'action',
-            className: 'row m-0'
-        },
+        // {
+        //     title: convertToLang(translation[ACTION], "ACTION"),
+        //     dataIndex: 'action',
+        //     key: 'action',
+        //     className: 'row m-0'
+        // },
         {
             // title: (
             //     <Input.Search

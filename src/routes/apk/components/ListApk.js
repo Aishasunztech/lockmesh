@@ -13,6 +13,7 @@ import UpdateFeatureApk from './UpdateFeatureApk';
 import { Button_Edit, Button_Delete } from '../../../constants/ButtonConstants';
 import { ADMIN } from '../../../constants/Constants';
 import Permissions from '../../utils/Components/Permissions';
+import { Tab_All } from '../../../constants/TabConstants';
 const TabPane = Tabs.TabPane;
 export default class ListApk extends Component {
     state = { visible: false }
@@ -135,7 +136,8 @@ export default class ListApk extends Component {
                         ),
                         permission: (
                             <div data-column="PERMISSION" style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
-                                {app.permission_count}
+                                {/* {app.permission_count} */}
+                                {(app.permission_count === "All" || this.props.totalDealers === app.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
                             </div>
                         ),
                         permissions: app.permissions,
@@ -183,7 +185,10 @@ export default class ListApk extends Component {
                                 }}>{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
                             </Fragment>
                         ),
-                        permission: <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>{app.permission_count}</span>,
+                        permission: <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
+                            {/* {app.permission_count} */}
+                            {(app.permission_count === "All" || this.props.totalDealers === app.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
+                        </span>,
                         permissions: app.permissions,
                         apk_status: (<Switch size="small" disabled defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
                             this.props.handleStatusChange(e, app.apk_id);
@@ -196,7 +201,7 @@ export default class ListApk extends Component {
                         policies: (app.policies === undefined || app.policies === null) ? [] : app.policies,
                         created_at: app.created_at,
                         updated_at: app.updated_at,
-                        label: app.label ? app.label: 'N/A',
+                        label: app.label ? app.label : 'N/A',
                         package_name: app.package_name ? app.package_name : 'N/A',
                     }
                     apkList.push(data)

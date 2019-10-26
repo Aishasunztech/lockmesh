@@ -11,6 +11,8 @@ import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col } from "antd"
 // import { Button_Edit, Button_Delete } from '../../../constants/ButtonConstants';
 // import { ADMIN } from '../../../constants/Constants';
 import Permissions from '../../utils/Components/Permissions';
+import { Tab_All } from '../../../constants/TabConstants';
+import { convertToLang } from '../../utils/commonUtils';
 // const TabPane = Tabs.TabPane;
 export default class ListDomain extends Component {
     state = { visible: false }
@@ -112,22 +114,23 @@ export default class ListDomain extends Component {
         let domainList = [];
         let data
         list.map((app) => {
-            // console.log('app is: ', app)
+            // console.log('app is: ', app.name, app.permission_count, this.props.totalDealers, app.permission_count == "All", this.props.totalDealers == app.permission_count)
             let parseDealers = JSON.parse(app.dealers);
 
             data = {
                 rowKey: app.id,
                 id: app.id,
-                action: (
-                    <div data-column="ACTION" style={{ display: "inline-flex" }}>
-                        <Fragment>
-                            <Button type="danger" size="small">DELETE</Button>
-                        </Fragment>
-                    </div>
-                ),
+                // action: (
+                //     <div data-column="ACTION" style={{ display: "inline-flex" }}>
+                //         <Fragment>
+                //             <Button type="danger" size="small">DELETE</Button>
+                //         </Fragment>
+                //     </div>
+                // ),
                 permission: (
                     <div data-column="PERMISSION" style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
-                        {(app.dealers) ? (parseDealers.includes(this.props.user.id)) ? parseDealers.length - 1 : parseDealers.length : 0}
+                        {/* {(app.dealers) ? (parseDealers.includes(this.props.user.id)) ? parseDealers.length - 1 : parseDealers.length : 0} */}
+                        {(app.permission_count === "All" || this.props.totalDealers === app.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
                     </div>
                 ),
                 permissions: app.dealers ? parseDealers : [],
@@ -198,7 +201,7 @@ export default class ListDomain extends Component {
                             );
                         }}
                         onExpand={this.onExpandRow}
-                        expandIconColumnIndex={2}
+                        expandIconColumnIndex={1}
                         expandIconAsCell={false}
                         size="midddle"
                         bordered

@@ -154,7 +154,10 @@ class PolicyList extends Component {
                     </Fragment>
                 )
                 ,
-                permission: <span style={{ fontSize: 15, fontWeight: 400 }}>{(policy.permission_count == 'All') ? convertToLang(this.props.translation[Tab_All], "All") : policy.permission_count}</span>,
+                permission: <span style={{ fontSize: 15, fontWeight: 400 }}>
+                {/* {(policy.permission_count == 'All') ? convertToLang(this.props.translation[Tab_All], "All") : policy.permission_count} */}
+                {(policy.permission_count === "All" || this.props.totalDealers === policy.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : policy.permission_count}
+                </span>,
                 permissions: (policy.dealer_permission !== undefined || policy.dealer_permission !== null) ? policy.dealer_permission : [],
                 policy_status: (
                     <Switch
