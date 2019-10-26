@@ -38,15 +38,13 @@ export function getDevicesList() {
             // 
             if (RestService.checkAuth(response.data)) {
                 // 
-                if (response.data.status) {
 
-                    dispatch({
-                        type: DEVICES_LIST,
-                        payload: response.data.data,
-                        response: response.data,
+                dispatch({
+                    type: DEVICES_LIST,
+                    payload: response.data.data,
+                    response: response.data,
 
-                    });
-                }
+                });
             } else {
                 dispatch({
                     type: INVALID_TOKEN
