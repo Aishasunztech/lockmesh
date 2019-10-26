@@ -285,8 +285,9 @@ export const RESET_AGENT_PWD = 'RESET_AGENT_PWD'
 
 export const GET_DASHBOARD_DATA = 'GET_DASHBOARD_DATA';
 
-//Rerpoting
+//Reporting
 export const PRODUCT_REPORT         = 'PRODUCT_REPORT';
 export const INVOICE_REPORT         = 'INVOICE_REPORT';
 export const PAYMENT_HISTORY_REPORT = 'PAYMENT_HISTORY_REPORT';
 export const HARDWARE_REPORT        = 'HARDWARE_REPORT';
+export const SALES_REPORT           = 'SALES_REPORT';

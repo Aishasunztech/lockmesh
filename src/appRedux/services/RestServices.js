@@ -912,7 +912,7 @@ const RestService = {
 
     //product report
     generateProductReport: (data) => {
-      return axios.post(BASE_URL + 'users/reporting/product', data, RestService.getHeader());
+      return axios.post(BASE_URL + 'users/reports/product', data, RestService.getHeader());
     },
 
   //invoice report
@@ -928,6 +928,11 @@ const RestService = {
   //hardware report
   generateHardwareReport: (data) => {
     return axios.post(BASE_URL + 'users/reports/hardware', data, RestService.getHeader());
+  },
+
+  //sales report
+  generateSalesReport: (data) => {
+    return axios.post(BASE_URL + 'users/reports/sales', data, RestService.getHeader());
   },
 }
 export default RestService;

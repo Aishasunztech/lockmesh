@@ -239,7 +239,6 @@ class ProductInventory extends Component {
         this.props.productReport.SIM.map((item, index) => {
           rows.push({
             'count': ++index,
-            'used': item.used ? item.used : 'N/A',
             'used': item.used == 1 ? 'USED' : 'UNUSED',
             'pgp_email': item.pgp_email ? item.pgp_email : 'N/A',
             'start_date': item.start_date ? item.start_date : 'N/A',
@@ -547,7 +546,7 @@ class ProductInventory extends Component {
               <Fragment>
                   <Row>
                     <Col xs={12} sm={12} md={12} lg={12} xl={12}>
-                      <h3>Hardware Invenotory Report</h3>
+                      <h3>Product Inventory Report</h3>
                     </Col>
                     <Col xs={12} sm={12} md={12} lg={12} xl={12}>
                       <div className="pull-right">
