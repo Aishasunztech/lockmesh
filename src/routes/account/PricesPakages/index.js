@@ -611,6 +611,7 @@ class Prices extends Component {
                                     pagination={false}
                                     rowKey="policy_list"
                                     ref='policy_table'
+                                    scroll={{ x: true }}
                                 />
                             </Tabs.TabPane>
                         </Tabs>
