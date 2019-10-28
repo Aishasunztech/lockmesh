@@ -1221,13 +1221,14 @@ class Account extends Component {
                                                             <Divider className="mb-0" />
                                                             <Row style={{ padding: '12px 0 0px' }}>
                                                                 <Col span={8} className="" style={{ textAlign: "center" }}>
-                                                                    <Icon type="dollar" className="and_icon" />
+                                                                    <img src={require("assets/images/domain.jpg")} />
+                                                                    {/* <Icon type="global" className="and_icon" /> */}
                                                                 </Col>
                                                                 <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
                                                                     <div className="crd_txt">
-                                                                        {/* <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_01], "Distribute tokens")}</h5>
-                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_02], "Set prices and delay for each token")}</h5>
-                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_03], "Set permissions for Tokens")}</h5> */}
+                                                                        <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation["PACKAGES_AND_IDS_01"], "Admin Permission to Dealers/SDealer on Domain access")}</h5>
+                                                                        <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation["PACKAGES_AND_IDS_02"], "Dealer Permissions to SDealer on Domain access")}</h5>
+                                                                        <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation["PACKAGES_AND_IDS_03"], "Allows for exclusive or certain Domains to be attributed to Dealers/Sdealers")}</h5>
                                                                         <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], "and more...")}</h5>
                                                                     </div>
                                                                 </Col>

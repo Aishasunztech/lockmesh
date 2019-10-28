@@ -125,12 +125,12 @@ class Permissions extends Component {
       })
     }
 
-    if (this.props.permissionType == 'package') {
-      this.props.getUserDealers();
-    } else {
-      this.props.getAllDealers();
-    }
     if (this.props.record.id !== nextProps.record.id) {
+      if (this.props.permissionType == 'package') {
+        this.props.getUserDealers();
+      } else {
+        this.props.getAllDealers();
+      }
       this.setState({
         dealerListForModal: this.props.dealerList,
         dealerList: this.props.dealerList,
