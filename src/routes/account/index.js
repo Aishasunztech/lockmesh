@@ -1221,8 +1221,7 @@ class Account extends Component {
                                                             <Divider className="mb-0" />
                                                             <Row style={{ padding: '12px 0 0px' }}>
                                                                 <Col span={8} className="" style={{ textAlign: "center" }}>
-                                                                    <img src={require("assets/images/domain.jpg")} />
-                                                                    {/* <Icon type="global" className="and_icon" /> */}
+                                                                    <Icon type="global" className="and_icon" />
                                                                 </Col>
                                                                 <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
                                                                     <div className="crd_txt">

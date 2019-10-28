@@ -420,6 +420,7 @@ export default (state = initialState, action) => {
         }
 
         case GET_DOMAINS: {
+            // console.log('get domains:: ', action.payload.domains)
             return {
                 ...state,
                 isloading: false,

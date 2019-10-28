@@ -183,6 +183,8 @@ class Permissions extends Component {
       permissions,
       addSelectedDealersModal: false
     })
+    // console.log("addUnSelected_IDs ", addUnSelected_IDs);
+    // console.log('user id:: ', this.props.user.id)
     this.props.savePermissionAction(this.props.record.id, JSON.stringify(addUnSelected_IDs), 'save');
   }
 
@@ -677,8 +679,10 @@ class Permissions extends Component {
 }
 
 
-const mapStateToProps = ({ dealers, settings }, props) => {
+const mapStateToProps = ({ dealers, settings, auth }, props) => {
+  // console.log('auth ', auth.authUser)
   return {
+    user: auth.authUser,
     dealerList: dealers.dealers,
     spinloading: dealers.spinloading,
     translation: settings.translation
