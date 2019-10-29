@@ -9,7 +9,15 @@ import PaymentHistory from './components/PaymentHistory';
 import Sales from './components/Sales';
 import AppFilter from '../../../components/AppFilter';
 import { convertToLang } from "../../utils/commonUtils";
-import { getAllDealers, generateSalesReport, generateProductReport, generateInvoiceReport, generatePaymentHistoryReport, generateHardwareReport } from '../../../appRedux/actions/';
+import {
+  getAllDealers,
+  generateSalesReport,
+  generateProductReport,
+  generateInvoiceReport,
+  generatePaymentHistoryReport,
+  generateHardwareReport,
+  getHardwares
+} from '../../../appRedux/actions/';
 import styles from './reporting.css'
 
 
@@ -36,6 +44,7 @@ class Reporting extends Component {
 
   componentDidMount() {
     this.props.getDealerList()
+    this.props.getHardwaresList()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -57,7 +66,7 @@ class Reporting extends Component {
             pageHeading={convertToLang(this.props.translation[''], "REPORTS")}
           />
           {
-          
+
               <div>
                 <Tabs defaultActiveKey="1" type='card' className="dev_tabs" activeKey={this.state.tabselect} onChange={this.handleChangeTab}>
                   <TabPane tab="PRODUCT INVENTORY" key="1">
@@ -74,6 +83,7 @@ class Reporting extends Component {
                   <TabPane tab="HARDWARE INVENTORY" key="2">
                     <HardwareInventory
                       dealerList={this.props.dealerList}
+                      hardwares={this.props.hardwares}
                       translation={this.props.translation}
                       generateHardwareReport={this.props.generateHardwareReport}
                       hardwareReport={this.props.hardwareReport}
@@ -120,12 +130,12 @@ class Reporting extends Component {
 
 
 
-var mapStateToProps = ({ dealers, settings, reporting  , auth}) => {
+var mapStateToProps = ({ dealers, settings, reporting  , auth, account}) => {
 
-  console.log(reporting)
   return {
     user: auth.authUser,
     dealerList: dealers.dealers,
+    hardwares: account.hardwares,
     productReport: reporting.productData,
     hardwareReport: reporting.hardwareData,
     invoiceReport: reporting.invoiceData,
@@ -144,6 +154,7 @@ function mapDispatchToProps(dispatch) {
     generatePaymentHistoryReport: generatePaymentHistoryReport,
     generateHardwareReport: generateHardwareReport,
     generateSalesReport: generateSalesReport,
+    getHardwaresList: getHardwares,
   }, dispatch);
 };
 

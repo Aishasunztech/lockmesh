@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal, Tabs, Col, Input, Form, Row, DatePicker, Select } from "antd";
 import moment from 'moment';
 import styles from '../reporting.css'
-import { convertToLang, generatePDF, generateExcel} from "../../../utils/commonUtils";
+import { convertToLang, generatePDF, generateExcel, getDateFromTimestamp} from "../../../utils/commonUtils";
 import {
   DEVICE_PRE_ACTIVATION, sim
 } from "../../../../constants/Constants";
@@ -41,11 +41,11 @@ class Invoice extends Component {
       },
 
       {
-        title: convertToLang(props.translation[''], "DEALER ID"),
+        title: convertToLang(props.translation[''], "DEALER PIN"),
         align: "center",
         className: '',
-        dataIndex: 'dealer_id',
-        key: 'dealer_id',
+        dataIndex: 'dealer_pin',
+        key: 'dealer_pin',
       },
 
       {
@@ -75,18 +75,20 @@ class Invoice extends Component {
 
     this.state = {
       reportCard: false,
+      reportFormData: {}
     };
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
+      this.state.reportFormData = values;
       this.props.generateInvoiceReport(values)
     });
   };
 
   componentDidMount() {
-    
+
   };
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -101,11 +103,11 @@ class Invoice extends Component {
           count: ++index,
           invoice_id: item.inv_no ? item.inv_no : 'N/A',
           device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
-          dealer_id: item.dealer_id ? item.dealer_id : 'N/A',
-          created_at: item.created_at ? item.created_at : 'N/A',
+          dealer_pin: item.dealer_pin ? item.dealer_pin : 'N/A',
+          created_at: item.created_at ? getDateFromTimestamp(item.created_at) : 'N/A',
           end_user_payment_status: item.end_user_payment_status ? item.end_user_payment_status : 'N/A',
         }
-      }); 
+      });
 
       columns = [
         { title: '#', dataKey: "count" },
@@ -135,38 +137,25 @@ class Invoice extends Component {
           'count': ++index,
           'invoice_id': item.inv_no ? item.inv_no : 'N/A',
           'device_id': item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
-          'dealer_id': item.dealer_id ? item.dealer_id : 'N/A',
-          'created_at': item.created_at ? item.created_at : 'N/A',
+          'dealer_pin': item.dealer_pin ? item.dealer_pin : 'N/A',
+          'created_at': item.created_at ? getDateFromTimestamp(item.created_at) : 'N/A',
           'end_user_payment_status': item.end_user_payment_status ? item.end_user_payment_status : 'N/A',
-          'file_name': <a href={BASE_URL+'users/getFile/'+item.file_name} target="_blank" download><Button type="primary" size="small">Download</Button></a>,
+          'file_name': <a href={BASE_URL+'users/getFile/'+item.file_name} download><Button type="primary" size="small">Download</Button></a>,
         })
       });
     }
     return data;
   };
-  
+
   createPDF = () => {
     var columns = [
       { title: '#', dataKey: "count" },
       { title: convertToLang(this.props.translation[''], "INVOICE ID"), dataKey: "invoice_id" },
       { title: convertToLang(this.props.translation[''], "DEVICE ID"), dataKey: "device_id" },
+      { title: convertToLang(this.props.translation[''], "DEALER PIN"), dataKey: "dealer_pin" },
       { title: convertToLang(this.props.translation[''], "USER PAYMENT STATUS"), dataKey: "end_user_payment_status" },
       { title: convertToLang(this.props.translation[''], "GENERATED AT"), dataKey: "created_at" },
     ];
-
-    var rows = this.props.invoiceReport.map((item, index) => {
-      return {
-        count: ++index,
-        invoice_id: item.inv_no ? item.inv_no : 'N/A',
-        device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
-        dealer_id: item.dealer_id ? item.dealer_id : 'N/A',
-        created_at: item.created_at ? item.created_at : 'N/A',
-        end_user_payment_status: item.end_user_payment_status ? item.end_user_payment_status : 'N/A',
-      }
-    });
-
-    let fileName = 'invoice_' + new Date().getTime()
-    generatePDF(columns, rows, 'Invoice Report', fileName);
   }
 
   render() {
@@ -183,7 +172,7 @@ class Invoice extends Component {
               </Form.Item>
 
               {(this.props.user.type === 'sdealer') ?
-                
+
                 <Form.Item style={{ marginBottom: 0 }}
                 >
                   {this.props.form.getFieldDecorator('dealer', {
@@ -301,7 +290,7 @@ class Invoice extends Component {
                 </Col>
                   <Col xs={12} sm={12} md={12} lg={12} xl={12}>
                     <div className="pull-right">
-                      <Button type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Invoice Report', fileName) }}>Download PDF</Button>
+                      <Button type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Invoice Report', fileName, this.state.reportFormData) }}>Download PDF</Button>
                     <Button type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName) }}>Download Excel</Button>
                     </div>
                 </Col>

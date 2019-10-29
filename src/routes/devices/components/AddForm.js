@@ -106,7 +106,6 @@ class AddDevice extends Component {
                                 id: sim_id_price[0].id,
                                 rowKey: sim_id_price[0].id,
                                 unit_price: sim_id_price[0].unit_price,
-                                rowKey: sim_id_price[0].id,
                                 price_for: "SIM ID 2"
                             }
 
@@ -240,7 +239,7 @@ class AddDevice extends Component {
     }
     handleChange = (e) => {
         // console.log(e);
-        // this.setState({ pgp_email: e }); 
+        // this.setState({ pgp_email: e });
         this.setState({ type: e.target.value });
     }
 

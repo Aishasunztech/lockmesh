@@ -5,7 +5,7 @@ import {
   DEVICE_PRE_ACTIVATION
 } from "../../../../constants/Constants";
 import styles from '../reporting.css'
-import { convertToLang, generatePDF, generateExcel } from "../../../utils/commonUtils";
+import { convertToLang, generatePDF, generateExcel, getDateFromTimestamp } from "../../../utils/commonUtils";
 let fileName = 'hardware_report_' + new Date().getTime()
 var columns;
 var rows;
@@ -92,7 +92,7 @@ class PaymentHistory extends Component {
           dealer_id: item.dealer_id,
           device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
           hardware: item.dealer_id,
-          created_at: item.created_at
+          created_at: getDateFromTimestamp(item.created_at)
         }
       })
 
@@ -112,19 +112,19 @@ class PaymentHistory extends Component {
       let data = []
       let counter = 1;
       list.map((item, index) => {
-        let hardwares = JSON.parse(item.hardwares)
-        hardwares.map((hardware, i) => {
+        // let hardwares = JSON.parse(item.hardware_data)
+        // hardwares.map((hardware, i) => {
           data.push( {
             rowKey: counter++,
             key: counter++,
             sr: counter++,
             dealer_id: item.dealer_id,
             device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
-            hardware: hardware.hardware_name,
-            created_at: item.created_at
+            hardware: item.hardware_name,
+            created_at: getDateFromTimestamp(item.created_at)
           })
         })
-      })
+      // })
       return data;
     }
   };
@@ -158,10 +158,9 @@ class PaymentHistory extends Component {
                 })(
                   <Select style={{ width: '100%' }}>
                     <Select.Option value=''>ALL</Select.Option>
-                    <Select.Option value='CHAT'>CHAT</Select.Option>
-                    <Select.Option value='PGP'>PGP</Select.Option>
-                    <Select.Option value='SIM'>SIM</Select.Option>
-                    <Select.Option value='VPN'>VPN</Select.Option>
+                    {this.props.hardwares.map((hardware, index) => {
+                      return (<Select.Option key={hardware.hardware_name} value={hardware.hardware_name}>{hardware.hardware_name}</Select.Option>)
+                    })}
                   </Select>
                 )}
               </Form.Item>

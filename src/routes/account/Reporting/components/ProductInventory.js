@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { Button, Card, Col, DatePicker, Form, Input, Row, Select, Table, Tabs } from "antd";
 import moment from 'moment';
-import { convertToLang, generatePDF, generateExcel } from "../../../utils/commonUtils";
+import { convertToLang, generatePDF, generateExcel, getDateFromTimestamp } from "../../../utils/commonUtils";
 import { TAB_CHAT_ID, TAB_PGP_EMAIL, TAB_SIM_ID, TAB_VPN } from "../../../../constants/TabConstants";
 import {
   LABEL_DATA_CHAT_ID,
@@ -154,13 +154,15 @@ class ProductInventory extends Component {
       columnsVpn: columnsVpn,
       pagination: 10,
       tabselect: 'all',
-      innerTabSelect: '1'
+      innerTabSelect: '1',
+      reportFormData: {}
     };
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
+      this.state.reportFormData = values;
       this.props.generateProductReport(values)
 
     });
@@ -196,7 +198,7 @@ class ProductInventory extends Component {
       this.setState({
         reportCard: true,
         productType: this.props.productType
-      })
+      });
 
       if (this.props.productReport.CHAT && this.state.innerTabSelect === '1') {
         this.props.productReport.CHAT.map((item, index) => {
@@ -204,7 +206,7 @@ class ProductInventory extends Component {
             'count': ++index,
             'chat_id': item.chat_id ? item.chat_id : 'N/A',
             'used': item.used == 1 ? 'USED' : 'UNUSED',
-            'created_at': item.created_at ? item.created_at : 'N/A',
+            'created_at': getDateFromTimestamp(item.created_at) ? getDateFromTimestamp(item.created_at) : 'N/A',
           })
         });
         columns.push(
@@ -213,7 +215,7 @@ class ProductInventory extends Component {
           { title: convertToLang(this.props.translation[''], "USED"), dataKey: "used" },
           { title: convertToLang(this.props.translation[''], "CREATED AT"), dataKey: "created_at" },
         )
-        fileName  = 'product_inventory_CHAT_' + new Date().getTime()
+        fileName  = 'product_inventory_CHAT_' + new Date().getTime();
         title     = 'Product Inventory Report - CHAT'
 
       } else if (this.props.productReport.PGP && this.state.innerTabSelect === '2') {
@@ -222,7 +224,7 @@ class ProductInventory extends Component {
             'count': ++index,
             'used': item.used == 1 ? 'USED' : 'UNUSED',
             'pgp_email': item.pgp_email ? item.pgp_email : 'N/A',
-            'created_at': item.created_at ? item.created_at : 'N/A',
+            'created_at': getDateFromTimestamp(item.created_at) ? getDateFromTimestamp(item.created_at) : 'N/A',
           })
         });
         columns.push(
@@ -231,7 +233,7 @@ class ProductInventory extends Component {
           { title: convertToLang(this.props.translation[''], "USED"), dataKey: "used" },
           { title: convertToLang(this.props.translation[''], "CREATED AT"), dataKey: "created_at" },
         )
-        fileName  = 'product_inventory_PGP_' + new Date().getTime()
+        fileName  = 'product_inventory_PGP_' + new Date().getTime();
         title     = 'Product Inventory Report - PGP';
 
 
@@ -243,7 +245,7 @@ class ProductInventory extends Component {
             'pgp_email': item.pgp_email ? item.pgp_email : 'N/A',
             'start_date': item.start_date ? item.start_date : 'N/A',
             'expiry_date': item.expiry_date ? item.expiry_date : 'N/A',
-            'created_at': item.created_at ? item.created_at : 'N/A',
+            'created_at': getDateFromTimestamp(item.created_at) ? getDateFromTimestamp(item.created_at) : 'N/A',
           })
         });
         columns.push(
@@ -255,7 +257,7 @@ class ProductInventory extends Component {
           { title: convertToLang(this.props.translation[''], "CREATED AT"), dataKey: "created_at" },
         )
 
-        fileName  = 'product_inventory_SIM_' + new Date().getTime()
+        fileName  = 'product_inventory_SIM_' + new Date().getTime();
         title     = 'Product Inventory Report - SIM';
 
 
@@ -267,7 +269,7 @@ class ProductInventory extends Component {
             'dealer_id': item.dealer_id ? item.dealer_id : 'N/A',
             'start_date': item.start_date ? item.start_date : 'N/A',
             'end_date': item.end_date ? item.end_date : 'N/A',
-            'created_at': item.created_at ? item.created_at : 'N/A',
+            'created_at': getDateFromTimestamp(item.created_at) ? getDateFromTimestamp(item.created_at) : 'N/A',
           })
         });
         columns.push(
@@ -278,7 +280,7 @@ class ProductInventory extends Component {
           { title: convertToLang(this.props.translation[''], "END DATE"), dataKey: "end_date" },
           { title: convertToLang(this.props.translation[''], "CREATED AT"), dataKey: "created_at" },
         )
-        fileName  = 'product_inventory_VPN_' + new Date().getTime()
+        fileName  = 'product_inventory_VPN_' + new Date().getTime();
         title     = 'Product Inventory Report - VPN';
 
       }
@@ -342,7 +344,7 @@ class ProductInventory extends Component {
           'count': ++i,
           'chat_id': item.chat_id ? item.chat_id : 'N/A',
           'used': item.used ? item.used : 'N/A',
-          'created_at': item.created_at ? item.created_at : 'N/A',
+          'created_at': getDateFromTimestamp(item.created_at) ? getDateFromTimestamp(item.created_at) : 'N/A',
         })
       });
     } else if (list.PGP && this.state.innerTabSelect === '2') {
@@ -352,7 +354,7 @@ class ProductInventory extends Component {
           'count': ++i,
           'used': item.used ? item.used : 'N/A',
           'pgp_email': item.pgp_email ? item.pgp_email : 'N/A',
-          'created_at': item.created_at ? item.created_at : 'N/A',
+          'created_at': getDateFromTimestamp(item.created_at) ? getDateFromTimestamp(item.created_at) : 'N/A',
         })
       });
     } else if (list.SIM && this.state.innerTabSelect === '3') {
@@ -364,7 +366,7 @@ class ProductInventory extends Component {
           'sim_id': item.sim_id ? item.sim_id : 'N/A',
           'start_date': item.start_date ? item.start_date : 'N/A',
           'expiry_date': item.expiry_date ? item.expiry_date : 'N/A',
-          'created_at': item.created_at ? item.created_at : 'N/A',
+          'created_at': getDateFromTimestamp(item.created_at) ? getDateFromTimestamp(item.created_at) : 'N/A',
         })
       });
     } else if (list.VPN && this.state.innerTabSelect === '4') {
@@ -377,7 +379,7 @@ class ProductInventory extends Component {
           'vpn_id': item.vpn_id ? item.vpn_id : 'N/A',
           'start_date': item.start_date ? item.start_date : 'N/A',
           'end_date': item.end_date ? item.end_date : 'N/A',
-          'created_at': item.created_at ? item.created_at : 'N/A',
+          'created_at': getDateFromTimestamp(item.created_at) ? getDateFromTimestamp(item.created_at) : 'N/A',
         })
       });
     }
@@ -387,7 +389,7 @@ class ProductInventory extends Component {
 
 
   createPDFReport = () => {
-    generatePDF(columns, rows, title, fileName);
+    generatePDF(columns, rows, title, fileName, this.state.reportFormData);
   }
 
   createExcelReport = () => {
