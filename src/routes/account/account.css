@@ -1,6 +1,5 @@
 .ac_card .ant-card-head {
     background: #f7f7f7;
-
 }
 
 .ac_card .ant-card-body {
@@ -66,7 +65,6 @@
     margin-right: 6px;
 }
 
-
 .coming_s_a {
     line-height: 130px;
     text-align: center;
@@ -89,7 +87,7 @@
 }
 
 .manage_ac .ant-card-body {
-    height: 260px;
+    height: 320px;
     position: relative;
 }
 
@@ -126,8 +124,7 @@
     height: 26px;
 }
 
-.search_heading2 .ant-select-selection--single,
-.pagination1 .ant-select-selection--single {
+.search_heading2 .ant-select-selection--single, .pagination1 .ant-select-selection--single {
     height: 26px;
     font-size: 12px;
     font-weight: 300;
@@ -138,8 +135,7 @@
     color: #e8e8e8 !important;
 }
 
-.pagination1 .ant-select-selection__rendered,
-.search_heading2 .ant-select-selection__rendered {
+.pagination1 .ant-select-selection__rendered, .search_heading2 .ant-select-selection__rendered {
     font-size: 12px;
     display: block;
     margin-left: 11px;
@@ -249,11 +245,9 @@
     .ac_card {
         width: 100%;
     }
-
     .p-0 {
         padding: 0 16px;
     }
-
     .text {
         line-height: 200px;
     }
@@ -267,15 +261,13 @@
 
 @media (max-width:1335px) and (min-width:768px) {
     .manage_ac .ant-card-body {
-        height: 340px;
+        height: 355px;
         position: relative;
     }
-
     .and_icon {
         font-size: 18px !important;
         padding: 12px !important;
     }
-
     .text {
         line-height: 338px;
     }
