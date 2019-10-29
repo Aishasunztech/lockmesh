@@ -46,8 +46,8 @@ class RightSidebar extends Component {
       // <CustomScrollbars className="gx-customizer">
       <div className="gx-customizer-item">
 
-        <Tabs onChange={() => this.callback()} type="card" className='rightSidebar-header'>
-          <TabPane tab="Pending" key="pending">
+            <br/>
+            <br/>
             <CustomScrollbars className="gx-customizer">
 
               <Collapse
@@ -57,47 +57,13 @@ class RightSidebar extends Component {
                 onChange={() => this.callback()}
               // style={{ height: 400 }}
               >
-                {this.renderList(this.props.tasks, 'pending', 'pending')}
+                {this.renderList(this.props.tasks, 'pending')}
                 {/* <div style={{ height: 50 }}></div> */}
               </Collapse>
 
             </CustomScrollbars>
-
-            <div className='rightSidebar-footer'>
-              <Icon
-                type="reload"
-                style={{ height: 10, width: 10 }}
-              // onClick={() => this.props.getSocketProcesses('pending', '', this.props.pendingTasks.length, 50)}
-
-              />
-            </div>
-          </TabPane>
-          <TabPane tab="Completed" key="completed_successfully">
-            <CustomScrollbars className="gx-customizer">
-              <Collapse
-                bordered={false}
-                expandIconPosition='right'
-                // defaultActiveKey={['1']}
-                onChange={() => this.callback()}
-
-              >
-                {this.renderList(this.props.tasks, 'completed_successfully', 'completed')}
-              </Collapse>
-            </CustomScrollbars>
-            <div className='rightSidebar-footer'>
-              <Icon
-                type="reload"
-                style={{ height: 10, width: 10 }}
-              // onClick={() => this.props.getSocketProcesses('completed', '', this.props.completedTasks.length, 10)}
-
-              />
-            </div>
-          </TabPane>
-
-        </Tabs>
       </div>
 
-      // </CustomScrollbars>
     )
   };
 
@@ -110,14 +76,14 @@ class RightSidebar extends Component {
       }));
   };
 
-  renderList = (data, type, title) => {
+  renderList = (data, title) => {
     let taskList = [];
 
     if (data.length) {
       data.map((item, index) => {
-        if (item.status === type) {
+        // if (item.status === type) {
           taskList.push(item);
-        }
+        // }
       })
     }
     return taskList.map((task) => {
@@ -129,6 +95,7 @@ class RightSidebar extends Component {
           extra={this.genExtra(title)}
         >
           <div>
+            <p>status: {task.status}</p>
             <p>{task.created_at}</p>
           </div>
         </Panel>
@@ -140,8 +107,9 @@ class RightSidebar extends Component {
     this.props.getSocketProcesses();
   }
   componentWillReceiveProps(nextProps){
-    if(nextProps.socket){
-      nextProps.getNotification()
+    console.log("rightSidebar: ", nextProps);
+    if(nextProps.socket && nextProps.socket.connected){
+      nextProps.getNotification(nextProps.socket)
     }
   }
   render() {

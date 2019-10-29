@@ -61,13 +61,13 @@ export class MainApp extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("MainApp: ", nextProps);
-    // if(nextProps.socket && nextProps.socket.connected){
-    if(nextProps.socket ){
 
-      this.props.hello_web(nextProps.socket);
-      this.props.getNotification(nextProps.socket)
-    }
+    // if(nextProps.socket && nextProps.socket.connected){
+    // if(nextProps.socket ){
+
+    //   // this.props.hello_web(nextProps.socket);
+    //   // this.props.getNotification(nextProps.socket)
+    // }
   }
 
   componentWillUnmount() {

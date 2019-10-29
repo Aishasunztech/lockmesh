@@ -346,7 +346,6 @@ export const getNotification = (socket) => {
     return (dispatch) => {
         if (socket && socket._callbacks['$' + SEND_JOB_TO_PANEL] == undefined) {
             socket.on(SEND_JOB_TO_PANEL, (data) => {
-                console.log("getNotification:", data);
                 dispatch({
                     type: SEND_JOB_TO_PANEL,
                     payload: data
