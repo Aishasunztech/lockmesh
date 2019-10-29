@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Drawer, Form, message, Icon, Tabs, Collapse, } from "antd";
+import { Button, Drawer, Form, Tag, Tabs, Collapse, } from "antd";
 import { connect } from "react-redux";
 import Auxiliary from "../../util/Auxiliary";
 import CustomScrollbars from "../../util/CustomScrollbars";
@@ -87,6 +87,17 @@ class RightSidebar extends Component {
       })
     }
     return taskList.map((task) => {
+      let color = '';
+      switch(task.status){
+        case 'pending':
+          color = 'blue'
+        break;
+        case 'completed_successfully':
+          color = 'green'
+        break;
+        default:
+          color = 'red'
+      }
       return (
         <Panel
           header={task.type + ' (' + task.device_id + ')'}
@@ -95,7 +106,7 @@ class RightSidebar extends Component {
           extra={this.genExtra(title)}
         >
           <div>
-            <p>status: {task.status}</p>
+            <p>status: <Tag color={color}>{task.status}</Tag></p>
             <p>{task.created_at}</p>
           </div>
         </Panel>
