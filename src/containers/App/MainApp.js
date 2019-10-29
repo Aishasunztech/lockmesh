@@ -20,7 +20,8 @@ import App from "../../routes/index";
 
 import {
   connectSocket,
-  hello_web
+  hello_web,
+  getNotification
 } from '../../appRedux/actions'
 
 import {
@@ -60,8 +61,12 @@ export class MainApp extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.socket){
-      this.props.hello_web(nextProps.socket)
+    console.log("MainApp: ", nextProps);
+    // if(nextProps.socket && nextProps.socket.connected){
+    if(nextProps.socket ){
+
+      this.props.hello_web(nextProps.socket);
+      this.props.getNotification(nextProps.socket)
     }
   }
 
@@ -196,5 +201,5 @@ const mapStateToProps = ({ settings, socket }) => {
   return { width, navStyle, socket: socket.socket }
 };
 
-export default connect(mapStateToProps, { connectSocket, hello_web })(MainApp);
+export default connect(mapStateToProps, { connectSocket, hello_web, getNotification })(MainApp);
 

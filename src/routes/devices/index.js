@@ -76,15 +76,21 @@ import {
 
 import { unflagged, unlinkDevice, transferDeviceProfile } from '../../appRedux/actions/ConnectDevice';
 
-import {
-    getNotification
-} from "../../appRedux/actions/Socket";
 
 import AppFilter from '../../components/AppFilter';
 import DevicesList from './components/DevicesList';
 import ShowMsg from './components/ShowMsg';
 // import Column from "antd/lib/table/Column";
-import { getStatus, componentSearch, titleCase, dealerColsWithSearch, convertToLang, checkValue, handleMultipleSearch, filterData_RelatedToMultipleSearch } from '../utils/commonUtils';
+import { 
+    getStatus, 
+    componentSearch, 
+    titleCase, 
+    dealerColsWithSearch, 
+    convertToLang, 
+    checkValue, 
+    handleMultipleSearch, 
+    filterData_RelatedToMultipleSearch 
+} from '../utils/commonUtils';
 import CircularProgress from "components/CircularProgress/index";
 import AddDevice from './components/AddDevice';
 import { devicesColumns } from '../utils/columnsUtils';
@@ -902,7 +908,6 @@ class Devices extends Component {
         this.props.getDevicesList();
         this.props.getDropdown('devices');
         this.props.getPagination('devices');
-        // this.props.getNotification();
     }
 
 
@@ -1236,7 +1241,6 @@ function mapDispatchToProps(dispatch) {
         preActiveDevice: preActiveDevice,
         postPagination: postPagination,
         getPagination: getPagination,
-        getNotification: getNotification,
         deleteUnlinkDevice: deleteUnlinkDevice,
         unflagged: unflagged,
         unlinkDevice: unlinkDevice,

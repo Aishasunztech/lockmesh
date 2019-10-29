@@ -16,7 +16,7 @@ import SideBar from "./SideBar"
 import Agents from './Agent';
 import Dashboard from './Dashboard';
 import Reporting from './Reports';
-import RightSidebar from './rightSidebar'
+import RightSidebar from './RightSidebar'
 
 const reducers = combineReducers({
   routing: routerReducer,

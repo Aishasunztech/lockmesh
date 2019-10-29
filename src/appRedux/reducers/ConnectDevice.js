@@ -1816,7 +1816,6 @@ export default (state = initialState, action) => {
             }
         }
         case RESET_DEVICE: {
-            console.log("RESET_DEVICE ")
             return {
                 ...state,
 

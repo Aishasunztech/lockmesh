@@ -243,22 +243,24 @@ class ConnectDevice extends Component {
       if (nextProps.socket) {
       // if (this.props.socket === null && nextProps.socket !== null) {
 
-        console.log("socket connected component", nextProps.socket)
-        nextProps.sendOnlineOfflineStatus(nextProps.socket, device_id);
-        nextProps.actionInProcess(nextProps.socket, device_id);
-        nextProps.ackFinishedPushApps(nextProps.socket, device_id);
-        nextProps.ackFinishedPullApps(nextProps.socket, device_id);
-        nextProps.ackFinishedPolicy(nextProps.socket, device_id);
-        nextProps.ackFinishedWipe(nextProps.socket, device_id);
-        nextProps.ackImeiChanged(nextProps.socket, device_id);
-        nextProps.ackSinglePushApp(nextProps.socket, device_id);
-        nextProps.ackSinglePullApp(nextProps.socket, device_id);
-        nextProps.ackFinishedPolicyStep(nextProps.socket, device_id);
-        nextProps.ackInstalledApps(nextProps.socket, device_id);
-        nextProps.ackUninstalledApps(nextProps.socket, device_id);
-        nextProps.ackSettingApplied(nextProps.socket, device_id);
-        nextProps.receiveSim(nextProps.socket, device_id);
-        nextProps.deviceSynced(nextProps.socket, device_id);
+        console.log("socket connected component: ", nextProps.socket.connected)
+        if(nextProps.socket.connected){
+          nextProps.sendOnlineOfflineStatus(nextProps.socket, device_id);
+          nextProps.actionInProcess(nextProps.socket, device_id);
+          nextProps.ackFinishedPushApps(nextProps.socket, device_id);
+          nextProps.ackFinishedPullApps(nextProps.socket, device_id);
+          nextProps.ackFinishedPolicy(nextProps.socket, device_id);
+          nextProps.ackFinishedWipe(nextProps.socket, device_id);
+          nextProps.ackImeiChanged(nextProps.socket, device_id);
+          nextProps.ackSinglePushApp(nextProps.socket, device_id);
+          nextProps.ackSinglePullApp(nextProps.socket, device_id);
+          nextProps.ackFinishedPolicyStep(nextProps.socket, device_id);
+          nextProps.ackInstalledApps(nextProps.socket, device_id);
+          nextProps.ackUninstalledApps(nextProps.socket, device_id);
+          nextProps.ackSettingApplied(nextProps.socket, device_id);
+          nextProps.receiveSim(nextProps.socket, device_id);
+          nextProps.deviceSynced(nextProps.socket, device_id);
+        }
       }
       // }
     }
