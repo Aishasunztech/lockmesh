@@ -185,6 +185,7 @@ class Domains extends Component {
     }
 
     render() {
+        // console.log("this.state.dealerList:: render func ", this.state.domainList)
         return (
             <div>
                 {
@@ -274,7 +275,7 @@ class Domains extends Component {
 
 
 const mapStateToProps = ({ account, auth, settings, dealers }) => {
-    // console.log("account.domainList ", account.domainList)
+    // console.log("account.domainList ", account.domainList);
     return {
         dealerList: dealers.dealers,
         domainList: account.domainList,

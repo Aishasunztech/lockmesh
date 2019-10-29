@@ -438,16 +438,16 @@ export default (state = initialState, action) => {
                 let index = state.domainList.findIndex((item) => item.id == action.formData.id);
                 let newDealers = (JSON.parse(action.formData.dealers)) ? JSON.parse(action.formData.dealers) : [];
                 let oldDealers = (JSON.parse(state.domainList[index].dealers)) ? JSON.parse(state.domainList[index].dealers) : [];
-                console.log('index is: ', index);
-                console.log('newDealers is: ', newDealers);
-                console.log('oldDealers is: ', oldDealers);
+                // console.log('index is: ', index);
+                // console.log('newDealers is: ', newDealers);
+                // console.log('oldDealers is: ', oldDealers);
 
                 // Save permission for new dealers
                 if (action.formData.action == "save") {
                     if (index !== -1) {
                         if (!action.formData.statusAll) {
                             let allDealers = findAndRemove_duplicate_in_array([...oldDealers, ...newDealers]);
-                            console.log("allDealers ", allDealers);
+                            // console.log("allDealers ", allDealers);
 
                             state.domainList[index].permission_count = allDealers.length;
                             state.domainList[index].dealers = JSON.stringify(allDealers);
@@ -456,9 +456,6 @@ export default (state = initialState, action) => {
                             state.domainList[index].dealers = action.formData.dealers;
                         }
                     }
-                    // else {
-                    //     state.domainList[index].dealers = action.formData.dealers;
-                    // }
                 }
                 else if (action.formData.action == "delete") {
                     // delete permission for dealers

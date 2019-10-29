@@ -863,7 +863,7 @@ class Devices extends Component {
                 flaggedDevices: this.filterList(DEVICE_FLAGGED, this.props.devices),
                 transferredDevices: this.filterList(DEVICE_TRANSFERED, this.props.devices),
             })
-            // this.handleChangetab(this.state.tabselect);
+            this.handleChangetab(this.state.tabselect);
 
         }
 

@@ -35,7 +35,7 @@ class Permissions extends Component {
       dealerListForModal: [],
       permissions: [],
       hideDefaultSelections: false,
-      removeSelectedDealersModal: false,
+      removeUnSelectedDealersModal: false,
       addSelectedDealersModal: false,
       redirect: false,
       dealer_id: '',
@@ -131,23 +131,19 @@ class Permissions extends Component {
       } else {
         this.props.getAllDealers();
       }
-      this.setState({
-        dealerListForModal: this.props.dealerList,
-        dealerList: this.props.dealerList,
-        permissions: this.props.record.permissions
-      })
-    } else if (this.props.dealerList.length !== nextProps.dealerList.length) {
-      this.setState({
-        dealerListForModal: nextProps.dealerList,
-        dealerList: nextProps.dealerList,
-        permissions: this.props.record.permissions
-      })
     }
+
+    this.setState({
+      dealerListForModal: nextProps.dealerList,
+      dealerList: nextProps.dealerList,
+      permissions: nextProps.record.permissions
+    })
+
   }
 
   showPermissionedDealersModal = (visible) => {
     this.setState({
-      removeSelectedDealersModal: visible,
+      removeUnSelectedDealersModal: visible,
       dealer_ids: [],
       selectedRowKeys: []
     })
@@ -177,10 +173,10 @@ class Permissions extends Component {
     var add_ids = dList.filter(e => !permissions.includes(e.dealer_id));
     var addUnSelected = add_ids.filter(e => !selectedRows.includes(e.dealer_id));
     var addUnSelected_IDs = addUnSelected.map(v => v.dealer_id);
-    permissions = [...permissions, ...addUnSelected_IDs];
+    // permissions = [...permissions, ...addUnSelected_IDs];
 
     this.setState({
-      permissions,
+      // permissions,
       addSelectedDealersModal: false
     })
     // console.log("addUnSelected_IDs ", addUnSelected_IDs);
@@ -208,7 +204,7 @@ class Permissions extends Component {
     this.props.dealerList.map((dealer) => {
       dealer_ids.push(dealer.dealer_id);
     });
-    this.setState({ permissions: dealer_ids })
+    // this.setState({ permissions: dealer_ids })
 
     this.props.savePermissionAction(this.props.record.id, JSON.stringify(dealer_ids), 'save', true); // last param is statusAll to save all permissions
   }
@@ -216,21 +212,21 @@ class Permissions extends Component {
     // console.log(this.props.dealerList, "dealer ids", this.state.dealer_ids);
 
     if (this.state.dealer_ids.length) {
-      this.props.dealerList.map((dealer) => {
-        if (this.state.dealer_ids.includes(dealer.dealer_id)) {
-          this.state.permissions.push(dealer.dealer_id);
-        }
-        else {
-          if (this.state.permissions.includes(dealer.dealer_id)) {
-            this.state.dealer_ids.push(dealer.dealer_id);
+      // this.props.dealerList.map((dealer) => {
+      //   if (this.state.dealer_ids.includes(dealer.dealer_id)) {
+      //     this.state.permissions.push(dealer.dealer_id);
+      //   }
+      //   else {
+      //     if (this.state.permissions.includes(dealer.dealer_id)) {
+      //       this.state.dealer_ids.push(dealer.dealer_id);
 
-          }
-        }
-      })
-      this.setState({
-        dealer_ids: [],
-        permissions: this.state.permissions
-      })
+      //     }
+      //   }
+      // })
+      // this.setState({
+      // dealer_ids: [],
+      // permissions: this.state.permissions
+      // })
       this.props.savePermissionAction(this.props.record.id, JSON.stringify(this.state.selectedRowKeys), 'save');
       this.showDealersModal(false);
     }
@@ -389,7 +385,7 @@ class Permissions extends Component {
     // console.log("permitted dealers", permittedDealers);
 
     this.setState({
-      permissions: []
+      // permissions: []
     })
     // this.props.savePermissionAction(this.props.record.id, JSON.stringify(permittedDealers), 'delete');
     this.props.savePermissionAction(this.props.record.id, JSON.stringify(permittedDealers), 'delete', true); // last param is statusAll to delete all permissions
@@ -398,23 +394,26 @@ class Permissions extends Component {
     // })
   }
 
-  removeSelectedDealersModal = (visible) => {
+  removeUnSelectedDealersModal = (visible) => {
     this.setState({
-      removeSelectedDealersModal: visible
+      removeUnSelectedDealersModal: visible
     })
   }
 
-  removeSelectedDealers = () => {
+  removeUnSelectedDealers = () => {
     let permittedDealers = this.state.permissions;
     let selectedRows = this.state.selectedRowKeys;
     var remove_ids = permittedDealers.filter(e => !selectedRows.includes(e));
 
     this.setState({
-      removeSelectedDealersModal: false,
-      dealer_ids: [],
-      permissions: selectedRows
+      removeUnSelectedDealersModal: false,
+      // dealer_ids: [],
+      // permissions: selectedRows
     })
 
+    let allPermissionIds = [...selectedRows, ...permittedDealers];
+    console.log("allPermissionIds ", allPermissionIds);
+    // this.props.savePermissionAction(this.props.record.id, JSON.stringify(allPermissionIds), 'delete_except');
     this.props.savePermissionAction(this.props.record.id, JSON.stringify(remove_ids), 'delete');
   }
 
@@ -622,14 +621,14 @@ class Permissions extends Component {
           width='665px'
           className="permiss_tabl"
           title={convertToLang(this.props.translation["PERMISSION_Remove_Modal_Title"], `Remove Dealers from permissions list for this ${this.props.permissionType}`)}
-          visible={this.state.removeSelectedDealersModal}
+          visible={this.state.removeUnSelectedDealersModal}
           okText={convertToLang(this.props.translation[Button_DeleteExceptSelected], "Delete Except Selected")}
           cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
           onOk={() => {
-            this.removeSelectedDealers()
+            this.removeUnSelectedDealers()
           }}
           onCancel={() => {
-            this.removeSelectedDealersModal(false)
+            this.removeUnSelectedDealersModal(false)
           }}
         >
           <DealerList

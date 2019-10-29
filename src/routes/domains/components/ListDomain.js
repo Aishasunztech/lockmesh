@@ -111,11 +111,11 @@ export default class ListDomain extends Component {
     // }
 
     renderList(list) {
+        // console.log("renderList: ", list);
         let domainList = [];
         let data
         list.map((app) => {
-            // console.log('app is: ', app.name, app.permission_count, this.props.totalDealers, app.permission_count == "All", this.props.totalDealers == app.permission_count)
-            let parseDealers = JSON.parse(app.dealers);
+            // let parseDealers = JSON.parse(app.dealers);
 
             data = {
                 rowKey: app.id,
@@ -133,7 +133,7 @@ export default class ListDomain extends Component {
                         {(app.permission_count === "All" || this.props.totalDealers === app.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
                     </div>
                 ),
-                permissions: app.dealers ? parseDealers : [],
+                permissions: app.dealers ? JSON.parse(app.dealers) : [],
 
                 name: app.name ? app.name : 'N/A',
 
@@ -196,6 +196,7 @@ export default class ListDomain extends Component {
                                         permissionType="domain"
                                         savePermissionAction={this.props.savePermission}
                                         translation={this.props.translation}
+
                                     />
                                 </Fragment>
                             );
