@@ -9,7 +9,7 @@ import {
 } from "../../../appRedux/actions/Account";
 import PackagesInfo from './components/PackagesInfo';
 import ModifyPrice from './components/ModifyPrice';
-import { sim, chat, pgp, vpn, DEALER, ADMIN } from '../../../constants/Constants';
+import { sim, chat, pgp, vpn, DEALER, ADMIN, SDEALER } from '../../../constants/Constants';
 import AppFilter from '../../../components/AppFilter/index';
 import PricesList from './components/pricesList';
 import { componentSearch, getDealerStatus, titleCase, convertToLang } from '../../utils/commonUtils';
@@ -618,7 +618,7 @@ class Prices extends Component {
                         // defaultPagingValue={this.state.defaultPagingValue}
                         // selectedOptions={this.props.selectedOptions}
                         // options={this.state.options}
-                        isAddButton={true}
+                        isAddButton={this.props.auth.type === SDEALER ? false : true}
                         setPrice={true}
                         // handlePolicyModal={this.handlePolicyModal2}
 
@@ -637,36 +637,39 @@ class Prices extends Component {
                             type="card"
                             onChange={(e) => this.setState({ outerTab: e })}
                         >
-                            <Tabs.TabPane tab={convertToLang(this.props.translation[Tab_ID_PRICES], "ID Prices")} key="1">
-                                <div>
-                                    <Tabs
-                                        tabPosition={'left'}
-                                        type="card"
-                                        onChange={(e) => this.tabChaged(e)}
-                                        className="price_table_tabs"
-                                    >
-                                        <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_SIM_ID], "SIM")} key={sim} >
+                            {(this.props.auth.type === ADMIN) ?
+                                <Tabs.TabPane tab={convertToLang(this.props.translation[Tab_ID_PRICES], "ID Prices")} key="1">
+                                    <div>
+                                        <Tabs
+                                            tabPosition={'left'}
+                                            type="card"
+                                            onChange={(e) => this.tabChaged(e)}
+                                            className="price_table_tabs"
+                                        >
+                                            <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_SIM_ID], "SIM")} key={sim} >
 
-                                        </Tabs.TabPane>
-                                        <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_CHAT_ID], "CHAT")} key={chat} >
+                                            </Tabs.TabPane>
+                                            <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_CHAT_ID], "CHAT")} key={chat} >
 
-                                        </Tabs.TabPane>
-                                        <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_PGP_EMAIL], "PGP")} key={pgp} >
+                                            </Tabs.TabPane>
+                                            <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_PGP_EMAIL], "PGP")} key={pgp} >
 
-                                        </Tabs.TabPane>
-                                        <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_VPN], "VPN")} key={vpn} >
+                                            </Tabs.TabPane>
+                                            <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_VPN], "VPN")} key={vpn} >
 
-                                        </Tabs.TabPane>
-                                    </Tabs>
-                                    <div className="price_table">
-                                        <PricesList
-                                            data={this.state.prices ? this.state.prices[this.state.tabSelected] : {}}
-                                            tabSelected={this.state.tabSelected}
-                                            translation={this.props.translation}
-                                        />
+                                            </Tabs.TabPane>
+                                        </Tabs>
+                                        <div className="price_table">
+                                            <PricesList
+                                                data={this.state.prices ? this.state.prices[this.state.tabSelected] : {}}
+                                                tabSelected={this.state.tabSelected}
+                                                translation={this.props.translation}
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                            </Tabs.TabPane>
+                                </Tabs.TabPane>
+                                : null
+                            }
                             <Tabs.TabPane tab={convertToLang(this.props.translation[Tab_PACKAGES], "PACKAGES")} key="2">
                                 <Table
                                     className="devices policy_expand"
@@ -730,7 +733,9 @@ class Prices extends Component {
                     resetPrice={this.props.resetPrice}
                     dealer_id={this.props.auth.dealerId}
                     translation={this.props.translation}
+                    auth={this.props.auth}
                 />
+
                 <Modal
                     maskClosable={false}
                     destroyOnClose={true}

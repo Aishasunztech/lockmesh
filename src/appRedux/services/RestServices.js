@@ -653,7 +653,7 @@ const RestService = {
     getHardwaresPrices: () => {
         return axios.get(BASE_URL + 'users/get-parent-hardware-prices', RestService.getHeader());
     },
-    
+
     checkPackageName: (name) => {
 
         return axios.patch(BASE_URL + 'users/check-package-name', { name }, RestService.getHeader());
@@ -792,8 +792,21 @@ const RestService = {
     rejectRequest: (request) => {
         return axios.put(BASE_URL + 'users/delete_request/' + request.id, request, RestService.getHeader());
     },
+    rejectServiceRequest: (request) => {
+        return axios.put(BASE_URL + 'users/delete_service_request/' + request.id, request, RestService.getHeader());
+    },
+
     acceptRequest: (request) => {
         return axios.put(BASE_URL + 'users/accept_request/' + request.id, request, RestService.getHeader());
+    },
+
+    acceptServiceRequest: (request) => {
+        return axios.put(BASE_URL + 'users/accept_service_request/' + request.id, request, RestService.getHeader());
+    },
+
+    getCancelServiceRequests: () => {
+        console.log("object");
+        return axios.get(BASE_URL + 'users/get-cancel-service-requests', RestService.getHeader());
     },
 
     simRegister: (data) => {
@@ -918,22 +931,22 @@ const RestService = {
 
     //product report
     generateProductReport: (data) => {
-      return axios.post(BASE_URL + 'users/reporting/product', data, RestService.getHeader());
+        return axios.post(BASE_URL + 'users/reporting/product', data, RestService.getHeader());
     },
 
-  //invoice report
-  generateInvoiceReport: (data) => {
-    return axios.post(BASE_URL + 'users/reports/invoice', data, RestService.getHeader());
-  },
-
-  //payment history report
-  generatePaymentHistoryReport: (data) => {
-    return axios.post(BASE_URL + 'users/reports/payment-history', data, RestService.getHeader());
+    //invoice report
+    generateInvoiceReport: (data) => {
+        return axios.post(BASE_URL + 'users/reports/invoice', data, RestService.getHeader());
     },
-  
-  //hardware report
-  generateHardwareReport: (data) => {
-    return axios.post(BASE_URL + 'users/reports/hardware', data, RestService.getHeader());
-  },
+
+    //payment history report
+    generatePaymentHistoryReport: (data) => {
+        return axios.post(BASE_URL + 'users/reports/payment-history', data, RestService.getHeader());
+    },
+
+    //hardware report
+    generateHardwareReport: (data) => {
+        return axios.post(BASE_URL + 'users/reports/hardware', data, RestService.getHeader());
+    },
 }
 export default RestService;

@@ -663,7 +663,7 @@ class AddDevice extends Component {
                     <Radio.Group className="width_100 text-center" onChange={this.handleChange} ref='option' defaultValue="0" buttonStyle="solid">
                         <Radio.Button className="dev_radio_btn" value="0">{convertToLang(this.props.translation[SINGLE_DEVICE], "Single Device")}</Radio.Button>
                         <Radio.Button className="dev_radio_btn" value="1">
-                            <a>{convertToLang(this.props.translation[DUPLICATE_DEVICES], "Duplicate Devices")}</a>
+                            <a>{convertToLang(this.props.translation[DUPLICATE_DEVICES], "Multiple Devices")}</a>
                             <Popover placement="bottomRight" content={(
                                 <Markup content={convertToLang(this.props.translation[DUPLICATE_DEVICES_HELPING_TEXT],
                                     `<p>Generate multiple activation <br /> codes with same settings</p>`)} />
@@ -1085,7 +1085,7 @@ class AddDevice extends Component {
                         </Fragment> : null}
                     {(this.state.type == 1) ?
                         <Form.Item
-                            label={convertToLang(this.props.translation[DUPLICATE_DEVICES], "DUPLICATE ")}
+                            label={convertToLang(this.props.translation[DUPLICATE_DEVICES], "MULTIPLE ")}
                             labelCol={{ span: 8 }}
                             wrapperCol={{ span: 14 }}
                         >
@@ -1093,9 +1093,16 @@ class AddDevice extends Component {
                                 initialValue: '',
                                 rules: [{
                                     required: true, message: convertToLang(this.props.translation[DUPLICATE_DEVICES_REQUIRED], 'Number of Duplicate devices required'),
-                                }],
+                                }
+                                ],
                             })(
-                                <InputNumber min={2} onChange={this.handleDuplicate} />
+                                <Fragment>
+                                    <InputNumber
+                                        min={2} max={10}
+                                        onChange={this.handleDuplicate} />
+                                    <span style={{ color: "red", marginLeft: '25px', padding: 0 }} >Maximum Multiple devices : 10</span>
+                                </Fragment>
+
                             )}
                         </Form.Item> : null
                     }
@@ -1223,15 +1230,19 @@ class AddDevice extends Component {
                             <h5 style={{ textAlign: "right" }}><b>Sub Total :  {this.state.serviceData.total_price + this.state.serviceData.hardwarePrice} Credits</b></h5>
                             <h4 style={{ textAlign: "center" }}><b>There will be a charge of {this.state.serviceData.total_price + this.state.serviceData.hardwarePrice} Credits</b></h4>
                         </div>
-                        {(this.state.term !== '0') ?
+                        {/* {(this.state.term !== '0') ?
                             <div>
                                 <h4 style={{ textAlign: "center", color: 'red' }}>If you PAY NOW you will get 3% discount.</h4>
                             </div>
-                            : null}
+                            : null
+                            } */}
 
                         <div className="edit_ftr_btn" >
                             <Button onClick={() => { this.setState({ showConfirmCredit: false }) }}>CANCEL</Button>
-                            <Button type='primary' onClick={() => { this.submitServicesConfirm(false) }}>PAY LATER</Button>
+                            {(this.props.user_credit < (this.state.serviceData.total_price + this.state.serviceData.hardwarePrice)) ?
+                                <Button type='primary' onClick={() => { this.submitServicesConfirm(false) }}>PAY LATER</Button>
+                                : null
+                            }
                             <Button style={{ backgroundColor: "green", color: "white" }} onClick={() => { this.submitServicesConfirm(true) }}>PAY NOW (-3%)</Button>
                         </div >
                     </Fragment>
@@ -1317,7 +1328,7 @@ var mapStateToProps = ({ routing, devices, device_details, users, settings, side
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(WrappedAddDeviceForm));
 function showConfirm(_this, values) {
     confirm({
-        title: "Do You Really want to duplicate " + values.duplicate + " devices with same settings.",
+        title: "Do You Really want to multiple " + values.duplicate + " devices with same settings.",
         onOk() {
             _this.props.AddDeviceHandler(values);
             _this.props.hideModal();

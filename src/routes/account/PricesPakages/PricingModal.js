@@ -7,7 +7,7 @@ import {
 import ItemsTab from "../../../components/ItemsTab/index";
 
 import PackagePricingForm from './components/PackagePricingForm';
-import { sim, chat, pgp, vpn, pkg_features, sim2 } from '../../../constants/Constants';
+import { sim, chat, pgp, vpn, pkg_features, sim2, ADMIN } from '../../../constants/Constants';
 import {
     Tab_SET_ID_PRICES,
     Tab_SET_PACKAGES_PRICES,
@@ -214,17 +214,20 @@ export default class PricingModal extends Component {
                     type="card"
                     onChange={(e) => this.setState({ outerTab: e })}
                 >
-                    <TabPane tab={convertToLang(this.props.translation[Tab_SET_ID_PRICES], "Set ID Prices")} key="1">
-                        <ItemsTab
-                            innerTabChanged={this.innerTabChanged}
-                            setPrice={this.props.setPrice}
-                            prices={this.props.prices}
-                            translation={this.props.translation}
-                            restrictSubmit={this.restrictSubmit}
-                            submitAvailable={this.state.submitAvailable}
-                            pricesFormErrors={this.state.pricesFormErrors}
-                        />
-                    </TabPane>
+                    {(this.props.auth.type === ADMIN) ?
+                        <TabPane tab={convertToLang(this.props.translation[Tab_SET_ID_PRICES], "Set ID Prices")} key="1">
+                            <ItemsTab
+                                innerTabChanged={this.innerTabChanged}
+                                setPrice={this.props.setPrice}
+                                prices={this.props.prices}
+                                translation={this.props.translation}
+                                restrictSubmit={this.restrictSubmit}
+                                submitAvailable={this.state.submitAvailable}
+                                pricesFormErrors={this.state.pricesFormErrors}
+                            />
+                        </TabPane>
+                        : null
+                    }
                     <TabPane tab={convertToLang(this.props.translation[Tab_SET_PACKAGES_PRICES], "Set Packages Price")} key="2">
                         <PackagePricingForm
                             showPricingModal={this.props.showPricingModal}

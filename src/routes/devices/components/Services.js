@@ -726,6 +726,16 @@ class Services extends Component {
         return (
             <Fragment>
                 <div>
+                    {(this.props.applyServicesValue === 'extend') ?
+                        <Button
+                            type="primary"
+                            onClick={() => this.props.handleRenewService()}
+                            style={{ float: "right" }}
+                        >
+                            {convertToLang(this.props.translation[DUMY_TRANS_ID], "RENEW CURRENT SERVICES")}
+                        </Button>
+                        : null
+                    }
                     <Tabs type="card" className="dev_tabs" activeKey={this.props.tabselect} onChange={this.callback}>
 
                         {(this.props.type !== 'edit' || (this.props.type === 'edit' && this.props.device.finalStatus === DEVICE_PRE_ACTIVATION)) ?
