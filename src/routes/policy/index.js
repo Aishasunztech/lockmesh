@@ -366,6 +366,7 @@ class Policy extends Component {
 
                 {/* Policy List */}
                 <PolicyList
+                    totalDealers={this.props.dealerList.length}
                     savePermission={this.props.policyPermission}
                     onChangeTableSorting={this.handleTableChange}
                     user={this.props.user}
@@ -473,9 +474,10 @@ function mapDispatchToProps(dispatch) {
         // getDefaultApps: getDefaultApps
     }, dispatch);
 }
-var mapStateToProps = ({ policies, auth, settings }) => {
+var mapStateToProps = ({ policies, auth, settings, dealers }) => {
 
     return {
+        dealerList: dealers.dealers,
         user: auth.authUser,
         policies: policies.policies,
         apk_list: policies.apk_list,
