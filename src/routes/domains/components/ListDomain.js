@@ -111,6 +111,7 @@ export default class ListDomain extends Component {
     // }
 
     renderList(list) {
+        // console.log(this.props.user)
         // console.log("renderList: ", list);
         let domainList = [];
         let data
@@ -134,9 +135,10 @@ export default class ListDomain extends Component {
                     </div>
                 ),
                 permissions: app.dealers ? JSON.parse(app.dealers) : [],
-
+                statusAll: app.statusAll,
                 name: app.name ? app.name : 'N/A',
-
+                dealer_type: app.dealer_type,
+                
                 created_at: app.created_at,
                 updated_at: app.updated_at
             }

@@ -1692,7 +1692,7 @@ export function sDealerColumns(translation, handleSearch) {
 
 export function dealerColsWithSearch(translation, searchBar = false, callBack = null) {
 
-    var searchInput = [
+    var searchInput = [  
         {
             title: (
                 <Input.Search
@@ -1782,6 +1782,14 @@ export function dealerColsWithSearch(translation, searchBar = false, callBack = 
 
     var child = [
         {
+            title: "#",
+            dataIndex: 'counter',
+            align: 'center',
+            className: '',
+            key: 'counter',
+            render: (text, record, index) => ++index,
+        },
+        {
             title: convertToLang(translation[DEALER_ID], "DEALER ID"),
             dataIndex: 'dealer_id',
             key: 'dealer_id',
@@ -1823,6 +1831,20 @@ export function dealerColsWithSearch(translation, searchBar = false, callBack = 
                 }
             },
             sortDirections: ['ascend', 'descend'],
+            className: '',
+        },
+        {
+            title: convertToLang(translation["permission_by"], "PERMISSION BY"),
+            dataIndex: 'permission_by',
+            key: 'permission_by',
+            // sorter: (a, b) => {
+            //     if (a.permission_by.props) {
+            //         return a.permission_by.props.children.localeCompare(b.permission_by.props.children)
+            //     } else {
+            //         return a.permission_by.localeCompare(b.permission_by)
+            //     }
+            // },
+            // sortDirections: ['ascend', 'descend'],
             className: '',
         },
         {

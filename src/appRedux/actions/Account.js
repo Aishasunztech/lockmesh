@@ -546,7 +546,7 @@ export function getDomains() {
     };
 }
 
-export function domainPermission(id, dealers, action, statusAll = false) {
+export function domainPermission(id, dealers, action, statusAll = false, user) {
     // console.log('at domainPermission action ', id, dealers, action, statusAll)
     return (dispatch) => {
         RestService.dealerPermissions(id, dealers, action, statusAll, 'domain').then((response) => {
@@ -559,7 +559,8 @@ export function domainPermission(id, dealers, action, statusAll = false) {
                         id,
                         dealers,
                         action,
-                        statusAll
+                        statusAll,
+                        user
                     }
                 })
 

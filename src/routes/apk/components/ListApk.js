@@ -219,7 +219,10 @@ export default class ListApk extends Component {
                 let data = {
                     'rowKey': app.apk_id,
                     'id': app.apk_id,
-                    'permission': <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>{app.permission_count}</span>,
+                    'permission': <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
+                        {/* {app.permission_count} */}
+                        {(app.permission_count === "All" || this.props.totalDealers === app.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
+                    </span>,
                     "permissions": app.permissions,
                     'apk_name': app.apk_name,
                     'apk_logo': (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
