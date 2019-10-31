@@ -251,44 +251,44 @@ export function handleMultipleSearch(e, copy_status, copyRequireSearchData, demo
       // console.log('device is: ', device);
       // if (obj[targetName] !== undefined) {
 
-        let searchRecords = 0;
+      let searchRecords = 0;
 
-        if (searchColsAre > 0) {
-          Object.values(demoSearchValues).forEach((data) => {
+      if (searchColsAre > 0) {
+        Object.values(demoSearchValues).forEach((data) => {
 
-            if (obj[data.key] !== undefined && obj[data.key] !== null) {
-              if (data.value == "") {
+          if (obj[data.key] !== undefined && obj[data.key] !== null) {
+            if (data.value == "") {
+              searchRecords++;
+            } else if (typeof (obj[data.key]) === 'string') {
+              if (obj[data.key].toString().toUpperCase().includes(data.value.toString().toUpperCase())) {
                 searchRecords++;
-              } else if (typeof (obj[data.key]) === 'string') {
-                if (obj[data.key].toString().toUpperCase().includes(data.value.toString().toUpperCase())) {
-                  searchRecords++;
-                }
-              } else
-                // if (obj[data.key] !== null) {
-                  if (isArray(obj[data.key])) {
+              }
+            } else
+              // if (obj[data.key] !== null) {
+              if (isArray(obj[data.key])) {
 
-                    if (data.key == "devicesList") {
-                      if (obj[data.key].length.toString().toUpperCase().includes(data.value.toString().toUpperCase())) {
-                        searchRecords++;
-                      }
-                    }
-
-                  } else if (obj[data.key].toString().toUpperCase().includes(data.value.toString().toUpperCase())) {
+                if (data.key == "devicesList") {
+                  if (obj[data.key].length.toString().toUpperCase().includes(data.value.toString().toUpperCase())) {
                     searchRecords++;
                   }
-                // }
-            }
-          })
+                }
 
-          if (searchColsAre === searchRecords) {
-            demoData.push(obj);
+              } else if (obj[data.key].toString().toUpperCase().includes(data.value.toString().toUpperCase())) {
+                searchRecords++;
+              }
+            // }
           }
+        })
+
+        if (searchColsAre === searchRecords) {
+          demoData.push(obj);
         }
-        else {
-          if (obj[targetName].toString().toUpperCase().includes(targetValue.toString().toUpperCase())) {
-            demoData.push(obj);
-          }
+      }
+      else {
+        if (obj[targetName].toString().toUpperCase().includes(targetValue.toString().toUpperCase())) {
+          demoData.push(obj);
         }
+      }
       // }
       // else {
       //   // demoData.push(obj);
@@ -352,6 +352,43 @@ export function filterData_RelatedToMultipleSearch(devices, SearchValues) {
   }
 }
 
+
+export function findAndRemove_duplicate_in_array(arra1) {
+  // console.log('array is: ', arra1)
+  var object = {};
+  var duplicateIds = [];
+
+  arra1.forEach(function (item) {
+    if (!object[item])
+      object[item] = 0;
+    object[item] += 1;
+  })
+
+  for (var prop in object) {
+    if (object[prop] >= 2) {
+      duplicateIds.push(Number(prop));
+    }
+  }
+
+  let removeDuplicateIds = arra1.filter((item) => !duplicateIds.includes(item));
+  return ([...removeDuplicateIds, ...duplicateIds]);
+
+}
+
+
+export function removeDuplicateObjects(originalArray, prop) {
+  var newArray = [];
+  var lookupObject  = {};
+
+  for(var i in originalArray) {
+     lookupObject[originalArray[i][prop]] = originalArray[i];
+  }
+
+  for(i in lookupObject) {
+      newArray.push(lookupObject[i]);
+  }
+   return newArray;
+}
 export function generatePDF(columns, rows, title, fileName) {
 
   var doc = new jsPDF('p', 'pt');

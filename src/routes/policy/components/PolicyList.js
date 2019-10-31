@@ -33,7 +33,7 @@ class PolicyList extends Component {
     }
 
     expandRow = (rowId, btnof, expandedByCustom = false) => {
-  
+
         if (this.state.expandedRowKeys.includes(rowId)) {
             var index = this.state.expandedRowKeys.indexOf(rowId);
             if (index !== -1) this.state.expandedRowKeys.splice(index, 1);
@@ -115,7 +115,7 @@ class PolicyList extends Component {
                 key: policy.id,
                 rowKey: policy.id,
                 isChangedPolicy: policy.isChangedPolicy ? policy.isChangedPolicy : false,
-                policy_id: policy.id,
+                id: policy.id,
                 action:
                     (policy.dealer_id === this.props.user.id || this.props.user.type === ADMIN) ?
                         (
@@ -154,7 +154,10 @@ class PolicyList extends Component {
                     </Fragment>
                 )
                 ,
-                permission: <span style={{ fontSize: 15, fontWeight: 400 }}>{(policy.permission_count == 'All') ? convertToLang(this.props.translation[Tab_All], "All") : policy.permission_count}</span>,
+                permission: <span style={{ fontSize: 15, fontWeight: 400 }}>
+                    {/* {(policy.permission_count == 'All') ? convertToLang(this.props.translation[Tab_All], "All") : policy.permission_count} */}
+                    {(policy.permission_count === "All" || this.props.totalDealers === policy.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : policy.permission_count}
+                </span>,
                 permissions: (policy.dealer_permission !== undefined || policy.dealer_permission !== null) ? policy.dealer_permission : [],
                 policy_status: (
                     <Switch
@@ -207,7 +210,7 @@ class PolicyList extends Component {
         // console.log(props);
         if (props.expanded) {
             // if (this.state.expandedByCustom[props.record.rowKey]) {
-                if(!this.state.expandedRowKeys.includes(props.record.rowKey)){
+            if (!this.state.expandedRowKeys.includes(props.record.rowKey)) {
                 return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
                     this.expandRow(props.record.rowKey, 'permission', false)
                 }}><Icon type="caret-right" /></a>
@@ -219,7 +222,7 @@ class PolicyList extends Component {
         } else {
 
             // if (this.state.expandedByCustom[props.record.rowKey]) {
-                if(!this.state.expandedRowKeys.includes(props.record.rowKey)){
+            if (!this.state.expandedRowKeys.includes(props.record.rowKey)) {
                 return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
                     this.expandRow(props.record.rowKey, 'permission', false)
                 }}><Icon type="caret-right" /></a>
@@ -247,7 +250,7 @@ class PolicyList extends Component {
 
         if (this.props.location.state && this.props.location.state.id) {
             const newItems = [...this.state.expandTabSelected];
-            newItems[this.props.location.state.id] =  '1' ;
+            newItems[this.props.location.state.id] = '1';
             this.setState({
                 expandedRowKeys: this.props.location.state.id ? [this.props.location.state.id] : [],
                 expandTabSelected: newItems,
@@ -278,14 +281,14 @@ class PolicyList extends Component {
                     <CustomScrollbars className="gx-popover-scroll">
                         <Table
                             className="devices policy_expand"
-                            rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.policy_id) ? 'exp_row' : ''}
+                            rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.id) ? 'exp_row' : ''}
                             size="default"
                             bordered
-                            rowKey={record => record.policy_id}
+                            rowKey={record => record.id}
                             expandIcon={(props) => this.customExpandIcon(props)}
                             // onExpand={this.onExpandRow}
                             expandedRowRender={(record, index, indent, expanded) => {
-                            
+                                // console.log("record ", record)
                                 return (
                                     <div>
                                         {/* Save Policy Button */}
@@ -296,12 +299,12 @@ class PolicyList extends Component {
                                         } */}
 
                                         <PolicyInfo
-                                            key={record.policy_id}
+                                            key={record.id}
                                             push_apps={this.props.push_apps}
                                             selected={this.state.expandTabSelected[record.rowKey]}
                                             policy={record}
                                             isSwitch={this.state.isSwitch && this.state[record.rowKey] == record.rowKey ? true : false}
-                                            rowId={record.policy_id}
+                                            rowId={record.id}
                                             handleEditPolicy={this.props.handleEditPolicy}
                                             handleCheckAll={this.props.handleCheckAll}
                                             // edit={true}
@@ -316,6 +319,7 @@ class PolicyList extends Component {
                                             enableAllallExtensions={this.props.enableAllallExtension}
                                             handleAppGotted={this.props.handleAppGotted}
                                             appsGotted={this.props.appsGotted}
+                                            savePermission={this.props.savePermission}
                                             translation={this.props.translation}
                                         />
                                     </div>

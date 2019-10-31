@@ -21,10 +21,13 @@ import {
     DELETE_PACKAGE,
     EDIT_PACKAGE,
     RESYNC_IDS,
+    GET_DOMAINS,
+    PERMISSION_DOMAINS,
     GET_HARDWARE,
     MODIFY_ITEM_PRICE
 } from "../../constants/ActionTypes";
 import { message, Modal } from "antd";
+import { findAndRemove_duplicate_in_array, removeDuplicateObjects } from "../../routes/utils/commonUtils";
 
 const success = Modal.success
 const error = Modal.error
@@ -55,6 +58,7 @@ const initialState = {
     },
     packages: [],
     packagesCopy: [],
+    domainList: [],
     hardwares: []
 };
 
@@ -112,7 +116,7 @@ export default (state = initialState, action) => {
         }
 
         case GET_PACKAGES: {
-            // console.log(action.response, 'response of get prices')
+            // console.log(action.response.data, JSON.stringify(action.response.data), 'response of get prices')
 
             return {
                 ...state,
@@ -313,20 +317,97 @@ export default (state = initialState, action) => {
                 ...state,
             }
 
-        case PACKAGE_PERMSSION_SAVED: {
-            // console.log("dasdasdad");
-            success({
-                title: action.payload
-            });
+        // case PACKAGE_PERMSSION_SAVED: {
+        //     // console.log("dasdasdad");
+        //     success({
+        //         title: action.payload
+        //     });
 
-            let objIndex = state.packages.findIndex((obj => obj.id === action.package_id));
-            state.packages[objIndex].permission_count = action.permission_count;
+        //     let objIndex = state.packages.findIndex((obj => obj.id === action.package_id));
+        //     state.packages[objIndex].permission_count = action.permission_count;
+
+        //     return {
+        //         ...state,
+        //         packages: [...state.packages]
+        //     }
+        // }
+
+        case PACKAGE_PERMSSION_SAVED: {
+
+            // console.log("at reducer PACKAGE_PERMSSION_SAVED:: ", state.packages, action);
+            if (action.payload.status) {
+                success({
+                    title: action.payload.msg
+                });
+                let user = action.formData.user;
+                let index = state.packages.findIndex((item) => item.id == action.formData.id);
+                let newDealers = (JSON.parse(action.formData.dealers)) ? JSON.parse(action.formData.dealers) : [];
+                let oldDealers = (state.packages[index].dealer_permission) ? state.packages[index].dealer_permission : [];
+                // console.log('index is: ', index);
+
+                // Save permission for new dealers
+                if (action.formData.action == "save") {
+
+                    if (index !== -1) {
+                        newDealers = newDealers.map((item) => {
+                            return {
+                                dealer_id: item,
+                                dealer_type: user.type,
+                                permission_by: user.id
+                            }
+                        });
+                        if (!action.formData.statusAll) {
+                            // let allDealers = findAndRemove_duplicate_in_array([...oldDealers, ...newDealers]);
+                            let allDealers = removeDuplicateObjects([...oldDealers, ...newDealers], "dealer_id");
+                            // console.log("allDealers ", allDealers);
+
+                            state.packages[index].permission_count = allDealers.length;
+                            state.packages[index].dealer_permission = allDealers;
+                            state.packages[index].statusAll = false;
+                        } else {
+                            state.packages[index].permission_count = "All";
+                            state.packages[index].statusAll = true;
+                            state.packages[index].dealer_permission = newDealers;
+                        }
+                    }
+                }
+                else if (action.formData.action == "delete") {
+                    // delete permission for dealers
+
+                    if (index !== -1) {
+                        if (!action.formData.statusAll) {
+                            let allDealers = oldDealers.filter((item) => !newDealers.includes(item.dealer_id));
+                            state.packages[index].dealer_permission = allDealers;
+                            state.packages[index].permission_count = allDealers.length;
+                        } else {
+                            if (user && user.type === "dealer") {
+                                state.packages[index].dealer_permission = oldDealers.filter((item) => item.dealer_type == "admin")
+                            }
+                            else if (user && user.type === "sdealer") {
+                                state.packages[index].dealer_permission = oldDealers.filter((item) => item.dealer_type == "dealer")
+                            }
+                            else {
+                                state.packages[index].dealer_permission = [];
+                            }
+                            state.packages[index].statusAll = false;
+                            state.packages[index].permission_count = 0;
+                        }
+                    }
+                }
+            } else {
+                error({
+                    title: action.payload.msg
+                });
+            }
 
             return {
                 ...state,
+                isloading: false,
                 packages: [...state.packages]
             }
         }
+
+
         case DELETE_PACKAGE: {
             let packages = state.packages
             if (action.payload.status) {
@@ -391,6 +472,88 @@ export default (state = initialState, action) => {
                     ...state,
                     hardwares: [...state.hardwares]
                 }
+            }
+        }
+
+        case GET_DOMAINS: {
+            // console.log('get domains:: ', action.payload.domains)
+            return {
+                ...state,
+                isloading: false,
+                domainList: action.payload.domains
+            }
+        }
+
+        case PERMISSION_DOMAINS: {
+
+            // console.log("at reducer PERMISSION_DOMAINS:: ",action.formData.user, state.domainList, action.formData.id, action.formData.dealers);
+            if (action.payload.status) {
+                success({
+                    title: action.payload.msg
+                });
+                let user = action.formData.user;
+                let index = state.domainList.findIndex((item) => item.id == action.formData.id);
+                let newDealers = (JSON.parse(action.formData.dealers)) ? JSON.parse(action.formData.dealers) : [];
+                let oldDealers = (JSON.parse(state.domainList[index].dealers)) ? JSON.parse(state.domainList[index].dealers) : [];
+                // console.log('index is: ', index);
+                // console.log('newDealers is: ', newDealers);
+                // console.log('oldDealers is: ', oldDealers);
+
+                // Save permission for new dealers
+                if (action.formData.action == "save") {
+                    if (index !== -1) {
+                        newDealers = newDealers.map((item) => {
+                            return {
+                                dealer_id: item,
+                                dealer_type: user.type,
+                                permission_by: user.id
+                            }
+                        });
+                        if (!action.formData.statusAll) {
+
+                            // let allDealers = findAndRemove_duplicate_in_array([...oldDealers, ...newDealers]);
+                            let allDealers = removeDuplicateObjects([...oldDealers, ...newDealers], "dealer_id");
+                            // console.log("allDealers ", allDealers);
+
+                            state.domainList[index].permission_count = allDealers.length;
+                            state.domainList[index].dealers = JSON.stringify(allDealers);
+                            state.domainList[index].statusAll = false;
+                        } else {
+                            state.domainList[index].permission_count = "All";
+                            state.domainList[index].statusAll = true;
+                            state.domainList[index].dealers = JSON.stringify(newDealers);
+                        }
+                    }
+                }
+                else if (action.formData.action == "delete") {
+                    // delete permission for dealers
+
+                    if (index !== -1) {
+                        if (!action.formData.statusAll) {
+                            let allDealers = oldDealers.filter((item) => !newDealers.includes(item.dealer_id));
+                            state.domainList[index].dealers = JSON.stringify(allDealers);
+                            state.domainList[index].permission_count = allDealers.length;
+                        } else {
+                            if (user && user.type !== "admin") {
+                                state.domainList[index].dealers = JSON.stringify(oldDealers.filter((item) => item.dealer_type == "admin"))  //'[]';
+                            } else {
+                                state.domainList[index].dealers = '[]';
+                            }
+                            state.domainList[index].statusAll = false;
+                            state.domainList[index].permission_count = 0;
+                        }
+                    }
+                }
+            } else {
+                error({
+                    title: action.payload.msg
+                });
+            }
+
+            return {
+                ...state,
+                isloading: false,
+                domainList: [...state.domainList]
             }
         }
 

@@ -335,7 +335,7 @@ class Dashboard extends Component {
                                                 </Card>
                                                 <div className="dash_btm_txt">
                                                     {/* <span className='db-span-qnty'>12</span> */}
-                                                    <span className='db-span-text'>{convertToLang(this.props.translation[MANAGE_DATA], "Manage Data")}</span>
+                                                    <span className='db-span-text'>{convertToLang(this.props.translation[MANAGE_DATA], "Manage ID Inventory")}</span>
                                                 </div>
                                             </Link>
                                         </div>
