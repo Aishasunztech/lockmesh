@@ -21,6 +21,7 @@ import {
     PACKAGE_INCLUDED,
     UNIT_PRICE,
 } from "../../../constants/AccountConstants";
+import { Markup } from 'interweave';
 
 const confirm = Modal.confirm;
 const TabPane = Tabs.TabPane;
@@ -115,7 +116,7 @@ class ServicesList extends Component {
                 className: 'row '
             },
             {
-                title: convertToLang(this.props.translation[DUMY_TRANS_ID], "PACKAGE PRICE (CREDITS)"),
+                title: <Markup content={convertToLang(this.props.translation[DUMY_TRANS_ID], "PACKAGE PRICE <br>(CREDITS)")}></Markup>,
                 align: "center",
                 className: 'white_normal',
                 dataIndex: 'pkg_price',
@@ -483,28 +484,29 @@ class ServicesList extends Component {
             <Fragment>
 
                 {(this.props.tabselect === '0') ?
-                    <div style={{}} >
-                        <h2 style={{ textAlign: "center" }}><strong>PRODUCTS</strong></h2>
-                        <Table
-                            id='products'
-                            className={"devices"}
-                            rowSelection={trialRowSelection}
-                            size="middle"
-                            bordered
-                            columns={this.state.pricesColumns}
-                            dataSource={this.renderList("trial")}
-                            pagination={
-                                false
-                            }
-                        />
-                    </div >
+                    <div>  <h2 className="text-center"><strong>PRODUCTS</strong></h2>
+                        <div className="prd_table">
+                            <Table
+                                id='products'
+                                className={"devices"}
+                                rowSelection={trialRowSelection}
+                                size="middle"
+                                bordered
+                                columns={this.state.pricesColumns}
+                                dataSource={this.renderList("trial")}
+                                pagination={
+                                    false
+                                }
+                            />
+                        </div >
+                    </div>
                     :
                     <Fragment>
-                        <div style={{}}>
-                            <h2 style={{ textAlign: "center" }}><strong>PACKAGES</strong></h2>
+                        <h2 className="text-center"><strong>PACKAGES</strong></h2>
+                        <div className="prd_table">
                             <Table
                                 id='packages'
-                                className={"devices mb-10"}
+                                className={"devices"}
                                 rowSelection={packageRowSelection}
                                 size="middle"
                                 bordered
@@ -513,9 +515,11 @@ class ServicesList extends Component {
                                 pagination={
                                     false
                                 }
+                            // scroll={{ y: "142px" }}
+                            // scroll={{ x: true }}
                             />
                         </div >
-                        <div style={{}} >
+                        {/* <div style={{}} >
                             <h2 style={{ textAlign: "center" }}><strong>PRODUCTS</strong></h2>
                             <Table
                                 id='products'
@@ -530,9 +534,9 @@ class ServicesList extends Component {
                                 }
                             />
 
-                        </div >
+                        </div > */}
                     </Fragment>}
-                <div className="edit_ftr_btn">
+                <div className="edit_ftr_btn_serv">
                     <Button key="back" type="button" onClick={this.handleCancel}>{convertToLang(this.props.translation[Button_Cancel], "Cancel")}</Button>
                     <Button type="primary" onClick={this.handleSubmit} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "SELECT")}</Button>
                 </div>
@@ -733,7 +737,7 @@ class Services extends Component {
                         </Button>
                         : null
                     }
-                    <Tabs type="card" tabPosition={'left'} style={{ display: "flex", alignItems: "center" }} className="dev_tabs" activeKey={this.props.tabselect} onChange={this.callback}>
+                    <Tabs type="card" tabPosition={'left'} className="services_tabs " activeKey={this.props.tabselect} onChange={this.callback}>
                         {(this.props.type !== 'edit' || (this.props.type === 'edit' && this.props.device.finalStatus === DEVICE_PRE_ACTIVATION)) ?
                             <TabPane tab={<span className="green">TRIAL</span>} key="0" >
                             </TabPane>
