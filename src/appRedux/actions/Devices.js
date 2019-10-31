@@ -18,7 +18,8 @@ import {
     USER_CREDITS,
     TRANSFER_DEVICE,
     ADD_DEVICE,
-    BULK_DEVICES_LIST
+    BULK_DEVICES_LIST,
+    GET_PARENT_HARDWARES
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -37,15 +38,13 @@ export function getDevicesList() {
             // 
             if (RestService.checkAuth(response.data)) {
                 // 
-                if (response.data.status) {
 
-                    dispatch({
-                        type: DEVICES_LIST,
-                        payload: response.data.data,
-                        response: response.data,
+                dispatch({
+                    type: DEVICES_LIST,
+                    payload: response.data.data,
+                    response: response.data,
 
-                    });
-                }
+                });
             } else {
                 dispatch({
                     type: INVALID_TOKEN
@@ -398,6 +397,24 @@ export const getParentPackages = () => {
 
                 dispatch({
                     type: GET_PARENT_PACKAGES,
+                    response: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+
+    }
+}
+export const getHardwaresPrices = () => {
+    return (dispatch) => {
+        RestService.getHardwaresPrices().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+
+                dispatch({
+                    type: GET_PARENT_HARDWARES,
                     response: response.data
                 })
             } else {

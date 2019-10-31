@@ -13,6 +13,7 @@ import UserProfile from "./UserProfile";
 // import AppsNavigation from "./AppsNavigation";
 
 import NewDevice from '../../components/NewDevices';
+import CreditsModal from '../../components/CreditsModal';
 
 import { getNewDevicesList } from "../../appRedux/actions/Common";
 import {
@@ -33,8 +34,6 @@ import {
 } from "../../constants/ThemeSetting";
 
 import {
-  Sidebar_devices,
-  Sidebar_users,
   Sidebar_dealers,
   Sidebar_sdealers,
   Sidebar_app,
@@ -43,6 +42,8 @@ import {
   Sidebar_logout,
   Alert_Change_Language,
   ARE_YOU_SURE_YOU_WANT_TO_LOGOUT,
+  Sidebar_users_devices,
+  Sidebar_clients,
 } from '../../constants/SidebarConstants'
 
 
@@ -101,6 +102,14 @@ class SidebarContent extends Component {
       this.props.getUserCredit()
       this.refs.new_device.showModal();
       // this.props.getDevicesList();
+    }
+
+    // alert('its working');
+  }
+  showCreditsModal = () => {
+    if (this.props.authUser.type !== ADMIN) {
+      this.props.getUserCredit()
+      this.refs.credits_modal.showModal();
     }
 
     // alert('its working');
@@ -198,6 +207,12 @@ class SidebarContent extends Component {
         <div className="gx-sidebar-content ">
           <div className={`gx-sidebar-notifications text-center ${this.getNoHeaderClass(navStyle)} `}>
             <UserProfile />
+            <CreditsModal
+              ref='credits_modal'
+              translation={this.props.translation}
+              user_credit={this.props.user_credit}
+              due_credit={this.props.due_credit}
+            />
             <NewDevice
               ref='new_device'
               devices={this.props.devices}
@@ -221,7 +236,7 @@ class SidebarContent extends Component {
               <li>
                 <a className="head-example">
                   <Badge className="cred_badge" count={this.props.user_credit} overflowCount={99999}>
-                    <i className="icon icon-dollar notification_icn" >
+                    <i className="icon icon-dollar notification_icn" onClick={() => this.showCreditsModal()} >
                       <Icon type="dollar" className="mb-10" />
                     </i>
                   </Badge>
@@ -296,14 +311,14 @@ class SidebarContent extends Component {
                     <i className="fa fa-mobile" aria-hidden="true"></i>
                   </i>
                   {/* <IntlMessages id="sidebar.devices" /> */}
-                  {convertToLang(translation[Sidebar_devices], "Devices")}
+                  {convertToLang(translation[Sidebar_users_devices], "Users & Devices")}
                 </Link>
               </Menu.Item>
               <Menu.Item key="users">
                 <Link to="/users">
                   <i className="icon icon-user" />
                   {/* <IntlMessages id="sidebar.users" /> */}
-                  {convertToLang(translation[Sidebar_users], "Users")}
+                  {convertToLang(translation[Sidebar_clients], "Clients")}
                 </Link>
               </Menu.Item>
               {(authUser.type === ADMIN) ? <Menu.Item key="dealer/dealer">
@@ -374,6 +389,7 @@ const mapStateToProps = ({ settings, devices, sidebar }) => {
     devices: devices.newDevices,
     requests: sidebar.newRequests,
     user_credit: sidebar.user_credit,
+    due_credit: sidebar.due_credit,
     languageData: languages,
     translation: translation,
     lng_id: translation["lng_id"],

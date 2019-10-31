@@ -100,7 +100,7 @@ const RestService = {
 
     },
 
-    // 
+    //
     getAllowedComponents: () => {
 
     },
@@ -384,15 +384,15 @@ const RestService = {
         return axios.post(BASE_URL + 'users/edit/apk', formData, RestService.getHeader());
 
     },
-    // For check apk name 
+    // For check apk name
     checkApkName: (name, apk_id = '') => {
         return axios.post(BASE_URL + 'users/checkApkName', { name, apk_id }, RestService.getHeader());
     },
-    // For Service Remaining data 
+    // For Service Remaining data
     getServiceRefund: (service_id) => {
         return axios.post(BASE_URL + 'users/check-service-refund-credits', { service_id }, RestService.getHeader());
     },
-    // For check apk name 
+    // For check apk name
     checkPolicyName: (name, policy_id = '') => {
         return axios.post(BASE_URL + 'users/check_policy_name', { name, policy_id }, RestService.getHeader());
     },
@@ -615,7 +615,7 @@ const RestService = {
         // });
     },
 
-    // Check pass 
+    // Check pass
     checkPass: (user) => {
         return axios.post(BASE_URL + 'users/check_pass', { user }, RestService.getHeader());
     },
@@ -636,6 +636,11 @@ const RestService = {
         // console.log(dealer_id, 'whte label on get price')
         return axios.get(BASE_URL + 'users/get-packages', RestService.getHeader());
     },
+
+    getHardwares: () => {
+        // console.log(dealer_id, 'whte label on get price')
+        return axios.get(BASE_URL + 'users/get-Hardwares', RestService.getHeader());
+    },
     getParentPackages: () => {
         // console.log(dealer_id, 'whte label on get price')
         return axios.get(BASE_URL + 'users/get-parent-packages', RestService.getHeader());
@@ -644,6 +649,11 @@ const RestService = {
         // console.log(dealer_id, 'whte label on get price')
         return axios.get(BASE_URL + 'users/get-parent-product-prices', RestService.getHeader());
     },
+
+    getHardwaresPrices: () => {
+        return axios.get(BASE_URL + 'users/get-parent-hardware-prices', RestService.getHeader());
+    },
+    
     checkPackageName: (name) => {
 
         return axios.patch(BASE_URL + 'users/check-package-name', { name }, RestService.getHeader());
@@ -709,6 +719,11 @@ const RestService = {
         return axios.get(BASE_URL + 'users/userList',
             RestService.getHeader()
         )
+    },
+
+    //GET invoice id
+    getInvoiceId: () => {
+        return axios.get(BASE_URL + 'users/getInvoiceId', RestService.getHeader())
     },
 
     //GET User List against device dealer
@@ -815,28 +830,30 @@ const RestService = {
             ...agent
         }, RestService.getHeader());
     },
+
     changeAgentStatus(agent, status) {
         return axios.put(BASE_URL + 'users/agents/' + agent.id + '/status', {
             status: status
         }, RestService.getHeader());
     },
+
     resetAgentPwd: (agentID) => {
         return axios.put(BASE_URL + 'users/agents/' + agentID + '/reset-pwd', {
         }, RestService.getHeader());
     },
+
     deleteAgent: (agentID) => {
         return axios.delete(BASE_URL + 'users/agents/' + agentID, RestService.getHeader());
     },
+
     deletePackage: (id) => {
         return axios.delete(BASE_URL + 'users/delete_package/' + id, RestService.getHeader());
     },
-    editPackage: (id, price, isModify) => {
-        // console.log(isModify);
-        return axios.put(BASE_URL + 'users/edit_package/' + id, { price, isModify }, RestService.getHeader());
-        // resyncIds: () => {
-        //     return axios.get(BASE_URL + 'users/resync_ids', RestService.getHeader())
-        // },
+
+    modifyItemPrice: (id, price, isModify, type) => {
+        return axios.put(BASE_URL + 'users/modify_item_price/' + id, { price, isModify, type }, RestService.getHeader());
     },
+
     getDashboardData: () => {
         return axios.get(BASE_URL + 'users/dashboard-data', RestService.getHeader());
     },
@@ -912,5 +929,25 @@ const RestService = {
             RestService.getHeader()
         );
     },
+
+    //product report
+    generateProductReport: (data) => {
+      return axios.post(BASE_URL + 'users/reporting/product', data, RestService.getHeader());
+    },
+
+  //invoice report
+  generateInvoiceReport: (data) => {
+    return axios.post(BASE_URL + 'users/reports/invoice', data, RestService.getHeader());
+  },
+
+  //payment history report
+  generatePaymentHistoryReport: (data) => {
+    return axios.post(BASE_URL + 'users/reports/payment-history', data, RestService.getHeader());
+    },
+  
+  //hardware report
+  generateHardwareReport: (data) => {
+    return axios.post(BASE_URL + 'users/reports/hardware', data, RestService.getHeader());
+  },
 }
 export default RestService;

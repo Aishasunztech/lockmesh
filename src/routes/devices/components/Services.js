@@ -37,11 +37,10 @@ class ServicesList extends Component {
             {
                 title: convertToLang(this.props.translation[PACKAGE_NAME], "PACKAGE NAME"),
                 align: "center",
-                className: '',
+                className: 'white_normal',
                 dataIndex: 'pkg_name',
                 key: 'pkg_name',
                 sorter: (a, b) => { return a.pkg_name.localeCompare(b.pkg_name) },
-
                 sortDirections: ['ascend', 'descend'],
 
             },
@@ -118,7 +117,7 @@ class ServicesList extends Component {
             {
                 title: convertToLang(this.props.translation[DUMY_TRANS_ID], "PACKAGE PRICE (CREDITS)"),
                 align: "center",
-                className: '',
+                className: 'white_normal',
                 dataIndex: 'pkg_price',
                 key: 'pkg_price',
                 // ...this.getColumnSearchProps('status'),
@@ -210,6 +209,7 @@ class ServicesList extends Component {
                         vpn: (services.vpn) ? <span style={{ color: "#008000" }}> YES</span > : <span style={{ color: "Red" }}>NO</span >,
                         pkg_price: item.pkg_price,
                         pkg_features: services,
+                        pkg_term: item.pkg_term,
                     })
                 }
             });
@@ -249,7 +249,8 @@ class ServicesList extends Component {
                         rowKey: item.id,
                         price_for: `${price_for}`,
                         unit_price: item.unit_price,
-                        item: item.price_for
+                        item: item.price_for,
+                        price_term: item.price_term
                     })
                 }
             });
@@ -370,16 +371,16 @@ class ServicesList extends Component {
 
 
             // console.log(total_price, this.props.user_credit);
-            if (this.props.creditsToRefund) {
-                total_price -= this.props.creditsToRefund
-            }
-            if (total_price < this.props.user_credit || this.props.tabselect === '0') {
-                this.props.handleServicesSubmit(this.state.proSelectedRows, this.state.PkgSelectedRows, this.props.serviceTerm);
-                this.handleCancel()
-            }
-            else {
-                showConfirm(this);
-            }
+            // if (this.props.creditsToRefund) {
+            //     total_price -= this.props.creditsToRefund
+            // }
+            // if (total_price < this.props.user_credit || this.props.tabselect === '0') {
+            this.props.handleServicesSubmit(this.state.proSelectedRows, this.state.PkgSelectedRows, this.props.serviceTerm);
+            this.handleCancel()
+            // }
+            // else {
+            //     showConfirm(this);
+            // }
         }
     }
 
@@ -480,8 +481,8 @@ class ServicesList extends Component {
             <Fragment>
 
                 {(this.props.tabselect === '0') ?
-                    <div style={{ marginTop: 20 }} >
-                        <h1 style={{ textAlign: "center" }}>PRODUCTS</h1>
+                    <div style={{}} >
+                        <h2 style={{ textAlign: "center" }}><strong>PRODUCTS</strong></h2>
                         <Table
                             id='products'
                             className={"devices"}
@@ -497,11 +498,11 @@ class ServicesList extends Component {
                     </div >
                     :
                     <Fragment>
-                        <div style={{ marginTop: 20 }}>
-                            <h1 style={{ textAlign: "center" }}>PACKAGES</h1>
+                        <div style={{}}>
+                            <h2 style={{ textAlign: "center" }}><strong>PACKAGES</strong></h2>
                             <Table
                                 id='packages'
-                                className={"devices"}
+                                className={"devices mb-10"}
                                 rowSelection={packageRowSelection}
                                 size="middle"
                                 bordered
@@ -512,10 +513,8 @@ class ServicesList extends Component {
                                 }
                             />
                         </div >
-
-
-                        <div style={{ marginTop: 20 }} >
-                            <h1 style={{ textAlign: "center" }}>PRODUCTS</h1>
+                        <div style={{}} >
+                            <h2 style={{ textAlign: "center" }}><strong>PRODUCTS</strong></h2>
                             <Table
                                 id='products'
                                 className={"devices"}
@@ -722,8 +721,7 @@ class Services extends Component {
         return (
             <Fragment>
                 <div>
-                    <Tabs type="card" className="dev_tabs" activeKey={this.props.tabselect} onChange={this.callback}>
-
+                    <Tabs type="card" tabPosition={'left'} style={{ display: "flex", alignItems: "center" }} className="dev_tabs" activeKey={this.props.tabselect} onChange={this.callback}>
                         {(this.props.type !== 'edit' || (this.props.type === 'edit' && this.props.device.finalStatus === DEVICE_PRE_ACTIVATION)) ?
                             <TabPane tab={<span className="green">TRIAL</span>} key="0" >
                             </TabPane>
@@ -736,25 +734,25 @@ class Services extends Component {
                         </TabPane>
                         <TabPane tab={<span className="green">12 MONTH</span>} key="12" >
                         </TabPane>
+                        <ServicesList
+                            parent_packages={this.props.parent_packages}
+                            product_prices={this.props.product_prices}
+                            ref="services"
+                            tabselect={this.props.tabselect}
+                            // resetTabSelected={this.resetTabSelected} 
+                            user={this.props.user}
+                            history={this.props.history}
+                            translation={this.props.translation}
+                            handleCancel={this.props.handleCancel}
+                            handleServicesSubmit={this.props.handleServicesSubmit}
+                            serviceTerm={this.props.tabselect}
+                            user_credit={this.props.user_credit}
+                            history={this.props.history}
+                            current_services={this.props.current_services}
+                            creditsToRefund={this.props.creditsToRefund}
+                            type={this.props.type}
+                        />
                     </Tabs>
-                    <ServicesList
-                        parent_packages={this.props.parent_packages}
-                        product_prices={this.props.product_prices}
-                        ref="services"
-                        tabselect={this.props.tabselect}
-                        // resetTabSelected={this.resetTabSelected}
-                        user={this.props.user}
-                        history={this.props.history}
-                        translation={this.props.translation}
-                        handleCancel={this.props.handleCancel}
-                        handleServicesSubmit={this.props.handleServicesSubmit}
-                        serviceTerm={this.props.tabselect}
-                        user_credit={this.props.user_credit}
-                        history={this.props.history}
-                        current_services={this.props.current_services}
-                        creditsToRefund={this.props.creditsToRefund}
-                        type={this.props.type}
-                    />
                 </div>
             </Fragment>
         )

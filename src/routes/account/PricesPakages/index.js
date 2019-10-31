@@ -7,7 +7,7 @@ import {
 } from "../../../appRedux/actions/Account";
 import {
     getPrices, resetPrice, setPackage,
-    saveIDPrices, setPrice, getPackages, deletePackage, modifyPackage
+    saveIDPrices, setPrice, getPackages, deletePackage, modifyItemPrice, getHardwares
 } from "../../../appRedux/actions/Account";
 import PackagesInfo from './components/PackagesInfo';
 import ModifyPrice from './components/ModifyPrice';
@@ -203,6 +203,77 @@ class Prices extends Component {
                 ]
             }
         ];
+        this.hardwareColumns = [
+            {
+                title: "Sr.#",
+                dataIndex: 'sr',
+                key: 'sr',
+                align: "center",
+            },
+            {
+                dataIndex: 'action',
+                align: 'center',
+                className: 'row',
+                width: 800,
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="name"
+                        key="name"
+                        id="name"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder='HARDWARE NAME'
+                    />
+                ),
+                dataIndex: 'name',
+                className: '',
+                children: [
+                    {
+                        title: 'HARDWARE NAME',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'name',
+                        key: 'name',
+                        sorter: (a, b) => { return a.name.localeCompare(b.name) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+
+            {
+                title: (
+                    <Input.Search
+                        name="price"
+                        key="price"
+                        id="price"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder='HADWARE PRICE (CREDITS)'
+                    />
+                ),
+                dataIndex: 'price',
+                className: '',
+                children: [
+                    {
+                        title: 'HADWARE PRICE (CREDITS)',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'price',
+                        key: 'price',
+                        // ...this.getColumnSearchProps('status'),
+                        // sorter: (a, b) => { return a.price - b.price },
+                        sorter: (a, b) => { return a.price.localeCompare(b.price) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            }
+        ];
         this.state = {
             pricing_modal: false,
             innerTabData: this.props.prices ? this.props.prices[sim] : {},
@@ -212,9 +283,11 @@ class Prices extends Component {
             expandedRowKeys: [],
             expandTabSelected: [],
             expandedByCustom: [],
-            modifyPackageModal: false,
-            modify_package: null,
+            modifyItemModal: false,
+            modify_item: null,
             isModify: false,
+            hardwares: [],
+            modify_item_type: ''
         }
     }
 
@@ -295,7 +368,7 @@ class Prices extends Component {
     }
     handleCancel = () => {
         this.setState({
-            modifyPackageModal: false
+            modifyItemModal: false
         })
     }
 
@@ -304,6 +377,7 @@ class Prices extends Component {
         this.props.getPrices()
         // console.log('DID MOUNT')
         this.props.getPackages()
+        this.props.getHardwares()
 
         this.setState({
             prices: this.props.prices,
@@ -341,6 +415,12 @@ class Prices extends Component {
                 copyStatus: true
             })
         }
+        if (this.props.hardwares !== nextProps.hardwares) {
+            // console.log(this.props.packages.length, nextProps.packages.length)
+            this.setState({
+                hardwares: nextProps.hardwares
+            })
+        }
     }
 
     showPricingModal = (visible) => {
@@ -367,62 +447,81 @@ class Prices extends Component {
         });
         // this.props.deletePackage(id)
     }
-    modifyPackage = (packageData, isModify) => {
+    modifyItem = (itemData, isModify, type) => {
 
 
         this.setState({
-            modifyPackageModal: true,
-            modify_package: packageData,
-            isModify: isModify
+            modifyItemModal: true,
+            modify_item: itemData,
+            isModify: isModify,
+            modify_item_type: type
         })
     }
 
 
-    renderList = () => {
-        if (this.state.packages) {
-            // console.log(this.state.packages)
-            let i = 0
 
-            return this.state.packages.map((item, index) => {
-                let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px ', textTransform: 'uppercase' }} onClick={() => { this.deletePackage(item.id, item.pkg_name) }} >{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
-                // let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "EDIT")}</Button>
-                let ModifyBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.modifyPackage(item, true) }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "MODIFY PRICE")}</Button>
-                return {
-                    id: item.id,
-                    key: item.id,
-                    rowKey: index,
-                    action: (item.dealer_type === "super_admin" && (this.props.auth.type === ADMIN || this.props.auth.type === DEALER)) ?
-                        (<Fragment>{ModifyBtn}</Fragment>) :
-                        (item.dealer_type === "admin" && this.props.auth.type === DEALER) ?
-                            (<Fragment>{ModifyBtn}</Fragment>)
-                            : (<Fragment>{DeleteBtn}</Fragment>),
+    renderList = (type) => {
+        if (type === "packages") {
 
-                    pkg_name: item.pkg_name,
-                    services:
-                        <Fragment>
-                            <a onClick={() => {
-                                console.log(index)
-                                this.expandRow(index, 'services', true)
-                                // console.log('table cosn', this.refs.policy_table)
-                                // this.refs.policy_table.props.onExpand()
-                            }}>
-                                <Icon type="arrow-down" style={{ fontSize: 15 }} />
-                            </a>
-                            <span className="exp_txt">{convertToLang(this.props.translation[""], "Expand")}</span>
-                        </Fragment>
-                    ,
-                    permission: <span style={{ fontSize: 15, fontWeight: 400 }}>
-                        {/* {(item.permission_count == 'All') ? convertToLang(this.props.translation[Tab_All], "All") : item.permission_count > 0 ? item.permission_count : 0} */}
-                        {(item.permission_count === "All" || this.props.totalDealers === item.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : item.permission_count}
-                    </span>,
-                    pkg_price: "$" + item.pkg_price,
-                    pkg_term: item.pkg_term,
-                    pkg_expiry: item.pkg_expiry,
-                    pkg_features: item.pkg_features ? JSON.parse(item.pkg_features) : {},
-                    permissions: (item.dealer_permission !== undefined && item.dealer_permission !== null) ? item.dealer_permission : [],
+            if (this.state.packages) {
+                // console.log(this.state.packages)
+                let i = 0
 
-                }
-            })
+                return this.state.packages.map((item, index) => {
+                    let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px ', textTransform: 'uppercase' }} onClick={() => { this.deletePackage(item.id, item.pkg_name) }} >{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
+                    // let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "EDIT")}</Button>
+                    let ModifyBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.modifyItem(item, true, 'package') }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "MODIFY PRICE")}</Button>
+                    return {
+                        id: item.id,
+                        key: item.id,
+                        rowKey: index,
+                        sr: ++i,
+                        action: (item.dealer_type === "super_admin" && (this.props.auth.type === ADMIN || this.props.auth.type === DEALER)) ?
+                            (<Fragment>{ModifyBtn}</Fragment>) :
+                            (item.dealer_type === "admin" && this.props.auth.type === DEALER) ?
+                                (<Fragment>{ModifyBtn}</Fragment>)
+                                : (<Fragment>{DeleteBtn}</Fragment>),
+
+                        pkg_name: item.pkg_name,
+                        services:
+                            <Fragment>
+                                <a onClick={() => {
+                                    console.log(index)
+                                    this.expandRow(index, 'services', true)
+                                    // console.log('table cosn', this.refs.policy_table)
+                                    // this.refs.policy_table.props.onExpand()
+                                }}>
+                                    <Icon type="arrow-down" style={{ fontSize: 15 }} />
+                                </a>
+                                <span className="exp_txt">{convertToLang(this.props.translation[""], "Expand")}</span>
+                            </Fragment>
+                        ,
+                        permission: <span style={{ fontSize: 15, fontWeight: 400 }}>
+                            {/* {(item.permission_count == 'All') ? convertToLang(this.props.translation[Tab_All], "All") : item.permission_count > 0 ? item.permission_count : 0} */}
+                            {(item.permission_count === "All" || this.props.totalDealers === item.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : item.permission_count}
+                        </span>,
+                        pkg_price: "$" + item.pkg_price,
+                        pkg_term: item.pkg_term,
+                        pkg_expiry: item.pkg_expiry,
+                        pkg_features: item.pkg_features ? JSON.parse(item.pkg_features) : {},
+                        permissions: (item.dealer_permission !== undefined && item.dealer_permission !== null) ? item.dealer_permission : [],
+
+                    }
+                })
+            }
+        } else if (type === "hardware") {
+            if (this.state.hardwares) {
+                return this.state.hardwares.map((item, index) => {
+                    return {
+                        key: item.id,
+                        sr: ++index,
+                        action:
+                            <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.modifyItem(item, true, 'hardware') }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "MODIFY PRICE")}</Button>,
+                        name: item.hardware_name,
+                        price: item.hardware_price
+                    }
+                })
+            }
         }
     }
 
@@ -607,11 +706,19 @@ class Prices extends Component {
                                     expandIconAsCell={false}
                                     columns={this.columns}
                                     onChange={this.props.onChangeTableSorting}
-                                    dataSource={this.renderList()}
+                                    dataSource={this.renderList("packages")}
                                     pagination={false}
                                     rowKey="policy_list"
                                     ref='policy_table'
                                     scroll={{ x: true }}
+                                />
+                            </Tabs.TabPane>
+                            <Tabs.TabPane tab="Hardware" key="3">
+                                <Table
+                                    columns={this.hardwareColumns}
+                                    dataSource={this.renderList("hardware")}
+                                    bordered
+                                    pagination={false}
                                 />
                             </Tabs.TabPane>
                         </Tabs>
@@ -635,10 +742,7 @@ class Prices extends Component {
                     maskClosable={false}
                     destroyOnClose={true}
                     title={<div>{convertToLang(this.props.translation[DUMY_TRANS_ID], "Modify Price")}</div>}
-                    visible={this.state.modifyPackageModal}
-                    // onOk={this.handleSubmit}
-                    // okText={convertToLang(this.props.translation[Button_Save], "Save")}
-                    okButtonProps={{ disabled: this.state.outerTab === '1' ? !this.props.isPriceChanged : false }}
+                    visible={this.state.modifyItemModal}
                     onCancel={() => {
                         this.handleCancel()
                     }}
@@ -647,12 +751,12 @@ class Prices extends Component {
                     className="set_price_modal"
                 >
                     <ModifyPrice
-                        package={this.state.modify_package}
+                        item={this.state.modify_item}
                         isModify={this.state.isModify}
                         translation={this.props.translation}
                         handleCancel={this.handleCancel}
-                        modifyPackage={this.props.modifyPackage}
-
+                        modifyItemPrice={this.props.modifyItemPrice}
+                        type={this.state.modify_item_type}
                     />
                 </Modal>
 
@@ -670,16 +774,17 @@ function mapDispatchToProps(dispatch) {
         resetPrice: resetPrice,
         setPrice: setPrice,
         getPackages: getPackages,
+        getHardwares: getHardwares,
         deletePackage: deletePackage,
-        modifyPackage: modifyPackage,
-        packagePermission: packagePermission
+        packagePermission: packagePermission,
+        modifyItemPrice: modifyItemPrice
     }, dispatch)
 }
 
 
 var mapStateToProps = ({ account, auth, settings, dealers }, otherprops) => {
     // console.log(account.packages, ' authUser props are')
-    console.log("account.packages ", account.packages)
+    // console.log("account.packages ", account.packages)
     return {
         totalDealers: dealers.dealers.length,
         auth: auth.authUser,
@@ -687,6 +792,7 @@ var mapStateToProps = ({ account, auth, settings, dealers }, otherprops) => {
         packages: account.packages,
         isPriceChanged: account.isPriceChanged,
         translation: settings.translation,
+        hardwares: account.hardwares
     }
 }
 

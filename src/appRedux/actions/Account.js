@@ -30,7 +30,9 @@ import {
     USER_CREDITS,
     GET_DOMAINS,
     PERMISSION_SAVED,
-    PERMISSION_DOMAINS
+    PERMISSION_DOMAINS,
+    GET_HARDWARE,
+    MODIFY_ITEM_PRICE
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -357,6 +359,25 @@ export const getPackages = () => {
     }
 }
 
+export const getHardwares = () => {
+    return (dispatch) => {
+        RestService.getHardwares().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                // console.log(response.data);
+                dispatch({
+                    type: GET_HARDWARE,
+                    response: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+
+    }
+}
+
 
 export const resetPrice = () => {
     return (dispatch) => {
@@ -493,18 +514,19 @@ export function deletePackage(id) {
         })
     }
 }
-export function modifyPackage(id, price, isModify = false) {
+export function modifyItemPrice(id, price, isModify = false, type) {
     // alert(package_id);
 
     return (dispatch) => {
-        RestService.editPackage(id, price, isModify).then((response) => {
+        RestService.modifyItemPrice(id, price, isModify, type).then((response) => {
             if (RestService.checkAuth(response.data)) {
 
                 dispatch({
-                    type: EDIT_PACKAGE,
+                    type: MODIFY_ITEM_PRICE,
                     payload: response.data,
-                    package_id: id,
-                    price: price
+                    item_id: id,
+                    price: price,
+                    item_type: type
                 })
 
             } else {

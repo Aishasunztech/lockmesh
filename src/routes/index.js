@@ -18,6 +18,7 @@ import AppMarket from "./appMaket/index";
 import ManageData from './account/ManageData/index'
 import SetPrice from './account/PricesPakages/index'
 import Domains from "./domains/index";
+import Reporting from './account/Reporting/index'
 import DealerAgent from './dealerAgent/index'
 import BulkActivities from './bulkActivities/index'
 import Dashboard from './dashboard'
@@ -110,6 +111,13 @@ const App = ({ match }) => {
           path={`${match.url}set-prices`}
           component={SetPrice}
         />
+
+        <Route
+          exact
+          path={`${match.url}reporting`}
+          component={Reporting}
+        />
+
         <Route
           exact
           path={`${match.url}domains`}

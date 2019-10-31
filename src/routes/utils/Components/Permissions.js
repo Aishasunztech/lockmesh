@@ -614,12 +614,12 @@ class Permissions extends Component {
 
 
         </Row>
-        <Row gutter={24} style={{ marginBottom: '24px' }}>
+        <Row gutter={24} style={{ marginBottom: '12px' }}>
           {
             this.props.spinloading ? <CircularProgress /> :
               <Col className="gutter-row" span={24}>
                 <Table
-                  className="mb-24 expand_rows"
+                  className="mb-12 expand_rows"
                   columns={this.state.listDealerCols}
                   onChange={this.handleDealerTableChange}
                   dataSource={this.renderDealer(this.state.dealerList, true)}
