@@ -1693,7 +1693,7 @@ export function sDealerColumns(translation, handleSearch) {
 
 export function dealerColsWithSearch(translation, searchBar = false, callBack = null) {
 
-    var searchInput = [
+    var searchInput = [  
         {
             title: (
                 <Input.Search
@@ -1783,6 +1783,14 @@ export function dealerColsWithSearch(translation, searchBar = false, callBack = 
 
     var child = [
         {
+            title: "#",
+            dataIndex: 'counter',
+            align: 'center',
+            className: '',
+            key: 'counter',
+            render: (text, record, index) => ++index,
+        },
+        {
             title: convertToLang(translation[DEALER_ID], "DEALER ID"),
             dataIndex: 'dealer_id',
             key: 'dealer_id',
@@ -1824,6 +1832,20 @@ export function dealerColsWithSearch(translation, searchBar = false, callBack = 
                 }
             },
             sortDirections: ['ascend', 'descend'],
+            className: '',
+        },
+        {
+            title: convertToLang(translation["permission_by"], "PERMISSION BY"),
+            dataIndex: 'permission_by',
+            key: 'permission_by',
+            // sorter: (a, b) => {
+            //     if (a.permission_by.props) {
+            //         return a.permission_by.props.children.localeCompare(b.permission_by.props.children)
+            //     } else {
+            //         return a.permission_by.localeCompare(b.permission_by)
+            //     }
+            // },
+            // sortDirections: ['ascend', 'descend'],
             className: '',
         },
         {
@@ -3435,4 +3457,85 @@ export function appMarketColumns(translation, handleSearch, removeSMapps) {
             // }
         ]
     )
+}
+
+export function domainColumns(translation, handleSearch) {
+    return ([
+        {
+            title: "#",
+            dataIndex: 'counter',
+            align: 'center',
+            className: 'row',
+            render: (text, record, index) => ++index,
+        },
+        // {
+        //     title: convertToLang(translation[ACTION], "ACTION"),
+        //     dataIndex: 'action',
+        //     key: 'action',
+        //     className: 'row m-0'
+        // },
+        {
+            // title: (
+            //     <Input.Search
+            //         name="permission"
+            //         key="permission"
+            //         id="permission"
+            //         className="search_heading"
+            //         // onChange={handleSearch}
+            //         autoComplete="new-password"
+            //         // placeholder={titleCase(props.convertToLang(props.translation[""], "APP NAME"))}
+            //         placeholder="PERMISSION"
+            //     />
+            // ),
+            // dataIndex: 'permission',
+            // className: '',
+            // key: 'permission',
+            // children: [
+            //     {
+            title: (
+                <span>
+                    {convertToLang(translation[APK_PERMISSION], "PERMISSION")}
+                    <Popover placement="top" content={(<Markup content={convertToLang(translation[""],
+                        `   <p>Press <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;">
+                                    <i className="fa fa-caret-right" aria-hidden="true"></i> 
+                                    </a> to Add, remove or View
+                                    <br/> the Dealers who have permission
+                                    <br/>to use this Domain</p>`)} />)}>
+                        <span className="helping_txt"><Icon type="info-circle" /></span>
+                    </Popover>
+                </span>),
+            dataIndex: 'permission',
+            key: 'permission',
+            // className: ''
+            //     }
+            // ]
+        },
+
+        {
+            title: (
+                <Input.Search
+                    name="name"
+                    key="name"
+                    id="name"
+                    className="search_heading"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    // placeholder={titleCase(props.convertToLang(props.translation[""], "APP NAME"))}
+                    placeholder="DOMAIN NAME"
+                />
+            ),
+            dataIndex: 'name',
+            className: '',
+            key: 'name',
+            children: [
+                {
+                    title: convertToLang(translation[""], "DOMAIN NAME"),
+                    dataIndex: 'name',
+                    key: 'name',
+                    // className: ''
+                }
+            ]
+
+        },
+    ])
 }

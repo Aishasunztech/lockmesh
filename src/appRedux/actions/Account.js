@@ -28,6 +28,9 @@ import {
     EDIT_PACKAGE,
     RESYNC_IDS,
     USER_CREDITS,
+    GET_DOMAINS,
+    PERMISSION_SAVED,
+    PERMISSION_DOMAINS,
     GET_HARDWARE,
     MODIFY_ITEM_PRICE
 } from "../../constants/ActionTypes"
@@ -438,19 +441,22 @@ export const purchaseCreditsFromCC = (cardInfo, creditInfo) => {
     }
 }
 
-export function savePermission(package_id, dealers, action) {
-    // alert(package_id);
-
+export function packagePermission(id, dealers, action, statusAll = false, user) {
+    console.log('at domainPermission action ', id, dealers, action, statusAll)
     return (dispatch) => {
-        RestService.savePackagePermissions(package_id, dealers, action).then((response) => {
+        RestService.dealerPermissions(id, dealers, action, statusAll, 'package').then((response) => {
             if (RestService.checkAuth(response.data)) {
 
                 dispatch({
                     type: PACKAGE_PERMSSION_SAVED,
-                    payload: response.data.msg,
-                    permission_count: response.data.permission_count,
-                    package_id: package_id,
-                    dealers: dealers
+                    payload: response.data,
+                    formData: {
+                        id,
+                        dealers,
+                        action,
+                        statusAll,
+                        user
+                    }
                 })
 
             } else {
@@ -462,6 +468,31 @@ export function savePermission(package_id, dealers, action) {
     }
 
 }
+
+// export function savePermission(package_id, dealers, action) {
+//     // alert(package_id);
+
+//     return (dispatch) => {
+//         RestService.savePackagePermissions(package_id, dealers, action).then((response) => {
+//             if (RestService.checkAuth(response.data)) {
+
+//                 dispatch({
+//                     type: PACKAGE_PERMSSION_SAVED,
+//                     payload: response.data.msg,
+//                     permission_count: response.data.permission_count,
+//                     package_id: package_id,
+//                     dealers: dealers
+//                 })
+
+//             } else {
+//                 dispatch({
+//                     type: INVALID_TOKEN
+//                 });
+//             }
+//         })
+//     }
+
+// }
 export function deletePackage(id) {
     // alert(package_id);
 
@@ -512,4 +543,56 @@ export const resyncIds = () => {
             type: RESYNC_IDS,
         })
     }
+}
+
+export function getDomains() {
+    return (dispatch) => {
+        dispatch({
+            type: LOADING,
+            isloading: true
+        });
+        RestService.getDomains().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                if (response.data.status) {
+                    dispatch({
+                        type: GET_DOMAINS,
+                        payload: response.data
+                    });
+                }
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        });
+
+    };
+}
+
+export function domainPermission(id, dealers, action, statusAll = false, user) {
+    // console.log('at domainPermission action ', id, dealers, action, statusAll)
+    return (dispatch) => {
+        RestService.dealerPermissions(id, dealers, action, statusAll, 'domain').then((response) => {
+            if (RestService.checkAuth(response.data)) {
+
+                dispatch({
+                    type: PERMISSION_DOMAINS,
+                    payload: response.data,
+                    formData: {
+                        id,
+                        dealers,
+                        action,
+                        statusAll,
+                        user
+                    }
+                })
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+    }
+
 }

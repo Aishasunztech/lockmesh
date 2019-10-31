@@ -327,19 +327,23 @@ export function handleCheckAll(e, key, stateToUpdate, uniqueName = '', rowId) {
     }
 }
 
-export function savePermission(policy_id, dealers, action) {
-    // alert(policy_id);
 
+export function policyPermission(id, dealers, action, statusAll = false, user) {
+    // console.log('at domainPermission action ', id, dealers, action, statusAll)
     return (dispatch) => {
-        RestService.savePolicyPermissions(policy_id, dealers, action).then((response) => {
+        RestService.dealerPermissions(id, dealers, action, statusAll, 'policy').then((response) => {
             if (RestService.checkAuth(response.data)) {
 
                 dispatch({
                     type: POLICY_PERMISSION_SAVED,
-                    payload: response.data.msg,
-                    permission_count: response.data.permission_count,
-                    policy_id: policy_id,
-                    dealers: dealers
+                    payload: response.data,
+                    formData: {
+                        id,
+                        dealers,
+                        action,
+                        statusAll,
+                        user
+                    }
                 })
 
             } else {
@@ -351,6 +355,31 @@ export function savePermission(policy_id, dealers, action) {
     }
 
 }
+
+// export function savePermission(policy_id, dealers, action) {
+//     // alert(policy_id);
+
+//     return (dispatch) => {
+//         RestService.savePolicyPermissions(policy_id, dealers, action).then((response) => {
+//             if (RestService.checkAuth(response.data)) {
+
+//                 dispatch({
+//                     type: POLICY_PERMISSION_SAVED,
+//                     payload: response.data.msg,
+//                     permission_count: response.data.permission_count,
+//                     policy_id: policy_id,
+//                     dealers: dealers
+//                 })
+
+//             } else {
+//                 dispatch({
+//                     type: INVALID_TOKEN
+//                 });
+//             }
+//         })
+//     }
+
+// }
 export function defaultPolicyChange(enable, policy_id) {
     return (dispatch) => {
         RestService.defaultPolicyChange(enable, policy_id).then((response) => {

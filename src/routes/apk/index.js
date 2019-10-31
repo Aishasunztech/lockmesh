@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { Input, Icon, Modal, Select, Button, Tooltip, Popover, Avatar, Row, Col } from "antd";
 import { Link } from 'react-router-dom';
 import Highlighter from 'react-highlight-words';
-
+import { apkPermission } from "../../appRedux/actions/Apk";
 // import {Route, Switch} from "react-router-dom";
 // import Apk from "../../containers/ApkList"
 import CircularProgress from "components/CircularProgress/index";
@@ -387,6 +387,8 @@ class Apk extends Component {
 
 
                             <ListApk
+                                totalDealers={this.props.dealerList.length}
+                                savePermission={this.props.apkPermission}
                                 onChangeTableSorting={this.handleTableChange}
                                 handleStatusChange={this.handleStatusChange}
                                 apk_list={this.state.apk_list}
@@ -498,8 +500,9 @@ class Apk extends Component {
 // );
 
 // export default Apk;
-const mapStateToProps = ({ apk_list, auth, settings, policies }) => {
+const mapStateToProps = ({ apk_list, auth, settings, policies, dealers }) => {
     return {
+        dealerList: dealers.dealers,
         isloading: apk_list.isloading,
         apk_list: apk_list.apk_list,
         options: settings.APKOptions,
@@ -523,7 +526,8 @@ function mapDispatchToProps(dispatch) {
         getPagination: getPagination,
         addApk: addApk,
         resetUploadForm: resetUploadForm,
-        getPolicies: getPolicies
+        getPolicies: getPolicies,
+        apkPermission: apkPermission
         //  getDevicesList: getDevicesList
     }, dispatch);
 }

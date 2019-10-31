@@ -17,6 +17,7 @@ import FourOFour from "./404/";
 import AppMarket from "./appMaket/index";
 import ManageData from './account/ManageData/index'
 import SetPrice from './account/PricesPakages/index'
+import Domains from "./domains/index";
 import Reporting from './account/Reporting/index'
 import DealerAgent from './dealerAgent/index'
 import BulkActivities from './bulkActivities/index'
@@ -34,7 +35,7 @@ const App = ({ match }) => {
           path={`${match.url}devices`}
           component={Devices}
         />
-         <Route
+        <Route
           exact
           path={`${match.url}dashboard`}
           component={Dashboard}
@@ -117,6 +118,11 @@ const App = ({ match }) => {
           component={Reporting}
         />
 
+        <Route
+          exact
+          path={`${match.url}domains`}
+          component={Domains}
+        />
         <Route
           exact
           path={`${match.url}dealer-agents`}

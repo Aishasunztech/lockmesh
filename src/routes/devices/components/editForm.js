@@ -637,7 +637,7 @@ class EditDevice extends Component {
     }
 
     render() {
-        console.log("DEVICE DATA: ", this.props.device);
+        // console.log("DEVICE DATA: ", this.props.device);
         const { users_list } = this.props;
 
         return (

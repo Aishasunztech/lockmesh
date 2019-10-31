@@ -88,7 +88,7 @@ import { getStatus, componentSearch, titleCase, dealerColsWithSearch, convertToL
 import CircularProgress from "components/CircularProgress/index";
 import AddDevice from './components/AddDevice';
 import { devicesColumns } from '../utils/columnsUtils';
-import { Sidebar_devices } from "../../constants/SidebarConstants";
+import { Sidebar_devices, Sidebar_users_devices } from "../../constants/SidebarConstants";
 
 
 var copyDevices = [];
@@ -863,7 +863,7 @@ class Devices extends Component {
                 flaggedDevices: this.filterList(DEVICE_FLAGGED, this.props.devices),
                 transferredDevices: this.filterList(DEVICE_TRANSFERED, this.props.devices),
             })
-            // this.handleChangetab(this.state.tabselect);
+            this.handleChangetab(this.state.tabselect);
 
         }
 
@@ -1060,7 +1060,7 @@ class Devices extends Component {
                                 handleComponentSearch={this.handleComponentSearch}
                                 locale={this.props.locale}
                                 translation={this.state.translation}
-                                pageHeading={convertToLang(this.props.translation[Sidebar_devices], "Devices")}
+                                pageHeading={convertToLang(this.props.translation[Sidebar_users_devices], "Users & Devices")}
                             />
                             <DevicesList
                                 transferDeviceProfile={this.transferDeviceProfile}
