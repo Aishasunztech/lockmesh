@@ -356,7 +356,9 @@ class AddDevice extends Component {
             unit_servcies_price: total_price,
             total_price: this.state.duplicate > 0 ? total_price * this.state.duplicate : total_price,
             PkgSelectedRows: packages,
-            proSelectedRows: products
+            proSelectedRows: products,
+            servicesModal: false,
+            visible: false,
         })
     }
 
@@ -1090,7 +1092,7 @@ class AddDevice extends Component {
                             wrapperCol={{ span: 14 }}
                         >
                             {this.props.form.getFieldDecorator('duplicate', {
-                                initialValue: '',
+                                initialValue: this.state.duplicate,
                                 rules: [{
                                     required: true, message: convertToLang(this.props.translation[DUPLICATE_DEVICES_REQUIRED], 'Number of Duplicate devices required'),
                                 }

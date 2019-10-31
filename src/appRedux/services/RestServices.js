@@ -366,6 +366,10 @@ const RestService = {
         return axios.put(BASE_URL + 'users/edit/devices', formData, RestService.getHeader());
     },
 
+    extendServices: (formData) => {
+        return axios.put(BASE_URL + 'users/edit-device/extendServices', formData, RestService.getHeader());
+    },
+
     // for dealer reset password(admin dashboard)
     updatePassword: (dealer) => {
 

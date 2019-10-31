@@ -82,6 +82,32 @@ export function editDevice(formData) {
         });
     }
 }
+export function extendServices(formData) {
+    return (dispatch) => {
+        // 
+        RestService.extendServices(formData).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: EDIT_DEVICE,
+                    response: response.data,
+                    payload: {
+                        formData: formData,
+                    }
+                });
+                if (response.data.status && response.data.credits) {
+                    dispatch({
+                        type: USER_CREDITS,
+                        response: response.data
+                    });
+                }
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        });
+    }
+}
 
 export function deleteUnlinkDevice(action, devices) {
     return (dispatch) => {
