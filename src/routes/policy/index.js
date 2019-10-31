@@ -14,7 +14,8 @@ import {
     getAppPermissions, addAppsToPolicies,
     removeAppsFromPolicies, checktogglebuttons,
     resetPlicies, resetAddPolicyForm,
-    handleAppGotted
+    handleAppGotted,
+    policyPermission
 } from "../../appRedux/actions/Policy";
 
 import {
@@ -365,6 +366,8 @@ class Policy extends Component {
 
                 {/* Policy List */}
                 <PolicyList
+                    totalDealers={this.props.dealerList.length}
+                    savePermission={this.props.policyPermission}
                     onChangeTableSorting={this.handleTableChange}
                     user={this.props.user}
                     columns={this.state.columns}
@@ -446,7 +449,7 @@ function mapDispatchToProps(dispatch) {
 
     return bindActionCreators({
         getPolicies: getPolicies,
-
+        policyPermission: policyPermission,
         // dropdown actions
         getDropdown: getDropdown,
         postDropdown: postDropdown,
@@ -471,9 +474,10 @@ function mapDispatchToProps(dispatch) {
         // getDefaultApps: getDefaultApps
     }, dispatch);
 }
-var mapStateToProps = ({ policies, auth, settings }) => {
+var mapStateToProps = ({ policies, auth, settings, dealers }) => {
 
     return {
+        dealerList: dealers.dealers,
         user: auth.authUser,
         policies: policies.policies,
         apk_list: policies.apk_list,

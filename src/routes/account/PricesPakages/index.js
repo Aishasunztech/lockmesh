@@ -2,7 +2,9 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Button, Tabs, Table, Card, Input, Icon, Modal } from 'antd';
-
+import {
+    packagePermission
+} from "../../../appRedux/actions/Account";
 import {
     getPrices, resetPrice, setPackage,
     saveIDPrices, setPrice, getPackages, deletePackage, modifyItemPrice, getHardwares
@@ -51,7 +53,7 @@ class Prices extends Component {
         super(props)
         this.columns = [
             {
-                title: "Sr.#",
+                title: "#",
                 dataIndex: 'sr',
                 key: 'sr',
                 align: "center",
@@ -494,7 +496,10 @@ class Prices extends Component {
                                 <span className="exp_txt">{convertToLang(this.props.translation[""], "Expand")}</span>
                             </Fragment>
                         ,
-                        permission: <span style={{ fontSize: 15, fontWeight: 400 }}>{(item.permission_count == 'All') ? convertToLang(this.props.translation[Tab_All], "All") : item.permission_count > 0 ? item.permission_count : 0}</span>,
+                        permission: <span style={{ fontSize: 15, fontWeight: 400 }}>
+                            {/* {(item.permission_count == 'All') ? convertToLang(this.props.translation[Tab_All], "All") : item.permission_count > 0 ? item.permission_count : 0} */}
+                            {(item.permission_count === "All" || this.props.totalDealers === item.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : item.permission_count}
+                        </span>,
                         pkg_price: "$" + item.pkg_price,
                         pkg_term: item.pkg_term,
                         pkg_expiry: item.pkg_expiry,
@@ -687,6 +692,7 @@ class Prices extends Component {
                                                     <PackagesInfo
                                                         selected={this.state.expandTabSelected[record.rowKey]}
                                                         package={record}
+                                                        savePermission={this.props.packagePermission}
                                                         translation={this.props.translation}
 
                                                     />
@@ -707,6 +713,7 @@ class Prices extends Component {
                                     pagination={false}
                                     rowKey="policy_list"
                                     ref='policy_table'
+                                    scroll={{ x: true }}
                                 />
                             </Tabs.TabPane>
                             <Tabs.TabPane tab="Hardware" key="3">
@@ -774,14 +781,17 @@ function mapDispatchToProps(dispatch) {
         getPackages: getPackages,
         getHardwares: getHardwares,
         deletePackage: deletePackage,
+        packagePermission: packagePermission,
         modifyItemPrice: modifyItemPrice
     }, dispatch)
 }
 
 
-var mapStateToProps = ({ account, auth, settings }, otherprops) => {
+var mapStateToProps = ({ account, auth, settings, dealers }, otherprops) => {
     // console.log(account.packages, ' authUser props are')
+    // console.log("account.packages ", account.packages)
     return {
+        totalDealers: dealers.dealers.length,
         auth: auth.authUser,
         prices: account.prices,
         packages: account.packages,

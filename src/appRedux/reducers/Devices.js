@@ -371,7 +371,6 @@ export default (state = initialState, action) => {
             }
             break;
 
-
         case EDIT_DEVICE:
             let filteredDevices = state.newDevices;
             if (action.response.status) {

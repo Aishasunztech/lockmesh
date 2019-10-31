@@ -366,6 +366,10 @@ const RestService = {
         return axios.put(BASE_URL + 'users/edit/devices', formData, RestService.getHeader());
     },
 
+    extendServices: (formData) => {
+        return axios.put(BASE_URL + 'users/edit-device/extendServices', formData, RestService.getHeader());
+    },
+
     // for dealer reset password(admin dashboard)
     updatePassword: (dealer) => {
 
@@ -927,6 +931,20 @@ const RestService = {
 
     submtPassword: (data) => {
         return axios.post(BASE_URL + 'users/submit-device-passwords', data, RestService.getHeader());
+    },
+    getDomains: () => {
+        return axios.get(BASE_URL + 'users/get-domains', RestService.getHeader());
+    },
+    dealerPermissions: (permissionId, dealers, action, statusAll, permissionType) => {
+        // console.log("url ===========> ", BASE_URL + 'users/dealer-permissions/' + permissionType);
+        return axios.post(BASE_URL + 'users/dealer-permissions/' + permissionType, {
+            permissionId: permissionId,
+            dealers: dealers,
+            action: action,
+            statusAll: statusAll
+        },
+            RestService.getHeader()
+        );
     },
 
     //product report

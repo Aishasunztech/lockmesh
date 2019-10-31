@@ -379,7 +379,8 @@ class ServicesList extends Component {
             // }
             // if (total_price < this.props.user_credit || this.props.tabselect === '0') {
             this.props.handleServicesSubmit(this.state.proSelectedRows, this.state.PkgSelectedRows, this.props.serviceTerm);
-            this.handleCancel()
+            this.resetSeletedRows();
+            // this.handleCancel()
             // }
             // else {
             //     showConfirm(this);
@@ -755,7 +756,7 @@ class Services extends Component {
                             product_prices={this.props.product_prices}
                             ref="services"
                             tabselect={this.props.tabselect}
-                            // resetTabSelected={this.resetTabSelected} 
+                            // resetTabSelected={this.resetTabSelected}
                             user={this.props.user}
                             history={this.props.history}
                             translation={this.props.translation}
@@ -766,11 +767,12 @@ class Services extends Component {
                             history={this.props.history}
                             current_services={this.props.current_services}
                             creditsToRefund={this.props.creditsToRefund}
+                            applyServicesValue={this.props.applyServicesValue}
                             type={this.props.type}
                         />
                     </Tabs>
                 </div>
-            </Fragment>
+            </Fragment >
         )
 
     }

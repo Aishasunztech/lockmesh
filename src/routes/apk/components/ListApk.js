@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col } from "antd";
 import { BASE_URL } from '../../../constants/Application';
-import Permissions from './Permissions';
 import styles from './app.css';
 import CustomScrollbars from "../../../util/CustomScrollbars";
 import { Link } from 'react-router-dom';
@@ -13,6 +12,8 @@ import EditApk from './EditApk';
 import UpdateFeatureApk from './UpdateFeatureApk';
 import { Button_Edit, Button_Delete } from '../../../constants/ButtonConstants';
 import { ADMIN } from '../../../constants/Constants';
+import Permissions from '../../utils/Components/Permissions';
+import { Tab_All } from '../../../constants/TabConstants';
 const TabPane = Tabs.TabPane;
 export default class ListApk extends Component {
     state = { visible: false }
@@ -120,7 +121,7 @@ export default class ListApk extends Component {
                 if (app.deleteable) {
                     data = {
                         rowKey: app.apk_id,
-                        apk_id: app.apk_id,
+                        id: app.apk_id,
                         action: (
                             <div data-column="ACTION" style={{ display: "inline-flex" }}>
                                 <Fragment>
@@ -135,7 +136,8 @@ export default class ListApk extends Component {
                         ),
                         permission: (
                             <div data-column="PERMISSION" style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
-                                {app.permission_count}
+                                {/* {app.permission_count} */}
+                                {(app.permission_count === "All" || this.props.totalDealers === app.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
                             </div>
                         ),
                         permissions: app.permissions,
@@ -173,7 +175,7 @@ export default class ListApk extends Component {
                 } else {
                     data = {
                         rowKey: app.apk_id,
-                        apk_id: app.apk_id,
+                        id: app.apk_id,
                         action: (
                             <Fragment>
                                 <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px", textTransform: "uppercase" }}
@@ -183,7 +185,10 @@ export default class ListApk extends Component {
                                 }}>{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
                             </Fragment>
                         ),
-                        permission: <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>{app.permission_count}</span>,
+                        permission: <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
+                            {/* {app.permission_count} */}
+                            {(app.permission_count === "All" || this.props.totalDealers === app.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
+                        </span>,
                         permissions: app.permissions,
                         apk_status: (<Switch size="small" disabled defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
                             this.props.handleStatusChange(e, app.apk_id);
@@ -196,7 +201,7 @@ export default class ListApk extends Component {
                         policies: (app.policies === undefined || app.policies === null) ? [] : app.policies,
                         created_at: app.created_at,
                         updated_at: app.updated_at,
-                        label: app.label ? app.label: 'N/A',
+                        label: app.label ? app.label : 'N/A',
                         package_name: app.package_name ? app.package_name : 'N/A',
                     }
                     apkList.push(data)
@@ -213,8 +218,11 @@ export default class ListApk extends Component {
             if (app.package_name === 'com.armorSec.android' || app.package_name === 'ca.unlimitedwireless.mailpgp' || app.package_name === 'com.rim.mobilefusion.client' || app.package_name === 'com.secure.vpn') {
                 let data = {
                     'rowKey': app.apk_id,
-                    'apk_id': app.apk_id,
-                    'permission': <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>{app.permission_count}</span>,
+                    'id': app.apk_id,
+                    'permission': <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
+                        {/* {app.permission_count} */}
+                        {(app.permission_count === "All" || this.props.totalDealers === app.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
+                    </span>,
                     "permissions": app.permissions,
                     'apk_name': app.apk_name,
                     'apk_logo': (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
@@ -380,6 +388,7 @@ export default class ListApk extends Component {
                                 rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
                                 expandIcon={(props) => this.customExpandIcon(props)}
                                 expandedRowRender={(record) => {
+                                    console.log('record is: ', record);
                                     return (
                                         // <Permissions className="exp_row22" record={record} translation={this.props.translation} />
                                         <Fragment>
@@ -391,6 +400,8 @@ export default class ListApk extends Component {
                                                     <Permissions
                                                         className="exp_row22"
                                                         record={record}
+                                                        permissionType="apk"
+                                                        savePermissionAction={this.props.savePermission}
                                                         translation={this.props.translation}
                                                     />
                                                 </Tabs.TabPane>
@@ -481,6 +492,8 @@ export default class ListApk extends Component {
                                                     <Permissions
                                                         className="exp_row22"
                                                         record={record}
+                                                        permissionType="apk"
+                                                        savePermissionAction={this.props.savePermission}
                                                         translation={this.props.translation}
                                                     />
                                                 </Tabs.TabPane>
