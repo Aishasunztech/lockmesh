@@ -31,7 +31,7 @@ import { getNewDevicesList } from "../../appRedux/actions/Common";
 import { transferDeviceProfile } from "../../appRedux/actions/ConnectDevice";
 import { Button_Yes, Button_No } from "../../constants/ButtonConstants";
 import { APP_MANAGE_APKs, APP_SECURE_MARKET, APP_MANAGE_POLICY } from "../../constants/AppConstants";
-import { Sidebar_users, Sidebar_sdealers, Sidebar_dealers, Sidebar_devices } from "../../constants/SidebarConstants";
+import { Sidebar_users, Sidebar_sdealers, Sidebar_dealers, Sidebar_devices, Sidebar_users_devices, Sidebar_clients } from "../../constants/SidebarConstants";
 import { Tab_SET_PACKAGES_PRICES, Tab_PACKAGES, Tab_Active } from "../../constants/TabConstants";
 import { PACKAGES_AND_IDS, MANAGE_DATA } from "../../constants/AccountConstants";
 import { PURCHASE_CREDITS } from "../../constants/ActionTypes";
@@ -49,7 +49,7 @@ class Dashboard extends Component {
     }
 
     transferDeviceProfile = (obj) => {
-        
+
         let _this = this;
         Modal.confirm({
             content: `Are you sure you want to Transfer, from ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
@@ -66,7 +66,7 @@ class Dashboard extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.props !== nextProps) {
-            
+
         }
     }
 
@@ -82,7 +82,7 @@ class Dashboard extends Component {
     }
 
     render() {
-        
+
         return (
             <div>
                 <AppFilter
@@ -132,7 +132,7 @@ class Dashboard extends Component {
                                 </Card>
                                 <div className="dash_btm_txt">
                                     <span className='db-span-qnty'>{this.props.items.activeDevices}</span>
-                                    <span className='db-span-text'>{convertToLang(this.props.translation[Tab_Active], "Active")} {convertToLang(this.props.translation[Sidebar_devices], "Devices")}</span>
+                                    <span className='db-span-text'>{convertToLang(this.props.translation[Tab_Active], "Active")} {convertToLang(this.props.translation[Sidebar_users_devices], "Users & Devices")}</span>
                                 </div>
                             </Link>
                             </div>
@@ -149,7 +149,7 @@ class Dashboard extends Component {
                                     </Card>
                                     <div className="dash_btm_txt">
                                         <span className='db-span-qnty'>{this.props.items.onlineDevices}</span>
-                                        <span className='db-span-text'>{convertToLang(this.props.translation[ONLINE], "Online")} {convertToLang(this.props.translation[Sidebar_devices], "Devices")}</span>
+                                        <span className='db-span-text'>{convertToLang(this.props.translation[ONLINE], "Online")} {convertToLang(this.props.translation[Sidebar_users_devices], "Users & Devices")}</span>
                                     </div>
                                 </Link>
                             </div>
@@ -193,7 +193,7 @@ class Dashboard extends Component {
                                     </Card>
                                     <div className="dash_btm_txt">
                                         <span className='db-span-qnty'>{this.props.items.users}</span>
-                                        <span className='db-span-text'>{convertToLang(this.props.translation[Sidebar_users], "Users")}</span>
+                                        <span className='db-span-text'>{convertToLang(this.props.translation[Sidebar_clients], "Clients")}</span>
                                     </div>
                                 </Link>
                             </div>
@@ -388,7 +388,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ dashboard, auth, devices, sidebar, settings }) => {
-    
+
     return {
         items: dashboard.dashboard_items,
         authUser: auth.authUser,

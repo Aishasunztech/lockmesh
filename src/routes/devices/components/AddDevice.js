@@ -91,6 +91,7 @@ export default class AddDevice extends Component {
                     bodyStyle={{ height: 500, overflow: "overlay" }}
                     okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
                     cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                    bodyStyle={{ height: 500, overflow: "overlay" }}
                 >
                     <AddForm
                         device={this.state.device}

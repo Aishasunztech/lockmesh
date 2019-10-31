@@ -8,43 +8,44 @@
 
 .ant-btn-sm {
     line-height: 20px !important;
-    font-size: 10px;
+    font-size  : 10px;
 }
 
 /* .ant-dropdown.ant-dropdown-placement-bottomRight {
     left: 169px !important;
-    top: 12px !important;
+    top : 12px !important;
 } */
 
 .edit_ftr_btn11 {
-    text-align: right;
-    border-top: 1px solid #e8e8e8;
-    padding-top: 13px;
+    text-align   : right;
+    border-top   : 1px solid #e8e8e8;
+    padding-top  : 13px;
     margin-bottom: 0px !important;
-    margin-top: 16px;
+    margin-top   : 16px;
 }
 
 .edit_ftr_btn {
-    text-align: right;
-    padding-top: 13px;
+    text-align   : right;
+    padding-top  : 13px;
     margin-bottom: 0px !important;
-    margin-top: 24px;
+    margin-top   : 24px;
 }
 
 .edit_ftr_btn button {
     margin-bottom: 0;
-    margin-left: 1px;
+    margin-left  : 1px;
 }
 
 .edit_form .ant-modal-body {
     padding: 16px 16px 16px;
+
 }
 
 .wipe_device .ant-modal-content {
-    height: 300px;
-    display: flex;
+    height         : 300px;
+    display        : flex;
     justify-content: center;
-    align-items: center;
+    align-items    : center;
 }
 
 .wipe_device .ant-modal-body {
@@ -60,8 +61,8 @@
 }
 
 .wipe_content {
-    border: 2px solid #03A9F4;
-    padding: 18px 30px;
+    border       : 2px solid #03A9F4;
+    padding      : 18px 30px;
     border-radius: 10px;
 }
 
@@ -70,16 +71,16 @@
 }
 
 .search_heading input {
-    height: 26px;
-    font-size: 12px;
-    font-weight: 300;
-    padding: 5px;
+    height       : 26px;
+    font-size    : 12px;
+    font-weight  : 300;
+    padding      : 5px;
     padding-right: 18px !important;
 }
 
 .search_heading i {
     font-size: 11px;
-    color: #b2b2b2;
+    color    : #b2b2b2;
 }
 
 .search_heading {
@@ -91,10 +92,10 @@
 }
 
 .ant-table-row-expand-icon {
-    width: 20px;
-    height: 20px;
+    width      : 20px;
+    height     : 20px;
     line-height: 16px;
-    font-size: 20px;
+    font-size  : 20px;
 }
 
 .dev_table th {
@@ -122,10 +123,10 @@
 }
 
 .dev_tabs.ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab {
-    margin: 0 4px 0 0;
-    font-size: 13px;
-    text-align: center;
-    padding-left: 12px;
+    margin       : 0 4px 0 0;
+    font-size    : 13px;
+    text-align   : center;
+    padding-left : 12px;
     padding-right: 12px;
 }
 
@@ -138,11 +139,11 @@
 }
 
 .gx-sidebar-content .fa-mobile {
-    font-size: 32px;
+    font-size     : 32px;
     vertical-align: text-bottom;
-    margin-left: 4px;
-    margin-right: 2px;
-    line-height: 25px;
+    margin-left   : 4px;
+    margin-right  : 2px;
+    line-height   : 25px;
 }
 
 .dev_tabs .ant-tabs-bar {
@@ -231,13 +232,13 @@
 
 .editable-cell-value-wrap {
     padding: 5px 12px;
-    cursor: pointer;
+    cursor : pointer;
 }
 
 .editable-row:hover .editable-cell-value-wrap {
-    border: 1px solid #d9d9d9;
+    border       : 1px solid #d9d9d9;
     border-radius: 4px;
-    padding: 4px 11px;
+    padding      : 4px 11px;
 }
 
 #order::parent {
@@ -249,11 +250,11 @@
 }
 
 .addUserSpin {
-    text-align: center;
-    background: rgba(0, 0, 0, 0.05);
+    text-align   : center;
+    background   : rgba(0, 0, 0, 0.05);
     border-radius: 4px;
-    padding-top: 10px;
-    margin: 10px 0;
+    padding-top  : 10px;
+    margin       : 10px 0;
 }
 
 .pos_rel {
@@ -262,25 +263,25 @@
 
 .add_user_btn {
     /* position: absolute; */
-    /* left: 230px; */
-    /* top: -9px; */
-    /* width: 40%; */
-    /* padding: 0; */
-    float: right;
-    margin: 8px 0 4px;
+    /* left    : 230px; */
+    /* top     : -9px; */
+    /* width   : 40%; */
+    /* padding : 0; */
+    float      : right;
+    margin     : 8px 0 4px;
 }
 
 .add_sim_permission_btn {
     position: absolute;
-    left: 230px;
-    top: -9px;
-    width: 55%;
-    padding: 0;
+    left    : 230px;
+    top     : -9px;
+    width   : 55%;
+    padding : 0;
 }
 
 .dev_radio_btn {
-    width: 40%;
-    text-align: center;
+    width        : 40%;
+    text-align   : center;
     margin-bottom: 16px !important;
 }
 
@@ -315,16 +316,20 @@
 .border_top_0 {
     border-top: 0 !important;
 }
+#packages .ant-table-thead>tr:first-child>th:first-child .ant-checkbox ,
+#products .ant-table-thead>tr:first-child>th:first-child .ant-checkbox {
+    display: none;
+}
 
 @media screen and (max-width: 768px) {
     .add_user_btn {
         /* position: absolute; */
-        /* left: 230px; */
-        /* top: -9px; */
-        /* width: 40%; */
-        /* padding: 0; */
-        float: right;
-        margin: 8px 0 4px;
+        /* left    : 230px; */
+        /* top     : -9px; */
+        /* width   : 40%; */
+        /* padding : 0; */
+        float      : right;
+        margin     : 8px 0 4px;
     }
     .edit_form .ant-form-item-label {
         text-align: left;

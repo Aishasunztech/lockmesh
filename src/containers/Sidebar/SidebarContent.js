@@ -37,8 +37,6 @@ import {
 } from "../../constants/ThemeSetting";
 
 import {
-  Sidebar_devices,
-  Sidebar_users,
   Sidebar_dealers,
   Sidebar_sdealers,
   Sidebar_app,
@@ -47,6 +45,8 @@ import {
   Sidebar_logout,
   Alert_Change_Language,
   ARE_YOU_SURE_YOU_WANT_TO_LOGOUT,
+  Sidebar_users_devices,
+  Sidebar_clients,
 } from '../../constants/SidebarConstants'
 
 
@@ -323,14 +323,14 @@ class SidebarContent extends Component {
                     <i className="fa fa-mobile" aria-hidden="true"></i>
                   </i>
                   {/* <IntlMessages id="sidebar.devices" /> */}
-                  {convertToLang(translation[Sidebar_devices], "Devices")}
+                  {convertToLang(translation[Sidebar_users_devices], "Users & Devices")}
                 </Link>
               </Menu.Item>
               <Menu.Item key="users">
                 <Link to="/users">
                   <i className="icon icon-user" />
                   {/* <IntlMessages id="sidebar.users" /> */}
-                  {convertToLang(translation[Sidebar_users], "Users")}
+                  {convertToLang(translation[Sidebar_clients], "Clients")}
                 </Link>
               </Menu.Item>
               {(authUser.type === ADMIN) ? <Menu.Item key="dealer/dealer">
