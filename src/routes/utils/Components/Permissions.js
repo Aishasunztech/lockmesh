@@ -7,7 +7,7 @@ import DealerList from "./DealerList";
 import { Redirect } from 'react-router-dom';
 import CircularProgress from "components/CircularProgress";
 
-import { titleCase, convertToLang } from '../commonUtils';
+import { titleCase, convertToLang, checkValue } from '../commonUtils';
 import { dealerColsWithSearch } from '../columnsUtils';
 import { Button_Remove, Button_Add, Button_AddAll, Button_AddExceptSelected, Button_RemoveAll, Button_RemoveExcept, Button_Save, Button_Cancel, Button_DeleteExceptSelected, Button_Yes, Button_No } from '../../../constants/ButtonConstants';
 import { Permission_List, PERMISSION_Add_Modal_Title, PERMISSION_Remove_Modal_Title, PERMISSION_Add_Except_Selected_Modal_Title } from '../../../constants/ApkConstants';
@@ -475,7 +475,7 @@ class Permissions extends Component {
             {dealer.dealer_email ? dealer.dealer_email : 'N/A'}
           </div>
         ),
-        permission_by: ((permitData && permitData.dealer_type == this.props.user.type) ? this.props.user.name : permitData.dealer_type), // (this.props.user.type == app.dealer_type) ? this.props.user.name : "n/a", // app.dealer_type
+        permission_by: (checkValue((permitData && permitData.dealer_type == this.props.user.type) ? this.props.user.name : permitData.dealer_type)).toUpperCase(), // (this.props.user.type == app.dealer_type) ? this.props.user.name : "n/a", // app.dealer_type
         'link_code': (
           <div data-column="DEALER PIN">
             {dealer.link_code ? dealer.link_code : 'N/A'}

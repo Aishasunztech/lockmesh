@@ -162,7 +162,7 @@ export function checkApkName(name, apk_id = '') {
 
 }
 
-export function apkPermission(id, dealers, action, statusAll = false) {
+export function apkPermission(id, dealers, action, statusAll = false, user) {
     // console.log('at domainPermission action ', id, dealers, action, statusAll)
     return (dispatch) => {
         RestService.dealerPermissions(id, dealers, action, statusAll, 'apk').then((response) => {
@@ -175,7 +175,8 @@ export function apkPermission(id, dealers, action, statusAll = false) {
                         id,
                         dealers,
                         action,
-                        statusAll
+                        statusAll,
+                        user
                     }
                 })
 

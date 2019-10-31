@@ -326,6 +326,7 @@ export default (state = initialState, action) => {
                 success({
                     title: action.payload.msg
                 });
+                let user = action.formData.user;
                 let index = state.packages.findIndex((item) => item.id == action.formData.id);
                 let newDealers = (JSON.parse(action.formData.dealers)) ? JSON.parse(action.formData.dealers) : [];
                 let oldDealers = (state.packages[index].dealer_permission) ? state.packages[index].dealer_permission : [];
@@ -335,14 +336,24 @@ export default (state = initialState, action) => {
                 if (action.formData.action == "save") {
 
                     if (index !== -1) {
+                        newDealers = newDealers.map((item) => {
+                            return {
+                                dealer_id: item,
+                                dealer_type: user.type,
+                                permission_by: user.id
+                            }
+                        });
                         if (!action.formData.statusAll) {
-                            let allDealers = findAndRemove_duplicate_in_array([...oldDealers, ...newDealers]);
+                            // let allDealers = findAndRemove_duplicate_in_array([...oldDealers, ...newDealers]);
+                            let allDealers = removeDuplicateObjects([...oldDealers, ...newDealers], "dealer_id");
                             // console.log("allDealers ", allDealers);
 
                             state.packages[index].permission_count = allDealers.length;
                             state.packages[index].dealer_permission = allDealers;
+                            state.packages[index].statusAll = false;
                         } else {
                             state.packages[index].permission_count = "All";
+                            state.packages[index].statusAll = true;
                             state.packages[index].dealer_permission = newDealers;
                         }
                     }
@@ -352,11 +363,20 @@ export default (state = initialState, action) => {
 
                     if (index !== -1) {
                         if (!action.formData.statusAll) {
-                            let allDealers = oldDealers.filter((item) => !newDealers.includes(item));
+                            let allDealers = oldDealers.filter((item) => !newDealers.includes(item.dealer_id));
                             state.packages[index].dealer_permission = allDealers;
                             state.packages[index].permission_count = allDealers.length;
                         } else {
-                            state.packages[index].dealer_permission = [];
+                            if (user && user.type === "dealer") {
+                                state.packages[index].dealer_permission = oldDealers.filter((item) => item.dealer_type == "admin")
+                            }
+                            else if (user && user.type === "sdealer") {
+                                state.packages[index].dealer_permission = oldDealers.filter((item) => item.dealer_type == "dealer")
+                            }
+                            else {
+                                state.packages[index].dealer_permission = [];
+                            }
+                            state.packages[index].statusAll = false;
                             state.packages[index].permission_count = 0;
                         }
                     }
@@ -430,7 +450,7 @@ export default (state = initialState, action) => {
 
         case PERMISSION_DOMAINS: {
 
-            console.log("at reducer PERMISSION_DOMAINS:: ",action.formData.user, state.domainList, action.formData.id, action.formData.dealers);
+            // console.log("at reducer PERMISSION_DOMAINS:: ",action.formData.user, state.domainList, action.formData.id, action.formData.dealers);
             if (action.payload.status) {
                 success({
                     title: action.payload.msg
@@ -439,14 +459,14 @@ export default (state = initialState, action) => {
                 let index = state.domainList.findIndex((item) => item.id == action.formData.id);
                 let newDealers = (JSON.parse(action.formData.dealers)) ? JSON.parse(action.formData.dealers) : [];
                 let oldDealers = (JSON.parse(state.domainList[index].dealers)) ? JSON.parse(state.domainList[index].dealers) : [];
-                console.log('index is: ', index);
-                console.log('newDealers is: ', newDealers);
-                console.log('oldDealers is: ', oldDealers);
+                // console.log('index is: ', index);
+                // console.log('newDealers is: ', newDealers);
+                // console.log('oldDealers is: ', oldDealers);
 
                 // Save permission for new dealers
                 if (action.formData.action == "save") {
                     if (index !== -1) {
-                        newDealers = newDealers.map((item) => { 
+                        newDealers = newDealers.map((item) => {
                             return {
                                 dealer_id: item,
                                 dealer_type: user.type,
@@ -457,7 +477,7 @@ export default (state = initialState, action) => {
 
                             // let allDealers = findAndRemove_duplicate_in_array([...oldDealers, ...newDealers]);
                             let allDealers = removeDuplicateObjects([...oldDealers, ...newDealers], "dealer_id");
-                            console.log("allDealers ", allDealers);
+                            // console.log("allDealers ", allDealers);
 
                             state.domainList[index].permission_count = allDealers.length;
                             state.domainList[index].dealers = JSON.stringify(allDealers);

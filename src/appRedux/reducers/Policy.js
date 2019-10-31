@@ -31,7 +31,7 @@ import {
 } from "../../constants/PolicyConstants";
 
 import { message, Modal } from 'antd';
-import { convertToLang, findAndRemove_duplicate_in_array } from "../../routes/utils/commonUtils";
+import { convertToLang, findAndRemove_duplicate_in_array, removeDuplicateObjects } from "../../routes/utils/commonUtils";
 import { POLICY_DELETED_SUCCESSFULLY, STATUS_UPDATED } from "../../constants/Constants";
 
 const success = Modal.success
@@ -677,6 +677,7 @@ export default (state = initialState, action) => {
                 success({
                     title: action.payload.msg
                 });
+                let user = action.formData.user;
                 let index = state.policies.findIndex((item) => item.id == action.formData.id);
                 let newDealers = (JSON.parse(action.formData.dealers)) ? JSON.parse(action.formData.dealers) : [];
                 let oldDealers = (state.policies[index].dealer_permission) ? state.policies[index].dealer_permission : [];
@@ -688,17 +689,27 @@ export default (state = initialState, action) => {
                 if (action.formData.action == "save") {
 
                     if (index !== -1) {
+                        newDealers = newDealers.map((item) => {
+                            return {
+                                dealer_id: item,
+                                dealer_type: user.type,
+                                permission_by: user.id
+                            }
+                        });
                         if (!action.formData.statusAll) {
-                            let allDealers = findAndRemove_duplicate_in_array([...oldDealers, ...newDealers]);
+                            // let allDealers = findAndRemove_duplicate_in_array([...oldDealers, ...newDealers]);
+                            let allDealers = removeDuplicateObjects([...oldDealers, ...newDealers], "dealer_id");
                             // console.log("allDealers ", allDealers);
 
                             // console.log('remove duplicate ', findAndRemove_duplicate_in_array(allDealers));
-                            
+
 
                             state.policies[index].permission_count = allDealers.length;
                             state.policies[index].dealer_permission = allDealers;
+                            state.policies[index].statusAll = false;
                         } else {
                             state.policies[index].permission_count = "All";
+                            state.policies[index].statusAll = true;
                             state.policies[index].dealer_permission = newDealers;
                         }
                     }
@@ -708,11 +719,20 @@ export default (state = initialState, action) => {
 
                     if (index !== -1) {
                         if (!action.formData.statusAll) {
-                            let allDealers = oldDealers.filter((item) => !newDealers.includes(item));
+                            let allDealers = oldDealers.filter((item) => !newDealers.includes(item.dealer_id));
                             state.policies[index].dealer_permission = allDealers;
                             state.policies[index].permission_count = allDealers.length;
                         } else {
-                            state.policies[index].dealer_permission = [];
+                            if (user && user.type === "dealer") {
+                                state.policies[index].dealer_permission = oldDealers.filter((item) => item.dealer_type == "admin")
+                            }
+                            else if (user && user.type === "sdealer") {
+                                state.policies[index].dealer_permission = oldDealers.filter((item) => item.dealer_type == "admin" || item.dealer_type == "dealer")
+                            }
+                            else {
+                                state.policies[index].dealer_permission = [];
+                            }
+                            state.policies[index].statusAll = false;
                             state.policies[index].permission_count = 0;
                         }
                     }

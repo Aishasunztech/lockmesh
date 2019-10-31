@@ -328,7 +328,7 @@ export function handleCheckAll(e, key, stateToUpdate, uniqueName = '', rowId) {
 }
 
 
-export function policyPermission(id, dealers, action, statusAll = false) {
+export function policyPermission(id, dealers, action, statusAll = false, user) {
     // console.log('at domainPermission action ', id, dealers, action, statusAll)
     return (dispatch) => {
         RestService.dealerPermissions(id, dealers, action, statusAll, 'policy').then((response) => {
@@ -341,7 +341,8 @@ export function policyPermission(id, dealers, action, statusAll = false) {
                         id,
                         dealers,
                         action,
-                        statusAll
+                        statusAll,
+                        user
                     }
                 })
 

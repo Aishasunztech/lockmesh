@@ -25,7 +25,7 @@ import {
 	APK_PERMISSION
 } from '../../constants/ApkConstants';
 import { message, Modal } from 'antd';
-import { findAndRemove_duplicate_in_array } from "../../routes/utils/commonUtils";
+import { findAndRemove_duplicate_in_array, removeDuplicateObjects } from "../../routes/utils/commonUtils";
 
 const success = Modal.success
 const error = Modal.error
@@ -178,6 +178,7 @@ export default (state = initialState, action) => {
 				success({
 					title: action.payload.msg
 				});
+				let user = action.formData.user;
 				let index = state.apk_list.findIndex((item) => item.apk_id == action.formData.id);
 				let newDealers = (JSON.parse(action.formData.dealers)) ? JSON.parse(action.formData.dealers) : [];
 				let oldDealers = (state.apk_list[index].permissions) ? state.apk_list[index].permissions : [];
@@ -187,14 +188,24 @@ export default (state = initialState, action) => {
 				if (action.formData.action == "save") {
 
 					if (index !== -1) {
+						newDealers = newDealers.map((item) => {
+							return {
+								dealer_id: item,
+								dealer_type: user.type,
+								permission_by: user.id
+							}
+						});
 						if (!action.formData.statusAll) {
-							let allDealers = findAndRemove_duplicate_in_array([...oldDealers, ...newDealers]);
+							// let allDealers = findAndRemove_duplicate_in_array([...oldDealers, ...newDealers]);
+							let allDealers = removeDuplicateObjects([...oldDealers, ...newDealers], "dealer_id");
 							// console.log("allDealers ", allDealers);
 
 							state.apk_list[index].permission_count = allDealers.length;
 							state.apk_list[index].permissions = allDealers;
+							state.apk_list[index].statusAll = false;
 						} else {
 							state.apk_list[index].permission_count = "All";
+							state.apk_list[index].statusAll = true;
 							state.apk_list[index].permissions = newDealers;
 						}
 					}
@@ -204,11 +215,16 @@ export default (state = initialState, action) => {
 
 					if (index !== -1) {
 						if (!action.formData.statusAll) {
-							let allDealers = oldDealers.filter((item) => !newDealers.includes(item));
+							let allDealers = oldDealers.filter((item) => !newDealers.includes(item.dealer_id));
 							state.apk_list[index].permissions = allDealers;
 							state.apk_list[index].permission_count = allDealers.length;
 						} else {
-							state.apk_list[index].permissions = [];
+							if (user && user.type !== "admin") {
+								state.apk_list[index].permissions = oldDealers.filter((item) => item.dealer_type == "admin");
+							} else {
+								state.apk_list[index].permissions = [];
+							}
+							state.apk_list[index].statusAll = false;
 							state.apk_list[index].permission_count = 0;
 						}
 					}

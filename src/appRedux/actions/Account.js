@@ -420,7 +420,7 @@ export const purchaseCreditsFromCC = (cardInfo, creditInfo) => {
     }
 }
 
-export function packagePermission(id, dealers, action, statusAll = false) {
+export function packagePermission(id, dealers, action, statusAll = false, user) {
     console.log('at domainPermission action ', id, dealers, action, statusAll)
     return (dispatch) => {
         RestService.dealerPermissions(id, dealers, action, statusAll, 'package').then((response) => {
@@ -433,7 +433,8 @@ export function packagePermission(id, dealers, action, statusAll = false) {
                         id,
                         dealers,
                         action,
-                        statusAll
+                        statusAll,
+                        user
                     }
                 })
 
