@@ -74,7 +74,9 @@ import {
     HANDLE_CHECK_SECURE_SETTINGS,
     RESET_DEVICE,
     SIM_LOADING,
-    TRANSFER_DEVICE
+    TRANSFER_DEVICE,
+    SERVICES_DETAIL,
+    SERVICES_HISTORY
 } from "../../constants/ActionTypes";
 
 import {
@@ -203,6 +205,7 @@ const initialState = {
     guestAllPushApps: false,
     enableAllPushApp: false,
     encryptedAllPushApps: false,
+    servicesHistoryList: [],
 };
 let pwdObject = { "admin_password": null, "guest_password": null, "encrypted_password": null, "duress_password": null }
 
@@ -714,13 +717,26 @@ export default (state = initialState, action) => {
             }
         }
 
+        case SERVICES_HISTORY: {
+            console.log("action.payload.data at reducer for sevices:: ", action.payload.data);
+            let data = state.servicesHistoryList;
+
+            if (action.payload.status) {
+                data = action.payload.data
+            }
+            return {
+                ...state,
+                servicesHistoryList: data
+            }
+        }
+
         case TRANSFER_DEVICE: {
 
             console.log(action.payload, 'check devices TRANSFER_DEVICE ', state.device)
             if (action.response.status) {
-               
-                    state.device.finalStatus = 'Transfered';
-                    state.device.transfer_status = 1;
+
+                state.device.finalStatus = 'Transfered';
+                state.device.transfer_status = 1;
             }
             // console.log('unlink called');
             return {

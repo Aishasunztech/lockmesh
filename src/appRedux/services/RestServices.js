@@ -141,6 +141,10 @@ const RestService = {
         return axios.get(BASE_URL + 'users/transfer/history/' + device_id, RestService.getHeader());
     },
 
+    getServicesHistory: (usr_acc_id) => {
+        return axios.get(BASE_URL + 'users/getServicesHistory/' + usr_acc_id, RestService.getHeader());
+    },
+
 
     // getDevices
     DeviceList: () => {

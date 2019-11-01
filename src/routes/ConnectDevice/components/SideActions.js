@@ -93,6 +93,7 @@ import {
 } from "../../../constants/DeviceConstants";
 
 import TransferHistory from './TransferModule/TransferHistory'
+import Services from './Services';
 
 const confirm = Modal.confirm;
 var coppyList = [];
@@ -353,6 +354,7 @@ class SideActions extends Component {
         super(props);
 
         this.state = {
+            servicesModal: false,
             showSimModal: false,
             pullAppsModal: false,
             pushAppsModal: false,
@@ -818,6 +820,16 @@ class SideActions extends Component {
         })
     }
 
+    handleServicesModal = (visible) => {
+        // if (this.props.device_details.device_id && visible) {
+        //     this.props.getServices(this.props.device_details.device_id);
+        // }
+        console.log("this.props.device_details ", this.props.device_details);
+        this.setState({
+            servicesModal: visible,
+        })
+    }
+
     render() {
         // console.log(this.state.app_list, 'device is: ', this.props.app_list)
         const device_status = (this.props.device.account_status === "suspended") ? "Unsuspend" : "suspended";
@@ -949,26 +961,32 @@ class SideActions extends Component {
                                 </Button>
                                 {/* </Tooltip> */}
                             </Col>
+                            <Button
+                                type="default"
+                                onClick={() => this.handleServicesModal(true)}
+                                style={{ width: "46%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }}
+                            >
+                                <Icon type="file" />
+                                {convertToLang(this.props.translation["SERVICES"], "SERVICES")}
+                            </Button>
+                            <Services
+                                translation={this.props.translation}
+                                user={this.props.authUser}
+                                handleServicesModal={this.handleServicesModal}
+                                visible={this.state.servicesModal}
+                                services={this.props.device_details.services}
+                                extended_services={this.props.device_details.extended_services}
+                                user_acc_id={this.props.device_details.id}
+                            />
                         </Row>
                     </Card>
                     <Card>
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={12} className="gutter-row" justify="center" >
-                                {/* <Tooltip title="Coming Soon"> */}
-                                {/* <Button
-                                    type="default"
-                                    onClick={() => this.handleTransfer()}
-                                    style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }}
-                                    disabled={(this.props.device.flagged === 'Not flagged') ? 'disabled' : ''}
-                                >
-                                    <Icon type="swap" />
-                                    {convertToLang(this.props.translation[Button_Transfer], "Transfer")} </Button> */}
-
-                                {/* <Button type="default" onClick={() => { if (flagged === "Unflag") { this.handleTransfer(this.props.device_id) } else { Modal.error({ title: 'Plaese Flag the device first to Transfer' }); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button> */}
                                 <Button type="default"
                                     onClick={() => this.handleTransferHistoryModal(true)}
-                                    style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button>
-                                {/* </Tooltip> */}
+                                    style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}
+                                </Button>
                                 <Button type={button_type}
                                     onClick={() => (device_status === "Unsuspend") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
                                     style={{ width: "100%", marginBottom: 16, fontSize: "12px" }}
@@ -976,10 +994,7 @@ class SideActions extends Component {
                                 >
                                     {((this.props.device.account_status === '')) ? <div><Icon type="user-delete" /> {convertToLang(this.props.translation[Button_Suspend], "Suspend")} </div> : <div><Icon type="user-add" /> {convertToLang(this.props.translation[Button_Unsuspend], "Unsuspend")} </div>}
                                 </Button>
-
                                 <Button type="default" className="btn_break_line" style={{ width: "100%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }} onClick={() => this.refs.wipe_device.showModel(this.props.device, this.props.wipe)}><Icon type="lock" className="lock_icon" />
-
-                                    {/* <IntlMessages id="button.WipeDevice" /> */}
                                     {convertToLang(this.props.translation[Button_WipeDevice], "WipeDevice")}
                                 </Button>
 
@@ -1158,6 +1173,28 @@ class SideActions extends Component {
 
 
                 {/* END SIM MODULE */}
+
+
+
+                {/* SERVICES MODULE */}
+                {/* <Modal
+                    width='850px'
+                    maskClosable={false}
+                    title={convertToLang(this.props.translation["SIM_SETTINGS"], "SERVICES")}
+                    visible={this.state.handleServicesModal}
+                    onOk={() => this.setState({ handleServicesModal: false })}
+                    onCancel={() => this.setState({ handleServicesModal: false })}
+                    // footer={null}
+                    okText={convertToLang(this.props.translation[Button_Ok], "OK")}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
+                >
+                    <SimSettings
+                        deviceID={this.props.device_id}
+                        translation={this.props.translation}
+                    />
+                </Modal> */}
+                {/* END SERVICES MODULE */}
+
 
                 {/* title={this.state.profileType[0] + this.state.profileType.substring(1,this.state.profileType.length).toLowerCase()} */}
                 <Modal
@@ -1352,11 +1389,11 @@ function mapDispatchToProps(dispatch) {
         handleChecked: handleChecked,
         resetPushApps: resetPushApps,
         handleCheckedAllPushApps: handleCheckedAllPushApps,
-        transferHistory: transferHistory
+        transferHistory: transferHistory,
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth, settings, devices, sidebar }, otherProps) => {
-    // console.log(device_details.apk_list, 'apk list from store')
+    // console.log(device_details.deviceServices, 'device_details.deviceServices')
     return {
         requests: sidebar.newRequests,
         devices: devices.newDevices,
