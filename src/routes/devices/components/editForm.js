@@ -216,8 +216,13 @@ class EditDevice extends Component {
     }
 
     handleServicesModal = async (e) => {
-
-        if (this.props.device.services && this.props.device.services.status === "request_for_cancel") {
+        if (this.props.device.extended_services) {
+            this.setState({
+                changeServiceMsg: "you have Applied a Renewal or Extension for this device, please cancel service first before chosing new service.",
+                checkServices: { color: "Red" },
+            })
+        }
+        else if (this.props.device.services && this.props.device.services.status === "request_for_cancel") {
             this.setState({
                 changeServiceMsg: "This Device is pending cancellation. Please contact Admin.",
                 checkServices: { color: "Red" },
@@ -644,6 +649,14 @@ class EditDevice extends Component {
             <div>
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
                     <p className="mb-4">(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")}</p>
+                    {/* {
+                        (this.props.device.extended_services) ?
+                            <div style={{ color: 'red', textAlign: 'center', margin: 15 }}>
+                                <span>{convertToLang(this.props.translation[DUMY_TRANS_ID], "*You need to cancel your extended services to use apply service function.")}</span>
+                            </div>
+                            : null
+                    } */}
+
                     <Form.Item
                         label={(this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ? convertToLang(this.props.translation[DEVICE_ID], DEVICE_ID) : null}
                         labelCol={{ span: 8, xs: 24, sm: 8 }}
@@ -764,6 +777,7 @@ class EditDevice extends Component {
                                         onChange={(e) => this.handleServicesModal(e)}
                                         value={this.state.applyServicesValue}
                                     // className="apply_services"
+                                    // disabled={(this.props.device.extended_services) ? true : false}
                                     >
                                         {(this.props.device.services) ?
 
@@ -775,6 +789,7 @@ class EditDevice extends Component {
                                             : null}
                                     </Select>
                                     <span style={this.state.checkServices}>{this.state.changeServiceMsg}</span>
+
                                 </Fragment>
                             )}
                         </Form.Item>
