@@ -63,7 +63,9 @@ import {
     HANDLE_CHECK_ALL_PUSH_APPS,
     HANDLE_CHECK_SECURE_SETTINGS,
     RESET_DEVICE,
-    SIM_LOADING
+    SIM_LOADING,
+    SERVICES_DETAIL,
+    SERVICES_HISTORY
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -244,7 +246,7 @@ export function getAccIdFromDvcId(deviceId) {
 export function suspendDevice2(device) {
 
     return (dispatch) => {
-         console.log("suspendDevice action" , device);
+        console.log("suspendDevice action", device);
 
         RestService.suspendDevice(device.usr_device_id).then((response) => { // usr_device_id
 
@@ -846,6 +848,23 @@ export const transferHistory = (device_id) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: TRANSFER_HISTORY,
+                    payload: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+
+export const getServicesHistory = (data) => {
+    return (dispatch) => {
+        RestService.getServicesHistory(data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: SERVICES_HISTORY,
                     payload: response.data
                 })
             } else {
