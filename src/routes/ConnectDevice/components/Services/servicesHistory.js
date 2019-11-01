@@ -2,9 +2,8 @@ import React, { Component, Fragment } from 'react';
 import { Modal, message, Input, Table, Switch, Avatar } from 'antd';
 import { componentSearch, getFormattedDate, convertToLang, checkValue } from '../../../utils/commonUtils';
 import Moment from 'react-moment';
-import { SECURE_SETTING, DATE, PROFILE_NAME, SEARCH } from '../../../../constants/Constants';
-import { BASE_URL } from '../../../../constants/Application';
-import { PREVIOUSLY_USED_SIMS, ICC_ID } from '../../../../constants/DeviceConstants';
+import { SEARCH } from '../../../../constants/Constants';
+import moment from 'moment';
 
 var copyServices = [];
 var status = true;
@@ -12,21 +11,6 @@ export default class ServicesHistory extends Component {
 
     constructor(props) {
         super(props);
-        this.innerColumns = [
-            {
-                title: "TYPE",
-                dataIndex: 'type',
-                key: '1',
-            }, {
-                title: "Name",
-                dataIndex: 'name',
-                key: '2',
-            }, {
-                title: "TERM",
-                dataIndex: 'term',
-                key: '3',
-            }
-        ];
 
         var columns = [
             {
@@ -38,15 +22,6 @@ export default class ServicesHistory extends Component {
                 sorter: (a, b) => { return a.status.localeCompare(b.status) },
                 sortDirections: ['ascend', 'descend'],
             },
-            // {
-            //     title: convertToLang(this.props.translation["TYPE"], "TYPE"),
-            //     align: "center",
-            //     dataIndex: 'type',
-            //     key: "type",
-            //     className: '',
-            //     sorter: (a, b) => { return a.type.localeCompare(b.type) },
-            //     sortDirections: ['ascend', 'descend'],
-            // },
             {
                 title: convertToLang(this.props.translation["NAME"], "NAME"),
                 align: "center",
@@ -77,10 +52,10 @@ export default class ServicesHistory extends Component {
             {
                 title: convertToLang(this.props.translation["END DATE"], "END DATE"),
                 align: "center",
-                dataIndex: 'updated_at',
-                key: "updated_at",
+                dataIndex: 'end_date',
+                key: "end_date",
                 className: '',
-                sorter: (a, b) => { return a.updated_at.localeCompare(b.updated_at) },
+                sorter: (a, b) => { return a.end_date.localeCompare(b.end_date) },
                 sortDirections: ['ascend', 'descend'],
                 defaultSortOrder: 'descend'
             },
@@ -89,7 +64,6 @@ export default class ServicesHistory extends Component {
         this.state = {
             columns: columns,
             visible: props.visible,
-            // services: props.servicesHistoryList,
             expandedRowKeys: [],
         }
     }
@@ -97,8 +71,6 @@ export default class ServicesHistory extends Component {
     showModal = () => {
         this.setState({
             visible: true,
-            // services: this.props.servicesHistoryList
-
         });
     }
 
@@ -195,7 +167,8 @@ export default class ServicesHistory extends Component {
                 packages = JSON.parse(services.packages).map((item) => {
                     item.type = "PACKAGE";
                     item.status = services.status;
-                    item.updated_at = services.updated_at;
+                    item.start_date = services.start_date;
+                    item.end_date = services.end_date;
                     return item;
                 });
             }
@@ -227,7 +200,7 @@ export default class ServicesHistory extends Component {
     }
 
     renderList = (data) => {
-        console.log('data is: ', data)
+        // console.log('data is: ', data)
         // let data = this.state.services;
         if (data && data.length) {
             return data.map((row, index) => {
@@ -238,11 +211,10 @@ export default class ServicesHistory extends Component {
                     type: checkValue(row.type),
                     name: checkValue(row.pkg_name),
                     term: checkValue(row.pkg_term),
-                    updated_at: getFormattedDate(row.updated_at),
-                    data: row
+                    start_date: checkValue(moment(row.start_date).format("YYYY/MM/DD")),
+                    end_date: checkValue(moment(row.end_date).format("YYYY/MM/DD")),
+                    // data: row
                 }
-
-
             })
         } else {
             return []
@@ -259,13 +231,14 @@ export default class ServicesHistory extends Component {
         return (
             <div>
                 <Modal
+                    width="880px"
                     maskClosable={false}
                     visible={visible}
                     title={<div>Services History <small>(Returned, Cancelled & Completed)</small></div>} //{convertToLang(this.props.translation["PREVIOUSLY_USED_SIMS"], "Services History")}
                     onCancel={this.handleCancel}
                     footer={null}
                 >
-                    <Input.Search
+                    {/* <Input.Search
                         name="search"
                         key="search"
                         id="search"
@@ -275,7 +248,7 @@ export default class ServicesHistory extends Component {
                             }
                         }
                         placeholder={convertToLang(this.props.translation[SEARCH], "Search")}
-                    />
+                    /> */}
                     <Table
                         columns={this.state.columns}
                         bordered

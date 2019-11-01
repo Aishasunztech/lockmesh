@@ -2,11 +2,6 @@ import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { Modal, message, Input, Table, Switch, Avatar, Button, Card, Row, Col, Select, Spin, Form } from 'antd';
 import { componentSearch, getFormattedDate, convertToLang, checkValue } from '../../../utils/commonUtils';
-import Moment from 'react-moment';
-import { SECURE_SETTING, DATE, PROFILE_NAME, SEARCH, ADMIN } from '../../../../constants/Constants';
-import { BASE_URL } from '../../../../constants/Application';
-import { PREVIOUSLY_USED_SIMS, ICC_ID, USER_ID, USER_ID_IS_REQUIRED, SELECT_USER_ID } from '../../../../constants/DeviceConstants';
-import { Button_Add_User, Button_Ok, Button_Cancel, Button_submit } from '../../../../constants/ButtonConstants';
 import {
     addUser,
     getUserList,
@@ -37,20 +32,12 @@ class TransferHistory extends Component {
                 className: 'row',
                 render: (text, record, index) => ++index,
             },
-            // {
-            //     title: "ACTION",
-            //     dataIndex: 'action',
-            //     align: 'center',
-            //     className: 'row',
-            // },
             {
                 title: "TYPE",
                 align: "center",
                 dataIndex: 'type',
                 key: "type",
                 className: '',
-                // sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) },
-                // sortDirections: ['ascend', 'descend'],
             },
             {
                 title: "NAME",
@@ -59,48 +46,13 @@ class TransferHistory extends Component {
                 key: "name",
                 className: '',
             },
-            // {
-            //     title: "PRICE FOR",
-            //     align: "center",
-            //     dataIndex: 'price_for',
-            //     key: "price_for",
-            //     className: '',
-            // },
-            // {
-            //     title: "UNIT PRICE",
-            //     align: "center",
-            //     dataIndex: 'unit_price',
-            //     key: "unit_price",
-            //     className: '',
-            // },
             {
                 title: "TERM",
                 align: "center",
                 dataIndex: 'term',
                 key: "term",
                 className: '',
-                // sorter: (a, b) => { return a.user_transfered_from.localeCompare(b.user_transfered_from) },
-                // sortDirections: ['ascend', 'descend'],
             },
-            // {
-            //     title: "PRICE",
-            //     align: "center",
-            //     dataIndex: 'price',
-            //     key: "price",
-            //     className: '',
-            //     // sorter: (a, b) => { return a.user_transfered_from.localeCompare(b.user_transfered_from) },
-            //     // sortDirections: ['ascend', 'descend'],
-            // },
-            // {
-            //     title: <div>TRANSFERED TO <br />(<small>USER ID</small>)</div>,
-            //     align: "center",
-            //     dataIndex: 'user_transfered_to',
-            //     key: "user_transfered_to",
-            //     className: '',
-            //     // sorter: (a, b) => { return a.user_id.localeCompare(b.user_id) },
-            //     // sortDirections: ['ascend', 'descend'],
-            // },
-
             {
                 title: convertToLang(this.props.translation["EXPIRY DATE"], "EXPIRY DATE"),
                 align: "center",
@@ -179,13 +131,13 @@ class TransferHistory extends Component {
                 // console.log(row);
 
                 // if (row.type === "PACKAGE") {
-                    return {
-                        key: index,
-                        type: checkValue(row.type),
-                        name: checkValue(row.pkg_name),
-                        term: checkValue(row.pkg_term),
-                        expiry_date: checkValue(moment(row.service_expiry_date).format("YYYY/MM/DD")),
-                    }
+                return {
+                    key: index,
+                    type: checkValue(row.type),
+                    name: checkValue(row.pkg_name),
+                    term: checkValue(row.pkg_term),
+                    expiry_date: checkValue(moment(row.service_expiry_date).format("YYYY/MM/DD")),
+                }
                 // }
                 // else if (row.type === "PRODUCT") {
                 //     return {
