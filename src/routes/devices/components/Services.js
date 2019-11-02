@@ -754,26 +754,26 @@ class Services extends Component {
                         </TabPane>
                         <TabPane tab={<span className="green">12 MONTH</span>} key="12" >
                         </TabPane>
-                        <ServicesList
-                            parent_packages={this.props.parent_packages}
-                            product_prices={this.props.product_prices}
-                            ref="services"
-                            tabselect={this.props.tabselect}
-                            // resetTabSelected={this.resetTabSelected}
-                            user={this.props.user}
-                            history={this.props.history}
-                            translation={this.props.translation}
-                            handleCancel={this.props.handleCancel}
-                            handleServicesSubmit={this.props.handleServicesSubmit}
-                            serviceTerm={this.props.tabselect}
-                            user_credit={this.props.user_credit}
-                            history={this.props.history}
-                            current_services={this.props.current_services}
-                            creditsToRefund={this.props.creditsToRefund}
-                            applyServicesValue={this.props.applyServicesValue}
-                            type={this.props.type}
-                        />
                     </Tabs>
+                    <ServicesList
+                        parent_packages={this.props.parent_packages}
+                        product_prices={this.props.product_prices}
+                        ref="services"
+                        tabselect={this.props.tabselect}
+                        // resetTabSelected={this.resetTabSelected}
+                        user={this.props.user}
+                        history={this.props.history}
+                        translation={this.props.translation}
+                        handleCancel={this.props.handleCancel}
+                        handleServicesSubmit={this.props.handleServicesSubmit}
+                        serviceTerm={this.props.tabselect}
+                        user_credit={this.props.user_credit}
+                        history={this.props.history}
+                        current_services={this.props.current_services}
+                        creditsToRefund={this.props.creditsToRefund}
+                        applyServicesValue={this.props.applyServicesValue}
+                        type={this.props.type}
+                    />
                 </div>
             </Fragment >
         )
