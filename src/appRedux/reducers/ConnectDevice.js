@@ -718,7 +718,7 @@ export default (state = initialState, action) => {
 
             console.log(action.payload, 'check devices TRANSFER_DEVICE ', state.device)
             if (action.response.status) {
-               
+
                     state.device.finalStatus = 'Transfered';
                     state.device.transfer_status = 1;
             }
@@ -806,8 +806,6 @@ export default (state = initialState, action) => {
         //     }
         // }
         case GUEST_PASSWORD: {
-            // console.log(GUEST_PASSWORD);
-            // console.log(action.payload);
             return {
                 ...state,
                 guestPwd: action.payload.pwd,

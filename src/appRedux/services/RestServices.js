@@ -80,6 +80,7 @@ const RestService = {
         localStorage.setItem('type', data.user.user_type);
         localStorage.setItem('dealer_pin', data.user.link_code);
         localStorage.setItem('two_factor_auth', data.user.two_factor_auth);
+        localStorage.setItem('account_balance_status', data.user.account_balance_status);
 
     },
     // checkAuth
@@ -653,7 +654,7 @@ const RestService = {
     getHardwaresPrices: () => {
         return axios.get(BASE_URL + 'users/get-parent-hardware-prices', RestService.getHeader());
     },
-    
+
     checkPackageName: (name) => {
 
         return axios.patch(BASE_URL + 'users/check-package-name', { name }, RestService.getHeader());
@@ -924,7 +925,7 @@ const RestService = {
   generatePaymentHistoryReport: (data) => {
     return axios.post(BASE_URL + 'users/reports/payment-history', data, RestService.getHeader());
     },
-  
+
   //hardware report
   generateHardwareReport: (data) => {
     return axios.post(BASE_URL + 'users/reports/hardware', data, RestService.getHeader());
@@ -933,6 +934,16 @@ const RestService = {
   //sales report
   generateSalesReport: (data) => {
     return axios.post(BASE_URL + 'users/reports/sales', data, RestService.getHeader());
+  },
+
+  //get latest payment history
+  getLatestPaymentHistory: (data) => {
+    return axios.post(BASE_URL + 'users/get-latest-payment-history', data, RestService.getHeader());
+  },
+
+  //get overdue details
+  getOverdueDetails: () => {
+    return axios.get(BASE_URL + 'users/get-overdue-details', RestService.getHeader());
   },
 }
 export default RestService;

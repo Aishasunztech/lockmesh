@@ -1,6 +1,8 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import Account from "./account/index";
+import PaymentHistory from "./account/components/PaymentHistory";
+import PaymentOverdueHistory from "./account/components/PaymentOverdueHistory";
 import AddApk from "./addApk/index";
 import AutoUpdate from "./autoUpdate/index";
 import Devices from "./devices/index";
@@ -48,6 +50,16 @@ const App = ({ match }) => {
           exact
           path={`${match.url}account`}
           component={Account}
+        />
+        <Route
+          exact
+          path={`${match.url}account/credits-payment-history`}
+          component={PaymentHistory}
+        />
+        <Route
+          exact
+          path={`${match.url}account/payment-overdue-history`}
+          component={PaymentOverdueHistory}
         />
         <Route
           exact

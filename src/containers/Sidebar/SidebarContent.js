@@ -2,16 +2,9 @@ import React, { Component } from "react";
 import { Menu, Icon, Badge, Modal, Popover, Avatar } from "antd";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-
 import SidebarLogo from "./SidebarLogo";
-
-// import LogoutIcon from "./logout.svg";
-
 import Auxiliary from "util/Auxiliary";
 import UserProfile from "./UserProfile";
-
-// import AppsNavigation from "./AppsNavigation";
-
 import NewDevice from '../../components/NewDevices';
 import CreditsModal from '../../components/CreditsModal';
 
@@ -22,6 +15,9 @@ import {
   rejectRequest,
   acceptRequest
 } from "../../appRedux/actions/SideBar";
+import {
+  getLatestPaymentHistory, getOverdueDetails
+} from "../../appRedux/actions/Account";
 
 import { transferDeviceProfile } from "../../appRedux/actions/ConnectDevice";
 
@@ -55,6 +51,7 @@ import { switchLanguage, getLanguage, toggleCollapsedSideNav } from "../../appRe
 
 import { ADMIN, DEALER, SDEALER, AUTO_UPDATE_ADMIN } from "../../constants/Constants";
 import { Button_Yes, Button_No } from "../../constants/ButtonConstants";
+import {cloneableGenerator} from "redux-saga/utils";
 
 let status = true;
 class SidebarContent extends Component {
@@ -98,8 +95,8 @@ class SidebarContent extends Component {
   showNotification = () => {
     if (this.props.authUser.type !== ADMIN) {
       this.props.getNewCashRequests();
-      this.props.getNewDevicesList()
-      this.props.getUserCredit()
+      this.props.getNewDevicesList();
+      this.props.getUserCredit();
       this.refs.new_device.showModal();
       // this.props.getDevicesList();
     }
@@ -109,7 +106,9 @@ class SidebarContent extends Component {
   showCreditsModal = () => {
     if (this.props.authUser.type !== ADMIN) {
       this.props.getUserCredit()
-      this.refs.credits_modal.showModal();
+      this.props.getLatestPaymentHistory({limit: 10, type: 'credits'})
+      this.props.getOverdueDetails();
+      this.refs.credits_modal.getWrappedInstance().showModal();
     }
 
     // alert('its working');
@@ -119,9 +118,7 @@ class SidebarContent extends Component {
     this.props.getLanguage();
     this.setState({
       languageData: this.props.languageData
-    })
-
-
+    });
 
     // console.log('get new device', this.props.getNewDevicesList())
     this.props.getNewDevicesList();
@@ -212,6 +209,9 @@ class SidebarContent extends Component {
               translation={this.props.translation}
               user_credit={this.props.user_credit}
               due_credit={this.props.due_credit}
+              latestPaymentTransaction={this.props.latestPaymentTransaction}
+              overdueDetails={this.props.overdueDetails}
+              account_balance_status={this.props.account_balance_status}
             />
             <NewDevice
               ref='new_device'
@@ -283,7 +283,7 @@ class SidebarContent extends Component {
                 </Link>
               </Menu.Item>
               <Menu.Item key="logout" onClick={(e) => {
-                // this.props.logout() 
+                // this.props.logout()
                 this.logout()
               }}>
                 {/* <Link to="/logout"> */}
@@ -375,10 +375,8 @@ class SidebarContent extends Component {
 
 // SidebarContent.propTypes = {};
 
-const mapStateToProps = ({ settings, devices, sidebar }) => {
+const mapStateToProps = ({ settings, devices, sidebar, account, auth }) => {
   const { navStyle, themeType, locale, pathname, languages, translation } = settings;
-
-  // console.log('lng id is: ', translation["lng_id"])
   // console.log('test: =====================================================>  ' , devices.devices)
   return {
     navStyle,
@@ -390,10 +388,13 @@ const mapStateToProps = ({ settings, devices, sidebar }) => {
     requests: sidebar.newRequests,
     user_credit: sidebar.user_credit,
     due_credit: sidebar.due_credit,
+    latestPaymentTransaction: account.paymentHistory,
+    overdueDetails: account.overdueDetails,
     languageData: languages,
     translation: translation,
     lng_id: translation["lng_id"],
+    account_balance_status: auth.authUser.account_balance_status
   }
 };
-export default connect(mapStateToProps, { getDevicesList, rejectDevice, addDevice, logout, getNewDevicesList, toggleCollapsedSideNav, switchLanguage, getLanguage, getNewCashRequests, getUserCredit, acceptRequest, rejectRequest, transferDeviceProfile })(SidebarContent);
+export default connect(mapStateToProps, { getLatestPaymentHistory, getOverdueDetails, getDevicesList, rejectDevice, addDevice, logout, getNewDevicesList, toggleCollapsedSideNav, switchLanguage, getLanguage, getNewCashRequests, getUserCredit, acceptRequest, rejectRequest, transferDeviceProfile })(SidebarContent);
 

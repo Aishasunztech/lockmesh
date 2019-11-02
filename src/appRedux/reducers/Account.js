@@ -1,28 +1,30 @@
 import {
-    IMPORT_CSV,
-    GET_USED_PGP_EMAILS,
-    GET_USED_CHAT_IDS,
-    GET_USED_SIM_IDS,
-    RELEASE_CSV,
-    DUPLICATE_SIM_IDS,
-    NEW_DATA_INSERTED,
-    CREATE_BACKUP_DB,
-    SHOW_BACKUP_MODAL,
-    CHECK_BACKUP_PASS,
-    SAVE_ID_PRICES,
-    SAVE_PACKAGE,
-    GET_PRICES,
-    SET_PRICE,
-    RESET_PRICE,
-    GET_PACKAGES,
-    PURCHASE_CREDITS,
-    GET_PARENT_PACKAGES,
-    PACKAGE_PERMSSION_SAVED,
-    DELETE_PACKAGE,
-    EDIT_PACKAGE,
-    RESYNC_IDS,
-    GET_HARDWARE,
-    MODIFY_ITEM_PRICE
+  IMPORT_CSV,
+  GET_USED_PGP_EMAILS,
+  GET_USED_CHAT_IDS,
+  GET_USED_SIM_IDS,
+  RELEASE_CSV,
+  DUPLICATE_SIM_IDS,
+  NEW_DATA_INSERTED,
+  CREATE_BACKUP_DB,
+  SHOW_BACKUP_MODAL,
+  CHECK_BACKUP_PASS,
+  SAVE_ID_PRICES,
+  SAVE_PACKAGE,
+  GET_PRICES,
+  SET_PRICE,
+  RESET_PRICE,
+  GET_PACKAGES,
+  PURCHASE_CREDITS,
+  GET_OVERDUE_DETAILS,
+  GET_PARENT_PACKAGES,
+  PACKAGE_PERMSSION_SAVED,
+  DELETE_PACKAGE,
+  EDIT_PACKAGE,
+  LATEST_PAYMENT_HISTORY,
+  RESYNC_IDS,
+  GET_HARDWARE,
+  MODIFY_ITEM_PRICE, SALES_REPORT
 } from "../../constants/ActionTypes";
 import { message, Modal } from "antd";
 
@@ -30,32 +32,34 @@ const success = Modal.success
 const error = Modal.error
 
 const initialState = {
-    msg: "",
-    showMsg: false,
-    used_pgp_emails: [],
-    used_sim_ids: [],
-    used_chat_ids: [],
-    duplicate_ids: [],
-    duplicate_modal_show: false,
-    duplicate_data_type: '',
-    newData: [],
-    backUpModal: false,
-    prices: {
-        sim_id: {},
-        chat_id: {},
-        pgp_email: {},
-        vpn: {}
-    },
-    isPriceChanged: false,
-    pricesCopy: {
-        sim_id: {},
-        chat_id: {},
-        pgp_email: {},
-        vpn: {}
-    },
-    packages: [],
-    packagesCopy: [],
-    hardwares: []
+  msg: "",
+  showMsg: false,
+  used_pgp_emails: [],
+  used_sim_ids: [],
+  used_chat_ids: [],
+  duplicate_ids: [],
+  duplicate_modal_show: false,
+  duplicate_data_type: '',
+  newData: [],
+  backUpModal: false,
+  prices: {
+    sim_id: {},
+    chat_id: {},
+    pgp_email: {},
+    vpn: {}
+  },
+  isPriceChanged: false,
+  pricesCopy: {
+    sim_id: {},
+    chat_id: {},
+    pgp_email: {},
+    vpn: {}
+  },
+  packages: [],
+  paymentHistory: [],
+  overdueDetails: {},
+  packagesCopy: [],
+  hardwares: []
 };
 
 export default (state = initialState, action) => {
@@ -165,6 +169,18 @@ export default (state = initialState, action) => {
                 isPriceChanged: true
             }
         }
+
+      case LATEST_PAYMENT_HISTORY:
+        return {
+          ...state,
+          paymentHistory: action.payload
+        };
+
+      case GET_OVERDUE_DETAILS:
+        return {
+          ...state,
+          overdueDetails: action.payload
+        };
 
         case IMPORT_CSV:
             return {

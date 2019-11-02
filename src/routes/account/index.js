@@ -320,7 +320,7 @@ class Account extends Component {
         this.setState({
             purchase_modal: visible
         })
-    }
+    };
 
     showPricingModal = (visible) => {
         this.setState({
@@ -1283,6 +1283,6 @@ var mapStateToProps = ({ account, devices, settings, auth }) => {
         translation: settings.translation,
         user: auth.authUser
     };
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Account);
