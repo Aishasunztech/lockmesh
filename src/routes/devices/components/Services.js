@@ -188,6 +188,7 @@ class ServicesList extends Component {
         if (type === 'package') {
             let packageIds = []
             let packagesDataList = []
+            console.log(this.props.current_services);
             if (this.props.current_services) {
                 let current_services_packages = JSON.parse(this.props.current_services.packages)
                 current_services_packages.map(item => {
@@ -398,42 +399,43 @@ class ServicesList extends Component {
             onChange: (selectedRowKeys, selectedRows) => {
                 this.handlePackageSelect(selectedRowKeys, selectedRows)
             },
-            getCheckboxProps: record => {
-                let disabled = false
-                // console.log(this.state.proSelectedRows, this.state.PkgSelectedRows);
-                if (this.state.proSelectedRows.length) {
-                    this.state.proSelectedRows.map((item) => {
-                        // console.log(record.pkg_features[item.item]);
-                        if (record.pkg_features[item.item] === true) {
-                            disabled = true
-                        }
-                    })
-                }
-                if (this.state.PkgSelectedRows.length) {
-                    this.state.PkgSelectedRows.map((item) => {
-                        // console.log(item, record);
-                        if (item.id !== record.id) {
-                            if (item.pkg_features.sim_id === true && record.pkg_features.sim_id === true) {
-                                disabled = true
-                            }
-                            if (item.pkg_features.chat_id === true && record.pkg_features.chat_id === true) {
-                                disabled = true
-                            }
-                            if (item.pkg_features.pgp_email === true && record.pkg_features.pgp_email === true) {
-                                disabled = true
-                            }
-                            if (item.pkg_features.vpn === true && record.pkg_features.vpn === true) {
-                                disabled = true
-                            }
-                        }
+            // getCheckboxProps: record => {
+            //     let disabled = false
+            //     // console.log(this.state.proSelectedRows, this.state.PkgSelectedRows);
+            //     if (this.state.proSelectedRows.length) {
+            //         this.state.proSelectedRows.map((item) => {
+            //             // console.log(record.pkg_features[item.item]);
+            //             if (record.pkg_features[item.item] === true) {
+            //                 disabled = true
+            //             }
+            //         })
+            //     }
+            //     if (this.state.PkgSelectedRows.length) {
+            //         this.state.PkgSelectedRows.map((item) => {
+            //             // console.log(item, record);
+            //             if (item.id !== record.id) {
+            //                 if (item.pkg_features.sim_id === true && record.pkg_features.sim_id === true) {
+            //                     disabled = true
+            //                 }
+            //                 if (item.pkg_features.chat_id === true && record.pkg_features.chat_id === true) {
+            //                     disabled = true
+            //                 }
+            //                 if (item.pkg_features.pgp_email === true && record.pkg_features.pgp_email === true) {
+            //                     disabled = true
+            //                 }
+            //                 if (item.pkg_features.vpn === true && record.pkg_features.vpn === true) {
+            //                     disabled = true
+            //                 }
+            //             }
 
-                    })
-                }
-                return ({
-                    disabled: disabled, // Column configuration not to be checked
-                    name: record.name,
-                })
-            },
+            //         })
+            //     }
+            //     return ({
+            //         disabled: disabled, // Column configuration not to be checked
+            //         name: record.name,
+            //     })
+            // },
+            type: 'radio'
             //  columnTitle: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
         };
 
@@ -477,6 +479,7 @@ class ServicesList extends Component {
                     name: record.name,
                 })
             },
+            type: 'radio'
             //  columnTitle: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
         };
 

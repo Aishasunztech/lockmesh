@@ -65,7 +65,9 @@ import {
     RESET_DEVICE,
     SIM_LOADING,
     SERVICES_DETAIL,
-    SERVICES_HISTORY
+    SERVICES_HISTORY,
+    CANCEL_EXTENDED_SERVICE,
+    USER_CREDITS
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -1344,6 +1346,37 @@ export const getUnRegisterSims = (data) => {
         })
     }
 }
+
+export const cancelExtendedServices = (service_date) => {
+    console.log('data is: ', service_date)
+    return (dispatch) => {
+        RestService.cancelExtendedServices(service_date).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                console.log("getUnRegisterSims", response.data);
+                dispatch({
+                    type: CANCEL_EXTENDED_SERVICE,
+                    payload: response.data
+                })
+                if (response.data.status && response.data.credits) {
+                    dispatch({
+                        type: USER_CREDITS,
+                        response: response.data
+                    });
+                }
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+
+
+        })
+    }
+}
+
+
+
+
 
 export const resetDevice = () => {
     return (dispatch) => {

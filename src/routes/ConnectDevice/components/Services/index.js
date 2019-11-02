@@ -13,7 +13,8 @@ import ServicesHistory from './servicesHistory';
 import {
     transferUser,
     transferHistory,
-    getServicesHistory
+    getServicesHistory,
+    cancelExtendedServices
 } from "../../../../appRedux/actions/ConnectDevice";
 import AddUser from '../../../users/components/AddUser';
 
@@ -190,6 +191,15 @@ class TransferHistory extends Component {
 
 
     }
+    cancelExtendedServices = () => {
+        if (this.props.extended_services) {
+            let service_data = {
+                service_id: this.props.extended_services.id,
+                user_acc_id: this.props.extended_services.user_acc_id
+            }
+            this.props.cancelExtendedServices(service_data)
+        }
+    }
 
     render() {
         const { visible } = this.state;
@@ -223,26 +233,28 @@ class TransferHistory extends Component {
                         dataSource={this.renderList(currentServices)}
                         pagination={false}
                     />
+                    <br /> <br /> <br /> <br />
+                    {(this.props.extended_services) ?
+                        <Fragment>
+                            <Row>
+                                <Col xs={24} sm={24} md={15} lg={15} xl={15}>
+                                    <h2 style={{ textAlign: 'right' }}>EXTENDED SERVICES</h2>
+                                </Col>
+                                <Col xs={24} sm={24} md={9} lg={9} xl={9}>
+                                    <Button disabled={(this.props.extended_services) ? false : true} style={{ float: 'right' }} type="danger" onClick={() => { this.cancelExtendedServices() }}>Cancel Extended Services</Button>
+                                </Col>
+                            </Row>
+                            <br />
 
-                    <br /><br /><br /><br />
-                    <Row>
-                        <Col xs={24} sm={24} md={15} lg={15} xl={15}>
-                            <h2 style={{ textAlign: 'right' }}>EXTENDED SERVICES</h2>
-                        </Col>
-                        <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-                            <Button style={{ float: 'right' }} type="danger">Cancel Extended Services</Button>
-                        </Col>
-                    </Row>
-                    <br />
-
-                    <Table
-                        columns={this.state.columns}
-                        bordered
-                        dataSource={this.renderList(extendedServices)}
-                        pagination={false}
-                    />
-                    <br /><br /><br />
-
+                            <Table
+                                columns={this.state.columns}
+                                bordered
+                                dataSource={this.renderList(extendedServices)}
+                                pagination={false}
+                            />
+                            <br /> <br /> <br />
+                        </Fragment>
+                        : null}
                 </Modal>
 
                 <ServicesHistory
@@ -271,4 +283,4 @@ var mapStateToProps = ({ users, settings, device_details }) => {
     };
 }
 
-export default connect(mapStateToProps, { getDeaerUsers, getUserList, addUser, transferUser, transferHistory, getNewDevicesList, getServicesHistory }, null, { withRef: true })(WrappedUserList);
+export default connect(mapStateToProps, { getDeaerUsers, getUserList, addUser, transferUser, transferHistory, getNewDevicesList, getServicesHistory, cancelExtendedServices }, null, { withRef: true })(WrappedUserList);
