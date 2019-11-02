@@ -76,7 +76,8 @@ import {
     SIM_LOADING,
     TRANSFER_DEVICE,
     SERVICES_DETAIL,
-    SERVICES_HISTORY
+    SERVICES_HISTORY,
+    CANCEL_EXTENDED_SERVICE
 } from "../../constants/ActionTypes";
 
 import {
@@ -1846,6 +1847,23 @@ export default (state = initialState, action) => {
                 redoControls: JSON.parse('[]'),
             }
         }
+
+        case CANCEL_EXTENDED_SERVICE:
+            {
+                if (action.payload.status) {
+                    success({
+                        title: action.payload.msg
+                    })
+                    return {
+                        ...state,
+                        device: action.payload.data
+                    }
+                } else {
+                    error({
+                        title: action.payload.msg
+                    })
+                }
+            }
         default:
             return state;
 
