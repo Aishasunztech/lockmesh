@@ -789,7 +789,7 @@ function mapDispatchToProps(dispatch) {
 
 var mapStateToProps = ({ account, auth, settings, dealers }, otherprops) => {
     // console.log(account.packages, ' authUser props are')
-    // console.log("account.packages ", account.packages)
+    console.log("account.packages ", account.packages)
     return {
         totalDealers: dealers.dealers.length,
         auth: auth.authUser,

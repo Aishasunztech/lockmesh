@@ -31,7 +31,7 @@ export default class PricingModal extends Component {
             [pgp]: {},
             [vpn]: {},
             pkg_features: JSON.parse(JSON.stringify(pkg_features)),
-            outerTab: '1',
+            outerTab: props.auth.type !== "admin" ? "2" : "1",
             pkgName: '',
             pkgTerms: '1 month',
             pkgPrice: 0,
@@ -111,10 +111,11 @@ export default class PricingModal extends Component {
                 let data = {
                     pkgName: pkgName,
                     pkgTerm: pkgTerm,
-                    pkgPrice: pkgPrice,
+                    pkgPrice: pkgTerm === "trial" ? 0 : pkgPrice,
                     pkgFeatures: pkgFeatures,
                     dealer_id: dealer_id
                 }
+                console.log("data is ", data);
                 showConfirm(this, data)
             }
         }
@@ -181,6 +182,7 @@ export default class PricingModal extends Component {
     }
 
     render() {
+        // console.log("auth ", this.props.auth)
         // console.log(this.props.isPriceChanged, 'ischanged price')
         // console.log(sim, this.state[sim], 'sim object ',this.state[chat], 'chat object ',this.state[pgp], 'pgp object',this.state[vpn], 'sim object',)
         return (
@@ -192,6 +194,7 @@ export default class PricingModal extends Component {
                 onOk={() => { this.handleSubmit() }}
                 okText={convertToLang(this.props.translation[Button_Save], "Save")}
                 okButtonProps={{ disabled: this.state.outerTab == '1' ? (!this.props.isPriceChanged || !this.state.submitAvailable) ? true : false : this.state.packageFormErrors && this.state.packageFormErrors.length ? true : false }}
+                // okButtonProps={{ disabled: this.state.outerTab == '1' ? (!this.props.isPriceChanged || !this.state.submitAvailable) ? true : false : this.state.packageFormErrors && this.state.packageFormErrors.length ? true : false }}
                 onCancel={() => {
                     this.props.showPricingModal(false);
                     this.props.resetPrice();

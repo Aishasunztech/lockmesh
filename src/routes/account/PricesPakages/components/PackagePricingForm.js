@@ -114,12 +114,12 @@ class PackagePricingForm extends Component {
         if (response) {
             this.props.restrictPackageSubmit(true, 'pkgName')
             callback()
-            
+
         } else {
-             this.props.restrictPackageSubmit(false, 'pkgName')
+            this.props.restrictPackageSubmit(false, 'pkgName')
             callback("Package name already taken please use another name.")
         }
-        if(value == ''){
+        if (value == '') {
             this.props.restrictPackageSubmit(false, 'pkgName')
         }
     }
@@ -168,7 +168,7 @@ class PackagePricingForm extends Component {
                         <Form.Item label={convertToLang(this.props.translation[PACKAGE_TERM], "PACKAGE TERM")} labelCol={{ span: 11 }}
                             wrapperCol={{ span: 13 }}>
                             {getFieldDecorator('pkgTerms', {
-                                   initialValue: '1 month',
+                                initialValue: '1 month',
                                 rules: [
                                     {
                                         required: true,
@@ -188,6 +188,7 @@ class PackagePricingForm extends Component {
                                     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
                             >
+                                <Option value={'trial'}>{convertToLang(this.props.translation["trial"], "trial")}</Option>
                                 <Option value={'1 month'}>{convertToLang(this.props.translation[one_month], "1 month")}</Option>
                                 <Option value={'3 month'}>{convertToLang(this.props.translation[three_month], "3 month")}</Option>
                                 <Option value={'6 month'}>{convertToLang(this.props.translation[six_month], "6 month")}</Option>
@@ -214,7 +215,7 @@ class PackagePricingForm extends Component {
                                         message: 'Please Input Package Price',
                                     },
                                 ],
-                            })(<Input onChange={(e => this.setPrice('pkgPrice', '', '', e.target.value))} type='number' min={0} />)}
+                            })(<Input disabled={this.state.pkgTerms === "trial" ? true : false} onChange={(e => this.setPrice('pkgPrice', '', '', e.target.value))} type='number' min={0} />)}
 
                         </Form.Item>
                     </Col>

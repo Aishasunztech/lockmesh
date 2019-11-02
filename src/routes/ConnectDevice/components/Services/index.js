@@ -20,7 +20,7 @@ import AddUser from '../../../users/components/AddUser';
 
 var copyTransfer = [];
 var status = true;
-class TransferHistory extends Component {
+class Services extends Component {
 
     constructor(props) {
         super(props);
@@ -256,19 +256,19 @@ class TransferHistory extends Component {
     }
 }
 
-const WrappedUserList = Form.create({ name: 'transfer-user' })(TransferHistory);
+const WrappedUserList = Form.create({ name: 'transfer-user' })(Services);
 
 var mapStateToProps = ({ users, settings, device_details }) => {
-    console.log('servicesHistoryList component ', device_details.servicesHistoryList)
+    // console.log('servicesHistoryList component ', device_details.servicesHistoryList)
 
     return {
         servicesHistoryList: device_details.servicesHistoryList,
-        transferHistoryList: device_details.transferHistoryList,
-        getHistory: device_details.getHistory,
-        users_list: users.dealer_users,
-        isloading: users.addUserFlag,
+        // transferHistoryList: device_details.transferHistoryList,
+        // getHistory: device_details.getHistory,
+        // users_list: users.dealer_users,
+        // isloading: users.addUserFlag,
         translation: settings.translation
     };
 }
 
-export default connect(mapStateToProps, { getDeaerUsers, getUserList, addUser, transferUser, transferHistory, getNewDevicesList, getServicesHistory }, null, { withRef: true })(WrappedUserList);
+export default connect(mapStateToProps, { getServicesHistory }, null, { withRef: true })(WrappedUserList);

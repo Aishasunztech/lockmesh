@@ -198,6 +198,7 @@ class AddDevice extends Component {
         });
 
         let packagesList = packages.map((item, index) => {
+            // console.log("packages list: ", item);
             // let services = JSON.parse(item.pkg_features)
             counter++
             return {
@@ -206,7 +207,7 @@ class AddDevice extends Component {
                 rowKey: item.rowKey,
                 item: `Package`,
                 description: item.pkg_name,
-                term: term + " Month",
+                term: (term === '0' || term === "trial") ? "TRIAL": term + " Month",
                 unit_price: item.pkg_price,
                 quantity: (duplicate > 0) ? 1 * duplicate : 1,
                 line_total: (duplicate > 0) ? item.pkg_price * duplicate : item.pkg_price
