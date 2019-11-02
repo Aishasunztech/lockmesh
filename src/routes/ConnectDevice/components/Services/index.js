@@ -189,7 +189,6 @@ class TransferHistory extends Component {
         console.log('hi');
         this.props.getServicesHistory(this.props.user_acc_id);
 
-
     }
     cancelExtendedServices = () => {
         if (this.props.extended_services) {

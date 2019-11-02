@@ -25,11 +25,11 @@ class PaymentHistory extends Component {
       },
 
       {
-        title: convertToLang(props.translation[''], "DEALER ID"),
+        title: convertToLang(props.translation[''], "DEALER PIN"),
         align: "center",
         className: '',
-        dataIndex: 'user_id',
-        key: 'user_id',
+        dataIndex: 'dealer_pin',
+        key: 'dealer_pin',
       },
 
       {
@@ -87,12 +87,14 @@ class PaymentHistory extends Component {
 
     this.state = {
       reportCard: false,
+      reportFormData: {}
     };
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
+      this.state.reportFormData = values;
       this.props.generatePaymentHistoryReport(values)
     });
   };
@@ -109,7 +111,7 @@ class PaymentHistory extends Component {
 
       columns = [
         { title: '#', dataKey: "count" },
-        { title: convertToLang(this.props.translation[''], "DEALER ID"), dataKey: "user_id" },
+        { title: convertToLang(this.props.translation[''], "DEALER PIN"), dataKey: "dealer_pin" },
         { title: convertToLang(this.props.translation[''], "DEVICE ID"), dataKey: "device_id" },
         { title: convertToLang(this.props.translation[''], "PRODUCT TYPE"), dataKey: "type" },
         { title: convertToLang(this.props.translation[''], "TRANSACTION TYPE"), dataKey: "transection_type" },
@@ -121,7 +123,7 @@ class PaymentHistory extends Component {
       rows = this.props.paymentHistoryReport.map((item, index) => {
         return {
           count: ++index,
-          user_id: item.user_id,
+          dealer_pin: item.dealer_pin,
           credits: item.credits,
           device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
           status: item.status,
@@ -148,7 +150,7 @@ class PaymentHistory extends Component {
           rowKey: index,
           key: item.id,
           sr: ++index,
-          user_id: item.user_id,
+          dealer_pin: item.dealer_pin,
           credits: item.credits,
           device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
           status: item.status,
@@ -174,29 +176,42 @@ class PaymentHistory extends Component {
               >
               </Form.Item>
 
-              <Form.Item
-                label="Dealer/Sdealer"
-                labelCol={{ span: 8 }}
-                wrapperCol={{ span: 14 }}
-                width='100%'
-              >
-                {this.props.form.getFieldDecorator('dealer', {
-                  initialValue: '',
-                  rules: [
-                    {
-                      required: false,
-                    },
-                  ],
-                })(
-                  <Select style={{ width: '100%' }}>
-                    <Select.Option value=''>ALL</Select.Option>
-                    <Select.Option value={this.props.user.dealerId}>My Report</Select.Option>
-                    {this.props.dealerList.map((dealer, index) => {
-                      return (<Select.Option key={dealer.link_code} value={dealer.link_code}>{dealer.dealer_name} ({dealer.link_code})</Select.Option>)
-                    })}
-                  </Select>
-                )}
-              </Form.Item>
+              {(this.props.user.type === 'sdealer') ?
+
+                <Form.Item style={{ marginBottom: 0 }}
+                >
+                  {this.props.form.getFieldDecorator('dealer', {
+                    initialValue: this.props.user.dealerId,
+                  })(
+
+                    <Input type='hidden' disabled />
+                  )}
+                </Form.Item>
+
+                : <Form.Item
+                  label="Dealer/Sdealer"
+                  labelCol={{ span: 8 }}
+                  wrapperCol={{ span: 14 }}
+                  width='100%'
+                >
+                  {this.props.form.getFieldDecorator('dealer', {
+                    initialValue: '',
+                    rules: [
+                      {
+                        required: false,
+                      },
+                    ],
+                  })(
+                    <Select style={{ width: '100%' }}>
+                      <Select.Option value=''>ALL</Select.Option>
+                      <Select.Option value={this.props.user.dealerId}>My Report</Select.Option>
+                      {this.props.dealerList.map((dealer, index) => {
+                        return (<Select.Option key={dealer.dealer_id} value={dealer.dealer_id}>{dealer.dealer_name} ({dealer.link_code})</Select.Option>)
+                      })}
+                    </Select>
+                  )}
+                </Form.Item>
+              }
 
               <Form.Item
                 label="Product Type"
@@ -303,7 +318,7 @@ class PaymentHistory extends Component {
                   </Col>
                   <Col xs={12} sm={12} md={12} lg={12} xl={12}>
                     <div className="pull-right">
-                      <Button type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Payment History Report', fileName)}}>Download PDF</Button>
+                      <Button type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Payment History Report', fileName, this.state.reportFormData)}}>Download PDF</Button>
                       <Button type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName)}}>Download Excel</Button>
                     </div>
                   </Col>

@@ -1,14 +1,23 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Card, Button, Row, Col, Select, Input, Checkbox, Icon, Tabs, Table, InputNumber, Form } from "antd";
+import { Input, Checkbox, Icon, Tabs, Table } from "antd";
 import Invoice from "./components/Invoice";
 import ProductInventory  from './components/ProductInventory';
 import HardwareInventory  from './components/HardwareInventory';
 import PaymentHistory from './components/PaymentHistory';
+import Sales from './components/Sales';
 import AppFilter from '../../../components/AppFilter';
 import { convertToLang } from "../../utils/commonUtils";
-import { getAllDealers, generateProductReport, generateInvoiceReport, generatePaymentHistoryReport, generateHardwareReport } from '../../../appRedux/actions/';
+import {
+  getAllDealers,
+  generateSalesReport,
+  generateProductReport,
+  generateInvoiceReport,
+  generatePaymentHistoryReport,
+  generateHardwareReport,
+  getHardwares
+} from '../../../appRedux/actions/';
 import styles from './reporting.css'
 
 
@@ -35,6 +44,7 @@ class Reporting extends Component {
 
   componentDidMount() {
     this.props.getDealerList()
+    this.props.getHardwaresList()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -56,7 +66,7 @@ class Reporting extends Component {
             pageHeading={convertToLang(this.props.translation[''], "REPORTS")}
           />
           {
-          
+
               <div>
                 <Tabs defaultActiveKey="1" type='card' className="dev_tabs" activeKey={this.state.tabselect} onChange={this.handleChangeTab}>
                   <TabPane tab="PRODUCT INVENTORY" key="1">
@@ -73,6 +83,7 @@ class Reporting extends Component {
                   <TabPane tab="HARDWARE INVENTORY" key="2">
                     <HardwareInventory
                       dealerList={this.props.dealerList}
+                      hardwares={this.props.hardwares}
                       translation={this.props.translation}
                       generateHardwareReport={this.props.generateHardwareReport}
                       hardwareReport={this.props.hardwareReport}
@@ -99,34 +110,36 @@ class Reporting extends Component {
                       user={this.props.user}
                     />
                   </TabPane>
+
+                  <TabPane tab="SALES" key="5">
+                    <Sales
+                      dealerList={this.props.dealerList}
+                      translation={this.props.translation}
+                      generateSalesReport={this.props.generateSalesReport}
+                      salesReport={this.props.salesReport}
+                      user={this.props.user}
+                    />
+                  </TabPane>
                 </Tabs>
               </div>
           }
         </div>
       );
   }
-
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-
-      }
-    });
-  }
 }
 
 
 
-var mapStateToProps = ({ dealers, settings, reporting  , auth}) => {
+var mapStateToProps = ({ dealers, settings, reporting  , auth, account}) => {
 
-  console.log(reporting)
   return {
     user: auth.authUser,
     dealerList: dealers.dealers,
+    hardwares: account.hardwares,
     productReport: reporting.productData,
     hardwareReport: reporting.hardwareData,
     invoiceReport: reporting.invoiceData,
+    salesReport: reporting.salesData,
     paymentHistoryReport: reporting.paymentHistoryData,
     productType: reporting.productType,
     translation: settings.translation,
@@ -140,6 +153,8 @@ function mapDispatchToProps(dispatch) {
     generateInvoiceReport: generateInvoiceReport,
     generatePaymentHistoryReport: generatePaymentHistoryReport,
     generateHardwareReport: generateHardwareReport,
+    generateSalesReport: generateSalesReport,
+    getHardwaresList: getHardwares,
   }, dispatch);
 };
 

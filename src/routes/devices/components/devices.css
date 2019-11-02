@@ -2,7 +2,6 @@
     white-space: nowrap !important;
 }
 
-
 .ant-btn-sm {
     line-height: 20px !important;
     font-size: 10px;
@@ -42,7 +41,6 @@
 
 .edit_form .ant-modal-body {
     padding: 16px 16px 16px;
-
 }
 
 .prd_table {
@@ -333,9 +331,112 @@
     border-top: 0 !important;
 }
 
-#packages .ant-table-thead>tr:first-child>th:first-child .ant-checkbox,
-#products .ant-table-thead>tr:first-child>th:first-child .ant-checkbox {
+#packages .ant-table-thead>tr:first-child>th:first-child .ant-checkbox, #products .ant-table-thead>tr:first-child>th:first-child .ant-checkbox {
     display: none;
+}
+
+.credit_popup .ant-modal-body {
+    padding: 8%;
+}
+
+.ac_status_table .ant-table-title {
+    padding: 0;
+}
+
+.buy_btn_invo {
+    background-color: #548235 !important;
+    width: 70%;
+    height: 20px;
+    margin: 5px 10px;
+    color: #fff !important;
+    letter-spacing: 2px;
+    font-size: 14px !important;
+    font-weight: 300;
+    border: 1px solid #dc8e47 !important;
+}
+
+.full_list_btn {
+    background-color: #f27727 !important;
+    width: 90px;
+    height: 20px;
+    color: #fff !important;
+    letter-spacing: 2px;
+    font-size: 14px !important;
+    font-weight: 300;
+    border: 1px solid #dc8e47 !important;
+    float: right;
+    margin-right: 50px;
+}
+
+.overdue_table, .pay_history {
+    margin-top: 50px;
+}
+
+.overdue_table .ant-table-small>.ant-table-content .ant-table-row:last-child td {
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.overdue_table .ant-table-content {
+    width: 85%;
+    float: right;
+}
+
+/* .overdue_table tbody.ant-table-tbody {
+    border-left: 1px solid #e8e8e8;
+} */
+
+.overdue_table .ant-table.ant-table-bordered .ant-table-title {
+    border: 1px solid #e8e8e8;
+    padding-left: 0;
+    padding-right: 0;
+    padding: 0;
+}
+
+.overdue_table .ant-table-tbody>tr:hover:not(.ant-table-expanded-row)>td, .ac_status_table .ant-table-tbody>tr:hover:not(.ant-table-expanded-row)>td {
+    background: none;
+}
+
+.overdue_table .ant-table-thead>tr>th, .overdue_table .ant-table-tbody>tr>td, .pay_history .ant-table-thead>tr>th, .pay_history .ant-table-tbody>tr>td {
+    padding: 4px 0 !important;
+}
+
+.pay_history .ant-table.ant-table-bordered .ant-table-title {
+    border: 1px solid #e8e8e8;
+    padding-left: 0;
+    padding-right: 0;
+    padding: 0;
+}
+
+.invo_btn {
+    width: 40%;
+    height: 20px;
+    font-size: 11px !important;
+    font-weight: 100;
+    background-color: #5b9bd5 !important;
+    border: 1px solid #41719c !important;
+    color: #fff !important;
+}
+
+.ac_status_table .ant-table.ant-table-bordered .ant-table-title {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.credit_modal_heading {
+    background: #ddebf7;
+    padding: 2px 2px;
+    margin-bottom: 0;
+}
+
+.buy_credit_main_div {
+    height: 100%;
+    display: flex;
+    justify-content: right;
+}
+
+.buy_credit_div {
+    line-height: 30px;
+    margin-bottom: 0
 }
 
 @media screen and (max-width: 768px) {
@@ -348,7 +449,6 @@
         float: right;
         margin: 8px 0 4px;
     }
-
     .edit_form .ant-form-item-label {
         text-align: left;
     }

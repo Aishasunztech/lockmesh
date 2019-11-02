@@ -823,8 +823,6 @@ export default (state = initialState, action) => {
         //     }
         // }
         case GUEST_PASSWORD: {
-            // console.log(GUEST_PASSWORD);
-            // console.log(action.payload);
             return {
                 ...state,
                 guestPwd: action.payload.pwd,

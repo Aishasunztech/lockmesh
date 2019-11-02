@@ -59,7 +59,7 @@ import {
     DEALER_DEVICES
 } from '../../constants/DealerConstants';
 
-// Mobile view 
+// Mobile view
 import {
     DEVICE_ACTIVATED, GUEST_PASSWORD, ENCRYPTED_PASSWORD, DURESS_PASSWORD, ADMIN_PASSWORD,
     SECURE_SETTING, SYSTEM_CONTROLS, NOT_AVAILABLE, MANAGE_PASSWORD, MAIN_MENU, APPS,
@@ -1693,7 +1693,7 @@ export function sDealerColumns(translation, handleSearch) {
 
 export function dealerColsWithSearch(translation, searchBar = false, callBack = null) {
 
-    var searchInput = [  
+    var searchInput = [
         {
             title: (
                 <Input.Search
@@ -3242,7 +3242,6 @@ export function inventorySales(translation) {
                 dataIndex: 'description',
                 className: '',
                 align: "center",
-                className: '',
                 key: 'description',
                 // ...this.getColumnSearchProps('status'),
                 // sorter: (a, b) => { return a.description.localeCompare(b.description) },
@@ -3254,7 +3253,6 @@ export function inventorySales(translation) {
                 dataIndex: 'term',
                 className: '',
                 align: "center",
-                className: '',
                 key: 'term',
                 // ...this.getColumnSearchProps('status'),
                 // sorter: (a, b) => { return a.term.localeCompare(b.term) },
@@ -3266,7 +3264,6 @@ export function inventorySales(translation) {
                 dataIndex: 'unit_price',
                 className: '',
                 align: "center",
-                className: '',
                 key: 'unit_price',
                 // ...this.getColumnSearchProps('status'),
                 // sorter: (a, b) => { return a.unit_price - b.unit_price },
@@ -3277,7 +3274,6 @@ export function inventorySales(translation) {
                 dataIndex: 'quantity',
                 className: '',
                 align: "center",
-                className: '',
                 key: 'quantity',
                 // ...this.getColumnSearchProps('status'),
                 // sorter: (a, b) => { return a.quantity - b.quantity },
@@ -3286,7 +3282,6 @@ export function inventorySales(translation) {
             {
                 title: convertToLang(translation[DUMY_TRANS_ID], "TOTAL"),
                 dataIndex: 'line_total',
-                className: '',
                 align: "center",
                 className: '',
                 key: 'line_total',
