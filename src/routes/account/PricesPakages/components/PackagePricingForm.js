@@ -89,9 +89,14 @@ class PackagePricingForm extends Component {
                 }
                 // console.log(isnum, 'value', e)
             } else {
-                this.setState({
-                    [fieldName]: value
-                })
+                if (fieldName === "pkgTerms" && value === 'trial') {
+                    this.setState({ pkgPrice: 0, [fieldName]: value })
+                    this.props.form.setFieldsValue({ pkgPrice: 0 })
+                } else {
+                    this.setState({
+                        [fieldName]: value
+                    })
+                }
             }
         }
     }
@@ -205,9 +210,10 @@ class PackagePricingForm extends Component {
                 <Row>
                     <Col span={17}>
                         <Form.Item label={convertToLang(this.props.translation[PACKAGE_PRICE], "PACKAGE PRICE")} labelCol={{ span: 11 }}
-                            validateStatus={this.state.validateStatus}
-                            help={this.state.help}
-                            wrapperCol={{ span: 13 }}>
+                            validateStatus={this.state.pkgTerms === "trial" ? "success" : this.state.validateStatus}
+                            help={this.state.pkgTerms === "trial" ? '' : this.state.help}
+                            wrapperCol={{ span: 13 }}
+                        >
                             {getFieldDecorator('pkgPrice', {
                                 rules: [
                                     {

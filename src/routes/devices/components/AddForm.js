@@ -513,8 +513,8 @@ class AddDevice extends Component {
         switch (value) {
             case '0':
                 this.setState({
-                    parent_packages: [],
-                    product_prices: [],
+                    parent_packages: this.filterList('trial', this.props.parent_packages, 'pkg'),
+                    product_prices: this.filterList('trial', this.props.product_prices, 'product'),
                     tabselect: '0',
                 })
                 break;
@@ -1311,6 +1311,7 @@ function mapDispatchToProps(dispatch) {
 }
 var mapStateToProps = ({ routing, devices, device_details, users, settings, sidebar, auth }) => {
     // console.log("users.invoiceID at componente", users.invoiceID);
+    console.log("devices.parent_packages ", devices.parent_packages);
     return {
         invoiceID: users.invoiceID,
         routing: routing,
