@@ -18,10 +18,11 @@ class PaymentHistory extends Component {
     this.columns = [
       {
         title: "Sr.#",
-        dataIndex: 'sr',
-        key: 'sr',
+        dataIndex: 'count',
+        key: 'count',
         align: "center",
-        render: (text, record, index) => ++index,
+        sorter: (a, b) => { return a.count - b.count },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {
@@ -30,6 +31,8 @@ class PaymentHistory extends Component {
         className: '',
         dataIndex: 'dealer_pin',
         key: 'dealer_pin',
+        sorter: (a, b) => { return a.dealer_pin - b.dealer_pin },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {
@@ -38,6 +41,8 @@ class PaymentHistory extends Component {
         className: '',
         dataIndex: 'device_id',
         key: 'device_id',
+        sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {
@@ -46,6 +51,8 @@ class PaymentHistory extends Component {
         className: '',
         dataIndex: 'type',
         key: 'type',
+        sorter: (a, b) => { return a.type.localeCompare(b.type) },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {
@@ -54,6 +61,8 @@ class PaymentHistory extends Component {
         className: '',
         dataIndex: 'transection_type',
         key: 'transection_type',
+        sorter: (a, b) => { return a.transection_type.localeCompare(b.transection_type) },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {
@@ -63,7 +72,9 @@ class PaymentHistory extends Component {
         align: 'center',
         dataIndex: 'credits',
         key: 'credits',
-        className: 'row '
+        className: 'row ',
+        sorter: (a, b) => { return a.credits - b.credits },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {
@@ -73,7 +84,9 @@ class PaymentHistory extends Component {
         align: 'center',
         dataIndex: 'status',
         key: 'status',
-        className: 'row '
+        className: 'row ',
+        sorter: (a, b) => { return a.status.localeCompare(b.status) },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {
@@ -82,6 +95,8 @@ class PaymentHistory extends Component {
         className: '',
         dataIndex: 'created_at',
         key: 'created_at',
+        sorter: (a, b) => { return a.created_at.localeCompare(b.created_at) },
+        sortDirections: ['ascend', 'descend'],
       },
     ];
 
@@ -149,7 +164,7 @@ class PaymentHistory extends Component {
         return {
           rowKey: index,
           key: item.id,
-          sr: ++index,
+          count: ++index,
           dealer_pin: item.dealer_pin,
           credits: item.credits,
           device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
