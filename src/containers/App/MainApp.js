@@ -38,6 +38,7 @@ import {
   TAB_SIZE
 } from "../../constants/ThemeSetting";
 import NoHeaderNotification from "../Topbar/NoHeaderNotification/index";
+import { HOST_NAME } from "../../constants/Application";
 
 const { Content, Footer } = Layout;
 
@@ -178,7 +179,8 @@ export class MainApp extends Component {
             {this.getNavStyles(navStyle)}
             <Content className={`gx-layout-content ${this.getContainerClass(navStyle)} `}>
               <App match={match} />
-              <RightSidebar />
+              {(HOST_NAME === 'localhost')? <RightSidebar /> : null }
+              
               <Footer>
                 <div className="gx-layout-footer-content">
                   {footerText}
