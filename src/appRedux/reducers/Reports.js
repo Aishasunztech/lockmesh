@@ -3,6 +3,7 @@ import {
   HARDWARE_REPORT,
   INVOICE_REPORT,
   PAYMENT_HISTORY_REPORT,
+  SALES_REPORT,
   LOADING,
 } from "../../constants/ActionTypes";
 
@@ -14,6 +15,7 @@ const initialState = {
   hardwareData: {},
   invoiceData: {},
   paymentHistoryData: {},
+  salesData: {},
   productType:""
 };
 
@@ -53,6 +55,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         hardwareData: action.payload.data
+      };
+
+      case SALES_REPORT:
+      return {
+        ...state,
+        salesData: action.payload.data
       };
 
     default:

@@ -54,6 +54,7 @@ export const loginUser = (user) => {
 						type: resp.data.user.user_type,
 						dealer_pin: resp.data.user.link_code,
 						dealer_token: '',
+            account_balance_status: resp.data.user.account_balance_status,
 						two_factor_auth: resp.data.user.two_factor_auth
 					}
 					RestService.authLogIn(resp.data)
@@ -70,7 +71,7 @@ export const loginUser = (user) => {
 export const verifyCode = (verifyForm) => {
 	return (dispatch) => {
 		RestService.verifyCode(verifyForm).then((response) => {
-			if (response.data.status) {
+			if (response.data.status) {console.log('aaaaaaaaaaaaaaaaaaa',response.data.user)
 				let payload = {
 					id: response.data.user.id,
 					connected_dealer: response.data.user.connected_dealer,
@@ -84,7 +85,8 @@ export const verifyCode = (verifyForm) => {
 					type: response.data.user.user_type,
 					dealer_pin: response.data.user.link_code,
 					dealer_token: '',
-					two_factor_auth: response.data.user.two_factor_auth
+					two_factor_auth: response.data.user.two_factor_auth,
+          account_balance_status: response.data.user.account_balance_status,
 				}
 				RestService.authLogIn(response.data)
 				dispatch({
@@ -135,7 +137,6 @@ export const checkComponent = (componentUri) => {
 		RestService.checkComponent(componentUri).then((resp) => {
 			if (RestService.checkAuth(resp.data)) {
 				if (resp.data.status === true) {
-
 					let payload = {
 						id: resp.data.user.id,
 						connected_dealer: resp.data.user.connected_dealer,
@@ -149,7 +150,8 @@ export const checkComponent = (componentUri) => {
 						type: resp.data.user.user_type,
 						dealer_pin: resp.data.user.link_code,
 						two_factor_auth: resp.data.user.two_factor_auth,
-						verified: resp.data.user.verified
+						verified: resp.data.user.verified,
+            account_balance_status: resp.data.user.account_balance_status,
 					}
 					RestService.setUserData(resp.data);
 

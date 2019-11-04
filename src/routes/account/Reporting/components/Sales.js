@@ -2,17 +2,18 @@ import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal, Tabs, Col, Input, Form, Row, DatePicker, Select } from "antd";
 import moment from 'moment';
 import styles from '../reporting.css'
-import { convertToLang, generatePDF, generateExcel, getDateFromTimestamp} from "../../../utils/commonUtils";
+import { convertToLang, generatePDF, generateExcel} from "../../../utils/commonUtils";
 import {
-  DEVICE_PRE_ACTIVATION, sim
+  DEVICE_PRE_ACTIVATION
 } from "../../../../constants/Constants";
 
 import { BASE_URL
 } from "../../../../constants/Application";
 var columns;
 var rows;
-var fileName = 'invoice_' + new Date().getTime()
-class Invoice extends Component {
+var fileName = 'sales_' + new Date().getTime()
+
+class Sales extends Component {
   constructor(props) {
     super(props);
     this.columns = [
@@ -27,16 +28,6 @@ class Invoice extends Component {
       },
 
       {
-        title: convertToLang(props.translation[''], "INVOICE ID"),
-        align: "center",
-        className: '',
-        dataIndex: 'invoice_id',
-        key: 'invoice_id',
-        sorter: (a, b) => { return a.invoice_id.localeCompare(b.invoice_id) },
-        sortDirections: ['ascend', 'descend'],
-      },
-
-      {
         title: convertToLang(props.translation[''], "DEVICE ID"),
         align: "center",
         className: '',
@@ -47,41 +38,74 @@ class Invoice extends Component {
       },
 
       {
-        title: convertToLang(props.translation[''], "DEALER PIN"),
+        title: convertToLang(props.translation[''], "DEALER ID"),
         align: "center",
         className: '',
         dataIndex: 'dealer_pin',
         key: 'dealer_pin',
-        sorter: (a, b) => { return a.dealer_pin - b.dealer_pin },
+        sorter: (a, b) => {  return a.dealer_pin- b.dealer_pin },
         sortDirections: ['ascend', 'descend'],
       },
 
       {
-        title: convertToLang(props.translation[''], "USER PAYMENT STATUS"),
+        title: convertToLang(props.translation[''], "TYPE"),
         align: "center",
         className: '',
-        dataIndex: 'end_user_payment_status',
-        key: 'end_user_payment_status',
-        sorter: (a, b) => { return a.end_user_payment_status.localeCompare(b.end_user_payment_status) },
+        dataIndex: 'type',
+        key: 'type',
+        sorter: (a, b) => { return a.type.localeCompare(b.type) },
         sortDirections: ['ascend', 'descend'],
       },
 
       {
-        title: convertToLang(props.translation[''], "GENERATED AT"),
+        title: convertToLang(props.translation[''], "NAME"),
+        align: "center",
+        className: '',
+        dataIndex: 'name',
+        key: 'name',
+        sorter: (a, b) => { return a.name.localeCompare(b.name) },
+        sortDirections: ['ascend', 'descend'],
+      },
+
+      {
+        title: convertToLang(props.translation[''], "COST PRICE (CREDITS)"),
+        align: "center",
+        className: '',
+        dataIndex: 'cost_price',
+        key: 'cost_price',
+        sorter: (a, b) => { return a.cost_price - b.cost_price },
+        sortDirections: ['ascend', 'descend'],
+      },
+
+      {
+        title: convertToLang(props.translation[''], "SALE PRICE (CREDITS)"),
+        align: "center",
+        className: '',
+        dataIndex: 'sale_price',
+        key: 'sale_price',
+        sorter: (a, b) => { return a.sale_price - b.sale_price },
+        sortDirections: ['ascend', 'descend'],
+      },
+
+      {
+        title: convertToLang(props.translation[''], "PROFIT/LOSS (CREDITS)"),
+        align: "center",
+        className: '',
+        dataIndex: 'profit_loss',
+        key: 'profit_loss',
+        sorter: (a, b) => { return a.profit_loss-b.profit_loss },
+        sortDirections: ['ascend', 'descend'],
+      },
+
+      {
+        title: convertToLang(props.translation[''], "CREATED AT"),
         align: "center",
         className: '',
         dataIndex: 'created_at',
         key: 'created_at',
         sorter: (a, b) => { return a.created_at.localeCompare(b.created_at) },
         sortDirections: ['ascend', 'descend'],
-      },
-
-      {
-        title: convertToLang(props.translation[''], "ACTION"),
-        align: "center",
-        className: '',
-        dataIndex: 'file_name',
-        key: 'file_name',
+        defaultSortOrder: 'descend'
       },
     ];
 
@@ -95,35 +119,27 @@ class Invoice extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       this.state.reportFormData = values;
-      this.props.generateInvoiceReport(values)
+      this.props.generateSalesReport(values)
     });
   };
 
-  componentDidMount() {
-
-  };
-
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.invoiceReport !== prevProps.invoiceReport){
+    if (this.props.salesReport !== prevProps.salesReport){
       this.setState({
-        reportCard:  true,
-        productType: this.props.productType
+        reportCard:  true
       })
 
-      rows = this.props.invoiceReport.map((item, index) => {
+      rows = this.props.salesReport.map((item, index) => {
         return {
           count: ++index,
-          invoice_id: item.inv_no ? item.inv_no : 'N/A',
           device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
           dealer_pin: item.dealer_pin ? item.dealer_pin : 'N/A',
-          created_at: item.created_at ? getDateFromTimestamp(item.created_at) : 'N/A',
-          end_user_payment_status: item.end_user_payment_status ? item.end_user_payment_status : 'N/A',
+          created_at: item.created_at ? item.created_at : 'N/A',
         }
       });
 
       columns = [
         { title: '#', dataKey: "count" },
-        { title: convertToLang(this.props.translation[''], "INVOICE ID"), dataKey: "invoice_id" },
         { title: convertToLang(this.props.translation[''], "DEVICE ID"), dataKey: "device_id" },
         { title: convertToLang(this.props.translation[''], "USER PAYMENT STATUS"), dataKey: "end_user_payment_status" },
         { title: convertToLang(this.props.translation[''], "GENERATED AT"), dataKey: "created_at" },
@@ -147,12 +163,14 @@ class Invoice extends Component {
         data.push({
           'key': index,
           'count': ++index,
-          'invoice_id': item.inv_no ? item.inv_no : 'N/A',
           'device_id': item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
           'dealer_pin': item.dealer_pin ? item.dealer_pin : 'N/A',
-          'created_at': item.created_at ? getDateFromTimestamp(item.created_at) : 'N/A',
-          'end_user_payment_status': item.end_user_payment_status ? item.end_user_payment_status : 'N/A',
-          'file_name': <a href={BASE_URL+'users/getFile/'+item.file_name} download><Button type="primary" size="small">Download</Button></a>,
+          'type': item.type ? item.type : 'N/A',
+          'name': item.name ? item.name : 'N/A',
+          'cost_price': item.cost_price ? item.cost_price : 0,
+          'sale_price': item.sale_price ? item.sale_price : 0,
+          'profit_loss': item.profit_loss ? item.profit_loss : 0,
+          'created_at': item.created_at ? item.created_at : 'N/A',
         })
       });
     }
@@ -164,10 +182,23 @@ class Invoice extends Component {
       { title: '#', dataKey: "count" },
       { title: convertToLang(this.props.translation[''], "INVOICE ID"), dataKey: "invoice_id" },
       { title: convertToLang(this.props.translation[''], "DEVICE ID"), dataKey: "device_id" },
-      { title: convertToLang(this.props.translation[''], "DEALER PIN"), dataKey: "dealer_pin" },
       { title: convertToLang(this.props.translation[''], "USER PAYMENT STATUS"), dataKey: "end_user_payment_status" },
       { title: convertToLang(this.props.translation[''], "GENERATED AT"), dataKey: "created_at" },
     ];
+
+    var rows = this.props.salesReport.map((item, index) => {
+      return {
+        count: ++index,
+        invoice_id: item.inv_no ? item.inv_no : 'N/A',
+        device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
+        dealer_pin: item.dealer_pin ? item.dealer_pin : 'N/A',
+        created_at: item.created_at ? item.created_at : 'N/A',
+        end_user_payment_status: item.end_user_payment_status ? item.end_user_payment_status : 'N/A',
+      }
+    });
+
+    let fileName = 'invoice_' + new Date().getTime();
+
   }
 
   render() {
@@ -181,6 +212,29 @@ class Invoice extends Component {
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 14 }}
               >
+              </Form.Item>
+
+              <Form.Item
+                label="Product Type"
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 14 }}
+                width='100%'
+              >
+                {this.props.form.getFieldDecorator('product_type', {
+                  initialValue: 'ALL',
+                  rules: [
+                    {
+                      required: false
+                    },
+                  ],
+                })(
+                  <Select style={{ width: '100%' }}>
+                    <Select.Option value='ALL'>ALL</Select.Option>
+                    <Select.Option value='PACKAGES'>PACKAGES</Select.Option>
+                    <Select.Option value='PRODUCTS'>PRODUCTS</Select.Option>
+                    <Select.Option value='HARDWARES'>HARDWARES</Select.Option>
+                  </Select>
+                )}
               </Form.Item>
 
               {(this.props.user.type === 'sdealer') ?
@@ -219,28 +273,6 @@ class Invoice extends Component {
                   )}
                 </Form.Item>
               }
-
-              <Form.Item
-                label="Payment Status"
-                labelCol={{ span: 8 }}
-                wrapperCol={{ span: 14 }}
-                width='100%'
-              >
-                {this.props.form.getFieldDecorator('payment_status', {
-                  initialValue: '',
-                  rules: [
-                    {
-                      required: false
-                    },
-                  ],
-                })(
-                  <Select style={{ width: '100%' }}>
-                    <Select.Option value=''>ALL</Select.Option>
-                    <Select.Option value='PAID'>PAID</Select.Option>
-                    <Select.Option value='PGP'>UNPAID</Select.Option>
-                  </Select>
-                )}
-              </Form.Item>
 
               <Form.Item
                 label="FROM (DATE) "
@@ -298,18 +330,18 @@ class Invoice extends Component {
               <Fragment>
               <Row>
                 <Col xs={12} sm={12} md={12} lg={12} xl={12}>
-                  <h3>Invoice Report</h3>
+                  <h3>Sales Report</h3>
                 </Col>
                   <Col xs={12} sm={12} md={12} lg={12} xl={12}>
                     <div className="pull-right">
-                      <Button type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Invoice Report', fileName, this.state.reportFormData) }}>Download PDF</Button>
+                      <Button type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Sales Report', fileName, this.state.reportFormData) }}>Download PDF</Button>
                     <Button type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName) }}>Download Excel</Button>
                     </div>
                 </Col>
               </Row>
             <Table
               columns={this.columns}
-              dataSource={this.renderList(this.props.invoiceReport)}
+              dataSource={this.renderList(this.props.salesReport)}
               bordered
               pagination={false}
                 />
@@ -322,5 +354,5 @@ class Invoice extends Component {
   }
 }
 
-const WrappedAddDeviceForm = Form.create()(Invoice);
+const WrappedAddDeviceForm = Form.create()(Sales);
 export default WrappedAddDeviceForm;

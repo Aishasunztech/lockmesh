@@ -184,11 +184,11 @@ class ServicesList extends Component {
 
 
     renderList(type, list) {
-        // console.log(list);
+        // console.log(list, type, this.props.current_services);
         if (type === 'package') {
             let packageIds = []
             let packagesDataList = []
-            console.log(this.props.current_services);
+            // console.log(this.props.current_services);
             if (this.props.current_services) {
                 let current_services_packages = JSON.parse(this.props.current_services.packages)
                 current_services_packages.map(item => {
@@ -199,6 +199,7 @@ class ServicesList extends Component {
             list.map((item, index) => {
                 if (!packageIds.includes(item.id)) {
                     let services = JSON.parse(item.pkg_features)
+                    // console.log("services ", services);
                     packagesDataList.push({
                         key: index,
                         id: item.id,
@@ -487,7 +488,7 @@ class ServicesList extends Component {
         return (
             <Fragment>
 
-                {(this.props.tabselect === '0') ?
+                {/* {(this.props.tabselect === '0') ?
                     <div>  <h2 className="text-center"><strong>PRODUCTS</strong></h2>
                         <div className="prd_table">
                             <Table
@@ -505,7 +506,7 @@ class ServicesList extends Component {
                         </div >
                     </div>
                     :
-                    <Fragment>
+                    <Fragment> */}
                         <h2 className="text-center"><strong>PACKAGES</strong></h2>
                         <div className="prd_table">
                             <Table
@@ -539,7 +540,7 @@ class ServicesList extends Component {
                             />
 
                         </div > */}
-                    </Fragment>}
+                    {/* </Fragment>} */}
                 <div className="edit_ftr_btn_serv">
                     <Button key="back" type="button" onClick={this.handleCancel}>{convertToLang(this.props.translation[Button_Cancel], "Cancel")}</Button>
                     <Button type="primary" onClick={this.handleSubmit} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "SELECT")}</Button>

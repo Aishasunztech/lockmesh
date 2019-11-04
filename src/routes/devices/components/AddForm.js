@@ -106,7 +106,6 @@ class AddDevice extends Component {
                                 id: sim_id_price[0].id,
                                 rowKey: sim_id_price[0].id,
                                 unit_price: sim_id_price[0].unit_price,
-                                rowKey: sim_id_price[0].id,
                                 price_for: "SIM ID 2"
                             }
 
@@ -198,6 +197,7 @@ class AddDevice extends Component {
         });
 
         let packagesList = packages.map((item, index) => {
+            // console.log("packages list: ", item);
             // let services = JSON.parse(item.pkg_features)
             counter++
             return {
@@ -206,7 +206,7 @@ class AddDevice extends Component {
                 rowKey: item.rowKey,
                 item: `Package`,
                 description: item.pkg_name,
-                term: term + " Month",
+                term: (term === '0' || term === "trial") ? "TRIAL" : term + " Month",
                 unit_price: item.pkg_price,
                 quantity: (duplicate > 0) ? 1 * duplicate : 1,
                 line_total: (duplicate > 0) ? item.pkg_price * duplicate : item.pkg_price
@@ -240,7 +240,7 @@ class AddDevice extends Component {
     }
     handleChange = (e) => {
         // console.log(e);
-        // this.setState({ pgp_email: e }); 
+        // this.setState({ pgp_email: e });
         this.setState({ type: e.target.value });
     }
 
@@ -512,8 +512,8 @@ class AddDevice extends Component {
         switch (value) {
             case '0':
                 this.setState({
-                    parent_packages: [],
-                    product_prices: [],
+                    parent_packages: this.filterList('trial', this.props.parent_packages, 'pkg'),
+                    product_prices: this.filterList('trial', this.props.product_prices, 'product'),
                     tabselect: '0',
                 })
                 break;
@@ -581,7 +581,7 @@ class AddDevice extends Component {
     handleOkInvoice = () => {
         // console.log("handleOk for invoice", this.state.serviceData)
 
-        if ((this.state.total_price + this.state.hardwarePrice) <= this.props.user_credit) {
+        if ((this.state.total_price + this.state.hardwarePrice) <= this.props.user_credit || !this.state.serviceData.pay_now) {
             this.state.serviceData.paid_by_user = this.state.paidByUser
             this.props.AddDeviceHandler(this.state.serviceData);
             this.props.hideModal();
@@ -1362,6 +1362,7 @@ function mapDispatchToProps(dispatch) {
 }
 var mapStateToProps = ({ routing, devices, device_details, users, settings, sidebar, auth }) => {
     // console.log("users.invoiceID at componente", users.invoiceID);
+    console.log("devices.parent_packages ", devices.parent_packages);
     return {
         invoiceID: users.invoiceID,
         routing: routing,
