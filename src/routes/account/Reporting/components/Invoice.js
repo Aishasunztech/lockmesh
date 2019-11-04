@@ -22,6 +22,8 @@ class Invoice extends Component {
         align: 'center',
         className: 'row',
         width: 50,
+        sorter: (a, b) => { return a.count - b.count },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {
@@ -30,6 +32,8 @@ class Invoice extends Component {
         className: '',
         dataIndex: 'invoice_id',
         key: 'invoice_id',
+        sorter: (a, b) => { return a.invoice_id.localeCompare(b.invoice_id) },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {
@@ -38,6 +42,8 @@ class Invoice extends Component {
         className: '',
         dataIndex: 'device_id',
         key: 'device_id',
+        sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {
@@ -46,6 +52,8 @@ class Invoice extends Component {
         className: '',
         dataIndex: 'dealer_pin',
         key: 'dealer_pin',
+        sorter: (a, b) => { return a.dealer_pin - b.dealer_pin },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {
@@ -54,6 +62,8 @@ class Invoice extends Component {
         className: '',
         dataIndex: 'end_user_payment_status',
         key: 'end_user_payment_status',
+        sorter: (a, b) => { return a.end_user_payment_status.localeCompare(b.end_user_payment_status) },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {
@@ -62,6 +72,8 @@ class Invoice extends Component {
         className: '',
         dataIndex: 'created_at',
         key: 'created_at',
+        sorter: (a, b) => { return a.created_at.localeCompare(b.created_at) },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {

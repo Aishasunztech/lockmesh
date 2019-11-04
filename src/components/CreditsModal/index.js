@@ -31,15 +31,10 @@ import { DT_MODAL_BODY_7 } from "../../constants/AppConstants";
 import { BASE_URL } from "../../constants/Application";
 import {bindActionCreators} from "redux";
 import {
-  checkPass,
-  createBackupDB,
-  exportCSV, getPackages,
-  importCSV,
-  insertNewData, purchaseCredits, purchaseCreditsFromCC,
-  releaseCSV,
-  showBackupModal
+purchaseCredits, purchaseCreditsFromCC
 } from "../../appRedux/actions";
 import {connect} from "react-redux";
+import RestService from "../../appRedux/services/RestServices";
 const confirm = Modal.confirm;
 let paymentHistoryColumns;
 let account_status_paragraph = '';
@@ -51,6 +46,16 @@ class CreditIcon extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      paymentHistoryColumns: paymentHistoryColumns,
+      visible: false,
+      currency: 'USD',
+      currency_sign: '$',
+      currency_price: this.props.user_credit,
+      currency_unit_price: 1,
+      purchase_modal: false,
+
+    }
     this.paymentHistoryColumns = [
       {
         title: "Transaction #",
@@ -160,41 +165,6 @@ class CreditIcon extends Component {
         key: 'invoices',
       },
     ];
-
-    this.cr_blnc_dataSource = [
-      {
-        name1: <h6 className="weight_600 p-5"> Dropdown</h6>,
-        age1: <Select style={{ width: '100%' }}>
-          <Select.Option value=''>ALL</Select.Option>
-          <Select.Option value=''>My Report</Select.Option>
-
-        </Select>,
-
-      },
-      {
-        name1:
-          <h6 className="weight_600 p-5"> USD (EQUIVALENT)</h6>,
-        age1:<h6 className="weight_600 p-5 float-right">  $ { formatMoney(this.props.user_credit) }</h6>,
-
-      },
-
-      {
-        name1: <span className="p-8"></span>,
-        age1: <span className="p-8"></span>,
-      },
-      {
-        name1: <h5 className="weight_600">PURCHASE CREDITS</h5>,
-        age1: <Button type="default" size="small" className="buy_btn_invo" onClick={(e) => {this.showPurchaseModal(e, true);}}>
-          BUY
-        </Button>,
-
-      }
-    ];
-
-    this.state = {
-      paymentHistoryColumns: paymentHistoryColumns,
-      visible: false,
-    }
   }
 
   showPurchaseModal = (e, visible) => {
@@ -204,9 +174,6 @@ class CreditIcon extends Component {
   };
 
   showModal = () => {
-
-    this.cr_blnc_columns[1].title = <h4 className="weight_600 bg_light_yellow p-5"> {this.props.user_credit} </h4>;
-    this.cr_blnc_dataSource[1].age1 = <h6 className="weight_600 p-5 float-right">  $ { formatMoney(this.props.user_credit) }</h6>
     this.setState({
       visible: true,
     });
@@ -238,7 +205,7 @@ class CreditIcon extends Component {
     return <div className="credit_modal_heading">
       <h4 className="weight_600">{convertToLang(this.props.translation[""], "OVERDUE")}
         <Link to={'/account/payment-overdue-history'}>
-          <Button type="default" size="small" className="full_list_btn">Full List</Button>
+          <Button type="default" size="small" className="full_list_btn" onClick={() => this.handleCancel()}>Full List</Button>
         </Link>
       </h4>
     </div>
@@ -248,7 +215,7 @@ class CreditIcon extends Component {
     return <div className="credit_modal_heading">
       <h4 className="weight_600">{convertToLang(this.props.translation[""], "PAYMENT HISTORY")}
         <Link to={'/account/credits-payment-history'}>
-          <Button type="default" size="small" className="full_list_btn">Full List</Button>
+          <Button type="default" size="small" className="full_list_btn" onClick={() => this.handleCancel()}>Full List</Button>
         </Link>
       </h4>
     </div>
@@ -323,7 +290,69 @@ class CreditIcon extends Component {
         age: <h5 className="weight_600 bg_brown p-5">{statusDays} </h5>,
       },
     ];
-  }
+  };
+
+  renderCreditBalance = () => {
+    return [
+
+      {
+        name1: <h6 className="weight_600 p-5"> CURRENCY</h6>,
+        age1: <Select defaultValue="USD"
+                      onChange={(e) => { this.onChangeCurrency(e, 'currency') }}
+        >
+          <Select.Option value="USD">USD</Select.Option>
+          <Select.Option value="CAD">CAD</Select.Option>
+          <Select.Option value="EUR">EUR</Select.Option>
+        </Select>,
+
+      },
+      {
+        name1: <h6 className="weight_600 p-5"> USD (EQUIVALENT)</h6>,
+        age1:<h6 className="weight_600 p-5 float-right">  $ { formatMoney(this.state.currency_price) }</h6>,
+
+      },
+
+      {
+        name1: <span className="p-8"></span>,
+        age1: <span className="p-8"></span>,
+      },
+      {
+        name1: <h5 className="weight_600">PURCHASE CREDITS</h5>,
+        age1: <Button type="default" size="small" className="buy_btn_invo" onClick={(e) => {this.showPurchaseModal(e, true);}}>
+          BUY
+        </Button>,
+
+      }
+    ];
+  };
+
+  onChangeCurrency = (e, field) => {
+
+    if (e === 'USD') {
+      this.setState({
+        currency: 'usd',
+        currency_price: this.props.user_credit,
+        currency_unit_price: 1,
+      })
+    } else {
+      RestService.exchangeCurrency(e).then((response) => {
+        if (response.data.status) {
+          if (this.props.user_credit > 0) {
+            this.setState({
+              currency: e,
+              currency_unit_price: response.data.currency_unit,
+              currency_price: this.props.user_credit * response.data.currency_unit
+            })
+          } else {
+            this.setState({
+              currency: e,
+              currency_unit_price: response.data.currency_unit,
+            })
+          }
+        }
+      })
+    }
+  };
 
   render() {
     return (
@@ -331,9 +360,9 @@ class CreditIcon extends Component {
       <div>
         <PurchaseCredit
           showPurchaseModal={this.showPurchaseModal}
-          // purchase_modal={this.state.purchase_modal}
-          // purchaseCredits={this.props.purchaseCredits}
-          // purchaseCreditsFromCC={this.props.purchaseCreditsFromCC}
+          purchase_modal={this.state.purchase_modal}
+          purchaseCredits={this.props.purchaseCredits}
+          purchaseCreditsFromCC={this.props.purchaseCreditsFromCC}
           translation={this.props.translation}
 
         />
@@ -367,7 +396,7 @@ class CreditIcon extends Component {
               <Col xs={24} sm={24} md={10} lg={10} xl={10}>
                 <Table
                   className="ac_status_table"
-                  dataSource={this.cr_blnc_dataSource}
+                  dataSource={this.renderCreditBalance()}
                   columns={this.cr_blnc_columns}
                   pagination={false}
                   title={this.cr_blnc_title}

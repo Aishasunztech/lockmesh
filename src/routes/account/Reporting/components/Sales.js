@@ -23,6 +23,8 @@ class Sales extends Component {
         align: 'center',
         className: 'row',
         width: 50,
+        sorter: (a, b) => { return a.count - b.count },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {
@@ -31,14 +33,18 @@ class Sales extends Component {
         className: '',
         dataIndex: 'device_id',
         key: 'device_id',
+        sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {
         title: convertToLang(props.translation[''], "DEALER ID"),
         align: "center",
         className: '',
-        dataIndex: 'dealer_id',
-        key: 'dealer_id',
+        dataIndex: 'dealer_pin',
+        key: 'dealer_pin',
+        sorter: (a, b) => {  return a.dealer_pin- b.dealer_pin },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {
@@ -47,6 +53,8 @@ class Sales extends Component {
         className: '',
         dataIndex: 'type',
         key: 'type',
+        sorter: (a, b) => { return a.type.localeCompare(b.type) },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {
@@ -55,6 +63,8 @@ class Sales extends Component {
         className: '',
         dataIndex: 'name',
         key: 'name',
+        sorter: (a, b) => { return a.name.localeCompare(b.name) },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {
@@ -63,6 +73,8 @@ class Sales extends Component {
         className: '',
         dataIndex: 'cost_price',
         key: 'cost_price',
+        sorter: (a, b) => { return a.cost_price - b.cost_price },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {
@@ -71,6 +83,8 @@ class Sales extends Component {
         className: '',
         dataIndex: 'sale_price',
         key: 'sale_price',
+        sorter: (a, b) => { return a.sale_price - b.sale_price },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {
@@ -79,6 +93,8 @@ class Sales extends Component {
         className: '',
         dataIndex: 'profit_loss',
         key: 'profit_loss',
+        sorter: (a, b) => { return a.profit_loss-b.profit_loss },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {
@@ -95,12 +111,14 @@ class Sales extends Component {
 
     this.state = {
       reportCard: false,
+      reportFormData: {}
     };
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
+      this.state.reportFormData = values;
       this.props.generateSalesReport(values)
     });
   };
@@ -115,7 +133,7 @@ class Sales extends Component {
         return {
           count: ++index,
           device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
-          dealer_id: item.dealer_id ? item.dealer_id : 'N/A',
+          dealer_pin: item.dealer_pin ? item.dealer_pin : 'N/A',
           created_at: item.created_at ? item.created_at : 'N/A',
         }
       });
@@ -146,12 +164,12 @@ class Sales extends Component {
           'key': index,
           'count': ++index,
           'device_id': item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
-          'dealer_id': item.dealer_id ? item.dealer_id : 'N/A',
+          'dealer_pin': item.dealer_pin ? item.dealer_pin : 'N/A',
           'type': item.type ? item.type : 'N/A',
           'name': item.name ? item.name : 'N/A',
-          'cost_price': item.cost_price ? item.cost_price : 'N/A',
-          'sale_price': item.sale_price ? item.sale_price : 'N/A',
-          'profit_loss': item.profit_loss ? item.profit_loss : 'N/A',
+          'cost_price': item.cost_price ? item.cost_price : 0,
+          'sale_price': item.sale_price ? item.sale_price : 0,
+          'profit_loss': item.profit_loss ? item.profit_loss : 0,
           'created_at': item.created_at ? item.created_at : 'N/A',
         })
       });
@@ -173,14 +191,14 @@ class Sales extends Component {
         count: ++index,
         invoice_id: item.inv_no ? item.inv_no : 'N/A',
         device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
-        dealer_id: item.dealer_id ? item.dealer_id : 'N/A',
+        dealer_pin: item.dealer_pin ? item.dealer_pin : 'N/A',
         created_at: item.created_at ? item.created_at : 'N/A',
         end_user_payment_status: item.end_user_payment_status ? item.end_user_payment_status : 'N/A',
       }
     });
 
-    let fileName = 'invoice_' + new Date().getTime()
-    generatePDF(columns, rows, 'Sales Report', fileName);
+    let fileName = 'invoice_' + new Date().getTime();
+
   }
 
   render() {
@@ -316,7 +334,7 @@ class Sales extends Component {
                 </Col>
                   <Col xs={12} sm={12} md={12} lg={12} xl={12}>
                     <div className="pull-right">
-                      <Button type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Invoice Report', fileName) }}>Download PDF</Button>
+                      <Button type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Sales Report', fileName, this.state.reportFormData) }}>Download PDF</Button>
                     <Button type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName) }}>Download Excel</Button>
                     </div>
                 </Col>
