@@ -2,18 +2,22 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import URLSearchParams from 'url-search-params'
 import { Redirect, Route, Switch } from "react-router-dom";
-import { LocaleProvider } from "antd";
 import MainApp from "./MainApp";
 
 import Login from "../Login";
 
 import VerifyAuthCode from "../VerifyAuthCode";
 
-// import SignUp from "../SignUp";
-import { setInitUrl } from "appRedux/actions/Auth";
-import { onLayoutTypeChange, onNavStyleChange, setThemeType, getLanguage, languages } from "../../appRedux/actions/Setting";
 
-import { checkComponent } from "../../appRedux/actions/Auth";
+import { 
+  setInitUrl,
+  checkComponent, 
+  onLayoutTypeChange, 
+  onNavStyleChange, 
+  setThemeType, 
+  getLanguage, 
+  languages 
+} from '../../appRedux/actions'
 
 import {
   LAYOUT_TYPE_BOXED,
@@ -68,10 +72,8 @@ class App extends Component {
     }
   };
 
-
-
   componentWillMount() {
-    // console.log("componentWillMount");
+    
     if (this.props.initURL === '') {
       this.props.setInitUrl(this.props.history.location.pathname);
     }
@@ -92,8 +94,8 @@ class App extends Component {
     document.title = APP_TITLE + ' - Admin Dashboard';
     this.props.getLanguage();
     this.props.languages();
-  }
 
+  }
 
   componentWillReceiveProps(nextProps) {
 
@@ -105,36 +107,36 @@ class App extends Component {
     }
   }
 
+  componentWillUnmount(){
+    
+  }
+
   render() {
 
     const { match, location, layoutType, navStyle, locale, authUser, initURL } = this.props;
-
+    
     if (location.pathname === '/') {
-      if (authUser.id === null || authUser.email === null || authUser.token === null || authUser.type === null) {
+      if ( !authUser.id || !authUser.email || !authUser.token || !authUser.type) {
         return (<Redirect to={'/login'} />);
       } else if ((initURL === '' || initURL === '/' || initURL === '/login' || initURL === '/session_timeout')) {
         return (<Redirect to={'/dashboard'} />);
       } else {
+        // this condition will not match anymore #usman
         return (<Redirect to={initURL} />);
       }
     }
 
-
     this.setLayoutType(layoutType);
 
     this.setNavStyle(navStyle);
-
 
     return (
 
       <Switch>
         <Route exact path='/login' component={Login} />
         <Route exact path="/verify-auth" component={VerifyAuthCode} />
-        <Route
-          exact
-          path="/session_timeout"
-          component={SessionTimeOut}
-        />
+        <Route exact path="/session_timeout" component={SessionTimeOut} />
+
         <RestrictedRoute
           authUser={authUser}
           path={`${match.url}`}

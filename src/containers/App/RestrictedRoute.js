@@ -45,27 +45,6 @@ class RestrictedRoute extends Component {
   constructor(props) {
     super(props);
   }
-  componentWillMount() {
-    const componentRoute = this.props.pathname;
-    // this.props.getUser();
-    this.props.checkComponent(componentRoute);
-
-  }
-
-  componentDidMount() {
-
-    // console.log("restrictions");
-
-  }
-  componentDidUpdate(prevProps) {
-    if (this.props.pathname !== prevProps.pathname && this.pathname !== "/invalid_page") {
-      const componentRoute = this.props.pathname;
-      this.props.checkComponent(componentRoute);
-    }
-    if (prevProps.pathname.includes('/connect-device')) {
-      this.props.clearState()
-    }
-  }
 
   getContainerClass = (navStyle) => {
     switch (navStyle) {
@@ -82,7 +61,8 @@ class RestrictedRoute extends Component {
       default:
         return '';
     }
-  };
+  }
+
   getNavStyles = (navStyle) => {
     switch (navStyle) {
       case NAV_STYLE_DEFAULT_HORIZONTAL:
@@ -108,7 +88,7 @@ class RestrictedRoute extends Component {
       default:
         return null;
     }
-  };
+  }
 
   getSidebar = (navStyle, width) => {
     if (width < TAB_SIZE) {
@@ -128,12 +108,40 @@ class RestrictedRoute extends Component {
       default:
         return null;
     }
-  };
+  }
+
+  componentWillMount() {
+    const componentRoute = this.props.pathname;
+    // this.props.getUser();
+    this.props.checkComponent(componentRoute);
+
+  }
+
+  componentDidMount() {
+
+  }
+  
+  componentWillReceiveProps(nextProps, prevProps){
+
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.pathname !== prevProps.pathname && this.pathname !== "/invalid_page") {
+      const componentRoute = this.props.pathname;
+      this.props.checkComponent(componentRoute);
+    }
+    if (prevProps.pathname.includes('/connect-device')) {
+      this.props.clearState()
+    }
+  }
+
+  componentWillUnmount(){
+
+  }
 
   render() {
     const Component = this.props.component;
     const { width, navStyle, authUser, isAllowed, location, isRequested } = this.props;
-    // console.trace("restricted route allowed", this.props);
 
     return (
       <Route

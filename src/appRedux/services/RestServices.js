@@ -105,6 +105,17 @@ const RestService = {
 
     },
 
+    getSocketProcesses: (status, filter, offset, limit) => {
+        let query = '';
+
+        query = (status) ? query + `?status=${status}&`: '';
+        query = (offset) ? query + `start=${offset}&`: '';
+        query = (limit) ? query + `limit=${limit}&`: '';
+        query = (filter) ? query + `filter=${filter}`: '';
+
+        return axios.get(BASE_URL + `users/get-processes${query}`, RestService.getHeader());
+    },
+
     // isAdmin
     isAdmin: () => {
         // var self = this;
@@ -653,7 +664,7 @@ const RestService = {
     getHardwaresPrices: () => {
         return axios.get(BASE_URL + 'users/get-parent-hardware-prices', RestService.getHeader());
     },
-    
+
     checkPackageName: (name) => {
 
         return axios.patch(BASE_URL + 'users/check-package-name', { name }, RestService.getHeader());
@@ -932,22 +943,22 @@ const RestService = {
 
     //product report
     generateProductReport: (data) => {
-      return axios.post(BASE_URL + 'users/reporting/product', data, RestService.getHeader());
+        return axios.post(BASE_URL + 'users/reporting/product', data, RestService.getHeader());
     },
 
-  //invoice report
-  generateInvoiceReport: (data) => {
-    return axios.post(BASE_URL + 'users/reports/invoice', data, RestService.getHeader());
-  },
-
-  //payment history report
-  generatePaymentHistoryReport: (data) => {
-    return axios.post(BASE_URL + 'users/reports/payment-history', data, RestService.getHeader());
+    //invoice report
+    generateInvoiceReport: (data) => {
+        return axios.post(BASE_URL + 'users/reports/invoice', data, RestService.getHeader());
     },
-  
-  //hardware report
-  generateHardwareReport: (data) => {
-    return axios.post(BASE_URL + 'users/reports/hardware', data, RestService.getHeader());
-  },
+
+    //payment history report
+    generatePaymentHistoryReport: (data) => {
+        return axios.post(BASE_URL + 'users/reports/payment-history', data, RestService.getHeader());
+    },
+
+    //hardware report
+    generateHardwareReport: (data) => {
+        return axios.post(BASE_URL + 'users/reports/hardware', data, RestService.getHeader());
+    },
 }
 export default RestService;

@@ -1,5 +1,19 @@
-import { LANGUAGES, SWITCH_LANGUAGE, TOGGLE_COLLAPSED_NAV, WINDOW_WIDTH, INVALID_TOKEN, GET_LANGUAGE } from "constants/ActionTypes";
-import { LAYOUT_TYPE, NAV_STYLE, THEME_COLOR_SELECTION, THEME_TYPE } from "../../constants/ThemeSetting";
+import { 
+  LANGUAGES, 
+  SWITCH_LANGUAGE, 
+  TOGGLE_COLLAPSED_NAV, 
+  WINDOW_WIDTH, 
+  INVALID_TOKEN, 
+  GET_LANGUAGE 
+} from "constants/ActionTypes";
+
+import { 
+  LAYOUT_TYPE, 
+  NAV_STYLE, 
+  THEME_COLOR_SELECTION, 
+  THEME_TYPE 
+} from "../../constants/ThemeSetting";
+
 import RestService from '../services/RestServices';
 
 export function toggleCollapsedSideNav(navCollapsed) {
@@ -26,14 +40,6 @@ export function onLayoutTypeChange(layoutType) {
   return { type: LAYOUT_TYPE, layoutType };
 }
 
-// export function switchLanguage(locale) {
-//   // console.log('switching language');
-//   // console.log(locale);
-//   return {
-//     type: SWITCH_LANGUAGE,
-//     payload: locale
-//   };
-// }
 
 export function languages() {
   return (dispatch) => {
@@ -59,12 +65,13 @@ export function switchLanguage(locale) {
             type: SWITCH_LANGUAGE,
             // payload: locale
           })
-        } else {
-          dispatch({
-            type: INVALID_TOKEN
-          });
-        }
-      }
+        } 
+      } 
+      // else {
+      //   dispatch({
+      //     type: INVALID_TOKEN
+      //   });
+      // }
     })
   }
 }
@@ -79,12 +86,18 @@ export function getLanguage() {
             type: GET_LANGUAGE,
             response: response.data
           })
-        } else {
-          dispatch({
-            type: INVALID_TOKEN
-          });
-        }
-      }
+        } 
+        // else {
+        //   dispatch({
+        //     type: INVALID_TOKEN
+        //   });
+        // }
+      } 
+      // else {
+      //   dispatch({
+      //     type: INVALID_TOKEN
+      //   });
+      // }
     })
   }
 }
