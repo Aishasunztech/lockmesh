@@ -45,6 +45,53 @@
 
 }
 
+.add_device {
+    height: auto;
+    overflow: overlay;
+    position: absolute;
+    top: 16px;
+    left: 0;
+    right: 0;
+    bottom: 16px;
+    border-radius: 6px;
+    padding-bottom: 0;
+}
+
+.add_device .ant-modal-title {
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.add_device .ant-modal-header {
+    padding: 16px 16px;
+}
+
+.add_device .ant-col-8.ant-form-item-label {
+    padding-right: 0;
+    padding-left: 8px;
+}
+
+.add_device .ant-col-16.ant-form-item-control-wrapper {
+    padding-left: 0;
+}
+
+.add_device .ant-input-number {
+    width: 100%;
+}
+
+.add_device .ant-form-item label {
+    position: relative;
+    font-weight: 600;
+}
+
+.select_hardware label {
+    line-height: 16px;
+    white-space: normal;
+    margin-top: 6px;
+    margin-right: 4px;
+    text-align: center;
+}
+
 .prd_table {
     height: 265px;
     overflow: overlay;
@@ -277,15 +324,15 @@
     position: relative;
 }
 
-.add_user_btn {
-    /* position: absolute; */
-    /* left    : 230px; */
-    /* top     : -9px; */
-    /* width   : 40%; */
-    /* padding : 0; */
+/* .add_user_btn {
+    position: absolute;
+    left: 230px;
+    top: -9px;
+    width: 40%;
+    padding: 0;
     float: right;
     margin: 8px 0 4px;
-}
+} */
 
 .add_sim_permission_btn {
     position: absolute;
@@ -299,6 +346,14 @@
     width: 40%;
     text-align: center;
     margin-bottom: 16px !important;
+}
+
+.ant-radio-button-wrapper .helping_txt {
+    color: #545454;
+}
+
+.ant-radio-button-wrapper-checked .helping_txt {
+    color: #fff;
 }
 
 .ant-radio-button-wrapper-checked a {
@@ -339,15 +394,16 @@
 }
 
 @media screen and (max-width: 768px) {
-    .add_user_btn {
-        /* position: absolute; */
-        /* left    : 230px; */
-        /* top     : -9px; */
-        /* width   : 40%; */
-        /* padding : 0; */
+    /* .add_user_btn {
+        position: absolute;
+        left: 230px;
+        top: -9px;
+        width: 40%;
+        padding : 0;
         float: right;
-        margin: 8px 0 4px;
+        margin: 8px 0 4px; 
     }
+    */
 
     .edit_form .ant-form-item-label {
         text-align: left;
