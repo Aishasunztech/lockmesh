@@ -249,11 +249,12 @@ class SidebarContent extends Component {
               {/* Price */}
               <li>
                 <a className="head-example">
-                  <Badge className="cred_badge" count={this.props.user_credit} overflowCount={99999}>
+                  <div className="cred_badge" >
                     <i className="icon icon-dollar notification_icn" onClick={() => this.showCreditsModal()} >
                       <Icon type="dollar" className="mb-10" />
+                      <span className="badge badge-pill doller-icon" >{this.props.user_credit}</span>
                     </i>
-                  </Badge>
+                  </div>
                 </a>
               </li>
               {/* {/* Chat Icon */}

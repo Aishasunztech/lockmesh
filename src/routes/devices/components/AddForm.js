@@ -206,7 +206,7 @@ class AddDevice extends Component {
                 rowKey: item.rowKey,
                 item: `Package`,
                 description: item.pkg_name,
-                term: (term === '0' || term === "trial") ? "TRIAL": term + " Month",
+                term: (term === '0' || term === "trial") ? "TRIAL" : term + " Month",
                 unit_price: item.pkg_price,
                 quantity: (duplicate > 0) ? 1 * duplicate : 1,
                 line_total: (duplicate > 0) ? item.pkg_price * duplicate : item.pkg_price
@@ -581,7 +581,7 @@ class AddDevice extends Component {
     handleOkInvoice = () => {
         // console.log("handleOk for invoice", this.state.serviceData)
 
-        if ((this.state.total_price + this.state.hardwarePrice) <= this.props.user_credit) {
+        if ((this.state.total_price + this.state.hardwarePrice) <= this.props.user_credit || !this.state.serviceData.pay_now) {
             this.state.serviceData.paid_by_user = this.state.paidByUser
             this.props.AddDeviceHandler(this.state.serviceData);
             this.props.hideModal();

@@ -415,7 +415,7 @@ export function removeDuplicateObjects(originalArray, prop) {
   }
    return newArray;
 }
-export function generatePDF(columns, rows, title, fileName) {
+export function generatePDF(columns, rows, title, fileName, formData) {
 
   let y   = 15;
   let x   = 20;
