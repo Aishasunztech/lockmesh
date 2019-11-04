@@ -190,7 +190,7 @@ class Prices extends Component {
                 className: '',
                 children: [
                     {
-                        title: convertToLang(props.translation[PACKAGE_EXPIRY], "PACKAGE EXPIRY"),
+                        title: convertToLang(props.translation["PACKAGE_EXPIRY DAYS"], "PACKAGE EXPIRY DAYS"),
                         align: "center",
                         className: '',
                         dataIndex: 'pkg_expiry',
@@ -466,11 +466,15 @@ class Prices extends Component {
             if (this.state.packages) {
                 // console.log(this.state.packages)
                 let i = 0
-
+                
                 return this.state.packages.map((item, index) => {
+                    let customStyle = {}
+                    if (item.pkg_term === "trial") {
+                        customStyle = { display: 'none' }
+                    }
                     let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px ', textTransform: 'uppercase' }} onClick={() => { this.deletePackage(item.id, item.pkg_name) }} >{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
                     // let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "EDIT")}</Button>
-                    let ModifyBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.modifyItem(item, true, 'package') }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "MODIFY PRICE")}</Button>
+                    let ModifyBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase', ...customStyle }} onClick={() => { this.modifyItem(item, true, 'package') }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "MODIFY PRICE")}</Button>
                     return {
                         id: item.id,
                         key: item.id,
