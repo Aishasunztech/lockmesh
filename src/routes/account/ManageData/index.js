@@ -514,7 +514,7 @@ class ManageData extends Component {
                             <Card >
                                 <Row gutter={16} className="filter_top">
                                     <Col className="col-md-6 col-sm-6 col-xs-6 vertical_center">
-                                        <span className="font_26"> {convertToLang(this.props.translation[MANAGE_DATA], "MANAGE DATA")} </span>
+                                        <span className="font_26"> {convertToLang(this.props.translation[MANAGE_DATA], "Manage ID Inventory")} </span>
                                     </Col>
                                     <Col className="col-md-2 col-sm-6 col-xs-6">
                                         <div className="m_mt-16">

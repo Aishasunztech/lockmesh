@@ -308,7 +308,7 @@ class DevicesList extends Component {
                 online: device.online === 'online' ? (<span style={{ color: "green" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) : (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
                 s_dealer: checkValue(device.s_dealer),
                 s_dealer_name: checkValue(device.s_dealer_name),
-                remainTermDays: device.remainTermDays,
+                remainTermDays: (Number(device.remainTermDays) > 0) ? device.remainTermDays : 0,
                 start_date: checkValue(device.start_date),
                 expiry_date: checkValue(device.expiry_date),
             }

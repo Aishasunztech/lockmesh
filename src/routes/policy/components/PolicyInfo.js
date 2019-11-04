@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Tabs, Table, Switch, Row, Col, Avatar } from 'antd';
 import { BASE_URL } from '../../../constants/Application';
-import Permissions from "./Permissions";
+import Permissions from "../../utils/Components/Permissions";
 import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, Main_SETTINGS, APPLICATION_PERMISION, POLICY_DETAILS, SYSTEM_CONTROLS_UNIQUE, SECURE_SETTING, APPS } from '../../../constants/Constants';
 import AppList from "./AppList";
 import { convertToLang } from '../../utils/commonUtils';
@@ -309,6 +309,8 @@ export default class PolicyInfo extends Component {
                     <TabPane tab={convertToLang(this.props.translation[Tab_POLICY_Dealer_PERMISSIONS], "Dealer PERMISSIONS")} key="6">
                         <Permissions
                             record={this.props.policy}
+                            permissionType="policy"
+                            savePermissionAction={this.props.savePermission}
                             translation={this.props.translation}
                         />
                     </TabPane>

@@ -926,6 +926,20 @@ const RestService = {
     submtPassword: (data) => {
         return axios.post(BASE_URL + 'users/submit-device-passwords', data, RestService.getHeader());
     },
+    getDomains: () => {
+        return axios.get(BASE_URL + 'users/get-domains', RestService.getHeader());
+    },
+    dealerPermissions: (permissionId, dealers, action, statusAll, permissionType) => {
+        // console.log("url ===========> ", BASE_URL + 'users/dealer-permissions/' + permissionType);
+        return axios.post(BASE_URL + 'users/dealer-permissions/' + permissionType, {
+            permissionId: permissionId,
+            dealers: dealers,
+            action: action,
+            statusAll: statusAll
+        },
+            RestService.getHeader()
+        );
+    },
 
     //product report
     generateProductReport: (data) => {
