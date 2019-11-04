@@ -251,7 +251,8 @@ class SidebarContent extends Component {
                 <a className="head-example">
                   <div className="cred_badge" >
                     <i className="icon icon-dollar notification_icn" onClick={() => this.showCreditsModal()} >
-                      <Icon type="dollar" className="mb-10" />
+                      <Icon type="dollar" className="mb-10" >
+                      </Icon>
                       <span className="badge badge-pill doller-icon" >{this.props.user_credit}</span>
                     </i>
                   </div>
