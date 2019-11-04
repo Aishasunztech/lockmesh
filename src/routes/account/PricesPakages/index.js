@@ -466,7 +466,7 @@ class Prices extends Component {
             if (this.state.packages) {
                 // console.log(this.state.packages)
                 let i = 0
-                
+
                 return this.state.packages.map((item, index) => {
                     let customStyle = {}
                     if (item.pkg_term === "trial") {
@@ -479,6 +479,7 @@ class Prices extends Component {
                         id: item.id,
                         key: item.id,
                         rowKey: index,
+                        statusAll: item.statusAll,
                         sr: ++i,
                         action: (item.dealer_type === "super_admin" && (this.props.auth.type === ADMIN || this.props.auth.type === DEALER)) ?
                             (<Fragment>{ModifyBtn}</Fragment>) :

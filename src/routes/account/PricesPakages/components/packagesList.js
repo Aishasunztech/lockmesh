@@ -97,7 +97,7 @@ export default class Prices extends Component {
         }
     }
 
-    2 = () => {
+    renderList = () => {
         if (this.state.packages) {
             return this.state.packages.map((item, index) => {
                 return {
@@ -110,6 +110,8 @@ export default class Prices extends Component {
                     pkg_expiry: item.pkg_expiry
                 }
             })
+        } else {
+            return [];
         }
     }
 

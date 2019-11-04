@@ -122,6 +122,7 @@ export default class ListApk extends Component {
                     data = {
                         rowKey: app.apk_id,
                         id: app.apk_id,
+                        statusAll: app.statusAll,
                         action: (
                             <div data-column="ACTION" style={{ display: "inline-flex" }}>
                                 <Fragment>
@@ -176,6 +177,7 @@ export default class ListApk extends Component {
                     data = {
                         rowKey: app.apk_id,
                         id: app.apk_id,
+                        statusAll: app.statusAll,
                         action: (
                             <Fragment>
                                 <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px", textTransform: "uppercase" }}
@@ -219,6 +221,7 @@ export default class ListApk extends Component {
                 let data = {
                     'rowKey': app.apk_id,
                     'id': app.apk_id,
+                    statusAll: app.statusAll,
                     'permission': <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
                         {/* {app.permission_count} */}
                         {(app.permission_count === "All" || this.props.totalDealers === app.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
