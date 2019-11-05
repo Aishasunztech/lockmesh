@@ -35,7 +35,8 @@ const reducers = combineReducers({
   socket: socket,
   sidebar: SideBar,
   dashboard: Dashboard,
-  rightSidebar: RightSidebar
+  rightSidebar: RightSidebar,
+  reporting: Reporting
 });
 
 export default reducers;
