@@ -1,0 +1,38 @@
+.container-notification-icon{
+    position: absolute;
+    right: 0px;
+    z-index: 10;
+    top: 100px;
+}
+
+.rightSidebar-header .ant-tabs-bar .ant-tabs-top-bar {
+    position: 'fixed'!important;
+    /* margin-bottom: 20px */
+}
+
+.gx-customizer {
+   height: calc(87vh - 30px) !important;
+}
+
+
+.ant-drawer-right .ant-drawer-content-wrapper {
+    width: 300px !important;
+}
+.ant-drawer-wrapper-body{
+    overflow: unset !important;
+
+}
+
+.bell-icon {
+ font-size: 20px;
+ margin-top: 4px;
+}
+
+.rightSidebar-footer {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    width: 300px;
+    height: 50px;
+    padding: 18px;
+}

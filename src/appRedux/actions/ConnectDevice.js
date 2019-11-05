@@ -976,7 +976,6 @@ export const getDealerApps = () => {
         // console.log('in return of fucntion')
         RestService.getDealerApps().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                console.log('get dealer apps resoo', response.data)
                 dispatch({
                     type: GET_DEALER_APPS,
                     payload: response.data.list
