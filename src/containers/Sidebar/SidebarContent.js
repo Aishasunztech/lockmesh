@@ -398,7 +398,7 @@ class SidebarContent extends Component {
 
 // SidebarContent.propTypes = {};
 
-const mapStateToProps = ({ settings, devices, sidebar }) => {
+const mapStateToProps = ({ settings, devices, sidebar, account, auth }) => {
   const { navStyle, themeType, locale, pathname, languages, translation, isSwitched } = settings;
   return {
     navStyle,
