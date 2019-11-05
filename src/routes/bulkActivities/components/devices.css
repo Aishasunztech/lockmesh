@@ -264,14 +264,9 @@
 }
 
 .add_user_btn {
-    /* position: absolute; */
-    /* left: 230px; */
-    /* top: -9px; */
-    /* width: 40%; */
-    /* padding: 0; */
-    float: right;
-    margin: 8px 0 4px;
+    width: 100%;
 }
+
 
 .add_sim_permission_btn {
     position: absolute;
@@ -302,8 +297,6 @@
         /* top: -9px; */
         /* width: 40%; */
         /* padding: 0; */
-        float: right;
-        margin: 8px 0 4px;
     }
 
     .edit_form .ant-form-item-label {

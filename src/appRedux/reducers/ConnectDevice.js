@@ -74,7 +74,10 @@ import {
     HANDLE_CHECK_SECURE_SETTINGS,
     RESET_DEVICE,
     SIM_LOADING,
-    TRANSFER_DEVICE
+    TRANSFER_DEVICE,
+    SERVICES_DETAIL,
+    SERVICES_HISTORY,
+    CANCEL_EXTENDED_SERVICE
 } from "../../constants/ActionTypes";
 
 import {
@@ -203,6 +206,7 @@ const initialState = {
     guestAllPushApps: false,
     enableAllPushApp: false,
     encryptedAllPushApps: false,
+    servicesHistoryList: [],
 };
 let pwdObject = { "admin_password": null, "guest_password": null, "encrypted_password": null, "duress_password": null }
 
@@ -714,13 +718,26 @@ export default (state = initialState, action) => {
             }
         }
 
+        case SERVICES_HISTORY: {
+            console.log("action.payload.data at reducer for sevices:: ", action.payload.data);
+            let data = state.servicesHistoryList;
+
+            if (action.payload.status) {
+                data = action.payload.data
+            }
+            return {
+                ...state,
+                servicesHistoryList: data
+            }
+        }
+
         case TRANSFER_DEVICE: {
 
             console.log(action.payload, 'check devices TRANSFER_DEVICE ', state.device)
             if (action.response.status) {
-               
-                    state.device.finalStatus = 'Transfered';
-                    state.device.transfer_status = 1;
+
+                state.device.finalStatus = 'Transfered';
+                state.device.transfer_status = 1;
             }
             // console.log('unlink called');
             return {
@@ -806,8 +823,6 @@ export default (state = initialState, action) => {
         //     }
         // }
         case GUEST_PASSWORD: {
-            // console.log(GUEST_PASSWORD);
-            // console.log(action.payload);
             return {
                 ...state,
                 guestPwd: action.payload.pwd,
@@ -1829,6 +1844,23 @@ export default (state = initialState, action) => {
                 redoControls: JSON.parse('[]'),
             }
         }
+
+        case CANCEL_EXTENDED_SERVICE:
+            {
+                if (action.payload.status) {
+                    success({
+                        title: action.payload.msg
+                    })
+                    return {
+                        ...state,
+                        device: action.payload.data
+                    }
+                } else {
+                    error({
+                        title: action.payload.msg
+                    })
+                }
+            }
         default:
             return state;
 

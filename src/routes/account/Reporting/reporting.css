@@ -4,9 +4,6 @@
   text-align: center;
 }
 
-.devices table td {
-  white-space: nowrap !important;
-}
 
 .devices .ant-table-tbody>tr>.devices1 {
   text-align: left;

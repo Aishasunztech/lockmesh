@@ -80,6 +80,7 @@ const RestService = {
         localStorage.setItem('type', data.user.user_type);
         localStorage.setItem('dealer_pin', data.user.link_code);
         localStorage.setItem('two_factor_auth', data.user.two_factor_auth);
+        localStorage.setItem('account_balance_status', data.user.account_balance_status);
 
     },
     // checkAuth
@@ -108,10 +109,10 @@ const RestService = {
     getSocketProcesses: (status, filter, offset, limit) => {
         let query = '';
 
-        query = (status) ? query + `?status=${status}&`: '';
-        query = (offset) ? query + `start=${offset}&`: '';
-        query = (limit) ? query + `limit=${limit}&`: '';
-        query = (filter) ? query + `filter=${filter}`: '';
+        query = (status) ? query + `?status=${status}&` : '';
+        query = (offset) ? query + `start=${offset}&` : '';
+        query = (limit) ? query + `limit=${limit}&` : '';
+        query = (filter) ? query + `filter=${filter}` : '';
 
         return axios.get(BASE_URL + `users/get-processes${query}`, RestService.getHeader());
     },
@@ -152,10 +153,20 @@ const RestService = {
         return axios.get(BASE_URL + 'users/transfer/history/' + device_id, RestService.getHeader());
     },
 
+    getServicesHistory: (usr_acc_id) => {
+        return axios.get(BASE_URL + 'users/getServicesHistory/' + usr_acc_id, RestService.getHeader());
+    },
+
 
     // getDevices
     DeviceList: () => {
         return axios.get(BASE_URL + 'users/devices',
+            RestService.getHeader()
+        )
+    },
+
+    getDevicesForReport: () => {
+        return axios.get(BASE_URL + 'users/get-devices-for-report',
             RestService.getHeader()
         )
     },
@@ -375,6 +386,15 @@ const RestService = {
     // For Dealer update
     updateDeviceDetails: (formData) => {
         return axios.put(BASE_URL + 'users/edit/devices', formData, RestService.getHeader());
+    },
+
+    extendServices: (formData) => {
+        return axios.put(BASE_URL + 'users/edit-device/extendServices', formData, RestService.getHeader());
+    },
+
+
+    cancelExtendedServices: (service_data) => {
+        return axios.put(BASE_URL + 'users/cancel-extended-services', service_data, RestService.getHeader());
     },
 
     // for dealer reset password(admin dashboard)
@@ -764,17 +784,17 @@ const RestService = {
         return axios.put(BASE_URL + 'users/undo_delete_user/' + userId, {}, RestService.getHeader())
     },
 
-    // Transfer Secure market Apps 
+    // Transfer Secure market Apps
     transferApps: (data, space) => {
         return axios.post(BASE_URL + 'users/transferApps', { data, spaceType: space }, RestService.getHeader())
     },
 
-    // Remove Secure market Apps 
+    // Remove Secure market Apps
     removeSMapps: (data, spaceType) => {
         return axios.post(BASE_URL + 'users/remove_sm_apps', { data, spaceType }, RestService.getHeader())
     },
 
-    // Change unistall app restriction for Secure market apps 
+    // Change unistall app restriction for Secure market apps
     handleUninstall: (apk_id, value, space) => {
         return axios.put(BASE_URL + 'users/handleUninstall/' + apk_id, { value, spaceType: space }, RestService.getHeader())
     },
@@ -803,8 +823,21 @@ const RestService = {
     rejectRequest: (request) => {
         return axios.put(BASE_URL + 'users/delete_request/' + request.id, request, RestService.getHeader());
     },
+    rejectServiceRequest: (request) => {
+        return axios.put(BASE_URL + 'users/delete_service_request/' + request.id, request, RestService.getHeader());
+    },
+
     acceptRequest: (request) => {
         return axios.put(BASE_URL + 'users/accept_request/' + request.id, request, RestService.getHeader());
+    },
+
+    acceptServiceRequest: (request) => {
+        return axios.put(BASE_URL + 'users/accept_service_request/' + request.id, request, RestService.getHeader());
+    },
+
+    getCancelServiceRequests: () => {
+        console.log("object");
+        return axios.get(BASE_URL + 'users/get-cancel-service-requests', RestService.getHeader());
     },
 
     simRegister: (data) => {
@@ -943,7 +976,7 @@ const RestService = {
 
     //product report
     generateProductReport: (data) => {
-        return axios.post(BASE_URL + 'users/reporting/product', data, RestService.getHeader());
+        return axios.post(BASE_URL + 'users/reports/product', data, RestService.getHeader());
     },
 
     //invoice report
@@ -959,6 +992,21 @@ const RestService = {
     //hardware report
     generateHardwareReport: (data) => {
         return axios.post(BASE_URL + 'users/reports/hardware', data, RestService.getHeader());
+    },
+
+    //sales report
+    generateSalesReport: (data) => {
+        return axios.post(BASE_URL + 'users/reports/sales', data, RestService.getHeader());
+    },
+
+    //get latest payment history
+    getLatestPaymentHistory: (data) => {
+        return axios.post(BASE_URL + 'users/get-latest-payment-history', data, RestService.getHeader());
+    },
+
+    //get overdue details
+    getOverdueDetails: () => {
+        return axios.get(BASE_URL + 'users/get-overdue-details', RestService.getHeader());
     },
 }
 export default RestService;
