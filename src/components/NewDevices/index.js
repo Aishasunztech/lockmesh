@@ -208,7 +208,7 @@ export default class NewDevices extends Component {
 
             let actionButns;
             if (this.state.sectionVisible) {
-                if (this.props.flaggedDevices !== undefined) {
+                if (this.props.allDevices !== undefined) {
                     if (flagged) {
                         actionButns = (<Fragment>{transferButton}</Fragment>);
                     } else {
@@ -260,8 +260,7 @@ export default class NewDevices extends Component {
 
 
     render() {
-        // console.log(this.props.cancel_service_requests);
-        let flaggedDevices = this.filterList(this.props.flaggedDevices)
+        let flaggedDevices = this.filterList(this.props.allDevices)
         // console.log('check flaggedDevices ', flaggedDevices, 'requests', this.props.requests, 'NewDevices', this.props.devices)
         return (
             <div>
