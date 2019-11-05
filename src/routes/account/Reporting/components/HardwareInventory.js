@@ -35,7 +35,7 @@ class PaymentHistory extends Component {
       },
 
       {
-        title: convertToLang(props.translation[''], "DEALER ID"),
+        title: convertToLang(props.translation[''], "DEALER PIN"),
         align: "center",
         className: '',
         dataIndex: 'dealer_pin',
@@ -67,12 +67,14 @@ class PaymentHistory extends Component {
 
     this.state = {
       reportCard: false,
+      reportFormData: {}
     };
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
+      this.state.reportFormData = values;
       this.props.generateHardwareReport(values)
     });
   };
@@ -89,9 +91,9 @@ class PaymentHistory extends Component {
 
       columns = [
         { title: '#', dataKey: "count" },
-        { title: convertToLang(this.props.translation[''], "DEALER ID"), dataKey: "dealer_pin" },
+        { title: convertToLang(this.props.translation[''], "HARDWARE"), dataKey: "hardware" },
+        { title: convertToLang(this.props.translation[''], "DEALER PIN"), dataKey: "dealer_pin" },
         { title: convertToLang(this.props.translation[''], "DEVICE ID"), dataKey: "device_id" },
-        { title: convertToLang(this.props.translation[''], "USER PAYMENT STATUS"), dataKey: "hardware" },
         { title: convertToLang(this.props.translation[''], "CREATED AT"), dataKey: "created_at" },
       ];
 
@@ -100,7 +102,7 @@ class PaymentHistory extends Component {
           count: ++index,
           dealer_pin: item.dealer_pin,
           device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
-          hardware: item.hardware,
+          hardware: item.hardware_name,
           created_at: getDateFromTimestamp(item.created_at)
         }
       })
@@ -270,7 +272,7 @@ class PaymentHistory extends Component {
                   </Col>
                   <Col xs={12} sm={12} md={12} lg={12} xl={12}>
                     <div className="pull-right">
-                      <Button type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Invoice Report', fileName);}}>Download PDF</Button>
+                      <Button type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Hardware Report', fileName, this.state.reportFormData);}}>Download PDF</Button>
                       <Button type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName)}}>Download Excel</Button>
                     </div>
                   </Col>

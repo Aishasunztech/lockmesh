@@ -4,11 +4,12 @@ import moment from 'moment';
 import styles from '../reporting.css'
 import { convertToLang, generatePDF, generateExcel, getDateFromTimestamp} from "../../../utils/commonUtils";
 import {
-  DEVICE_PRE_ACTIVATION, sim
+  DEVICE_PRE_ACTIVATION, DEVICE_UNLINKED
 } from "../../../../constants/Constants";
 
 import { BASE_URL
 } from "../../../../constants/Application";
+import {PRE_ACTIVATE_DEVICE} from "../../../../constants/ActionTypes";
 var columns;
 var rows;
 var fileName = 'invoice_' + new Date().getTime()
@@ -219,6 +220,32 @@ class Invoice extends Component {
                   )}
                 </Form.Item>
               }
+
+              <Form.Item
+                label="Devices"
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 14 }}
+                width='100%'
+              >
+                {this.props.form.getFieldDecorator('device', {
+                  initialValue: '',
+                  rules: [
+                    {
+                      required: false,
+                    },
+                  ],
+                })(
+                  <Select style={{ width: '100%' }}>
+                    <Select.Option value=''>ALL</Select.Option>
+                    <Select.Option value={DEVICE_PRE_ACTIVATION}>{DEVICE_PRE_ACTIVATION}</Select.Option>
+                    {this.props.devices.map((device, index) => {
+                      // if (device.finalStatus != DEVICE_UNLINKED && device.finalStatus != DEVICE_PRE_ACTIVATION){
+                        return (<Select.Option key={device.device_id} value={device.device_id}>{device.device_id}</Select.Option>)
+                      // }
+                    })}
+                  </Select>
+                )}
+              </Form.Item>
 
               <Form.Item
                 label="Payment Status"

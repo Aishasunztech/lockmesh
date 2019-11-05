@@ -25,7 +25,8 @@ import {
     UNLINK_DEVICE,
     ADD_DEVICE,
     BULK_DEVICES_LIST,
-    TRANSFER_DEVICE,
+  DEVICES_LIST_FOR_REPORT,
+  TRANSFER_DEVICE,
     FLAG_DEVICE,
     GET_PARENT_HARDWARES,
     ACCEPT_REQUEST
@@ -123,6 +124,7 @@ const initialState = {
     // options: ["DEVICE ID", "REMAINING DAYS", "FLAGGED", "STATUS", "MODE", "DEVICE NAME", "ACCOUNT EMAIL", "ACTIVATION CODE", "PGP EMAIL", "CHAT ID", "CLIENT ID", "DEALER ID", "DEALER PIN", "MAC ADDRESS", "SIM ID", "IMEI 1", "SIM 1", "IMEI 2", "SIM 2", "SERIAL NUMBER", "MODEL", "START DATE", "EXPIRY DATE", "DEALER NAME", "S-DEALER", "S-DEALER NAME"],
     newDevices: [],
     product_prices: [],
+    devicesForReport: [],
 };
 
 export default (state = initialState, action) => {
@@ -181,7 +183,7 @@ export default (state = initialState, action) => {
 
         case UNFLAG_DEVICE: {
             if (action.response.status) {
-                // 
+                //
                 let objIndex = state.devices.findIndex((obj => obj.device_id === action.payload.device.device_id));
                 if (objIndex !== -1) {
                     state.devices[objIndex].flagged = 'Not flagged';
@@ -253,7 +255,7 @@ export default (state = initialState, action) => {
         }
 
         case NEW_DEVICES_LIST:
-            // 
+            //
             return {
                 ...state,
                 isloading: false,
@@ -265,7 +267,7 @@ export default (state = initialState, action) => {
 
         case SUSPEND_DEVICE:
             if (action.response.status) {
-                // 
+                //
                 let objIndex = state.devices.findIndex((obj => obj.device_id === action.response.data.device_id));
                 if (objIndex !== -1) {
                     state.devices[objIndex] = action.response.data;
@@ -292,7 +294,7 @@ export default (state = initialState, action) => {
 
         // case UNLINK_DEVICE:
         //     if (action.response.status) {
-        //         
+        //
         //         let objIndex = state.devices.findIndex((obj => obj.device_id === action.response.data.device_id));
         //         if (objIndex !== -1) {
         //             state.devices[objIndex] = action.response.data;
@@ -450,7 +452,7 @@ export default (state = initialState, action) => {
         case PRE_ACTIVATE_DEVICE:
             let devices = [...state.devices]
             if (action.response.status) {
-                // 
+                //
                 // state.devices.push(action.response.data.data)
                 success({
                     title: action.response.data.msg,
@@ -477,25 +479,25 @@ export default (state = initialState, action) => {
             break;
 
         case GET_DROPDOWN: {
-            // 
-            // 
+            //
+            //
             // console.log({
             //     ...state,
             //     selectedOptions: action.payload
             // });
-            // 
+            //
             if (action.payload.length === 0) {
-                // 
+                //
                 action.payload[0] = 'ACTIONS';
             }
-            // 
+            //
             return {
                 ...state,
                 selectedOptions: action.payload
             }
         }
         case GET_PAGINATION: {
-            // 
+            //
             // console.log({
             //     ...state,
             //     selectedOptions: action.payload
@@ -515,7 +517,7 @@ export default (state = initialState, action) => {
             return state
         }
         case GET_SIM_IDS: {
-            // 
+            //
             // console.log(
             //     action.payload
             // )
@@ -542,7 +544,7 @@ export default (state = initialState, action) => {
             let filteredDevices = state.devices;
             let filteredNewDevices = state.newDevices;
             if (action.response.status) {
-                // 
+                //
                 var alldevices = state.devices;
                 var device_id = action.device.device_id;
                 filteredDevices = alldevices.filter(device => device.device_id !== device_id);
@@ -579,12 +581,19 @@ export default (state = initialState, action) => {
                 parent_hardwares: action.response.data,
             }
         case GET_PRODUCT_PRICES:
-            // 
+            //
 
             return {
                 ...state,
                 product_prices: action.response.data,
             }
+
+      case DEVICES_LIST_FOR_REPORT:
+        return {
+          ...state,
+          devicesForReport: action.payload.data,
+        }
+
         default:
             return state;
 
