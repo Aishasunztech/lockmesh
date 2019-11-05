@@ -676,8 +676,8 @@ const RestService = {
         return axios.post(BASE_URL + 'users/purchase_credits_CC', { cardInfo: cardInfo, creditInfo: creditInfo }, RestService.getHeader());
     },
 
-    languages: () => {
-        return axios.get(`${BASE_URL}users/languages`, RestService.getHeader());
+    getAll_Languages: () => {
+        return axios.get(`${BASE_URL}users/get-all-languages`, RestService.getHeader());
     },
 
     switchLanguage: (language) => {

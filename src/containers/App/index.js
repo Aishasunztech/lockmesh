@@ -15,8 +15,8 @@ import {
   onLayoutTypeChange, 
   onNavStyleChange, 
   setThemeType, 
-  getLanguage, 
-  languages 
+  // getLanguage, 
+  // getAll_Languages 
 } from '../../appRedux/actions'
 
 import {
@@ -92,19 +92,19 @@ class App extends Component {
 
   componentDidMount() {
     document.title = APP_TITLE + ' - Admin Dashboard';
-    this.props.getLanguage();
-    this.props.languages();
+    // this.props.getLanguage();
+    // this.props.getAll_Languages();
 
   }
 
   componentWillReceiveProps(nextProps) {
 
-    if (this.props.isSwitched !== nextProps.isSwitched) {
-      this.props.getLanguage();
-      // this.setState({
-      //   re_render: !this.state.re_render
-      // })
-    }
+    // if (this.props.isSwitched !== nextProps.isSwitched) {
+    //   this.props.getLanguage();
+    //   // this.setState({
+    //   //   re_render: !this.state.re_render
+    //   // })
+    // }
   }
 
   componentWillUnmount(){
@@ -160,4 +160,4 @@ const mapStateToProps = ({ settings, auth }) => {
   const { authUser, initURL, isAllowed } = auth;
   return { locale, navStyle, layoutType, authUser, initURL, isAllowed, isSwitched }
 };
-export default connect(mapStateToProps, { setInitUrl, setThemeType, onNavStyleChange, onLayoutTypeChange, checkComponent, getLanguage, languages })(App);
+export default connect(mapStateToProps, { setInitUrl, setThemeType, onNavStyleChange, onLayoutTypeChange, checkComponent })(App);

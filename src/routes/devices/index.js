@@ -211,6 +211,7 @@ class Devices extends Component {
     }
 
     handleChange(value) {
+        // this.handleCheckChange(this.props.selectedOptions)
         // console.log('filtede dis0')
 
         let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
@@ -469,8 +470,8 @@ class Devices extends Component {
 
     handleChangetab = (value) => {
 
-
-        // console.log('tab is: ', value)
+        // this.handleCheckChange(this.props.selectedOptions);
+        // console.log('this.props.selectedOptions: ', this.props.selectedOptions)
         // console.log('============= value index is: ', value)
         let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
         let indxAction = this.state.columns.findIndex(k => k.dataIndex == 'action');
@@ -759,7 +760,7 @@ class Devices extends Component {
 
 
     handleCheckChange(values) {
-        // console.log('handleCheckChange values are: ', values)
+        console.log('handleCheckChange values are: ', values)
         let dumydata = this.state.columns;
 
         // console.log("dumyData", dumydata);
