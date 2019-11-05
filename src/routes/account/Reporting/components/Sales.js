@@ -205,7 +205,7 @@ class Sales extends Component {
     return (
       <Row>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-          <Card style={{ height: '500px', paddingTop: '50px' }}>
+          <Card style={{ height: '500px'}}>
             <Form onSubmit={this.handleSubmit} autoComplete="new-password">
 
               <Form.Item

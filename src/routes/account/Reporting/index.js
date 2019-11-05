@@ -77,6 +77,7 @@ class Reporting extends Component {
                   productType={this.props.productType}
                   generateProductReport={this.props.generateProductReport}
                   user={this.props.user}
+                  devices={this.props.devices}
                 />
               </TabPane>
 
@@ -88,6 +89,7 @@ class Reporting extends Component {
                   generateHardwareReport={this.props.generateHardwareReport}
                   hardwareReport={this.props.hardwareReport}
                   user={this.props.user}
+                  devices={this.props.devices}
                 />
               </TabPane>
 
@@ -98,6 +100,7 @@ class Reporting extends Component {
                   generatePaymentHistoryReport={this.props.generatePaymentHistoryReport}
                   paymentHistoryReport={this.props.paymentHistoryReport}
                   user={this.props.user}
+                  devices={this.props.devices}
                 />
               </TabPane>
 
@@ -119,6 +122,7 @@ class Reporting extends Component {
                   generateSalesReport={this.props.generateSalesReport}
                   salesReport={this.props.salesReport}
                   user={this.props.user}
+                  devices={this.props.devices}
                 />
               </TabPane>
             </Tabs>

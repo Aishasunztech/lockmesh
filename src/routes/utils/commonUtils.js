@@ -416,7 +416,7 @@ export function removeDuplicateObjects(originalArray, prop) {
    return newArray;
 }
 export function generatePDF(columns, rows, title, fileName, formData) {
-
+console.log(formData)
   let y   = 15;
   let x   = 20;
   var doc = new jsPDF('p', 'pt');
@@ -430,6 +430,27 @@ export function generatePDF(columns, rows, title, fileName, formData) {
     doc.setTextColor(40);
     doc.setFontStyle('normal');
     doc.text('Product: ' + formData.product, y, x+=15);
+  }
+
+  if (formData.hardware){
+    doc.setFontSize(12);
+    doc.setTextColor(40);
+    doc.setFontStyle('normal');
+    doc.text('Hardware: ' + formData.hardware, y, x+=15);
+  }
+
+  if (formData.device){
+    doc.setFontSize(12);
+    doc.setTextColor(40);
+    doc.setFontStyle('normal');
+    doc.text('Device: ' + formData.device, y, x+=15);
+  }
+
+  if (formData.dealerObject){
+    doc.setFontSize(12);
+    doc.setTextColor(40);
+    doc.setFontStyle('normal');
+    doc.text('Dealer PIN: ' + formData.dealerObject.link_code, y, x+=15);
   }
 
   if (formData.payment_status){
