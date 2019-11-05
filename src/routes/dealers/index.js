@@ -82,7 +82,8 @@ class Dealers extends Component {
             suspendDealers: [],
             unlinkedDealers: [],
             expandedRowsKey: [],
-            SearchValues: []
+            SearchValues: [],
+            filteredDealers: []
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -170,8 +171,8 @@ class Dealers extends Component {
             case 'active':
                 dealers = this.filterList('active', this.props.dealers);
                 this.setState({
-                    dealers: this.handleSearch12(dealers),
-                    column: this.state.columns,
+                    dealers: this.handleSearchOnTabChange(dealers),
+                    filteredDealers: dealers,
                     tabselect: '2'
                 })
 
@@ -179,8 +180,8 @@ class Dealers extends Component {
             case 'suspended':
                 dealers = this.filterList('suspended', this.props.dealers);
                 this.setState({
-                    dealers: this.handleSearch12(dealers),
-                    column: this.state.columns,
+                    dealers: this.handleSearchOnTabChange(dealers),
+                    filteredDealers: dealers,
                     tabselect: '4'
                 })
                 break;
@@ -188,16 +189,16 @@ class Dealers extends Component {
             case 'all':
                 dealers = this.props.dealers;
                 this.setState({
-                    dealers: this.handleSearch12(dealers),
-                    column: this.state.columns,
+                    dealers: this.handleSearchOnTabChange(dealers),
+                    filteredDealers: dealers,
                     tabselect: '1'
                 })
                 break;
             case "unlinked":
                 dealers = this.filterList('unlinked', this.props.dealers);
                 this.setState({
-                    dealers: this.handleSearch12(dealers),
-                    column: this.state.columns,
+                    dealers: this.handleSearchOnTabChange(dealers),
+                    filteredDealers: dealers,
                     tabselect: '3'
                 })
                 break;
@@ -205,8 +206,8 @@ class Dealers extends Component {
             default:
                 dealers = this.props.dealers;
                 this.setState({
-                    dealers: this.handleSearch12(dealers),
-                    column: this.state.columns,
+                    dealers: this.handleSearchOnTabChange(dealers),
+                    filteredDealers: dealers,
                     tabselect: '1'
                 })
                 break;
@@ -344,7 +345,7 @@ class Dealers extends Component {
 
     handleComponentSearch = (value) => {
 
-        // console.log('searched keyword', value);
+        console.log('searched keyword', value);
 
         try {
             if (value.length) {
@@ -440,40 +441,46 @@ class Dealers extends Component {
 
         // console.log('selsect', this.props.selectedOptions)
         // let type = value.toLowerCase();
+        let dealers = [];
         switch (value) {
             case '2':
+                dealers = this.filterList('active', this.props.dealers);
                 this.setState({
-                    dealers: this.handleSearch12(this.filterList('active', this.props.dealers)),
-                    column: this.state.columns,
+                    dealers: this.handleSearchOnTabChange(dealers),
+                    filteredDealers: dealers,
                     tabselect: '2'
                 })
 
                 break;
             case '4':
+                dealers = this.filterList('suspended', this.props.dealers);
                 this.setState({
-                    dealers: this.handleSearch12(this.filterList('suspended', this.props.dealers)),
-                    column: this.state.columns,
+                    dealers: this.handleSearchOnTabChange(dealers),
+                    filteredDealers: dealers,
                     tabselect: '4'
                 })
                 break;
             case '1':
+                dealers = this.props.dealers;
                 this.setState({
-                    dealers: this.handleSearch12(this.props.dealers),
-                    column: this.state.columns,
+                    dealers: this.handleSearchOnTabChange(dealers),
+                    filteredDealers: dealers,
                     tabselect: '1'
                 })
                 break;
             case "3":
+                dealers = this.filterList('unlinked', this.props.dealers);
                 this.setState({
-                    dealers: this.handleSearch12(this.filterList('unlinked', this.props.dealers)),
-                    column: this.state.columns,
+                    dealers: this.handleSearchOnTabChange(dealers),
+                    filteredDealers: dealers,
                     tabselect: '3'
                 })
                 break;
             default:
+                dealers = this.props.dealers;
                 this.setState({
-                    dealers: this.handleSearch12(this.props.dealers),
-                    column: this.state.columns,
+                    dealers: this.handleSearchOnTabChange(dealers),
+                    filteredDealers: dealers,
                     tabselect: '1'
                 })
                 break;
@@ -648,11 +655,13 @@ class Dealers extends Component {
 
     handleSearch = (e) => {
 
+        console.log("dealer handleSearch key: ", e.target.name, "value: ", e.target.value);
+
         this.state.SearchValues[e.target.name] = { key: e.target.name, value: e.target.value };
 
-        let response = handleMultipleSearch(e, status, copyDealers, this.state.SearchValues, this.state.dealers)
+        let response = handleMultipleSearch(e, status, copyDealers, this.state.SearchValues, this.state.filteredDealers)
 
-        console.log(response.SearchValues, "response is: ===========> ", response)
+        // console.log(response.SearchValues, "response is: ===========> ", response)
         this.setState({
             dealers: response.demoData,
             SearchValues: response.SearchValues
@@ -739,7 +748,7 @@ class Dealers extends Component {
     }
 
 
-    handleSearch12 = (dealers) => {
+    handleSearchOnTabChange = (dealers) => {
         // console.log('check 2nd search data:: ', dealers);
 
         let response = filterData_RelatedToMultipleSearch(dealers, this.state.SearchValues);
