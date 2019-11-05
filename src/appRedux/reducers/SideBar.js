@@ -2,7 +2,8 @@ import {
     NEW_REQUEST_LIST,
     REJECT_REQUEST,
     ACCEPT_REQUEST,
-    USER_CREDITS
+    USER_CREDITS,
+    GET_CANCEL_REQUEST
 } from "../../constants/ActionTypes";
 import { Modal } from 'antd';
 
@@ -13,7 +14,8 @@ const initialSidebar = {
     whiteLabels: [],
     newRequests: [],
     user_credit: 0,
-    due_credit: 0
+    due_credit: 0,
+    cancel_service_requests: []
 };
 
 export default (state = initialSidebar, action) => {
@@ -83,7 +85,12 @@ export default (state = initialSidebar, action) => {
                 due_credit: action.response.due_credits
             }
         }
-
+        case GET_CANCEL_REQUEST: {
+            return {
+                ...state,
+                cancel_service_requests: action.response.data,
+            }
+        }
 
         default:
             return state;

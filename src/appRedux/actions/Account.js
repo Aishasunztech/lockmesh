@@ -13,6 +13,7 @@ import {
     DUPLICATE_SIM_IDS,
     NEW_DATA_INSERTED,
     CREATE_BACKUP_DB,
+    GET_OVERDUE_DETAILS,
     CHECK_BACKUP_PASS,
     SHOW_BACKUP_MODAL,
     SAVE_ID_PRICES,
@@ -32,6 +33,7 @@ import {
     PERMISSION_SAVED,
     PERMISSION_DOMAINS,
     GET_HARDWARE,
+  LATEST_PAYMENT_HISTORY,
     MODIFY_ITEM_PRICE
 } from "../../constants/ActionTypes"
 
@@ -596,3 +598,40 @@ export function domainPermission(id, dealers, action, statusAll = false, user) {
     }
 
 }
+export const getLatestPaymentHistory = (data) => {
+  return (dispatch) => {
+    RestService.getLatestPaymentHistory(data).then((response) => {
+      if (RestService.checkAuth(response.data)) {
+
+        dispatch({
+          type: LATEST_PAYMENT_HISTORY,
+          payload: response.data
+        })
+
+      } else {
+        dispatch({
+          type: INVALID_TOKEN
+        });
+      }
+    })
+  }
+};
+
+
+export const getOverdueDetails = () => {
+  return (dispatch) => {
+    RestService.getOverdueDetails().then((response) => {
+      if (RestService.checkAuth(response.data)) {
+        dispatch({
+          type: GET_OVERDUE_DETAILS,
+          payload: response.data
+        })
+
+      } else {
+        dispatch({
+          type: INVALID_TOKEN
+        });
+      }
+    })
+  }
+};

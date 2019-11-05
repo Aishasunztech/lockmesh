@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 import { convertToLang } from '../../utils/commonUtils';
 import { DUMY_TRANS_ID } from '../../../constants/LabelConstants';
-import { inventorySales } from '../../utils/columnsUtils';
+import { inventorySales, refundServiceColumns } from '../../utils/columnsUtils';
 import moment from 'moment';
 import { APP_TITLE } from '../../../constants/Application';
 
@@ -17,11 +17,12 @@ class Invoice extends Component {
         super(props);
 
         const invoiceColumns = inventorySales(props.translation);
-
+        const refundServicesColumns = refundServiceColumns(props.translation);
 
         this.state = {
             invoiceColumns: invoiceColumns,
             visible: false,
+            refundServicesColumns: refundServicesColumns
         }
     }
 
@@ -50,10 +51,10 @@ class Invoice extends Component {
     }
 
     render() {
-        const { user, deviceAction } = this.props;
+        const { user, deviceAction, renewService, applyServicesValue } = this.props;
 
         let total;
-        let discount = Math.ceil(Number(this.props.subTotal) * 0.05);
+        let discount = Math.ceil(Number(this.props.subTotal) * 0.03);
         let balanceDue = this.props.subTotal;
         let paid = 0;
 
@@ -61,17 +62,21 @@ class Invoice extends Component {
         if (deviceAction === "Edit") {
             total = this.props.total;
             paid = total;
-
             if (this.props.invoiceType === "pay_now") {
                 paid = balanceDue = total = total - discount;
             } else {
-                balanceDue = this.props.subTotal - this.props.creditsToRefund
+                if (!renewService || applyServicesValue !== 'extend') {
+                    balanceDue = this.props.subTotal - this.props.creditsToRefund
+                    total = this.props.subTotal - this.props.creditsToRefund
+                }
             }
         } else {
-            total = this.props.subTotal - discount;
             if (this.props.invoiceType === "pay_now") {
+                total = this.props.subTotal - discount;
                 balanceDue = total;
                 paid = total;
+            } else {
+                total = this.props.subTotal;
             }
         }
 
@@ -115,33 +120,30 @@ class Invoice extends Component {
 
                 <Fragment>
                     {(deviceAction === "Edit") ?
-                        <div style={{ marginTop: 40 }}>
-                            <h3 style={{ textAlign: "center" }}><b>CURRENT SERVICES</b></h3>
-                            <Table
-                                size="middle"
-                                columns={this.state.invoiceColumns}
-                                dataSource={this.props.renderInvoiceList((this.props.currentPakages) ? JSON.parse(this.props.currentPakages.packages) : [], (this.props.currentPakages) ? JSON.parse(this.props.currentPakages.products) : [], [], this.props.term, this.props.duplicate)}
-                                pagination={false}
-                            />
-                            <br />
-                            <div style={{ textAlign: 'right' }}>
-                                <Row style={{ fontWeight: 'bold' }}>
-                                    <Col span={12} />
-                                    <Col span={8}>Remaining days of services : </Col>
-                                    <Col span={4}>{this.props.serviceRemainingDays}</Col>
-                                </Row>
-                                <Row>
-                                    <Col span={12} />
-                                    <Col span={8}>Previous service refund credits : </Col>
-                                    <Col span={4}>{this.props.creditsToRefund}.00 Credits</Col>
-                                </Row>
-                            </div>
-                        </div >
+                        (renewService || applyServicesValue === 'extend') ? null :
+                            <div style={{ marginTop: 40 }}>
+                                <h4>REFUND APPLIED ON EXISTING SERVICE</h4>
+                                <Table
+                                    size="middle"
+                                    columns={this.state.refundServicesColumns}
+                                    dataSource={this.props.refundServiceRenderList(this.props.currentPakages, this.props.serviceRemainingDays, this.props.creditsToRefund, this.props.prevService_totalDays)}
+                                    pagination={false}
+                                />
+                                <br />
+                                <div style={{ textAlign: 'right' }}>
+                                    <Row style={{ fontWeight: 'bold' }}>
+                                        <Col span={10} />
+                                        <Col span={10}>TOTAL REFUND CREDITS: </Col>
+                                        <Col span={4}> -{this.props.creditsToRefund} Credits</Col>
+                                    </Row>
+                                </div>
+                            </div >
                         : null}
 
                     <div style={{ marginTop: 20 }}>
                         {(deviceAction === "Edit") ?
-                            <h3 style={{ textAlign: "center" }}><b>NEW SERVICES</b></h3>
+                            (renewService) ? <h4><b>RENEW SERVICES</b></h4> :
+                                <h4><b>NEW SERVICES</b></h4>
                             : null}
                         <Table
                             // width='850px'
@@ -160,51 +162,42 @@ class Invoice extends Component {
                         <Col span={4}>{this.props.subTotal} Credits</Col>
                     </Row>
                     {(deviceAction === "Edit") ?
-                        <Row>
-                            <Col span={12} />
-                            <Col span={8}>Previous service refund credits : </Col>
-                            <Col span={4}>{this.props.creditsToRefund} Credits</Col>
-                        </Row>
+                        (renewService || applyServicesValue) ? null :
+                            <Row>
+                                <Col span={12} />
+                                <Col span={8}>REFUND : </Col>
+                                <Col span={4}> -{this.props.creditsToRefund} Credits</Col>
+                            </Row>
                         : null}
                     {(this.props.invoiceType === "pay_now") ?
                         <Fragment>
-                            <Row>
+                            {/* <Row>
                                 <Col span={12} />
                                 <Col span={8}>Discount % : </Col>
                                 <Col span={4}> 5 % </Col>
-                            </Row>
+                            </Row> */}
                             <Row>
                                 <Col span={12} />
-                                <Col span={8}>Discount Credits : </Col>
-                                <Col span={4}>{discount} Credits</Col>
-                            </Row>
-                            <Row>
-                                <Col span={12} />
-                                <Col span={8}>Total : </Col>
-                                <Col span={4}>{total}&nbsp;Credits</Col>
+                                <Col span={8}>Discount 3% : </Col>
+                                <Col span={4}> -{discount} Credits</Col>
                             </Row>
                         </Fragment>
                         : null}
-                    <Row>
-                        <Col span={16} />
-                        <Col span={4}>Paid To Date : </Col>
-                        <Col span={4}>{paid}&nbsp;Credits</Col>
-                    </Row>
-                    <Row>
-                        <Col span={16} />
-                        <Col span={4}>Balance Due : </Col>
-                        <Col span={4}>{balanceDue}&nbsp;Credits</Col>
-                    </Row>
                     <br />
-                    <Row>
+                    <Row style={{ fontWeight: 'bold' }}>
+                        <Col span={12} />
+                        <Col span={8}>Total : </Col>
+                        <Col span={4}>{total}&nbsp;Credits</Col>
+                    </Row>
+                    <Row style={{ fontWeight: 'bold' }}>
                         <Col span={14} />
-                        <Col span={6}><b>Equivalent USD Price: </b></Col>
-                        <Col span={4}><b>${balanceDue}.00</b></Col>
+                        <Col span={6}>Equivalent USD Price: </Col>
+                        <Col span={4}>${balanceDue}.00</Col>
                     </Row>
 
                 </div>
                 <p style={{ textAlign: 'center', marginTop: 70 }}>Thank you for your business.</p>
-                
+
 
             </div>
         )

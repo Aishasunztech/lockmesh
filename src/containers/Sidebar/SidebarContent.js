@@ -2,16 +2,9 @@ import React, { Component } from "react";
 import { Menu, Icon, Badge, Modal, Popover, Avatar } from "antd";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-
 import SidebarLogo from "./SidebarLogo";
-
-// import LogoutIcon from "./logout.svg";
-
 import Auxiliary from "util/Auxiliary";
 import UserProfile from "./UserProfile";
-
-// import AppsNavigation from "./AppsNavigation";
-
 import NewDevice from '../../components/NewDevices';
 import CreditsModal from '../../components/CreditsModal';
 
@@ -20,8 +13,14 @@ import {
   getNewCashRequests,
   getUserCredit,
   rejectRequest,
-  acceptRequest
+  acceptRequest,
+  rejectServiceRequest,
+  acceptServiceRequest,
+  getCancelServiceRequests
 } from "../../appRedux/actions/SideBar";
+import {
+  getLatestPaymentHistory, getOverdueDetails
+} from "../../appRedux/actions/Account";
 
 import { transferDeviceProfile } from "../../appRedux/actions/ConnectDevice";
 
@@ -49,12 +48,13 @@ import {
 
 import { logout } from "appRedux/actions/Auth";
 
-import { rejectDevice, addDevice, getDevicesList } from '../../appRedux/actions/Devices';
+import { rejectDevice, addDevice, getDevicesList, } from '../../appRedux/actions/Devices';
 
 import { switchLanguage, getLanguage, getAll_Languages, toggleCollapsedSideNav } from "../../appRedux/actions/Setting";
 
 import { ADMIN, DEALER, SDEALER, AUTO_UPDATE_ADMIN } from "../../constants/Constants";
 import { Button_Yes, Button_No } from "../../constants/ButtonConstants";
+import { cloneableGenerator } from "redux-saga/utils";
 
 let status = true;
 class SidebarContent extends Component {
@@ -97,10 +97,13 @@ class SidebarContent extends Component {
   showNotification = () => {
     if (this.props.authUser.type !== ADMIN) {
       this.props.getNewCashRequests();
-      this.props.getNewDevicesList()
-      this.props.getUserCredit()
+      this.props.getNewDevicesList();
+      this.props.getUserCredit();
       this.refs.new_device.showModal();
       // this.props.getDevicesList();
+    } else {
+      this.props.getCancelServiceRequests()
+      this.refs.new_device.showModal();
     }
 
     // alert('its working');
@@ -108,7 +111,9 @@ class SidebarContent extends Component {
   showCreditsModal = () => {
     if (this.props.authUser.type !== ADMIN) {
       this.props.getUserCredit()
-      this.refs.credits_modal.showModal();
+      this.props.getLatestPaymentHistory({ limit: 10, type: 'credits' })
+      this.props.getOverdueDetails();
+      this.refs.credits_modal.getWrappedInstance().showModal();
     }
 
     // alert('its working');
@@ -120,15 +125,14 @@ class SidebarContent extends Component {
     this.setState({
       languageData: this.props.languageData
     })
-
-
-
-    // console.log('get new device', this.props.getNewDevicesList())
     this.props.getNewDevicesList();
     this.props.getNewCashRequests();
     this.props.getUserCredit();
     if (this.props.allDevices.length === 0) {
       this.props.getDevicesList();
+    }
+    if (this.props.authUser.type == ADMIN) {
+      this.props.getCancelServiceRequests()
     }
   }
 
@@ -142,6 +146,9 @@ class SidebarContent extends Component {
       this.props.getNewDevicesList();
       this.props.getNewCashRequests();
       this.props.getUserCredit()
+      if (this.props.authUser.type == ADMIN) {
+        this.props.getCancelServiceRequests()
+      }
     }
 
     if (this.props.isSwitched !== nextProps.isSwitched) {
@@ -219,6 +226,9 @@ class SidebarContent extends Component {
               translation={this.props.translation}
               user_credit={this.props.user_credit}
               due_credit={this.props.due_credit}
+              latestPaymentTransaction={this.props.latestPaymentTransaction}
+              overdueDetails={this.props.overdueDetails}
+              account_balance_status={this.props.account_balance_status}
             />
             <NewDevice
               ref='new_device'
@@ -232,6 +242,10 @@ class SidebarContent extends Component {
               translation={this.props.translation}
               allDevices={this.props.allDevices}
               transferDeviceProfile={this.transferDeviceProfile}
+              cancel_service_requests={this.props.cancel_service_requests}
+              rejectServiceRequest={this.props.rejectServiceRequest}
+              acceptServiceRequest={this.props.acceptServiceRequest}
+
             />
             <span className="font_14">
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}
@@ -242,11 +256,13 @@ class SidebarContent extends Component {
               {/* Price */}
               <li>
                 <a className="head-example">
-                  <Badge className="cred_badge" count={this.props.user_credit} overflowCount={99999}>
+                  <div className="cred_badge" >
                     <i className="icon icon-dollar notification_icn" onClick={() => this.showCreditsModal()} >
-                      <Icon type="dollar" className="mb-10" />
+                      <Icon type="dollar" className="mb-10" >
+                      </Icon>
+                      <span className="badge badge-pill doller-icon" >{this.props.user_credit}</span>
                     </i>
-                  </Badge>
+                  </div>
                 </a>
               </li>
               {/* {/* Chat Icon */}
@@ -257,7 +273,7 @@ class SidebarContent extends Component {
               {/* Notifications */}
               <li>
                 <a className="head-example">
-                  <Badge count={(localStorage.getItem('type') !== ADMIN) ? this.props.devices.length + this.props.requests.length : null}>
+                  <Badge count={(localStorage.getItem('type') !== ADMIN) ? this.props.devices.length + this.props.requests.length : this.props.cancel_service_requests.length}>
                     <i className="icon icon-notification notification_icn" onClick={() => this.showNotification()} />
                   </Badge>
                 </a>
@@ -290,7 +306,7 @@ class SidebarContent extends Component {
                 </Link>
               </Menu.Item>
               <Menu.Item key="logout" onClick={(e) => {
-                // this.props.logout() 
+                // this.props.logout()
                 this.logout()
               }}>
                 {/* <Link to="/logout"> */}
@@ -384,9 +400,6 @@ class SidebarContent extends Component {
 
 const mapStateToProps = ({ settings, devices, sidebar }) => {
   const { navStyle, themeType, locale, pathname, languages, translation, isSwitched } = settings;
-
-  // console.log('lng id is: ', translation["lng_id"])
-  // console.log('test: =====================================================>  ' , devices.devices)
   return {
     navStyle,
     themeType,
@@ -396,12 +409,38 @@ const mapStateToProps = ({ settings, devices, sidebar }) => {
     devices: devices.newDevices,
     requests: sidebar.newRequests,
     user_credit: sidebar.user_credit,
+    cancel_service_requests: sidebar.cancel_service_requests,
     due_credit: sidebar.due_credit,
+    latestPaymentTransaction: account.paymentHistory,
+    overdueDetails: account.overdueDetails,
     languageData: languages,
     translation: translation,
     lng_id: translation["lng_id"],
-    isSwitched: isSwitched
+    isSwitched: isSwitched,
+    account_balance_status: auth.authUser.account_balance_status 
   }
 };
-export default connect(mapStateToProps, { getDevicesList, rejectDevice, addDevice, logout, getNewDevicesList, toggleCollapsedSideNav, switchLanguage, getLanguage, getAll_Languages, getNewCashRequests, getUserCredit, acceptRequest, rejectRequest, transferDeviceProfile })(SidebarContent);
+export default connect(mapStateToProps,
+  {
+    getLatestPaymentHistory,
+    getOverdueDetails,
+    getDevicesList,
+    rejectDevice,
+    addDevice,
+    logout,
+    getNewDevicesList,
+    toggleCollapsedSideNav,
+    switchLanguage,
+    getLanguage,
+    getAll_Languages,
+    getNewCashRequests,
+    getUserCredit,
+    acceptRequest,
+    rejectRequest,
+    transferDeviceProfile,
+    getCancelServiceRequests,
+    acceptServiceRequest,
+    rejectServiceRequest
+  }
+)(SidebarContent);
 

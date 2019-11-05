@@ -5,8 +5,8 @@ import {
   DEVICE_PRE_ACTIVATION
 } from "../../../../constants/Constants";
 import styles from '../reporting.css'
-import { convertToLang, generatePDF, generateExcel } from "../../../utils/commonUtils";
-let fileName = 'hardware_report_' + new Date().getTime()
+import { convertToLang, generatePDF, generateExcel, getDateFromTimestamp } from "../../../utils/commonUtils";
+let fileName = 'hardware_report_' + new Date().getTime();
 var columns;
 var rows;
 
@@ -16,11 +16,12 @@ class PaymentHistory extends Component {
 
     this.columns = [
       {
-        title: "Sr.#",
-        dataIndex: 'sr',
-        key: 'sr',
+        title: "#",
+        dataIndex: 'count',
+        key: 'count',
         align: "center",
-        render: (text, record, index) => ++index,
+        sorter: (a, b) => { return a.count - b.count },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {
@@ -29,14 +30,18 @@ class PaymentHistory extends Component {
         className: '',
         dataIndex: 'hardware',
         key: 'hardware',
+        sorter: (a, b) => { return a.hardware.localeCompare(b.hardware) },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {
-        title: convertToLang(props.translation[''], "DEALER ID"),
+        title: convertToLang(props.translation[''], "DEALER PIN"),
         align: "center",
         className: '',
-        dataIndex: 'dealer_id',
-        key: 'dealer_id',
+        dataIndex: 'dealer_pin',
+        key: 'dealer_pin',
+        sorter: (a, b) => { return a.dealer_pin - b.dealer_pin },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {
@@ -45,6 +50,8 @@ class PaymentHistory extends Component {
         className: '',
         dataIndex: 'device_id',
         key: 'device_id',
+        sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) },
+        sortDirections: ['ascend', 'descend'],
       },
 
       {
@@ -53,17 +60,21 @@ class PaymentHistory extends Component {
         className: '',
         dataIndex: 'created_at',
         key: 'created_at',
+        sorter: (a, b) => { return a.created_at.localeCompare(b.created_at) },
+        sortDirections: ['ascend', 'descend'],
       },
     ];
 
     this.state = {
       reportCard: false,
+      reportFormData: {}
     };
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
+      this.state.reportFormData = values;
       this.props.generateHardwareReport(values)
     });
   };
@@ -80,19 +91,19 @@ class PaymentHistory extends Component {
 
       columns = [
         { title: '#', dataKey: "count" },
-        { title: convertToLang(this.props.translation[''], "DEALER ID"), dataKey: "dealer_id" },
+        { title: convertToLang(this.props.translation[''], "HARDWARE"), dataKey: "hardware" },
+        { title: convertToLang(this.props.translation[''], "DEALER PIN"), dataKey: "dealer_pin" },
         { title: convertToLang(this.props.translation[''], "DEVICE ID"), dataKey: "device_id" },
-        { title: convertToLang(this.props.translation[''], "USER PAYMENT STATUS"), dataKey: "hardware" },
         { title: convertToLang(this.props.translation[''], "CREATED AT"), dataKey: "created_at" },
       ];
 
       rows = this.props.hardwareReport.map((item, index) => {
         return {
           count: ++index,
-          dealer_id: item.dealer_id,
+          dealer_pin: item.dealer_pin,
           device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
-          hardware: item.dealer_id,
-          created_at: item.created_at
+          hardware: item.hardware_name,
+          created_at: getDateFromTimestamp(item.created_at)
         }
       })
 
@@ -112,19 +123,19 @@ class PaymentHistory extends Component {
       let data = []
       let counter = 1;
       list.map((item, index) => {
-        let hardwares = JSON.parse(item.hardwares)
-        hardwares.map((hardware, i) => {
+        // let hardwares = JSON.parse(item.hardware_data)
+        // hardwares.map((hardware, i) => {
           data.push( {
             rowKey: counter++,
             key: counter++,
-            sr: counter++,
-            dealer_id: item.dealer_id,
+            count: counter++,
+            dealer_pin: item.dealer_pin,
             device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
-            hardware: hardware.hardware_name,
-            created_at: item.created_at
+            hardware: item.hardware_name,
+            created_at: getDateFromTimestamp(item.created_at)
           })
         })
-      })
+      // })
       return data;
     }
   };
@@ -158,37 +169,49 @@ class PaymentHistory extends Component {
                 })(
                   <Select style={{ width: '100%' }}>
                     <Select.Option value=''>ALL</Select.Option>
-                    <Select.Option value='CHAT'>CHAT</Select.Option>
-                    <Select.Option value='PGP'>PGP</Select.Option>
-                    <Select.Option value='SIM'>SIM</Select.Option>
-                    <Select.Option value='VPN'>VPN</Select.Option>
-                  </Select>
-                )}
-              </Form.Item>
-
-              <Form.Item
-                label="Dealer/Sdealer"
-                labelCol={{ span: 8 }}
-                wrapperCol={{ span: 14 }}
-                width='100%'
-              >
-                {this.props.form.getFieldDecorator('dealer', {
-                  initialValue: '',
-                  rules: [
-                    {
-                      required: false,
-                    },
-                  ],
-                })(
-                  <Select style={{ width: '100%' }}>
-                    <Select.Option value=''>ALL</Select.Option>
-                    <Select.Option value={this.props.user.dealerId}>My Report</Select.Option>
-                    {this.props.dealerList.map((dealer, index) => {
-                      return (<Select.Option key={dealer.dealer_id} value={dealer.dealer_id}>{dealer.dealer_name} ({dealer.link_code})</Select.Option>)
+                    {this.props.hardwares.map((hardware, index) => {
+                      return (<Select.Option key={hardware.hardware_name} value={hardware.hardware_name}>{hardware.hardware_name}</Select.Option>)
                     })}
                   </Select>
                 )}
               </Form.Item>
+
+              {(this.props.user.type === 'sdealer') ?
+
+                <Form.Item style={{ marginBottom: 0 }}
+                >
+                  {this.props.form.getFieldDecorator('dealer', {
+                    initialValue: this.props.user.dealerId,
+                  })(
+
+                    <Input type='hidden' disabled />
+                  )}
+                </Form.Item>
+
+                : <Form.Item
+                  label="Dealer/Sdealer"
+                  labelCol={{ span: 8 }}
+                  wrapperCol={{ span: 14 }}
+                  width='100%'
+                >
+                  {this.props.form.getFieldDecorator('dealer', {
+                    initialValue: '',
+                    rules: [
+                      {
+                        required: false,
+                      },
+                    ],
+                  })(
+                    <Select style={{ width: '100%' }}>
+                      <Select.Option value=''>ALL</Select.Option>
+                      <Select.Option value={this.props.user.dealerId}>My Report</Select.Option>
+                      {this.props.dealerList.map((dealer, index) => {
+                        return (<Select.Option key={dealer.dealer_id} value={dealer.dealer_id}>{dealer.dealer_name} ({dealer.link_code})</Select.Option>)
+                      })}
+                    </Select>
+                  )}
+                </Form.Item>
+              }
 
               <Form.Item
                 label="FROM (DATE) "
@@ -249,7 +272,7 @@ class PaymentHistory extends Component {
                   </Col>
                   <Col xs={12} sm={12} md={12} lg={12} xl={12}>
                     <div className="pull-right">
-                      <Button type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Invoice Report', fileName);}}>Download PDF</Button>
+                      <Button type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Hardware Report', fileName, this.state.reportFormData);}}>Download PDF</Button>
                       <Button type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName)}}>Download Excel</Button>
                     </div>
                   </Col>

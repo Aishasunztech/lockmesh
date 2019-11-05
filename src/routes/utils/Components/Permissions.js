@@ -127,7 +127,7 @@ class Permissions extends Component {
         listDealerCols: dealerColsWithSearch(nextProps.translation)
       })
     }
-    // console.log("this.props.record ", this.props.record);
+    console.log("nextProps.record.statusAll will recv  ", nextProps.record);
     if (this.props.record.id !== nextProps.record.id) {
       if (this.props.permissionType == 'package') {
         this.props.getUserDealers();
@@ -137,7 +137,7 @@ class Permissions extends Component {
     }
 
     // console.log("nextProps.record.permissions ", nextProps.record.permissions);
-    addAllBtn = this.props.record.statusAll;
+    addAllBtn = nextProps.record.statusAll;
     this.setState({
       dealerListForModal: nextProps.dealerList,
       dealerList: nextProps.dealerList,
@@ -524,6 +524,7 @@ class Permissions extends Component {
       }} />
     }
 
+    // console.log("addAllBtn check 01: ", addAllBtn)
 
     // console.log('check condition: ', "length: ", this.state.dealerList.length == this.props.record.permissions.length, this.state.checkChanges, this.props.record.statusAll)
     if (this.state.checkChanges) {
@@ -564,7 +565,7 @@ class Permissions extends Component {
 
     // console.log(checkPermissins, "checkPermissins");
 
-
+    // console.log("addAllBtn check 02: ", addAllBtn)
 
     return (
       <Fragment>
