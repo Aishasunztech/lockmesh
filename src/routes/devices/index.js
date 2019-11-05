@@ -81,21 +81,21 @@ import AppFilter from '../../components/AppFilter';
 import DevicesList from './components/DevicesList';
 import ShowMsg from './components/ShowMsg';
 // import Column from "antd/lib/table/Column";
-import { 
-    getStatus, 
-    componentSearch, 
-    titleCase, 
-    dealerColsWithSearch, 
-    convertToLang, 
-    checkValue, 
-    handleMultipleSearch, 
-    filterData_RelatedToMultipleSearch 
+import {
+    getStatus,
+    componentSearch,
+    titleCase,
+    dealerColsWithSearch,
+    convertToLang,
+    checkValue,
+    handleMultipleSearch,
+    filterData_RelatedToMultipleSearch
 } from '../utils/commonUtils';
 import CircularProgress from "components/CircularProgress/index";
 import AddDevice from './components/AddDevice';
 import { devicesColumns } from '../utils/columnsUtils';
 import { Sidebar_devices, Sidebar_users_devices } from "../../constants/SidebarConstants";
-
+const confirm = Modal.confirm
 
 var copyDevices = [];
 var status = true;
@@ -1010,9 +1010,13 @@ class Devices extends Component {
 
     handleDeviceModal = (visible) => {
         let device = {};
-        this.refs.add_device.showModal(device, (device) => {
-            this.props.preActiveDevice(device);
-        }, true);
+        if (this.props.user.account_balance_status === 'suspended') {
+            showSupendAccountWarning(this)
+        } else {
+            this.refs.add_device.showModal(device, (device) => {
+                this.props.preActiveDevice(device);
+            }, true);
+        }
     }
 
 
@@ -1271,3 +1275,18 @@ var mapStateToProps = ({ devices, auth, settings }) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Devices)
+
+
+function showSupendAccountWarning(_this) {
+    confirm({
+        title: "Your account is past due, please make a payment of past due to bring your account up to date to use the ADD DEVICE feature.",
+        okText: "PURCHASE CREDITS",
+        onOk() {
+            _this.props.history.push('/account')
+        },
+        onCancel() {
+
+        },
+
+    })
+}
