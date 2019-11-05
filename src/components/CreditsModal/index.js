@@ -303,6 +303,8 @@ class CreditIcon extends Component {
           <Select.Option value="USD">USD</Select.Option>
           <Select.Option value="CAD">CAD</Select.Option>
           <Select.Option value="EUR">EUR</Select.Option>
+          <Select.Option value="VND">VND</Select.Option>
+          <Select.Option value="CNY">CNY</Select.Option>
         </Select>,
 
       },
