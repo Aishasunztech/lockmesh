@@ -742,7 +742,7 @@ class Services extends Component {
                         </Button>
                         : null
                     }
-                    <Tabs type="card" tabPosition={'left'} className="services_tabs " activeKey={this.props.tabselect} onChange={this.callback}>
+                    <Tabs type="card" className="services_tabs " activeKey={this.props.tabselect} onChange={this.callback}>
                         {(this.props.type !== 'edit' || (this.props.type === 'edit' && this.props.device.finalStatus === DEVICE_PRE_ACTIVATION)) ?
                             <TabPane tab={<span className="green">TRIAL</span>} key="0" >
                             </TabPane>

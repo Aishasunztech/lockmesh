@@ -93,6 +93,7 @@
     border: 1px solid #e8e8e8;
     border-left: 0;
     border-right: 0;
+    margin-bottom: 15px;
 }
 
 .wipe_device .ant-modal-content {
@@ -388,8 +389,7 @@
     margin-right: 50px;
 }
 
-.overdue_table,
-.pay_history {
+.overdue_table, .pay_history {
     margin-top: 50px;
 }
 
@@ -413,15 +413,11 @@
     padding: 0;
 }
 
-.overdue_table .ant-table-tbody>tr:hover:not(.ant-table-expanded-row)>td,
-.ac_status_table .ant-table-tbody>tr:hover:not(.ant-table-expanded-row)>td {
+.overdue_table .ant-table-tbody>tr:hover:not(.ant-table-expanded-row)>td, .ac_status_table .ant-table-tbody>tr:hover:not(.ant-table-expanded-row)>td {
     background: none;
 }
 
-.overdue_table .ant-table-thead>tr>th,
-.overdue_table .ant-table-tbody>tr>td,
-.pay_history .ant-table-thead>tr>th,
-.pay_history .ant-table-tbody>tr>td {
+.overdue_table .ant-table-thead>tr>th, .overdue_table .ant-table-tbody>tr>td, .pay_history .ant-table-thead>tr>th, .pay_history .ant-table-tbody>tr>td {
     padding: 4px 0 !important;
 }
 
@@ -464,6 +460,11 @@
     margin-bottom: 0
 }
 
+.edit_ftr_btn_serv {
+    float: right;
+    margin-top: 10;
+}
+
 @media screen and (max-width: 768px) {
     /* .add_user_btn {
         position: absolute;
@@ -475,7 +476,6 @@
         margin: 8px 0 4px; 
     }
     */
-
     .edit_form .ant-form-item-label {
         text-align: left;
     }

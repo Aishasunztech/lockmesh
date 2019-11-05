@@ -1045,6 +1045,7 @@ class EditDevice extends Component {
                     // onCancel={this.handleCancel}
                     footer={null}
                     className="edit_form"
+                    bodyStyle={{ height: '440px', overflow: 'overlay' }}
                 >
                     <Services
                         handleCancel={this.handleCancel}

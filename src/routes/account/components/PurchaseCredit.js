@@ -242,7 +242,7 @@ class PurchaseCredit extends Component {
                                     <Input disabled />
                                 )}
                             </Form.Item>
-                            <Form.Item
+                            {/* <Form.Item
                                 label="PROMO CODE"
                                 labelCol={{ span: 8, xs: 24, sm: 8 }}
                                 wrapperCol={{ span: 14, md: 14, xs: 24 }}
@@ -252,7 +252,7 @@ class PurchaseCredit extends Component {
                                 })(
                                     <Input disabled />
                                 )}
-                            </Form.Item>
+                            </Form.Item> */}
                             <Form.Item
                                 label="PAYMENT METHOD"
                                 labelCol={{ span: 8, xs: 24, sm: 8 }}
