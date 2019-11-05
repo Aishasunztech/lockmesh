@@ -119,7 +119,17 @@ export default class NewDevices extends Component {
     }
 
     acceptRequest(request) {
+
         showConfirm(this, convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST], "Are you sure you want to accept this request ?"), this.props.acceptRequest, request)
+    }
+
+    acceptDevice(device) {
+        if (this.props.authUser.account_balance_status === 'suspended') {
+            showSupendAccountWarning(this)
+        } else {
+            this.refs.add_device_modal.showModal(device, this.props.addDevice);
+            this.setState({ visible: false })
+        }
     }
 
 
@@ -204,7 +214,7 @@ export default class NewDevices extends Component {
             }
 
             let declineButton = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.rejectDevice(device); }}>{convertToLang(this.props.translation[Button_Decline], "DECLINE")}</Button>;
-            let acceptButton = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.refs.add_device_modal.showModal(device, this.props.addDevice); this.setState({ visible: false }) }}> {convertToLang(this.props.translation[Button_ACCEPT], "ACCEPT")}</Button>;
+            let acceptButton = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.acceptDevice(device) }}> {convertToLang(this.props.translation[Button_ACCEPT], "ACCEPT")}</Button>;
 
             let actionButns;
             if (this.state.sectionVisible) {
@@ -348,4 +358,17 @@ function showConfirm(_this, msg, action, request) {
 
         },
     });
+}
+function showSupendAccountWarning(_this) {
+    confirm({
+        title: "Your account is past due, please make a payment of past due to bring your account up to date to use the ADD DEVICE feature.",
+        okText: "PURCHASE CREDITS",
+        onOk() {
+            _this.props.history.push('/account')
+        },
+        onCancel() {
+
+        },
+
+    })
 }
