@@ -118,7 +118,7 @@ export function rejectServiceRequest(request) {
 
 export function acceptServiceRequest(request) {
     return (dispatch) => {
-        console.log(request)
+        // console.log(request)
         RestService.acceptServiceRequest(request).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
