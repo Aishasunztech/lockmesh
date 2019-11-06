@@ -17,7 +17,7 @@ import {
     cancelExtendedServices
 } from "../../../../appRedux/actions/ConnectDevice";
 import AddUser from '../../../users/components/AddUser';
-
+const confirm = Modal.confirm
 
 var copyTransfer = [];
 var status = true;
@@ -192,11 +192,8 @@ class Services extends Component {
     }
     cancelExtendedServices = () => {
         if (this.props.extended_services) {
-            let service_data = {
-                service_id: this.props.extended_services.id,
-                user_acc_id: this.props.extended_services.user_acc_id
-            }
-            this.props.cancelExtendedServices(service_data)
+            showCancelExtendedConfirm(this)
+
         }
     }
 
@@ -283,3 +280,21 @@ var mapStateToProps = ({ users, settings, device_details }) => {
 }
 
 export default connect(mapStateToProps, { getServicesHistory, cancelExtendedServices }, null, { withRef: true })(WrappedUserList);
+
+function showCancelExtendedConfirm(_this) {
+    confirm({
+        title: "Are you sure you want to cancel extended services from this device ? ",
+        okText: "PROCEED WITH CANCELLATION",
+        onOk() {
+            let service_data = {
+                service_id: _this.props.extended_services.id,
+                user_acc_id: _this.props.extended_services.user_acc_id
+            }
+            _this.props.cancelExtendedServices(service_data)
+        },
+        onCancel() {
+
+        },
+
+    })
+}

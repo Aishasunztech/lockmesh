@@ -785,7 +785,7 @@ class EditDevice extends Component {
                                     // className="apply_services"
                                     // disabled={(this.props.device.extended_services) ? true : false}
                                     >
-                                        {(this.props.device.services) ?
+                                        {(this.props.device.services && this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ?
 
                                             <Select.Option value="extend">{convertToLang(this.props.translation[DUMY_TRANS_ID], "EXTEND SERVICES")}</Select.Option>
                                             : null}
