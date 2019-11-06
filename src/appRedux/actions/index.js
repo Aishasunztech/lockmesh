@@ -19,3 +19,4 @@ export * from './Socket';
 export * from './Users';
 
 export * from './Reports';
+export * from './RightSidebar';

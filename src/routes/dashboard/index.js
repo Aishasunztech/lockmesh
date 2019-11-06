@@ -113,7 +113,7 @@ class Dashboard extends Component {
                     acceptRequest={this.props.acceptRequest}
                     rejectRequest={this.props.rejectRequest}
                     translation={this.props.translation}
-                    flaggedDevices={this.props.flaggedDevices}
+                    allDevices={this.props.allDevices}
                     transferDeviceProfile={this.transferDeviceProfile}
                 />
 
@@ -393,7 +393,7 @@ var mapStateToProps = ({ dashboard, auth, devices, sidebar, settings }) => {
         items: dashboard.dashboard_items,
         authUser: auth.authUser,
 
-        flaggedDevices: devices.devices,
+        allDevices: devices.devices,
         devices: devices.newDevices,
         requests: sidebar.newRequests,
         translation: settings.translation,

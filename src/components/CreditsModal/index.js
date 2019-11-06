@@ -31,9 +31,9 @@ import { DT_MODAL_BODY_7 } from "../../constants/AppConstants";
 import { BASE_URL } from "../../constants/Application";
 import { bindActionCreators } from "redux";
 import {
-purchaseCredits, purchaseCreditsFromCC
+  purchaseCredits, purchaseCreditsFromCC
 } from "../../appRedux/actions";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import RestService from "../../appRedux/services/RestServices";
 const confirm = Modal.confirm;
 let paymentHistoryColumns;
@@ -249,7 +249,7 @@ class CreditIcon extends Component {
       {
         status: <span className="p-5 weight_600"> Account Restriction</span>,
         overdue: <span className="weight_600 p-5"> 30+</span>,
-        amount: <span className="weight_600 p-5"> {(this.props.overdueDetails._30to60_dues) ? '-' + this.props.overdueDetails._21to30_dues : 0}</span>,
+        amount: <span className="weight_600 p-5"> {(this.props.overdueDetails._30to60_dues) ? '-' + this.props.overdueDetails._30to60_dues : 0}</span>,
         invoices: <Button size="small" className="invo_btn"> {this.props.overdueDetails._30to60}</Button>
       },
       {
@@ -298,17 +298,19 @@ class CreditIcon extends Component {
       {
         name1: <h6 className="weight_600 p-5"> CURRENCY</h6>,
         age1: <Select defaultValue="USD"
-                      onChange={(e) => { this.onChangeCurrency(e, 'currency') }}
+          onChange={(e) => { this.onChangeCurrency(e, 'currency') }}
         >
           <Select.Option value="USD">USD</Select.Option>
           <Select.Option value="CAD">CAD</Select.Option>
           <Select.Option value="EUR">EUR</Select.Option>
+          <Select.Option value="VND">VND</Select.Option>
+          <Select.Option value="CNY">CNY</Select.Option>
         </Select>,
 
       },
       {
-        name1: <h6 className="weight_600 p-5"> USD (EQUIVALENT)</h6>,
-        age1:<h6 className="weight_600 p-5 float-right">  $ { formatMoney(this.state.currency_price) }</h6>,
+        name1: <h6 className="weight_600 p-5"> {this.state.currency.toUpperCase() + ' (EQUIVALENT)'}</h6>,
+        age1: <h6 className="weight_600 p-5 float-right"> {formatMoney(this.state.currency_price)}</h6>,
 
       },
 
@@ -318,7 +320,7 @@ class CreditIcon extends Component {
       },
       {
         name1: <h5 className="weight_600">PURCHASE CREDITS</h5>,
-        age1: <Button type="default" size="small" className="buy_btn_invo" onClick={(e) => {this.showPurchaseModal(e, true);}}>
+        age1: <Button type="default" size="small" className="buy_btn_invo" onClick={(e) => { this.showPurchaseModal(e, true); }}>
           BUY
         </Button>,
 

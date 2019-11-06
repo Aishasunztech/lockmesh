@@ -106,6 +106,17 @@ const RestService = {
 
     },
 
+    getSocketProcesses: (status, filter, offset, limit) => {
+        let query = '';
+
+        query = (status) ? query + `?status=${status}&` : '';
+        query = (offset) ? query + `start=${offset}&` : '';
+        query = (limit) ? query + `limit=${limit}&` : '';
+        query = (filter) ? query + `filter=${filter}` : '';
+
+        return axios.get(BASE_URL + `users/get-processes${query}`, RestService.getHeader());
+    },
+
     // isAdmin
     isAdmin: () => {
         // var self = this;
@@ -154,11 +165,11 @@ const RestService = {
         )
     },
 
-  getDevicesForReport: () => {
-    return axios.get(BASE_URL + 'users/get-devices-for-report',
-      RestService.getHeader()
-    )
-  },
+    getDevicesForReport: () => {
+        return axios.get(BASE_URL + 'users/get-devices-for-report',
+            RestService.getHeader()
+        )
+    },
 
     getBulkDevicesList: (data) => {
         return axios.post(BASE_URL + 'users/filtered-bulkDevices', data, RestService.getHeader())
@@ -685,8 +696,8 @@ const RestService = {
         return axios.post(BASE_URL + 'users/purchase_credits_CC', { cardInfo: cardInfo, creditInfo: creditInfo }, RestService.getHeader());
     },
 
-    languages: () => {
-        return axios.get(`${BASE_URL}users/languages`, RestService.getHeader());
+    getAll_Languages: () => {
+        return axios.get(`${BASE_URL}users/get-all-languages`, RestService.getHeader());
     },
 
     switchLanguage: (language) => {
@@ -965,7 +976,7 @@ const RestService = {
 
     //product report
     generateProductReport: (data) => {
-      return axios.post(BASE_URL + 'users/reports/product', data, RestService.getHeader());
+        return axios.post(BASE_URL + 'users/reports/product', data, RestService.getHeader());
     },
 
     //invoice report
@@ -983,19 +994,19 @@ const RestService = {
         return axios.post(BASE_URL + 'users/reports/hardware', data, RestService.getHeader());
     },
 
-  //sales report
-  generateSalesReport: (data) => {
-    return axios.post(BASE_URL + 'users/reports/sales', data, RestService.getHeader());
-  },
+    //sales report
+    generateSalesReport: (data) => {
+        return axios.post(BASE_URL + 'users/reports/sales', data, RestService.getHeader());
+    },
 
-  //get latest payment history
-  getLatestPaymentHistory: (data) => {
-    return axios.post(BASE_URL + 'users/get-latest-payment-history', data, RestService.getHeader());
-  },
+    //get latest payment history
+    getLatestPaymentHistory: (data) => {
+        return axios.post(BASE_URL + 'users/get-latest-payment-history', data, RestService.getHeader());
+    },
 
-  //get overdue details
-  getOverdueDetails: () => {
-    return axios.get(BASE_URL + 'users/get-overdue-details', RestService.getHeader());
-  },
+    //get overdue details
+    getOverdueDetails: () => {
+        return axios.get(BASE_URL + 'users/get-overdue-details', RestService.getHeader());
+    },
 }
 export default RestService;

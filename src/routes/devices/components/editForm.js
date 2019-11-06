@@ -65,6 +65,7 @@ class EditDevice extends Component {
             vpn: '',
             packageId: '',
             disableSim: true,
+            disableSim2: true,
             disableChat: true,
             disablePgp: true,
             disableVpn: true,
@@ -450,6 +451,7 @@ class EditDevice extends Component {
         let disableChat = true;
         let disablePgp = true;
         let disableSim = true;
+        let disableSim2 = true;
         let vpn = '';
         console.log(this.state.applyServicesValue, products, packages, term);
         let packagesData = []
@@ -475,10 +477,13 @@ class EditDevice extends Component {
                     disableSim = false
                 }
                 if (services.sim_id2) {
+
+                    disableSim2 = false
                     this.sim_id2_included = true
-                } else {
-                    this.sim_id2_included = false
+                    // } else {
+                    //     this.sim_id2_included = false
                 }
+
                 if (services.pgp_email) {
                     disablePgp = false
                 }
@@ -488,30 +493,30 @@ class EditDevice extends Component {
                 // console.log(item.pkg_features);
             })
         }
-        if (products && products.length) {
-            products.map((item) => {
-                let data = {
-                    id: item.id,
-                    price_for: item.item,
-                    unit_price: item.unit_price,
-                    price_term: item.price_term
-                }
-                total_price = total_price + Number(item.unit_price)
-                productData.push(data)
-                if (item.item == 'chat_id') {
-                    disableChat = false
-                }
-                else if (item.item == 'sim_id') {
-                    disableSim = false
-                }
-                else if (item.item == 'pgp_email') {
-                    disablePgp = false
-                }
-                else if (item.item == 'vpn') {
-                    vpn = "1"
-                }
-            })
-        }
+        // if (products && products.length) {
+        //     products.map((item) => {
+        //         let data = {
+        //             id: item.id,
+        //             price_for: item.item,
+        //             unit_price: item.unit_price,
+        //             price_term: item.price_term
+        //         }
+        //         total_price = total_price + Number(item.unit_price)
+        //         productData.push(data)
+        //         if (item.item == 'chat_id') {
+        //             disableChat = false
+        //         }
+        //         else if (item.item == 'sim_id') {
+        //             disableSim = false
+        //         }
+        //         else if (item.item == 'pgp_email') {
+        //             disablePgp = false
+        //         }
+        //         else if (item.item == 'vpn') {
+        //             vpn = "1"
+        //         }
+        //     })
+        // }
 
         let expiry_date = ''
         if (term === '0') {
@@ -526,9 +531,10 @@ class EditDevice extends Component {
             pgp_email: (this.state.pgp_email && !disablePgp) ? this.state.pgp_email : (this.props.pgp_emails.length && !disablePgp) ? this.props.pgp_emails[0].pgp_email : '',
             chat_id: (this.state.chat_id && !disableChat) ? this.state.chat_id : (this.props.chat_ids.length && !disableChat) ? this.props.chat_ids[0].chat_id : '',
             sim_id: (this.state.sim_id && !disableSim) ? this.state.sim_id : (this.props.sim_ids.length > 0 && !disableSim) ? this.props.sim_ids[0].sim_id : '',
-            sim_id2: (this.state.sim_id2 && this.sim_id2_included) ? this.state.sim_id2 : (this.sim_id2_included) ? (this.props.sim_ids.length > 1) ? this.props.sim_ids[1].sim_id : undefined : undefined,
+            sim_id2: (this.state.sim_id2 && !disableSim2) ? this.state.sim_id2 : (!disableSim2) ? (this.props.sim_ids.length > 1) ? this.props.sim_ids[1].sim_id : undefined : undefined,
             vpn: vpn,
             disableSim: disableSim,
+            disableSim2: disableSim2,
             disableChat: disableChat,
             disablePgp: disablePgp,
             packages: packagesData,
@@ -890,7 +896,7 @@ class EditDevice extends Component {
                                 // onFocus={handleFocus}
                                 // onBlur={handleBlur}
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                disabled={this.state.disableSim}
+                                disabled={this.state.disableSim2}
                             >
                                 <Select.Option value=""> {convertToLang(this.props.translation[DUMY_TRANS_ID], "Select Sim ID 2")}</Select.Option>
                                 {this.props.sim_ids.map((sim_id, index) => {
@@ -1045,6 +1051,7 @@ class EditDevice extends Component {
                     // onCancel={this.handleCancel}
                     footer={null}
                     className="edit_form"
+                    bodyStyle={{ height: '440px', overflow: 'overlay' }}
                 >
                     <Services
                         handleCancel={this.handleCancel}
