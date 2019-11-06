@@ -36,35 +36,35 @@ const success = Modal.success
 const error = Modal.error
 
 const initialState = {
-  msg: "",
-  showMsg: false,
-  used_pgp_emails: [],
-  used_sim_ids: [],
-  used_chat_ids: [],
-  duplicate_ids: [],
-  duplicate_modal_show: false,
-  duplicate_data_type: '',
-  newData: [],
-  backUpModal: false,
-  prices: {
-    sim_id: {},
-    chat_id: {},
-    pgp_email: {},
-    vpn: {}
-  },
-  isPriceChanged: false,
-  pricesCopy: {
-    sim_id: {},
-    chat_id: {},
-    pgp_email: {},
-    vpn: {}
-  },
-  packages: [],
-  paymentHistory: [],
-  overdueDetails: {},
-  packagesCopy: [],
-  hardwares: [],
-  domainList: [],
+    msg: "",
+    showMsg: false,
+    used_pgp_emails: [],
+    used_sim_ids: [],
+    used_chat_ids: [],
+    duplicate_ids: [],
+    duplicate_modal_show: false,
+    duplicate_data_type: '',
+    newData: [],
+    backUpModal: false,
+    prices: {
+        sim_id: {},
+        chat_id: {},
+        pgp_email: {},
+        vpn: {}
+    },
+    isPriceChanged: false,
+    pricesCopy: {
+        sim_id: {},
+        chat_id: {},
+        pgp_email: {},
+        vpn: {}
+    },
+    packages: [],
+    paymentHistory: [],
+    overdueDetails: {},
+    packagesCopy: [],
+    hardwares: [],
+    domainList: [],
 };
 
 export default (state = initialState, action) => {
@@ -95,6 +95,7 @@ export default (state = initialState, action) => {
                 })
                 if (action.response.data.length) {
                     dump = JSON.parse(JSON.stringify(state.packages));
+                    action.response.data[0]["permission_count"] = 0;
                     dump.push(action.response.data[0])
                 }
             } else {

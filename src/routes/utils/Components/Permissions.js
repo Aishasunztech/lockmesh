@@ -127,7 +127,7 @@ class Permissions extends Component {
         listDealerCols: dealerColsWithSearch(nextProps.translation)
       })
     }
-    console.log("nextProps.record.statusAll will recv  ", nextProps.record);
+    // console.log("nextProps.record.statusAll will recv  ", nextProps.record);
     if (this.props.record.id !== nextProps.record.id) {
       if (this.props.permissionType == 'package') {
         this.props.getUserDealers();
