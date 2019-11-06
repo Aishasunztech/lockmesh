@@ -72,7 +72,7 @@ export default class EditDealer extends Component {
                     onCancel={this.handleCancel}
                     footer={null}
                     className="edit_form"
-                    maskClosable={false}
+                    destroyOnClose={true}
                     okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
                     cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                 >
@@ -82,6 +82,7 @@ export default class EditDealer extends Component {
                         hideModal={this.handleCancel}
                         editDeviceFunc={this.state.func}
                         handleCancel={this.handleCancel}
+                        history={this.props.history}
                     // translation={this.props.translation}
                     />
 

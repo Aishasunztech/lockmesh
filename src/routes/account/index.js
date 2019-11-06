@@ -65,7 +65,7 @@ import {
 
 import PasswordForm from '../ConnectDevice/components/PasswordForm';
 import PurchaseCredit from "./components/PurchaseCredit";
-import { ADMIN, PUSH_APP_TEXT } from "../../constants/Constants";
+import { ADMIN, PUSH_APP_TEXT, DEALER, SDEALER } from "../../constants/Constants";
 import { APP_ADD_MORE } from "../../constants/AppConstants";
 // import SetPricingModal from './PricesPakages/SetPricingModal';
 
@@ -93,9 +93,6 @@ class PasswordModal extends Component {
                     this.refs.pswdForm.resetFields()
                 }
                 }
-                // okText="Push Apps"
-                okText={convertToLang(this.props.translation[PUSH_APP_TEXT], "PUSH APP")}
-                cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
             >
                 <PasswordForm
                     checkPass={this.props.checkPass}
@@ -323,7 +320,7 @@ class Account extends Component {
         this.setState({
             purchase_modal: visible
         })
-    }
+    };
 
     showPricingModal = (visible) => {
         this.setState({
@@ -432,9 +429,32 @@ class Account extends Component {
                 </Row>
                 <div style={{ marginTop: -60 }}>
                     <Row>
-                        {(this.props.user.type === ADMIN) ?
-                            <Fragment>
+
+                        <Fragment>
+                            {(this.props.user.type === ADMIN || this.props.user.type === DEALER || this.props.user.type === SDEALER) ?
                                 <Col xs={24} sm={24} md={8} lg={8} xl={8} >
+                                    <Link to="/account/managedata" onClick={this.showModal}>
+                                        {/* <Link to="#" > */}
+                                        <Card className="manage_ac" style={{ borderRadius: 12 }}>
+                                            <div>
+                                                <h2 style={{ textAlign: "center" }}>{convertToLang(this.props.translation[MANAGE_DATA], "Manage ID Inventory")} </h2>
+                                                <Divider className="mb-0" />
+                                                <Row style={{ padding: '12px 0 0px' }}>
+                                                    <Col span={7} className="" style={{ textAlign: "center" }}>
+                                                        <Icon type="form" className="and_icon" />
+                                                    </Col>
+                                                    <Col span={16} style={{ padding: 0 }} className="crd_txt">
+                                                        <h5 className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_01], "Manage ID Inventory such as SIM ID, <br style={{ marginLeft: 4 }} />CHAT ID, PGP Email, etc..")} />  </h5>
+                                                        <h5 className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_02], "View/Edit your data")} /> </h5>
+                                                        <h5 className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_03], "Release previously used data back to system")} />  </h5>
+                                                        <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], "and more...")}</h5>
+                                                    </Col>
+                                                </Row>
+                                            </div>
+                                        </Card>
+                                        <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
+                                    </Link>
+
                                     <Modal
                                         maskClosable={false}
                                         title={<div><Icon type="question-circle" className='warning' /><span>
@@ -520,33 +540,13 @@ class Account extends Component {
                                     </Modal>
                                     <div>
 
-                                        <Link to="/account/managedata" onClick={this.showModal}>
-                                            {/* <Link to="#" > */}
-                                            <Card className="manage_ac" style={{ borderRadius: 12 }}>
-                                                <div>
-                                                    <h2 style={{ textAlign: "center" }}>{convertToLang(this.props.translation[MANAGE_DATA], "Manage Data")} </h2>
-                                                    <Divider className="mb-0" />
-                                                    <Row style={{ padding: '12px 0 0px' }}>
-                                                        <Col span={7} className="" style={{ textAlign: "center" }}>
-                                                            <Icon type="form" className="and_icon" />
-                                                        </Col>
-                                                        <Col span={16} style={{ padding: 0 }} className="crd_txt">
-                                                            <h5 className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_01], "Manage data such as SIM ID, <br style={{ marginLeft: 4 }} />CHAT ID, PGP Email, etc..")} />  </h5>
-                                                            <h5 className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_02], "View/Edit your data")} /> </h5>
-                                                            <h5 className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_03], "Release previously used data back to system")} />  </h5>
-                                                            <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], "and more...")}</h5>
-                                                        </Col>
-                                                    </Row>
-                                                </div>
-                                            </Card>
-                                            <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
-                                        </Link>
+
 
                                         <Modal
                                             maskClosable={false}
                                             className="manage_data"
                                             width="450px"
-                                            title="Manage Data"
+                                            title="Manage ID Inventory"
                                             visible={this.state.visible1}
                                             onOk={this.handleOk}
                                             onCancel={this.handleCancel}
@@ -1003,7 +1003,7 @@ class Account extends Component {
                                                         <div className="col-md-12 ac_card">
                                                             <Card style={{ borderRadius: 12 }}>
                                                                 <div>
-                                                                    {/* <h2 style={{ textAlign: "center" }}><a href="#"></a> Manage Data</h2>
+                                                                    {/* <h2 style={{ textAlign: "center" }}><a href="#"></a> Manage ID Inventory</h2>
                                                             <Divider className="mb-0" /> */}
                                                                     <Row style={{ padding: '16px' }}>
                                                                         <div className="inline_b">
@@ -1061,6 +1061,10 @@ class Account extends Component {
                                         </Modal>
                                     </div>
                                 </Col>
+
+
+                                : null}
+                            {(this.props.user.type === ADMIN) ?
                                 <Col xs={24} sm={24} md={8} lg={8} xl={8} >
 
                                     <Modal
@@ -1111,15 +1115,15 @@ class Account extends Component {
                                         </div>
                                     </div>
                                 </Col>
-                            </Fragment>
-                            : null}
+                                : null}
+                        </Fragment>
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
                                 <div>
                                     <a href="javascript:void(0)"
-                                    // onClick={(e) => {
-                                    //     this.showPurchaseModal(e, true);
-                                    // }}
+                                        onClick={(e) => {
+                                            this.showPurchaseModal(e, true);
+                                        }}
                                     >
                                         <Card style={{ borderRadius: 12 }} className="manage_ac">
                                             <div className="profile_table image_1">
@@ -1185,6 +1189,8 @@ class Account extends Component {
                                     <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
                                     {/* </a> */}
                                 </Link>
+
+
                                 {/* <div className="middle">
                                         <SetPricingModal
                                             showPricingModal={this.showPricingModal}
@@ -1201,6 +1207,92 @@ class Account extends Component {
                                     </div> */}
                             </div>
                         </Col>
+
+                        {(this.props.user.type === ADMIN || this.props.user.type === DEALER) ?
+                            <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                                <div>
+                                    {/* <a href="javascript:void(0)" onClick={() => this.showPricingModal(true)}> */}
+                                    <Link to={"/domains"}>
+                                        {/* <Link to={"/set-prices/" + this.props.whiteLabelInfo.name}> */}
+                                        <Card style={{ borderRadius: 12 }} className="manage_ac">
+                                            <div className="profile_table image_1">
+                                                <Fragment>
+                                                    <Row>
+                                                        <div className="col-md-12 ac_card">
+                                                            <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[""], "Manage Domains")} </h2>
+                                                            <Divider className="mb-0" />
+                                                            <Row style={{ padding: '12px 0 0px' }}>
+                                                                <Col span={8} className="" style={{ textAlign: "center" }}>
+                                                                    <Icon type="global" className="and_icon" />
+                                                                </Col>
+                                                                <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
+                                                                    <div className="crd_txt">
+                                                                        <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation["PACKAGES_AND_IDS_01"], "Admin Permission to Dealers/SDealer on Domain access")}</h5>
+                                                                        <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation["PACKAGES_AND_IDS_02"], "Dealer Permissions to SDealer on Domain access")}</h5>
+                                                                        <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation["PACKAGES_AND_IDS_03"], "Allows for exclusive or certain Domains to be attributed to Dealers/Sdealers")}</h5>
+                                                                        <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], "and more...")}</h5>
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </div>
+                                                    </Row>
+                                                </Fragment>
+                                            </div>
+                                        </Card>
+                                        <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
+                                        {/* </a> */}
+                                    </Link>
+                                    {/* <div className="middle">
+                                        <SetPricingModal
+                                            showPricingModal={this.showPricingModal}
+                                            pricing_modal={this.state.pricing_modal}
+                                            // LabelName = {this.props.whiteLabelInfo.name}
+                                            saveIDPrices={this.props.saveIDPrices}
+                                            setPackage={this.props.setPackage}
+                                        // whitelabel_id={this.props.whiteLabelInfo.id}
+
+                                        />
+                                    </div> */}
+                                    {/* <div className="middle">
+                                        <div className="text">Coming Soon</div>
+                                    </div> */}
+                                </div>
+                            </Col>
+                            : null}
+                      <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                        <div>
+                          <Link to={"/reporting"}>
+                            <Card style={{ borderRadius: 12 }} className="manage_ac">
+                              <div className="profile_table image_1">
+                                <Fragment>
+                                  <Row>
+                                    <div className="col-md-12 ac_card">
+                                      <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[''], "Reports")} </h2>
+                                      <Divider className="mb-0" />
+                                      <Row style={{ padding: '12px 0 0px' }}>
+                                        <Col span={8} className="" style={{ textAlign: "center" }}>
+                                          <Icon type="dollar" className="and_icon" />
+
+                                        </Col>
+                                        <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
+                                          <div className="crd_txt">
+                                            <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Run Reports on Sales, Inventory, Profit/loss, Payment history, etc...")}</h5>
+                                            <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Ability to select date range for each reports")}</h5>
+                                            <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Run reports on individual Dealers/SDealers")}</h5>
+                                            <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Export Reports in PDF format")}</h5>
+                                            <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], "and more...")}</h5>
+                                          </div>
+                                        </Col>
+                                      </Row>
+                                    </div>
+                                  </Row>
+                                </Fragment>
+                              </div>
+                            </Card>
+                            <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
+                          </Link>
+                        </div>
+                      </Col>
                     </Row>
                 </div>
                 <PasswordModal
@@ -1242,6 +1334,6 @@ var mapStateToProps = ({ account, devices, settings, auth }) => {
         translation: settings.translation,
         user: auth.authUser
     };
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Account);

@@ -73,7 +73,11 @@ import {
     HANDLE_CHECK_ALL_PUSH_APPS,
     HANDLE_CHECK_SECURE_SETTINGS,
     RESET_DEVICE,
-    SIM_LOADING
+    SIM_LOADING,
+    TRANSFER_DEVICE,
+    SERVICES_DETAIL,
+    SERVICES_HISTORY,
+    CANCEL_EXTENDED_SERVICE
 } from "../../constants/ActionTypes";
 
 import {
@@ -202,6 +206,7 @@ const initialState = {
     guestAllPushApps: false,
     enableAllPushApp: false,
     encryptedAllPushApps: false,
+    servicesHistoryList: [],
 };
 let pwdObject = { "admin_password": null, "guest_password": null, "encrypted_password": null, "duress_password": null }
 
@@ -311,6 +316,7 @@ export default (state = initialState, action) => {
         }
 
         case SUSPEND_DEVICE2: {
+            // console.log('check suspended data ', action.response.data);
             if (action.response.status) {
                 // console.log(state.device, 'device is the', action.response.data)
                 state.device = action.response.data;
@@ -336,7 +342,7 @@ export default (state = initialState, action) => {
                 isloading: false,
                 device: state.device,
                 activities: state.activities,
-                pageName: NOT_AVAILABLE
+                pageName: MAIN_MENU
             }
 
         }
@@ -712,6 +718,35 @@ export default (state = initialState, action) => {
             }
         }
 
+        case SERVICES_HISTORY: {
+            console.log("action.payload.data at reducer for sevices:: ", action.payload.data);
+            let data = state.servicesHistoryList;
+
+            if (action.payload.status) {
+                data = action.payload.data
+            }
+            return {
+                ...state,
+                servicesHistoryList: data
+            }
+        }
+
+        case TRANSFER_DEVICE: {
+
+            console.log(action.payload, 'check devices TRANSFER_DEVICE ', state.device)
+            if (action.response.status) {
+
+                state.device.finalStatus = 'Transfered';
+                state.device.transfer_status = 1;
+            }
+            // console.log('unlink called');
+            return {
+                ...state,
+                isLoading: false,
+                device: state.device,
+                getHistory: new Date()
+            }
+        }
 
         case SHOW_MESSAGE: {
 
@@ -765,26 +800,29 @@ export default (state = initialState, action) => {
             }
         }
 
-        case UNLINK_DEVICE: {
-            if (action.response.status) {
-                success({
-                    title: action.response.msg,
-                });
-            } else {
-                error({
-                    title: action.response.msg,
-                });
-            }
-            // console.log('unlink called');
-            return {
-                ...state,
-                isLoading: false,
+        // case UNLINK_DEVICE: {
+        //     let devices = state.devices;
 
-            }
-        }
+        //     if (action.response.status) {
+        //         success({
+        //             title: action.response.msg,
+        //         });
+        //         if (action.isTransferred) {
+        //             devices = state.devices.filter((obj => obj.device_id !== action.payload.device_id));
+        //         }
+        //     } else {
+        //         error({
+        //             title: action.response.msg,
+        //         });
+        //     }
+        //     // console.log('unlink called');
+        //     return {
+        //         ...state,
+        //         isLoading: false,
+        //         devices
+        //     }
+        // }
         case GUEST_PASSWORD: {
-            // console.log(GUEST_PASSWORD);
-            // console.log(action.payload);
             return {
                 ...state,
                 guestPwd: action.payload.pwd,
@@ -1759,13 +1797,11 @@ export default (state = initialState, action) => {
             let checkExt = {};
 
             if (action.payload.app_list) {
-                console.log("app_list applied from ack_setting", action.payload.app_list);
                 settings.app_list = action.payload.app_list;
                 checkApps = handleCheckedAll(action.payload.app_list)
             }
 
             if (action.payload.extensions) {
-                console.log("extensions applied from ack_setting", action.payload.extensions);
                 settings.extensions = action.payload.extensions;
                 checkExt = handleCheckedAllExts(action.payload.extensions);
             }
@@ -1773,6 +1809,8 @@ export default (state = initialState, action) => {
             if (action.payload.controls) {
                 settings.controls = action.payload.controls;
             }
+
+            console.log("testing: ", settings, checkExt, checkApps);
 
             return {
                 ...state,
@@ -1793,7 +1831,6 @@ export default (state = initialState, action) => {
             }
         }
         case RESET_DEVICE: {
-            console.log("RESET_DEVICE ")
             return {
                 ...state,
 
@@ -1807,6 +1844,23 @@ export default (state = initialState, action) => {
                 redoControls: JSON.parse('[]'),
             }
         }
+
+        case CANCEL_EXTENDED_SERVICE:
+            {
+                if (action.payload.status) {
+                    success({
+                        title: action.payload.msg
+                    })
+                    return {
+                        ...state,
+                        device: action.payload.data
+                    }
+                } else {
+                    error({
+                        title: action.payload.msg
+                    })
+                }
+            }
         default:
             return state;
 
@@ -2115,16 +2169,14 @@ function checkAllSims(sims) {
         } else if (sims.label === "encrypt") {
             encryptSimAll = sims.value;
         }
+    } else if (sims.length) {
+
+        let checkEnc = sims.filter(e => e.encrypt != true);
+        let checkGst = sims.filter(e => e.guest != true);
+
+        if (checkGst.length > 0) guestSimAll = 0; else guestSimAll = 1;
+        if (checkEnc.length > 0) encryptSimAll = 0; else encryptSimAll = 1;
     }
-    else
-        if (sims.length) {
-
-            let checkEnc = sims.filter(e => e.encrypt != true);
-            let checkGst = sims.filter(e => e.guest != true);
-
-            if (checkGst.length > 0) guestSimAll = 0; else guestSimAll = 1;
-            if (checkEnc.length > 0) encryptSimAll = 0; else encryptSimAll = 1;
-        }
 
     return {
         guestSimAll,

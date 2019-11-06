@@ -63,6 +63,9 @@ switch (hostName) {
         break;
 }
 
+
+export const HOST_NAME = hostName;
+ 
 export const BASE_URL = URL;
 
 export const APP_TITLE = TITLE;

@@ -14,12 +14,18 @@ import {
     PRE_ACTIVATE_DEVICE,
     DELETE_UNLINK_DEVICE,
     GET_PARENT_PACKAGES,
-    TRANSFER_DEVICE
+    GET_PRODUCT_PRICES,
+    USER_CREDITS,
+    TRANSFER_DEVICE,
+    ADD_DEVICE,
+    DEVICES_LIST_FOR_REPORT,
+    BULK_DEVICES_LIST,
+    GET_PARENT_HARDWARES
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
 
-// action creaters 
+// action creaters
 
 export function getDevicesList() {
 
@@ -29,9 +35,10 @@ export function getDevicesList() {
             isloading: true
         });
         RestService.DeviceList().then((response) => {
-            // console.log("data form server");
-            // console.log(response.data);
+            //
+            //
             if (RestService.checkAuth(response.data)) {
+                //
 
                 dispatch({
                     type: DEVICES_LIST,
@@ -39,7 +46,6 @@ export function getDevicesList() {
                     response: response.data,
 
                 });
-
             } else {
                 dispatch({
                     type: INVALID_TOKEN
@@ -49,9 +55,35 @@ export function getDevicesList() {
 
     };
 }
+
+export function getDevicesForReport() {
+
+  return (dispatch) => {
+    dispatch({
+      type: LOADING,
+      isloading: true
+    });
+    RestService.getDevicesForReport().then((response) => {
+
+      if (RestService.checkAuth(response.data)) {
+
+        dispatch({
+          type: DEVICES_LIST_FOR_REPORT,
+          payload: response.data,
+
+        });
+      } else {
+        dispatch({
+          type: INVALID_TOKEN
+        });
+      }
+    })
+
+  };
+}
 export function editDevice(formData) {
     return (dispatch) => {
-        // console.log('edit form data ', formData);
+        //
         RestService.updateDeviceDetails(formData).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
@@ -61,6 +93,38 @@ export function editDevice(formData) {
                         formData: formData,
                     }
                 });
+                if (response.data.status && response.data.credits) {
+                    dispatch({
+                        type: USER_CREDITS,
+                        response: response.data
+                    });
+                }
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        });
+    }
+}
+export function extendServices(formData) {
+    return (dispatch) => {
+        //
+        RestService.extendServices(formData).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: EDIT_DEVICE,
+                    response: response.data,
+                    payload: {
+                        formData: formData,
+                    }
+                });
+                if (response.data.status && response.data.credits) {
+                    dispatch({
+                        type: USER_CREDITS,
+                        response: response.data
+                    });
+                }
             } else {
                 dispatch({
                     type: INVALID_TOKEN
@@ -73,17 +137,29 @@ export function editDevice(formData) {
 export function deleteUnlinkDevice(action, devices) {
     return (dispatch) => {
         // alert("hello");
-        // console.log(devices);
+        //
         RestService.deleteUnlinkDevice(action, devices).then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // console.log('successfully ', response.data);
+                //
+                console.log(action);
                 dispatch({
                     type: DELETE_UNLINK_DEVICE,
                     response: response.data,
                     payload: {
-                        formData: devices
+                        formData: devices,
+                        type: action
                     }
+
                 });
+                if (action === 'pre-active') {
+                    if (response.data.status) {
+                        dispatch({
+                            type: USER_CREDITS,
+                            response: response.data
+                        });
+                    }
+
+                }
             } else {
                 dispatch({
                     type: INVALID_TOKEN
@@ -96,8 +172,8 @@ export function deleteUnlinkDevice(action, devices) {
 
 export function suspendDevice(device) {
 
+    console.log("suspendDevice action file =========> ", device);
     return (dispatch) => {
-        // console.log("suspendDevice action");
 
         RestService.suspendDevice(device.usr_device_id).then((response) => {
 
@@ -134,7 +210,7 @@ export function activateDevice(device) {
 
         RestService.activateDevice(device.usr_device_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // console.log('response', response.data);
+                //
                 device.account_status = '';
 
                 if (response.data.status) {
@@ -176,7 +252,7 @@ export function getSimIDs() {
 
         RestService.getSimIDs().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // console.log('response', response.data);
+                //
                 dispatch({
                     type: GET_SIM_IDS,
                     payload: response.data.data
@@ -196,7 +272,7 @@ export function getChatIDs() {
 
         RestService.getChatIDs().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // console.log('response', response.data);
+                //
                 dispatch({
                     type: GET_CHAT_IDS,
                     payload: response.data.data
@@ -216,7 +292,7 @@ export function getPGPEmails() {
         // alert("hello");
         RestService.getPGPEmails().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // console.log('response', response.data);
+                //
                 dispatch({
                     type: GET_PGP_EMAILS,
                     payload: response.data.data
@@ -237,7 +313,7 @@ export function getAllSimIDs() {
 
         RestService.getAllSimIDs().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // console.log('response', response.data);
+                //
                 dispatch({
                     type: GET_SIM_IDS,
                     payload: response.data.data
@@ -257,7 +333,7 @@ export function getAllChatIDs() {
 
         RestService.getAllChatIDs().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // console.log('response', response.data);
+                //
                 dispatch({
                     type: GET_CHAT_IDS,
                     payload: response.data.data
@@ -277,7 +353,7 @@ export function getAllPGPEmails() {
         // alert("hello");
         RestService.getAllPGPEmails().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // console.log('response', response.data);
+                //
                 dispatch({
                     type: GET_PGP_EMAILS,
                     payload: response.data.data
@@ -293,7 +369,7 @@ export function getAllPGPEmails() {
 }
 export function rejectDevice(device) {
     return (dispatch) => {
-        // console.log(device , 'action of reject device')
+        //
         RestService.rejectDevice(device).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
@@ -315,13 +391,20 @@ export function addDevice(device) {
         // alert("hello");
         RestService.addDevice(device).then((response) => {
             if (RestService.checkAuth(response.data)) {
+
                 dispatch({
-                    type: EDIT_DEVICE,
+                    type: ADD_DEVICE,
                     response: response.data,
                     payload: {
                         formData: device,
                     }
                 });
+                if (response.data.status) {
+                    dispatch({
+                        type: USER_CREDITS,
+                        response: response.data
+                    });
+                }
             } else {
                 dispatch({
                     type: INVALID_TOKEN
@@ -332,11 +415,11 @@ export function addDevice(device) {
 }
 
 export function preActiveDevice(device) {
-    // console.log("action called", device);
+    //
     return (dispatch) => {
         RestService.preActiveDevice(device).then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // console.log('action done ', response.data);
+
                 dispatch({
                     type: PRE_ACTIVATE_DEVICE,
                     response: response.data,
@@ -344,7 +427,13 @@ export function preActiveDevice(device) {
                         formData: device,
                     }
                 });
-
+                if (response.data.status) {
+                    //
+                    dispatch({
+                        type: USER_CREDITS,
+                        response: response.data.data
+                    });
+                }
             } else {
                 dispatch({
                     type: INVALID_TOKEN
@@ -358,7 +447,7 @@ export const getParentPackages = () => {
     return (dispatch) => {
         RestService.getParentPackages().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                console.log("Response", response.data);
+
                 dispatch({
                     type: GET_PARENT_PACKAGES,
                     response: response.data
@@ -372,3 +461,117 @@ export const getParentPackages = () => {
 
     }
 }
+export const getHardwaresPrices = () => {
+    return (dispatch) => {
+        RestService.getHardwaresPrices().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+
+                dispatch({
+                    type: GET_PARENT_HARDWARES,
+                    response: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+
+    }
+}
+
+export const getProductPrices = () => {
+    return (dispatch) => {
+        RestService.getProductPrices().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+
+                dispatch({
+                    type: GET_PRODUCT_PRICES,
+                    response: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+
+    }
+}
+
+// export function getBulkDevicesList(data) {
+//     console.log('at action file ', data)
+
+//     return (dispatch) => {
+//         dispatch({
+//             type: LOADING,
+//             isloading: true
+//         });
+//         RestService.getBulkDevicesList(data).then((response) => {
+//             if (RestService.checkAuth(response.data)) {
+//                 if (response.data.status) {
+//                     console.log('at action file on response')
+//                     dispatch({
+//                         type: BULK_DEVICES_LIST,
+//                         payload: response.data.data,
+//                         response: response.data,
+
+//                     });
+//                 }
+//             } else {
+//                 dispatch({
+//                     type: INVALID_TOKEN
+//                 });
+//             }
+//         })
+
+//     };
+// }
+
+// export function getBulkDealers(data) {
+
+//     return (dispatch) => {
+//         RestService.getBulkDealers(data).then((response) => {
+//             if (RestService.checkAuth(response.data)) {
+//                 if (response.data.status) {
+
+//                     dispatch({
+//                         type: BULK_DEALERS_LIST,
+//                         payload: response.data.data,
+//                         response: response.data,
+
+//                     });
+//                 }
+//             } else {
+//                 dispatch({
+//                     type: INVALID_TOKEN
+//                 });
+//             }
+//         })
+
+//     };
+// }
+
+// export function getBulkUsers(data) {
+
+//     return (dispatch) => {
+//         RestService.getBulkUsers(data).then((response) => {
+//             if (RestService.checkAuth(response.data)) {
+//                 if (response.data.status) {
+
+//                     dispatch({
+//                         type: BULK_USERS_LIST,
+//                         payload: response.data.data,
+//                         response: response.data,
+
+//                     });
+//                 }
+//             } else {
+//                 dispatch({
+//                     type: INVALID_TOKEN
+//                 });
+//             }
+//         })
+
+//     };
+// }

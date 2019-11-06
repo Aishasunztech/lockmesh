@@ -1,5 +1,5 @@
 import {
-    INVALID_TOKEN, NEW_REQUEST_LIST, REJECT_REQUEST, ACCEPT_REQUEST, USER_CREDITS
+    INVALID_TOKEN, NEW_REQUEST_LIST, REJECT_REQUEST, ACCEPT_REQUEST, USER_CREDITS, GET_CANCEL_REQUEST, ACCEPT_SERVICE_REQUEST, REJECT_SERVICES_REQUEST
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -74,9 +74,11 @@ export function rejectRequest(request) {
         });
     }
 }
+
+
 export function acceptRequest(request) {
     return (dispatch) => {
-        // console.log(device)
+        console.log(request)
         RestService.acceptRequest(request).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
@@ -84,6 +86,68 @@ export function acceptRequest(request) {
                     response: response.data,
                     request: request,
                 })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+    }
+}
+
+
+export function rejectServiceRequest(request) {
+    return (dispatch) => {
+        console.log(request, 'reject request called')
+        RestService.rejectServiceRequest(request).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: REJECT_SERVICES_REQUEST,
+                    response: response.data,
+                    request: request,
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+    }
+}
+
+
+export function acceptServiceRequest(request) {
+    return (dispatch) => {
+        // console.log(request)
+        RestService.acceptServiceRequest(request).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: ACCEPT_SERVICE_REQUEST,
+                    response: response.data,
+                    request: request,
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+    }
+}
+
+
+export function getCancelServiceRequests() {
+    console.log("HELLO");
+    return (dispatch) => {
+        RestService.getCancelServiceRequests().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                console.log(response.data.status);
+                if (response.data.status) {
+                    dispatch({
+                        type: GET_CANCEL_REQUEST,
+                        response: response.data,
+                    })
+                }
             } else {
                 dispatch({
                     type: INVALID_TOKEN

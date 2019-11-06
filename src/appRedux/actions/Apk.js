@@ -9,11 +9,15 @@ import {
     RESET_UPLOAD_FORM,
     // CHECK_APK_NAME,
     AUTHENTICATE_UPDATE_USER,
-    RESET_AUTH_UPDATE
+    RESET_AUTH_UPDATE,
+    CHECKPASS,
+    CHECK_BULK_PASS,
+    RESET_BULK_FLAG
 } from "../../constants/ActionTypes"
 // import AuthFailed from './Auth';
 
 import RestService from '../services/RestServices';
+import { history } from '../store/index'
 
 export function getApkList() {
     return (dispatch) => {
@@ -158,17 +162,22 @@ export function checkApkName(name, apk_id = '') {
 
 }
 
-export function savePermission(apk_id, dealers, action) {
+export function apkPermission(id, dealers, action, statusAll = false, user) {
+    // console.log('at domainPermission action ', id, dealers, action, statusAll)
     return (dispatch) => {
-        RestService.saveAPKPermissions(apk_id, dealers, action).then((response) => {
+        RestService.dealerPermissions(id, dealers, action, statusAll, 'apk').then((response) => {
             if (RestService.checkAuth(response.data)) {
 
                 dispatch({
                     type: PERMISSION_SAVED,
-                    payload: response.data.msg,
-                    permission_count: response.data.permission_count,
-                    apk_id: apk_id,
-                    dealers: dealers
+                    payload: response.data,
+                    formData: {
+                        id,
+                        dealers,
+                        action,
+                        statusAll,
+                        user
+                    }
                 })
 
             } else {
@@ -180,6 +189,29 @@ export function savePermission(apk_id, dealers, action) {
     }
 
 }
+
+// export function savePermission(apk_id, dealers, action) {
+//     return (dispatch) => {
+//         RestService.saveAPKPermissions(apk_id, dealers, action).then((response) => {
+//             if (RestService.checkAuth(response.data)) {
+
+//                 dispatch({
+//                     type: PERMISSION_SAVED,
+//                     payload: response.data.msg,
+//                     permission_count: response.data.permission_count,
+//                     apk_id: apk_id,
+//                     dealers: dealers
+//                 })
+
+//             } else {
+//                 dispatch({
+//                     type: INVALID_TOKEN
+//                 });
+//             }
+//         })
+//     }
+
+// }
 export function resetUploadForm(visible) {
     return (dispatch) => {
         dispatch({
@@ -214,5 +246,36 @@ export function resetAuthUpdate() {
         dispatch({
             type: RESET_AUTH_UPDATE,
         });
+    }
+}
+export const checkPass = (user) => {
+    // console.log(user);
+    return (dispatch) => {
+        RestService.checkPass(user).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                // if (response.data.password_matched) {
+                //     history.push('/bulk-activities')
+                // }
+                dispatch({
+                    type: CHECK_BULK_PASS,
+                    payload: {
+                        PasswordMatch: response.data,
+                        msg: response.data.msg
+                    }
+                })
+            }
+            else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+export const resetBulkFlag = () => {
+    return (dispatch) => {
+        dispatch({
+            type: RESET_BULK_FLAG
+        })
     }
 }

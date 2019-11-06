@@ -1,5 +1,8 @@
 import moment_timezone from "moment-timezone";
 import moment from 'moment';
+import jsPDF from 'jspdf';
+import XLSX from 'xlsx';
+import jsPDFautotable from 'jspdf-autotable';
 
 import {
   DEVICE_ACTIVATED,
@@ -70,7 +73,6 @@ export function getColor(status) {
 }
 
 export function getDateTimeOfClientTimeZone (dateTime){
-  console.log("timeZone: ", Intl.DateTimeFormat().resolvedOptions());
   if(Intl.DateTimeFormat().resolvedOptions().timeZone){
     return moment_timezone(dateTime).tz(Intl.DateTimeFormat().resolvedOptions().timeZone).format('YYYY/MM/DD H:m:s')
   } else {
@@ -155,6 +157,32 @@ export function getFormattedDate(value) {
   let formattedDate = convert(date)
   return formattedDate;
   // date.toLocaleDateString('%d-%b-%Y');
+}
+
+export function getDateFromTimestamp(value) {
+  function convert(str) {
+    var month, day, year;
+    var date  = new Date(str),
+      month   = ("0" + (date.getMonth() + 1)).slice(-2),
+      day     = ("0" + date.getDate()).slice(-2);
+
+
+    var formatedDate = [date.getFullYear(),month, day].join("/");
+    return formatedDate;
+  }
+
+  let date = new Date(value);
+  let formattedDate = convert(date)
+  return formattedDate;
+}
+
+export function convertTimestampToDate(value) {
+  function convert(str) {
+    return moment(str).format('DD-MM-YYYY')
+  }
+
+  let formattedDate = convert(value)
+  return formattedDate;
 }
 
 export function initCap(str) {
@@ -249,44 +277,44 @@ export function handleMultipleSearch(e, copy_status, copyRequireSearchData, demo
       // console.log('device is: ', device);
       // if (obj[targetName] !== undefined) {
 
-        let searchRecords = 0;
+      let searchRecords = 0;
 
-        if (searchColsAre > 0) {
-          Object.values(demoSearchValues).forEach((data) => {
+      if (searchColsAre > 0) {
+        Object.values(demoSearchValues).forEach((data) => {
 
-            if (obj[data.key] !== undefined && obj[data.key] !== null) {
-              if (data.value == "") {
+          if (obj[data.key] !== undefined && obj[data.key] !== null) {
+            if (data.value == "") {
+              searchRecords++;
+            } else if (typeof (obj[data.key]) === 'string') {
+              if (obj[data.key].toString().toUpperCase().includes(data.value.toString().toUpperCase())) {
                 searchRecords++;
-              } else if (typeof (obj[data.key]) === 'string') {
-                if (obj[data.key].toString().toUpperCase().includes(data.value.toString().toUpperCase())) {
-                  searchRecords++;
-                }
-              } else
-                // if (obj[data.key] !== null) {
-                  if (isArray(obj[data.key])) {
+              }
+            } else
+              // if (obj[data.key] !== null) {
+              if (isArray(obj[data.key])) {
 
-                    if (data.key == "devicesList") {
-                      if (obj[data.key].length.toString().toUpperCase().includes(data.value.toString().toUpperCase())) {
-                        searchRecords++;
-                      }
-                    }
-
-                  } else if (obj[data.key].toString().toUpperCase().includes(data.value.toString().toUpperCase())) {
+                if (data.key == "devicesList") {
+                  if (obj[data.key].length.toString().toUpperCase().includes(data.value.toString().toUpperCase())) {
                     searchRecords++;
                   }
-                // }
-            }
-          })
+                }
 
-          if (searchColsAre === searchRecords) {
-            demoData.push(obj);
+              } else if (obj[data.key].toString().toUpperCase().includes(data.value.toString().toUpperCase())) {
+                searchRecords++;
+              }
+            // }
           }
+        })
+
+        if (searchColsAre === searchRecords) {
+          demoData.push(obj);
         }
-        else {
-          if (obj[targetName].toString().toUpperCase().includes(targetValue.toString().toUpperCase())) {
-            demoData.push(obj);
-          }
+      }
+      else {
+        if (obj[targetName].toString().toUpperCase().includes(targetValue.toString().toUpperCase())) {
+          demoData.push(obj);
         }
+      }
       // }
       // else {
       //   // demoData.push(obj);
@@ -349,3 +377,138 @@ export function filterData_RelatedToMultipleSearch(devices, SearchValues) {
     return devices;
   }
 }
+
+
+export function findAndRemove_duplicate_in_array(arra1) {
+  // console.log('array is: ', arra1)
+  var object = {};
+  var duplicateIds = [];
+
+  arra1.forEach(function (item) {
+    if (!object[item])
+      object[item] = 0;
+    object[item] += 1;
+  })
+
+  for (var prop in object) {
+    if (object[prop] >= 2) {
+      duplicateIds.push(Number(prop));
+    }
+  }
+
+  let removeDuplicateIds = arra1.filter((item) => !duplicateIds.includes(item));
+  return ([...removeDuplicateIds, ...duplicateIds]);
+
+}
+
+
+export function removeDuplicateObjects(originalArray, prop) {
+  var newArray = [];
+  var lookupObject  = {};
+
+  for(var i in originalArray) {
+     lookupObject[originalArray[i][prop]] = originalArray[i];
+  }
+
+  for(i in lookupObject) {
+      newArray.push(lookupObject[i]);
+  }
+   return newArray;
+}
+export function generatePDF(columns, rows, title, fileName, formData) {
+
+  let y   = 15;
+  let x   = 20;
+  var doc = new jsPDF('p', 'pt');
+  doc.setFontSize(16);
+  doc.setTextColor(40);
+  doc.setFontStyle('normal');
+  doc.text(title, y, x);
+
+  if (formData.product){
+    doc.setFontSize(12);
+    doc.setTextColor(40);
+    doc.setFontStyle('normal');
+    doc.text('Product: ' + formData.product, y, x+=15);
+  }
+
+  if (formData.payment_status){
+    doc.setFontSize(12);
+    doc.setTextColor(40);
+    doc.setFontStyle('normal');
+    doc.text('Payment Status: ' + formData.payment_status, y, x+=15);
+  }
+
+  if (formData.type){
+    doc.setFontSize(12);
+    doc.setTextColor(40);
+    doc.setFontStyle('normal');
+    doc.text('Product Type: ' + formData.type, y, x+=15);
+  }
+
+  if (formData.transaction_type){
+    doc.setFontSize(12);
+    doc.setTextColor(40);
+    doc.setFontStyle('normal');
+    doc.text('Transaction Type: ' + formData.transaction_type, y, x+=15);
+  }
+
+  if (formData.from){
+    doc.setFontSize(12);
+    doc.setTextColor(40);
+    doc.setFontStyle('normal');
+    doc.text('From: ' + convertTimestampToDate(formData.from), y, x+=15);
+  }
+
+  if (formData.to){
+    doc.setFontSize(12);
+    doc.setTextColor(40);
+    doc.setFontStyle('normal');
+    doc.text('To: ' + convertTimestampToDate(formData.to), y, x+=15);
+  }
+
+  doc.setFontSize(12);
+  doc.setTextColor(40);
+  doc.setFontStyle('normal');
+  doc.text('Total Records: ' + rows.length, y, x+=15);
+
+
+  doc.autoTable(columns, rows, {
+    startY: doc.autoTableEndPosY() + x+15,
+    margin: { horizontal: 10 },
+    styles: { overflow: 'linebreak' },
+    bodyStyles: { valign: 'top' },
+    theme: "striped"
+  });
+
+  doc.save(fileName+'.pdf');
+}
+
+
+
+export function generateExcel(rows, fileName) {
+  var wb          = XLSX.utils.book_new();
+  let ws          = XLSX.utils.json_to_sheet(rows);
+  let fileNameCSV = fileName + ".xlsx";
+
+  XLSX.utils.book_append_sheet(wb, ws, 'Devices');
+  console.log(wb);
+  XLSX.writeFile(wb, fileNameCSV)
+
+}
+
+export function formatMoney(amount, decimalCount = 2, decimal = ".", thousands = ",") {
+  try {
+    decimalCount = Math.abs(decimalCount);
+    decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
+
+    const negativeSign = amount < 0 ? "-" : "";
+
+    let i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
+    let j = (i.length > 3) ? i.length % 3 : 0;
+
+    return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
+  } catch (e) {
+    console.log(e)
+  }
+};

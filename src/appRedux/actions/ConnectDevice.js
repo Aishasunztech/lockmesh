@@ -59,10 +59,15 @@ import {
     PUSH_APP_CHECKED,
     RESET_PUSH_APPS,
     GET_UNREG_SIMS,
+    TRANSFER_DEVICE,
     HANDLE_CHECK_ALL_PUSH_APPS,
     HANDLE_CHECK_SECURE_SETTINGS,
     RESET_DEVICE,
-    SIM_LOADING
+    SIM_LOADING,
+    SERVICES_DETAIL,
+    SERVICES_HISTORY,
+    CANCEL_EXTENDED_SERVICE,
+    USER_CREDITS
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -243,22 +248,22 @@ export function getAccIdFromDvcId(deviceId) {
 export function suspendDevice2(device) {
 
     return (dispatch) => {
-        //  console.log("suspendDevice action");
+        console.log("suspendDevice action", device);
 
-        RestService.suspendDevice(device.usr_device_id).then((response) => {
+        RestService.suspendDevice(device.usr_device_id).then((response) => { // usr_device_id
 
 
             if (RestService.checkAuth(response.data)) {
-                // console.log('reslut', response);
+                // console.log('reslut response ', response);
                 // console.log('conect device', device);
                 // console.log('done status');
                 dispatch({
                     type: SUSPEND_DEVICE2,
                     response: response.data,
-                    payload: {
-                        device: device,
-                        msg: response.data.msg,
-                    }
+                    // payload: {
+                    //     device: devices,
+                    //     msg: response.data.msg,
+                    // }
                 });
 
 
@@ -287,8 +292,8 @@ export function wipe(device) {
     }
 }
 
-export function unlinkDevice(device) {
-    // console.log('you are at action file of unlinkDevice', device)
+export function unlinkDevice(device, transferred = false) {
+    // console.log(transferred, 'you are at action file of unlinkDevice', device)
     return (dispatch) => {
         RestService.unlinkDevice(device).then((response) => {
             // console.log('response to unlink device', response);
@@ -297,7 +302,8 @@ export function unlinkDevice(device) {
                     dispatch({
                         response: response.data,
                         type: UNLINK_DEVICE,
-                        payload: response.data.profiles
+                        payload: device,
+                        isTransferred: transferred
                     })
                 }
 
@@ -800,13 +806,14 @@ export function savePolicy(app_list, passwords = null, profileType, profileName,
 }
 
 export const transferDeviceProfile = (data) => {
-    // alert(data);
+    // console.log("transferDeviceProfile action file",data);
     return (dispatch) => {
         RestService.transferDeviceProfile(data).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
-                    type: MESSAGE_HANDLER,
-                    payload: response.data
+                    type: TRANSFER_DEVICE,
+                    response: response.data,
+                    payload: data.flagged_device
                 })
             } else {
                 dispatch({
@@ -843,6 +850,23 @@ export const transferHistory = (device_id) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: TRANSFER_HISTORY,
+                    payload: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+
+export const getServicesHistory = (data) => {
+    return (dispatch) => {
+        RestService.getServicesHistory(data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: SERVICES_HISTORY,
                     payload: response.data
                 })
             } else {
@@ -947,12 +971,11 @@ export const checkPass = (user, actionType) => {
 }
 
 export const getDealerApps = () => {
-    // console.log('get dealer action id')
+    console.log('get dealer action id')
     return (dispatch) => {
         // console.log('in return of fucntion')
         RestService.getDealerApps().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // console.log('get dealer apps resoo', response.data)
                 dispatch({
                     type: GET_DEALER_APPS,
                     payload: response.data.list
@@ -1322,6 +1345,37 @@ export const getUnRegisterSims = (data) => {
         })
     }
 }
+
+export const cancelExtendedServices = (service_date) => {
+    console.log('data is: ', service_date)
+    return (dispatch) => {
+        RestService.cancelExtendedServices(service_date).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                console.log("getUnRegisterSims", response.data);
+                dispatch({
+                    type: CANCEL_EXTENDED_SERVICE,
+                    payload: response.data
+                })
+                if (response.data.status && response.data.credits) {
+                    dispatch({
+                        type: USER_CREDITS,
+                        response: response.data
+                    });
+                }
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+
+
+        })
+    }
+}
+
+
+
+
 
 export const resetDevice = () => {
     return (dispatch) => {

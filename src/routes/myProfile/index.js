@@ -373,7 +373,6 @@ var matchDispatchToProps = (dispatch) => {
 var mapStateToProps = ({ auth, settings }) => {
     // console.log("mapStateToProps");
     // console.log('ooo', state.auth);
-    // console.log(auth.authUser);
     return {
         profile: auth.authUser,
         loginHistory: auth.loginHistory,
