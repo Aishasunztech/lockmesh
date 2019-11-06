@@ -424,11 +424,13 @@ export function devicesColumns(translation, handleSearch) {
                 />
             ),
             dataIndex: 'transfered_to',
+            className: 'hide',
             children: [
                 {
                     title: "TRANSFERED TO",
                     align: "center",
                     dataIndex: 'transfered_to',
+                    className: 'hide',
                     key: "transfered_to",
                     sorter: (a, b) => {
                         return a.transfered_to.localeCompare(b.transfered_to)
