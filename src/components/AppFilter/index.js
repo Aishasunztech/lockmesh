@@ -150,7 +150,7 @@ class AppFilter extends Component {
             <Card className="sticky_top_bar">
                 <Row gutter={24} className="filter_top">
                     <Col className={`${fullScreenClass3} col-sm-12 col-xs-12 vertical_center`}>
-                        <span className="font_26 white_now">
+                        <span className="font_26_vw white_now">
                             {(this.props.pageHeading) ? this.props.pageHeading : ""}
                         </span>
                     </Col>
@@ -158,7 +158,7 @@ class AppFilter extends Component {
                         <div className="m_mt-16">
                             {(this.props.options !== undefined && this.props.options !== null) ?
                                 <Fragment>
-                                    <Icon type="down" className="down_icon" />
+
                                     <Picky
                                         options={this.props.options}
                                         valueKey="key"
@@ -198,7 +198,6 @@ class AppFilter extends Component {
                                             }
                                         }
                                         }
-
                                         render={({
                                             style,
                                             isSelected,
@@ -222,6 +221,7 @@ class AppFilter extends Component {
                                         }
                                         }
                                     />
+                                    <Icon type="down" className="down_icon" />
                                 </Fragment>
                                 :
                                 null

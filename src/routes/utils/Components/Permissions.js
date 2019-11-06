@@ -614,7 +614,7 @@ class Permissions extends Component {
 
 
         </Row>
-        <Row gutter={24} style={{ marginBottom: '12px' }}>
+        <Row gutter={15} style={{ marginBottom: '12px' }}>
           {
             this.props.spinloading ? <CircularProgress /> :
               <Col className="gutter-row" span={24}>
