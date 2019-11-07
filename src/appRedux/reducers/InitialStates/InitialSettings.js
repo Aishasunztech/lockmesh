@@ -7,6 +7,7 @@ import {
   THEME_COLOR_SELECTION_PRESET,
   THEME_TYPE,
   THEME_TYPE_SEMI_DARK,
+  NAV_STYLE_NO_HEADER_EXPANDED_SIDEBAR,
 
 } from "../../../constants/ThemeSetting";
 // import { convertToLang } from '../../../routes/utils/commonUtils';
@@ -68,7 +69,7 @@ import {
 
 export var initialSettings = {
   navCollapsed: true,
-  navStyle: NAV_STYLE_FIXED,
+  navStyle: NAV_STYLE_NO_HEADER_EXPANDED_SIDEBAR,
   layoutType: LAYOUT_TYPE_FULL,
   themeType: THEME_TYPE_SEMI_DARK,
   colorSelection: THEME_COLOR_SELECTION_PRESET,
