@@ -85,7 +85,7 @@ export default class DeviceSettings extends Component {
         let data = this.props.extensions;
 
         let extensions = [];
-        console.log("DATA EXTENSIONS", data, this.props.show_all_apps, this.props.show_unchanged);
+        
         if (this.props.show_all_apps) {
             if (this.props.show_unchanged) {
                 if (data.length) {
@@ -275,7 +275,7 @@ export default class DeviceSettings extends Component {
     }
 
     render() {
-        console.log("this.props.controls. ischanged", this.props.controls, this.state.app_list)
+        // console.log("this.props.controls. ischanged", this.props.controls, this.state.app_list)
 
 
         // find the length of changed controls. it can be refactored
@@ -299,8 +299,6 @@ export default class DeviceSettings extends Component {
         if (this.props.app_list && this.props.app_list.length) {
             exten = this.props.app_list.filter(item => item.uniqueName === SECURE_SETTING)
         }
-
-        console.log("SECURE SETTING APPS", exten);
 
         // console.log(this.props.extensions, 'check extension  ', this.props.extensions[extenObjIndex].isChanged);
 

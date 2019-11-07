@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 import { Button, Form, Input, Select, InputNumber, Spin, Modal, Table, Switch } from 'antd';
 import { checkValue, convertToLang } from '../../utils/commonUtils'
 
-import { getSimIDs, getChatIDs, getPGPEmails, getParentPackages, getProductPrices } from "../../../appRedux/actions/Devices";
+import { getSimIDs, getChatIDs, getPGPEmails, getParentPackages, getProductPrices, extendServices } from "../../../appRedux/actions/Devices";
 import {
     DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, ADMIN, Model_text, Expire_Date, one_month, three_month, six_month, twelve_month, Days, Start_Date, Expire_Date_Require, Not_valid_Email
 } from '../../../constants/Constants';
@@ -36,8 +36,9 @@ import moment from 'moment';
 import axios from 'axios';
 import RestService from '../../../appRedux/services/RestServices';
 import { async } from 'q';
-import { inventorySales } from '../../utils/columnsUtils';
+import { inventorySales, refundServiceColumns } from '../../utils/columnsUtils';
 import Invoice from './invoice';
+import { PRE_ACTIVATE_DEVICE } from '../../../constants/ActionTypes';
 
 const { TextArea } = Input;
 const confirm = Modal.confirm
@@ -47,6 +48,7 @@ class EditDevice extends Component {
         super(props);
 
         const invoiceColumns = inventorySales(props.translation);
+        const refundServicesColumns = refundServiceColumns(props.translation);
 
         this.state = {
             visible: false,
@@ -63,6 +65,7 @@ class EditDevice extends Component {
             vpn: '',
             packageId: '',
             disableSim: true,
+            disableSim2: true,
             disableChat: true,
             disablePgp: true,
             disableVpn: true,
@@ -80,14 +83,18 @@ class EditDevice extends Component {
             unit_servcies_price: 0,
             total_price: 0,
             invoiceColumns: invoiceColumns,
+            refundServicesColumns: refundServicesColumns,
             PkgSelectedRows: [],
             proSelectedRows: [],
             creditsToRefund: 0,
             serviceRemainingDays: 0,
+            prevService_totalDays: 0,
             showConfirmCredit: false,
             serviceData: {},
             invoiceID: 'PI00001',
-            paidByUser: "PAID"
+            paidByUser: "PAID",
+            applyServicesValue: null,
+            renewService: false
         }
     }
     handleUserChange = (e) => {
@@ -107,8 +114,18 @@ class EditDevice extends Component {
                 values.prevSimId = this.props.device.sim_id;
                 values.finalStatus = this.props.device.finalStatus;
                 values.prevService = this.props.device.services
-
-                if (this.state.services) {
+                if (this.state.renewService) {
+                    values.products = this.state.products;
+                    values.packages = this.state.packages;
+                    values.total_price = this.state.total_price
+                    values.renewService = this.state.renewService
+                    values.service = true
+                    this.setState({
+                        serviceData: values,
+                        showConfirmCredit: true
+                    })
+                }
+                else if (this.state.services) {
                     let product_prices = this.filterList(this.state.term + ' month', this.props.product_prices, 'product');
                     let sim_id_price = product_prices.filter((item) => {
                         if (item.price_for === 'sim_id') {
@@ -137,11 +154,11 @@ class EditDevice extends Component {
                         this.state.total_price = this.state.total_price - Number(sim_id_price[0].unit_price)
                         this.sim_id2_added = false
                     }
-                    let priceToCharge = this.state.total_price - this.state.creditsToRefund
+                    let priceToCharge = this.state.total_price
+                    if (this.state.applyServicesValue !== 'extend') {
+                        priceToCharge = this.state.total_price - this.state.creditsToRefund
+                    }
 
-
-                    // if (priceToCharge <= this.props.user_credit) {
-                    // console.log(this.state.products);
                     values.products = this.state.products;
                     values.packages = this.state.packages;
                     values.expiry_date = this.state.term;
@@ -150,24 +167,17 @@ class EditDevice extends Component {
                     this.setState({
                         serviceData: values,
                         showConfirmCredit: true
-
                     })
-                    // if (this.state.type == 1) {
-                    // showConfirmCredit(this, values);
-                    // } else {
-                    //     this.props.AddDeviceHandler(values);
-                    //     this.props.hideModal();
-                    //     this.handleReset();
-                    // }
-                    // } else {
-                    //     showCreditPurchase(this)
-                    // }
                 } else {
-                    // console.log("Device Details ", values)
-                    this.props.editDeviceFunc(values);
-                    this.props.hideModal();
-                    this.handleReset();
-                    // console.log('Received values of form: ', values);
+                    if (this.state.applyServicesValue === 'cancel') {
+                        values.cancelService = true
+                        showCancelServiceConfirm(this, values)
+                    } else {
+                        values.cancelService = false
+                        this.props.editDeviceFunc(values);
+                        this.props.hideModal();
+                        this.handleReset();
+                    }
                 }
 
 
@@ -206,32 +216,55 @@ class EditDevice extends Component {
         this.refs.add_user.showModal(handleSubmit);
     }
 
-    handleServicesModal = async () => {
-
-
-        let prevService = this.props.device.services
-        let creditsToRefund = 0
-        let serviceRemainingDays = 0
-        if (prevService) {
-            await RestService.getServiceRefund(prevService.id).then((response) => {
-                if (RestService.checkAuth(response.data)) {
-                    if (response.data.status) {
-                        creditsToRefund = response.data.creditsToRefund
-                        serviceRemainingDays = response.data.serviceRemainingDays
-                    }
-                    else {
-                        return false
-                    }
-                }
-            });
-        }
-
-        if (creditsToRefund !== null) {
+    handleServicesModal = async (e) => {
+        if (this.props.device.extended_services) {
             this.setState({
-                servicesModal: true,
-                creditsToRefund: creditsToRefund,
-                serviceRemainingDays: serviceRemainingDays
+                changeServiceMsg: "you have Applied a Renewal or Extension for this device, please cancel service first before chosing new service.",
+                checkServices: { color: "Red" },
             })
+        }
+        else if (this.props.device.services && this.props.device.services.status === "request_for_cancel") {
+            this.setState({
+                changeServiceMsg: "This Device is pending cancellation. Please contact Admin.",
+                checkServices: { color: "Red" },
+            })
+        } else {
+            if (e === "extend" || e === 'change') {
+                let prevService = this.props.device.services
+                let creditsToRefund = 0
+                let serviceRemainingDays = 0
+                let totalDays = 0
+                if (prevService) {
+                    await RestService.getServiceRefund(prevService.id).then((response) => {
+                        if (RestService.checkAuth(response.data)) {
+                            if (response.data.status) {
+                                creditsToRefund = response.data.creditsToRefund
+                                serviceRemainingDays = response.data.serviceRemainingDays
+                                totalDays = response.data.totalDays
+                            }
+                            else {
+                                return false
+                            }
+                        }
+                    });
+                }
+
+                if (creditsToRefund !== null) {
+                    this.setState({
+                        servicesModal: true,
+                        creditsToRefund: creditsToRefund,
+                        serviceRemainingDays: serviceRemainingDays,
+                        prevService_totalDays: totalDays,
+                        applyServicesValue: e
+                    })
+                }
+            } else {
+                this.setState({
+                    applyServicesValue: e,
+                    changeServiceMsg: "You requested to cancel your services.",
+                    checkServices: { display: 'inline', color: "Red", margin: 0 },
+                })
+            }
         }
     }
 
@@ -278,7 +311,6 @@ class EditDevice extends Component {
             }
         });
         let productList = products.map((item, index) => {
-            // let services = JSON.parse(item.pkg_features)
             counter++
             return {
                 counter: counter,
@@ -292,15 +324,44 @@ class EditDevice extends Component {
                 line_total: item.unit_price
             }
         });
-        // console.log(packagesList)
         return [...packagesList, ...productList]
+    }
+    refundServiceRenderList(services, serviceRemainingDays, creditsToRefund, prevService_totalDays) {
+        if (services) {
+            let service_term = ''
+            if (services.packages) {
+                let packages = JSON.parse(services.packages)
+                if (packages.length) {
+                    service_term = packages[0].pkg_term
+                }
+            } else if (services.products) {
+                let products = JSON.parse(services.products)
+                if (products.length) {
+                    service_term = products[0].price_term
+                }
+            }
+            return [{
+                counter: 1,
+                id: services.id,
+                rowKey: 1,
+                item: `REFUND`,
+                description: "Previous Service Refund",
+                term: service_term,
+                remaining_term: serviceRemainingDays,
+                unit_price: "-" + (services.total_credits / prevService_totalDays).toFixed(2),
+                line_total: "-" + creditsToRefund
+            }]
+        } else {
+            return []
+        }
     }
 
     handleCancelForm = () => {
         this.setState({
             visible: false,
             addNewUserModal: false,
-            addNewUserValue: ''
+            addNewUserValue: '',
+            renewService: false
         });
     }
 
@@ -330,7 +391,9 @@ class EditDevice extends Component {
         this.setState({
             visible: false,
             servicesModal: false,
-
+            applyServicesValue: null,
+            checkServices: { display: 'none' },
+            renewService: false
         });
     }
 
@@ -388,12 +451,12 @@ class EditDevice extends Component {
         let disableChat = true;
         let disablePgp = true;
         let disableSim = true;
+        let disableSim2 = true;
         let vpn = '';
-
+        console.log(this.state.applyServicesValue, products, packages, term);
         let packagesData = []
         let productData = []
         let total_price = 0
-        console.log(products, packages);
         if (packages && packages.length) {
             packages.map((item) => {
                 let data = {
@@ -414,10 +477,13 @@ class EditDevice extends Component {
                     disableSim = false
                 }
                 if (services.sim_id2) {
+
+                    disableSim2 = false
                     this.sim_id2_included = true
-                } else {
-                    this.sim_id2_included = false
+                    // } else {
+                    //     this.sim_id2_included = false
                 }
+
                 if (services.pgp_email) {
                     disablePgp = false
                 }
@@ -427,30 +493,30 @@ class EditDevice extends Component {
                 // console.log(item.pkg_features);
             })
         }
-        if (products && products.length) {
-            products.map((item) => {
-                let data = {
-                    id: item.id,
-                    price_for: item.item,
-                    unit_price: item.unit_price,
-                    price_term: item.price_term
-                }
-                total_price = total_price + Number(item.unit_price)
-                productData.push(data)
-                if (item.item == 'chat_id') {
-                    disableChat = false
-                }
-                else if (item.item == 'sim_id') {
-                    disableSim = false
-                }
-                else if (item.item == 'pgp_email') {
-                    disablePgp = false
-                }
-                else if (item.item == 'vpn') {
-                    vpn = "1"
-                }
-            })
-        }
+        // if (products && products.length) {
+        //     products.map((item) => {
+        //         let data = {
+        //             id: item.id,
+        //             price_for: item.item,
+        //             unit_price: item.unit_price,
+        //             price_term: item.price_term
+        //         }
+        //         total_price = total_price + Number(item.unit_price)
+        //         productData.push(data)
+        //         if (item.item == 'chat_id') {
+        //             disableChat = false
+        //         }
+        //         else if (item.item == 'sim_id') {
+        //             disableSim = false
+        //         }
+        //         else if (item.item == 'pgp_email') {
+        //             disablePgp = false
+        //         }
+        //         else if (item.item == 'vpn') {
+        //             vpn = "1"
+        //         }
+        //     })
+        // }
 
         let expiry_date = ''
         if (term === '0') {
@@ -459,15 +525,16 @@ class EditDevice extends Component {
             expiry_date = term + " Months";
         }
         let services = (packages.length > 0 || products.length > 0) ? true : false;
-        // console.log(this.props.sim_ids, disableSim);
+        console.log(services);
 
         this.setState({
             pgp_email: (this.state.pgp_email && !disablePgp) ? this.state.pgp_email : (this.props.pgp_emails.length && !disablePgp) ? this.props.pgp_emails[0].pgp_email : '',
             chat_id: (this.state.chat_id && !disableChat) ? this.state.chat_id : (this.props.chat_ids.length && !disableChat) ? this.props.chat_ids[0].chat_id : '',
             sim_id: (this.state.sim_id && !disableSim) ? this.state.sim_id : (this.props.sim_ids.length > 0 && !disableSim) ? this.props.sim_ids[0].sim_id : '',
-            sim_id2: (this.state.sim_id2 && this.sim_id2_included) ? this.state.sim_id2 : (this.sim_id2_included) ? (this.props.sim_ids.length > 1) ? this.props.sim_ids[1].sim_id : undefined : undefined,
+            sim_id2: (this.state.sim_id2 && !disableSim2) ? this.state.sim_id2 : (!disableSim2) ? (this.props.sim_ids.length > 1) ? this.props.sim_ids[1].sim_id : undefined : undefined,
             vpn: vpn,
             disableSim: disableSim,
+            disableSim2: disableSim2,
             disableChat: disableChat,
             disablePgp: disablePgp,
             packages: packagesData,
@@ -475,11 +542,15 @@ class EditDevice extends Component {
             expiry_date: expiry_date,
             services: services,
             checkServices: (services) ? { display: 'inline', color: "Red", margin: 0 } : { display: 'none' },
+            changeServiceMsg: (this.state.applyServicesValue === 'extend') ? "You requested to extend your services." : "You requested to change your services.",
             term: term,
             unit_servcies_price: total_price,
-            total_price: this.state.duplicate > 0 ? total_price * this.state.duplicate : total_price,
+            total_price: total_price,
             PkgSelectedRows: packages,
-            proSelectedRows: products
+            proSelectedRows: products,
+            renewService: false,
+            servicesModal: false,
+            visible: false,
         })
     }
 
@@ -511,10 +582,13 @@ class EditDevice extends Component {
     }
 
     handleOkInvoice = () => {
-
-        if (this.state.total_price <= this.props.user_credit) {
+        if (this.state.total_price <= this.props.user_credit || !this.state.serviceData.pay_now) {
             this.state.serviceData.paid_by_user = this.state.paidByUser
-            this.props.editDeviceFunc(this.state.serviceData)
+            if (this.state.renewService || this.state.applyServicesValue === 'extend') {
+                this.props.extendServices(this.state.serviceData)
+            } else {
+                this.props.editDeviceFunc(this.state.serviceData)
+            }
             this.props.hideModal();
             this.handleReset();
             this.setState({
@@ -545,20 +619,50 @@ class EditDevice extends Component {
             })
         }
     }
+    handleRenewService = () => {
+        let packagesData = this.props.device.services ? JSON.parse(this.props.device.services.packages) : []
+        let productData = this.props.device.services ? JSON.parse(this.props.device.services.products) : []
+        let total_price = 0
+        if (packagesData && packagesData.length) {
+            packagesData.map((item) => {
+                total_price = total_price + Number(item.pkg_price)
+            })
+        }
+        if (productData && productData.length) {
+            productData.map((item) => {
+                total_price = total_price + Number(item.unit_price)
+            })
+        }
+        this.setState({
+            packages: packagesData,
+            products: productData,
+            total_price: total_price,
+            visible: false,
+            servicesModal: false,
+            renewService: true,
+            checkServices: { display: 'inline', color: "Red", margin: 0 },
+            changeServiceMsg: "You requested to renew current services.",
+            PkgSelectedRows: packagesData,
+            proSelectedRows: productData
+        })
+    }
 
     render() {
-        // console.log(this.props.parent_packages, this.props.product_prices)
-        // console.log('check edit device: ', this.props.device);
-        console.log('props of coming', this.props);
-        const { visible, loading, isloading, addNewUserValue } = this.state;
+        // console.log("DEVICE DATA: ", this.props.device);
         const { users_list } = this.props;
-        var lastObject = users_list[0]
-        // console.log(this.props.user);
 
         return (
             <div>
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
                     <p className="mb-4">(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")}</p>
+                    {/* {
+                        (this.props.device.extended_services) ?
+                            <div style={{ color: 'red', textAlign: 'center', margin: 15 }}>
+                                <span>{convertToLang(this.props.translation[DUMY_TRANS_ID], "*You need to cancel your extended services to use apply service function.")}</span>
+                            </div>
+                            : null
+                    } */}
+
                     <Form.Item
                         label={(this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ? convertToLang(this.props.translation[DEVICE_ID], DEVICE_ID) : null}
                         labelCol={{ span: 8, xs: 24, sm: 8 }}
@@ -662,26 +766,40 @@ class EditDevice extends Component {
                             <Input type='hidden' disabled />
                         )}
                     </Form.Item>
-                    <Form.Item
-                        label={convertToLang(this.props.translation[DUMY_TRANS_ID], "CHANGE SERVICES")}
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 14 }}
-                    >
-                        {this.props.form.getFieldDecorator('service', {
-                            initialValue: '',
-                        })(
-                            <Fragment>
-                                <Button
-                                    type="primary"
-                                    onClick={() => this.handleServicesModal()}
-                                    style={{ width: '100%' }}
-                                >
-                                    {convertToLang(this.props.translation[DUMY_TRANS_ID], "CHANGE SERVICES")}
-                                </Button>
-                                <span style={this.state.checkServices}>YOUR SERVICES CHANGED.</span>
-                            </Fragment>
-                        )}
-                    </Form.Item>
+                    {(this.props.user.type === ADMIN) ? null :
+                        <Form.Item
+                            label={convertToLang(this.props.translation[DUMY_TRANS_ID], "APPLY SERVICES")}
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}
+                            className="apply_services"
+                        >
+                            {this.props.form.getFieldDecorator('service', {
+                                // initialValue: this.state.applyServicesValue
+                            })(
+                                <Fragment>
+                                    <Select
+                                        placeholder={convertToLang(this.props.translation[""], " ")}
+                                        optionFilterProp="children"
+                                        onChange={(e) => this.handleServicesModal(e)}
+                                        value={this.state.applyServicesValue}
+                                    // className="apply_services"
+                                    // disabled={(this.props.device.extended_services) ? true : false}
+                                    >
+                                        {(this.props.device.services && this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ?
+
+                                            <Select.Option value="extend">{convertToLang(this.props.translation[DUMY_TRANS_ID], "EXTEND SERVICES")}</Select.Option>
+                                            : null}
+                                        <Select.Option value="change">{convertToLang(this.props.translation[DUMY_TRANS_ID], "CHANGE SERVICES")}</Select.Option>
+                                        {(this.props.device.services && this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ?
+                                            <Select.Option value="cancel">{convertToLang(this.props.translation[DUMY_TRANS_ID], "CANCEL SERVICES")}</Select.Option>
+                                            : null}
+                                    </Select>
+                                    <span style={this.state.checkServices}>{this.state.changeServiceMsg}</span>
+
+                                </Fragment>
+                            )}
+                        </Form.Item>
+                    }
                     <Form.Item
                         label={convertToLang(this.props.translation[LABEL_DATA_PGP_EMAIL], "PGP Email ")}
                         labelCol={{ span: 8 }}
@@ -698,9 +816,6 @@ class EditDevice extends Component {
                                 placeholder={convertToLang(this.props.translation[SELECT_PGP_EMAILS], "Select PGP Emails")}
                                 optionFilterProp="children"
                                 onChange={(e) => this.setState({ pgp_email: e })}
-                                // onFocus={handleFocus}
-                                // onBlur={handleBlur}
-                                // defaultValue={this.state.pgp_email}
                                 autoComplete="new-password"
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                 disabled={this.state.disablePgp}
@@ -781,7 +896,7 @@ class EditDevice extends Component {
                                 // onFocus={handleFocus}
                                 // onBlur={handleBlur}
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                disabled={this.state.disableSim}
+                                disabled={this.state.disableSim2}
                             >
                                 <Select.Option value=""> {convertToLang(this.props.translation[DUMY_TRANS_ID], "Select Sim ID 2")}</Select.Option>
                                 {this.props.sim_ids.map((sim_id, index) => {
@@ -868,15 +983,6 @@ class EditDevice extends Component {
                             // }],
                         })(
                             <Input disabled />
-                            // <Select
-                            //     style={{ width: '100%' }}
-                            // >
-                            //     {/* {(this.props.device.finalStatus === DEVICE_TRIAL || this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? <Select.Option value={0}>{convertToLang(this.props.translation[DEVICE_TRIAL], DEVICE_TRIAL)} (7 {convertToLang(this.props.translation[Days], Days)})</Select.Option> : null} */}
-                            //     <Select.Option value={1}> {convertToLang(this.props.translation[one_month], one_month)} </Select.Option>
-                            //     <Select.Option value={3}>{convertToLang(this.props.translation[three_month], three_month)}</Select.Option>
-                            //     <Select.Option value={6}>{convertToLang(this.props.translation[six_month], six_month)}</Select.Option>
-                            //     <Select.Option value={12}>{convertToLang(this.props.translation[twelve_month], twelve_month)}</Select.Option>
-                            // </Select>
                         )}
 
                     </Form.Item>
@@ -903,49 +1009,7 @@ class EditDevice extends Component {
                         </Fragment>
                         :
                         <Fragment>
-                            {/* <Form.Item
-                                label="Dealer Pin "
-                                labelCol={{ span: 8, xs: 24, sm: 8 }}
-                                wrapperCol={{ span: 14, md: 14, xs: 24 }}
-                            >
-                                <Input value={this.props.device.link_code} disabled />
 
-                            </Form.Item>
-
-                            <Form.Item
-                                label="IMEI 1 "
-                                labelCol={{ span: 8, xs: 24, sm: 8 }}
-                                wrapperCol={{ span: 14, md: 14, xs: 24 }}
-                            >
-
-                                <Input type='text' value={this.props.device.imei} disabled />
-
-                            </Form.Item>
-                            <Form.Item
-                                label="SIM 1 "
-                                labelCol={{ span: 8, xs: 24, sm: 8 }}
-                                wrapperCol={{ span: 14, md: 14, xs: 24 }}
-                            >
-                                <Input value={this.props.device.simno} disabled />
-
-                            </Form.Item>
-                            <Form.Item
-                                label="IMEI 2 "
-                                labelCol={{ span: 8, xs: 24, sm: 8 }}
-                                wrapperCol={{ span: 14, md: 14, xs: 24 }}
-                            >
-
-                                <Input value={this.props.device.imei2} disabled />
-
-                            </Form.Item>
-                            <Form.Item
-                                label="SIM 2 "
-                                labelCol={{ span: 8, xs: 24, sm: 8 }}
-                                wrapperCol={{ span: 14, md: 14, xs: 24 }}
-                            >
-                                <Input value={this.props.device.simno2} disabled />
-
-                            </Form.Item> */}
                         </Fragment>
 
                     }
@@ -958,11 +1022,7 @@ class EditDevice extends Component {
                         {this.props.form.getFieldDecorator('note', {
                             initialValue: this.props.device.note,
                         })(
-                            // <Input />
                             <TextArea
-                                // value={value}
-                                // onChange={this.onChange}
-                                // placeholder="Controlled autosize"
                                 autosize={{ minRows: 3, maxRows: 5 }}
                             />
                         )}
@@ -984,13 +1044,14 @@ class EditDevice extends Component {
                 <Modal
                     width={750}
                     visible={this.state.servicesModal}
-                    title={convertToLang(this.props.translation[DUMY_TRANS_ID], "SEVCIES")}
+                    title={convertToLang(this.props.translation[DUMY_TRANS_ID], this.state.applyServicesValue ? this.state.applyServicesValue.toUpperCase() + " SERVICES" : "")}
                     maskClosable={false}
                     onOk={this.handleOk}
                     closable={false}
                     // onCancel={this.handleCancel}
                     footer={null}
                     className="edit_form"
+                    bodyStyle={{ height: '440px', overflow: 'overlay' }}
                 >
                     <Services
                         handleCancel={this.handleCancel}
@@ -1006,13 +1067,15 @@ class EditDevice extends Component {
                         creditsToRefund={this.state.creditsToRefund}
                         type={"edit"}
                         device={this.props.device}
+                        applyServicesValue={this.state.applyServicesValue}
+                        handleRenewService={this.handleRenewService}
                     />
                 </Modal>
 
                 <Modal
                     width={900}
                     visible={this.state.showConfirmCredit}
-                    title={<span style={{ fontWeight: "bold" }}> {convertToLang(this.props.translation[DUMY_TRANS_ID], "Do You Really want to apply selected services on device ?")} </span>}
+                    title={<span style={{ fontWeight: "bold" }}> {convertToLang(this.props.translation[DUMY_TRANS_ID], "SERVICE CHANGE DETAILS")} </span>}
                     maskClosable={false}
                     // onOk={this.handleOk}
                     closable={false}
@@ -1027,26 +1090,31 @@ class EditDevice extends Component {
                     className="edit_form"
                 >
                     <Fragment>
-                        <div style={{ marginTop: 20 }}>
-                            <h3 style={{ textAlign: "center" }}><b>CURRENT SERVICES</b></h3>
-                            <Table
-                                id='packages'
-                                className={"devices mb-20"}
-                                // rowSelection={packageRowSelection}
-                                size="middle"
-                                bordered
-                                columns={this.state.invoiceColumns}
-                                dataSource={this.confirmRenderList((this.props.device && this.props.device.services) ? JSON.parse(this.props.device.services.packages) : [], (this.props.device && this.props.device.services) ? JSON.parse(this.props.device.services.products) : [])}
-                                pagination={
-                                    false
-                                }
-                            />
-                            <h5 style={{ textAlign: "right" }}><b>Remaining days of services : {this.state.serviceRemainingDays}</b></h5>
-                            <h5 style={{ textAlign: "right" }}>Previous service refund credits :  {this.state.creditsToRefund} Credits</h5>
-                        </div >
+
+                        {(this.state.renewService || this.state.applyServicesValue === 'extend') ? null :
+                            <div style={{ marginTop: 20 }}>
+                                {/* <h4 style={{ textAlign: "center" }}><b>CURRENT SERVICES</b></h4> */}
+                                <h4>REFUND APPLIED ON EXISTING SERVICE</h4>
+                                <Table
+                                    id='packages'
+                                    className={"devices mb-20"}
+                                    // rowSelection={packageRowSelection}
+                                    size="middle"
+                                    bordered
+                                    columns={this.state.refundServicesColumns}
+                                    dataSource={this.refundServiceRenderList(this.props.device.services, this.state.serviceRemainingDays, this.state.creditsToRefund, this.state.prevService_totalDays)}
+                                    pagination={
+                                        false
+                                    }
+                                />
+                                {/* <h5 style={{ textAlign: "right" }}>Remaining days of services : {this.state.serviceRemainingDays}</h5> */}
+                                <h5 style={{ textAlign: "right" }}><b>TOTAL REFUND CREDITS :  -{this.state.creditsToRefund} Credits </b></h5>
+                            </div >
+                        }
 
                         <div style={{ marginTop: 20 }}>
-                            <h3 style={{ textAlign: "center" }}><b>NEW SERVICES</b></h3>
+                            {(this.state.renewService && this.state.applyServicesValue === 'extend') ? <h4><b>RENEW SERVICES</b></h4>
+                                : <h4><b>NEW SERVICES</b></h4>}
                             <Table
                                 id='packages'
                                 className={"devices mb-20"}
@@ -1062,20 +1130,20 @@ class EditDevice extends Component {
                         </div >
                         <div>
                             <h5 style={{ textAlign: "right" }}>Sub Total :  {this.state.total_price} Credits</h5>
-
-                            <h5 style={{ textAlign: "right" }}>Previous service refund credits :  {this.state.creditsToRefund} Credits</h5>
-                            <h5 style={{ textAlign: "right" }}><b>Total :  {this.state.serviceData.total_price} Credits</b></h5>
-                            <h4 style={{ textAlign: "center" }}><b>There will be a charge of {this.state.serviceData.total_price} Credits</b></h4>
+                            {(this.state.renewService || this.state.applyServicesValue === 'extend') ? null :
+                                <h5 style={{ textAlign: "right" }}>REFUND :  -{this.state.creditsToRefund} Credits</h5>
+                            }
+                            <h5 style={{ textAlign: "right" }}><b>TOTAL :  {this.state.serviceData.total_price} Credits</b></h5>
+                            {/* <h4 style={{ textAlign: "center" }}><b>There will be a charge of {this.state.serviceData.total_price} Credits</b></h4> */}
                         </div>
-                        {(this.state.term !== '0') ?
-                            <div>
-                                <h4 style={{ textAlign: "center", color: 'red' }}>If you PAY NOW you will get 5% discount.</h4>
-                            </div>
-                            : null}
                         <div className="edit_ftr_btn" >
                             <Button onClick={() => { this.setState({ showConfirmCredit: false }) }}>CANCEL</Button>
-                            <Button type='primary' onClick={() => { this.submitServicesConfirm(false) }}>PAY LATER</Button>
-                            <Button style={{ backgroundColor: "green", color: "white" }} onClick={() => { this.submitServicesConfirm(true) }}>PAY NOW</Button>
+
+                            {(this.props.user_credit < this.state.serviceData.total_price) ?
+                                <Button type='primary' onClick={() => { this.submitServicesConfirm(false) }}>PAY LATER</Button>
+                                : null
+                            }
+                            <Button style={{ backgroundColor: "green", color: "white" }} onClick={() => { this.submitServicesConfirm(true) }}>PAY NOW (-3%)</Button>
                         </div >
                     </Fragment>
                 </Modal>
@@ -1093,7 +1161,6 @@ class EditDevice extends Component {
                     cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                 >
                     <Invoice
-                        // ref="invoice_modal"
                         PkgSelectedRows={this.state.PkgSelectedRows}
                         proSelectedRows={this.state.proSelectedRows}
                         renderInvoiceList={this.confirmRenderList}
@@ -1103,6 +1170,7 @@ class EditDevice extends Component {
                         term={this.state.term}
                         duplicate={1}
                         deviceAction={"Edit"}
+                        renewService={this.state.renewService}
                         device_id={this.props.device.device_id}
                         user_id={this.props.device.user_id}
                         invoiceID={this.state.invoiceID}
@@ -1110,6 +1178,9 @@ class EditDevice extends Component {
                         serviceRemainingDays={this.state.serviceRemainingDays}
                         creditsToRefund={this.state.creditsToRefund}
                         translation={this.props.translation}
+                        refundServiceRenderList={this.refundServiceRenderList}
+                        prevService_totalDays={this.state.prevService_totalDays}
+                        applyServicesValue={this.state.applyServicesValue}
                     />
                     <div style={{ float: "right" }}><b>PAID BY USER: </b> <Switch size="small" defaultChecked onChange={this.handlePaidUser} /></div>
                 </Modal>
@@ -1135,6 +1206,7 @@ function mapDispatchToProps(dispatch) {
         getParentPackages: getParentPackages,
         getProductPrices: getProductPrices,
         getInvoiceId: getInvoiceId,
+        extendServices: extendServices
     }, dispatch);
 }
 var mapStateToProps = ({ routing, devices, users, auth, settings, sidebar }) => {
@@ -1158,76 +1230,26 @@ var mapStateToProps = ({ routing, devices, users, auth, settings, sidebar }) => 
 
 export default connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(WrappedEditDeviceForm);
 
-
-
-// function showConfirmCredit(_this, values) {
-//     let prevPackages =
-//         let prevProducts =
-//             confirm({
-//                 width: 900,
-//                 title: <span style={{ fontWeight: "bold" }}>Do You Really want to apply selected services on device ? </span>,
-//                 content:
-//                     <Fragment>
-//                         <div style={{ marginTop: 20 }}>
-//                             <h3 style={{ textAlign: "center" }}><b>CURRENT SERVICES</b></h3>
-//                             <Table
-//                                 id='packages'
-//                                 className={"devices mb-20"}
-//                                 // rowSelection={packageRowSelection}
-//                                 size="middle"
-//                                 bordered
-//                                 columns={_this.state.invoiceColumns}
-//                                 dataSource={_this.confirmRenderList(prevPackages, prevProducts)}
-//                                 pagination={
-//                                     false
-//                                 }
-//                             />
-//                             <h5 style={{ textAlign: "right" }}><b>Remaining days of services : {_this.state.serviceRemainingDays}</b></h5>
-//                             <h5 style={{ textAlign: "right" }}>Previous service refund credits :  {_this.state.creditsToRefund} Credits</h5>
-//                         </div >
-
-
-//                         <div style={{ marginTop: 20 }}>
-//                             <h3 style={{ textAlign: "center" }}><b>NEW SERVICES</b></h3>
-//                             <Table
-//                                 id='packages'
-//                                 className={"devices mb-20"}
-//                                 // rowSelection={packageRowSelection}
-//                                 size="middle"
-//                                 bordered
-//                                 columns={_this.state.invoiceColumns}
-//                                 dataSource={_this.confirmRenderList(_this.state.PkgSelectedRows, _this.state.proSelectedRows)}
-//                                 pagination={
-//                                     false
-//                                 }
-//                             />
-//                         </div >
-//                         {(_this.state.term !== '0') ?
-//                             <div>
-//                                 <h5 style={{ textAlign: "right" }}>Sub Total :  {_this.state.total_price} Credits</h5>
-
-//                                 <h5 style={{ textAlign: "right" }}>Previous service refund credits :  {_this.state.creditsToRefund} Credits</h5>
-//                                 <h5 style={{ textAlign: "right" }}><b>Total :  {values.total_price} Credits</b></h5>
-//                                 <h4 style={{ textAlign: "center" }}><b>There will be a charge of {values.total_price} Credits</b></h4>
-//                             </div>
-//                             : null}
-//                     </Fragment>,
-//                 onOk() {
-//                     _this.props.editDeviceFunc(values)
-//                     _this.props.hideModal();
-//                     _this.handleReset();
-//                 },
-//                 onCancel() {
-
-//                 },
-//             });
-// }
 function showCreditPurchase(_this) {
     confirm({
         title: "Your Credits are not enough to apply these services. Please select other services OR Purchase Credits.",
         okText: "PURCHASE CREDITS",
         onOk() {
             _this.props.history.push('/account')
+        },
+        onCancel() {
+        },
+    })
+}
+
+function showCancelServiceConfirm(_this, values) {
+    confirm({
+        title: <span>Are you sure you want to cancel services on this device?  <br /> This action cannot be reversed.</span>,
+        okText: "PROCEED WITH CANCELLATION",
+        onOk() {
+            _this.props.editDeviceFunc(values);
+            _this.props.hideModal();
+            _this.handleReset();
         },
         onCancel() {
         },

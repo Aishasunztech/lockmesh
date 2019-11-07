@@ -59,7 +59,7 @@ import {
     DEALER_DEVICES
 } from '../../constants/DealerConstants';
 
-// Mobile view 
+// Mobile view
 import {
     DEVICE_ACTIVATED, GUEST_PASSWORD, ENCRYPTED_PASSWORD, DURESS_PASSWORD, ADMIN_PASSWORD,
     SECURE_SETTING, SYSTEM_CONTROLS, NOT_AVAILABLE, MANAGE_PASSWORD, MAIN_MENU, APPS,
@@ -227,34 +227,6 @@ export function devicesColumns(translation, handleSearch) {
                     key: "user_id",
                     sorter: (a, b) => {
                         return a.user_id.props.children.localeCompare(b.user_id.props.children)
-                    },
-                    sortDirections: ['ascend', 'descend'],
-                }
-            ],
-        },
-        {
-            title: (
-                <Input.Search
-                    name="transfered_to"
-                    key="transfered_to"
-                    id="transfered_to"
-                    className="search_heading"
-                    onChange={handleSearch}
-                    // onFocus={handleSearch}
-                    autoComplete="new-password"
-                    placeholder="TRANSFERED TO"
-                // onBlur={(e) => { e.target.value = '' }}
-                />
-            ),
-            dataIndex: 'transfered_to',
-            children: [
-                {
-                    title: "TRANSFERED TO",
-                    align: "center",
-                    dataIndex: 'transfered_to',
-                    key: "transfered_to",
-                    sorter: (a, b) => {
-                        return a.transfered_to.localeCompare(b.transfered_to)
                     },
                     sortDirections: ['ascend', 'descend'],
                 }
@@ -436,6 +408,36 @@ export function devicesColumns(translation, handleSearch) {
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="transfered_to"
+                    key="transfered_to"
+                    id="transfered_to"
+                    className="search_heading"
+                    onChange={handleSearch}
+                    // onFocus={handleSearch}
+                    autoComplete="new-password"
+                    placeholder="TRANSFERED TO"
+                // onBlur={(e) => { e.target.value = '' }}
+                />
+            ),
+            dataIndex: 'transfered_to',
+            className: 'hide',
+            children: [
+                {
+                    title: "TRANSFERED TO",
+                    align: "center",
+                    dataIndex: 'transfered_to',
+                    className: 'hide',
+                    key: "transfered_to",
+                    sorter: (a, b) => {
+                        return a.transfered_to.localeCompare(b.transfered_to)
+                    },
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ],
         },
         {
             title: (
@@ -1693,7 +1695,7 @@ export function sDealerColumns(translation, handleSearch) {
 
 export function dealerColsWithSearch(translation, searchBar = false, callBack = null) {
 
-    var searchInput = [  
+    var searchInput = [
         {
             title: (
                 <Input.Search
@@ -3219,16 +3221,82 @@ export function bulkDevicesColumns(translation, handleSearch) {
 export function inventorySales(translation) {
     return (
         [
-            // {
-            //     dataIndex: 'counter',
-            //     className: '',
-            //     title: '#',
-            //     align: "center",
-            //     key: 'counter',
-            //     sorter: (a, b) => { return a.counter - b.counter },
-            //     sortDirections: ['ascend', 'descend'],
+            {
+                title: "#",
+                dataIndex: 'counter',
+                align: 'center',
+                className: 'row',
+                key: 'counter',
+                render: (text, record, index) => ++index,
+            },
+            {
+                dataIndex: 'item',
+                className: '',
+                title: convertToLang(translation["ITEM"], "ITEM"),
+                align: "center",
+                key: 'item',
+                // sorter: (a, b) => { return a.item.localeCompare(b.item) },
+                // sortDirections: ['ascend', 'descend'],
 
-            // },
+            },
+            {
+                title: convertToLang(translation[DUMY_TRANS_ID], "DESCRPTION"),
+                dataIndex: 'description',
+                className: '',
+                align: "center",
+                key: 'description',
+                // ...this.getColumnSearchProps('status'),
+                // sorter: (a, b) => { return a.description.localeCompare(b.description) },
+                // sortDirections: ['ascend', 'descend'],
+
+            },
+            {
+                title: convertToLang(translation[DUMY_TRANS_ID], "SERVICE TERM"),
+                dataIndex: 'term',
+                className: '',
+                align: "center",
+                key: 'term',
+                // ...this.getColumnSearchProps('status'),
+                // sorter: (a, b) => { return a.term.localeCompare(b.term) },
+                // sortDirections: ['ascend', 'descend'],
+
+            },
+            {
+                title: convertToLang(translation[DUMY_TRANS_ID], "UNIT PRICE (CREDITS)"),
+                dataIndex: 'unit_price',
+                className: '',
+                align: "center",
+                key: 'unit_price',
+                // ...this.getColumnSearchProps('status'),
+                // sorter: (a, b) => { return a.unit_price - b.unit_price },
+                // sortDirections: ['ascend', 'descend'],
+            },
+            {
+                title: convertToLang(translation[DUMY_TRANS_ID], "QUANTITY"),
+                dataIndex: 'quantity',
+                className: '',
+                align: "center",
+                key: 'quantity',
+                // ...this.getColumnSearchProps('status'),
+                // sorter: (a, b) => { return a.quantity - b.quantity },
+                // sortDirections: ['ascend', 'descend'],
+            },
+            {
+                title: convertToLang(translation[DUMY_TRANS_ID], "TOTAL"),
+                dataIndex: 'line_total',
+                align: "center",
+                className: '',
+                key: 'line_total',
+                // ...this.getColumnSearchProps('status'),
+                // sorter: (a, b) => { return a.line_total - b.line_total },
+                // sortDirections: ['ascend', 'descend'],
+            },
+        ]
+    );
+}
+export function refundServiceColumns(translation) {
+    return (
+        [
             {
                 title: "#",
                 dataIndex: 'counter',
@@ -3266,11 +3334,17 @@ export function inventorySales(translation) {
                 align: "center",
                 className: '',
                 key: 'term',
-                // ...this.getColumnSearchProps('status'),
-                // sorter: (a, b) => { return a.term.localeCompare(b.term) },
-                // sortDirections: ['ascend', 'descend'],
-
             },
+
+            {
+                title: convertToLang(translation[DUMY_TRANS_ID], "CREDIT TERM (DAYS)"),
+                dataIndex: 'remaining_term',
+                className: '',
+                align: "center",
+                className: '',
+                key: 'remaining_term',
+            },
+
             {
                 title: convertToLang(translation[DUMY_TRANS_ID], "UNIT PRICE (CREDITS)"),
                 dataIndex: 'unit_price',
@@ -3283,17 +3357,6 @@ export function inventorySales(translation) {
                 // sortDirections: ['ascend', 'descend'],
             },
             {
-                title: convertToLang(translation[DUMY_TRANS_ID], "QUANTITY"),
-                dataIndex: 'quantity',
-                className: '',
-                align: "center",
-                className: '',
-                key: 'quantity',
-                // ...this.getColumnSearchProps('status'),
-                // sorter: (a, b) => { return a.quantity - b.quantity },
-                // sortDirections: ['ascend', 'descend'],
-            },
-            {
                 title: convertToLang(translation[DUMY_TRANS_ID], "TOTAL"),
                 dataIndex: 'line_total',
                 className: '',
@@ -3303,11 +3366,12 @@ export function inventorySales(translation) {
                 // ...this.getColumnSearchProps('status'),
                 // sorter: (a, b) => { return a.line_total - b.line_total },
                 // sortDirections: ['ascend', 'descend'],
-
-            },
+            }
         ]
     );
 }
+
+
 export function appMarketColumns(translation, handleSearch, removeSMapps) {
     return (
         [

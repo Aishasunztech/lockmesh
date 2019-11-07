@@ -21,6 +21,7 @@ import {
     PACKAGE_INCLUDED,
     UNIT_PRICE,
 } from "../../../constants/AccountConstants";
+import { Markup } from 'interweave';
 
 const confirm = Modal.confirm;
 const TabPane = Tabs.TabPane;
@@ -115,7 +116,7 @@ class ServicesList extends Component {
                 className: 'row '
             },
             {
-                title: convertToLang(this.props.translation[DUMY_TRANS_ID], "PACKAGE PRICE (CREDITS)"),
+                title: <Markup content={convertToLang(this.props.translation[DUMY_TRANS_ID], "PACKAGE PRICE <br>(CREDITS)")}></Markup>,
                 align: "center",
                 className: 'white_normal',
                 dataIndex: 'pkg_price',
@@ -183,10 +184,11 @@ class ServicesList extends Component {
 
 
     renderList(type, list) {
-        // console.log(list);
+        // console.log(list, type, this.props.current_services);
         if (type === 'package') {
             let packageIds = []
             let packagesDataList = []
+            // console.log(this.props.current_services);
             if (this.props.current_services) {
                 let current_services_packages = JSON.parse(this.props.current_services.packages)
                 current_services_packages.map(item => {
@@ -197,7 +199,9 @@ class ServicesList extends Component {
             list.map((item, index) => {
                 if (!packageIds.includes(item.id)) {
                     let services = JSON.parse(item.pkg_features)
+                    // console.log("services ", services);
                     packagesDataList.push({
+                        key: index,
                         id: item.id,
                         rowKey: item.id,
                         pkg_name: `${item.pkg_name}`,
@@ -245,6 +249,7 @@ class ServicesList extends Component {
                     }
 
                     productsDataList.push({
+                        key: index,
                         id: item.id,
                         rowKey: item.id,
                         price_for: `${price_for}`,
@@ -376,7 +381,8 @@ class ServicesList extends Component {
             // }
             // if (total_price < this.props.user_credit || this.props.tabselect === '0') {
             this.props.handleServicesSubmit(this.state.proSelectedRows, this.state.PkgSelectedRows, this.props.serviceTerm);
-            this.handleCancel()
+            this.resetSeletedRows();
+            // this.handleCancel()
             // }
             // else {
             //     showConfirm(this);
@@ -394,42 +400,43 @@ class ServicesList extends Component {
             onChange: (selectedRowKeys, selectedRows) => {
                 this.handlePackageSelect(selectedRowKeys, selectedRows)
             },
-            getCheckboxProps: record => {
-                let disabled = false
-                // console.log(this.state.proSelectedRows, this.state.PkgSelectedRows);
-                if (this.state.proSelectedRows.length) {
-                    this.state.proSelectedRows.map((item) => {
-                        // console.log(record.pkg_features[item.item]);
-                        if (record.pkg_features[item.item] === true) {
-                            disabled = true
-                        }
-                    })
-                }
-                if (this.state.PkgSelectedRows.length) {
-                    this.state.PkgSelectedRows.map((item) => {
-                        // console.log(item, record);
-                        if (item.id !== record.id) {
-                            if (item.pkg_features.sim_id === true && record.pkg_features.sim_id === true) {
-                                disabled = true
-                            }
-                            if (item.pkg_features.chat_id === true && record.pkg_features.chat_id === true) {
-                                disabled = true
-                            }
-                            if (item.pkg_features.pgp_email === true && record.pkg_features.pgp_email === true) {
-                                disabled = true
-                            }
-                            if (item.pkg_features.vpn === true && record.pkg_features.vpn === true) {
-                                disabled = true
-                            }
-                        }
+            // getCheckboxProps: record => {
+            //     let disabled = false
+            //     // console.log(this.state.proSelectedRows, this.state.PkgSelectedRows);
+            //     if (this.state.proSelectedRows.length) {
+            //         this.state.proSelectedRows.map((item) => {
+            //             // console.log(record.pkg_features[item.item]);
+            //             if (record.pkg_features[item.item] === true) {
+            //                 disabled = true
+            //             }
+            //         })
+            //     }
+            //     if (this.state.PkgSelectedRows.length) {
+            //         this.state.PkgSelectedRows.map((item) => {
+            //             // console.log(item, record);
+            //             if (item.id !== record.id) {
+            //                 if (item.pkg_features.sim_id === true && record.pkg_features.sim_id === true) {
+            //                     disabled = true
+            //                 }
+            //                 if (item.pkg_features.chat_id === true && record.pkg_features.chat_id === true) {
+            //                     disabled = true
+            //                 }
+            //                 if (item.pkg_features.pgp_email === true && record.pkg_features.pgp_email === true) {
+            //                     disabled = true
+            //                 }
+            //                 if (item.pkg_features.vpn === true && record.pkg_features.vpn === true) {
+            //                     disabled = true
+            //                 }
+            //             }
 
-                    })
-                }
-                return ({
-                    disabled: disabled, // Column configuration not to be checked
-                    name: record.name,
-                })
-            },
+            //         })
+            //     }
+            //     return ({
+            //         disabled: disabled, // Column configuration not to be checked
+            //         name: record.name,
+            //     })
+            // },
+            type: 'radio'
             //  columnTitle: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
         };
 
@@ -473,6 +480,7 @@ class ServicesList extends Component {
                     name: record.name,
                 })
             },
+            type: 'radio'
             //  columnTitle: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
         };
 
@@ -480,40 +488,43 @@ class ServicesList extends Component {
         return (
             <Fragment>
 
-                {(this.props.tabselect === '0') ?
-                    <div style={{}} >
-                        <h2 style={{ textAlign: "center" }}><strong>PRODUCTS</strong></h2>
-                        <Table
-                            id='products'
-                            className={"devices"}
-                            rowSelection={trialRowSelection}
-                            size="middle"
-                            bordered
-                            columns={this.state.pricesColumns}
-                            dataSource={this.renderList("trial")}
-                            pagination={
-                                false
-                            }
-                        />
-                    </div >
-                    :
-                    <Fragment>
-                        <div style={{}}>
-                            <h2 style={{ textAlign: "center" }}><strong>PACKAGES</strong></h2>
+                {/* {(this.props.tabselect === '0') ?
+                    <div>  <h2 className="text-center"><strong>PRODUCTS</strong></h2>
+                        <div className="prd_table">
                             <Table
-                                id='packages'
-                                className={"devices mb-10"}
-                                rowSelection={packageRowSelection}
+                                id='products'
+                                className={"devices"}
+                                rowSelection={trialRowSelection}
                                 size="middle"
                                 bordered
-                                columns={this.state.packagesColumns}
-                                dataSource={this.renderList("package", this.props.parent_packages)}
+                                columns={this.state.pricesColumns}
+                                dataSource={this.renderList("trial")}
                                 pagination={
                                     false
                                 }
                             />
                         </div >
-                        <div style={{}} >
+                    </div>
+                    :
+                    <Fragment> */}
+                <h2 className="text-center"><strong>PACKAGES</strong></h2>
+                <div className="prd_table">
+                    <Table
+                        id='packages'
+                        className={"devices"}
+                        rowSelection={packageRowSelection}
+                        size="middle"
+                        bordered
+                        columns={this.state.packagesColumns}
+                        dataSource={this.renderList("package", this.props.parent_packages)}
+                        pagination={
+                            false
+                        }
+                    // scroll={{ y: "142px" }}
+                    // scroll={{ x: true }}
+                    />
+                </div >
+                {/* <div style={{}} >
                             <h2 style={{ textAlign: "center" }}><strong>PRODUCTS</strong></h2>
                             <Table
                                 id='products'
@@ -528,9 +539,9 @@ class ServicesList extends Component {
                                 }
                             />
 
-                        </div >
-                    </Fragment>}
-                <div className="edit_ftr_btn">
+                        </div > */}
+                {/* </Fragment>} */}
+                <div className="edit_ftr_btn_serv">
                     <Button key="back" type="button" onClick={this.handleCancel}>{convertToLang(this.props.translation[Button_Cancel], "Cancel")}</Button>
                     <Button type="primary" onClick={this.handleSubmit} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "SELECT")}</Button>
                 </div>
@@ -591,123 +602,123 @@ class Services extends Component {
         this.setState({ type: e.target.value });
     }
 
-    packageChange = (value) => {
-        if (value != '') {
-            let userPackage = this.props.parent_packages.filter((item) => {
-                if (item.id === value) {
-                    return item
-                }
-            })
-            // console.log(userPackage);
-            // console.log(userPackage.pkg_features);
-            let services = JSON.parse(userPackage[0].pkg_features)
-            // console.log(services);
-            let sim_id = '';
-            let chat_id = '';
-            let pgp_email = '';
-            let vpn = '';
-            let disableChat = false;
-            let disablePgp = false;
-            let disableSim = false;
-            let disableVpn = false
-            let error = false
-            if (services.sim_id) {
-                if (this.props.sim_ids.length) {
-                    sim_id = this.props.sim_ids[0].sim_id
-                }
-                else {
-                    error = true
-                }
-                disableSim = true
-            }
+    // packageChange = (value) => {
+    //     if (value != '') {
+    //         let userPackage = this.props.parent_packages.filter((item) => {
+    //             if (item.id === value) {
+    //                 return item
+    //             }
+    //         })
+    //         // console.log(userPackage);
+    //         // console.log(userPackage.pkg_features);
+    //         let services = JSON.parse(userPackage[0].pkg_features)
+    //         // console.log(services);
+    //         let sim_id = '';
+    //         let chat_id = '';
+    //         let pgp_email = '';
+    //         let vpn = '';
+    //         let disableChat = false;
+    //         let disablePgp = false;
+    //         let disableSim = false;
+    //         let disableVpn = false
+    //         let error = false
+    //         if (services.sim_id) {
+    //             if (this.props.sim_ids.length) {
+    //                 sim_id = this.props.sim_ids[0].sim_id
+    //             }
+    //             else {
+    //                 error = true
+    //             }
+    //             disableSim = true
+    //         }
 
-            if (services.chat_id) {
-                if (this.props.chat_ids.length) {
-                    chat_id = this.props.chat_ids[0].chat_id
-                }
-                else {
-                    error = true
-                }
-                disableChat = true
-            }
-            if (services.pgp_email) {
-                if (this.props.pgp_emails.length) {
-                    pgp_email = this.props.pgp_emails[0].pgp_email
-                }
-                else {
-                    error = true
-                }
-                disablePgp = true
-            }
-            if (services.vpn) {
-                disableVpn = true
-            }
-            if (error) {
-                let _this = this
-                confirm({
-                    title: "All Seleced Services are not found. Please Contact your ADMIN or click CONTINUE ANYWAYS to add later.",
-                    okText: 'CONTINUE ANYWAYS',
-                    onOk() {
-                        _this.setState({
-                            packageId: value,
-                            sim_id: sim_id,
-                            chat_id: chat_id,
-                            pgp_email: pgp_email,
-                            vpn: (services.vpn) ? "1" : "0",
-                            disableSim: disableSim,
-                            disableChat: disableChat,
-                            disablePgp: disablePgp,
-                            disableVpn: disableVpn,
+    //         if (services.chat_id) {
+    //             if (this.props.chat_ids.length) {
+    //                 chat_id = this.props.chat_ids[0].chat_id
+    //             }
+    //             else {
+    //                 error = true
+    //             }
+    //             disableChat = true
+    //         }
+    //         if (services.pgp_email) {
+    //             if (this.props.pgp_emails.length) {
+    //                 pgp_email = this.props.pgp_emails[0].pgp_email
+    //             }
+    //             else {
+    //                 error = true
+    //             }
+    //             disablePgp = true
+    //         }
+    //         if (services.vpn) {
+    //             disableVpn = true
+    //         }
+    //         if (error) {
+    //             let _this = this
+    //             confirm({
+    //                 title: "All Seleced Services are not found. Please Contact your ADMIN or click CONTINUE ANYWAYS to add later.",
+    //                 okText: 'CONTINUE ANYWAYS',
+    //                 onOk() {
+    //                     _this.setState({
+    //                         packageId: value,
+    //                         sim_id: sim_id,
+    //                         chat_id: chat_id,
+    //                         pgp_email: pgp_email,
+    //                         vpn: (services.vpn) ? "1" : "0",
+    //                         disableSim: disableSim,
+    //                         disableChat: disableChat,
+    //                         disablePgp: disablePgp,
+    //                         disableVpn: disableVpn,
 
-                        })
+    //                     })
 
-                    },
-                    onCancel() {
-                        _this.setState({
-                            packageId: '',
-                            sim_id: '',
-                            chat_id: '',
-                            pgp_email: '',
-                            vpn: '',
-                            disableSim: false,
-                            disableChat: false,
-                            disablePgp: false,
-                            disableVpn: false,
-                        })
-                    },
+    //                 },
+    //                 onCancel() {
+    //                     _this.setState({
+    //                         packageId: '',
+    //                         sim_id: '',
+    //                         chat_id: '',
+    //                         pgp_email: '',
+    //                         vpn: '',
+    //                         disableSim: false,
+    //                         disableChat: false,
+    //                         disablePgp: false,
+    //                         disableVpn: false,
+    //                     })
+    //                 },
 
-                })
+    //             })
 
-            } else {
-                this.setState({
-                    packageId: value,
-                    sim_id: sim_id,
-                    chat_id: chat_id,
-                    pgp_email: pgp_email,
-                    vpn: (services.vpn) ? "1" : "0",
-                    disableSim: disableSim,
-                    disableChat: disableChat,
-                    disablePgp: disablePgp,
-                    disableVpn: disableVpn,
+    //         } else {
+    //             this.setState({
+    //                 packageId: value,
+    //                 sim_id: sim_id,
+    //                 chat_id: chat_id,
+    //                 pgp_email: pgp_email,
+    //                 vpn: (services.vpn) ? "1" : "0",
+    //                 disableSim: disableSim,
+    //                 disableChat: disableChat,
+    //                 disablePgp: disablePgp,
+    //                 disableVpn: disableVpn,
 
-                })
-            }
-        }
-        else {
-            this.setState({
-                packageId: value,
-                sim_id: '',
-                chat_id: '',
-                pgp_email: '',
-                vpn: '',
-                disableSim: false,
-                disableChat: false,
-                disablePgp: false,
-                disableVpn: false,
-            })
+    //             })
+    //         }
+    //     }
+    //     else {
+    //         this.setState({
+    //             packageId: value,
+    //             sim_id: '',
+    //             chat_id: '',
+    //             pgp_email: '',
+    //             vpn: '',
+    //             disableSim: false,
+    //             disableChat: false,
+    //             disablePgp: false,
+    //             disableVpn: false,
+    //         })
 
-        }
-    }
+    //     }
+    // }
 
     callback = (key) => {
         // console.log(this.refs.services.resetSeletedRows);
@@ -721,7 +732,17 @@ class Services extends Component {
         return (
             <Fragment>
                 <div>
-                    <Tabs type="card" tabPosition={'left'} style={{ display: "flex", alignItems: "center" }} className="dev_tabs" activeKey={this.props.tabselect} onChange={this.callback}>
+                    {(this.props.applyServicesValue === 'extend') ?
+                        <Button
+                            type="primary"
+                            onClick={() => this.props.handleRenewService()}
+                            style={{ float: "right" }}
+                        >
+                            {convertToLang(this.props.translation[DUMY_TRANS_ID], "RENEW CURRENT SERVICES")}
+                        </Button>
+                        : null
+                    }
+                    <Tabs type="card" className="services_tabs " activeKey={this.props.tabselect} onChange={this.callback}>
                         {(this.props.type !== 'edit' || (this.props.type === 'edit' && this.props.device.finalStatus === DEVICE_PRE_ACTIVATION)) ?
                             <TabPane tab={<span className="green">TRIAL</span>} key="0" >
                             </TabPane>
@@ -734,27 +755,28 @@ class Services extends Component {
                         </TabPane>
                         <TabPane tab={<span className="green">12 MONTH</span>} key="12" >
                         </TabPane>
-                        <ServicesList
-                            parent_packages={this.props.parent_packages}
-                            product_prices={this.props.product_prices}
-                            ref="services"
-                            tabselect={this.props.tabselect}
-                            // resetTabSelected={this.resetTabSelected} 
-                            user={this.props.user}
-                            history={this.props.history}
-                            translation={this.props.translation}
-                            handleCancel={this.props.handleCancel}
-                            handleServicesSubmit={this.props.handleServicesSubmit}
-                            serviceTerm={this.props.tabselect}
-                            user_credit={this.props.user_credit}
-                            history={this.props.history}
-                            current_services={this.props.current_services}
-                            creditsToRefund={this.props.creditsToRefund}
-                            type={this.props.type}
-                        />
                     </Tabs>
+                    <ServicesList
+                        parent_packages={this.props.parent_packages}
+                        product_prices={this.props.product_prices}
+                        ref="services"
+                        tabselect={this.props.tabselect}
+                        // resetTabSelected={this.resetTabSelected}
+                        user={this.props.user}
+                        history={this.props.history}
+                        translation={this.props.translation}
+                        handleCancel={this.props.handleCancel}
+                        handleServicesSubmit={this.props.handleServicesSubmit}
+                        serviceTerm={this.props.tabselect}
+                        user_credit={this.props.user_credit}
+                        history={this.props.history}
+                        current_services={this.props.current_services}
+                        creditsToRefund={this.props.creditsToRefund}
+                        applyServicesValue={this.props.applyServicesValue}
+                        type={this.props.type}
+                    />
                 </div>
-            </Fragment>
+            </Fragment >
         )
 
     }

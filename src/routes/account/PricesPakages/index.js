@@ -11,7 +11,7 @@ import {
 } from "../../../appRedux/actions/Account";
 import PackagesInfo from './components/PackagesInfo';
 import ModifyPrice from './components/ModifyPrice';
-import { sim, chat, pgp, vpn, DEALER, ADMIN } from '../../../constants/Constants';
+import { sim, chat, pgp, vpn, DEALER, ADMIN, SDEALER } from '../../../constants/Constants';
 import AppFilter from '../../../components/AppFilter/index';
 import PricesList from './components/pricesList';
 import { componentSearch, getDealerStatus, titleCase, convertToLang } from '../../utils/commonUtils';
@@ -190,7 +190,7 @@ class Prices extends Component {
                 className: '',
                 children: [
                     {
-                        title: convertToLang(props.translation[PACKAGE_EXPIRY], "PACKAGE EXPIRY"),
+                        title: convertToLang(props.translation["PACKAGE_EXPIRY DAYS"], "PACKAGE EXPIRY DAYS"),
                         align: "center",
                         className: '',
                         dataIndex: 'pkg_expiry',
@@ -468,13 +468,18 @@ class Prices extends Component {
                 let i = 0
 
                 return this.state.packages.map((item, index) => {
+                    let customStyle = {}
+                    if (item.pkg_term === "trial") {
+                        customStyle = { display: 'none' }
+                    }
                     let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px ', textTransform: 'uppercase' }} onClick={() => { this.deletePackage(item.id, item.pkg_name) }} >{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
                     // let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "EDIT")}</Button>
-                    let ModifyBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.modifyItem(item, true, 'package') }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "MODIFY PRICE")}</Button>
+                    let ModifyBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase', ...customStyle }} onClick={() => { this.modifyItem(item, true, 'package') }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "MODIFY PRICE")}</Button>
                     return {
                         id: item.id,
                         key: item.id,
                         rowKey: index,
+                        statusAll: item.statusAll,
                         sr: ++i,
                         action: (item.dealer_type === "super_admin" && (this.props.auth.type === ADMIN || this.props.auth.type === DEALER)) ?
                             (<Fragment>{ModifyBtn}</Fragment>) :
@@ -623,7 +628,7 @@ class Prices extends Component {
                         // defaultPagingValue={this.state.defaultPagingValue}
                         // selectedOptions={this.props.selectedOptions}
                         // options={this.state.options}
-                        isAddButton={true}
+                        isAddButton={this.props.auth.type === SDEALER ? false : true}
                         setPrice={true}
                         // handlePolicyModal={this.handlePolicyModal2}
 
@@ -642,36 +647,39 @@ class Prices extends Component {
                             type="card"
                             onChange={(e) => this.setState({ outerTab: e })}
                         >
-                            <Tabs.TabPane tab={convertToLang(this.props.translation[Tab_ID_PRICES], "ID Prices")} key="1">
-                                <div>
-                                    <Tabs
-                                        tabPosition={'left'}
-                                        type="card"
-                                        onChange={(e) => this.tabChaged(e)}
-                                        className="price_table_tabs"
-                                    >
-                                        <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_SIM_ID], "SIM")} key={sim} >
+                            {(this.props.auth.type === ADMIN) ?
+                                <Tabs.TabPane tab={convertToLang(this.props.translation[Tab_ID_PRICES], "ID Prices")} key="1">
+                                    <div>
+                                        <Tabs
+                                            tabPosition={'left'}
+                                            type="card"
+                                            onChange={(e) => this.tabChaged(e)}
+                                            className="price_table_tabs"
+                                        >
+                                            <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_SIM_ID], "SIM")} key={sim} >
 
-                                        </Tabs.TabPane>
-                                        <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_CHAT_ID], "CHAT")} key={chat} >
+                                            </Tabs.TabPane>
+                                            <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_CHAT_ID], "CHAT")} key={chat} >
 
-                                        </Tabs.TabPane>
-                                        <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_PGP_EMAIL], "PGP")} key={pgp} >
+                                            </Tabs.TabPane>
+                                            <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_PGP_EMAIL], "PGP")} key={pgp} >
 
-                                        </Tabs.TabPane>
-                                        <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_VPN], "VPN")} key={vpn} >
+                                            </Tabs.TabPane>
+                                            <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_VPN], "VPN")} key={vpn} >
 
-                                        </Tabs.TabPane>
-                                    </Tabs>
-                                    <div className="price_table">
-                                        <PricesList
-                                            data={this.state.prices ? this.state.prices[this.state.tabSelected] : {}}
-                                            tabSelected={this.state.tabSelected}
-                                            translation={this.props.translation}
-                                        />
+                                            </Tabs.TabPane>
+                                        </Tabs>
+                                        <div className="price_table">
+                                            <PricesList
+                                                data={this.state.prices ? this.state.prices[this.state.tabSelected] : {}}
+                                                tabSelected={this.state.tabSelected}
+                                                translation={this.props.translation}
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                            </Tabs.TabPane>
+                                </Tabs.TabPane>
+                                : null
+                            }
                             <Tabs.TabPane tab={convertToLang(this.props.translation[Tab_PACKAGES], "PACKAGES")} key="2">
                                 <Table
                                     className="devices policy_expand"
@@ -737,7 +745,9 @@ class Prices extends Component {
                     resetPrice={this.props.resetPrice}
                     dealer_id={this.props.auth.dealerId}
                     translation={this.props.translation}
+                    auth={this.props.auth}
                 />
+
                 <Modal
                     maskClosable={false}
                     destroyOnClose={true}

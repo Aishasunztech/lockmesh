@@ -82,7 +82,9 @@ class Dealers extends Component {
             suspendDealers: [],
             unlinkedDealers: [],
             expandedRowsKey: [],
-            SearchValues: []
+            SearchValues: [],
+            filteredDealers: [],
+            globalSearchedValue: "",
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -168,45 +170,55 @@ class Dealers extends Component {
         let dealers = [];
         switch (value) {
             case 'active':
+                status = true;
                 dealers = this.filterList('active', this.props.dealers);
+                dealers = (this.state.globalSearchedValue === "") ? dealers : this.handleGlobalSearch(dealers);
                 this.setState({
-                    dealers: this.handleSearch12(dealers),
-                    column: this.state.columns,
+                    dealers: this.handleSearchOnTabChange(dealers),
+                    filteredDealers: dealers,
                     tabselect: '2'
                 })
 
                 break;
             case 'suspended':
+                status = true;
                 dealers = this.filterList('suspended', this.props.dealers);
+                dealers = (this.state.globalSearchedValue === "") ? dealers : this.handleGlobalSearch(dealers);
                 this.setState({
-                    dealers: this.handleSearch12(dealers),
-                    column: this.state.columns,
+                    dealers: this.handleSearchOnTabChange(dealers),
+                    filteredDealers: dealers,
                     tabselect: '4'
                 })
                 break;
 
             case 'all':
+                status = true;
                 dealers = this.props.dealers;
+                dealers = (this.state.globalSearchedValue === "") ? dealers : this.handleGlobalSearch(dealers);
                 this.setState({
-                    dealers: this.handleSearch12(dealers),
-                    column: this.state.columns,
+                    dealers: this.handleSearchOnTabChange(dealers),
+                    filteredDealers: dealers,
                     tabselect: '1'
                 })
                 break;
             case "unlinked":
+                status = true;
                 dealers = this.filterList('unlinked', this.props.dealers);
+                dealers = (this.state.globalSearchedValue === "") ? dealers : this.handleGlobalSearch(dealers);
                 this.setState({
-                    dealers: this.handleSearch12(dealers),
-                    column: this.state.columns,
+                    dealers: this.handleSearchOnTabChange(dealers),
+                    filteredDealers: dealers,
                     tabselect: '3'
                 })
                 break;
 
             default:
+                status = true;
                 dealers = this.props.dealers;
+                dealers = (this.state.globalSearchedValue === "") ? dealers : this.handleGlobalSearch(dealers);
                 this.setState({
-                    dealers: this.handleSearch12(dealers),
-                    column: this.state.columns,
+                    dealers: this.handleSearchOnTabChange(dealers),
+                    filteredDealers: dealers,
                     tabselect: '1'
                 })
                 break;
@@ -342,34 +354,71 @@ class Dealers extends Component {
         }
     }
 
+    handleGlobalSearch(dealers) {
+        // console.log("HANDLE GLOBAL SEARCH");
+        if (dealers.length) {
+            if (this.state.globalSearchedValue !== "") {
+                status = true
+                let foundDealers = componentSearch(dealers, this.state.globalSearchedValue);
+                if (foundDealers.length) {
+                    dealers = foundDealers
+                } else {
+                    dealers = []
+                }
+            }
+        }
+        return dealers
+    }
+
     handleComponentSearch = (value) => {
 
         // console.log('searched keyword', value);
 
         try {
+            switch (this.state.tabselect) {
+                case '1':
+                    copyDealers = this.state.allDealers
+                    break;
+                case '2':
+                    copyDealers = this.state.activeDealers
+                    break;
+                case '3':
+                    copyDealers = this.state.unlinkedDealers
+                    break;
+                case '4':
+                    copyDealers = this.state.suspendDealers
+                    break;
+                default:
+                    copyDealers = this.state.allDealers
+                    break;
+            }
             if (value.length) {
-                if (status) {
-                    copyDealers = this.state.dealers;
-                    status = false;
-                }
+                // if (status) {
+                //     copyDealers = this.state.filteredDealers;
+                //     status = false;
+                // }
                 let founddealers = componentSearch(copyDealers, value);
                 // console.log("found dealers", founddealers);
                 if (founddealers.length) {
                     this.setState({
                         dealers: founddealers,
+                        globalSearchedValue: value
                     })
                 } else {
                     this.setState({
-                        dealers: []
+                        dealers: [],
+                        globalSearchedValue: value
                     })
                 }
             } else {
                 status = true;
                 this.setState({
                     dealers: copyDealers,
+                    globalSearchedValue: ""
                 })
             }
         } catch (error) {
+            // console.log("error: ", error);
             // alert(error);
         }
     }
@@ -405,7 +454,23 @@ class Dealers extends Component {
             })
         }
         if (this.props !== prevProps) {
+            let dealerList = []
+            switch (this.state.tabselect) {
+                case '2':
+                    dealerList = this.filterList('active', this.props.dealers);
+                    break;
+                case '3':
+                    dealerList = this.filterList('unlinked', this.props.dealers);
+                    break;
+                case '4':
+                    dealerList = this.filterList('suspended', this.props.dealers);
+                    break;
+                default:
+                    dealerList = this.filterList('active', this.props.dealers);
+                    break;
+            }
             this.setState({
+                dealers: dealerList,
                 allDealers: this.props.dealers,
                 activeDealers: this.filterList('active', this.props.dealers),
                 suspendDealers: this.filterList('suspended', this.props.dealers),
@@ -437,43 +502,58 @@ class Dealers extends Component {
     handleChangetab = (value) => {
         // alert('value');
         // alert(value);
-
+        // console.log('tab value: ', value);
         // console.log('selsect', this.props.selectedOptions)
         // let type = value.toLowerCase();
+        let dealers = this.props.dealers;
         switch (value) {
             case '2':
+                status = true;
+                dealers = this.filterList('active', this.props.dealers);
+                dealers = (this.state.globalSearchedValue === "") ? dealers : this.handleGlobalSearch(dealers);
                 this.setState({
-                    dealers: this.handleSearch12(this.filterList('active', this.props.dealers)),
-                    column: this.state.columns,
+                    dealers: this.handleSearchOnTabChange(dealers),
+                    filteredDealers: dealers,
                     tabselect: '2'
                 })
-
                 break;
             case '4':
+                status = true;
+                dealers = this.filterList('suspended', this.props.dealers);
+                dealers = (this.state.globalSearchedValue === "") ? dealers : this.handleGlobalSearch(dealers);
                 this.setState({
-                    dealers: this.handleSearch12(this.filterList('suspended', this.props.dealers)),
-                    column: this.state.columns,
+                    dealers: this.handleSearchOnTabChange(dealers),
+                    filteredDealers: dealers,
                     tabselect: '4'
                 })
                 break;
             case '1':
+                status = true;
+                dealers = this.props.dealers;
+                dealers = (this.state.globalSearchedValue === "") ? dealers : this.handleGlobalSearch(dealers);
                 this.setState({
-                    dealers: this.handleSearch12(this.props.dealers),
-                    column: this.state.columns,
+                    dealers: this.handleSearchOnTabChange(dealers),
+                    filteredDealers: dealers,
                     tabselect: '1'
                 })
                 break;
             case "3":
+                status = true;
+                dealers = this.filterList('unlinked', this.props.dealers);
+                dealers = (this.state.globalSearchedValue === "") ? dealers : this.handleGlobalSearch(dealers);
                 this.setState({
-                    dealers: this.handleSearch12(this.filterList('unlinked', this.props.dealers)),
-                    column: this.state.columns,
+                    dealers: this.handleSearchOnTabChange(dealers),
+                    filteredDealers: dealers,
                     tabselect: '3'
                 })
                 break;
             default:
+                status = true;
+                dealers = this.props.dealers;
+                dealers = (this.state.globalSearchedValue === "") ? dealers : this.handleGlobalSearch(dealers);
                 this.setState({
-                    dealers: this.handleSearch12(this.props.dealers),
-                    column: this.state.columns,
+                    dealers: this.handleSearchOnTabChange(dealers),
+                    filteredDealers: dealers,
                     tabselect: '1'
                 })
                 break;
@@ -485,6 +565,7 @@ class Dealers extends Component {
 
 
     render() {
+        // console.log('copy dealers: ', copyDealers);
         // ADMIN,DEALER,SDEALER
         // console.log(this.props.location, 'location is the ')
         let dealerType;
@@ -648,11 +729,13 @@ class Dealers extends Component {
 
     handleSearch = (e) => {
 
+        // console.log("dealer handleSearch key: ", e.target.name, "value: ", e.target.value);
+
         this.state.SearchValues[e.target.name] = { key: e.target.name, value: e.target.value };
+        // console.log("data ; ", this.state.filteredDealers);
+        let response = handleMultipleSearch(e, status, copyDealers, this.state.SearchValues, this.state.filteredDealers)
 
-        let response = handleMultipleSearch(e, status, copyDealers, this.state.SearchValues, this.state.dealers)
-
-        console.log(response.SearchValues, "response is: ===========> ", response)
+        // console.log(response.SearchValues, "response is: ===========> ", response)
         this.setState({
             dealers: response.demoData,
             SearchValues: response.SearchValues
@@ -739,7 +822,7 @@ class Dealers extends Component {
     }
 
 
-    handleSearch12 = (dealers) => {
+    handleSearchOnTabChange = (dealers) => {
         // console.log('check 2nd search data:: ', dealers);
 
         let response = filterData_RelatedToMultipleSearch(dealers, this.state.SearchValues);

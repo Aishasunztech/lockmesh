@@ -2,7 +2,10 @@ import {
     NEW_REQUEST_LIST,
     REJECT_REQUEST,
     ACCEPT_REQUEST,
-    USER_CREDITS
+    USER_CREDITS,
+    GET_CANCEL_REQUEST,
+    ACCEPT_SERVICE_REQUEST,
+    REJECT_SERVICES_REQUEST
 } from "../../constants/ActionTypes";
 import { Modal } from 'antd';
 
@@ -13,7 +16,8 @@ const initialSidebar = {
     whiteLabels: [],
     newRequests: [],
     user_credit: 0,
-    due_credit: 0
+    due_credit: 0,
+    cancel_service_requests: []
 };
 
 export default (state = initialSidebar, action) => {
@@ -83,7 +87,56 @@ export default (state = initialSidebar, action) => {
                 due_credit: action.response.due_credits
             }
         }
+        case GET_CANCEL_REQUEST: {
 
+            return {
+                ...state,
+                cancel_service_requests: action.response.data,
+            }
+        }
+
+        case ACCEPT_SERVICE_REQUEST: {
+            var newRequests = state.cancel_service_requests;
+            var request_id = action.request.id;
+            var filteredRequests = newRequests;
+
+            if (action.response.status) {
+                success({
+                    title: action.response.msg,
+                });
+                filteredRequests = newRequests.filter(request => request.id !== request_id);
+            } else {
+                error({
+                    title: action.response.msg,
+                });
+            }
+            return {
+                ...state,
+                cancel_service_requests: filteredRequests,
+            }
+        }
+
+        case REJECT_SERVICES_REQUEST: {
+
+            var newRequests = state.cancel_service_requests;
+            var request_id = action.request.id;
+            var filteredRequests = newRequests;
+
+            if (action.response.status) {
+                success({
+                    title: action.response.msg,
+                });
+                filteredRequests = newRequests.filter(request => request.id !== request_id);
+            } else {
+                error({
+                    title: action.response.msg,
+                });
+            }
+            return {
+                ...state,
+                cancel_service_requests: filteredRequests,
+            }
+        }
 
         default:
             return state;

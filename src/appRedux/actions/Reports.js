@@ -4,6 +4,7 @@ import {
   INVOICE_REPORT,
   PAYMENT_HISTORY_REPORT,
   INVALID_TOKEN,
+  SALES_REPORT,
   SPIN_lOADING
 } from "../../constants/ActionTypes";
 
@@ -14,7 +15,6 @@ export function generateProductReport(data) {
   return (dispatch) => {
     dispatch({
       type: SPIN_lOADING,
-      spinloading: true
     });
 
     RestService.generateProductReport(data).then((response) => {
@@ -40,7 +40,6 @@ export function generateInvoiceReport(data) {
   return (dispatch) => {
     dispatch({
       type: SPIN_lOADING,
-      spinloading: true
     });
 
     RestService.generateInvoiceReport(data).then((response) => {
@@ -64,7 +63,6 @@ export function generatePaymentHistoryReport(data) {
   return (dispatch) => {
     dispatch({
       type: SPIN_lOADING,
-      spinloading: true
     });
 
     RestService.generatePaymentHistoryReport(data).then((response) => {
@@ -88,13 +86,34 @@ export function generateHardwareReport(data) {
   return (dispatch) => {
     dispatch({
       type: SPIN_lOADING,
-      spinloading: true
     });
 
     RestService.generateHardwareReport(data).then((response) => {
       if (RestService.checkAuth(response.data)) {
         dispatch({
           type: HARDWARE_REPORT,
+          payload: response.data
+        });
+      } else {
+        dispatch({
+          type: INVALID_TOKEN
+        });
+      }
+    });
+
+  };
+}
+
+export function generateSalesReport(data) {
+  return (dispatch) => {
+    dispatch({
+      type: SPIN_lOADING,
+    });
+
+    RestService.generateSalesReport(data).then((response) => {
+      if (RestService.checkAuth(response.data)) {
+        dispatch({
+          type: SALES_REPORT,
           payload: response.data
         });
       } else {
