@@ -9,11 +9,36 @@ let TITLE = packageJson.name;
 
 switch (hostName) {
     case "localhost":
-        // URL = 'http://localhost:3000/'
-        // TITLE = "LockMesh"
-        // SUPERADMIN = ''
         break;
 
+    // dev server
+    case "dev.lockmesh.com":
+    case "http://dev.lockmesh.com":
+    case "https://dev.lockmesh.com":
+        URL = "https://devapi.lockmesh.com/"
+        SUPERADMIN = 'https://devapi.meshguard.co/'
+        TITLE = "LockMesh"
+        break;
+    
+    // pre dev server for unfinished work
+    case "predev.lockmesh.com":
+    case "http://predev.lockmesh.com":
+    case "https://predev.lockmesh.com":
+        URL = "https://predevapi.lockmesh.com/"
+        SUPERADMIN = 'https://devapi.meshguard.co/'
+        TITLE = "LockMesh"
+        break;
+
+    // for load testing = live LM
+    case "loadtester.lockmesh.com":
+    case "http://loadtester.lockmesh.com":
+    case "https://loadtester.lockmesh.com":
+        URL = "https://loadtesterapi.lockmesh.com/"
+        SUPERADMIN = 'https://devapi.meshguard.co/'
+        TITLE = "LockMesh"
+        break;
+
+    // Live systems
     case "lockmesh.com":
     case "www.lockmesh.com":
     case "http://www.lockmesh.com":
@@ -30,14 +55,6 @@ switch (hostName) {
         URL = "https://api.titansecureserver.com/"
         SUPERADMIN = 'https://api.meshguard.co/'
         TITLE = "TitanLocker"
-        break;
-
-    case "dev.lockmesh.com":
-    case "http://dev.lockmesh.com":
-    case "https://dev.lockmesh.com":
-        URL = "https://devapi.lockmesh.com/"
-        SUPERADMIN = 'https://devapi.meshguard.co/'
-        TITLE = "LockMesh"
         break;
 
     case "cryptc.lockmesh.com":
@@ -57,16 +74,13 @@ switch (hostName) {
         break;
 
     default:
-        // URL = "http://localhost:3000/";
-        // TITLE = "LockMesh"
-        // SUPERADMIN = ''
         break;
 }
 
+
+export const HOST_NAME = hostName;
 export const BASE_URL = URL;
-
 export const APP_TITLE = TITLE;
-
 export const SUPERADMIN_URL = `${SUPERADMIN}api/v1/`;
 
 // APP Constants
