@@ -57,6 +57,7 @@ class AddDevice extends Component {
             vpn: '',
             packageId: '',
             disableSim: true,
+            disableSim2: true,
             disableChat: true,
             disablePgp: true,
             disableVpn: true,
@@ -267,6 +268,7 @@ class AddDevice extends Component {
         let disableChat = true;
         let disablePgp = true;
         let disableSim = true;
+        let disableSim2 = true;
         let vpn = '';
 
         let packagesData = []
@@ -293,9 +295,8 @@ class AddDevice extends Component {
                     disableSim = false
                 }
                 if (services.sim_id2) {
+                    disableSim2 = false
                     this.sim_id2_included = true
-                } else {
-                    this.sim_id2_included = false
                 }
                 if (services.pgp_email) {
                     disablePgp = false
@@ -306,30 +307,30 @@ class AddDevice extends Component {
                 // console.log(item.pkg_features);
             })
         }
-        if (products && products.length) {
-            products.map((item) => {
-                let data = {
-                    id: item.id,
-                    price_for: item.item,
-                    unit_price: item.unit_price,
-                    price_term: item.price_term
-                }
-                total_price = total_price + Number(item.unit_price)
-                productData.push(data)
-                if (item.item == 'chat_id') {
-                    disableChat = false
-                }
-                else if (item.item == 'sim_id') {
-                    disableSim = false
-                }
-                else if (item.item == 'pgp_email') {
-                    disablePgp = false
-                }
-                else if (item.item == 'vpn') {
-                    vpn = "1"
-                }
-            })
-        }
+        // if (products && products.length) {
+        //     products.map((item) => {
+        //         let data = {
+        //             id: item.id,
+        //             price_for: item.item,
+        //             unit_price: item.unit_price,
+        //             price_term: item.price_term
+        //         }
+        //         total_price = total_price + Number(item.unit_price)
+        //         productData.push(data)
+        //         if (item.item == 'chat_id') {
+        //             disableChat = false
+        //         }
+        //         else if (item.item == 'sim_id') {
+        //             disableSim = false
+        //         }
+        //         else if (item.item == 'pgp_email') {
+        //             disablePgp = false
+        //         }
+        //         else if (item.item == 'vpn') {
+        //             vpn = "1"
+        //         }
+        //     })
+        // }
 
         let expiry_date = ''
         if (term === '0') {
@@ -342,9 +343,10 @@ class AddDevice extends Component {
             pgp_email: (this.props.pgp_emails.length && !disablePgp) ? this.props.pgp_emails[0].pgp_email : '',
             chat_id: (this.props.chat_ids.length && !disableChat) ? this.props.chat_ids[0].chat_id : '',
             sim_id: (this.props.sim_ids.length && !disableSim) ? this.props.sim_ids[0].sim_id : '',
-            sim_id2: (this.sim_id2_included) ? (this.props.sim_ids.length > 1) ? this.props.sim_ids[1].sim_id : undefined : undefined,
+            sim_id2: (!disableSim2) ? (this.props.sim_ids.length > 1) ? this.props.sim_ids[1].sim_id : undefined : undefined,
             vpn: vpn,
             disableSim: disableSim,
+            disableSim2: disableSim2,
             disableChat: disableChat,
             disablePgp: disablePgp,
             packages: packagesData,
@@ -369,123 +371,126 @@ class AddDevice extends Component {
     }
 
 
-    packageChange = (value) => {
-        if (value != '') {
-            let userPackage = this.props.parent_packages.filter((item) => {
-                if (item.id === value) {
-                    return item
-                }
-            })
-            // console.log(userPackage);
-            // console.log(userPackage.pkg_features);
-            let services = JSON.parse(userPackage[0].pkg_features)
-            // console.log(services);
-            let sim_id = '';
-            let chat_id = '';
-            let pgp_email = '';
-            let vpn = '';
-            let disableChat = false;
-            let disablePgp = false;
-            let disableSim = false;
-            let disableVpn = false
-            let error = false
-            if (services.sim_id) {
-                if (this.props.sim_ids.length) {
-                    sim_id = this.props.sim_ids[0].sim_id
-                }
-                else {
-                    error = true
-                }
-                disableSim = true
-            }
+    // packageChange = (value) => {
+    //     if (value != '') {
+    //         let userPackage = this.props.parent_packages.filter((item) => {
+    //             if (item.id === value) {
+    //                 return item
+    //             }
+    //         })
+    //         // console.log(userPackage);
+    //         // console.log(userPackage.pkg_features);
+    //         let services = JSON.parse(userPackage[0].pkg_features)
+    //         // console.log(services);
+    //         let sim_id = '';
+    //         let chat_id = '';
+    //         let pgp_email = '';
+    //         let vpn = '';
+    //         let disableChat = false;
+    //         let disablePgp = false;
+    //         let disableSim = false;
+    //         let disableSim2 = false;
+    //         let disableVpn = false
+    //         let error = false
+    //         if (services.sim_id) {
+    //             if (this.props.sim_ids.length) {
+    //                 sim_id = this.props.sim_ids[0].sim_id
+    //             }
+    //             else {
+    //                 error = true
+    //             }
+    //             disableSim = true
+    //         }
 
-            if (services.chat_id) {
-                if (this.props.chat_ids.length) {
-                    chat_id = this.props.chat_ids[0].chat_id
-                }
-                else {
-                    error = true
-                }
-                disableChat = true
-            }
-            if (services.pgp_email) {
-                if (this.props.pgp_emails.length) {
-                    pgp_email = this.props.pgp_emails[0].pgp_email
-                }
-                else {
-                    error = true
-                }
-                disablePgp = true
-            }
-            if (services.vpn) {
-                disableVpn = true
-            }
-            if (error) {
-                let _this = this
-                confirm({
-                    title: "All Services are not found. Please Contact your ADMIN or click CONTINUE ANYWAYS to add later.",
-                    okText: 'CONTINUE ANYWAYS',
-                    onOk() {
-                        _this.setState({
-                            packageId: value,
-                            sim_id: sim_id,
-                            chat_id: chat_id,
-                            pgp_email: pgp_email,
-                            vpn: (services.vpn) ? "1" : "0",
-                            disableSim: disableSim,
-                            disableChat: disableChat,
-                            disablePgp: disablePgp,
-                            disableVpn: disableVpn,
+    //         if (services.chat_id) {
+    //             if (this.props.chat_ids.length) {
+    //                 chat_id = this.props.chat_ids[0].chat_id
+    //             }
+    //             else {
+    //                 error = true
+    //             }
+    //             disableChat = true
+    //         }
+    //         if (services.pgp_email) {
+    //             if (this.props.pgp_emails.length) {
+    //                 pgp_email = this.props.pgp_emails[0].pgp_email
+    //             }
+    //             else {
+    //                 error = true
+    //             }
+    //             disablePgp = true
+    //         }
+    //         if (services.vpn) {
+    //             disableVpn = true
+    //         }
+    //         if (error) {
+    //             let _this = this
+    //             confirm({
+    //                 title: "All Services are not found. Please Contact your ADMIN or click CONTINUE ANYWAYS to add later.",
+    //                 okText: 'CONTINUE ANYWAYS',
+    //                 onOk() {
+    //                     _this.setState({
+    //                         packageId: value,
+    //                         sim_id: sim_id,
+    //                         chat_id: chat_id,
+    //                         pgp_email: pgp_email,
+    //                         vpn: (services.vpn) ? "1" : "0",
+    //                         disableSim: disableSim,
+    //                         disableChat: disableChat,
+    //                         disablePgp: disablePgp,
+    //                         disableVpn: disableVpn,
 
-                        })
+    //                     })
 
-                    },
-                    onCancel() {
-                        _this.setState({
-                            packageId: '',
-                            sim_id: '',
-                            chat_id: '',
-                            pgp_email: '',
-                            vpn: '',
-                            disableSim: false,
-                            disableChat: false,
-                            disablePgp: false,
-                            disableVpn: false,
-                        })
-                    },
+    //                 },
+    //                 onCancel() {
+    //                     _this.setState({
+    //                         packageId: '',
+    //                         sim_id: '',
+    //                         chat_id: '',
+    //                         pgp_email: '',
+    //                         vpn: '',
+    //                         disableSim: false,
+    //                         disableChat: false,
+    //                         disablePgp: false,
+    //                         disableVpn: false,
+    //                     })
+    //                 },
 
-                })
+    //             })
 
-            } else {
-                this.setState({
-                    packageId: value,
-                    sim_id: sim_id,
-                    chat_id: chat_id,
-                    pgp_email: pgp_email,
-                    vpn: (services.vpn) ? "1" : "0",
-                    disableSim: disableSim,
-                    disableChat: disableChat,
-                    disablePgp: disablePgp,
-                    disableVpn: disableVpn,
+    //         } else {
+    //             this.setState({
+    //                 packageId: value,
+    //                 sim_id: sim_id,
+    //                 chat_id: chat_id,
+    //                 pgp_email: pgp_email,
+    //                 vpn: (services.vpn) ? "1" : "0",
+    //                 disableSim: disableSim,
+    //                 disableSim2: disableSim2,
+    //                 disableChat: disableChat,
+    //                 disablePgp: disablePgp,
+    //                 disableVpn: disableVpn,
 
-                })
-            }
-        }
-        else {
-            this.setState({
-                packageId: value,
-                sim_id: '',
-                chat_id: '',
-                pgp_email: '',
-                vpn: '',
-                disableSim: false,
-                disableChat: false,
-                disablePgp: false,
-                disableVpn: false,
-            })
+    //             })
+    //         }
+    //     }
+    //     else {
+    //         this.setState({
+    //             packageId: value,
+    //             sim_id: '',
+    //             chat_id: '',
+    //             pgp_email: '',
+    //             vpn: '',
+    //             disableSim: false,
+    //             disableSim2: false,
+    //             disableChat: false,
+    //             disablePgp: false,
+    //             disableVpn: false,
+    //         })
 
-        }
-    }
+    //     }
+    // }
 
 
     filterList = (type, list, listType) => {
@@ -1033,7 +1038,7 @@ class AddDevice extends Component {
                                                     // onFocus={handleFocus}
                                                     // onBlur={handleBlur}
                                                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                                    disabled={this.state.disableSim}
+                                                    disabled={this.state.disableSim2}
                                                 >
                                                     {this.props.sim_ids.map((sim_id, index) => {
                                                         if (index > 0) {
@@ -1235,7 +1240,7 @@ class AddDevice extends Component {
                     // onCancel={this.handleCancel}
                     footer={null}
                     className="edit_form"
-                    bodyStyle={{ height: '383px', overflow: 'overlay' }}
+                    bodyStyle={{ height: '440px', overflow: 'overlay' }}
                 >
                     <Services
                         handleCancel={this.handleCancel}

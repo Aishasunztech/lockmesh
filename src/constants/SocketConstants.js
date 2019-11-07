@@ -52,7 +52,7 @@ export const FINISH_IMEI = 'finish_imei';
 
 export const ACTION_IN_PROCESS = 'action_in_process';
 
-
+export const SEND_JOB_TO_PANEL = 'SEND_JOB_TO_PANEL';
 // sim button
 
 export const RECV_SIM_DATA = 'receiveSimData_';

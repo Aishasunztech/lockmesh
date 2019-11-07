@@ -1797,13 +1797,11 @@ export default (state = initialState, action) => {
             let checkExt = {};
 
             if (action.payload.app_list) {
-                console.log("app_list applied from ack_setting", action.payload.app_list);
                 settings.app_list = action.payload.app_list;
                 checkApps = handleCheckedAll(action.payload.app_list)
             }
 
             if (action.payload.extensions) {
-                console.log("extensions applied from ack_setting", action.payload.extensions);
                 settings.extensions = action.payload.extensions;
                 checkExt = handleCheckedAllExts(action.payload.extensions);
             }
@@ -1811,6 +1809,8 @@ export default (state = initialState, action) => {
             if (action.payload.controls) {
                 settings.controls = action.payload.controls;
             }
+
+            console.log("testing: ", settings, checkExt, checkApps);
 
             return {
                 ...state,
@@ -1831,7 +1831,6 @@ export default (state = initialState, action) => {
             }
         }
         case RESET_DEVICE: {
-            console.log("RESET_DEVICE ")
             return {
                 ...state,
 

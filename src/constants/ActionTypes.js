@@ -5,6 +5,10 @@ export const SWITCH_LANGUAGE = 'SWITCH-LANGUAGE';
 export const GET_LANGUAGE = 'GET_LANGUAGE';
 export const LANGUAGES = 'LANGUAGES';
 
+
+// Right Sidebar
+export const GET_QUE_JOBS = 'GET_QUE_JOBS';
+
 // AppFilter
 export const GET_DROPDOWN = 'GET_DROPDOWN';
 export const POST_DROPDOWN = 'POST_DROPDOWN';
@@ -40,6 +44,7 @@ export const LOGIN_HISTORY = 'LOGIN_HISTORY';
 
 //Device const
 export const DEVICES_LIST = 'DEVICES_LIST';
+export const DEVICES_LIST_FOR_REPORT = 'DEVICES_LIST_FOR_REPORT';
 export const SUSPEND_DEVICE = 'SUSPEND_DEVICE';
 export const ACTIVATE_DEVICE = 'ACTIVATE_DEVICE';
 export const CONNECT_DEVICE = "CONNECT_DEVICE";

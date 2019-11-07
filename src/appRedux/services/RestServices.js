@@ -106,6 +106,17 @@ const RestService = {
 
     },
 
+    getSocketProcesses: (status, filter, offset, limit) => {
+        let query = '';
+
+        query = (status) ? query + `?status=${status}&` : '';
+        query = (offset) ? query + `start=${offset}&` : '';
+        query = (limit) ? query + `limit=${limit}&` : '';
+        query = (filter) ? query + `filter=${filter}` : '';
+
+        return axios.get(BASE_URL + `users/get-processes${query}`, RestService.getHeader());
+    },
+
     // isAdmin
     isAdmin: () => {
         // var self = this;
@@ -150,6 +161,12 @@ const RestService = {
     // getDevices
     DeviceList: () => {
         return axios.get(BASE_URL + 'users/devices',
+            RestService.getHeader()
+        )
+    },
+
+    getDevicesForReport: () => {
+        return axios.get(BASE_URL + 'users/get-devices-for-report',
             RestService.getHeader()
         )
     },
@@ -679,8 +696,8 @@ const RestService = {
         return axios.post(BASE_URL + 'users/purchase_credits_CC', { cardInfo: cardInfo, creditInfo: creditInfo }, RestService.getHeader());
     },
 
-    languages: () => {
-        return axios.get(`${BASE_URL}users/languages`, RestService.getHeader());
+    getAll_Languages: () => {
+        return axios.get(`${BASE_URL}users/get-all-languages`, RestService.getHeader());
     },
 
     switchLanguage: (language) => {
@@ -767,17 +784,17 @@ const RestService = {
         return axios.put(BASE_URL + 'users/undo_delete_user/' + userId, {}, RestService.getHeader())
     },
 
-    // Transfer Secure market Apps 
+    // Transfer Secure market Apps
     transferApps: (data, space) => {
         return axios.post(BASE_URL + 'users/transferApps', { data, spaceType: space }, RestService.getHeader())
     },
 
-    // Remove Secure market Apps 
+    // Remove Secure market Apps
     removeSMapps: (data, spaceType) => {
         return axios.post(BASE_URL + 'users/remove_sm_apps', { data, spaceType }, RestService.getHeader())
     },
 
-    // Change unistall app restriction for Secure market apps 
+    // Change unistall app restriction for Secure market apps
     handleUninstall: (apk_id, value, space) => {
         return axios.put(BASE_URL + 'users/handleUninstall/' + apk_id, { value, spaceType: space }, RestService.getHeader())
     },
@@ -959,7 +976,7 @@ const RestService = {
 
     //product report
     generateProductReport: (data) => {
-      return axios.post(BASE_URL + 'users/reports/product', data, RestService.getHeader());
+        return axios.post(BASE_URL + 'users/reports/product', data, RestService.getHeader());
     },
 
     //invoice report
@@ -977,24 +994,19 @@ const RestService = {
         return axios.post(BASE_URL + 'users/reports/hardware', data, RestService.getHeader());
     },
 
-  //hardware report
-  generateHardwareReport: (data) => {
-    return axios.post(BASE_URL + 'users/reports/hardware', data, RestService.getHeader());
-  },
+    //sales report
+    generateSalesReport: (data) => {
+        return axios.post(BASE_URL + 'users/reports/sales', data, RestService.getHeader());
+    },
 
-  //sales report
-  generateSalesReport: (data) => {
-    return axios.post(BASE_URL + 'users/reports/sales', data, RestService.getHeader());
-  },
+    //get latest payment history
+    getLatestPaymentHistory: (data) => {
+        return axios.post(BASE_URL + 'users/get-latest-payment-history', data, RestService.getHeader());
+    },
 
-  //get latest payment history
-  getLatestPaymentHistory: (data) => {
-    return axios.post(BASE_URL + 'users/get-latest-payment-history', data, RestService.getHeader());
-  },
-
-  //get overdue details
-  getOverdueDetails: () => {
-    return axios.get(BASE_URL + 'users/get-overdue-details', RestService.getHeader());
-  },
+    //get overdue details
+    getOverdueDetails: () => {
+        return axios.get(BASE_URL + 'users/get-overdue-details', RestService.getHeader());
+    },
 }
 export default RestService;

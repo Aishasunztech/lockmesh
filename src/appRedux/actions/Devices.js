@@ -18,13 +18,14 @@ import {
     USER_CREDITS,
     TRANSFER_DEVICE,
     ADD_DEVICE,
+    DEVICES_LIST_FOR_REPORT,
     BULK_DEVICES_LIST,
     GET_PARENT_HARDWARES
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
 
-// action creaters 
+// action creaters
 
 export function getDevicesList() {
 
@@ -34,10 +35,10 @@ export function getDevicesList() {
             isloading: true
         });
         RestService.DeviceList().then((response) => {
-            // 
-            // 
+            //
+            //
             if (RestService.checkAuth(response.data)) {
-                // 
+                //
 
                 dispatch({
                     type: DEVICES_LIST,
@@ -54,9 +55,35 @@ export function getDevicesList() {
 
     };
 }
+
+export function getDevicesForReport() {
+
+  return (dispatch) => {
+    dispatch({
+      type: LOADING,
+      isloading: true
+    });
+    RestService.getDevicesForReport().then((response) => {
+
+      if (RestService.checkAuth(response.data)) {
+
+        dispatch({
+          type: DEVICES_LIST_FOR_REPORT,
+          payload: response.data,
+
+        });
+      } else {
+        dispatch({
+          type: INVALID_TOKEN
+        });
+      }
+    })
+
+  };
+}
 export function editDevice(formData) {
     return (dispatch) => {
-        // 
+        //
         RestService.updateDeviceDetails(formData).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
@@ -82,7 +109,7 @@ export function editDevice(formData) {
 }
 export function extendServices(formData) {
     return (dispatch) => {
-        // 
+        //
         RestService.extendServices(formData).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
@@ -110,10 +137,10 @@ export function extendServices(formData) {
 export function deleteUnlinkDevice(action, devices) {
     return (dispatch) => {
         // alert("hello");
-        // 
+        //
         RestService.deleteUnlinkDevice(action, devices).then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // 
+                //
                 console.log(action);
                 dispatch({
                     type: DELETE_UNLINK_DEVICE,
@@ -183,7 +210,7 @@ export function activateDevice(device) {
 
         RestService.activateDevice(device.usr_device_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // 
+                //
                 device.account_status = '';
 
                 if (response.data.status) {
@@ -225,7 +252,7 @@ export function getSimIDs() {
 
         RestService.getSimIDs().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // 
+                //
                 dispatch({
                     type: GET_SIM_IDS,
                     payload: response.data.data
@@ -245,7 +272,7 @@ export function getChatIDs() {
 
         RestService.getChatIDs().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // 
+                //
                 dispatch({
                     type: GET_CHAT_IDS,
                     payload: response.data.data
@@ -265,7 +292,7 @@ export function getPGPEmails() {
         // alert("hello");
         RestService.getPGPEmails().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // 
+                //
                 dispatch({
                     type: GET_PGP_EMAILS,
                     payload: response.data.data
@@ -286,7 +313,7 @@ export function getAllSimIDs() {
 
         RestService.getAllSimIDs().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // 
+                //
                 dispatch({
                     type: GET_SIM_IDS,
                     payload: response.data.data
@@ -306,7 +333,7 @@ export function getAllChatIDs() {
 
         RestService.getAllChatIDs().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // 
+                //
                 dispatch({
                     type: GET_CHAT_IDS,
                     payload: response.data.data
@@ -326,7 +353,7 @@ export function getAllPGPEmails() {
         // alert("hello");
         RestService.getAllPGPEmails().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // 
+                //
                 dispatch({
                     type: GET_PGP_EMAILS,
                     payload: response.data.data
@@ -342,7 +369,7 @@ export function getAllPGPEmails() {
 }
 export function rejectDevice(device) {
     return (dispatch) => {
-        // 
+        //
         RestService.rejectDevice(device).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
@@ -388,7 +415,7 @@ export function addDevice(device) {
 }
 
 export function preActiveDevice(device) {
-    // 
+    //
     return (dispatch) => {
         RestService.preActiveDevice(device).then((response) => {
             if (RestService.checkAuth(response.data)) {
@@ -401,7 +428,7 @@ export function preActiveDevice(device) {
                     }
                 });
                 if (response.data.status) {
-                    // 
+                    //
                     dispatch({
                         type: USER_CREDITS,
                         response: response.data.data
