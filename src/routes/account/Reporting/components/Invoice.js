@@ -95,6 +95,11 @@ class Invoice extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
+
+      values.dealerObject = this.props.dealerList.find((dealer, index) => dealer.dealer_id === values.dealer);
+      if (!values.dealerObject && values.dealer){
+        values.dealerObject = {link_code: this.props.user.dealer_pin};
+      }
       this.state.reportFormData = values;
       this.props.generateInvoiceReport(values)
     });
@@ -212,7 +217,7 @@ class Invoice extends Component {
                   })(
                     <Select style={{ width: '100%' }}>
                       <Select.Option value=''>ALL</Select.Option>
-                      <Select.Option value={this.props.user.dealerId}>My Report</Select.Option>
+                      <Select.Option value={this.props.user.dealerId} key={this.props.user.dealerId}>My Report</Select.Option>
                       {this.props.dealerList.map((dealer, index) => {
                         return (<Select.Option key={dealer.dealer_id} value={dealer.dealer_id}>{dealer.dealer_name} ({dealer.link_code})</Select.Option>)
                       })}
@@ -239,9 +244,7 @@ class Invoice extends Component {
                     <Select.Option value=''>ALL</Select.Option>
                     <Select.Option value={DEVICE_PRE_ACTIVATION}>{DEVICE_PRE_ACTIVATION}</Select.Option>
                     {this.props.devices.map((device, index) => {
-                      // if (device.finalStatus != DEVICE_UNLINKED && device.finalStatus != DEVICE_PRE_ACTIVATION){
                         return (<Select.Option key={device.device_id} value={device.device_id}>{device.device_id}</Select.Option>)
-                      // }
                     })}
                   </Select>
                 )}

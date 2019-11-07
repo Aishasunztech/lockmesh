@@ -416,76 +416,106 @@ export function removeDuplicateObjects(originalArray, prop) {
    return newArray;
 }
 export function generatePDF(columns, rows, title, fileName, formData) {
-console.log(formData)
+
   let y   = 15;
   let x   = 20;
-  var doc = new jsPDF('p', 'pt');
+  var doc = new jsPDF('p', 'pt', [610, 842]);
   doc.setFontSize(16);
   doc.setTextColor(40);
   doc.setFontStyle('normal');
   doc.text(title, y, x);
 
-  if (formData.product){
+  if (title === 'Product Inventory Report'){
+
+      doc.setFontSize(12);
+      doc.setTextColor(40);
+      doc.setFontStyle('normal');
+      doc.text((formData.product) ? formData.product : 'Product: All' , y, x+=15);
+
+      doc.setFontSize(12);
+      doc.setTextColor(40);
+      doc.setFontStyle('normal');
+      doc.text((formData.type) ? formData.type: 'Product Type: All', y, x+=15);
+
+  }else if (title === 'Hardware Inventory Report'){
+
+      doc.setFontSize(12);
+      doc.setTextColor(40);
+      doc.setFontStyle('normal');
+      doc.text((formData.hardware) ? formData.hardware : 'Hardware: All' , y, x+=15);
+
+  }else if (title === 'Payment History Report'){
+
     doc.setFontSize(12);
     doc.setTextColor(40);
     doc.setFontStyle('normal');
-    doc.text('Product: ' + formData.product, y, x+=15);
+    doc.text((formData.type)? formData.type : 'Product Type: All', y, x+=15);
+
+    doc.setFontSize(12);
+    doc.setTextColor(40);
+    doc.setFontStyle('normal');
+    doc.text((formData.transaction_type) ? formData.transaction_type : 'Transaction Type: All', y, x+=15);
+
+
+  }else if (title === 'Invoice Report'){
+
+    doc.setFontSize(12);
+    doc.setTextColor(40);
+    doc.setFontStyle('normal');
+    doc.text( (formData.payment_status) ? 'Payment Status: ' +formData.payment_status: 'Payment Status: All' , y, x+=15);
+
+  }else if (title === 'Sales Report'){
+
+    doc.setFontSize(12);
+    doc.setTextColor(40);
+    doc.setFontStyle('normal');
+    doc.text('Total Cost: ' + (formData.saleInfo.totalCost) ? 'Total Cost: ' + formData.saleInfo.totalCost : 'Total Cost: ' + 0, y, x+=15);
+
+    doc.setFontSize(12);
+    doc.setTextColor(40);
+    doc.setFontStyle('normal');
+    doc.text('Total Cost: ' + (formData.saleInfo.totalSale) ? 'Total Sale: ' + formData.saleInfo.totalSale : 'Total Sale: ' + 0, y, x+=15);
+
+    doc.setFontSize(12);
+    doc.setTextColor(40);
+    doc.setFontStyle('normal');
+    doc.text('Total Cost: ' + (formData.saleInfo.totalProfitLoss) ? 'Profit/Loss: ' + formData.saleInfo.totalProfitLoss : 'Profit/Loss: ' + 0, y, x+=15);
+
+    doc.setFontSize(12);
+    doc.setTextColor(40);
+    doc.setFontStyle('normal');
+    doc.text((formData.saleInfo.product) ? 'Product Type(s): ' + formData.saleInfo.product : 'Product Type(s): All', y, x+=15);
+
   }
 
-  if (formData.hardware){
-    doc.setFontSize(12);
-    doc.setTextColor(40);
-    doc.setFontStyle('normal');
-    doc.text('Hardware: ' + formData.hardware, y, x+=15);
-  }
+  doc.setFontSize(12);
+  doc.setTextColor(40);
+  doc.setFontStyle('normal');
+  doc.text((formData.dealerObject) ? 'Dealer(s): ' +formData.dealerObject.link_code : 'Dealer(s): All', y, x+=15);
 
-  if (formData.device){
-    doc.setFontSize(12);
-    doc.setTextColor(40);
-    doc.setFontStyle('normal');
-    doc.text('Device: ' + formData.device, y, x+=15);
-  }
 
-  if (formData.dealerObject){
-    doc.setFontSize(12);
-    doc.setTextColor(40);
-    doc.setFontStyle('normal');
-    doc.text('Dealer PIN: ' + formData.dealerObject.link_code, y, x+=15);
-  }
+  doc.setFontSize(12);
+  doc.setTextColor(40);
+  doc.setFontStyle('normal');
+  doc.text((formData.device) ? 'Device(s): ' + formData.device : 'Device(s): All', y, x+=15);
 
-  if (formData.payment_status){
-    doc.setFontSize(12);
-    doc.setTextColor(40);
-    doc.setFontStyle('normal');
-    doc.text('Payment Status: ' + formData.payment_status, y, x+=15);
-  }
 
-  if (formData.type){
-    doc.setFontSize(12);
-    doc.setTextColor(40);
-    doc.setFontStyle('normal');
-    doc.text('Product Type: ' + formData.type, y, x+=15);
-  }
+  if (!formData.from && !formData.to){
+    doc.text('Duration: All' , y, x+=15);
+  }else{
+    if (formData.from){
+      doc.setFontSize(12);
+      doc.setTextColor(40);
+      doc.setFontStyle('normal');
+      doc.text('From: ' + convertTimestampToDate(formData.from), y, x+=15);
+    }
 
-  if (formData.transaction_type){
-    doc.setFontSize(12);
-    doc.setTextColor(40);
-    doc.setFontStyle('normal');
-    doc.text('Transaction Type: ' + formData.transaction_type, y, x+=15);
-  }
-
-  if (formData.from){
-    doc.setFontSize(12);
-    doc.setTextColor(40);
-    doc.setFontStyle('normal');
-    doc.text('From: ' + convertTimestampToDate(formData.from), y, x+=15);
-  }
-
-  if (formData.to){
-    doc.setFontSize(12);
-    doc.setTextColor(40);
-    doc.setFontStyle('normal');
-    doc.text('To: ' + convertTimestampToDate(formData.to), y, x+=15);
+    if (formData.to){
+      doc.setFontSize(12);
+      doc.setTextColor(40);
+      doc.setFontStyle('normal');
+      doc.text('To: ' + convertTimestampToDate(formData.to), y, x+=15);
+    }
   }
 
   doc.setFontSize(12);

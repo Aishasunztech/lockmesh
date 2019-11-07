@@ -11,10 +11,10 @@ import {
 } from "../../../../constants/LabelConstants";
 import {DEVICE_PRE_ACTIVATION} from "../../../../constants/Constants";
 const TabPane = Tabs.TabPane;
-var columns = [];
-var rows = [];
-var fileName = '';
-var title = '';
+var columns   = [];
+var rows      = [];
+var fileName  = '';
+var title     = 'Product Inventory Report';
 
 class ProductInventory extends Component {
   constructor(props) {
@@ -210,6 +210,7 @@ class ProductInventory extends Component {
             'created_at': getDateFromTimestamp(item.created_at) ? getDateFromTimestamp(item.created_at) : 'N/A',
           })
         });
+
         columns.push(
           { title: '#', dataKey: "count" },
           { title: convertToLang(this.props.translation[''], "CHAT ID"), dataKey: "chat_id" },
@@ -217,7 +218,6 @@ class ProductInventory extends Component {
           { title: convertToLang(this.props.translation[''], "CREATED AT"), dataKey: "created_at" },
         )
         fileName  = 'product_inventory_CHAT_' + new Date().getTime();
-        title     = 'Product Inventory Report - CHAT'
 
       } else if (this.props.productReport.PGP && this.state.innerTabSelect === '2') {
         this.props.productReport.PGP.map((item, index) => {
@@ -235,8 +235,6 @@ class ProductInventory extends Component {
           { title: convertToLang(this.props.translation[''], "CREATED AT"), dataKey: "created_at" },
         )
         fileName  = 'product_inventory_PGP_' + new Date().getTime();
-        title     = 'Product Inventory Report - PGP';
-
 
       } else if (this.props.productReport.SIM && this.state.innerTabSelect === '3') {
         this.props.productReport.SIM.map((item, index) => {
@@ -259,9 +257,6 @@ class ProductInventory extends Component {
         )
 
         fileName  = 'product_inventory_SIM_' + new Date().getTime();
-        title     = 'Product Inventory Report - SIM';
-
-
       } else if (this.props.productReport.VPN && this.state.innerTabSelect === '4') {
         this.props.productReport.VPN.map((item, index) => {
           rows.push({
@@ -282,8 +277,6 @@ class ProductInventory extends Component {
           { title: convertToLang(this.props.translation[''], "CREATED AT"), dataKey: "created_at" },
         )
         fileName  = 'product_inventory_VPN_' + new Date().getTime();
-        title     = 'Product Inventory Report - VPN';
-
       }
     }
   }
@@ -555,9 +548,9 @@ class ProductInventory extends Component {
                 )}
               </Form.Item>
               <Form.Item className="edit_ftr_btn"
-                wrapperCol={{
-                  xs: { span: 22, offset: 0 },
-                }}
+                         wrapperCol={{
+                           xs: { span: 22, offset: 0 },
+                         }}
               >
                 <Button key="back" type="button" onClick={this.handleReset}>CANCEL</Button>
                 <Button type="primary" htmlType="submit" onClick={this.handleSubmit}>GENERATE</Button>
@@ -571,17 +564,17 @@ class ProductInventory extends Component {
           <Card bordered={false} style={{ height: '500px', overflow: 'scroll' }} >
             {(this.state.reportCard) ?
               <Fragment>
-                  <Row>
-                    <Col xs={12} sm={12} md={12} lg={12} xl={12}>
-                      <h3>Product Inventory Report</h3>
-                    </Col>
-                    <Col xs={12} sm={12} md={12} lg={12} xl={12}>
-                      <div className="pull-right">
-                        <Button type="dotted" icon="download" size="small" onClick={this.createPDFReport}>Download PDF</Button>
-                        <Button type="primary" icon="download" size="small" onClick={this.createExcelReport}>Download Excel</Button>
-                      </div>
-                    </Col>
-                  </Row>
+                <Row>
+                  <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                    <h3>Product Inventory Report</h3>
+                  </Col>
+                  <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                    <div className="pull-right">
+                      <Button type="dotted" icon="download" size="small" onClick={this.createPDFReport}>Download PDF</Button>
+                      <Button type="primary" icon="download" size="small" onClick={this.createExcelReport}>Download Excel</Button>
+                    </div>
+                  </Col>
+                </Row>
                 <Tabs defaultActiveKey="1" activeKey={this.state.innerTabSelect} type="card" tabPosition="left" className="" onChange={this.handleChangeCardTabs}>
 
                   {(this.state.productType === 'ALL' || this.state.productType === 'CHAT') ?
