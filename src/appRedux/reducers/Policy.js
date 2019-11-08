@@ -256,19 +256,20 @@ export default (state = initialState, action) => {
         }
 
         case SAVE_POLICY: {
-            console.log(action.response, 'resp')
+            // console.log(action.response, 'resp')
             let policies = state.policies
             if (action.response.status) {
                 success({
                     title: action.response.msg,
                 });
+                action.response.data["permission_count"] = 0;
                 policies.push(action.response.data)
             } else {
                 error({
                     title: action.response.msg,
                 });
             }
-            console.log(policies);
+            // console.log("policies ", policies);
             return {
                 ...state,
                 policies: [...policies],

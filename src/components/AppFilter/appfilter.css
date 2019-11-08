@@ -36,6 +36,10 @@
      margin: 0 8px 0 0;
  }
 
+ .filter_top .picky__input::after {
+     display: none;
+ }
+
  .down_btn {
      width: 100%;
      padding: 0px 8px;
@@ -88,9 +92,9 @@
 
  .down_icon {
      position: absolute;
-     right: 20px;
+     right: 22px;
      z-index: 10;
-     top: 11px;
+     top: 12px;
      color: #bfbfbf;
      font-size: 12px;
  }

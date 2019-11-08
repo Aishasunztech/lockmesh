@@ -41,9 +41,9 @@ export function onLayoutTypeChange(layoutType) {
 }
 
 
-export function languages() {
+export function getAll_Languages() {
   return (dispatch) => {
-    RestService.languages().then((response) => {
+    RestService.getAll_Languages().then((response) => {
       // console.log("Language Resoonse" , response.data)
       if (RestService.checkAuth(response.data)) {
         dispatch({

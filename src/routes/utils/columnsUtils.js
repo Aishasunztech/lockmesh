@@ -235,34 +235,6 @@ export function devicesColumns(translation, handleSearch) {
         {
             title: (
                 <Input.Search
-                    name="transfered_to"
-                    key="transfered_to"
-                    id="transfered_to"
-                    className="search_heading"
-                    onChange={handleSearch}
-                    // onFocus={handleSearch}
-                    autoComplete="new-password"
-                    placeholder="TRANSFERED TO"
-                // onBlur={(e) => { e.target.value = '' }}
-                />
-            ),
-            dataIndex: 'transfered_to',
-            children: [
-                {
-                    title: "TRANSFERED TO",
-                    align: "center",
-                    dataIndex: 'transfered_to',
-                    key: "transfered_to",
-                    sorter: (a, b) => {
-                        return a.transfered_to.localeCompare(b.transfered_to)
-                    },
-                    sortDirections: ['ascend', 'descend'],
-                }
-            ],
-        },
-        {
-            title: (
-                <Input.Search
                     name="finalStatus"
                     key="status"
                     id="status"
@@ -436,6 +408,36 @@ export function devicesColumns(translation, handleSearch) {
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="transfered_to"
+                    key="transfered_to"
+                    id="transfered_to"
+                    className="search_heading"
+                    onChange={handleSearch}
+                    // onFocus={handleSearch}
+                    autoComplete="new-password"
+                    placeholder="TRANSFERED TO"
+                // onBlur={(e) => { e.target.value = '' }}
+                />
+            ),
+            dataIndex: 'transfered_to',
+            className: 'hide',
+            children: [
+                {
+                    title: "TRANSFERED TO",
+                    align: "center",
+                    dataIndex: 'transfered_to',
+                    className: 'hide',
+                    key: "transfered_to",
+                    sorter: (a, b) => {
+                        return a.transfered_to.localeCompare(b.transfered_to)
+                    },
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ],
         },
         {
             title: (

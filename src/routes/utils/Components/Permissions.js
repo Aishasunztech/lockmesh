@@ -127,7 +127,7 @@ class Permissions extends Component {
         listDealerCols: dealerColsWithSearch(nextProps.translation)
       })
     }
-    console.log("nextProps.record.statusAll will recv  ", nextProps.record);
+    // console.log("nextProps.record.statusAll will recv  ", nextProps.record);
     if (this.props.record.id !== nextProps.record.id) {
       if (this.props.permissionType == 'package') {
         this.props.getUserDealers();
@@ -615,7 +615,7 @@ class Permissions extends Component {
 
 
         </Row>
-        <Row gutter={24} style={{ marginBottom: '12px' }}>
+        <Row gutter={15} style={{ marginBottom: '12px' }}>
           {
             this.props.spinloading ? <CircularProgress /> :
               <Col className="gutter-row" span={24}>

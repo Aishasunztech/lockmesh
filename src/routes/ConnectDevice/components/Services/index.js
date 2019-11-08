@@ -55,6 +55,16 @@ class Services extends Component {
                 className: '',
             },
             {
+                title: convertToLang(this.props.translation["START DATE"], "START DATE"),
+                align: "center",
+                dataIndex: 'start_date',
+                key: "start_date",
+                className: '',
+                // sorter: (a, b) => { return a.start_date.localeCompare(b.start_date) },
+                // sortDirections: ['ascend', 'descend'],
+                // defaultSortOrder: 'descend'
+            },
+            {
                 title: convertToLang(this.props.translation["EXPIRY DATE"], "EXPIRY DATE"),
                 align: "center",
                 dataIndex: 'expiry_date',
@@ -137,6 +147,7 @@ class Services extends Component {
                     type: checkValue(row.type),
                     name: checkValue(row.pkg_name),
                     term: checkValue(row.pkg_term),
+                    start_date: checkValue(moment(row.start_date).format("YYYY/MM/DD")),
                     expiry_date: checkValue(moment(row.service_expiry_date).format("YYYY/MM/DD")),
                 }
                 // }
@@ -146,6 +157,7 @@ class Services extends Component {
                 //         type: checkValue(row.type),
                 //         name: checkValue(row.price_for),
                 //         term: checkValue(row.price_term),
+                //         start_date: checkValue(moment(row.start_date).format("YYYY/MM/DD")),
                 //         expiry_date: checkValue(moment(row.service_expiry_date).format("YYYY/MM/DD")),
                 //     }
                 // }
@@ -165,6 +177,7 @@ class Services extends Component {
             packages = JSON.parse(services.packages).map((item) => {
                 item.type = "PACKAGE";
                 item.status = services.status;
+                item.start_date = services.start_date;
                 item.service_expiry_date = services.service_expiry_date;
                 return item;
             });
@@ -173,6 +186,7 @@ class Services extends Component {
             products = JSON.parse(services.products).map((item) => {
                 item.type = "PRODUCT";
                 item.status = services.status;
+                item.start_date = services.start_date;
                 item.service_expiry_date = services.service_expiry_date;
                 return item;
             });
