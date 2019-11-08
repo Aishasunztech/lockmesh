@@ -582,7 +582,8 @@ class EditDevice extends Component {
     }
 
     handleOkInvoice = () => {
-        if (this.state.total_price <= this.props.user_credit || !this.state.serviceData.pay_now) {
+        // console.log(this.state.serviceData);
+        if (this.state.serviceData.total_price <= this.props.user_credit || !this.state.serviceData.pay_now) {
             this.state.serviceData.paid_by_user = this.state.paidByUser
             if (this.state.renewService || this.state.applyServicesValue === 'extend') {
                 this.props.extendServices(this.state.serviceData)
@@ -743,6 +744,15 @@ class EditDevice extends Component {
                     >
                         {this.props.form.getFieldDecorator('dealer_id', {
                             initialValue: this.props.device.dealer_id,
+                        })(
+
+                            <Input type='hidden' disabled />
+                        )}
+                    </Form.Item>
+                    < Form.Item style={{ marginBottom: 0 }}
+                    >
+                        {this.props.form.getFieldDecorator('user_id', {
+                            initialValue: this.props.device.user_id,
                         })(
 
                             <Input type='hidden' disabled />
