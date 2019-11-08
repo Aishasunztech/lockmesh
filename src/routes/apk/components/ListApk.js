@@ -347,7 +347,7 @@ export default class ListApk extends Component {
                         <Card >
                             <Row >
                                 <Col xs={24} sm={24} md={8} lg={8} xl={8} className="vertical_center">
-                                    <h2 className="mb-0">FEATURED APPS</h2>
+                                    <h2 className="mb-0">{convertToLang(this.props.translation["FEATURED APPS"], "FEATURED APPS")}</h2>
                                 </Col>
                                 {(this.props.user.type === ADMIN) ?
                                     <Fragment>

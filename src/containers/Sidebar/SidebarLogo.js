@@ -35,7 +35,7 @@ class SidebarLogo extends Component {
                 navStyle === NAV_STYLE_MINI_SIDEBAR
                   ? "menu-unfold"
                   : "menu-fold"
-              } ${themeType !== THEME_TYPE_LITE ? "gx-text-white" : ""}`}
+                } ${themeType !== THEME_TYPE_LITE ? "gx-text-white" : ""}`}
               onClick={() => {
                 if (navStyle === NAV_STYLE_DRAWER) {
                   this.props.toggleCollapsedSideNav(!navCollapsed);
@@ -51,22 +51,22 @@ class SidebarLogo extends Component {
           </div>
         ) : null}
 
-        <Link to="/" className="gx-site-logo">
+        <a href="/" className="gx-site-logo">
           {navStyle === NAV_STYLE_NO_HEADER_MINI_SIDEBAR &&
-          width >= TAB_SIZE ? (
-            <p className="mb-0" style={{ fontSize: 18 }}>
-              {APP_TITLE}
-            </p>
-          ) : themeType === THEME_TYPE_LITE ? (
-            <p className="mb-0" style={{ fontSize: 18 }}>
-              {APP_TITLE}
-            </p>
-          ) : (
-            <p className="mb-0" style={{ fontSize: 18 }}>
-              {APP_TITLE}
-            </p>
-          )}
-        </Link>
+            width >= TAB_SIZE ? (
+              <p className="mb-0" style={{ fontSize: 18 }}>
+                {APP_TITLE}
+              </p>
+            ) : themeType === THEME_TYPE_LITE ? (
+              <p className="mb-0" style={{ fontSize: 18 }}>
+                {APP_TITLE}
+              </p>
+            ) : (
+                <p className="mb-0" style={{ fontSize: 18 }}>
+                  {APP_TITLE}
+                </p>
+              )}
+        </a>
       </div>
     );
   }

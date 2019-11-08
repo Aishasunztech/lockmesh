@@ -750,6 +750,7 @@ class AddDevice extends Component {
                                     label={convertToLang(this.props.translation[DUMY_TRANS_ID], "SERVICES")}
                                     labelCol={{ span: 8 }}
                                     wrapperCol={{ span: 16 }}
+                                    className="l_h_20"
                                 >
                                     {this.props.form.getFieldDecorator('service', {
                                         initialValue: '',
@@ -1112,8 +1113,9 @@ class AddDevice extends Component {
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
                                             label={convertToLang(this.props.translation[Device_Valid_For], "VALID FOR(DAYS)")}
-                                            labelCol={{ span: 14 }}
-                                            wrapperCol={{ span: 10 }}
+                                            labelCol={{ span: 12 }}
+                                            wrapperCol={{ span: 12 }}
+                                            className="val_days"
                                         >
                                             {this.props.form.getFieldDecorator('validity', {
                                                 initialValue: '',
@@ -1148,7 +1150,7 @@ class AddDevice extends Component {
                                                     className="width_100"
                                                     min={2} max={10}
                                                     onChange={this.handleDuplicate} />
-                                                <span style={{ color: "red", padding: 0 }} >Maximum Multiple devices : 10</span>
+                                                <span style={{ color: "red", padding: 0, fontSize: 13, }} >Maximum Multiple devices : 10</span>
                                             </Fragment>
 
                                         )}

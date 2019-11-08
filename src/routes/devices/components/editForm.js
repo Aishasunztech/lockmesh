@@ -219,7 +219,7 @@ class EditDevice extends Component {
     handleServicesModal = async (e) => {
         if (this.props.device.extended_services) {
             this.setState({
-                changeServiceMsg: "you have Applied a Renewal or Extension for this device, please cancel service first before chosing new service.",
+                changeServiceMsg: "You have Applied a Renewal or Extension for this device, please cancel service first before chosing new service.",
                 checkServices: { color: "Red" },
             })
         }

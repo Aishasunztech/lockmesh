@@ -389,7 +389,8 @@
     margin-right: 50px;
 }
 
-.overdue_table, .pay_history {
+.overdue_table,
+.pay_history {
     margin-top: 50px;
 }
 
@@ -413,11 +414,15 @@
     padding: 0;
 }
 
-.overdue_table .ant-table-tbody>tr:hover:not(.ant-table-expanded-row)>td, .ac_status_table .ant-table-tbody>tr:hover:not(.ant-table-expanded-row)>td {
+.overdue_table .ant-table-tbody>tr:hover:not(.ant-table-expanded-row)>td,
+.ac_status_table .ant-table-tbody>tr:hover:not(.ant-table-expanded-row)>td {
     background: none;
 }
 
-.overdue_table .ant-table-thead>tr>th, .overdue_table .ant-table-tbody>tr>td, .pay_history .ant-table-thead>tr>th, .pay_history .ant-table-tbody>tr>td {
+.overdue_table .ant-table-thead>tr>th,
+.overdue_table .ant-table-tbody>tr>td,
+.pay_history .ant-table-thead>tr>th,
+.pay_history .ant-table-tbody>tr>td {
     padding: 4px 0 !important;
 }
 
@@ -465,7 +470,19 @@
     margin-top: 10;
 }
 
+.l_h_20 .ant-form-item-control,
+.apply_services .ant-form-item-control {
+    line-height: 20px;
+    position: relative;
+    zoom: 1;
+}
+
+.val_days .ant-col-12.ant-form-item-control-wrapper {
+    padding-left: 0;
+}
+
 @media screen and (max-width: 768px) {
+
     /* .add_user_btn {
         position: absolute;
         left: 230px;
