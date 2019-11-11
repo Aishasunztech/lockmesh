@@ -18,7 +18,7 @@
 
 .edit_ftr_btn11 {
     text-align: right;
-    border-top: 1px solid #e8e8e8;
+    /* border-top: 1px solid #e8e8e8; */
     padding-top: 4px;
     margin-bottom: 0px !important;
     margin-top: 16px;
@@ -335,9 +335,10 @@
 }
 
 .dev_radio_btn {
-    width: 40%;
+    width: 45%;
     text-align: center;
     margin-bottom: 16px !important;
+    padding: 0;
 }
 
 .ant-radio-button-wrapper .helping_txt {
@@ -365,7 +366,7 @@
 }
 
 .sale_info_table .ant-table-title {
-  padding: 0 !important;
+    padding: 0 !important;
 }
 
 
