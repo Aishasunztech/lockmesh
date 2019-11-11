@@ -144,7 +144,7 @@ export default class ListApk extends Component {
                         permissions: app.permissions,
                         apk_status: (
                             <div data-column="SHOW ON DEVICE">
-                                <Switch size="small" defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
+                                <Switch size="small" checked={(app.apk_status === "On") ? true : false} onChange={(e) => {
                                     this.props.handleStatusChange(e, app.apk_id);
                                 }} />
                             </div>
@@ -192,7 +192,7 @@ export default class ListApk extends Component {
                             {(app.permission_count === "All" || this.props.totalDealers === app.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
                         </span>,
                         permissions: app.permissions,
-                        apk_status: (<Switch size="small" disabled defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
+                        apk_status: (<Switch size="small" disabled checked={(app.apk_status === "On") ? true : false} onChange={(e) => {
                             this.props.handleStatusChange(e, app.apk_id);
                         }} />),
                         apk: app.apk ? app.apk : 'N/A',
