@@ -430,7 +430,7 @@ export function generatePDF(columns, rows, title, fileName, formData) {
       doc.setFontSize(12);
       doc.setTextColor(40);
       doc.setFontStyle('normal');
-      doc.text((formData.product) ? formData.product : 'Product: All' , y, x+=15);
+      doc.text((formData.productType) ? 'Product: ' + formData.productType : 'Product: All' , y, x+=15);
 
       doc.setFontSize(12);
       doc.setTextColor(40);
