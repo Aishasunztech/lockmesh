@@ -31,13 +31,6 @@ class PaymentHistory extends Component {
       },
 
       {
-        title: convertToLang(props.translation[''], "PAYMENT METHOD"),
-        align: "center",
-        dataIndex: 'payment_method',
-        key: 'payment_method',
-      },
-
-      {
         title: convertToLang(props.translation[''], "AMOUNT (USD)"),
         align: "center",
         dataIndex: 'amount',
@@ -68,7 +61,6 @@ class PaymentHistory extends Component {
           key: ++index,
           transaction_no: item.id,
           created_at: item.created_at,
-          payment_method: JSON.parse(item.transection_data).request_type,
           amount: "$ " +formatMoney(item.credits),
           total_credits: item.credits,
         }
