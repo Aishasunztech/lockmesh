@@ -581,7 +581,7 @@ class Devices extends Component {
                 })
                 break;
             case '9':
-                devices = this.state.trialDevices;
+                devices = this.filterList(DEVICE_TRIAL, this.props.devices)
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearchOnTabChange(devices),
@@ -591,7 +591,7 @@ class Devices extends Component {
                 })
                 break;
             case '7':
-                devices = this.state.suspendDevices;
+                devices = this.filterList(DEVICE_SUSPENDED, this.props.devices);
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearchOnTabChange(devices),
@@ -601,7 +601,7 @@ class Devices extends Component {
                 })
                 break;
             case '6':
-                devices = this.state.expireDevices;
+                devices = this.filterList(DEVICE_EXPIRED, this.props.devices)
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearchOnTabChange(devices),
@@ -631,7 +631,7 @@ class Devices extends Component {
                 })
                 break;
             case "2":
-                devices = this.state.pendingDevices
+                devices = this.filterList(DEVICE_PENDING_ACTIVATION, this.props.devices)
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearchOnTabChange(devices),
@@ -641,7 +641,7 @@ class Devices extends Component {
                 })
                 break;
             case "3":
-                devices = this.state.preActiveDevices
+                devices = this.filterList(DEVICE_PRE_ACTIVATION, this.props.devices)
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
                     devices: this.handleSearchOnTabChange(devices),
@@ -823,7 +823,6 @@ class Devices extends Component {
                 transferredDevices: this.filterList(DEVICE_TRANSFERED, this.props.devices),
             })
             this.handleChangetab(this.state.tabselect);
-
         }
 
         if (this.props.translation !== prevProps.translation) {
