@@ -182,7 +182,7 @@ class PaymentHistory extends Component {
     return (
       <Row>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-          <Card style={{ height: '500px', paddingTop: '50px' }}>
+          <Card style={{ height: '500px'}}>
             <Form onSubmit={this.handleSubmit} autoComplete="new-password">
 
               <Form.Item
@@ -227,6 +227,30 @@ class PaymentHistory extends Component {
                   )}
                 </Form.Item>
               }
+
+              <Form.Item
+                label="Devices"
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 14 }}
+                width='100%'
+              >
+                {this.props.form.getFieldDecorator('device', {
+                  initialValue: '',
+                  rules: [
+                    {
+                      required: false,
+                    },
+                  ],
+                })(
+                  <Select style={{ width: '100%' }}>
+                    <Select.Option value=''>ALL</Select.Option>
+                    <Select.Option value={DEVICE_PRE_ACTIVATION}>{DEVICE_PRE_ACTIVATION}</Select.Option>
+                    {this.props.devices.map((device, index) => {
+                      return (<Select.Option key={device.device_id} value={device.device_id}>{device.device_id}</Select.Option>)
+                    })}
+                  </Select>
+                )}
+              </Form.Item>
 
               <Form.Item
                 label="Product Type"

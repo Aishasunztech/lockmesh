@@ -77,6 +77,7 @@ class Reporting extends Component {
                   productType={this.props.productType}
                   generateProductReport={this.props.generateProductReport}
                   user={this.props.user}
+                  devices={this.props.devices}
                 />
               </TabPane>
 
@@ -88,6 +89,7 @@ class Reporting extends Component {
                   generateHardwareReport={this.props.generateHardwareReport}
                   hardwareReport={this.props.hardwareReport}
                   user={this.props.user}
+                  devices={this.props.devices}
                 />
               </TabPane>
 
@@ -98,6 +100,7 @@ class Reporting extends Component {
                   generatePaymentHistoryReport={this.props.generatePaymentHistoryReport}
                   paymentHistoryReport={this.props.paymentHistoryReport}
                   user={this.props.user}
+                  devices={this.props.devices}
                 />
               </TabPane>
 
@@ -118,7 +121,9 @@ class Reporting extends Component {
                   translation={this.props.translation}
                   generateSalesReport={this.props.generateSalesReport}
                   salesReport={this.props.salesReport}
+                  saleInfo={this.props.saleInfo}
                   user={this.props.user}
+                  devices={this.props.devices}
                 />
               </TabPane>
             </Tabs>
@@ -142,6 +147,7 @@ var mapStateToProps = ({ dealers, settings, reporting  , auth, account, devices}
     hardwareReport: reporting.hardwareData,
     invoiceReport: reporting.invoiceData,
     salesReport: reporting.salesData,
+    saleInfo: reporting.saleInfo,
     paymentHistoryReport: reporting.paymentHistoryData,
     productType: reporting.productType,
     translation: settings.translation,
