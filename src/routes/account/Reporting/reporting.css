@@ -84,3 +84,9 @@
     top: 80px;
   }
 }
+
+@media screen and (max-width: 991px) {
+  .m_d_table1 {
+    top: 80px;
+  }
+}

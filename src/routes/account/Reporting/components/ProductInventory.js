@@ -524,6 +524,7 @@ class ProductInventory extends Component {
         })
       });
     } else if (list.PGP && this.state.innerTabSelect === '2') {
+      this.state.productTypeName = 'PGP Emails';
       list.PGP.map((item, index) => {
         data.push({
           'row_key': `${i}Key`,
@@ -538,6 +539,7 @@ class ProductInventory extends Component {
         })
       });
     } else if (list.SIM && this.state.innerTabSelect === '3') {
+      this.state.productTypeName = 'SIM IDs';
       list.SIM.map((item, index) => {
         data.push({
           'row_key': `${i}Key`,
@@ -552,6 +554,7 @@ class ProductInventory extends Component {
         })
       });
     } else if (list.VPN && this.state.innerTabSelect === '4') {
+      this.state.productTypeName = 'VPN';
       list.VPN.map((item, index) => {
         data.push({
           'row_key': `${i}Key`,
