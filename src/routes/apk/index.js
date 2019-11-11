@@ -65,7 +65,8 @@ class Apk extends Component {
             showUploadModal: false,
             showUploadData: {},
             columns: columns,
-            featureApkcolumns: featureApkcolumns
+            featureApkcolumns: featureApkcolumns,
+            listOf: "all"
         }
 
         // this.columns = ;
@@ -136,9 +137,10 @@ class Apk extends Component {
         //  console.log('will recive props');
 
         if (this.props.apk_list !== nextProps.apk_list) {
-            this.setState({
-                apk_list: nextProps.apk_list,
-            })
+            // this.setState({
+            //     apk_list: nextProps.apk_list,
+            // })
+            this.handleChange(this.state.listOf);
         }
     }
 
@@ -240,9 +242,11 @@ class Apk extends Component {
 
         switch (value) {
             case 'active':
+                // this.state.listOf = value;
                 this.setState({
                     apk_list: this.filterList('On', this.props.apk_list),
-                    column: this.columns,
+                    listOf: "active"
+                    // column: this.columns,
 
                 })
 
@@ -250,7 +254,8 @@ class Apk extends Component {
             case 'disabled':
                 this.setState({
                     apk_list: this.filterList('Off', this.props.apk_list),
-                    column: this.columns,
+                    listOf: "disabled"
+                    // column: this.columns,
 
                 })
                 break;
@@ -258,7 +263,8 @@ class Apk extends Component {
             default:
                 this.setState({
                     apk_list: this.props.apk_list,
-                    column: this.columns,
+                    listOf: "all"
+                    // column: this.columns,
 
                 })
                 break;
@@ -279,9 +285,10 @@ class Apk extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
-            this.setState({
-                apk_list: this.props.apk_list
-            })
+            // this.setState({
+            //     apk_list: this.props.apk_list
+            // })
+            this.handleChange(this.state.listOf);
         }
 
         if (this.props.selectedOptions !== prevProps.selectedOptions) {
@@ -343,6 +350,8 @@ class Apk extends Component {
 
     render() {
 
+        // console.log("this.state.apk_list ", this.state.apk_list);
+        // console.log("this.props.apk_list ", this.props.apk_list);
         if (this.props.user.type === 'dealer') {
             this.state.columns[1].className = 'hide';
         } else {
