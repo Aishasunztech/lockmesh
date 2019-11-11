@@ -128,7 +128,7 @@ export default class ListApk extends Component {
                                 <Fragment>
                                     <Button type="primary" size="small" style={{ margin: '0px 8px 0 0px', textTransform: "uppercase" }}
                                         onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], "EDIT")}</Button>
-                                    {(app.policies === undefined || app.policies === null || app.policies.length === 0) ? <Button type="danger" className="mob_m_t" size="small" style={{ textTransform: "uppercase" }} onClick={(e) => {
+                                    {((app.policies === undefined || app.policies === null || app.policies.length === 0) && app.permission_count == 0) ? <Button type="danger" className="mob_m_t" size="small" style={{ textTransform: "uppercase" }} onClick={(e) => {
                                         this.props.handleConfirmDelete(app.apk_id, app);
                                     }}>{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button> : null}
 
@@ -182,9 +182,11 @@ export default class ListApk extends Component {
                             <Fragment>
                                 <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px", textTransform: "uppercase" }}
                                     onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], "EDIT")}</Button>
-                                <Button type="danger" className="mob_m_t" size="small" style={{ textTransform: "uppercase" }} onClick={(e) => {
-                                    this.props.handleConfirmDelete(app.apk_id, app);
-                                }}>{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
+                                {(app.permission_count === 0) ?
+                                    <Button type="danger" className="mob_m_t" size="small" style={{ textTransform: "uppercase" }} onClick={(e) => {
+                                        this.props.handleConfirmDelete(app.apk_id, app);
+                                    }}>{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
+                                    : null}
                             </Fragment>
                         ),
                         permission: <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
