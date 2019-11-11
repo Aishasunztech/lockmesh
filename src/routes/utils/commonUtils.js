@@ -435,14 +435,14 @@ export function generatePDF(columns, rows, title, fileName, formData) {
       doc.setFontSize(12);
       doc.setTextColor(40);
       doc.setFontStyle('normal');
-      doc.text((formData.type) ? formData.type: 'Product Type: All', y, x+=15);
+      doc.text((formData.type) ? 'Type: ' + formData.type: 'Type: All', y, x+=15);
 
   }else if (title === 'Hardware Inventory Report'){
 
       doc.setFontSize(12);
       doc.setTextColor(40);
       doc.setFontStyle('normal');
-      doc.text((formData.hardware) ? formData.hardware : 'Hardware: All' , y, x+=15);
+      doc.text((formData.hardware) ? 'Hardware: ' + formData.hardware : 'Hardware: All' , y, x+=15);
 
   }else if (title === 'Payment History Report'){
 
@@ -454,7 +454,7 @@ export function generatePDF(columns, rows, title, fileName, formData) {
     doc.setFontSize(12);
     doc.setTextColor(40);
     doc.setFontStyle('normal');
-    doc.text((formData.transaction_type) ? formData.transaction_type : 'Transaction Type: All', y, x+=15);
+    doc.text((formData.transaction_type) ? 'Transaction Type: ' + formData.transaction_type : 'Transaction Type: All', y, x+=15);
 
 
   }else if (title === 'Invoice Report'){
