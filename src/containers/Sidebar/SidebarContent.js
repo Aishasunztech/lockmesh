@@ -109,12 +109,12 @@ class SidebarContent extends Component {
     // alert('its working');
   }
   showCreditsModal = () => {
-    if (this.props.authUser.type !== ADMIN) {
-      this.props.getUserCredit()
-      this.props.getLatestPaymentHistory({ limit: 10, type: 'credits' })
-      this.props.getOverdueDetails();
-      this.refs.credits_modal.getWrappedInstance().showModal();
-    }
+    // if (this.props.authUser.type !== ADMIN) {
+    this.props.getUserCredit()
+    this.props.getLatestPaymentHistory({ limit: 10, type: 'credits' })
+    this.props.getOverdueDetails();
+    this.refs.credits_modal.getWrappedInstance().showModal();
+    // }
 
     // alert('its working');
   }
@@ -417,7 +417,7 @@ const mapStateToProps = ({ settings, devices, sidebar, account, auth }) => {
     translation: translation,
     lng_id: translation["lng_id"],
     isSwitched: isSwitched,
-    account_balance_status: auth.authUser.account_balance_status 
+    account_balance_status: auth.authUser.account_balance_status
   }
 };
 export default connect(mapStateToProps,

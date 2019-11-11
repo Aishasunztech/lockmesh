@@ -249,7 +249,12 @@ class DevicesList extends Component {
                 action: ((status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ?
                     (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                     : (status === DEVICE_PRE_ACTIVATION) ?
-                        (<Fragment><Fragment>{DeleteBtnPreActive}</Fragment><Fragment>{EditBtn/* EditBtnPreActive */}</Fragment></Fragment>)
+                        (<Fragment>
+                            {(this.props.user.type !== ADMIN) ?
+                                <Fragment>{DeleteBtnPreActive}</Fragment> : null
+                            }
+                            <Fragment>{EditBtn/* EditBtnPreActive */}</Fragment>
+                        </Fragment>)
                         // : (device.flagged !== 'Not flagged') ?
                         //     (<Fragment><Fragment>{Unflagbtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                         : (device.flagged !== 'Not flagged' && device.transfer_status === 0 && device.finalStatus === "Flagged") ?
