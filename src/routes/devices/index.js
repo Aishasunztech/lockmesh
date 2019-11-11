@@ -169,12 +169,12 @@ class Devices extends Component {
     }
 
     transferDeviceProfile = (obj) => {
-        // console.log('at req transferDeviceProfile', obj)
+        // 
         let _this = this;
         Modal.confirm({
             content: `Are you sure you want to Transfer, from ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
             onOk() {
-                // console.log('OK');
+                // 
                 _this.props.transferDeviceProfile(obj);
             },
             onCancel() { },
@@ -187,12 +187,12 @@ class Devices extends Component {
         let dumyDevices = [];
 
         if (type === DEVICE_FLAGGED) {
-            // console.log('11111 flagged', type)
+            // 
             devices.filter(function (device) {
                 if (device.finalStatus !== DEVICE_UNLINKED) {
                     // let deviceStatus = getStatus(device.status, device.account_status, device.unlink_status, device.device_status, device.activation_status);
                     let deviceStatus = device.flagged;
-                    // console.log('22222 flagged', device.flagged)
+                    // 
                     if ((deviceStatus === 'Defective' || deviceStatus === 'Lost' || deviceStatus === 'Stolen' || deviceStatus === 'Other') && (device.finalStatus === "Flagged")) {
                         dumyDevices.push(device);
                     }
@@ -214,7 +214,7 @@ class Devices extends Component {
 
     handleChange(value) {
         // this.handleCheckChange(this.props.selectedOptions)
-        // console.log('filtede dis0')
+        // 
 
         // let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
         let indxAction = this.state.columns.findIndex(k => k.dataIndex === 'action');
@@ -230,7 +230,7 @@ class Devices extends Component {
                 //     this.state.columns[indexTransfered].children[0].className = 'hide';
                 // }
             }
-            //    console.log('CLGGGG', this.state.columns)
+            //    
 
         } else {
             if (indxAction < 0) {
@@ -252,7 +252,7 @@ class Devices extends Component {
         else if (value === DEVICE_PRE_ACTIVATION) {
             let isCheckedColumn = this.state.selectedOptions.findIndex((item) => { return item.key === "validity" });
             let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
-            // console.log('index of 3 tab', indxRemainingDays)
+            // 
             if (indxAction >= 0) {
                 // this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >DELETE SELECTED</Button>
             }
@@ -461,14 +461,14 @@ class Devices extends Component {
     handleChangetab = (value) => {
 
         // this.handleCheckChange(this.state.selectedOptions);
-        // console.log('handleChangetab this.state.selectedOptions: ', this.state.selectedOptions)
-        // console.log('============= value index is: ', value)
+        // 
+        // 
         // let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
         let indxAction = this.state.columns.findIndex(k => k.dataIndex == 'action');
         if (value == '5' && this.props.user.type == ADMIN) {
             //  indx = this.state.columns.findIndex(k => k.dataIndex =='action');
             if (indxAction >= 0) { this.state.columns.splice(indxAction, 1) }
-            //    console.log('CLGGGG', this.state.columns)
+            //    
 
         } else {
             if (indxAction < 0) {
@@ -493,7 +493,7 @@ class Devices extends Component {
         else if (value === '3') {
             let isCheckedColumn = this.state.selectedOptions.findIndex((item) => { return item.key === "validity" });
             let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
-            if (indxAction >= 0) {
+            if (indxAction >= 0 && (this.props.user.type !== ADMIN)) {
                 this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >DELETE SELECTED</Button>
             }
             if (indxRemainingDays >= 0 && indxRemainingDays !== undefined && isCheckedColumn !== -1) { //  && isCheckedColumn !== -1
@@ -545,7 +545,7 @@ class Devices extends Component {
 
             let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
             let isCheckedColumn = this.state.selectedOptions.findIndex((item) => { return item.key === "transfered_to" }); // item.key === "transfered_to"
-            // console.log(this.state.selectedOptions, "isCheckedColumn ", isCheckedColumn);
+            // 
 
             if (value === '8' || value === '1') {
                 if (indexTransfered >= 0 && indexTransfered !== undefined && isCheckedColumn !== -1) {
@@ -684,7 +684,7 @@ class Devices extends Component {
     }
 
     handleGlobalSearch(devices) {
-        // console.log("HANDLE GLOBAL SEARCH");
+        // 
         if (devices.length) {
             if (this.state.globalSearchedValue !== "") {
                 status = true
@@ -711,10 +711,10 @@ class Devices extends Component {
 
 
     handleCheckChange(values) {
-        // console.log('handleCheckChange values are: ', values)
+        // 
         let dumydata = this.state.columns;
 
-        // console.log("dumyData", dumydata);
+        // 
         if (values.length) {
             this.state.columns.map((column, index) => {
 
@@ -726,7 +726,7 @@ class Devices extends Component {
                     }
                     // dumydata[]
                 }
-                // console.log(this.state.tabselect)
+                // 
                 values.map((value) => {
                     if (column.className !== 'row') {
                         if (column.dataIndex === value.key) {
@@ -760,7 +760,7 @@ class Devices extends Component {
 
             this.setState({ columns: newState, selectedOptions: values });
         }
-        // console.log("values ", values);
+        // 
         this.props.postDropdown(values, 'devices');
         // this.props.getDropdown('devices');
     }
@@ -833,7 +833,7 @@ class Devices extends Component {
 
 
 
-        // console.log('updated');
+        // 
 
         if (selectOptionsStatus) {
             this.handleCheckChange(this.props.selectedOptions);
@@ -841,8 +841,8 @@ class Devices extends Component {
         }
 
         // if (this.props.selectedOptions !== prevProps.selectedOptions) {
-        //     // console.log('==================== componentDidUpdate  ======================== ');
-        //     // console.log(this.props.selectedOptions)
+        //     // 
+        //     // 
         //     this.handleCheckChange(this.props.selectedOptions)
         // }
     }
@@ -864,7 +864,7 @@ class Devices extends Component {
 
     handlePagination = (value) => {
         //  alert(value);
-        //  console.log('pagination value of ', value)
+        //  
         this.refs.devcieList.handlePagination(value);
         this.props.postPagination(value, 'devices');
     }
@@ -915,7 +915,7 @@ class Devices extends Component {
             }
             if (value.length) {
 
-                // console.log("DEVICES LIST", copyDevices);
+                // 
                 let foundDevices = componentSearch(copyDevices, value);
                 if (foundDevices.length) {
                     this.setState({
@@ -1001,7 +1001,7 @@ class Devices extends Component {
 
     render() {
 
-        // console.log('search data is: ', this.state.devices);
+        // 
         let type = this.props.user.type
         let styleType = {};
         if (type === ADMIN) {
@@ -1009,7 +1009,7 @@ class Devices extends Component {
         } else {
             styleType = "devices_fix_card_dealer"
         }
-        // console.log(this.state.selectedOptions, 'state selectedOptions are ')
+        // 
         return (
             <Fragment>
                 {/* <Button type="danger" size="small" onClick={() => dealerColsWithSearch()}>Testing</Button> */}
@@ -1091,10 +1091,10 @@ class Devices extends Component {
     handleSearch = (e) => {
 
         this.state.SearchValues[e.target.name] = { key: e.target.name, value: e.target.value };
-        // console.log()
+        // 
         let response = handleMultipleSearch(e, this.state.copy_status, copyDevices, this.state.SearchValues, this.state.filteredDevices)
 
-        // console.log(response.SearchValues, "response is: ===========> ", response)
+        // 
         this.setState({
             devices: response.demoData,
             SearchValues: response.SearchValues
@@ -1118,7 +1118,7 @@ class Devices extends Component {
         //     this.state.SearchValues[targetName] = { key: targetName, value: targetValue };
 
         //     copyDevices.forEach((device) => {
-        //         // console.log('device is: ', device);
+        //         // 
         //         if ((typeof device[targetName]) === 'string' && device[targetName] !== null && device[targetName] !== undefined) {
 
         //             let searchColsAre = Object.keys(demoSearchValues).length;
@@ -1174,8 +1174,8 @@ class Devices extends Component {
         //         let searchDevices = 0;
 
         //         for (let search of searchData) {
-        //             // console.log('search is: ', search)
-        //             // console.log('search key is: ', search.key)
+        //             // 
+        //             // 
         //             if (search.value == "") {
         //                 searchDevices++;
         //             } else if (device[search.key].toUpperCase().includes(search.value.toUpperCase())) {
@@ -1221,10 +1221,10 @@ function mapDispatchToProps(dispatch) {
 }
 
 var mapStateToProps = ({ devices, auth, settings }) => {
-    // console.log('check traslatin log at component:: ', settings.translation)
-    // console.log('devices AUTH', auth);
-    //   console.log(settings.deviceOptions,' Hamza.. devices OPTION');
-    // console.log("at component devices.selectedOptions ", devices.selectedOptions);
+    // 
+    // 
+    //   
+    // 
     return {
         devices: devices.devices,
         msg: devices.msg,

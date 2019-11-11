@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { Button, Form, Input, Select, InputNumber, Spin, Modal, Table, Switch } from 'antd';
+import { Button, Form, Input, Select, InputNumber, Spin, Modal, Table, Switch, DatePicker } from 'antd';
 import { checkValue, convertToLang } from '../../utils/commonUtils'
 
 import { getSimIDs, getChatIDs, getPGPEmails, getParentPackages, getProductPrices, extendServices } from "../../../appRedux/actions/Devices";
@@ -114,11 +114,15 @@ class EditDevice extends Component {
                 values.prevSimId = this.props.device.sim_id;
                 values.finalStatus = this.props.device.finalStatus;
                 values.prevService = this.props.device.services
+                if (this.props.user.type === ADMIN) {
+                    values.expiry_date = values.expiry_date._d
+                }
                 if (this.state.renewService) {
                     values.products = this.state.products;
                     values.packages = this.state.packages;
                     values.total_price = this.state.total_price
                     values.renewService = this.state.renewService
+                    values.expiry_date = this.state.tabselect
                     values.service = true
                     this.setState({
                         serviceData: values,
@@ -185,6 +189,7 @@ class EditDevice extends Component {
         });
 
     }
+
     componentDidMount() {
         this.props.getSimIDs();
         this.props.getChatIDs();
@@ -211,6 +216,7 @@ class EditDevice extends Component {
             })
         }
     }
+
     handleUserModal = () => {
         let handleSubmit = this.props.addUser;
         this.refs.add_user.showModal(handleSubmit);
@@ -634,6 +640,8 @@ class EditDevice extends Component {
                 total_price = total_price + Number(item.unit_price)
             })
         }
+        // console.log(this.state.tabselect, "Tab select");
+
         this.setState({
             packages: packagesData,
             products: productData,
@@ -644,8 +652,14 @@ class EditDevice extends Component {
             checkServices: { display: 'inline', color: "Red", margin: 0 },
             changeServiceMsg: "You requested to renew current services.",
             PkgSelectedRows: packagesData,
-            proSelectedRows: productData
+            proSelectedRows: productData,
+            expiry_date: this.state.tabselect + " Months"
         })
+    }
+
+    disabledDate = (current) => {
+        // Can not select days before today and today
+        return current && current < moment().endOf('day');
     }
 
     render() {
@@ -981,21 +995,38 @@ class EditDevice extends Component {
                             <Input disabled />
                         )}
                     </Form.Item>
-                    <Form.Item
-                        label={convertToLang(this.props.translation[Expire_Date], "Extend Expire Date")}
-                        labelCol={{ span: 8, xs: 24, sm: 8 }}
-                        wrapperCol={{ span: 14, md: 14, xs: 24 }}
-                    >
-                        {this.props.form.getFieldDecorator('expiry_date', {
-                            initialValue: this.state.expiry_date,
-                            // rules: [{
-                            //     required: true, message: convertToLang(this.props.translation[Expire_Date_Require], "Expiry Date is Required ! "),
-                            // }],
-                        })(
-                            <Input disabled />
-                        )}
+                    {this.props.user.type === ADMIN ?
 
-                    </Form.Item>
+                        <Form.Item
+                            label={convertToLang(this.props.translation[""], "Adjust Expire Date")}
+                            labelCol={{ span: 8, xs: 24, sm: 8 }}
+                            wrapperCol={{ span: 14, md: 14, xs: 24 }}
+                        >
+                            {this.props.form.getFieldDecorator('expiry_date', {
+                                initialValue: moment(this.state.expiry_date, 'YYYY/MM/DD'),
+                                // rules: [{
+                                //     required: true, message: convertToLang(this.props.translation[Expire_Date_Require], "Expiry Date is Required ! "),
+                                // }],
+                            })(
+                                <DatePicker style={{ width: '100%' }} disabledDate={this.disabledDate} format={'YYYY/MM/DD'} />
+                            )}
+
+                        </Form.Item>
+                        : <Form.Item
+                            label={convertToLang(this.props.translation[Expire_Date], "Extend Expire Date")}
+                            labelCol={{ span: 8, xs: 24, sm: 8 }}
+                            wrapperCol={{ span: 14, md: 14, xs: 24 }}
+                        >
+                            {this.props.form.getFieldDecorator('expiry_date', {
+                                initialValue: this.state.expiry_date,
+                                // rules: [{
+                                //     required: true, message: convertToLang(this.props.translation[Expire_Date_Require], "Expiry Date is Required ! "),
+                                // }],
+                            })(
+                                <Input disabled />
+                            )}
+
+                        </Form.Item>}
 
                     {(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ?
                         <Fragment>
