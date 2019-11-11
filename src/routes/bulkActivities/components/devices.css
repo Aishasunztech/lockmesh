@@ -1,4 +1,4 @@
-.devices table th {
+/* .devices table th {
     white-space: nowrap !important;
 }
 
@@ -14,12 +14,12 @@
 /* .ant-dropdown.ant-dropdown-placement-bottomRight {
     left: 169px !important;
     top: 12px !important;
-} */
+} 
 
 .edit_ftr_btn11 {
     text-align: right;
     border-top: 1px solid #e8e8e8;
-    padding-top: 13px;
+    padding-top: 4px;
     margin-bottom: 0px !important;
     margin-top: 16px;
 }
@@ -288,7 +288,7 @@
 
 .border_top_0 {
     border-top: 0 !important;
-}
+} 
 
 @media screen and (max-width: 768px) {
     .add_user_btn {
@@ -296,10 +296,10 @@
         /* left: 230px; */
         /* top: -9px; */
         /* width: 40%; */
-        /* padding: 0; */
-    }
+        /* padding: 0;
+    } */
 
-    .edit_form .ant-form-item-label {
+    /* .edit_form .ant-form-item-label {
         text-align: left;
-    }
-}
+    } 
+}*/

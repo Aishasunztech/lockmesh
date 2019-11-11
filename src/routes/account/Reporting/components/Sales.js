@@ -2,12 +2,13 @@ import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal, Tabs, Col, Input, Form, Row, DatePicker, Select } from "antd";
 import moment from 'moment';
 import styles from '../reporting.css'
-import {convertToLang, generatePDF, generateExcel, formatMoney} from "../../../utils/commonUtils";
+import { convertToLang, generatePDF, generateExcel, formatMoney } from "../../../utils/commonUtils";
 import {
   DEVICE_PRE_ACTIVATION
 } from "../../../../constants/Constants";
 
-import { BASE_URL
+import {
+  BASE_URL
 } from "../../../../constants/Application";
 var columns;
 var rows;
@@ -43,7 +44,7 @@ class Sales extends Component {
         className: '',
         dataIndex: 'dealer_pin',
         key: 'dealer_pin',
-        sorter: (a, b) => {  return a.dealer_pin- b.dealer_pin },
+        sorter: (a, b) => { return a.dealer_pin - b.dealer_pin },
         sortDirections: ['ascend', 'descend'],
       },
 
@@ -93,7 +94,7 @@ class Sales extends Component {
         className: '',
         dataIndex: 'profit_loss',
         key: 'profit_loss',
-        sorter: (a, b) => { return a.profit_loss-b.profit_loss },
+        sorter: (a, b) => { return a.profit_loss - b.profit_loss },
         sortDirections: ['ascend', 'descend'],
       },
 
@@ -138,9 +139,9 @@ class Sales extends Component {
   };
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.salesReport !== prevProps.salesReport){
+    if (this.props.salesReport !== prevProps.salesReport) {
       this.setState({
-        reportCard:  true
+        reportCard: true
       });
 
       rows = this.props.salesReport.map((item, index) => {
@@ -166,7 +167,7 @@ class Sales extends Component {
           title: convertToLang(this.props.translation[''], "DEVICE ID"), dataKey: 'device_id',
         },
 
-        {title: convertToLang(this.props.translation[''], "DEALER ID"), dataKey: 'dealer_pin'},
+        { title: convertToLang(this.props.translation[''], "DEALER ID"), dataKey: 'dealer_pin' },
 
         {
           title: convertToLang(this.props.translation[''], "TYPE"), dataKey: 'type',
@@ -253,18 +254,18 @@ class Sales extends Component {
     return (
       <Row>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-          <Card style={{ height: '500px'}}>
+          <Card  >
             <Form onSubmit={this.handleSubmit} autoComplete="new-password">
 
               <Form.Item
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
               >
               </Form.Item>
 
               <Form.Item
                 label="Product Type"
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
                 width='100%'
               >
@@ -299,7 +300,7 @@ class Sales extends Component {
 
                 : <Form.Item
                   label="Dealer/Sdealer"
-                  labelCol={{ span: 8 }}
+                  labelCol={{ span: 10 }}
                   wrapperCol={{ span: 14 }}
                   width='100%'
                 >
@@ -324,7 +325,7 @@ class Sales extends Component {
 
               <Form.Item
                 label="Devices"
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
                 width='100%'
               >
@@ -348,7 +349,7 @@ class Sales extends Component {
 
               <Form.Item
                 label="FROM (DATE) "
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
               >
                 {this.props.form.getFieldDecorator('from', {
@@ -366,7 +367,7 @@ class Sales extends Component {
 
               <Form.Item
                 label="TO (DATE)"
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
               >
                 {this.props.form.getFieldDecorator('to', {
@@ -384,9 +385,9 @@ class Sales extends Component {
                 )}
               </Form.Item>
               <Form.Item className="edit_ftr_btn"
-                         wrapperCol={{
-                           xs: { span: 22, offset: 0 },
-                         }}
+                wrapperCol={{
+                  xs: { span: 24, offset: 0 },
+                }}
               >
                 <Button key="back" type="button" onClick={this.handleReset}>CANCEL</Button>
                 <Button type="primary" htmlType="submit" onClick={this.handleSubmit}>GENERATE</Button>
@@ -401,13 +402,13 @@ class Sales extends Component {
             {(this.state.reportCard) ?
               <Fragment>
                 <Row>
-                  <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                  <Col xs={14} sm={14} md={14} lg={14} xl={14}>
                     <h3>Sales Report</h3>
                   </Col>
-                  <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                  <Col xs={10} sm={10} md={10} lg={10} xl={10}>
                     <div className="pull-right">
-                      <Button type="dotted" icon="download" size="small" onClick={() => {this.state.reportFormData.saleInfo = this.props.saleInfo;generatePDF(columns, rows, 'Sales Report', fileName, this.state.reportFormData) }}>Download PDF</Button>
-                      <Button type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName) }}>Download Excel</Button>
+                      <Button className="mb-8" type="dotted" icon="download" size="small" onClick={() => { this.state.reportFormData.saleInfo = this.props.saleInfo; generatePDF(columns, rows, 'Sales Report', fileName, this.state.reportFormData) }}>Download PDF</Button>
+                      <Button className="mb-8" type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName) }}>Download Excel</Button>
                     </div>
                   </Col>
                 </Row>
@@ -429,7 +430,7 @@ class Sales extends Component {
                   pagination={false}
                 />
               </Fragment>
-              : null }
+              : null}
           </Card>
         </Col>
       </Row>
