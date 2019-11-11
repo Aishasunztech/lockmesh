@@ -74,14 +74,14 @@ export function getColor(status) {
   }
 }
 
-export function getDateTimeOfClientTimeZone (dateTime, format){
+export function getDateTimeOfClientTimeZone (dateTime, format = 'YYYY-MM-DD H:m:s'){
   
-  let serverTimeZoneDate = moment(dateTime).tz(TIME_ZONE).format(format)
+  // let serverTimeZoneDate = moment(dateTime).tz(TIME_ZONE).format(format)
   let timeZone = moment.tz.guess();
   if(timeZone){
-    return moment(serverTimeZoneDate).tz(timeZone).format(format);
+    return moment(dateTime).tz(timeZone).format(format);
   }else {
-    return serverTimeZoneDate
+    return moment(dateTime).format(format);
   }
   // if(Intl.DateTimeFormat().resolvedOptions().timeZone){
   //   // 'YYYY/MM/DD H:m:s'
