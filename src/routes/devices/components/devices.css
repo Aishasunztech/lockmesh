@@ -19,7 +19,7 @@
 .edit_ftr_btn11 {
     text-align: right;
     border-top: 1px solid #e8e8e8;
-    padding-top: 13px;
+    padding-top: 4px;
     margin-bottom: 0px !important;
     margin-top: 16px;
 }
@@ -475,6 +475,24 @@
     line-height: 20px;
     position: relative;
     zoom: 1;
+}
+
+.edit_dev_title {
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 500;
+    padding: 0px 8px;
+    color: #545454;
+}
+
+.apply_services label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    line-height: 16px;
+    margin-bottom: 0;
+    margin-top: 3px;
 }
 
 .val_days .ant-col-12.ant-form-item-control-wrapper {

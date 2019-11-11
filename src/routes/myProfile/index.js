@@ -212,7 +212,7 @@ class Profile extends Component {
                                                 <Col span={8} className="text-center ">
                                                     {/* <Icon type="file-text" className="policy_icon" /> */}
                                                     <img src={require("assets/images/profile-image.png")} className="mb-8"></img>
-                                                    <h1 className="mb-0">{this.props.profile.name}</h1>
+                                                    <h1 className="mb-0" style={{ fontSize: '3vh' }}>{this.props.profile.name}</h1>
                                                     <p>({this.props.profile.type})</p>
                                                 </Col>
                                                 <Col span={16} style={{ padding: 0, marginTop: 12 }}>
