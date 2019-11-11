@@ -4,6 +4,8 @@ import jsPDF from 'jspdf';
 import XLSX from 'xlsx';
 import jsPDFautotable from 'jspdf-autotable';
 
+import { TIME_ZONE } from '../../constants/Application';
+
 import {
   DEVICE_ACTIVATED,
   DEVICE_EXPIRED,
@@ -72,12 +74,21 @@ export function getColor(status) {
   }
 }
 
-export function getDateTimeOfClientTimeZone (dateTime){
-  if(Intl.DateTimeFormat().resolvedOptions().timeZone){
-    return moment_timezone(dateTime).tz(Intl.DateTimeFormat().resolvedOptions().timeZone).format('YYYY/MM/DD H:m:s')
-  } else {
-    return dateTime;
+export function getDateTimeOfClientTimeZone (dateTime, format){
+  
+  let serverTimeZoneDate = moment(dateTime).tz(TIME_ZONE).format(format)
+  let timeZone = moment.tz.guess();
+  if(timeZone){
+    return moment(serverTimeZoneDate).tz(timeZone).format(format);
+  }else {
+    return serverTimeZoneDate
   }
+  // if(Intl.DateTimeFormat().resolvedOptions().timeZone){
+  //   // 'YYYY/MM/DD H:m:s'
+  //   return moment_timezone(dateTime).tz(Intl.DateTimeFormat().resolvedOptions().timeZone).format(format)
+  // } else {
+  //   return dateTime;
+  // }
 }
 export function getSortOrder(status) {
   switch (status) {
