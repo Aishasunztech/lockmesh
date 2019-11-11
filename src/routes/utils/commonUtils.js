@@ -173,7 +173,7 @@ export function getDateFromTimestamp(value) {
 
   let date = new Date(value);
   let formattedDate = convert(date)
-  return formattedDate;
+  return moment(formattedDate).format('DD-MMM-YYYY');
 }
 
 export function convertTimestampToDate(value) {

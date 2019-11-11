@@ -121,22 +121,19 @@ class PaymentHistory extends Component {
 
   renderList = (list) => {
     if (list) {
-      let data = []
+      let data    = [];
       let counter = 1;
       list.map((item, index) => {
-        // let hardwares = JSON.parse(item.hardware_data)
-        // hardwares.map((hardware, i) => {
-          data.push( {
-            rowKey: counter++,
-            key: counter++,
-            count: counter++,
-            dealer_pin: item.dealer_pin,
-            device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
-            hardware: item.hardware_name,
-            created_at: getDateFromTimestamp(item.created_at)
-          })
+        data.push( {
+          rowKey: counter++,
+          key: counter++,
+          count: counter++,
+          dealer_pin: item.dealer_pin,
+          device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
+          hardware: item.hardware_name,
+          created_at: getDateFromTimestamp(item.created_at)
         })
-      // })
+      });
       return data;
     }
   };
@@ -276,9 +273,9 @@ class PaymentHistory extends Component {
                 )}
               </Form.Item>
               <Form.Item className="edit_ftr_btn"
-                wrapperCol={{
-                  xs: { span: 22, offset: 0 },
-                }}
+                         wrapperCol={{
+                           xs: { span: 22, offset: 0 },
+                         }}
               >
                 <Button key="back" type="button" onClick={this.handleReset}>CANCEL</Button>
                 <Button type="primary" htmlType="submit">GENERATE</Button>
@@ -302,11 +299,11 @@ class PaymentHistory extends Component {
                     </div>
                   </Col>
                 </Row>
-              <Table
-                columns={this.columns}
-                dataSource={this.renderList(this.props.hardwareReport)}
-                bordered
-                pagination={false}
+                <Table
+                  columns={this.columns}
+                  dataSource={this.renderList(this.props.hardwareReport)}
+                  bordered
+                  pagination={false}
 
                 />
               </Fragment>

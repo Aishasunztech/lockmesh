@@ -74,6 +74,41 @@ class ProductInventory extends Component {
         className: '',
       },
       {
+        title: convertToLang(props.translation[''], "DEVICE ID"),
+        dataIndex: 'device_id',
+        key: 'device_id',
+        align: 'center',
+        className: '',
+      },
+      {
+        title: convertToLang(props.translation[''], "DEALER PIN"),
+        dataIndex: 'dealer_pin',
+        key: 'dealer_pin',
+        align: 'center',
+        className: '',
+      },
+      {
+        title: convertToLang(props.translation[''], "USED"),
+        dataIndex: 'used',
+        key: 'used',
+        align: 'center',
+        className: '',
+      },
+      {
+        title: convertToLang(props.translation[''], "START DATE"),
+        dataIndex: 'start_date',
+        key: 'start_date',
+        align: 'center',
+        className: '',
+      },
+      {
+        title: convertToLang(props.translation[''], "END DATE"),
+        dataIndex: 'end_date',
+        key: 'end_date',
+        align: 'center',
+        className: '',
+      },
+      {
         title: convertToLang(props.translation[LABEL_DATA_CREATED_AT], "CREATED AT"),
         dataIndex: 'created_at',
         key: 'created_at',
@@ -94,6 +129,20 @@ class ProductInventory extends Component {
         title: convertToLang(props.translation[''], "VPN ID"),
         dataIndex: 'vpn_id',
         key: 'vpn_id',
+        align: 'center',
+        className: '',
+      },
+      {
+        title: convertToLang(props.translation[''], "DEVICE ID"),
+        dataIndex: 'device_id',
+        key: 'device_id',
+        align: 'center',
+        className: '',
+      },
+      {
+        title: convertToLang(props.translation[''], "DEALER PIN"),
+        dataIndex: 'dealer_pin',
+        key: 'dealer_pin',
         align: 'center',
         className: '',
       },
@@ -206,17 +255,25 @@ class ProductInventory extends Component {
           rows.push({
             'count': ++index,
             'chat_id': item.chat_id ? item.chat_id : 'N/A',
-            'used': item.used == 1 ? 'USED' : 'UNUSED',
-            'created_at': getDateFromTimestamp(item.created_at) ? getDateFromTimestamp(item.created_at) : 'N/A',
+            'device_id': item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
+            'dealer_pin': item.dealer_pin ? item.dealer_pin : 'N/A',
+            'used': item.used == 1 ? 'YES' : 'NO',
+            'start_date': item.start_date ? getDateFromTimestamp(item.start_date) : 'N/A',
+            'end_date': item.end_date ? getDateFromTimestamp(item.end_date) : 'N/A',
+            'created_at': item.created_at ? getDateFromTimestamp(item.created_at) : 'N/A',
           })
         });
 
         columns.push(
           { title: '#', dataKey: "count" },
           { title: convertToLang(this.props.translation[''], "CHAT ID"), dataKey: "chat_id" },
+          { title: convertToLang(this.props.translation[''], "DEVICE ID"), dataKey: "device_id" },
+          { title: convertToLang(this.props.translation[''], "DEALER PIN"), dataKey: "dealer_pin" },
           { title: convertToLang(this.props.translation[''], "USED"), dataKey: "used" },
+          { title: convertToLang(this.props.translation[''], "START DATE"), dataKey: "start_date" },
+          { title: convertToLang(this.props.translation[''], "END DATE"), dataKey: "end_date" },
           { title: convertToLang(this.props.translation[''], "CREATED AT"), dataKey: "created_at" },
-        )
+        );
         fileName  = 'product_inventory_CHAT_' + new Date().getTime();
 
       } else if (this.props.productReport.PGP && this.state.innerTabSelect === '2') {
@@ -233,7 +290,7 @@ class ProductInventory extends Component {
           { title: convertToLang(this.props.translation[''], "PGP EMAIL"), dataKey: "pgp_email" },
           { title: convertToLang(this.props.translation[''], "USED"), dataKey: "used" },
           { title: convertToLang(this.props.translation[''], "CREATED AT"), dataKey: "created_at" },
-        )
+        );
         fileName  = 'product_inventory_PGP_' + new Date().getTime();
 
       } else if (this.props.productReport.SIM && this.state.innerTabSelect === '3') {
@@ -242,9 +299,9 @@ class ProductInventory extends Component {
             'count': ++index,
             'used': item.used == 1 ? 'USED' : 'UNUSED',
             'pgp_email': item.pgp_email ? item.pgp_email : 'N/A',
-            'start_date': item.start_date ? item.start_date : 'N/A',
-            'expiry_date': item.expiry_date ? item.expiry_date : 'N/A',
-            'created_at': getDateFromTimestamp(item.created_at) ? getDateFromTimestamp(item.created_at) : 'N/A',
+            'start_date': item.start_date ? getDateFromTimestamp(item.start_date) : 'N/A',
+            'expiry_date': item.expiry_date ? getDateFromTimestamp(item.expiry_date) : 'N/A',
+            'created_at': item.created_at ? getDateFromTimestamp(item.created_at) : 'N/A',
           })
         });
         columns.push(
@@ -254,7 +311,7 @@ class ProductInventory extends Component {
           { title: convertToLang(this.props.translation[''], "START DATE"), dataKey: "start_date" },
           { title: convertToLang(this.props.translation[''], "EXPIRY DATE"), dataKey: "expiry_date" },
           { title: convertToLang(this.props.translation[''], "CREATED AT"), dataKey: "created_at" },
-        )
+        );
 
         fileName  = 'product_inventory_SIM_' + new Date().getTime();
       } else if (this.props.productReport.VPN && this.state.innerTabSelect === '4') {
@@ -263,9 +320,9 @@ class ProductInventory extends Component {
             'count': ++index,
             'vpn_id': item.vpn_id ? item.vpn_id : 'N/A',
             'dealer_id': item.dealer_id ? item.dealer_id : 'N/A',
-            'start_date': item.start_date ? item.start_date : 'N/A',
-            'end_date': item.end_date ? item.end_date : 'N/A',
-            'created_at': getDateFromTimestamp(item.created_at) ? getDateFromTimestamp(item.created_at) : 'N/A',
+            'start_date': item.start_date ? getDateFromTimestamp(item.start_date) : 'N/A',
+            'end_date': item.end_date ? getDateFromTimestamp(item.end_date) : 'N/A',
+            'created_at': item.created_at ? getDateFromTimestamp(item.created_at) : 'N/A',
           })
         });
         columns.push(
@@ -275,7 +332,7 @@ class ProductInventory extends Component {
           { title: convertToLang(this.props.translation[''], "START DATE"), dataKey: "start_date" },
           { title: convertToLang(this.props.translation[''], "END DATE"), dataKey: "end_date" },
           { title: convertToLang(this.props.translation[''], "CREATED AT"), dataKey: "created_at" },
-        )
+        );
         fileName  = 'product_inventory_VPN_' + new Date().getTime();
       }
     }
@@ -337,7 +394,11 @@ class ProductInventory extends Component {
           'row_key': `${i}Key`,
           'count': ++i,
           'chat_id': item.chat_id ? item.chat_id : 'N/A',
-          'used': item.used ? item.used : 'N/A',
+          'device_id': item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
+          'dealer_pin': item.dealer_pin ? item.dealer_pin : 'N/A',
+          'used': item.used == 1 ? 'YES' : 'NO',
+          'start_date': item.start_date ? getDateFromTimestamp(item.start_date) : 'N/A',
+          'end_date': item.end_date ? getDateFromTimestamp(item.end_date) : 'N/A',
           'created_at': getDateFromTimestamp(item.created_at) ? getDateFromTimestamp(item.created_at) : 'N/A',
         })
       });

@@ -165,17 +165,6 @@ class Invoice extends Component {
     return data;
   };
 
-  createPDF = () => {
-    var columns = [
-      { title: '#', dataKey: "count" },
-      { title: convertToLang(this.props.translation[''], "INVOICE ID"), dataKey: "invoice_id" },
-      { title: convertToLang(this.props.translation[''], "DEVICE ID"), dataKey: "device_id" },
-      { title: convertToLang(this.props.translation[''], "DEALER PIN"), dataKey: "dealer_pin" },
-      { title: convertToLang(this.props.translation[''], "USER PAYMENT STATUS"), dataKey: "end_user_payment_status" },
-      { title: convertToLang(this.props.translation[''], "GENERATED AT"), dataKey: "created_at" },
-    ];
-  }
-
   render() {
     return (
       <Row>
