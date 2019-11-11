@@ -11,6 +11,25 @@
   width: 130px;
 }
 
+.reports_tab .ant-col-10.ant-form-item-label {
+  padding-right: 0;
+}
+
+.reports_tab .ant-form label {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.reports_tab .ant-calendar-picker {
+  width: 100%;
+}
+
+.reports_tab .ant-btn-sm {
+  line-height: 20px !important;
+  font-size: 10px;
+  margin-bottom: 8px;
+}
+
 .manage_data {
   float: left;
   width: 6.2%;
@@ -34,10 +53,16 @@
   height: auto;
   overflow: overlay;
   float: right;
-  width: auto;
-  left: 76px;
-  top: 45px;
+  width: 100%;
+  left: 72px;
+  top: 46px;
   right: 16px;
+  padding-right: 16px;
+  border-top: 0;
+}
+
+.prod_in_rept_tab {
+  width: 60px;
 }
 
 .manage_data .ant-tabs-tab {
@@ -55,6 +80,7 @@
   }
 
   .m_d_table {
-    width: 90.8%;
+    width: auto;
+    top: 80px;
   }
 }

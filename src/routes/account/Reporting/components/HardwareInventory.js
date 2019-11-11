@@ -121,10 +121,10 @@ class PaymentHistory extends Component {
 
   renderList = (list) => {
     if (list) {
-      let data    = [];
+      let data = [];
       let counter = 1;
       list.map((item, index) => {
-        data.push( {
+        data.push({
           rowKey: counter++,
           key: counter++,
           count: counter++,
@@ -142,18 +142,18 @@ class PaymentHistory extends Component {
     return (
       <Row>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-          <Card style={{ height: '500px'}}>
+          <Card  >
             <Form onSubmit={this.handleSubmit} autoComplete="new-password">
 
               <Form.Item
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
               >
               </Form.Item>
 
               <Form.Item
                 label="Hardware"
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
                 width='100%'
               >
@@ -188,7 +188,7 @@ class PaymentHistory extends Component {
 
                 : <Form.Item
                   label="Dealer/Sdealer"
-                  labelCol={{ span: 8 }}
+                  labelCol={{ span: 10 }}
                   wrapperCol={{ span: 14 }}
                   width='100%'
                 >
@@ -213,7 +213,7 @@ class PaymentHistory extends Component {
 
               <Form.Item
                 label="Devices"
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
                 width='100%'
               >
@@ -237,7 +237,7 @@ class PaymentHistory extends Component {
 
               <Form.Item
                 label="FROM (DATE) "
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
               >
                 {this.props.form.getFieldDecorator('from', {
@@ -255,7 +255,7 @@ class PaymentHistory extends Component {
 
               <Form.Item
                 label="TO (DATE)"
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
               >
                 {this.props.form.getFieldDecorator('to', {
@@ -273,9 +273,9 @@ class PaymentHistory extends Component {
                 )}
               </Form.Item>
               <Form.Item className="edit_ftr_btn"
-                         wrapperCol={{
-                           xs: { span: 22, offset: 0 },
-                         }}
+                wrapperCol={{
+                  xs: { span: 24, offset: 0 },
+                }}
               >
                 <Button key="back" type="button" onClick={this.handleReset}>CANCEL</Button>
                 <Button type="primary" htmlType="submit">GENERATE</Button>
@@ -289,13 +289,13 @@ class PaymentHistory extends Component {
             {(this.state.reportCard) ?
               <Fragment>
                 <Row>
-                  <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                  <Col xs={14} sm={14} md={14} lg={14} xl={14}>
                     <h3>Hardware Invenotory Report</h3>
                   </Col>
-                  <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                  <Col xs={10} sm={10} md={10} lg={10} xl={10}>
                     <div className="pull-right">
-                      <Button type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Hardware Report', fileName, this.state.reportFormData);}}>Download PDF</Button>
-                      <Button type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName)}}>Download Excel</Button>
+                      <Button className="mb-8" type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Hardware Report', fileName, this.state.reportFormData); }}>Download PDF</Button>
+                      <Button className="mb-8" type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName) }}>Download Excel</Button>
                     </div>
                   </Col>
                 </Row>

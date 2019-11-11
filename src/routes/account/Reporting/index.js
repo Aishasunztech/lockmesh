@@ -68,7 +68,7 @@ class Reporting extends Component {
         {
 
           <div>
-            <Tabs defaultActiveKey="1" type='card' className="dev_tabs" activeKey={this.state.tabselect} onChange={this.handleChangeTab}>
+            <Tabs defaultActiveKey="1" type='card' className="dev_tabs reports_tab" activeKey={this.state.tabselect} onChange={this.handleChangeTab}>
               <TabPane tab="PRODUCT INVENTORY" key="1">
                 <ProductInventory
                   dealerList={this.props.dealerList}
