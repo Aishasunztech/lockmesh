@@ -28,55 +28,64 @@ class ProductInventory extends Component {
         align: 'center',
         className: 'row',
         width: 50,
+        sorter: (a, b) => { return a.count - b.count },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[LABEL_DATA_SIM_ID], "SIM ID"),
         dataIndex: 'sim_id',
         key: 'sim_id',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.sim_id - b.sim_id },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[''], "DEVICE ID"),
         dataIndex: 'device_id',
         key: 'device_id',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[''], "DEALER PIN"),
         dataIndex: 'dealer_pin',
         key: 'dealer_pin',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.dealer_pin - b.dealer_pin },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[''], "USED"),
         dataIndex: 'used',
         key: 'used',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.used.localeCompare(b.used) },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[''], "START DATE"),
         dataIndex: 'start_date',
         key: 'start_date',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.start_date.localeCompare(b.start_date) },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[''], "EXPIRY DATE"),
         dataIndex: 'expiry_date',
         key: 'expiry_date',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.expiry_date.localeCompare(b.expiry_date) },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[LABEL_DATA_CREATED_AT], "CREATED AT"),
         dataIndex: 'created_at',
         key: 'created_at',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.created_at.localeCompare(b.created_at) },
+        sortDirections: ['ascend', 'descend'],
       },
     ];
 
@@ -87,55 +96,64 @@ class ProductInventory extends Component {
         align: 'center',
         className: 'row',
         width: 50,
+        sorter: (a, b) => { return a.count - b.count },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[LABEL_DATA_CHAT_ID], "CHAT ID"),
         dataIndex: 'chat_id',
         key: 'chat_id',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.chat_id.localeCompare(b.chat_id) },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[''], "DEVICE ID"),
         dataIndex: 'device_id',
         key: 'device_id',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[''], "DEALER PIN"),
         dataIndex: 'dealer_pin',
         key: 'dealer_pin',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.dealer_pin - b.dealer_pin },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[''], "USED"),
         dataIndex: 'used',
         key: 'used',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.used.localeCompare(b.used) },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[''], "START DATE"),
         dataIndex: 'start_date',
         key: 'start_date',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.start_date.localeCompare(b.start_date) },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[''], "END DATE"),
         dataIndex: 'end_date',
         key: 'end_date',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.end_date.localeCompare(b.end_date) },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[LABEL_DATA_CREATED_AT], "CREATED AT"),
         dataIndex: 'created_at',
         key: 'created_at',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.created_at.localeCompare(b.created_at) },
+        sortDirections: ['ascend', 'descend'],
       },
     ];
 
@@ -146,48 +164,56 @@ class ProductInventory extends Component {
         align: 'center',
         className: 'row',
         width: 50,
+        sorter: (a, b) => { return a.count - b.count },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[''], "VPN ID"),
         dataIndex: 'vpn_id',
         key: 'vpn_id',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.count - b.count },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[''], "DEVICE ID"),
         dataIndex: 'device_id',
         key: 'device_id',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[''], "DEALER PIN"),
         dataIndex: 'dealer_pin',
         key: 'dealer_pin',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.dealer_pin - b.dealer_pin },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[''], "START DATE"),
         dataIndex: 'start_date',
         key: 'start_date',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.start_date.localeCompare(b.start_date) },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[''], "END DATE"),
         dataIndex: 'end_date',
         key: 'end_date',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.end_date.localeCompare(b.end_date) },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[LABEL_DATA_CREATED_AT], "CREATED AT"),
         dataIndex: 'created_at',
         key: 'created_at',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.created_at.localeCompare(b.created_at) },
+        sortDirections: ['ascend', 'descend'],
       },
     ];
 
@@ -198,55 +224,64 @@ class ProductInventory extends Component {
         align: 'center',
         className: 'row',
         width: 50,
+        sorter: (a, b) => { return a.count - b.count },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[LABEL_DATA_PGP_EMAIL], "PGP EMAIL"),
         dataIndex: 'pgp_email',
         key: 'pgp_email',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.pgp_email.localeCompare(b.pgp_email) },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[''], "DEVICE ID"),
         dataIndex: 'device_id',
         key: 'device_id',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[''], "DEALER PIN"),
         dataIndex: 'dealer_pin',
         key: 'dealer_pin',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.dealer_pin - b.dealer_pin },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[''], "USED"),
         dataIndex: 'used',
         key: 'used',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.used.localeCompare(b.used) },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[''], "START DATE"),
         dataIndex: 'start_date',
         key: 'start_date',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.start_date.localeCompare(b.start_date) },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[''], "END DATE"),
         dataIndex: 'end_date',
         key: 'end_date',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.end_date.localeCompare(b.end_date) },
+        sortDirections: ['ascend', 'descend'],
       },
       {
         title: convertToLang(props.translation[LABEL_DATA_CREATED_AT], "CREATED AT"),
         dataIndex: 'created_at',
         key: 'created_at',
         align: 'center',
-        className: '',
+        sorter: (a, b) => { return a.created_at.localeCompare(b.created_at) },
+        sortDirections: ['ascend', 'descend'],
       },
 
     ];
@@ -264,6 +299,7 @@ class ProductInventory extends Component {
       pagination: 10,
       tabselect: 'all',
       innerTabSelect: '1',
+      productTypeName: 'CHAT IDs',
       reportFormData: {}
     };
   }
@@ -432,7 +468,8 @@ class ProductInventory extends Component {
       case '1':
         this.setState({
           columns: this.state.columnsChatIDs,
-          innerTabSelect: '1'
+          innerTabSelect: '1',
+          productTypeName: 'CHAT IDs'
         });
         break;
 
@@ -440,26 +477,29 @@ class ProductInventory extends Component {
         this.setState({
           columns: this.state.columnsPgpemails,
           innerTabSelect: '2',
-
+          productTypeName: 'PGP Emails'
         });
 
         break;
       case "3":
         this.setState({
           columns: this.state.columnsSimIDs,
-          innerTabSelect: '3'
+          innerTabSelect: '3',
+          productTypeName: 'SIM IDs'
         });
         break;
       case '4':
         this.setState({
           columns: this.state.columnsVpn,
-          innerTabSelect: '4'
+          innerTabSelect: '4',
+          productTypeName: 'VPN'
         });
         break;
       default:
         this.setState({
           columns: this.state.columnsChatIDs,
-          innerTabSelect: '1'
+          innerTabSelect: '1',
+          productTypeName: 'CHAT IDs'
         });
         break;
     }
@@ -531,6 +571,7 @@ class ProductInventory extends Component {
 
 
   createPDFReport = () => {
+    this.state.reportFormData.productType = this.state.productTypeName;
     generatePDF(columns, rows, title, fileName, this.state.reportFormData);
   };
 
