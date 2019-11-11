@@ -811,7 +811,6 @@ class EditDevice extends Component {
                             {(this.props.user.type === ADMIN) ? null :
                                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                     <Form.Item
-
                                         label={<Markup content={convertToLang(this.props.translation[LABEL_APPLY_SERVICES], "APPLY <br />SERVICES")} />}
                                         labelCol={{ span: 8 }}
                                         wrapperCol={{ span: 16 }}
@@ -877,9 +876,10 @@ class EditDevice extends Component {
                             {this.props.user.type === ADMIN ?
                                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                     <Form.Item
-                                        label={convertToLang(this.props.translation[""], "Adjust Expire Date")}
+                                        label={<Markup content={convertToLang(this.props.translation[""], "Adjust <br>Expire Date")} />}
                                         labelCol={{ span: 8 }}
                                         wrapperCol={{ span: 16 }}
+                                        className="apply_services"
                                     >
                                         {this.props.form.getFieldDecorator('expiry_date', {
                                             initialValue: moment(this.state.expiry_date, 'YYYY/MM/DD'),
