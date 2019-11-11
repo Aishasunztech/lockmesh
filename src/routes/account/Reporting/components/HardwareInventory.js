@@ -74,6 +74,7 @@ class PaymentHistory extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
+      values.dealerObject = this.props.dealerList.find((dealer, index) => dealer.dealer_id === values.dealer);
       this.state.reportFormData = values;
       this.props.generateHardwareReport(values)
     });
@@ -87,7 +88,7 @@ class PaymentHistory extends Component {
     if (this.props.hardwareReport !== prevProps.hardwareReport) {
       this.setState({
         reportCard: true
-      })
+      });
 
       columns = [
         { title: '#', dataKey: "count" },
@@ -120,22 +121,19 @@ class PaymentHistory extends Component {
 
   renderList = (list) => {
     if (list) {
-      let data = []
+      let data    = [];
       let counter = 1;
       list.map((item, index) => {
-        // let hardwares = JSON.parse(item.hardware_data)
-        // hardwares.map((hardware, i) => {
-          data.push( {
-            rowKey: counter++,
-            key: counter++,
-            count: counter++,
-            dealer_pin: item.dealer_pin,
-            device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
-            hardware: item.hardware_name,
-            created_at: getDateFromTimestamp(item.created_at)
-          })
+        data.push( {
+          rowKey: counter++,
+          key: counter++,
+          count: counter++,
+          dealer_pin: item.dealer_pin,
+          device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
+          hardware: item.hardware_name,
+          created_at: getDateFromTimestamp(item.created_at)
         })
-      // })
+      });
       return data;
     }
   };
@@ -144,7 +142,7 @@ class PaymentHistory extends Component {
     return (
       <Row>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-          <Card style={{ height: '500px', paddingTop: '50px' }}>
+          <Card style={{ height: '500px'}}>
             <Form onSubmit={this.handleSubmit} autoComplete="new-password">
 
               <Form.Item
@@ -214,6 +212,30 @@ class PaymentHistory extends Component {
               }
 
               <Form.Item
+                label="Devices"
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 14 }}
+                width='100%'
+              >
+                {this.props.form.getFieldDecorator('device', {
+                  initialValue: '',
+                  rules: [
+                    {
+                      required: false,
+                    },
+                  ],
+                })(
+                  <Select style={{ width: '100%' }}>
+                    <Select.Option value=''>ALL</Select.Option>
+                    <Select.Option value={DEVICE_PRE_ACTIVATION}>{DEVICE_PRE_ACTIVATION}</Select.Option>
+                    {this.props.devices.map((device, index) => {
+                      return (<Select.Option key={device.device_id} value={device.device_id}>{device.device_id}</Select.Option>)
+                    })}
+                  </Select>
+                )}
+              </Form.Item>
+
+              <Form.Item
                 label="FROM (DATE) "
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 14 }}
@@ -251,9 +273,9 @@ class PaymentHistory extends Component {
                 )}
               </Form.Item>
               <Form.Item className="edit_ftr_btn"
-                wrapperCol={{
-                  xs: { span: 22, offset: 0 },
-                }}
+                         wrapperCol={{
+                           xs: { span: 22, offset: 0 },
+                         }}
               >
                 <Button key="back" type="button" onClick={this.handleReset}>CANCEL</Button>
                 <Button type="primary" htmlType="submit">GENERATE</Button>
@@ -277,11 +299,11 @@ class PaymentHistory extends Component {
                     </div>
                   </Col>
                 </Row>
-              <Table
-                columns={this.columns}
-                dataSource={this.renderList(this.props.hardwareReport)}
-                bordered
-                pagination={false}
+                <Table
+                  columns={this.columns}
+                  dataSource={this.renderList(this.props.hardwareReport)}
+                  bordered
+                  pagination={false}
 
                 />
               </Fragment>

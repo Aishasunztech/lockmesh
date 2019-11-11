@@ -364,6 +364,11 @@
     padding: 0;
 }
 
+.sale_info_table .ant-table-title {
+  padding: 0 !important;
+}
+
+
 .buy_btn_invo {
     background-color: #548235 !important;
     width: 70%;
@@ -508,7 +513,7 @@
         width: 40%;
         padding : 0;
         float: right;
-        margin: 8px 0 4px; 
+        margin: 8px 0 4px;
     }
     */
     .edit_form .ant-form-item-label {
