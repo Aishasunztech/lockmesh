@@ -301,14 +301,14 @@ export default class PolicyInfo extends Component {
                                     columns={this.columnsSystemPermission}>
                                 </Table>
                             </TabPane>
-                            <TabPane tab={convertToLang(this.props.translation[POLICY_DETAILS], "POLICY DETAILS")} key="5">
+                            <TabPane tab={convertToLang(this.props.translation[POLICY_DETAILS], "Policy Details")} key="5">
                                 <Table
                                     pagination={false}
                                     dataSource={PolicyDetail}
                                     columns={this.columnsPolicyDetail}>
                                 </Table>
                             </TabPane>
-                            <TabPane tab={convertToLang(this.props.translation[Tab_POLICY_Dealer_PERMISSIONS], "Dealer PERMISSIONS")} key="6">
+                            <TabPane tab={convertToLang(this.props.translation[Tab_POLICY_Dealer_PERMISSIONS], "Dealer Permissions")} key="6">
                                 <Permissions
                                     record={this.props.policy}
                                     permissionType="policy"
