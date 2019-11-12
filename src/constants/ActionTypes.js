@@ -83,6 +83,7 @@ export const BULK_PUSH_APPS = 'BULK_PUSH_APPS';
 
 
 //Dealer const
+export const DEALER_LOADING = 'DEALER_LOADING';
 export const DEALERS_LIST = 'DEALERS_LIST';
 export const SUSPEND_DEALERS = 'SUSPEND_DEALERS';
 export const EDIT_DEALER = 'EDIT_DEALER';
@@ -94,6 +95,7 @@ export const ADD_DEALER = 'ADD_DEALER';
 export const DEALERS_LIST_IN_SDEALER = 'DEALERS_LIST_IN_SDEALER';
 
 // Apk const
+export const APK_LOADING = 'APK_LOADING';
 export const APK_LIST = 'APK_LIST';
 export const UNLINK_APK = 'UNLINK_APK';
 export const ADD_APK = 'ADD_APK';

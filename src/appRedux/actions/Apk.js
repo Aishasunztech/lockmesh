@@ -12,7 +12,8 @@ import {
     RESET_AUTH_UPDATE,
     CHECKPASS,
     CHECK_BULK_PASS,
-    RESET_BULK_FLAG
+    RESET_BULK_FLAG,
+    APK_LOADING
 } from "../../constants/ActionTypes"
 // import AuthFailed from './Auth';
 
@@ -22,7 +23,7 @@ import { history } from '../store/index'
 export function getApkList() {
     return (dispatch) => {
         dispatch({
-            type: LOADING,
+            type: APK_LOADING,
             isloading: true
         });
         RestService.ApkList()
