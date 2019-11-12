@@ -2,14 +2,15 @@ import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal, Tabs, Col, Input, Form, Row, DatePicker, Select } from "antd";
 import moment from 'moment';
 import styles from '../reporting.css'
-import { convertToLang, generatePDF, generateExcel, getDateFromTimestamp} from "../../../utils/commonUtils";
+import { convertToLang, generatePDF, generateExcel, getDateFromTimestamp } from "../../../utils/commonUtils";
 import {
   DEVICE_PRE_ACTIVATION, DEVICE_UNLINKED
 } from "../../../../constants/Constants";
 
-import { BASE_URL
+import {
+  BASE_URL
 } from "../../../../constants/Application";
-import {PRE_ACTIVATE_DEVICE} from "../../../../constants/ActionTypes";
+import { PRE_ACTIVATE_DEVICE } from "../../../../constants/ActionTypes";
 var columns;
 var rows;
 var fileName = 'invoice_' + new Date().getTime()
@@ -97,8 +98,8 @@ class Invoice extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
 
       values.dealerObject = this.props.dealerList.find((dealer, index) => dealer.dealer_id === values.dealer);
-      if (!values.dealerObject && values.dealer){
-        values.dealerObject = {link_code: this.props.user.dealer_pin};
+      if (!values.dealerObject && values.dealer) {
+        values.dealerObject = { link_code: this.props.user.dealer_pin };
       }
       this.state.reportFormData = values;
       this.props.generateInvoiceReport(values)
@@ -110,9 +111,9 @@ class Invoice extends Component {
   };
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.invoiceReport !== prevProps.invoiceReport){
+    if (this.props.invoiceReport !== prevProps.invoiceReport) {
       this.setState({
-        reportCard:  true,
+        reportCard: true,
         productType: this.props.productType
       })
 
@@ -158,7 +159,7 @@ class Invoice extends Component {
           'dealer_pin': item.dealer_pin ? item.dealer_pin : 'N/A',
           'created_at': item.created_at ? getDateFromTimestamp(item.created_at) : 'N/A',
           'end_user_payment_status': item.end_user_payment_status ? item.end_user_payment_status : 'N/A',
-          'file_name': <a href={BASE_URL+'users/getFile/'+item.file_name} download><Button type="primary" size="small">Download</Button></a>,
+          'file_name': <a href={BASE_URL + 'users/getFile/' + item.file_name} download><Button type="primary" size="small">Download</Button></a>,
         })
       });
     }
@@ -169,11 +170,11 @@ class Invoice extends Component {
     return (
       <Row>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-          <Card style={{ height: '500px' }}>
+          <Card  >
             <Form onSubmit={this.handleSubmit} autoComplete="new-password">
 
               <Form.Item
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
               >
               </Form.Item>
@@ -192,7 +193,7 @@ class Invoice extends Component {
 
                 : <Form.Item
                   label="Dealer/Sdealer"
-                  labelCol={{ span: 8 }}
+                  labelCol={{ span: 10 }}
                   wrapperCol={{ span: 14 }}
                   width='100%'
                 >
@@ -217,7 +218,7 @@ class Invoice extends Component {
 
               <Form.Item
                 label="Devices"
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
                 width='100%'
               >
@@ -233,7 +234,7 @@ class Invoice extends Component {
                     <Select.Option value=''>ALL</Select.Option>
                     <Select.Option value={DEVICE_PRE_ACTIVATION}>{DEVICE_PRE_ACTIVATION}</Select.Option>
                     {this.props.devices.map((device, index) => {
-                        return (<Select.Option key={device.device_id} value={device.device_id}>{device.device_id}</Select.Option>)
+                      return (<Select.Option key={device.device_id} value={device.device_id}>{device.device_id}</Select.Option>)
                     })}
                   </Select>
                 )}
@@ -241,7 +242,7 @@ class Invoice extends Component {
 
               <Form.Item
                 label="Payment Status"
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
                 width='100%'
               >
@@ -263,7 +264,7 @@ class Invoice extends Component {
 
               <Form.Item
                 label="FROM (DATE) "
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
               >
                 {this.props.form.getFieldDecorator('from', {
@@ -281,7 +282,7 @@ class Invoice extends Component {
 
               <Form.Item
                 label="TO (DATE)"
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
               >
                 {this.props.form.getFieldDecorator('to', {
@@ -299,9 +300,9 @@ class Invoice extends Component {
                 )}
               </Form.Item>
               <Form.Item className="edit_ftr_btn"
-                         wrapperCol={{
-                           xs: { span: 22, offset: 0 },
-                         }}
+                wrapperCol={{
+                  xs: { span: 24, offset: 0 },
+                }}
               >
                 <Button key="back" type="button" onClick={this.handleReset}>CANCEL</Button>
                 <Button type="primary" htmlType="submit" onClick={this.handleSubmit}>GENERATE</Button>
@@ -315,25 +316,25 @@ class Invoice extends Component {
           <Card style={{ height: '500px', overflow: 'scroll' }}>
             {(this.state.reportCard) ?
               <Fragment>
-              <Row>
-                <Col xs={12} sm={12} md={12} lg={12} xl={12}>
-                  <h3>Invoice Report</h3>
-                </Col>
-                  <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                <Row>
+                  <Col xs={14} sm={14} md={14} lg={14} xl={14}>
+                    <h3>Invoice Report</h3>
+                  </Col>
+                  <Col xs={10} sm={10} md={10} lg={10} xl={10}>
                     <div className="pull-right">
-                      <Button type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Invoice Report', fileName, this.state.reportFormData) }}>Download PDF</Button>
-                    <Button type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName) }}>Download Excel</Button>
+                      <Button className="mb-8" type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Invoice Report', fileName, this.state.reportFormData) }}>Download PDF</Button>
+                      <Button className="mb-8" type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName) }}>Download Excel</Button>
                     </div>
-                </Col>
-              </Row>
-            <Table
-              columns={this.columns}
-              dataSource={this.renderList(this.props.invoiceReport)}
-              bordered
-              pagination={false}
+                  </Col>
+                </Row>
+                <Table
+                  columns={this.columns}
+                  dataSource={this.renderList(this.props.invoiceReport)}
+                  bordered
+                  pagination={false}
                 />
               </Fragment>
-            : null }
+              : null}
           </Card>
         </Col>
       </Row>
