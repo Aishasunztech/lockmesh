@@ -700,6 +700,21 @@ class EditDevice extends Component {
         return ((current && current < moment().endOf('day')) || current > moment(this.props.device.expiry_date).add(1, 'M'))
         // return ;
     }
+    validateValidDays = (rule, value, callback) => {
+        // console.log(value);
+        if (value !== '') {
+            if (value % 1 !== 0) {
+                callback('Please Enter a Integer Value.');
+            }
+            else if (value > 30 || value < 1) {
+                callback('Range 1-30 Please Enter a valid input.');
+            } else {
+                callback();
+            }
+        } else {
+            callback();
+        }
+    }
 
     render() {
         // 
@@ -924,7 +939,7 @@ class EditDevice extends Component {
                                             //     required: true, message: convertToLang(this.props.translation[Expire_Date_Require], "Expiry Date is Required ! "),
                                             // }],
                                         })(
-                                            <DatePicker style={{ width: '100%' }} disabledDate={this.disabledDate} format={'YYYY/MM/DD'} />
+                                            <DatePicker style={{ width: '100%' }} disabledDate={this.disabledDate} format={'YYYY/MM/DD'} disabled />
                                         )}
 
                                     </Form.Item>
@@ -1126,14 +1141,19 @@ class EditDevice extends Component {
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
                                             label={convertToLang(this.props.translation[Device_Valid_For], "VALID FOR(DAYS)  ")}
-                                            labelCol={{ span: 8 }}
-                                            wrapperCol={{ span: 16 }}
+                                            labelCol={{ span: 12 }}
+                                            wrapperCol={{ span: 12 }}
+                                            className="val_days"
                                         >
                                             {this.props.form.getFieldDecorator('validity', {
                                                 initialValue: this.props.device.validity,
                                                 rules: [{
                                                     required: true, message: convertToLang(this.props.translation[Device_Valid_days_Required], "Valid days required "),
-                                                }],
+                                                },
+                                                {
+                                                    validator: this.validateValidDays
+                                                }
+                                                ],
                                             })(
                                                 <InputNumber min={1} />
                                             )}

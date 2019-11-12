@@ -15,6 +15,7 @@ import {
 // import { message } from 'antd';
 
 import RestService from '../services/RestServices';
+import { DEALER_LOADING } from "../../constants/ActionTypes";
 
 // action creaters 
 
@@ -22,7 +23,7 @@ export function getDealerList(d, is_loading_show = true) {
     return (dispatch) => {
         if (is_loading_show) {
             dispatch({
-                type: LOADING,
+                type: DEALER_LOADING,
                 isloading: true
             });
         }
