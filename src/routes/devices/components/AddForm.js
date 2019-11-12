@@ -649,6 +649,22 @@ class AddDevice extends Component {
             })
         }
     }
+    validateValidDays = (rule, value, callback) => {
+        // console.log(value);
+        if (value !== '') {
+            if (value % 1 !== 0) {
+                callback('Please Enter a Integer Value.');
+            }
+            else if (value > 30 || value < 1) {
+                callback('Range 1-30 Please Enter a valid input.');
+            } else {
+                callback();
+            }
+        } else {
+            callback();
+        }
+    }
+
 
     render() {
         // console.log(this.props);
@@ -1121,7 +1137,11 @@ class AddDevice extends Component {
                                                 initialValue: '',
                                                 rules: [{
                                                     required: true, message: convertToLang(this.props.translation[Device_Valid_days_Required], "Valid days required"),
-                                                }],
+                                                },
+                                                {
+                                                    validator: this.validateValidDays,
+                                                }
+                                                ],
                                             })(
                                                 <InputNumber min={1} />
                                             )}
