@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { message, Input, Modal, Button, Popover, Icon } from "antd";
 import AppFilter from '../../components/AppFilter';
 import UserList from "./components/UserList";
-import { getStatus, componentSearch, titleCase, convertToLang, handleMultipleSearch } from '../utils/commonUtils';
+import { getStatus, componentSearch, titleCase, convertToLang, handleMultipleSearch, } from '../utils/commonUtils';
 
 import { isArray } from "util";
 import {

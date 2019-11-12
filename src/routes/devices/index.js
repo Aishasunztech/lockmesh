@@ -250,7 +250,7 @@ class Devices extends Component {
             this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >DELETE SELECTED</Button>;
         }
         else if (value === DEVICE_PRE_ACTIVATION) {
-            let isCheckedColumn = this.state.selectedOptions.findIndex((item) => { return item.key === "validity" });
+            let isCheckedColumn = this.props.selectedOptions.findIndex((item) => { return item.key === "validity" });
             let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
             // 
             if (indxAction >= 0) {
@@ -288,7 +288,7 @@ class Devices extends Component {
         } else {
             this.state.columns[1]['title'] = 'ACTION';
 
-            let isCheckedColumn = this.state.selectedOptions.findIndex((item) => { return item.key === "validity" });
+            let isCheckedColumn = this.props.selectedOptions.findIndex((item) => { return item.key === "validity" });
             let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
             if (indxRemainingDays >= 0 && indxRemainingDays !== undefined && isCheckedColumn !== -1) {
                 this.state.columns[indxRemainingDays].className = 'hide';
@@ -298,7 +298,7 @@ class Devices extends Component {
             // if (indexTransfered > -1) {
             if (value === DEVICE_TRANSFERED) {
                 let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
-                isCheckedColumn = this.state.selectedOptions.findIndex((item) => { return item.key === "transfered_to" }); // item.key === "transfered_to"
+                isCheckedColumn = this.props.selectedOptions.findIndex((item) => { return item.key === "transfered_to" }); // item.key === "transfered_to"
                 if (indexTransfered >= 0 && indexTransfered !== undefined && isCheckedColumn !== -1) {
                     this.state.columns[indexTransfered].className = '';
                     this.state.columns[indexTransfered].children[0].className = '';
@@ -460,7 +460,7 @@ class Devices extends Component {
 
     handleChangetab = (value) => {
 
-        // this.handleCheckChange(this.state.selectedOptions);
+        // this.handleCheckChange(this.props.selectedOptions);
         // 
         // 
         // let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
@@ -491,7 +491,7 @@ class Devices extends Component {
             this.state.columns.splice(indxAction, 1)
         }
         else if (value === '3') {
-            let isCheckedColumn = this.state.selectedOptions.findIndex((item) => { return item.key === "validity" });
+            let isCheckedColumn = this.props.selectedOptions.findIndex((item) => { return item.key === "validity" });
             let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
             if (indxAction >= 0 && (this.props.user.type !== ADMIN)) {
                 this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >DELETE SELECTED</Button>
@@ -531,7 +531,7 @@ class Devices extends Component {
             let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
             if (value === '1') {
                 // check column from dropdown, checked or not
-                let isCheckedColumn = this.state.selectedOptions.findIndex((item) => { return item.key === "validity" });
+                let isCheckedColumn = this.props.selectedOptions.findIndex((item) => { return item.key === "validity" });
 
                 if (indxRemainingDays >= 0 && indxRemainingDays !== undefined && isCheckedColumn !== -1) {
                     this.state.columns[indxRemainingDays].className = '';
@@ -544,7 +544,7 @@ class Devices extends Component {
 
 
             let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
-            let isCheckedColumn = this.state.selectedOptions.findIndex((item) => { return item.key === "transfered_to" }); // item.key === "transfered_to"
+            let isCheckedColumn = this.props.selectedOptions.findIndex((item) => { return item.key === "transfered_to" }); // item.key === "transfered_to"
             // 
 
             if (value === '8' || value === '1') {
@@ -831,20 +831,9 @@ class Devices extends Component {
             })
         }
 
-
-
-        // 
-
-        if (selectOptionsStatus) {
-            this.handleCheckChange(this.props.selectedOptions);
-            selectOptionsStatus = false;
+        if (this.props.selectedOptions !== prevProps.selectedOptions) {
+            this.handleCheckChange(this.props.selectedOptions)
         }
-
-        // if (this.props.selectedOptions !== prevProps.selectedOptions) {
-        //     // 
-        //     // 
-        //     this.handleCheckChange(this.props.selectedOptions)
-        // }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -1018,7 +1007,7 @@ class Devices extends Component {
                         <Fragment>
                             <AppFilter
                                 handleFilterOptions={this.handleFilterOptions}
-                                selectedOptions={this.state.selectedOptions}
+                                selectedOptions={this.props.selectedOptions}
                                 searchPlaceholder={convertToLang(this.props.translation[Appfilter_SearchDevices], "Search Devices")}
                                 defaultPagingValue={this.state.defaultPagingValue}
                                 addButtonText={convertToLang(this.props.translation[Button_Add_Device], "Add Device")}
@@ -1054,7 +1043,7 @@ class Devices extends Component {
                                 activateDevice={this.props.activateDevice}
                                 columns={this.state.columns}
                                 rejectDevice={this.rejectDevice}
-                                selectedOptions={this.state.selectedOptions}
+                                selectedOptions={this.props.selectedOptions}
                                 ref="devcieList"
                                 pagination={this.props.DisplayPages}
                                 addDevice={this.props.addDevice}
@@ -1221,10 +1210,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 var mapStateToProps = ({ devices, auth, settings }) => {
-    // 
-    // 
-    //   
-    // 
     return {
         devices: devices.devices,
         msg: devices.msg,

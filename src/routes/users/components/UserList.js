@@ -1,24 +1,25 @@
 import React, { Component, Fragment } from 'react'
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-// import styles1 from './users_fixheader.css';
-import CustomScrollbars from "../../../util/CustomScrollbars";
+// import { connect } from "react-redux";
+// import { bindActionCreators } from "redux";
 import scrollIntoView from 'scroll-into-view';
-
 import { Card, Row, Col, List, Button, message, Table, Icon, Switch, Modal } from "antd";
+
+import CustomScrollbars from "../../../util/CustomScrollbars";
+import { getFormattedDate, convertToLang, getDateTimeOfClientTimeZone } from '../../utils/commonUtils';
+
 import UserDeviceList from './UserDeviceList'
 import AddUser from './AddUser';
-import { getFormattedDate, convertToLang } from '../../utils/commonUtils';
 import {
     Button_Delete,
     Button_Edit,
     Button_Undo,
-
 } from '../../../constants/ButtonConstants';
 
-import styles from './user.css';
 import { EDIT_USER, DELETE_USER, DO_YOU_WANT_TO_DELETE_USER, UNDO, DO_YOU_WANT_TO_UNDO_USER } from '../../../constants/UserConstants';
 import { ADMIN } from '../../../constants/Constants';
+
+import styles from './user.css';
+// import styles1 from './users_fixheader.css';
 
 const confirm = Modal.confirm
 

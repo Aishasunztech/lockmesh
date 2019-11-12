@@ -1,21 +1,21 @@
-import React, {Component, Fragment} from 'react'
-import {Button, Card, Col, DatePicker, Form, Input, Row, Select, Table, Tabs} from "antd";
+import React, { Component, Fragment } from 'react'
+import { Button, Card, Col, DatePicker, Form, Input, Row, Select, Table, Tabs } from "antd";
 import moment from 'moment';
-import {convertToLang, generateExcel, generatePDF, getDateFromTimestamp} from "../../../utils/commonUtils";
-import {TAB_CHAT_ID, TAB_PGP_EMAIL, TAB_SIM_ID, TAB_VPN} from "../../../../constants/TabConstants";
+import { convertToLang, generateExcel, generatePDF, getDateFromTimestamp } from "../../../utils/commonUtils";
+import { TAB_CHAT_ID, TAB_PGP_EMAIL, TAB_SIM_ID, TAB_VPN } from "../../../../constants/TabConstants";
 import {
   LABEL_DATA_CHAT_ID,
   LABEL_DATA_CREATED_AT,
   LABEL_DATA_PGP_EMAIL,
   LABEL_DATA_SIM_ID
 } from "../../../../constants/LabelConstants";
-import {DEVICE_PRE_ACTIVATION} from "../../../../constants/Constants";
+import { DEVICE_PRE_ACTIVATION } from "../../../../constants/Constants";
 
 const TabPane = Tabs.TabPane;
-let columns   = [];
-let rows      = [];
-let fileName  = '';
-let title     = 'Product Inventory Report';
+let columns = [];
+let rows = [];
+let fileName = '';
+let title = 'Product Inventory Report';
 
 class ProductInventory extends Component {
   constructor(props) {
@@ -348,7 +348,7 @@ class ProductInventory extends Component {
       });
     }
 
-    if (JSON.stringify(this.props.productReport) !== '{}'){
+    if (JSON.stringify(this.props.productReport) !== '{}') {
       if (this.props.productReport.CHAT && this.state.innerTabSelect === '1') {
         this.props.productReport.CHAT.map((item, index) => {
           rows.push({
@@ -373,7 +373,7 @@ class ProductInventory extends Component {
           { title: convertToLang(this.props.translation[''], "END DATE"), dataKey: "end_date" },
           { title: convertToLang(this.props.translation[''], "CREATED AT"), dataKey: "created_at" },
         ];
-        fileName  = 'product_inventory_CHAT_' + new Date().getTime();
+        fileName = 'product_inventory_CHAT_' + new Date().getTime();
 
       } else if (this.props.productReport.PGP && this.state.innerTabSelect === '2') {
         this.props.productReport.PGP.map((item, index) => {
@@ -399,7 +399,7 @@ class ProductInventory extends Component {
           { title: convertToLang(this.props.translation[''], "END DATE"), dataKey: "end_date" },
           { title: convertToLang(this.props.translation[''], "CREATED AT"), dataKey: "created_at" },
         ];
-        fileName  = 'product_inventory_PGP_' + new Date().getTime();
+        fileName = 'product_inventory_PGP_' + new Date().getTime();
 
       } else if (this.props.productReport.SIM && this.state.innerTabSelect === '3') {
         this.props.productReport.SIM.map((item, index) => {
@@ -425,7 +425,7 @@ class ProductInventory extends Component {
           { title: convertToLang(this.props.translation[''], "CREATED AT"), dataKey: "created_at" },
         ];
 
-        fileName  = 'product_inventory_SIM_' + new Date().getTime();
+        fileName = 'product_inventory_SIM_' + new Date().getTime();
       } else if (this.props.productReport.VPN && this.state.innerTabSelect === '4') {
         this.props.productReport.VPN.map((item, index) => {
           rows.push({
@@ -449,7 +449,7 @@ class ProductInventory extends Component {
           { title: convertToLang(this.props.translation[''], "END DATE"), dataKey: "end_date" },
           { title: convertToLang(this.props.translation[''], "CREATED AT"), dataKey: "created_at" },
         ];
-        fileName  = 'product_inventory_VPN_' + new Date().getTime();
+        fileName = 'product_inventory_VPN_' + new Date().getTime();
       }
     }
   }
@@ -586,18 +586,18 @@ class ProductInventory extends Component {
     return (
       <Row>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-          <Card style={{ height: '500px' }}>
+          <Card  >
             <Form onSubmit={this.handleSubmit} autoComplete="new-password">
 
               <Form.Item
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
               >
               </Form.Item>
 
               <Form.Item
                 label="Product"
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
                 width='100%'
               >
@@ -621,7 +621,7 @@ class ProductInventory extends Component {
 
               <Form.Item
                 label="Type"
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
                 width='100%'
               >
@@ -655,7 +655,7 @@ class ProductInventory extends Component {
 
                 : <Form.Item
                   label="Dealer/Sdealer"
-                  labelCol={{ span: 8 }}
+                  labelCol={{ span: 10 }}
                   wrapperCol={{ span: 14 }}
                   width='100%'
                 >
@@ -680,7 +680,7 @@ class ProductInventory extends Component {
 
               <Form.Item
                 label="Devices"
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
                 width='100%'
               >
@@ -704,7 +704,7 @@ class ProductInventory extends Component {
 
               <Form.Item
                 label="FROM (DATE) "
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
               >
                 {this.props.form.getFieldDecorator('from', {
@@ -722,7 +722,7 @@ class ProductInventory extends Component {
 
               <Form.Item
                 label="TO (DATE)"
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
               >
                 {this.props.form.getFieldDecorator('to', {
@@ -740,9 +740,9 @@ class ProductInventory extends Component {
                 )}
               </Form.Item>
               <Form.Item className="edit_ftr_btn"
-                         wrapperCol={{
-                           xs: { span: 22, offset: 0 },
-                         }}
+                wrapperCol={{
+                  xs: { span: 24, offset: 0 },
+                }}
               >
                 <Button key="back" type="button" onClick={this.handleReset}>CANCEL</Button>
                 <Button type="primary" htmlType="submit" onClick={this.handleSubmit}>GENERATE</Button>
@@ -757,17 +757,17 @@ class ProductInventory extends Component {
             {(this.state.reportCard) ?
               <Fragment>
                 <Row>
-                  <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                  <Col xs={14} sm={14} md={14} lg={14} xl={14}>
                     <h3>Product Inventory Report</h3>
                   </Col>
-                  <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                  <Col xs={10} sm={10} md={10} lg={10} xl={10}>
                     <div className="pull-right">
-                      <Button type="dotted" icon="download" size="small" onClick={this.createPDFReport}>Download PDF</Button>
-                      <Button type="primary" icon="download" size="small" onClick={this.createExcelReport}>Download Excel</Button>
+                      <Button className="mb-8" type="dotted" icon="download" size="small" onClick={this.createPDFReport}>Download PDF</Button>
+                      <Button className="mb-8" type="primary" icon="download" size="small" onClick={this.createExcelReport}>Download Excel</Button>
                     </div>
                   </Col>
                 </Row>
-                <Tabs defaultActiveKey="1" activeKey={this.state.innerTabSelect} type="card" tabPosition="left" className="" onChange={this.handleChangeCardTabs}>
+                <Tabs defaultActiveKey="1" activeKey={this.state.innerTabSelect} type="card" tabPosition="left" className="prod_in_rept_tab" onChange={this.handleChangeCardTabs}>
 
                   {(this.state.productType === 'ALL' || this.state.productType === 'CHAT') ?
                     < TabPane tab={convertToLang(this.props.translation[TAB_CHAT_ID], "CHAT")} key="1" forceRender={true}>

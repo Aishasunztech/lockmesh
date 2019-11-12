@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { Button, Form, Input, Select, InputNumber, Spin, Modal, Table, Switch, DatePicker } from 'antd';
+import { Button, Form, Input, Select, InputNumber, Spin, Modal, Table, Switch, DatePicker, Row, Col } from 'antd';
 import { checkValue, convertToLang } from '../../utils/commonUtils'
 
 import { getSimIDs, getChatIDs, getPGPEmails, getParentPackages, getProductPrices, extendServices } from "../../../appRedux/actions/Devices";
@@ -28,10 +28,11 @@ import {
     DEVICE_Select_CHAT_ID,
     SELECT_USER_ID,
     USER_ID_IS_REQUIRED,
-    SELECT_PGP_EMAILS
+    SELECT_PGP_EMAILS,
+    DEVICE_EDIT
 } from '../../../constants/DeviceConstants';
 import { Button_Add_User, Button_submit, Button_Cancel } from '../../../constants/ButtonConstants';
-import { LABEL_DATA_PGP_EMAIL, DUMY_TRANS_ID, LABEL_DATA_CHAT_ID, LABEL_DATA_SIM_ID } from '../../../constants/LabelConstants';
+import { LABEL_DATA_PGP_EMAIL, DUMY_TRANS_ID, LABEL_DATA_CHAT_ID, LABEL_DATA_SIM_ID, LABEL_APPLY_SERVICES } from '../../../constants/LabelConstants';
 import moment from 'moment';
 import axios from 'axios';
 import RestService from '../../../appRedux/services/RestServices';
@@ -39,6 +40,7 @@ import { async } from 'q';
 import { inventorySales, refundServiceColumns } from '../../utils/columnsUtils';
 import Invoice from './invoice';
 import { PRE_ACTIVATE_DEVICE } from '../../../constants/ActionTypes';
+import { Markup } from 'interweave';
 
 const { TextArea } = Input;
 const confirm = Modal.confirm
@@ -705,30 +707,46 @@ class EditDevice extends Component {
 
         return (
             <div>
+                <Row>
+                    <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                        <h3 className="edit_dev_title">
+                            <div> {convertToLang(this.props.translation[DEVICE_EDIT], "Edit Device")}
+                                {/* <br />
+                                <span> {convertToLang(this.props.translation[DEVICE_ID], "DEVICE ID")}: {this.props.device.device_id} </span> */}
+                            </div>
+                        </h3>
+                    </Col>
+                    <Col xs={10} sm={10} md={10} lg={10} xl={10} className="text-right">
+                        <p>(*)- {convertToLang(this.props.translation[Required_Fields], "Required Fields")}</p>
+                    </Col>
+                </Row>
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
-                    <p className="mb-4">(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")}</p>
-                    {/* {
+                    {/*   <p className="mb-4">(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")}</p>
+                    {
                         (this.props.device.extended_services) ?
                             <div style={{ color: 'red', textAlign: 'center', margin: 15 }}>
                                 <span>{convertToLang(this.props.translation[DUMY_TRANS_ID], "*You need to cancel your extended services to use apply service function.")}</span>
                             </div>
                             : null
                     } */}
+                    <Row>
+                        <Col xs={24} sm={24} md={12} lg={12} xl={12} className="p-0">
 
-                    <Form.Item
-                        label={(this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ? convertToLang(this.props.translation[DEVICE_ID], DEVICE_ID) : null}
-                        labelCol={{ span: 8, xs: 24, sm: 8 }}
-                        wrapperCol={{ span: 14, md: 14, xs: 24 }}
-                    >
-                        {this.props.form.getFieldDecorator('device_id', {
-                            initialValue: this.props.device.device_id,
-                        })(
+                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                <Form.Item
+                                    label={(this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ? convertToLang(this.props.translation[DEVICE_ID], DEVICE_ID) : null}
+                                    labelCol={{ span: 8 }}
+                                    wrapperCol={{ span: 16 }}
+                                >
+                                    {this.props.form.getFieldDecorator('device_id', {
+                                        initialValue: this.props.device.device_id,
+                                    })(
 
-                            <Input type={(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? 'hidden' : ''} disabled />
-                        )}
-                    </Form.Item>
-
-                    {/* {(isloading ?
+                                        <Input type={(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? 'hidden' : ''} disabled />
+                                    )}
+                                </Form.Item>
+                            </Col>
+                            {/* {(isloading ?
 
                         <div className="addUserSpin">
                             <Spin />
@@ -736,10 +754,10 @@ class EditDevice extends Component {
                         :
                         // (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? null :
                         <Fragment> */}
-                    {/* <Form.Item
+                            {/* <Form.Item
                                 label={convertToLang(this.props.translation[USER_ID], "USER ID")}
-                                labelCol={{ span: 8, xs: 24, md: 8, sm: 24 }}
-                                wrapperCol={{ span: 14, md: 14, xs: 24 }}
+                                 labelCol={{ span: 8 }}
+                                wrapperCol={{ span: 16 }}
                             >
 
 
@@ -789,332 +807,357 @@ class EditDevice extends Component {
 
                             </Form.Item> */}
 
-                    {/* </Fragment>
+                            {/* </Fragment>
                     )} */}
-                    < Form.Item style={{ marginBottom: 0 }}
-                    >
-                        {this.props.form.getFieldDecorator('dealer_id', {
-                            initialValue: this.props.device.dealer_id,
-                        })(
-
-                            <Input type='hidden' disabled />
-                        )}
-                    </Form.Item>
-                    < Form.Item style={{ marginBottom: 0 }}
-                    >
-                        {this.props.form.getFieldDecorator('user_id', {
-                            initialValue: this.props.device.user_id,
-                        })(
-
-                            <Input type='hidden' disabled />
-                        )}
-                    </Form.Item>
-                    <Form.Item style={{ marginBottom: 0 }}
-                    >
-                        {this.props.form.getFieldDecorator('usr_device_id', {
-                            initialValue: this.props.new ? "" : this.props.device.usr_device_id,
-                        })(
-
-                            <Input type='hidden' disabled />
-                        )}
-                    </Form.Item>
-                    <Form.Item style={{ marginBottom: 0 }}
-                    >
-                        {this.props.form.getFieldDecorator('usr_acc_id', {
-                            initialValue: this.props.new ? "" : this.props.device.id,
-                        })(
-
-                            <Input type='hidden' disabled />
-                        )}
-                    </Form.Item>
-                    {(this.props.user.type === ADMIN) ? null :
-                        <Form.Item
-                            label={convertToLang(this.props.translation[DUMY_TRANS_ID], "APPLY SERVICES")}
-                            labelCol={{ span: 8 }}
-                            wrapperCol={{ span: 14 }}
-                            className="apply_services"
-                        >
-                            {this.props.form.getFieldDecorator('service', {
-                                // initialValue: this.state.applyServicesValue
-                            })(
-                                <Fragment>
-                                    <Select
-                                        placeholder={convertToLang(this.props.translation[""], " ")}
-                                        optionFilterProp="children"
-                                        onChange={(e) => this.handleServicesModal(e)}
-                                        value={this.state.applyServicesValue}
-                                    // className="apply_services"
-                                    // disabled={(this.props.device.extended_services) ? true : false}
-                                    >
-                                        {(this.props.device.services && this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ?
-                                            <Select.Option value="extend">{convertToLang(this.props.translation[DUMY_TRANS_ID], "EXTEND SERVICES")}</Select.Option>
-                                            : null}
-                                        <Select.Option value="change">{convertToLang(this.props.translation[DUMY_TRANS_ID], "CHANGE SERVICES")}</Select.Option>
-                                        {(this.props.device.services && this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION && this.props.device.finalStatus !== DEVICE_EXPIRED) ?
-                                            <Select.Option value="cancel">{convertToLang(this.props.translation[DUMY_TRANS_ID], "CANCEL SERVICES")}</Select.Option>
-                                            : null}
-                                    </Select>
-                                    <span style={this.state.checkServices}>{this.state.changeServiceMsg}</span>
-                                </Fragment>
-                            )}
-                        </Form.Item>
-                    }
-                    <Form.Item
-                        label={convertToLang(this.props.translation[LABEL_DATA_PGP_EMAIL], "PGP Email ")}
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 14 }}
-                    >
-                        {this.props.form.getFieldDecorator('pgp_email', {
-                            initialValue: this.state.pgp_email,
-                            rules: [{
-                                type: 'email', message: convertToLang(this.props.translation[Not_valid_Email], 'The input is not valid E-mail!'),
-                            }],
-                        })(
-                            <Select
-                                showSearch
-                                placeholder={convertToLang(this.props.translation[SELECT_PGP_EMAILS], "Select PGP Emails")}
-                                optionFilterProp="children"
-                                onChange={(e) => this.setState({ pgp_email: e })}
-                                autoComplete="new-password"
-                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                disabled={this.state.disablePgp}
+                            < Form.Item style={{ marginBottom: 0 }}
                             >
-                                {this.props.pgp_emails.map((pgp_email) => {
-                                    return (<Select.Option key={pgp_email.id} value={pgp_email.pgp_email.trim()}>{pgp_email.pgp_email.trim()}</Select.Option>)
-                                })}
-                            </Select>
-                            // <Input />
-                        )}
-                    </Form.Item>
-
-                    <Form.Item
-                        label={convertToLang(this.props.translation[LABEL_DATA_CHAT_ID], "Chat ID ")}
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 14 }}
-                    >
-                        {this.props.form.getFieldDecorator('chat_id', {
-                            initialValue: this.state.chat_id,
-                        })(
-                            // <Input />
-                            <Select
-                                showSearch
-                                placeholder={convertToLang(this.props.translation[DEVICE_Select_CHAT_ID], "Select Chat ID")}
-                                optionFilterProp="children"
-                                onChange={(value) => this.setState({ chat_id: value })}
-                                // onFocus={handleFocus}
-                                // onBlur={handleBlur}
-                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                disabled={this.state.disableChat}
-                            >
-                                {this.props.chat_ids.map((chat_id, index) => {
-                                    return (<Select.Option key={index} value={chat_id.chat_id}>{chat_id.chat_id}</Select.Option>)
-                                })}
-                            </Select>
-                        )}
-                    </Form.Item>
-
-                    <Form.Item
-                        label={convertToLang(this.props.translation[LABEL_DATA_SIM_ID], "Sim ID ")}
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 14 }}
-                    >
-                        {this.props.form.getFieldDecorator('sim_id', {
-                            initialValue: this.state.sim_id,
-                        })(
-                            <Select
-                                // className="pos_rel"
-                                showSearch
-                                placeholder={convertToLang(this.props.translation[DEVICE_Select_SIM_ID], "Select Sim ID ")}
-                                optionFilterProp="children"
-                                onChange={(value) => this.setState({ sim_id: value })}
-                                // onFocus={handleFocus}
-                                // onBlur={handleBlur}
-                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                disabled={this.state.disableSim}
-                            >
-                                {this.props.sim_ids.map((sim_id, index) => {
-                                    return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
-                                })}
-                            </Select>,
-                        )}
-                    </Form.Item>
-                    <Form.Item
-                        label={convertToLang(this.props.translation[DUMY_TRANS_ID], "Sim ID 2 ")}
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 14 }}
-                    >
-                        {this.props.form.getFieldDecorator('sim_id2', {
-                            initialValue: this.state.sim_id2,
-                        })(
-                            <Select
-                                // className="pos_rel"
-                                showSearch
-                                placeholder={convertToLang(this.props.translation[DUMY_TRANS_ID], "Select Sim ID 2")}
-                                optionFilterProp="children"
-                                onChange={(value) => this.setState({ sim_id2: value })}
-                                // onFocus={handleFocus}
-                                // onBlur={handleBlur}
-                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                disabled={this.state.disableSim2}
-                            >
-                                <Select.Option value=""> {convertToLang(this.props.translation[DUMY_TRANS_ID], "Select Sim ID 2")}</Select.Option>
-                                {this.props.sim_ids.map((sim_id, index) => {
-                                    if (index > 0) {
-
-                                        return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
-                                    }
-                                })}
-                            </Select>,
-                        )}
-                    </Form.Item>
-                    <Form.Item
-                        label={convertToLang(this.props.translation[DUMY_TRANS_ID], "VPN")}
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 14 }}
-                    >
-                        {this.props.form.getFieldDecorator('vpn', {
-                            initialValue: this.props.device.vpn
-                        })(
-                            <Select
-                                showSearch
-                                placeholder={convertToLang(this.props.translation[DUMY_TRANS_ID], "Select VPN")}
-                                optionFilterProp="children"
-                                onChange={(value) => this.setState({ vpn: value })}
-
-                                disabled={this.state.disableVpn}
-                            >
-                                <Select.Option value="">{convertToLang(this.props.translation[DUMY_TRANS_ID], "Select VPN ")}</Select.Option>
-                                <Select.Option value="1">{convertToLang(this.props.translation[DUMY_TRANS_ID], "YES")}</Select.Option>
-                                <Select.Option value="0">{convertToLang(this.props.translation[DUMY_TRANS_ID], "NO")}</Select.Option>
-                            </Select>,
-                        )}
-                    </Form.Item>
-                    <Form.Item
-                        label={convertToLang(this.props.translation[DUMY_TRANS_ID], "Client ID ")}
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 14 }}
-                    >
-                        {this.props.form.getFieldDecorator('client_id', {
-                            initialValue: this.props.device.client_id,
-
-                        })(
-                            <Input
-                                onChange={e => {
-                                    this.setState({ client_id: e.target.value });
-                                }} />
-                        )}
-                    </Form.Item>
-
-                    {(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? null :
-                        <Form.Item
-                            label={convertToLang(this.props.translation[Model_text], "Model")}
-                            labelCol={{ span: 8, xs: 24, sm: 8 }}
-                            wrapperCol={{ span: 14, md: 14, xs: 24 }}
-                        >
-                            {this.props.form.getFieldDecorator('model', {
-                                initialValue: checkValue(this.props.device.model),
-                            })(
-                                <Input />
-                            )}
-                        </Form.Item>
-                    }
-                    <Form.Item
-                        label={convertToLang(this.props.translation[Start_Date], "Start Date ")}
-                        labelCol={{ span: 8, xs: 24, sm: 8 }}
-                        wrapperCol={{ span: 14, md: 14, xs: 24 }}
-                    >
-                        {this.props.form.getFieldDecorator('start_date', {
-                            initialValue: (this.props.device.start_date) ? this.props.device.start_date : this.createdDate()
-                        })(
-
-                            <Input disabled />
-                        )}
-                    </Form.Item>
-                    {this.props.user.type === ADMIN ?
-
-                        <Form.Item
-                            label={convertToLang(this.props.translation[""], "Adjust Expire Date")}
-                            labelCol={{ span: 8, xs: 24, sm: 8 }}
-                            wrapperCol={{ span: 14, md: 14, xs: 24 }}
-                        >
-                            {this.props.form.getFieldDecorator('expiry_date', {
-                                initialValue: moment(this.state.expiry_date, 'YYYY/MM/DD'),
-                                // rules: [{
-                                //     required: true, message: convertToLang(this.props.translation[Expire_Date_Require], "Expiry Date is Required ! "),
-                                // }],
-                            })(
-                                <DatePicker style={{ width: '100%' }} disabledDate={this.disabledDate} format={'YYYY/MM/DD'} />
-                            )}
-
-                        </Form.Item>
-                        : <Form.Item
-                            label={convertToLang(this.props.translation[Expire_Date], "Extend Expire Date")}
-                            labelCol={{ span: 8, xs: 24, sm: 8 }}
-                            wrapperCol={{ span: 14, md: 14, xs: 24 }}
-                        >
-                            {this.props.form.getFieldDecorator('expiry_date', {
-                                initialValue: this.state.expiry_date,
-                                // rules: [{
-                                //     required: true, message: convertToLang(this.props.translation[Expire_Date_Require], "Expiry Date is Required ! "),
-                                // }],
-                            })(
-                                <Input disabled />
-                            )}
-
-                        </Form.Item>}
-
-                    {(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ?
-                        <Fragment>
-
-                            <Form.Item
-                                label={convertToLang(this.props.translation[Device_Valid_For], "VALID FOR(DAYS)  ")}
-                                labelCol={{ span: 8, xs: 24, sm: 8 }}
-                                wrapperCol={{ span: 14, md: 14, xs: 24 }}
-                            >
-                                {this.props.form.getFieldDecorator('validity', {
-                                    initialValue: this.props.device.validity,
-                                    rules: [{
-                                        required: true, message: convertToLang(this.props.translation[Device_Valid_days_Required], "Valid days required "),
-                                    }],
+                                {this.props.form.getFieldDecorator('dealer_id', {
+                                    initialValue: this.props.device.dealer_id,
                                 })(
-                                    <InputNumber min={1} />
+
+                                    <Input type='hidden' disabled />
                                 )}
-
                             </Form.Item>
+                            < Form.Item style={{ marginBottom: 0 }}
+                            >
+                                {this.props.form.getFieldDecorator('user_id', {
+                                    initialValue: this.props.device.user_id,
+                                })(
 
-                        </Fragment>
-                        :
-                        <Fragment>
+                                    <Input type='hidden' disabled />
+                                )}
+                            </Form.Item>
+                            <Form.Item style={{ marginBottom: 0 }}
+                            >
+                                {this.props.form.getFieldDecorator('usr_device_id', {
+                                    initialValue: this.props.new ? "" : this.props.device.usr_device_id,
+                                })(
 
-                        </Fragment>
+                                    <Input type='hidden' disabled />
+                                )}
+                            </Form.Item>
+                            <Form.Item style={{ marginBottom: 0 }}
+                            >
+                                {this.props.form.getFieldDecorator('usr_acc_id', {
+                                    initialValue: this.props.new ? "" : this.props.device.id,
+                                })(
 
-                    }
+                                    <Input type='hidden' disabled />
+                                )}
+                            </Form.Item>
+                            {(this.props.user.type === ADMIN) ? null :
+                                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                    <Form.Item
+                                        label={<Markup content={convertToLang(this.props.translation[LABEL_APPLY_SERVICES], "APPLY <br />SERVICES")} />}
+                                        labelCol={{ span: 8 }}
+                                        wrapperCol={{ span: 16 }}
+                                        className="apply_services"
+                                    >
+                                        {this.props.form.getFieldDecorator('service', {
+                                            // initialValue: this.state.applyServicesValue
+                                        })(
+                                            <Fragment>
+                                                <Select
+                                                    placeholder={convertToLang(this.props.translation[""], " ")}
+                                                    optionFilterProp="children"
+                                                    onChange={(e) => this.handleServicesModal(e)}
+                                                    value={this.state.applyServicesValue}
+                                                // className="apply_services"
+                                                // disabled={(this.props.device.extended_services) ? true : false}
+                                                >
+                                                    {(this.props.device.services && this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ?
 
-                    <Form.Item
-                        label={convertToLang(this.props.translation[Device_Note], "Note ")}
-                        labelCol={{ span: 8, xs: 24, sm: 8 }}
-                        wrapperCol={{ span: 14, md: 14, xs: 24 }}
-                    >
-                        {this.props.form.getFieldDecorator('note', {
-                            initialValue: this.props.device.note,
-                        })(
-                            <TextArea
-                                autosize={{ minRows: 3, maxRows: 5 }}
-                            />
-                        )}
+                                                        <Select.Option value="extend">{convertToLang(this.props.translation[DUMY_TRANS_ID], "EXTEND SERVICES")}</Select.Option>
+                                                        : null}
+                                                    <Select.Option value="change">{convertToLang(this.props.translation[DUMY_TRANS_ID], "CHANGE SERVICES")}</Select.Option>
+                                                    {(this.props.device.services && this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ?
+                                                        <Select.Option value="cancel">{convertToLang(this.props.translation[DUMY_TRANS_ID], "CANCEL SERVICES")}</Select.Option>
+                                                        : null}
+                                                </Select>
+                                                <span style={this.state.checkServices}>{this.state.changeServiceMsg}</span>
 
-                    </Form.Item>
+                                            </Fragment>
+                                        )}
+                                    </Form.Item>
+                                </Col>
+                            }
+                            {(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? null :
+                                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                    <Form.Item
+                                        label={convertToLang(this.props.translation[Model_text], "Model")}
+                                        labelCol={{ span: 8 }}
+                                        wrapperCol={{ span: 16 }}
+                                    >
+                                        {this.props.form.getFieldDecorator('model', {
+                                            initialValue: checkValue(this.props.device.model),
+                                        })(
+                                            <Input />
+                                        )}
+                                    </Form.Item>
+                                </Col>
+                            }
+                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                <Form.Item
+                                    label={convertToLang(this.props.translation[Start_Date], "Start Date ")}
+                                    labelCol={{ span: 8 }}
+                                    wrapperCol={{ span: 16 }}
+                                >
+                                    {this.props.form.getFieldDecorator('start_date', {
+                                        initialValue: (this.props.device.start_date) ? this.props.device.start_date : this.createdDate()
+                                    })(
 
-                    <Form.Item className="edit_ftr_btn11"
-                        wrapperCol={{
-                            xs: { span: 24, offset: 0 },
-                            sm: { span: 24, offset: 0 },
-                        }}
-                    >
-                        <Button key="back" type="button" onClick={() => { this.props.handleCancel(); this.handleCancelForm() }} > {convertToLang(this.props.translation[Button_Cancel], "Cancel")}</Button>
-                        <Button type="primary" htmlType="submit">{convertToLang(this.props.translation[Button_submit], "Submit")}</Button>
-                    </Form.Item>
+                                        <Input disabled />
+                                    )}
+                                </Form.Item>
+                            </Col>
+                            {this.props.user.type === ADMIN ?
+                                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                    <Form.Item
+                                        label={<Markup content={convertToLang(this.props.translation[""], "Adjust <br>Expire Date")} />}
+                                        labelCol={{ span: 8 }}
+                                        wrapperCol={{ span: 16 }}
+                                        className="apply_services"
+                                    >
+                                        {this.props.form.getFieldDecorator('expiry_date', {
+                                            initialValue: moment(this.state.expiry_date, 'YYYY/MM/DD'),
+                                            // rules: [{
+                                            //     required: true, message: convertToLang(this.props.translation[Expire_Date_Require], "Expiry Date is Required ! "),
+                                            // }],
+                                        })(
+                                            <DatePicker style={{ width: '100%' }} disabledDate={this.disabledDate} format={'YYYY/MM/DD'} />
+                                        )}
 
+                                    </Form.Item>
+                                </Col>
+                                :
+                                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                    <Form.Item
+                                        label={convertToLang(this.props.translation[Expire_Date], "Extend Expire Date")}
+                                        labelCol={{ span: 8 }}
+                                        wrapperCol={{ span: 16 }}
+                                    >
+                                        {this.props.form.getFieldDecorator('expiry_date', {
+                                            initialValue: this.state.expiry_date,
+                                            // rules: [{
+                                            //     required: true, message: convertToLang(this.props.translation[Expire_Date_Require], "Expiry Date is Required ! "),
+                                            // }],
+                                        })(
+                                            <Input disabled />
+                                        )}
+
+                                    </Form.Item>
+                                </Col>
+                            }
+                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                <Form.Item
+                                    label={convertToLang(this.props.translation[Device_Note], "Note ")}
+                                    labelCol={{ span: 8 }}
+                                    wrapperCol={{ span: 16 }}
+                                >
+                                    {this.props.form.getFieldDecorator('note', {
+                                        initialValue: this.props.device.note,
+                                    })(
+                                        <TextArea
+                                            autosize={{ minRows: 3, maxRows: 5 }}
+                                        />
+                                    )}
+
+                                </Form.Item>
+                            </Col>
+                        </Col>
+                        <Col xs={24} sm={24} md={12} lg={12} xl={12} className="p-0">
+                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                <Form.Item
+                                    label={convertToLang(this.props.translation[LABEL_DATA_PGP_EMAIL], "PGP Email ")}
+                                    labelCol={{ span: 8 }}
+                                    wrapperCol={{ span: 16 }}
+                                >
+                                    {this.props.form.getFieldDecorator('pgp_email', {
+                                        initialValue: this.state.pgp_email,
+                                        rules: [{
+                                            type: 'email', message: convertToLang(this.props.translation[Not_valid_Email], 'The input is not valid E-mail!'),
+                                        }],
+                                    })(
+                                        <Select
+                                            showSearch
+                                            placeholder={convertToLang(this.props.translation[SELECT_PGP_EMAILS], "Select PGP Emails")}
+                                            optionFilterProp="children"
+                                            onChange={(e) => this.setState({ pgp_email: e })}
+                                            autoComplete="new-password"
+                                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                            disabled={this.state.disablePgp}
+                                        >
+                                            {this.props.pgp_emails.map((pgp_email) => {
+                                                return (<Select.Option key={pgp_email.id} value={pgp_email.pgp_email.trim()}>{pgp_email.pgp_email.trim()}</Select.Option>)
+                                            })}
+                                        </Select>
+                                        // <Input />
+                                    )}
+                                </Form.Item>
+                            </Col>
+                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                <Form.Item
+                                    label={convertToLang(this.props.translation[LABEL_DATA_CHAT_ID], "Chat ID ")}
+                                    labelCol={{ span: 8 }}
+                                    wrapperCol={{ span: 16 }}
+                                >
+                                    {this.props.form.getFieldDecorator('chat_id', {
+                                        initialValue: this.state.chat_id,
+                                    })(
+                                        // <Input />
+                                        <Select
+                                            showSearch
+                                            placeholder={convertToLang(this.props.translation[DEVICE_Select_CHAT_ID], "Select Chat ID")}
+                                            optionFilterProp="children"
+                                            onChange={(value) => this.setState({ chat_id: value })}
+                                            // onFocus={handleFocus}
+                                            // onBlur={handleBlur}
+                                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                            disabled={this.state.disableChat}
+                                        >
+                                            {this.props.chat_ids.map((chat_id, index) => {
+                                                return (<Select.Option key={index} value={chat_id.chat_id}>{chat_id.chat_id}</Select.Option>)
+                                            })}
+                                        </Select>
+                                    )}
+                                </Form.Item>
+                            </Col>
+                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                <Form.Item
+                                    label={convertToLang(this.props.translation[LABEL_DATA_SIM_ID], "Sim ID ")}
+                                    labelCol={{ span: 8 }}
+                                    wrapperCol={{ span: 16 }}
+                                >
+                                    {this.props.form.getFieldDecorator('sim_id', {
+                                        initialValue: this.state.sim_id,
+                                    })(
+                                        <Select
+                                            // className="pos_rel"
+                                            showSearch
+                                            placeholder={convertToLang(this.props.translation[DEVICE_Select_SIM_ID], "Select Sim ID ")}
+                                            optionFilterProp="children"
+                                            onChange={(value) => this.setState({ sim_id: value })}
+                                            // onFocus={handleFocus}
+                                            // onBlur={handleBlur}
+                                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                            disabled={this.state.disableSim}
+                                        >
+                                            {this.props.sim_ids.map((sim_id, index) => {
+                                                return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
+                                            })}
+                                        </Select>,
+                                    )}
+                                </Form.Item>
+                            </Col>
+                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                <Form.Item
+                                    label={convertToLang(this.props.translation[DUMY_TRANS_ID], "Sim ID 2 ")}
+                                    labelCol={{ span: 8 }}
+                                    wrapperCol={{ span: 16 }}
+                                >
+                                    {this.props.form.getFieldDecorator('sim_id2', {
+                                        initialValue: this.state.sim_id2,
+                                    })(
+                                        <Select
+                                            // className="pos_rel"
+                                            showSearch
+                                            placeholder={convertToLang(this.props.translation[DUMY_TRANS_ID], "Select Sim ID 2")}
+                                            optionFilterProp="children"
+                                            onChange={(value) => this.setState({ sim_id2: value })}
+                                            // onFocus={handleFocus}
+                                            // onBlur={handleBlur}
+                                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                            disabled={this.state.disableSim2}
+                                        >
+                                            <Select.Option value=""> {convertToLang(this.props.translation[DUMY_TRANS_ID], "Select Sim ID 2")}</Select.Option>
+                                            {this.props.sim_ids.map((sim_id, index) => {
+                                                if (index > 0) {
+
+                                                    return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
+                                                }
+                                            })}
+                                        </Select>,
+                                    )}
+                                </Form.Item>
+                            </Col>
+                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                <Form.Item
+                                    label={convertToLang(this.props.translation[DUMY_TRANS_ID], "VPN")}
+                                    labelCol={{ span: 8 }}
+                                    wrapperCol={{ span: 16 }}
+                                >
+                                    {this.props.form.getFieldDecorator('vpn', {
+                                        initialValue: this.props.device.vpn
+                                    })(
+                                        <Select
+                                            showSearch
+                                            placeholder={convertToLang(this.props.translation[DUMY_TRANS_ID], "Select VPN")}
+                                            optionFilterProp="children"
+                                            onChange={(value) => this.setState({ vpn: value })}
+
+                                            disabled={this.state.disableVpn}
+                                        >
+                                            <Select.Option value="">{convertToLang(this.props.translation[DUMY_TRANS_ID], "Select VPN ")}</Select.Option>
+                                            <Select.Option value="1">{convertToLang(this.props.translation[DUMY_TRANS_ID], "YES")}</Select.Option>
+                                            <Select.Option value="0">{convertToLang(this.props.translation[DUMY_TRANS_ID], "NO")}</Select.Option>
+                                        </Select>,
+                                    )}
+                                </Form.Item>
+                            </Col>
+                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                <Form.Item
+                                    label={convertToLang(this.props.translation[DUMY_TRANS_ID], "Client ID ")}
+                                    labelCol={{ span: 8 }}
+                                    wrapperCol={{ span: 16 }}
+                                >
+                                    {this.props.form.getFieldDecorator('client_id', {
+                                        initialValue: this.props.device.client_id,
+
+                                    })(
+                                        <Input
+                                            onChange={e => {
+                                                this.setState({ client_id: e.target.value });
+                                            }} />
+                                    )}
+                                </Form.Item>
+                            </Col>
+                            {(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ?
+                                <Fragment>
+                                    <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                        <Form.Item
+                                            label={convertToLang(this.props.translation[Device_Valid_For], "VALID FOR(DAYS)  ")}
+                                            labelCol={{ span: 8 }}
+                                            wrapperCol={{ span: 16 }}
+                                        >
+                                            {this.props.form.getFieldDecorator('validity', {
+                                                initialValue: this.props.device.validity,
+                                                rules: [{
+                                                    required: true, message: convertToLang(this.props.translation[Device_Valid_days_Required], "Valid days required "),
+                                                }],
+                                            })(
+                                                <InputNumber min={1} />
+                                            )}
+
+                                        </Form.Item>
+                                    </Col>
+                                </Fragment>
+                                :
+                                <Fragment>
+                                </Fragment>
+                            }
+                            <Col xs={24} sm={24} md={24} lg={24} xl={24} className="text-right">
+                                <Form.Item className="edit_ftr_btn11"
+                                    wrapperCol={{
+                                        xs: { span: 24, offset: 0 },
+                                        sm: { span: 24, offset: 0 },
+                                    }}
+                                >
+                                    <Button key="back" type="button" onClick={() => { this.props.handleCancel(); this.handleCancelForm() }} > {convertToLang(this.props.translation[Button_Cancel], "Cancel")}</Button>
+                                    <Button type="primary" htmlType="submit">{convertToLang(this.props.translation[Button_submit], "Submit")}</Button>
+                                </Form.Item>
+                            </Col>
+                        </Col>
+                    </Row>
                 </Form>
                 <AddUser ref="add_user" translation={this.props.translation} />
                 <Modal

@@ -2358,6 +2358,16 @@ export function featureApkColumns(translation) {
             defaultSortOrder: "ascend"
         },
         {
+            title: convertToLang(translation[APK_APP_LOGO], "APP LOGO"),
+            dataIndex: 'apk_logo',
+            key: 'apk_logo',
+        },
+        {
+            title: convertToLang(translation[APK_SIZE], "APP SIZE"),
+            dataIndex: 'apk_size',
+            key: 'apk_size',
+        },
+        {
             title: convertToLang(translation[''], "PACKAGE NAME"),
             dataIndex: 'package_name',
             width: "100",
@@ -2370,16 +2380,6 @@ export function featureApkColumns(translation) {
             title: convertToLang(translation["APP VERSION"], "APP VERSION"),
             dataIndex: 'apk_version',
             key: 'apk_version',
-        },
-        {
-            title: convertToLang(translation[APK_APP_LOGO], "APP LOGO"),
-            dataIndex: 'apk_logo',
-            key: 'apk_logo',
-        },
-        {
-            title: convertToLang(translation[APK_SIZE], "APP SIZE"),
-            dataIndex: 'apk_size',
-            key: 'apk_size',
         },
         {
             title: convertToLang(translation["UPDATED DATE"], "LAST UPDATE"),
