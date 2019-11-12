@@ -40,7 +40,7 @@ import {
     Appfilter_Display
 } from '../../constants/AppFilterConstants';
 
-import { convertToLang } from '../../routes/utils/commonUtils';
+import { convertToLang, getDefaultLanguage } from '../../routes/utils/commonUtils';
 import { ADMIN } from '../../constants/Constants';
 // Picky.prototype={
 //     value: new PropTypes.object(),
@@ -73,18 +73,25 @@ class AppFilter extends Component {
             this.setPagination(nextProps.defaultPagingValue)
         }
         if (this.props.selectedOptions !== nextProps.selectedOptions) {
-            //  console.log(nextProps.selectedOptions, "componentWillReceiveProps selectedOptions", this.props.selectedOptions);
+            // console.log(nextProps.selectedOptions, "componentWillReceiveProps selectedOptions", this.props.selectedOptions);
             // console.log("componentWillReceiveProps", this.state.selectedDisplayValues);
             // alert('recive props', nextProps.selectedOptions);
             // console.log(' recive props set dropdwon', nextProps);
-            this.setDropdowns(nextProps.selectedOptions);
+            // this.setDropdowns(nextProps.selectedOptions);
 
             //  this.props.handleCheckChange();
         }
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.selectedOptions !== prevProps.selectedOptions) {
+            console.log(prevProps.selectedOptions, "componentDidUpdate selectedOptions", this.props.selectedOptions);
+            this.setDropdowns(this.props.selectedOptions);
+        }
+    }
+
     setDropdowns(values) {
-        // console.log('setDropdowns val : ', values)
+        // console.log('setDropdowns val : ', values)   
         this.setState({
             selectedDisplayValues: values,
         });
@@ -136,7 +143,7 @@ class AppFilter extends Component {
 
         //  console.log('render props selectedOptions ...', this.props.selectedOptions);
         //  console.log('allSelected val this.props.selectedOptions are: ', this.props.selectedOptions)
-        //  console.log('render state selectedDisplayValues ...', this.state.selectedDisplayValues);
+        console.log('render state selectedDisplayValues ...', this.state.selectedDisplayValues);
         let allSelectedOpt;
         if (this.state.selectedDisplayValues !== undefined && this.props.options !== undefined) {
             if (this.props.options.length === this.state.selectedDisplayValues.length) {
@@ -215,7 +222,7 @@ class AppFilter extends Component {
                                                     key={item.key} // required
                                                     onClick={() => selectValue({ "key": item.key, "value": convertToLang(this.props.translation[item.value], item.value) })}
                                                 >
-                                                    <Checkbox checked={isSelected}>{`${convertToLang(this.props.translation[item.value], item.value)}  ${extraText}`}</Checkbox>
+                                                    <Checkbox checked={isSelected}>{`${getDefaultLanguage(convertToLang(this.props.translation[item.value], item.value))}  ${extraText}`}</Checkbox>
                                                 </li>
                                             );
                                         }
