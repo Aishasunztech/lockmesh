@@ -806,9 +806,6 @@ class ProductInventory extends Component {
       </Row>
     )
   }
-
-  componentWillReceiveProps(nextProps, prevProps) {
-  }
 }
 
 const WrappedAddDeviceForm = Form.create()(ProductInventory);
