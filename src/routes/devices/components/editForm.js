@@ -887,7 +887,7 @@ class EditDevice extends Component {
                                             //     required: true, message: convertToLang(this.props.translation[Expire_Date_Require], "Expiry Date is Required ! "),
                                             // }],
                                         })(
-                                            <DatePicker style={{ width: '100%' }} disabledDate={this.disabledDate} format={'YYYY/MM/DD'} />
+                                            <DatePicker style={{ width: '100%' }} disabledDate={this.disabledDate} format={'YYYY/MM/DD'} disabled />
                                         )}
 
                                     </Form.Item>
