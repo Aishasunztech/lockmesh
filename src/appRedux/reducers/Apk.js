@@ -14,7 +14,8 @@ import {
 	AUTHENTICATE_UPDATE_USER,
 	RESET_AUTH_UPDATE,
 	CHECK_BULK_PASS,
-	RESET_BULK_FLAG
+	RESET_BULK_FLAG,
+	APK_LOADING
 } from "../../constants/ActionTypes";
 
 import {
@@ -51,7 +52,7 @@ export default (state = initialState, action) => {
 
 	switch (action.type) {
 
-		case LOADING:
+		case APK_LOADING:
 			return {
 				...state,
 				isloading: true,
