@@ -718,6 +718,7 @@ class AddDevice extends Component {
                                         className="add_user_btn"
                                         type="primary"
                                         onClick={() => this.handleUserModal()}
+                                        style={{ width: "100%" }}
                                     >
                                         {convertToLang(this.props.translation[Button_Add_User], "Add User")}
                                     </Button>

@@ -1840,6 +1840,7 @@ export function dealerColsWithSearch(translation, searchBar = false, callBack = 
             title: convertToLang(translation["permission_by"], "PERMISSION BY"),
             dataIndex: 'permission_by',
             key: 'permission_by',
+            name: 'permission_by',
             // sorter: (a, b) => {
             //     if (a.permission_by.props) {
             //         return a.permission_by.props.children.localeCompare(b.permission_by.props.children)
