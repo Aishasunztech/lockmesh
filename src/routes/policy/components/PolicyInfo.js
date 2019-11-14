@@ -198,7 +198,8 @@ export default class PolicyInfo extends Component {
                                         <Col span={8} className="">
                                         </Col>
                                         <Col span={2} className="">
-                                            <Avatar src={`${BASE_URL}users/getFile/${this.state.secure_setting_app.icon}`} style={{ width: "30px", height: "30px" }} />
+                                            {/* <Avatar src={`${BASE_URL}users/getFile/${this.state.secure_setting_app.icon}`} style={{ width: "30px", height: "30px" }} /> */}
+                                            <img src={require("assets/images/secure_setting.png")} style={{ width: "30px", height: "30px" }} />
                                         </Col>
                                         <Col span={6} className="pl-0">
                                             <h5 style={{ marginTop: '9px' }}>{convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], "Secure Settings Permission")}</h5>

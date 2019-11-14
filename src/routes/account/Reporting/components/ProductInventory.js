@@ -300,7 +300,8 @@ class ProductInventory extends Component {
       tabselect: 'all',
       innerTabSelect: '1',
       productTypeName: 'CHAT IDs',
-      reportFormData: {}
+      reportFormData: {},
+      deviceList: props.devices,
     };
   }
 
@@ -312,7 +313,14 @@ class ProductInventory extends Component {
 
     });
   };
-
+  componentWillReceiveProps(nextProps) {
+    // console.log("nextProps.devices ", nextProps.devices)
+    if (nextProps.devices !== this.props.devices) {
+      this.setState({
+        deviceList: nextProps.devices
+      })
+    }
+  }
   componentDidMount() {
   }
 
@@ -582,6 +590,19 @@ class ProductInventory extends Component {
     generateExcel(rows, fileName);
   };
 
+  handleDealerChange = (e) => {
+    let devices = [];
+    if (e == '') {
+      devices = this.props.devices
+    } else {
+      devices = this.props.devices.filter(device => device.dealer_id == e);
+      // console.log("handleDealerChange ", devices);
+    }
+    this.setState({
+      deviceList: devices
+    })
+  }
+
   render() {
     return (
       <Row>
@@ -667,7 +688,10 @@ class ProductInventory extends Component {
                       },
                     ],
                   })(
-                    <Select style={{ width: '100%' }}>
+                    <Select
+                      style={{ width: '100%' }}
+                      onChange={(e) => this.handleDealerChange(e)}
+                    >
                       <Select.Option value=''>ALL</Select.Option>
                       <Select.Option value={this.props.user.dealerId}>My Report</Select.Option>
                       {this.props.dealerList.map((dealer, index) => {
@@ -695,7 +719,7 @@ class ProductInventory extends Component {
                   <Select style={{ width: '100%' }}>
                     <Select.Option value=''>ALL</Select.Option>
                     <Select.Option value={DEVICE_PRE_ACTIVATION}>{DEVICE_PRE_ACTIVATION}</Select.Option>
-                    {this.props.devices.map((device, index) => {
+                    {this.state.deviceList.map((device, index) => {
                       return (<Select.Option key={device.device_id} value={device.device_id}>{device.device_id}</Select.Option>)
                     })}
                   </Select>
@@ -805,9 +829,6 @@ class ProductInventory extends Component {
         </Col>
       </Row>
     )
-  }
-
-  componentWillReceiveProps(nextProps, prevProps) {
   }
 }
 
