@@ -338,7 +338,7 @@ export function getDefaultLanguage(transaction_id) {
 
     // apk Columns
     case "show.on.device.id":
-      return "SHOW ON DEVICE";
+      return "SHOW ON DEVICE1";
     case "app.name.id":
       return "APP NAME";
     case "app.logo.id":
