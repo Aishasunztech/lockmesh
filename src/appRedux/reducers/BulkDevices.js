@@ -11,13 +11,13 @@ const warning = Modal.warning;
 
 
 const initialState = {
-    bulkDevices: [],
+    bulkDevices: [], // all filtered devices
     bulkDevicesHistory: [],
     msg: "",
     showMsg: false,
     isloading: false,
     usersOfDealers: [],
-    selectedDevices: [],
+    selectedDevices: [], // again filter devices against applied action
     noOfApp_push_pull: 0,
 };
 
