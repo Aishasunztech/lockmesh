@@ -1,6 +1,6 @@
 
 import {
-    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS,
+    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS,
 } from "../../constants/ActionTypes";
 import { message, Modal } from 'antd';
 
@@ -19,12 +19,19 @@ const initialState = {
     usersOfDealers: [],
     selectedDevices: [], // again filter devices against applied action
     noOfApp_push_pull: 0,
+    bulkSelectedPushApps: []
 };
 
 export default (state = initialState, action) => {
 
     switch (action.type) {
 
+        case SET_PUSH_APPS: {
+            return {
+                ...state,
+                bulkSelectedPushApps: action.payload
+            }
+        }
         case BULK_LOADING:
             return {
                 ...state,

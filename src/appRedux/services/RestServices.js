@@ -932,12 +932,8 @@ const RestService = {
         return axios.post(BASE_URL + 'users/getUsersOfDealers', data, RestService.getHeader())
     },
 
-    applyBulkPushApps: (push_apps, deviceIds, usrAccIds) => {
-        return axios.post(BASE_URL + 'users/apply_bulk_pushapps', {
-            push_apps: push_apps,
-            deviceIds: deviceIds,
-            usrAccIds: usrAccIds
-        }, RestService.getHeader());
+    applyBulkPushApps: (data) => {
+        return axios.post(BASE_URL + 'users/apply_bulk_pushapps', data, RestService.getHeader());
     },
 
     applyBulkPolicy: (deviceIds, userAccIds, policyId) => {

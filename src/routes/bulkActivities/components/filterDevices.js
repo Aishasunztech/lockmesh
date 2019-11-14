@@ -9,6 +9,7 @@ import FilterDevicesList from "./filterDevicesList";
 import CircularProgress from "components/CircularProgress/index";
 import BulkSuspendDevices from './bulkSuspendDevices';
 import BulkActivateDevices from './bulkActivateDevices';
+import BulkPushAppsConfirmation from './bulkPushAppsConfirmation';
 import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, titleCase, convertToLang, checkRemainTermDays } from '../../utils/commonUtils'
 
 import { bulkDevicesColumns, devicesColumns, userDevicesListColumns } from '../../utils/columnsUtils';
@@ -161,7 +162,13 @@ class FilterDevices extends Component {
           updateSelectedDevices = copySelectedDevices.filter((device) => device.finalStatus != DEVICE_SUSPENDED)
         } else if (action === "ACTIVATE DEVICES") {
           updateSelectedDevices = copySelectedDevices.filter((device) => device.finalStatus != DEVICE_ACTIVATED)
-        } else {
+        }
+        // else if (action === "PUSH APPS") {
+        //   updateSelectedDevices = copySelectedDevices.filter((device) => device.finalStatus != DEVICE_SUSPENDED)
+        // } else if (action === "PULL APPS") {
+        //   updateSelectedDevices = copySelectedDevices.filter((device) => device.finalStatus != DEVICE_SUSPENDED)
+        // } 
+        else {
           updateSelectedDevices = copySelectedDevices;
         }
 
@@ -610,8 +617,12 @@ class FilterDevices extends Component {
       if (this.state.selectedDevices.length) {
         if (action === "SUSPEND DEVICES") {
           this.refs.bulk_suspend.handleSuspendDevice(this.state.selectedDevices, this.props.selectedDealers, this.props.selectedUsers);
-        } else if (action === "ACTIVATE DEVICES") {
           console.log("ACTIVATE DEVICES action called ");
+        } else if (action === "ACTIVATE DEVICES") {
+          this.refs.bulk_activate.handleActivateDevice(this.state.selectedDevices, this.props.selectedDealers, this.props.selectedUsers);
+        } else if (action === "PUSH APPS") {
+          this.refs.bulk_push_apps.handleBulkPushApps(this.state.selectedDevices, this.props.selectedDealers, this.props.selectedUsers);
+        } else if (action === "PULL APPS") {
           this.refs.bulk_activate.handleActivateDevice(this.state.selectedDevices, this.props.selectedDealers, this.props.selectedUsers);
         }
       } else {
@@ -698,6 +709,11 @@ class FilterDevices extends Component {
     } else if (action === "ACTIVATE DEVICES") {
       updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED)
     }
+    // else if (action === "PUSH APPS") {
+    //   updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED)
+    // } else if (action === "PULL APPS") {
+    //   updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED)
+    // }
 
     this.state.selectedDevices = updateSelectedDevices
     // this.setState({
@@ -894,6 +910,13 @@ class FilterDevices extends Component {
         <BulkActivateDevices
           ref="bulk_activate"
           bulkActivateDevice={this.props.bulkActivateDevice}
+          translation={this.props.translation}
+        />
+
+        <BulkPushAppsConfirmation
+          ref="bulk_push_apps"
+          applyPushApps={this.props.applyPushApps}
+          selectedPushAppsList={this.props.selectedPushAppsList}
           translation={this.props.translation}
         />
 

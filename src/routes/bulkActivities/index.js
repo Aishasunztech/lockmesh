@@ -11,7 +11,8 @@ import {
     getbulkHistory,
     getUsersOfDealers,
 
-    applyBulkPushApps
+    applyBulkPushApps,
+    setBulkPushApps
 } from "../../appRedux/actions/BulkDevices";
 
 import {
@@ -25,8 +26,8 @@ import {
     loadDeviceProfile,
     showPushAppsModal,
     showPullAppsModal,
-    applyPushApps,
-    applyPullApps,
+    // applyPushApps,
+    // applyPullApps,
     writeImei,
     getActivities,
     hidePolicyConfirm,
@@ -72,8 +73,8 @@ class BulkActivities extends Component {
         super(props);
 
         this.actionList = [
-            // { key: 'PUSH APPS', value: "Push Apps" },
-            // { key: 'PULL APPS', value: "Pull Apps" },
+            { key: 'PUSH APPS', value: "Push Apps" },
+            { key: 'PULL APPS', value: "Pull Apps" },
             // { key: 'PUSH POLICY', value: "Push Policy" },
             // { key: 'SET PERMISSIONS', value: "Set Permissions" },
             { key: 'ACTIVATE DEVICES', value: "Activate Devices" },
@@ -576,6 +577,8 @@ class BulkActivities extends Component {
                         handleActionValue={this.state.selectedAction}
                         bulkSuspendDevice={this.props.bulkSuspendDevice}
                         bulkActivateDevice={this.props.bulkActivateDevice}
+                        selectedPushAppsList={this.props.selectedPushAppsList}
+                        applyPushApps={this.props.applyPushApps}
                         renderList={this.renderList}
                         translation={this.props.translation}
                         onChangeTableSorting={this.handleTableChange}
@@ -685,7 +688,7 @@ class BulkActivities extends Component {
                     pushAppsModal={this.state.pushAppsModal}
                     apk_list={this.props.apk_list}
                     onPushAppsSelection={this.onPushAppsSelection}
-                    applyPushApps={this.props.applyPushApps}
+                    setBulkPushApps={this.props.setBulkPushApps}
                     showPullAppsModal={this.showPullAppsModal}
                     translation={this.props.translation}
                 />
@@ -715,6 +718,7 @@ const mapDispatchToProps = (dispatch) => {
         showPushAppsModal: showPushAppsModal,
         getDealerApps: getDealerApps,
         applyPushApps: applyBulkPushApps,
+        setBulkPushApps: setBulkPushApps
     }, dispatch);
 }
 
@@ -722,6 +726,7 @@ const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users,
     console.log(bulkDevices.usersOfDealers, 'usersOfDealers ,devices.bulkDevices ', bulkDevices.bulkDevices);
     console.log("device_details.apk_list", device_details.apk_list);
     return {
+        selectedPushAppsList: bulkDevices.bulkSelectedPushApps,
         devices: bulkDevices.bulkDevices,
         history: bulkDevices.bulkDevicesHistory,
         users_list: bulkDevices.usersOfDealers, // users.users_list,
