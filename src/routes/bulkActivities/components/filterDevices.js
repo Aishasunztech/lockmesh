@@ -397,15 +397,15 @@ class FilterDevices extends Component {
           Object.keys(device).map(key => {
 
             if (device[key] !== undefined && key != 'status' && key != 'account_status') {
-              if ((typeof device[key]) === 'string') { 
+              if ((typeof device[key]) === 'string') {
                 if (device[key].toUpperCase().includes(e.target.value.toUpperCase())) {
-                  if(!demoDevices.includes(device)){
+                  if (!demoDevices.includes(device)) {
                     demoDevices.push(device);
                   }
                 }
               } else if (device[key] !== null && key != 'status' && key != 'account_status') {
                 if (device[key].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
-                  if(!demoDevices.includes(device)){
+                  if (!demoDevices.includes(device)) {
                     demoDevices.push(device);
                   }
                 }
@@ -611,6 +611,7 @@ class FilterDevices extends Component {
         if (action === "SUSPEND DEVICES") {
           this.refs.bulk_suspend.handleSuspendDevice(this.state.selectedDevices, this.props.selectedDealers, this.props.selectedUsers);
         } else if (action === "ACTIVATE DEVICES") {
+          console.log("ACTIVATE DEVICES action called ");
           this.refs.bulk_activate.handleActivateDevice(this.state.selectedDevices, this.props.selectedDealers, this.props.selectedUsers);
         }
       } else {
@@ -698,6 +699,7 @@ class FilterDevices extends Component {
       updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED)
     }
 
+    this.state.selectedDevices = updateSelectedDevices
     // this.setState({
     //   selectedDevices: updateSelectedDevices
     // });

@@ -72,7 +72,7 @@ class BulkActivities extends Component {
         super(props);
 
         this.actionList = [
-            { key: 'PUSH APPS', value: "Push Apps" },
+            // { key: 'PUSH APPS', value: "Push Apps" },
             // { key: 'PULL APPS', value: "Pull Apps" },
             // { key: 'PUSH POLICY', value: "Push Policy" },
             // { key: 'SET PERMISSIONS', value: "Set Permissions" },
@@ -453,7 +453,7 @@ class BulkActivities extends Component {
 
     render() {
 
-        console.log("parent this.props.devices ", this.props.devices)
+        // console.log("parent this.props.devices ", this.props.devices)
         // let data = "NULL ";
         // if (this.state.selectedDealers.length) {
         //     data = this.state.selectedDealers.map((item) => { return `${item.label}, ` });

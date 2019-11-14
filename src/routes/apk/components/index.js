@@ -359,7 +359,7 @@ class Apk extends Component {
                                     </div>
 
                                 </Col>
-                                {((this.props.user.type === 'admin' && false)) ?
+                                {((this.props.user.type === 'admin')) ?
                                     <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                                         <div>
                                             <Link

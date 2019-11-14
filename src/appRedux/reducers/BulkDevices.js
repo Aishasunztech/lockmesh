@@ -17,7 +17,7 @@ const initialState = {
     showMsg: false,
     isloading: false,
     usersOfDealers: [],
-
+    selectedDevices: [],
     noOfApp_push_pull: 0,
 };
 
