@@ -62,7 +62,13 @@
     z-index: 1;
 }
 
-.apk_fix_card .ant-table-thead>tr>th.ant-table-column-has-actions.ant-table-column-has-sorters {
+.feat_apk_fix_card_admin .ant-table-thead>tr>th.ant-table-column-has-actions.ant-table-column-has-sorters,
+.feat_apk_fix_card_dealer .ant-table-thead>tr>th.ant-table-column-has-actions.ant-table-column-has-sorters {
+    top: 0;
+}
+
+.apk_fix_card_admin .ant-table-thead>tr>th.ant-table-column-has-actions.ant-table-column-has-sorters,
+.apk_fix_card_dealer .ant-table-thead>tr>th.ant-table-column-has-actions.ant-table-column-has-sorters {
     top: -1px;
 }
 
@@ -72,6 +78,10 @@
 
 .fix_card .ant-card-body {
     padding: 16px 0px !important;
+}
+
+.apk_fix_card .ant-card-body {
+    padding: 0 0px !important;
 }
 
 .m_d_fix_table .ant-card-body {
@@ -146,7 +156,6 @@
 
 .users_fix_card_admin,
 .users_fix_card_dealer,
-.apk_fix_card,
 .policy_fix_card {
     top: 102px;
 }
@@ -158,6 +167,19 @@
 .m_d_fix_table {
     top: 143px;
     overflow: scroll;
+}
+
+.apk_fix_card_dealer,
+.apk_fix_card_admin {
+    top: 140px;
+}
+
+.feat_apk_fix_card_admin {
+    top: 210px;
+}
+
+.feat_apk_fix_card_dealer {
+    top: 200px;
 }
 
 .gx-popover-scroll {
@@ -296,13 +318,25 @@
         top: 344px;
     }
 
-    .apk_fix_card {
-        top: 220px;
+    .apk_fix_card_dealer {
+        top: 308px;
+    }
+
+    .apk_fix_card_admin {
+        top: 344px;
     }
 
     .policy_fix_card,
     .users_fix_card {
         top: 268px;
+    }
+
+    .feat_apk_fix_card_admin {
+        top: 505px;
+    }
+
+    .feat_apk_fix_card_dealer {
+        top: 365px;
     }
 
     .m_mt-16 {
@@ -400,7 +434,7 @@
 
 .sale_info_table .ant-table-tbody>tr>td,
 .sale_info_table .ant-table-thead>tr>th {
-  padding: 0 !important;
+    padding: 0 !important;
 }
 
 .ac_status_table .ant-table-tbody>tr>td,
@@ -422,6 +456,14 @@
 
 .p-16 {
     padding: 16px;
+}
+
+.pt-8 {
+    padding-top: 8px;
+}
+
+.pt-12 {
+    padding-top: 12px;
 }
 
 .pl-0 {

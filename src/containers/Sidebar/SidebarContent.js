@@ -251,8 +251,7 @@ class SidebarContent extends Component {
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? (localStorage.getItem('dealer_pin') === '' || localStorage.getItem('dealer_pin') === null || localStorage.getItem('dealer_pin') === undefined) ? null : localStorage.getItem('dealer_pin') : null}
             </span>
-            <ul className="gx-app-nav mt-12" style={{ justifyContent: "center" }}>
-
+            <ul className="gx-app-nav mt-12 " style={{ justifyContent: "center" }}>
               {/* Price */}
               <li>
                 <a className="head-example">
@@ -318,7 +317,7 @@ class SidebarContent extends Component {
               </Menu.Item>
             </Menu>
             :
-            <Menu defaultOpenKeys={[defaultOpenKeys]} selectedKeys={[selectedKeys]} theme={themeType === THEME_TYPE_LITE ? 'lite' : 'dark'} mode="inline">
+            <Menu className="pt-12" defaultOpenKeys={[defaultOpenKeys]} selectedKeys={[selectedKeys]} theme={themeType === THEME_TYPE_LITE ? 'lite' : 'dark'} mode="inline">
               <Menu.Item key="dashboard">
                 <Link to="/dashboard">
                   <i className="icon icon-dasbhoard" >

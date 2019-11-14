@@ -2263,7 +2263,7 @@ export function apkColumns(translation) {
         {
             title:
                 <span>
-                    {convertToLang(translation[APK_SHOW_ON_DEVICE], "SHOW ON DEVICE")}
+                    {convertToLang(translation[APK_SHOW_ON_DEVICE], "SHOW ON DEVICE3")}
                     <Popover placement="top"
                         content={(<Markup content={convertToLang(translation[SHOW_ON_DEVCIE_HELPING_TEXT],
                             `<p>Shows app in <b>Install Apps</b> <br />menu on Devices`)} />)}>

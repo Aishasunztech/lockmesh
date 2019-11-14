@@ -717,6 +717,7 @@ class AddDevice extends Component {
                                     <Button
                                         className="add_user_btn"
                                         type="primary"
+                                        style={{width: "100%"}}
                                         onClick={() => this.handleUserModal()}
                                         style={{ width: "100%" }}
                                     >
