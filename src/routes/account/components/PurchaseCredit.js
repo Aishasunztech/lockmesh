@@ -157,6 +157,8 @@ class PurchaseCredit extends Component {
                     bitCoinModal={this.state.bitCoinModal}
                     showBitCoinModal={this.showBitCoinModal}
                     creditInfo={this.state.creditInfo}
+                    cancelPurchaseModal={this.cancelPurchaseModal}
+                    purchaseCreditsFromBTC={this.props.purchaseCreditsFromBTC}
                 />
                 <Modal
                     // closable={false}
@@ -275,7 +277,7 @@ class PurchaseCredit extends Component {
                                     >
                                         <Select.Option value="">Select Payment Method</Select.Option>
                                         <Select.Option value="CASH">CASH</Select.Option>
-                                        {/* <Select.Option value="BTC">BITCOIN</Select.Option> */}
+                                         <Select.Option value="BTC">BITCOIN</Select.Option>
                                         <Select.Option value="CREDIT">CREDIT CARD</Select.Option>
                                     </Select>,
                                 )}

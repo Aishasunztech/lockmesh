@@ -696,6 +696,10 @@ const RestService = {
         return axios.post(BASE_URL + 'users/purchase_credits_CC', { cardInfo: cardInfo, creditInfo: creditInfo }, RestService.getHeader());
     },
 
+    purchaseCreditsFromBTC: (cardInfo, creditInfo) => {
+      return axios.post(BASE_URL + 'users/purchase_credits_BTC', { cardInfo: cardInfo, creditInfo: creditInfo }, RestService.getHeader());
+    },
+
     getAll_Languages: () => {
         return axios.get(`${BASE_URL}users/get-all-languages`, RestService.getHeader());
     },

@@ -443,6 +443,30 @@ export const purchaseCreditsFromCC = (cardInfo, creditInfo) => {
     }
 }
 
+export const purchaseCreditsFromBTC = (cardInfo, creditInfo) => {
+  return (dispatch) => {
+    // console.log(data);
+    RestService.purchaseCreditsFromBTC(cardInfo, creditInfo).then((response) => {
+      if (RestService.checkAuth(response.data)) {
+        dispatch({
+          type: PURCHASE_CREDITS,
+          response: response.data
+        });
+        if (response.data.status) {
+          dispatch({
+            type: USER_CREDITS,
+            response: response.data
+          })
+        }
+      } else {
+        dispatch({
+          type: INVALID_TOKEN
+        })
+      }
+    });
+  }
+};
+
 export function packagePermission(id, dealers, action, statusAll = false, user) {
     console.log('at domainPermission action ', id, dealers, action, statusAll)
     return (dispatch) => {

@@ -31,7 +31,7 @@ import { DT_MODAL_BODY_7 } from "../../constants/AppConstants";
 import { BASE_URL } from "../../constants/Application";
 import { bindActionCreators } from "redux";
 import {
-  purchaseCredits, purchaseCreditsFromCC
+  purchaseCredits, purchaseCreditsFromCC, purchaseCreditsFromBTC
 } from "../../appRedux/actions";
 import { connect } from "react-redux";
 import RestService from "../../appRedux/services/RestServices";
@@ -50,12 +50,12 @@ class CreditIcon extends Component {
       paymentHistoryColumns: paymentHistoryColumns,
       visible: false,
       currency: 'USD',
-      currency_sign: '$',
       currency_price: this.props.user_credit,
       currency_unit_price: 1,
       purchase_modal: false,
 
-    }
+    };
+
     this.paymentHistoryColumns = [
       {
         title: "Transaction #",
@@ -111,12 +111,10 @@ class CreditIcon extends Component {
 
     this.cr_blnc_columns = [
       {
-        title: <h4 className="weight_600 bg_light_yellow p-5">TOTAL</h4>,
         dataIndex: 'name1',
         key: 'name1',
       },
       {
-        title: <h4 className="weight_600 bg_light_yellow p-5"> {this.props.user_credit} </h4>,
         dataIndex: 'age1',
         key: 'age1',
       },
@@ -167,6 +165,15 @@ class CreditIcon extends Component {
     ];
   }
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.props.user_credit !== prevProps.user_credit){
+      this.setState({
+        currency_price: this.props.user_credit,
+      })
+    }
+  }
+
+
   showPurchaseModal = (e, visible) => {
     this.setState({
       purchase_modal: visible
@@ -198,8 +205,6 @@ class CreditIcon extends Component {
   cr_blnc_title = () => {
     return <h4 className="credit_modal_heading weight_600">{convertToLang(this.props.translation[""], "CURRENT BALANCE (Credits)")}</h4>
   };
-
-
 
   overdue_title = () => {
     return <div className="credit_modal_heading">
@@ -296,9 +301,14 @@ class CreditIcon extends Component {
     return [
 
       {
+        name1: <h4 className="weight_600 bg_light_yellow p-5">TOTAL</h4>,
+        age1: <h4 className="weight_600 bg_light_yellow p-5"> {this.props.user_credit} </h4>,
+      },
+
+      {
         name1: <h6 className="weight_600 p-5"> CURRENCY</h6>,
         age1: <Select defaultValue="USD"
-          onChange={(e) => { this.onChangeCurrency(e, 'currency') }}
+                      onChange={(e) => { this.onChangeCurrency(e, 'currency') }}
         >
           <Select.Option value="USD">USD</Select.Option>
           <Select.Option value="CAD">CAD</Select.Option>
@@ -365,6 +375,7 @@ class CreditIcon extends Component {
           purchase_modal={this.state.purchase_modal}
           purchaseCredits={this.props.purchaseCredits}
           purchaseCreditsFromCC={this.props.purchaseCreditsFromCC}
+          purchaseCreditsFromBTC={this.props.purchaseCreditsFromBTC}
           translation={this.props.translation}
 
         />
@@ -453,7 +464,8 @@ class CreditIcon extends Component {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     purchaseCredits: purchaseCredits,
-    purchaseCreditsFromCC: purchaseCreditsFromCC
+    purchaseCreditsFromCC: purchaseCreditsFromCC,
+    purchaseCreditsFromBTC: purchaseCreditsFromBTC
   }, dispatch);
 }
 
