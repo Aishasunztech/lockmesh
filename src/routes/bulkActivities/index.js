@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Modal, Col, Row, Card, Button, Input, Select, Table } from 'antd';
+import { Modal, Col, Row, Card, Button, Input, Select, Table, Icon } from 'antd';
 import { getAllDealers } from "../../appRedux/actions/Dealers";
 import HistoryModal from "./components/bulkHistory";
 import {
@@ -12,7 +12,9 @@ import {
     getUsersOfDealers,
 
     applyBulkPushApps,
-    setBulkPushApps
+    applyBulkPullApps,
+    setBulkPushApps,
+    setBulkPullApps
 } from "../../appRedux/actions/BulkDevices";
 
 import {
@@ -71,6 +73,23 @@ const confirm = Modal.confirm;
 class BulkActivities extends Component {
     constructor(props) {
         super(props);
+        this.pushAppsModalColumns = [
+            {
+                title: "#",
+                dataIndex: 'counter',
+                align: 'center',
+                className: 'row',
+                render: (text, record, index) => ++index,
+            },
+            {
+                title: 'DEVICE ID',
+                align: "center",
+                dataIndex: 'device-id',
+                key: "device-id",
+                sortDirections: ['ascend', 'descend'],
+
+            }
+        ]
 
         this.actionList = [
             { key: 'PUSH APPS', value: "Push Apps" },
@@ -101,7 +120,9 @@ class BulkActivities extends Component {
             allDealers: [],
 
             pushAppsModal: false,
+            pullAppsModal: false,
             apk_list: [],
+            pushAppsResponseModal: false
         }
     }
 
@@ -126,18 +147,9 @@ class BulkActivities extends Component {
 
 
     showPushAppsModal = (visible) => {
-        // console.log(this.state.apk_list)
-
-        if (visible) {
-            this.setState({
-                pushAppsModal: visible,
-                // selectedApps: this.state.apk_list
-            })
-        } else {
-            this.setState({
-                pushAppsModal: visible
-            })
-        }
+        this.setState({
+            pushAppsModal: visible,
+        })
     }
 
     showPullAppsModal = (visible) => {
@@ -237,6 +249,20 @@ class BulkActivities extends Component {
         this.setState({ allUsers, allDealers })
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.pushAppsResponseModal !== prevProps.pushAppsResponseModal) {
+            this.setState({
+                pushAppsResponseModal: this.props.pushAppsResponseModal
+            })
+        }
+    }
+
+    handleCancelDuplicate = () => {
+        this.setState({
+            pushAppsResponseModal: false
+        })
+        // this.props.insertNewData({ newData: [], submit: false });
+    }
 
     handleColumnSearch = (e) => {
 
@@ -447,6 +473,9 @@ class BulkActivities extends Component {
         if (e === "PUSH APPS") {
             this.setState({ pushAppsModal: true });
         }
+        else if (e === "PULL APPS") {
+            this.setState({ pullAppsModal: true });
+        }
 
         this.setState({ selectedAction: e });
 
@@ -578,7 +607,9 @@ class BulkActivities extends Component {
                         bulkSuspendDevice={this.props.bulkSuspendDevice}
                         bulkActivateDevice={this.props.bulkActivateDevice}
                         selectedPushAppsList={this.props.selectedPushAppsList}
+                        selectedPullAppsList={this.props.selectedPullAppsList}
                         applyPushApps={this.props.applyPushApps}
+                        applyPullApps={this.props.applyPullApps}
                         renderList={this.renderList}
                         translation={this.props.translation}
                         onChangeTableSorting={this.handleTableChange}
@@ -596,112 +627,76 @@ class BulkActivities extends Component {
                     translation={this.props.translation}
                 />
 
-                {/* Duplicate modal */}
-                {/* <Modal
+                {/* Push Apps responses handle through modal */}
+                <Modal
                     maskClosable={false}
-                    title={<div><Icon type="question-circle" className='warning' /><span> WARNNING! Duplicate Data</span></div>}
-                    visible={this.state.duplicate_modal_show}
-                    onOk={this.InsertNewData}
+                    title={<div><Icon type="question-circle" className='warning' /><span> WARNNING! </span></div>}
+                    visible={this.state.pushAppsResponseModal}
                     onCancel={this.handleCancelDuplicate}
-                    okText='Submit'
-                    okButtonProps={{
-                        disabled: this.state.newData.length ? false : true
-                    }}
+                    footer={false}
                 >
+                    {this.props.failed_device_ids.length ?
+                        <Fragment>
+                            <h2>Failed to push apps on these Devices</h2>
+                            <Table
+                                bordered
+                                size="middle"
+                                pagination={false}
+                                className="dup_table"
+                                columns={this.pushAppsModalColumns}
+                                dataSource={[]}
+                            />
+                            <span className="warning_hr">
+                                <hr />
+                            </span>
+                        </Fragment>
+                        : null}
 
-                    <Table
-                        bordered
-                        size="middle"
-                        pagination={false}
-                        className="dup_table"
-                        columns={JSON.parse(JSON.stringify(duplicateModalColumns))}
-                        dataSource={
-                            this.state.duplicate_ids.map(row => {
-                                // console.log('single row for id:: ', row)
-                                if (this.state.duplicate_data_type == 'chat_id') {
-                                    return {
-                                        key: row.chat_id,
-                                        label: row.name,
-                                        chat_id: row.chat_id
-                                    }
-                                } else if (this.state.duplicate_data_type == 'pgp_email') {
-                                    return {
-                                        key: row.pgp_email,
-                                        label: row.name,
-                                        pgp_email: row.pgp_email
-                                    }
-                                }
-                                else if (this.state.duplicate_data_type == 'sim_id') {
-                                    return {
-                                        key: row.id,
-                                        label: row.name,
-                                        sim_id: row[this.state.duplicate_data_type],
-                                        start_date: row.start_date,
-                                        expiry_date: row.expiry_date
-                                    }
-                                }
+                    {this.props.queue_device_ids.length ?
+                        <Fragment>
+                            <h2>Offline Devices</h2>
+                            <p><small>(Apps pushed to these devices. Action will be performed when devices back online)</small></p>
+                            <Table
+                                bordered
+                                size="middle"
+                                pagination={false}
+                                className="dup_table"
+                                columns={this.pushAppsModalColumns}
+                                dataSource={[]}
+                            />
+                            <span className="warning_hr">
+                                <hr />
+                            </span>
+                        </Fragment>
+                        : null}
 
-                            })
-                        }
-                    />
-                    <span className="warning_hr">
-                        <hr />
-                    </span>
-                    <h2>New Data</h2>
 
+                    <h2>Apps are being Pushed on these Devices</h2>
                     <Table
                         size="middle"
                         pagination={false}
                         bordered
                         className="dup_table"
-                        columns={duplicateModalColumns.splice(1, duplicateModalColumns.length)}
-                        dataSource={
-                            this.state.newData.map(row => {
-
-                                if (this.state.duplicate_data_type == 'chat_id') {
-                                    return {
-                                        key: row.chat_id,
-                                        chat_id: row.chat_id
-                                    }
-                                } else if (this.state.duplicate_data_type == 'pgp_email') {
-                                    return {
-                                        key: row.pgp_email,
-                                        pgp_email: row.pgp_email
-                                    }
-                                }
-                                else if (this.state.duplicate_data_type == 'sim_id') {
-                                    return {
-                                        key: row.id,
-                                        sim_id: row[this.state.duplicate_data_type],
-                                        start_date: row.start_date,
-                                        expiry_date: row.expiry_date
-                                    }
-                                }
-                            })
-                        }
+                        columns={this.pushAppsModalColumns}
+                        dataSource={[]}
                     />
-                </Modal> */}
+                </Modal>
 
 
                 <PushPullApps
                     showPushAppsModal={this.showPushAppsModal}
                     pushAppsModal={this.state.pushAppsModal}
+                    showPullAppsModal={this.showPullAppsModal}
+                    pullAppsModal={this.state.pullAppsModal}
                     apk_list={this.props.apk_list}
                     onPushAppsSelection={this.onPushAppsSelection}
                     setBulkPushApps={this.props.setBulkPushApps}
-                    showPullAppsModal={this.showPullAppsModal}
+                    setBulkPullApps={this.props.setBulkPullApps}
                     translation={this.props.translation}
                 />
 
             </Fragment >
         )
-        // } else {
-        //     return (
-        //         <Redirect to={{
-        //             pathname: '/app',
-        //         }} />
-        //     )
-        // }
     }
 }
 
@@ -718,7 +713,9 @@ const mapDispatchToProps = (dispatch) => {
         showPushAppsModal: showPushAppsModal,
         getDealerApps: getDealerApps,
         applyPushApps: applyBulkPushApps,
-        setBulkPushApps: setBulkPushApps
+        applyPullApps: applyBulkPullApps,
+        setBulkPushApps: setBulkPushApps,
+        setBulkPullApps: setBulkPullApps
     }, dispatch);
 }
 
@@ -727,6 +724,7 @@ const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users,
     console.log("device_details.apk_list", device_details.apk_list);
     return {
         selectedPushAppsList: bulkDevices.bulkSelectedPushApps,
+        selectedPullAppsList: bulkDevices.bulkSelectedPullApps,
         devices: bulkDevices.bulkDevices,
         history: bulkDevices.bulkDevicesHistory,
         users_list: bulkDevices.usersOfDealers, // users.users_list,
@@ -737,6 +735,10 @@ const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users,
 
         pushAppsModal: device_details.pushAppsModal,
         apk_list: device_details.apk_list,
+        pushAppsResponseModal: bulkDevices.pushAppsResponseModal,
+        failed_device_ids: bulkDevices.failed_device_ids,
+        queue_device_ids: bulkDevices.queue_device_ids,
+        pushed_device_ids: bulkDevices.pushed_device_ids
     };
 }
 

@@ -1,4 +1,4 @@
-import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS } from "../../constants/ActionTypes";
+import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
 
@@ -138,14 +138,25 @@ export function getUsersOfDealers(data) {
 }
 
 
+
+
+export const setBulkPushApps = (apps) => {
+    apps.forEach((el) => {
+        el.enable = (typeof (el.enable) === Boolean || typeof (el.enable) === 'Boolean' || typeof (el.enable) === 'boolean') ? el.enable : false;
+        el.guest = (typeof (el.guest) === Boolean || typeof (el.guest) === 'Boolean' || typeof (el.guest) === 'boolean') ? el.guest : false;
+        el.encrypted = (typeof (el.encrypted) === Boolean || typeof (el.encrypted) === 'Boolean' || typeof (el.encrypted) === 'boolean') ? el.encrypted : false;
+        delete el.apk_logo;
+        delete el.apk_status;
+    })
+    return (dispatch) => {
+        dispatch({
+            type: SET_PUSH_APPS,
+            payload: apps,
+        })
+    }
+}
+
 export const applyBulkPushApps = (data) => {
-    // data.apps.forEach((el) => {
-    //     el.enable = (typeof (el.enable) === Boolean || typeof (el.enable) === 'Boolean' || typeof (el.enable) === 'boolean') ? el.enable : false;
-    //     el.guest = (typeof (el.guest) === Boolean || typeof (el.guest) === 'Boolean' || typeof (el.guest) === 'boolean') ? el.guest : false;
-    //     el.encrypted = (typeof (el.encrypted) === Boolean || typeof (el.encrypted) === 'Boolean' || typeof (el.encrypted) === 'boolean') ? el.encrypted : false;
-    //     delete el.apk_logo;
-    //     delete el.apk_status;
-    // })
     return (dispatch) => {
         RestService.applyBulkPushApps(data).then((response) => {
             if (RestService.checkAuth(response.data)) {
@@ -162,18 +173,42 @@ export const applyBulkPushApps = (data) => {
     }
 }
 
-export const setBulkPushApps = (apps) => {
+
+// Set Pull apps 
+export const setBulkPullApps = (apps) => {
     apps.forEach((el) => {
-        el.enable = (typeof (el.enable) === Boolean || typeof (el.enable) === 'Boolean' || typeof (el.enable) === 'boolean') ? el.enable : false;
-        el.guest = (typeof (el.guest) === Boolean || typeof (el.guest) === 'Boolean' || typeof (el.guest) === 'boolean') ? el.guest : false;
-        el.encrypted = (typeof (el.encrypted) === Boolean || typeof (el.encrypted) === 'Boolean' || typeof (el.encrypted) === 'boolean') ? el.encrypted : false;
-        delete el.apk_logo;
-        delete el.apk_status;
+
+        delete el.icon;
+        el.apk_id = el.key;
+        el.apk_name = el.label;
+        el.version_name = "";
+        el.apk = "";
+        el.guest = false;
+        el.encrypted = false;
+        el.enable = false;
     })
     return (dispatch) => {
         dispatch({
-            type: SET_PUSH_APPS,
-            payload: apps,
+            type: SET_PULL_APPS,
+            payload: apps
+
+        })
+    }
+}
+
+export const applyBulkPullApps = (data) => {
+    return (dispatch) => {
+        RestService.applyBulkPullApps(data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: BULK_PULL_APPS,
+                    payload: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
         })
     }
 }

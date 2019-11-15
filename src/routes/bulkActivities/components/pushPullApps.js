@@ -438,7 +438,8 @@ export default class PushPullApps extends Component {
 
 
     applyPullApps = () => {
-        this.props.applyPullApps(this.state.pullApps, this.props.device_id, this.props.usr_acc_id);
+        // this.props.applyPullApps(this.state.pullApps, this.props.device_id, this.props.usr_acc_id);
+        this.props.setBulkPullApps(this.state.pullApps);
         this.setState({ selectedApps: [], selectedAppKeys: [], })
         // this.props.getActivities(this.props.device_id)
     }

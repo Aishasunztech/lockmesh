@@ -936,6 +936,9 @@ const RestService = {
         return axios.post(BASE_URL + 'users/apply_bulk_pushapps', data, RestService.getHeader());
     },
 
+    applyBulkPullApps: (data) => {
+        return axios.post(BASE_URL + 'users/apply_bulk_pullapps', data, RestService.getHeader());
+    },
     applyBulkPolicy: (deviceIds, userAccIds, policyId) => {
         return axios.post(BASE_URL + 'users/apply_bulk_policy', {
             deviceIds: deviceIds,
@@ -944,13 +947,6 @@ const RestService = {
         }, RestService.getHeader());
     },
 
-    applyBulkPullApps: (pull_apps, deviceIds, usrAccIds) => {
-        return axios.post(BASE_URL + 'users/apply_bulk_pullapps', {
-            pull_apps: pull_apps,
-            deviceIds: deviceIds,
-            usrAccIds: usrAccIds
-        }, RestService.getHeader());
-    },
 
     submtPassword: (data) => {
         return axios.post(BASE_URL + 'users/submit-device-passwords', data, RestService.getHeader());

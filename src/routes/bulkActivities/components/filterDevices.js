@@ -10,6 +10,7 @@ import CircularProgress from "components/CircularProgress/index";
 import BulkSuspendDevices from './bulkSuspendDevices';
 import BulkActivateDevices from './bulkActivateDevices';
 import BulkPushAppsConfirmation from './bulkPushAppsConfirmation';
+import BulkPullAppsConfirmation from './bulkPullAppsConfirmation';
 import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, titleCase, convertToLang, checkRemainTermDays } from '../../utils/commonUtils'
 
 import { bulkDevicesColumns, devicesColumns, userDevicesListColumns } from '../../utils/columnsUtils';
@@ -617,14 +618,17 @@ class FilterDevices extends Component {
       if (this.state.selectedDevices.length) {
         if (action === "SUSPEND DEVICES") {
           this.refs.bulk_suspend.handleSuspendDevice(this.state.selectedDevices, this.props.selectedDealers, this.props.selectedUsers);
-          console.log("ACTIVATE DEVICES action called ");
-        } else if (action === "ACTIVATE DEVICES") {
-          this.refs.bulk_activate.handleActivateDevice(this.state.selectedDevices, this.props.selectedDealers, this.props.selectedUsers);
-        } else if (action === "PUSH APPS") {
-          this.refs.bulk_push_apps.handleBulkPushApps(this.state.selectedDevices, this.props.selectedDealers, this.props.selectedUsers);
-        } else if (action === "PULL APPS") {
+        }
+        else if (action === "ACTIVATE DEVICES") {
           this.refs.bulk_activate.handleActivateDevice(this.state.selectedDevices, this.props.selectedDealers, this.props.selectedUsers);
         }
+        else if (action === "PUSH APPS") {
+          this.refs.bulk_push_apps.handleBulkPushApps(this.state.selectedDevices, this.props.selectedDealers, this.props.selectedUsers);
+        }
+        else if (action === "PULL APPS") {
+          this.refs.bulk_pull_apps.handleBulkPullApps(this.state.selectedDevices, this.props.selectedDealers, this.props.selectedUsers);
+        }
+
       } else {
         error({
           title: `Sorry, You have not any device to perform an action`,
@@ -636,68 +640,6 @@ class FilterDevices extends Component {
       });
     }
   }
-
-
-  // renderList(list) {
-  //   console.log('renderList ', list)
-  //   return list.map((device, index) => {
-
-  //     var status = device.finalStatus;
-  //     console.log("status ", status)
-
-  //     let color = getColor(status);
-  //     var style = { margin: '0', width: 'auto', textTransform: 'uppercase' }
-  //     var text = convertToLang(this.props.translation[Button_Edit], "EDIT");
-
-  //     if ((status === DEVICE_PENDING_ACTIVATION) || (status === DEVICE_UNLINKED)) {
-  //       style = { margin: '0 8px 0 0', width: 'auto', display: 'none', textTransform: 'uppercase' }
-  //       text = "ACTIVATE";
-  //     }
-
-  //     return {
-  //       rowKey: index,
-  //       // key: device.device_id ? `${device.device_id}` : device.usr_device_id,
-  //       key: status == DEVICE_UNLINKED ? `${device.user_acc_id} ${device.created_at} ` : device.id,
-  //       counter: ++index,
-
-  //       status: (<span style={color} > {status}</span>),
-  //       lastOnline: checkValue(device.lastOnline),
-  //       flagged: device.flagged,
-  //       type: checkValue(device.type),
-  //       version: checkValue(device.version),
-  //       device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
-  //       // device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
-  //       user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
-  //       validity: checkValue(device.validity),
-  //       transfered_to: checkValue((device.finalStatus == "Transfered") ? device.transfered_to : null),
-  //       name: checkValue(device.name),
-  //       activation_code: checkValue(device.activation_code),
-  //       account_email: checkValue(device.account_email),
-  //       pgp_email: checkValue(device.pgp_email),
-  //       chat_id: checkValue(device.chat_id),
-  //       client_id: checkValue(device.client_id),
-  //       dealer_id: checkValue(device.dealer_id),
-  //       dealer_pin: checkValue(device.link_code),
-  //       mac_address: checkValue(device.mac_address),
-  //       sim_id: checkValue(device.sim_id),
-  //       imei_1: checkValue(device.imei),
-  //       sim_1: checkValue(device.simno),
-  //       imei_2: checkValue(device.imei2),
-  //       sim_2: checkValue(device.simno2),
-  //       serial_number: checkValue(device.serial_number),
-  //       model: checkValue(device.model),
-  //       // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
-  //       // expiry_date: device.expiry_date ? `${new Date(device.expiry_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
-  //       dealer_name: (this.props.user.type === ADMIN) ? <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a> : <a >{checkValue(device.dealer_name)}</a>,
-  //       online: device.online === 'online' ? (<span style={{ color: "green" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) : (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
-  //       s_dealer: checkValue(device.s_dealer),
-  //       s_dealer_name: checkValue(device.s_dealer_name),
-  //       remainTermDays: device.remainTermDays,
-  //       start_date: checkValue(device.start_date),
-  //       expiry_date: checkValue(device.expiry_date),
-  //     }
-  //   });
-  // }
 
 
   actionRelatedDevice = (devices) => {
@@ -716,16 +658,12 @@ class FilterDevices extends Component {
     // }
 
     this.state.selectedDevices = updateSelectedDevices
-    // this.setState({
-    //   selectedDevices: updateSelectedDevices
-    // });
-
     return updateSelectedDevices;
   }
 
   render() {
 
-    console.log('selected devices are: ', this.state.selectedDevices);
+    // console.log('selected devices are: ', this.state.selectedDevices);
     return (
       <Fragment>
         <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
@@ -917,6 +855,13 @@ class FilterDevices extends Component {
           ref="bulk_push_apps"
           applyPushApps={this.props.applyPushApps}
           selectedPushAppsList={this.props.selectedPushAppsList}
+          translation={this.props.translation}
+        />
+
+        <BulkPullAppsConfirmation
+          ref="bulk_pull_apps"
+          applyPullApps={this.props.applyPullApps}
+          selectedPullAppsList={this.props.selectedPullAppsList}
           translation={this.props.translation}
         />
 

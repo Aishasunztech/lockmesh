@@ -214,7 +214,7 @@ export default class Activity extends Component {
                     width="880px"
                     maskClosable={false}
                     visible={this.props.historyModalShow}
-                    title={convertToLang(this.props.translation["Bulk Activities"], "Bulk Activities")}
+                    title={convertToLang(this.props.translation[""], "History of Bulk Device Activities")}
                     onOk={this.handleOk}
                     onCancel={this.props.handleHistoryCancel}
                     footer={null}

@@ -1,6 +1,6 @@
 
 import {
-    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS,
+    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS,
 } from "../../constants/ActionTypes";
 import { message, Modal } from 'antd';
 
@@ -19,7 +19,12 @@ const initialState = {
     usersOfDealers: [],
     selectedDevices: [], // again filter devices against applied action
     noOfApp_push_pull: 0,
-    bulkSelectedPushApps: []
+    bulkSelectedPushApps: [],
+    bulkSelectedPullApps: [],
+    pushAppsResponseModal: false,
+    failed_device_ids: [],
+    queue_device_ids: [],
+    pushed_device_ids: []
 };
 
 export default (state = initialState, action) => {
@@ -30,6 +35,13 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 bulkSelectedPushApps: action.payload
+            }
+        }
+
+        case SET_PULL_APPS: {
+            return {
+                ...state,
+                bulkSelectedPullApps: action.payload
             }
         }
         case BULK_LOADING:
@@ -140,20 +152,27 @@ export default (state = initialState, action) => {
 
 
         case BULK_PUSH_APPS: {
-            let noOfApps = 0
+            console.log('BULK_PUSH_APPS reducer data:: ', action.payload);
+
+            let showResponseModal = false;
+
             if (action.payload.status) {
-                if (action.payload.online) {
+                if (action.payload.online && !action.payload.offline && !action.payload.failed) {
                     success({
                         title: action.payload.msg, // "Apps are Being pushed"
                     });
-                } else {
-                    // message.warning(<Fragment><span>Warning Device Offline</span> <div>Apps pushed to device. </div> <div>Action will be performed when device is back online</div></Fragment>)
+                } else if (!action.payload.online && action.payload.offline && !action.payload.failed) {
                     warning({
-                        title: action.payload.msg, //  'Warning Device Offline',
-                        content: action.payload.content // "Apps pushed to device. Action will be performed when device is back online", // 'Apps pushed to device. Action will be performed when device is back online',
+                        title: action.payload.msg,
+                        content: action.payload.content
                     });
+                } else {
+                    // state.failed_device_ids = action.payload.failed_device_ids;
+                    state.queue_device_ids = action.payload.queue_device_ids;
+                    state.pushed_device_ids = action.payload.pushed_device_ids;
+                    showResponseModal = true;
                 }
-                noOfApps = action.payload.noOfApps
+
             } else {
                 error({
                     title: action.payload.msg,
@@ -161,7 +180,46 @@ export default (state = initialState, action) => {
             }
             return {
                 ...state,
-                noOfApp_push_pull: noOfApps
+                // failed_device_ids: [...state.failed_device_ids],
+                queue_device_ids: [...state.queue_device_ids],
+                pushed_device_ids: [...state.pushed_device_ids],
+                pushAppsResponseModal: showResponseModal
+            }
+        }
+
+        case BULK_PULL_APPS: {
+            console.log('BULK_PULL_APPS reducer data:: ', action.payload);
+
+            let showResponseModal = false;
+
+            if (action.payload.status) {
+                if (action.payload.online && !action.payload.offline && !action.payload.failed) {
+                    success({
+                        title: action.payload.msg, // "Apps are Being pushed"
+                    });
+                } else if (!action.payload.online && action.payload.offline && !action.payload.failed) {
+                    warning({
+                        title: action.payload.msg,
+                        content: action.payload.content
+                    });
+                } else {
+                    // state.failed_device_ids = action.payload.failed_device_ids;
+                    state.queue_device_ids = action.payload.queue_device_ids;
+                    state.pushed_device_ids = action.payload.pushed_device_ids;
+                    showResponseModal = true;
+                }
+
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+            return {
+                ...state,
+                // failed_device_ids: [...state.failed_device_ids],
+                queue_device_ids: [...state.queue_device_ids],
+                pushed_device_ids: [...state.pushed_device_ids],
+                pushAppsResponseModal: showResponseModal
             }
         }
 
