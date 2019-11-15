@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { Button, Form, Input, Select, InputNumber, Spin } from 'antd';
+import { Button, Form, Input, Select, InputNumber, Spin, DatePicker } from 'antd';
 import { checkValue, convertToLang } from '../../utils/commonUtils'
 
 import { getSimIDs, getChatIDs, getPGPEmails } from "../../../appRedux/actions/Devices";
@@ -30,6 +30,7 @@ import {
 } from '../../../constants/DeviceConstants';
 import { Button_Add_User, Button_submit, Button_Cancel } from '../../../constants/ButtonConstants';
 import { LABEL_DATA_PGP_EMAIL } from '../../../constants/LabelConstants';
+import moment from 'moment'
 
 const { TextArea } = Input;
 
@@ -355,29 +356,49 @@ class EditDevice extends Component {
                             <Input disabled />
                         )}
                     </Form.Item>
-                    <Form.Item
-                        label={convertToLang(this.props.translation[Expire_Date], "Extend Expire Date")}
-                        labelCol={{ span: 8, xs: 24, sm: 8 }}
-                        wrapperCol={{ span: 14, md: 14, xs: 24 }}
-                    >
-                        {this.props.form.getFieldDecorator('expiry_date', {
-                            initialValue: this.props.device.expiry_date,
-                            rules: [{
-                                required: true, message: convertToLang(this.props.translation[Expire_Date_Require], "Expiry Date is Required ! "),
-                            }],
-                        })(
-                            <Select
-                                style={{ width: '100%' }}
-                            >
-                                {/* {(this.props.device.finalStatus === DEVICE_TRIAL || this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? <Select.Option value={0}>{convertToLang(this.props.translation[DEVICE_TRIAL], DEVICE_TRIAL)} (7 {convertToLang(this.props.translation[Days], Days)})</Select.Option> : null} */}
-                                <Select.Option value={1}> {convertToLang(this.props.translation[one_month], one_month)} </Select.Option>
-                                <Select.Option value={3}>{convertToLang(this.props.translation[three_month], three_month)}</Select.Option>
-                                <Select.Option value={6}>{convertToLang(this.props.translation[six_month], six_month)}</Select.Option>
-                                <Select.Option value={12}>{convertToLang(this.props.translation[twelve_month], twelve_month)}</Select.Option>
-                            </Select>
-                        )}
 
-                    </Form.Item>
+                    {this.props.user.type === ADMIN ?
+                        <Form.Item
+                            label={convertToLang(this.props.translation[""], "Adjust Expire Date")}
+                            labelCol={{ span: 8, xs: 24, sm: 8 }}
+                            wrapperCol={{ span: 14, md: 14, xs: 24 }}
+                        >
+                            {this.props.form.getFieldDecorator('expiry_date', {
+                                initialValue: moment(this.props.device.expiry_date, 'YYYY/MM/DD'),
+                                // rules: [{
+                                //     required: true, message: convertToLang(this.props.translation[Expire_Date_Require], "Expiry Date is Required ! "),
+                                // }],
+                            })(
+                                <DatePicker style={{ width: '100%' }} format={'YYYY/MM/DD'} disabled={(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION)} />
+                            )}
+
+                        </Form.Item>
+                        :
+
+                        <Form.Item
+                            label={convertToLang(this.props.translation[Expire_Date], "Extend Expire Date")}
+                            labelCol={{ span: 8, xs: 24, sm: 8 }}
+                            wrapperCol={{ span: 14, md: 14, xs: 24 }}
+                        >
+                            {this.props.form.getFieldDecorator('expiry_date', {
+                                initialValue: this.props.device.expiry_date,
+                                rules: [{
+                                    required: true, message: convertToLang(this.props.translation[Expire_Date_Require], "Expiry Date is Required ! "),
+                                }],
+                            })(
+                                <Select
+                                    style={{ width: '100%' }}
+                                >
+                                    {/* {(this.props.device.finalStatus === DEVICE_TRIAL || this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? <Select.Option value={0}>{convertToLang(this.props.translation[DEVICE_TRIAL], DEVICE_TRIAL)} (7 {convertToLang(this.props.translation[Days], Days)})</Select.Option> : null} */}
+                                    <Select.Option value={1}> {convertToLang(this.props.translation[one_month], one_month)} </Select.Option>
+                                    <Select.Option value={3}>{convertToLang(this.props.translation[three_month], three_month)}</Select.Option>
+                                    <Select.Option value={6}>{convertToLang(this.props.translation[six_month], six_month)}</Select.Option>
+                                    <Select.Option value={12}>{convertToLang(this.props.translation[twelve_month], twelve_month)}</Select.Option>
+                                </Select>
+                            )}
+
+                        </Form.Item>
+                    }
 
                     {(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ?
                         <Fragment>

@@ -110,8 +110,8 @@ class SidebarContent extends Component {
 
     // console.log('get new device', this.props.getNewDevicesList())
     this.props.getNewDevicesList();
-    this.props.getNewCashRequests();
-    this.props.getUserCredit();
+    // this.props.getNewCashRequests();
+    // this.props.getUserCredit();
 
   }
 
@@ -122,8 +122,8 @@ class SidebarContent extends Component {
 
     if (this.props.pathname !== nextProps.pathname) {
       this.props.getNewDevicesList();
-      this.props.getNewCashRequests();
-      this.props.getUserCredit()
+      // this.props.getNewCashRequests();
+      // this.props.getUserCredit()
     }
   }
 
