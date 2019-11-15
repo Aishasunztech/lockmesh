@@ -76,7 +76,7 @@ class EditDevice extends Component {
             product_prices: [],
             products: [],
             packages: [],
-            expiry_date: this.props.device.expiry_date,
+            expiry_date: this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION ? this.props.device.expiry_date : this.props.device.expiry_months + " month",
             services: false,
             checkServices: {
                 display: 'none',
@@ -114,6 +114,7 @@ class EditDevice extends Component {
                 values.prevPGP = this.props.device.pgp_email;
                 values.prevChatID = this.props.device.chat_id;
                 values.prevSimId = this.props.device.sim_id;
+                values.prevSimId2 = this.props.device.sim_id2;
                 values.finalStatus = this.props.device.finalStatus;
                 values.prevService = this.props.device.services
                 if (this.props.user.type === ADMIN) {
@@ -925,7 +926,7 @@ class EditDevice extends Component {
                                     )}
                                 </Form.Item>
                             </Col>
-                            {this.props.user.type === ADMIN ?
+                            {this.props.user.type === ADMIN && this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION ?
                                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                     <Form.Item
                                         label={<Markup content={convertToLang(this.props.translation[""], "Adjust <br>Expire Date")} />}
@@ -939,7 +940,7 @@ class EditDevice extends Component {
                                             //     required: true, message: convertToLang(this.props.translation[Expire_Date_Require], "Expiry Date is Required ! "),
                                             // }],
                                         })(
-                                            <DatePicker style={{ width: '100%' }} disabledDate={this.disabledDate} format={'YYYY/MM/DD'} disabled />
+                                            <DatePicker style={{ width: '100%' }} disabledDate={this.disabledDate} format={'YYYY/MM/DD'} disabled={(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION)} />
                                         )}
 
                                     </Form.Item>

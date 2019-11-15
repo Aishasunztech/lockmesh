@@ -215,9 +215,10 @@ class Services extends Component {
   render() {
     const { visible } = this.state;
     let { services, extended_services } = this.props;
+    let serviceData = services
     let currentServices = this.filterServices(services);
     let extendedServices = this.filterServices(extended_services);
-
+    console.log(serviceData);
     return (
       <div>
         <Modal
@@ -241,23 +242,26 @@ class Services extends Component {
             dataSource={this.renderList(currentServices)}
             pagination={false}
           />
+          {(serviceData && serviceData.grace_days) ? <h4 style={{ float: "right", marginTop: 15 }}>
+            Total Grace Days Applied : {serviceData.grace_days}
+          </h4> : null}
           <br /> <br /> <br /> <br />
           {(this.props.extended_services) ?
             <Fragment>
-              <Row>
-                <Col xs={24} sm={24} md={15} lg={15} xl={15}>
-                  <h2 style={{ textAlign: 'right' }}>EXTENDED SERVICES</h2>
-                </Col>
-                {(this.props.user.type !== 'admin') ?
-                  <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-                    <Button disabled={(this.props.extended_services) ? false : true}
-                            style={{float: 'right'}} type="danger" onClick={() => {
-                      this.cancelExtendedServices()
-                    }}>Cancel Extended Services</Button>
-                  </Col>
-                  : ""
-                }
-              </Row>
+              {/* <Row>
+                <Col xs={24} sm={24} md={15} lg={15} xl={15}></Col> */}
+              <h2 style={{ textAlign: 'center' }}>EXTENDED SERVICES</h2>
+
+              {(this.props.user.type !== 'admin') ?
+                // <Col xs={24} sm={24} md={9} lg={9} xl={9}>
+                <Button disabled={(this.props.extended_services) ? false : true}
+                  style={{ float: 'right' }} type="danger" onClick={() => {
+                    this.cancelExtendedServices()
+                  }}>Cancel Extended Services</Button>
+                // </Col>
+                : ""
+              }
+              {/* </Row> */}
               <br />
 
               <Table
@@ -275,7 +279,7 @@ class Services extends Component {
           ref="history_services"
           translation={this.props.translation}
           servicesHistoryList={this.props.servicesHistoryList}
-          // deviceId={this.props.device.device_id}
+        // deviceId={this.props.device.device_id}
         />
       </div>
     )
