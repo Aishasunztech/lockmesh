@@ -489,14 +489,14 @@ export default (state = initialState, action) => {
                             let allDealers = oldDealers.filter((item) => !newDealers.includes(item.dealer_id));
                             // state.packages[index].dealer_permission = allDealers;
                             // state.packages[index].permission_count = allDealers.length;
-                            if (user && user.type !== "admin") {
-                                let filterDealers = allDealers.filter((item) => item.dealer_type === "admin");
-                                state.packages[index].dealer_permission = filterDealers;
-                                state.packages[index].permission_count = filterDealers.length;
-                            } else {
+                            // if (user && user.type !== "admin") {
+                            //     let filterDealers = allDealers.filter((item) => item.dealer_type === "admin");
+                            //     state.packages[index].dealer_permission = filterDealers;
+                            //     state.packages[index].permission_count = filterDealers.length;
+                            // } else {
                                 state.packages[index].dealer_permission = allDealers;
                                 state.packages[index].permission_count = allDealers.length;
-                            }
+                            // }
                             state.packages[index].statusAll = false;
                         } else {
                             let allDealers = [];
@@ -671,14 +671,14 @@ export default (state = initialState, action) => {
                     if (index !== -1) {
                         if (!action.formData.statusAll) {
                             let allDealers = oldDealers.filter((item) => !newDealers.includes(item.dealer_id));
-                            if (user && user.type !== "admin") {
-                                let filterDealers = allDealers.filter((item) => item.dealer_type === "admin");
-                                state.domainList[index].dealers = JSON.stringify(filterDealers);
-                                state.domainList[index].permission_count = filterDealers.length;
-                            } else {
+                            // if (user && user.type !== "admin") {
+                            //     let filterDealers = allDealers.filter((item) => item.dealer_type === "admin");
+                            //     state.domainList[index].dealers = JSON.stringify(filterDealers);
+                            //     state.domainList[index].permission_count = filterDealers.length;
+                            // } else {
                                 state.domainList[index].dealers = JSON.stringify(allDealers);
                                 state.domainList[index].permission_count = allDealers.length;
-                            }
+                            // }
                             state.domainList[index].statusAll = false;
                         } else {
                             if (user && user.type !== "admin") {

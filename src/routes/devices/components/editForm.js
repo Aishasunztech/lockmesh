@@ -750,7 +750,7 @@ class EditDevice extends Component {
 
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
-                                    label={(this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ? convertToLang(this.props.translation[DEVICE_ID], DEVICE_ID) : null}
+                                    label={(this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ? convertToLang(this.props.translation[DEVICE_ID], "DEVICE ID") : null}
                                     labelCol={{ span: 8 }}
                                     wrapperCol={{ span: 16 }}
                                 >
@@ -929,7 +929,7 @@ class EditDevice extends Component {
                             {this.props.user.type === ADMIN && this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION ?
                                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                     <Form.Item
-                                        label={<Markup content={convertToLang(this.props.translation[""], "Adjust <br>Expire Date")} />}
+                                        label={convertToLang(this.props.translation[""], <span>Adjust <br className="disp_n_768" /> Date Expiry</span>)}
                                         labelCol={{ span: 8 }}
                                         wrapperCol={{ span: 16 }}
                                         className="apply_services"

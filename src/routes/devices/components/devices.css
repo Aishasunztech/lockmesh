@@ -520,4 +520,16 @@
     .edit_form .ant-form-item-label {
         text-align: left;
     }
+
+    .disp_n_768 {
+        display: none;
+    }
+
+    .apply_services label {
+        display: inline-block;
+        /* text-align: none;
+        line-height: 16px;
+        margin-bottom: 0;
+        margin-top: 3px; */
+    }
 }

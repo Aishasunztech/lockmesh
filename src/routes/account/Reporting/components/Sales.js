@@ -126,7 +126,8 @@ class Sales extends Component {
 
     this.state = {
       reportCard: false,
-      reportFormData: {}
+      reportFormData: {},
+      deviceList: props.devices,
     };
   }
 
@@ -137,6 +138,15 @@ class Sales extends Component {
       this.props.generateSalesReport(values)
     });
   };
+
+  componentWillReceiveProps(nextProps) {
+    // console.log("nextProps.devices ", nextProps.devices)
+    if (nextProps.devices !== this.props.devices) {
+      this.setState({
+        deviceList: nextProps.devices
+      })
+    }
+  }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.salesReport !== prevProps.salesReport) {
@@ -250,7 +260,21 @@ class Sales extends Component {
     return <h4 className="credit_modal_heading weight_600">{convertToLang(this.props.translation[""], "SALE INFO")}</h4>
   };
 
+  handleDealerChange = (e) => {
+    let devices = [];
+    if (e == '') {
+      devices = this.props.devices
+    } else {
+      devices = this.props.devices.filter(device => device.dealer_id == e);
+      // console.log("handleDealerChange ", devices);
+    }
+    this.setState({
+      deviceList: devices
+    })
+  }
+
   render() {
+    // console.log("render this.state.deviceList ", this.state.deviceList)
     return (
       <Row>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
@@ -312,7 +336,10 @@ class Sales extends Component {
                       },
                     ],
                   })(
-                    <Select style={{ width: '100%' }}>
+                    <Select
+                      style={{ width: '100%' }}
+                      onChange={(e) => this.handleDealerChange(e)}
+                    >
                       <Select.Option value=''>ALL</Select.Option>
                       <Select.Option value={this.props.user.dealerId}>My Report</Select.Option>
                       {this.props.dealerList.map((dealer, index) => {
@@ -340,7 +367,7 @@ class Sales extends Component {
                   <Select style={{ width: '100%' }}>
                     <Select.Option value=''>ALL</Select.Option>
                     <Select.Option value={DEVICE_PRE_ACTIVATION}>{DEVICE_PRE_ACTIVATION}</Select.Option>
-                    {this.props.devices.map((device, index) => {
+                    {this.state.deviceList.map((device, index) => {
                       return (<Select.Option key={device.device_id} value={device.device_id}>{device.device_id}</Select.Option>)
                     })}
                   </Select>
