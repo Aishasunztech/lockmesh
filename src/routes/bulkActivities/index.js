@@ -17,6 +17,28 @@ import {
     setBulkPullApps
 } from "../../appRedux/actions/BulkDevices";
 
+// import {
+//     connectSocket,
+//     ackFinishedBulkPushApps,
+//     ackFinishedPullApps,
+//     ackFinishedPolicy,
+//     ackFinishedWipe,
+//     actionInProcess,
+//     ackImeiChanged,
+//     getAppJobQueue,
+//     ackSinglePushApp,
+//     ackSinglePullApp,
+//     ackFinishedPolicyStep,
+//     receiveSim,
+//     hello_web,
+//     closeConnectPageSocketEvents,
+//     ackInstalledApps,
+//     ackUninstalledApps,
+//     ackSettingApplied,
+//     sendOnlineOfflineStatus,
+//     deviceSynced
+// } from "../../appRedux/actions/Socket";
+
 import {
     showHistoryModal,
     showSaveProfileModal,
@@ -84,9 +106,9 @@ class BulkActivities extends Component {
             {
                 title: 'DEVICE ID',
                 align: "center",
-                dataIndex: 'device-id',
-                key: "device-id",
-                sortDirections: ['ascend', 'descend'],
+                dataIndex: 'device_id',
+                key: "device_id",
+                // sortDirections: ['ascend', 'descend'],
 
             }
         ]
@@ -224,19 +246,26 @@ class BulkActivities extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('hi')
+        // console.log('hi')
         if (this.props.devices != nextProps.devices || this.props.dealerList != nextProps.dealerList) {
-            console.log('componentWillReceiveProps ', nextProps.devices)
+            // console.log('componentWillReceiveProps ', nextProps.devices)
             this.setState({
                 filteredDevices: nextProps.devices,
                 dealerList: this.props.dealerList
             })
-        } else {
-            // this.setState({
-            //     apk_list: nextProps.apk_list
-            // })
         }
 
+        // if (nextProps.socket) {
+        //     // if (this.props.socket === null && nextProps.socket !== null) {
+
+        //     console.log("socket connected component: ", nextProps.socket.connected)
+        //     if (nextProps.socket.connected) {
+        //         nextProps.ackFinishedBulkPushApps(nextProps.socket, nextProps.queue_device_ids);
+        //         // nextProps.ackFinishedPullApps(nextProps.socket, queue_device_ids);
+        //         // nextProps.ackFinishedPolicy(nextProps.socket, queue_device_ids);
+        //         // nextProps.ackFinishedWipe(nextProps.socket, queue_device_ids);
+        //     }
+        // }
 
 
         let allDealers = nextProps.dealerList.map((item) => {
@@ -369,6 +398,15 @@ class BulkActivities extends Component {
     handleHistoryCancel = () => {
         console.log('hi')
         this.setState({ historyModalShow: false });
+    }
+
+    renderResponseList(list) {
+        console.log("list: ", list);
+        return list.map(item => {
+            return {
+                device_id: item
+            }
+        })
     }
 
     renderList(list) {
@@ -635,7 +673,7 @@ class BulkActivities extends Component {
                     onCancel={this.handleCancelDuplicate}
                     footer={false}
                 >
-                    {this.props.failed_device_ids.length ?
+                    {this.props.failed_device_ids && this.props.failed_device_ids.length ?
                         <Fragment>
                             <h2>Failed to push apps on these Devices</h2>
                             <Table
@@ -644,7 +682,7 @@ class BulkActivities extends Component {
                                 pagination={false}
                                 className="dup_table"
                                 columns={this.pushAppsModalColumns}
-                                dataSource={[]}
+                                dataSource={this.renderResponseList(this.props.failed_device_ids)}
                             />
                             <span className="warning_hr">
                                 <hr />
@@ -652,7 +690,7 @@ class BulkActivities extends Component {
                         </Fragment>
                         : null}
 
-                    {this.props.queue_device_ids.length ?
+                    {this.props.queue_device_ids && this.props.queue_device_ids.length ?
                         <Fragment>
                             <h2>Offline Devices</h2>
                             <p><small>(Apps pushed to these devices. Action will be performed when devices back online)</small></p>
@@ -662,7 +700,7 @@ class BulkActivities extends Component {
                                 pagination={false}
                                 className="dup_table"
                                 columns={this.pushAppsModalColumns}
-                                dataSource={[]}
+                                dataSource={this.renderResponseList(this.props.queue_device_ids)}
                             />
                             <span className="warning_hr">
                                 <hr />
@@ -678,7 +716,7 @@ class BulkActivities extends Component {
                         bordered
                         className="dup_table"
                         columns={this.pushAppsModalColumns}
-                        dataSource={[]}
+                        dataSource={this.renderResponseList(this.props.pushed_device_ids)}
                     />
                 </Modal>
 
@@ -689,6 +727,7 @@ class BulkActivities extends Component {
                     showPullAppsModal={this.showPullAppsModal}
                     pullAppsModal={this.state.pullAppsModal}
                     apk_list={this.props.apk_list}
+                    app_list={this.props.app_list} // .app_list
                     onPushAppsSelection={this.onPushAppsSelection}
                     setBulkPushApps={this.props.setBulkPushApps}
                     setBulkPullApps={this.props.setBulkPullApps}
@@ -715,26 +754,32 @@ const mapDispatchToProps = (dispatch) => {
         applyPushApps: applyBulkPushApps,
         applyPullApps: applyBulkPullApps,
         setBulkPushApps: setBulkPushApps,
-        setBulkPullApps: setBulkPullApps
+        setBulkPullApps: setBulkPullApps,
+
+        // ackFinishedPullApps: ackFinishedPullApps,
+        // ackFinishedBulkPushApps: ackFinishedBulkPushApps,
+        // ackFinishedPolicy: ackFinishedPolicy,
+        // ackFinishedWipe: ackFinishedWipe,
     }, dispatch);
 }
 
-const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users, device_details }, otherProps) => {
-    console.log(bulkDevices.usersOfDealers, 'usersOfDealers ,devices.bulkDevices ', bulkDevices.bulkDevices);
-    console.log("device_details.apk_list", device_details.apk_list);
+const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users, device_details, socket }, otherProps) => {
+    // console.log(bulkDevices.usersOfDealers, 'usersOfDealers ,devices.bulkDevices ', bulkDevices.bulkDevices);
+    console.log("bulkDevices.pushAppsResponseModal", bulkDevices.pushAppsResponseModal, "device_details.apk_list ", device_details.apk_list);
     return {
+        socket: socket.socket,
+        user: auth.authUser,
+        routing: routing,
+        translation: settings.translation,
         selectedPushAppsList: bulkDevices.bulkSelectedPushApps,
         selectedPullAppsList: bulkDevices.bulkSelectedPullApps,
         devices: bulkDevices.bulkDevices,
         history: bulkDevices.bulkDevicesHistory,
         users_list: bulkDevices.usersOfDealers, // users.users_list,
         dealerList: dealers.dealers,
-        user: auth.authUser,
-        routing: routing,
-        translation: settings.translation,
-
         pushAppsModal: device_details.pushAppsModal,
         apk_list: device_details.apk_list,
+        app_list: device_details.app_list,
         pushAppsResponseModal: bulkDevices.pushAppsResponseModal,
         failed_device_ids: bulkDevices.failed_device_ids,
         queue_device_ids: bulkDevices.queue_device_ids,

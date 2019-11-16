@@ -30,7 +30,8 @@ import {
     ACK_INSTALLED_APPS,
     ACK_UNINSTALLED_APPS,
     FINISH_WIPE,
-    SEND_JOB_TO_PANEL
+    SEND_JOB_TO_PANEL,
+    FINISHED_BULK_PUSH_APPS
 } from "../../constants/SocketConstants";
 
 import RestService from '../services/RestServices'
@@ -374,3 +375,23 @@ export const hello_web = (socket) => {
 export const closeAllSocketEvents = (socket) => {
 
 }
+
+
+
+//******************** Bulk Activities */
+
+// export const ackFinishedBulkPushApps = (socket, deviceId) => {
+//     return (dispatch) => {
+//         if (socket && socket._callbacks['$' + ACK_FINISHED_PUSH_APPS + deviceId] == undefined) {
+//             socket.on(ACK_FINISHED_PUSH_APPS + deviceId, (response) => {
+//                 // console.log("jkshdksa");
+//                 dispatch({
+//                     type: FINISHED_BULK_PUSH_APPS,
+//                     payload: true
+//                 })
+//             })
+//         } else {
+
+//         }
+//     }
+// }

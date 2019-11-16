@@ -1393,7 +1393,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth, settings, devices, sidebar }, otherProps) => {
-    // console.log(device_details.deviceServices, 'device_details.deviceServices')
+    console.log(device_details.app_list, 'device_details.app_list')
     return {
         requests: sidebar.newRequests,
         devices: devices.newDevices,

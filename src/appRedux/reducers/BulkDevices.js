@@ -167,9 +167,9 @@ export default (state = initialState, action) => {
                         content: action.payload.content
                     });
                 } else {
-                    // state.failed_device_ids = action.payload.failed_device_ids;
-                    state.queue_device_ids = action.payload.queue_device_ids;
-                    state.pushed_device_ids = action.payload.pushed_device_ids;
+                    state.failed_device_ids = action.payload.data.failed_device_ids;
+                    state.queue_device_ids = action.payload.data.queue_device_ids;
+                    state.pushed_device_ids = action.payload.data.pushed_device_ids;
                     showResponseModal = true;
                 }
 
@@ -178,9 +178,12 @@ export default (state = initialState, action) => {
                     title: action.payload.msg,
                 });
             }
+
+
+            console.log('state is: ', state)
             return {
                 ...state,
-                // failed_device_ids: [...state.failed_device_ids],
+                failed_device_ids: [...state.failed_device_ids],
                 queue_device_ids: [...state.queue_device_ids],
                 pushed_device_ids: [...state.pushed_device_ids],
                 pushAppsResponseModal: showResponseModal

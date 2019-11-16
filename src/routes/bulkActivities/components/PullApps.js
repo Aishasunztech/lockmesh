@@ -8,6 +8,7 @@ import { convertToLang } from '../../utils/commonUtils';
 
 
 const renderApps = (apk_list) => {
+    console.log("apk_list renderApps ", apk_list)
     let app_list = []
      apk_list.map((app) => {
         if (app.system_app !== 1) {
@@ -20,6 +21,16 @@ const renderApps = (apk_list) => {
             });
 
         }
+        // if (app.system_app !== 1) {
+        //     app_list.push( {
+        //         key: (app.apk_id) ? app.apk_id : 'N/A',
+        //         app_id: (app.apk_id) ? app.apk_id : 'N/A',
+        //         package_name: app.apk_name,
+        //         label: (app.label) ? app.label : 'N/A',
+        //         icon: (typeof (app.icon) === String || typeof (app.icon) === 'string') ? (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.icon} />) : app.icon,
+        //     });
+
+        // }
 
     });
 

@@ -466,10 +466,10 @@ export default class PushPullApps extends Component {
                 />
 
                 <PullAppsModal
-                    pullAppsModal={this.state.pullAppsModal}
+                    pullAppsModal={this.props.pullAppsModal}
                     showPullAppsModal={this.props.showPullAppsModal}
                     handleComponentSearch={this.handleComponentSearch}
-                    app_list={this.props.app_list}
+                    app_list={this.props.app_list} // this.props.app_list
                     onPullAppsSelection={this.onPullAppsSelection}
                     showSelectedPullAppsModal={this.showSelectedPullAppsModal}
                     selectedPullApps={this.state.selectedPullApps}
