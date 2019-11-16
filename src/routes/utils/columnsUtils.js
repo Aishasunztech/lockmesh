@@ -2243,6 +2243,7 @@ export function apkColumns(translation) {
             key: 'action',
             className: 'row m-0'
         },
+
         {
             title: (
                 <span>
@@ -2259,6 +2260,11 @@ export function apkColumns(translation) {
             dataIndex: 'permission',
             key: 'permission',
             // className: ''
+        },
+        {
+            title: convertToLang(translation[""], "USED BY"),
+            dataIndex: 'used_by',
+            key: 'used_by',
         },
         {
             title:
@@ -2303,6 +2309,7 @@ export function apkColumns(translation) {
             key: 'apk_size',
             // className: ''
         },
+        
         {
             title: convertToLang(translation[""], "LABEL"),
             dataIndex: 'label',
@@ -2318,6 +2325,7 @@ export function apkColumns(translation) {
             dataIndex: 'version',
             key: 'version',
         },
+        
         {
             title: convertToLang(translation[""], "UPLOAD DATE"),
             dataIndex: 'created_at',

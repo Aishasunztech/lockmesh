@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col } from "antd";
+import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col, Tag } from "antd";
 import { BASE_URL } from '../../../constants/Application';
 import styles from './app.css';
 import CustomScrollbars from "../../../util/CustomScrollbars";
@@ -28,7 +28,7 @@ export default class ListApk extends Component {
             selectedTab: '1'
 
         };
-        this.renderList = this.renderList.bind(this);
+
     }
 
     showModal = () => {
@@ -115,105 +115,135 @@ export default class ListApk extends Component {
     }
 
     // renderList
-    renderList(list) {
+    renderList = (list) => {
         let apkList = [];
         let data
         list.map((app) => {
             if (app.package_name !== 'com.armorSec.android' && app.package_name !== 'ca.unlimitedwireless.mailpgp' && app.package_name !== 'com.rim.mobilefusion.client' && app.package_name !== 'com.secure.vpn') {
+                let usedBy = [];
+                if (app.policies && app.policies.length) {
+                    usedBy.push(<Tag color="green" key="Policies">
+                        Policies
+                    </Tag>)
+                }
+                
+                if (app.permission_count != 0) {
+                    usedBy.push(<Tag color="green" key="Permissions">Permissions</Tag>)
+                }
+
+                if (!usedBy.length) {
+                    usedBy.push(<Tag key="Not Used">Not Used</Tag>)
+                }
                 // console.log('app is: ', app)
-                if (app.deleteable) {
-                    data = {
-                        rowKey: app.apk_id,
-                        id: app.apk_id,
-                        statusAll: app.statusAll,
-                        action: (
-                            <div data-column="ACTION" style={{ display: "inline-flex" }}>
-                                <Fragment>
-                                    <Button type="primary" size="small" style={{ margin: '0px 8px 0 0px', textTransform: "uppercase" }}
-                                        onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], "EDIT")}</Button>
-                                    {((app.policies === undefined || app.policies === null || app.policies.length === 0) && app.permission_count == 0) ? <Button type="danger" className="mob_m_t" size="small" style={{ textTransform: "uppercase" }} onClick={(e) => {
-                                        this.props.handleConfirmDelete(app.apk_id, app);
-                                    }}>{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button> : null}
-
-                                </Fragment>
-                            </div>
-                        ),
-                        permission: (
-                            <div data-column="PERMISSION" style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
-                                {/* {app.permission_count} */}
-                                {(app.permission_count === "All" || this.props.totalDealers === app.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
-                            </div>
-                        ),
-                        permissions: app.permissions,
-                        apk_status: (
-                            <div data-column="SHOW ON DEVICE1">
-                                <Switch size="small" checked={(app.apk_status === "On") ? true : false} onChange={(e) => {
-                                    this.props.handleStatusChange(e, app.apk_id);
-                                }} />
-                            </div>
-                        ),
-                        apk: (
-                            <div data-column="SHOW ON DEVICE2">
-                                {app.apk ? app.apk : 'N/A'}
-                            </div>
-                        ),
-                        apk_name: app.apk_name ? app.apk_name : 'N/A',
-                        apk_logo: (
-                            <div data-column="APK LOGO">
-                                <Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />
-                            </div>),
-                        apk_size: (
-                            <div data-column="APP SIZE">
-                                {app.size ? app.size : 'N/A'}
-                            </div>
-                        ),
-                        label: app.label,
-                        package_name: app.package_name,
-                        version: app.version,
-                        policies: (app.policies === undefined || app.policies === null) ? [] : app.policies,
-                        created_at: app.created_at,
-                        updated_at: app.updated_at
-                    }
-                    apkList.push(data)
-
-                } else {
-                    data = {
-                        rowKey: app.apk_id,
-                        id: app.apk_id,
-                        statusAll: app.statusAll,
-                        action: (
+                // if (app.deleteable) {
+                data = {
+                    rowKey: app.apk_id,
+                    id: app.apk_id,
+                    statusAll: app.statusAll,
+                    action: (
+                        <div data-column="ACTION" style={{ display: "inline-flex" }}>
                             <Fragment>
-                                <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px", textTransform: "uppercase" }}
-                                    onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], "EDIT")}</Button>
-                                {(app.permission_count === 0) ?
-                                    <Button type="danger" className="mob_m_t" size="small" style={{ textTransform: "uppercase" }} onClick={(e) => {
-                                        this.props.handleConfirmDelete(app.apk_id, app);
-                                    }}>{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
-                                    : null}
+                                {/* EDIT APK BUTTON */}
+                                <Button type="primary" size="small" style={{ margin: '0px 8px 0 0px', textTransform: "uppercase" }}
+                                    onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} >
+                                    {convertToLang(this.props.translation[Button_Edit], "EDIT")}
+                                </Button>
+
+                                {/* DELETE APK BUTTON */}
+                                {/* {((!app.policies || app.policies.length === 0) && app.permission_count == 0) ? */}
+                                    <Button
+                                        type="danger"
+                                        className="mob_m_t"
+                                        size="small"
+                                        style={{ textTransform: "uppercase" }}
+                                        onClick={(e) => {
+                                            this.props.handleConfirmDelete(app.apk_id, app, usedBy);
+                                        }}
+                                    >
+                                        {convertToLang(this.props.translation[Button_Delete], "DELETE")}
+                                    </Button>
+                                 {/* : null} */}
+
                             </Fragment>
-                        ),
-                        permission: <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
+                        </div>
+                    ),
+                    permission: (
+                        <div data-column="PERMISSION" style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
                             {/* {app.permission_count} */}
                             {(app.permission_count === "All" || this.props.totalDealers === app.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
-                        </span>,
-                        permissions: app.permissions,
-                        apk_status: (<Switch size="small" disabled checked={(app.apk_status === "On") ? true : false} onChange={(e) => {
-                            this.props.handleStatusChange(e, app.apk_id);
-                        }} />),
-                        apk: app.apk ? app.apk : 'N/A',
-                        apk_name: app.apk_name ? app.apk_name : 'N/A',
-                        apk_logo: (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
-                        apk_size: app.size ? app.size : "N/A",
-                        version: app.version,
-                        policies: (app.policies === undefined || app.policies === null) ? [] : app.policies,
-                        created_at: app.created_at,
-                        updated_at: app.updated_at,
-                        label: app.label ? app.label : 'N/A',
-                        package_name: app.package_name ? app.package_name : 'N/A',
-                    }
-                    apkList.push(data)
-
+                        </div>
+                    ),
+                    permissions: app.permissions,
+                    apk_status: (
+                        <div data-column="SHOW ON DEVICE1">
+                            <Switch size="small" checked={(app.apk_status === "On") ? true : false} onChange={(e) => {
+                                this.props.handleStatusChange(e, app.apk_id);
+                            }} />
+                        </div>
+                    ),
+                    apk: (
+                        <div data-column="SHOW ON DEVICE2">
+                            {app.apk ? app.apk : 'N/A'}
+                        </div>
+                    ),
+                    apk_name: app.apk_name ? app.apk_name : 'N/A',
+                    apk_logo: (
+                        <div data-column="APK LOGO">
+                            <Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />
+                        </div>),
+                    apk_size: (
+                        <div data-column="APP SIZE">
+                            {app.size ? app.size : 'N/A'}
+                        </div>
+                    ),
+                    label: app.label,
+                    package_name: app.package_name,
+                    version: app.version,
+                    used_by: <Fragment>{usedBy}</Fragment>,
+                    policies: (app.policies === undefined || app.policies === null) ? [] : app.policies,
+                    created_at: app.created_at,
+                    updated_at: app.updated_at
                 }
+                apkList.push(data)
+
+                // } else {
+                //     data = {
+                //         rowKey: app.apk_id,
+                //         id: app.apk_id,
+                //         statusAll: app.statusAll,
+                //         action: (
+                //             <Fragment>
+                //                 <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px", textTransform: "uppercase" }}
+                //                     onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], "EDIT")}</Button>
+                //                 {(app.permission_count === 0) ?
+                //                     <Button type="danger" className="mob_m_t" size="small" style={{ textTransform: "uppercase" }} onClick={(e) => {
+                //                         this.props.handleConfirmDelete(app.apk_id, app);
+                //                     }}>{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
+                //                     : null}
+                //             </Fragment>
+                //         ),
+                //         permission: <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
+                //             {/* {app.permission_count} */}
+                //             {(app.permission_count === "All" || this.props.totalDealers === app.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
+                //         </span>,
+                //         permissions: app.permissions,
+                //         apk_status: (<Switch size="small" disabled checked={(app.apk_status === "On") ? true : false} onChange={(e) => {
+                //             this.props.handleStatusChange(e, app.apk_id);
+                //         }} />),
+                //         apk: app.apk ? app.apk : 'N/A',
+                //         apk_name: app.apk_name ? app.apk_name : 'N/A',
+                //         apk_logo: (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
+                //         apk_size: app.size ? app.size : "N/A",
+                //         version: app.version,
+                //         policies: (app.policies === undefined || app.policies === null) ? [] : app.policies,
+                //         created_at: app.created_at,
+                //         updated_at: app.updated_at,
+                //         label: app.label ? app.label : 'N/A',
+                //         package_name: app.package_name ? app.package_name : 'N/A',
+                //     }
+                //     apkList.push(data)
+
+                // }
             }
         });
         return apkList
@@ -375,7 +405,7 @@ export default class ListApk extends Component {
                 {(this.state.selectedTab == '1') ?
                     <div className="feat_btns">
                         <Row>
-                            <Col xs={24} sm={24} md={8} lg={8} xl={8} className="vertical_center">
+                            <Col xs={24} sm={24} md={8} lg={8} xl={8} className="ver0tical_center">
                                 <h2 className="mb-0">{convertToLang(this.props.translation["FEATURED APPS"], "FEATURED APPS")}</h2>
                             </Col>
                             {(this.props.user.type === ADMIN) ?
