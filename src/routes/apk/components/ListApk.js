@@ -121,16 +121,18 @@ export default class ListApk extends Component {
         list.map((app) => {
             if (app.package_name !== 'com.armorSec.android' && app.package_name !== 'ca.unlimitedwireless.mailpgp' && app.package_name !== 'com.rim.mobilefusion.client' && app.package_name !== 'com.secure.vpn') {
                 let usedBy = [];
-                if(app.policies && app.policies.length){
-                    usedBy.push(<Tag color="green">
+                if (app.policies && app.policies.length) {
+                    usedBy.push(<Tag color="green" key="Policies">
                         Policies
                     </Tag>)
                 }
-                if(app.permission_count!=0){
-                    usedBy.push(<Tag color="green">Permissions</Tag>)
+                
+                if (app.permission_count != 0) {
+                    usedBy.push(<Tag color="green" key="Permissions">Permissions</Tag>)
                 }
-                if(!usedBy.length){
-                    usedBy.push(<Tag>Not Used</Tag>)
+
+                if (!usedBy.length) {
+                    usedBy.push(<Tag key="Not Used">Not Used</Tag>)
                 }
                 // console.log('app is: ', app)
                 // if (app.deleteable) {
@@ -148,18 +150,19 @@ export default class ListApk extends Component {
                                 </Button>
 
                                 {/* DELETE APK BUTTON */}
-                                {((!app.policies || app.policies.length === 0) && app.permission_count == 0) ?
+                                {/* {((!app.policies || app.policies.length === 0) && app.permission_count == 0) ? */}
                                     <Button
                                         type="danger"
-                                        className="mob_m_t" 
-                                        size="small" 
+                                        className="mob_m_t"
+                                        size="small"
                                         style={{ textTransform: "uppercase" }}
                                         onClick={(e) => {
-                                            this.props.handleConfirmDelete(app.apk_id, app);
+                                            this.props.handleConfirmDelete(app.apk_id, app, usedBy);
                                         }}
                                     >
                                         {convertToLang(this.props.translation[Button_Delete], "DELETE")}
-                                    </Button> : null}
+                                    </Button>
+                                 {/* : null} */}
 
                             </Fragment>
                         </div>
