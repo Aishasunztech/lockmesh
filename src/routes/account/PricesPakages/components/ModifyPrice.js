@@ -49,6 +49,20 @@ class ModifyPriceForm extends Component {
 
                 </Form.Item>
 
+                <Form.Item label={convertToLang(this.props.translation[""], "RETAIL PRICE")} labelCol={{ span: 8 }}
+                    wrapperCol={{ span: 14 }}>
+                    {getFieldDecorator('retail_price', {
+                        initialValue: (this.props.type === 'package') ? this.props.item.pkg_price : this.props.item.price,
+                        rules: [
+                            {
+                                required: true,
+                                message: 'Please Input Price',
+                            },
+                        ],
+                    })(<Input type='number' min={0} />)}
+
+                </Form.Item>
+
                 <Form.Item className="edit_ftr_btn"
                     wrapperCol={{
                         xs: { span: 24, offset: 0 },

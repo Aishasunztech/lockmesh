@@ -154,21 +154,21 @@ class Prices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[PACKAGE_PRICE], "PACKAGE PRICE")}
+                        placeholder={convertToLang(props.translation[""], "PACKAGE PRICE (CREDITS)")}
                     />
                 ),
                 dataIndex: 'pkg_price',
                 className: '',
                 children: [
                     {
-                        title: convertToLang(props.translation[PACKAGE_PRICE], "PACKAGE PRICE"),
+                        title: convertToLang(props.translation[""], "PACKAGE PRICE (CREDITS)"),
                         align: "center",
                         className: '',
                         dataIndex: 'pkg_price',
                         key: 'pkg_price',
                         // ...this.getColumnSearchProps('status'),
                         // sorter: (a, b) => { return a.pkg_price - b.pkg_price },
-                        sorter: (a, b) => { return a.pkg_price.localeCompare(b.pkg_price) },
+                        sorter: (a, b) => { return a.pkg_price - b.pkg_price },
 
                         sortDirections: ['ascend', 'descend'],
                     }
@@ -177,31 +177,60 @@ class Prices extends Component {
             {
                 title: (
                     <Input.Search
-                        name="pkg_expiry"
-                        key="pkg_expiry"
-                        id="pkg_expiry"
+                        name="pkg_retail_price"
+                        key="pkg_retail_price"
+                        id="pkg_retail_price"
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[PACKAGE_EXPIRY], "PACKAGE EXPIRY")}
+                        placeholder={convertToLang(props.translation[""], "RETAIL PACKAGE PRICE (CREDITS)")}
                     />
                 ),
-                dataIndex: 'pkg_expiry',
+                dataIndex: 'pkg_retail_price',
                 className: '',
                 children: [
                     {
-                        title: convertToLang(props.translation["PACKAGE_EXPIRY DAYS"], "PACKAGE EXPIRY DAYS"),
+                        title: convertToLang(props.translation[""], "RETAIL PACKAGE PRICE (CREDITS)"),
                         align: "center",
                         className: '',
-                        dataIndex: 'pkg_expiry',
-                        key: 'pkg_expiry',
+                        dataIndex: 'pkg_retail_price',
+                        key: 'pkg_retail_price',
                         // ...this.getColumnSearchProps('status'),
-                        sorter: (a, b) => { return a.pkg_expiry - b.pkg_expiry },
+                        // sorter: (a, b) => { return a.pkg_retail_price - b.pkg_retail_price },
+                        sorter: (a, b) => { return a.pkg_retail_price - b.pkg_retail_price },
 
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
-            }
+            },
+            // {
+            //     title: (
+            //         <Input.Search
+            //             name="pkg_expiry"
+            //             key="pkg_expiry"
+            //             id="pkg_expiry"
+            //             className="search_heading"
+            //             onKeyUp={this.handleSearch}
+            //             autoComplete="new-password"
+            //             placeholder={convertToLang(props.translation[PACKAGE_EXPIRY], "PACKAGE EXPIRY")}
+            //         />
+            //     ),
+            //     dataIndex: 'pkg_expiry',
+            //     className: '',
+            //     children: [
+            //         {
+            //             title: convertToLang(props.translation["PACKAGE_EXPIRY DAYS"], "PACKAGE EXPIRY DAYS"),
+            //             align: "center",
+            //             className: '',
+            //             dataIndex: 'pkg_expiry',
+            //             key: 'pkg_expiry',
+            //             // ...this.getColumnSearchProps('status'),
+            //             sorter: (a, b) => { return a.pkg_expiry - b.pkg_expiry },
+
+            //             sortDirections: ['ascend', 'descend'],
+            //         }
+            //     ]
+            // }
         ];
         this.hardwareColumns = [
             {
@@ -244,6 +273,7 @@ class Prices extends Component {
                 ]
             },
 
+
             {
                 title: (
                     <Input.Search
@@ -267,12 +297,42 @@ class Prices extends Component {
                         key: 'price',
                         // ...this.getColumnSearchProps('status'),
                         // sorter: (a, b) => { return a.price - b.price },
-                        sorter: (a, b) => { return a.price.localeCompare(b.price) },
+                        sorter: (a, b) => { return a.price - b.price },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="retail_price"
+                        key="retail_price"
+                        id="retail_price"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder='HADWARE RETAIL PRICE (CREDITS)'
+                    />
+                ),
+                dataIndex: 'retail_price',
+                className: '',
+                children: [
+                    {
+                        title: 'HADWARE RETAIL PRICE (CREDITS)',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'retail_price',
+                        key: 'retail_price',
+                        // ...this.getColumnSearchProps('status'),
+                        // sorter: (a, b) => { return a.price - b.price },
+                        sorter: (a, b) => { return a.price - b.price },
 
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
             }
+
         ];
         this.state = {
             pricing_modal: false,
@@ -440,16 +500,19 @@ class Prices extends Component {
                 _this.props.deletePackage(id);
                 // _this.resetSeletedRows();
                 // if (_this.refs.tablelist.props.rowSelection !== null) {
-                //     _this.refs.tablelist.props.rowSelection.selectedRowKeys = []
+                // _this.refs.tablelist.props.rowSelection.selectedRowKeys = []
                 // }
             }),
             onCancel() { },
         });
         // this.props.deletePackage(id)
     }
+
+    editPackage = (item) => {
+        this.refs.editPackage.showModal(item)
+    }
+
     modifyItem = (itemData, isModify, type) => {
-
-
         this.setState({
             modifyItemModal: true,
             modify_item: itemData,
@@ -473,7 +536,7 @@ class Prices extends Component {
                         customStyle = { display: 'none' }
                     }
                     let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px ', textTransform: 'uppercase' }} onClick={() => { this.deletePackage(item.id, item.pkg_name) }} >{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
-                    // let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "EDIT")}</Button>
+                    let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.editPackage(item) }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "EDIT")}</Button>
                     let ModifyBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase', ...customStyle }} onClick={() => { this.modifyItem(item, true, 'package') }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "MODIFY PRICE")}</Button>
                     return {
                         id: item.id,
@@ -485,7 +548,7 @@ class Prices extends Component {
                             (<Fragment>{ModifyBtn}</Fragment>) :
                             (item.dealer_type === "admin" && this.props.auth.type === DEALER) ?
                                 (<Fragment>{ModifyBtn}</Fragment>)
-                                : (<Fragment>{DeleteBtn}</Fragment>),
+                                : (<Fragment>{DeleteBtn}{EditBtn}</Fragment>),
 
                         pkg_name: item.pkg_name,
                         services:
@@ -505,9 +568,10 @@ class Prices extends Component {
                             {/* {(item.permission_count == 'All') ? convertToLang(this.props.translation[Tab_All], "All") : item.permission_count > 0 ? item.permission_count : 0} */}
                             {(item.permission_count === "All" || this.props.totalDealers === item.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : item.permission_count}
                         </span>,
-                        pkg_price: "$" + item.pkg_price,
+                        pkg_price: item.pkg_price,
+                        pkg_retail_price: item.pkg_price,
                         pkg_term: item.pkg_term,
-                        pkg_expiry: item.pkg_expiry,
+                        // pkg_expiry: item.pkg_expiry,
                         pkg_features: item.pkg_features ? JSON.parse(item.pkg_features) : {},
                         permissions: (item.dealer_permission !== undefined && item.dealer_permission !== null) ? item.dealer_permission : [],
 
@@ -523,7 +587,8 @@ class Prices extends Component {
                         action:
                             <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.modifyItem(item, true, 'hardware') }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "MODIFY PRICE")}</Button>,
                         name: item.hardware_name,
-                        price: item.hardware_price
+                        price: item.hardware_price,
+                        retail_price: item.hardware_price
                     }
                 })
             }
@@ -723,6 +788,7 @@ class Prices extends Component {
                             </Tabs.TabPane>
                             <Tabs.TabPane tab="Hardware" key="3">
                                 <Table
+                                    className="devices"
                                     columns={this.hardwareColumns}
                                     dataSource={this.renderList("hardware")}
                                     bordered
@@ -733,6 +799,20 @@ class Prices extends Component {
 
                     </Card>
                 </div>
+
+                <PricingModal
+                    showPricingModal={this.showPricingModal}
+                    pricing_modal={this.state.pricing_modal}
+                    saveIDPrices={this.props.saveIDPrices}
+                    setPackage={this.props.setPackage}
+                    prices={this.state.prices}
+                    setPrice={this.props.setPrice}
+                    isPriceChanged={this.props.isPriceChanged}
+                    resetPrice={this.props.resetPrice}
+                    dealer_id={this.props.auth.dealerId}
+                    translation={this.props.translation}
+                    auth={this.props.auth}
+                />
 
                 <PricingModal
                     showPricingModal={this.showPricingModal}
