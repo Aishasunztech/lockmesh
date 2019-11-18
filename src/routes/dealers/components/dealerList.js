@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Avatar, Switch, Button, Icon, Card, Modal } from "antd";
+import { Table, Avatar, Switch, Button, Icon, Card, Modal, Tabs } from "antd";
+import { Link } from "react-router-dom";
+
 import { BASE_URL } from '../../../constants/Application';
 import EditDealer from './editDealer';
-import { Tabs } from 'antd';
 // import EditApk from './editDealer';
 import { ADMIN } from '../../../constants/Constants';
 import scrollIntoView from 'scroll-into-view';
@@ -219,10 +220,6 @@ class DealerList extends Component {
         this.props.postDropdown(values, this.state.dealer_type);
     }
 
-
-
-
-
     renderList(list) {
         data = [];
         list.map((dealer, index) => {
@@ -231,6 +228,19 @@ class DealerList extends Component {
             const dealer_status = (dealer.account_status === "suspended") ? "Activate" : "Suspend";
             const button_type = (dealer_status === "Activate") ? "default" : "danger";
             const undo_button_type = (dealer.unlink_status === 0) ? 'danger' : "default";
+            // console.log("dealer:", dealer);
+            let ConnectButton = <Link
+                to={`/connect-dealer/${btoa(dealer.dealer_id.toString())}`.trim()}
+            >
+                <Button
+                    type="default"
+                    size="small"
+                    style={{ margin: '0 0 0 8px', textTransform: "uppercase" }}
+                // style={style}
+                >
+                    {convertToLang(this.props.translation[Button_Connect], "CONNECT")}
+                </Button>
+            </Link>
             data.push({
                 'row_key': dealer.dealer_id,
                 'accounts': <span>
@@ -245,7 +255,8 @@ class DealerList extends Component {
                     </Button>
                     <Button type="primary" style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => showConfirm(this, dealer, this.props.updatePassword, 'RESET PASSWORD', dealer.dealer_name)} >{convertToLang(this.props.translation[Button_passwordreset], "Password Reset")}</Button>
                     {(this.props.user.type === ADMIN) ?
-                        <Button style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => { }} >{convertToLang(this.props.translation[Button_Connect], "Connect")}</Button>
+                        // <Button style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => { }} >{convertToLang(this.props.translation[Button_Connect], "Connect")}</Button>
+                        ConnectButton
                         :
                         null
                     }

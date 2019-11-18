@@ -1023,6 +1023,7 @@ class Devices extends Component {
                                 handleComponentSearch={this.handleComponentSearch}
                                 locale={this.props.locale}
                                 translation={this.state.translation}
+                                // provide page heading if you need
                                 pageHeading={convertToLang(this.props.translation[Sidebar_users_devices], "Users & Devices")}
                             />
                             <DevicesList

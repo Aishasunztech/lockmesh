@@ -6,6 +6,7 @@ export * from './Auth';
 
 export * from './Common';
 export * from './ConnectDevice';
+export * from './ConnectDealer';
 
 export * from './Devices';
 export * from './Dealers';

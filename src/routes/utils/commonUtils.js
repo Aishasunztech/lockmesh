@@ -245,7 +245,7 @@ export function checkRemainTermDays(createDate, endDate) {
 }
 
 export function isBase64(str) {
-  if (str === '' || str.trim() === '') { return false; }
+  if (!str || str.trim() === '') { return false; }
   try {
     return atob(str)
   } catch (err) {
