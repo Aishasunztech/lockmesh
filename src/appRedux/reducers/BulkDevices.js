@@ -24,7 +24,8 @@ const initialState = {
     pushAppsResponseModal: false,
     failed_device_ids: [],
     queue_device_ids: [],
-    pushed_device_ids: []
+    pushed_device_ids: [],
+    pull_push_action: ''
 };
 
 export default (state = initialState, action) => {
@@ -170,7 +171,7 @@ export default (state = initialState, action) => {
                     state.failed_device_ids = action.payload.data.failed_device_ids;
                     state.queue_device_ids = action.payload.data.queue_device_ids;
                     state.pushed_device_ids = action.payload.data.pushed_device_ids;
-                    showResponseModal = true;
+                    showResponseModal = new Date();
                 }
 
             } else {
@@ -179,14 +180,13 @@ export default (state = initialState, action) => {
                 });
             }
 
-
-            console.log('state is: ', state)
             return {
                 ...state,
                 failed_device_ids: [...state.failed_device_ids],
                 queue_device_ids: [...state.queue_device_ids],
                 pushed_device_ids: [...state.pushed_device_ids],
-                pushAppsResponseModal: showResponseModal
+                pushAppsResponseModal: showResponseModal,
+                pull_push_action: "push"
             }
         }
 
@@ -198,7 +198,7 @@ export default (state = initialState, action) => {
             if (action.payload.status) {
                 if (action.payload.online && !action.payload.offline && !action.payload.failed) {
                     success({
-                        title: action.payload.msg, // "Apps are Being pushed"
+                        title: action.payload.msg, // "Apps are Being puslled"
                     });
                 } else if (!action.payload.online && action.payload.offline && !action.payload.failed) {
                     warning({
@@ -206,10 +206,10 @@ export default (state = initialState, action) => {
                         content: action.payload.content
                     });
                 } else {
-                    // state.failed_device_ids = action.payload.failed_device_ids;
-                    state.queue_device_ids = action.payload.queue_device_ids;
-                    state.pushed_device_ids = action.payload.pushed_device_ids;
-                    showResponseModal = true;
+                    state.failed_device_ids = action.payload.data.failed_device_ids;
+                    state.queue_device_ids = action.payload.data.queue_device_ids;
+                    state.pushed_device_ids = action.payload.data.pushed_device_ids;
+                    showResponseModal = new Date();
                 }
 
             } else {
@@ -217,16 +217,16 @@ export default (state = initialState, action) => {
                     title: action.payload.msg,
                 });
             }
+
             return {
                 ...state,
-                // failed_device_ids: [...state.failed_device_ids],
+                failed_device_ids: [...state.failed_device_ids],
                 queue_device_ids: [...state.queue_device_ids],
                 pushed_device_ids: [...state.pushed_device_ids],
-                pushAppsResponseModal: showResponseModal
+                pushAppsResponseModal: showResponseModal,
+                pull_push_action: "pull"
             }
         }
-
-
 
         default:
             return state;

@@ -243,6 +243,7 @@ const PullAppsModal = (props) => {
 
 
 const SelectedPullApps = (props) => {
+    console.log("SelectedPullApps ", props)
     return (
         <Modal
             maskClosable={false}
@@ -333,6 +334,14 @@ export default class PushPullApps extends Component {
 
     }
 
+    onPullAppsSelection = (selectedRowKeys, selectedRows) => {
+
+        this.setState({
+            selectedPullApps: selectedRows,
+            selectedPullAppKeys: selectedRowKeys
+        })
+    }
+
     handleChecked = (e, key, app_id) => {
         this.state.selectedPushApps.map((el) => {
             if (el.apk_id === app_id) {
@@ -379,6 +388,7 @@ export default class PushPullApps extends Component {
                 }
             }
         }
+        console.log("dumyList ", dumyList)
         this.setState({
             selectedPullAppsModal: visible,
             pullApps: dumyList
@@ -455,6 +465,7 @@ export default class PushPullApps extends Component {
                     apk_list={this.state.apk_list}
                     // app list props is added because push apps will not show installed apps again to push
                     app_list={this.props.app_list}
+                    app_list={this.props.app_list}
                     onPushAppsSelection={this.onPushAppsSelection}
                     selectedPushAppKeys={this.state.selectedPushAppKeys}
                     showSelectedPushAppsModal={this.showSelectedPushAppsModal}
@@ -469,7 +480,8 @@ export default class PushPullApps extends Component {
                     pullAppsModal={this.props.pullAppsModal}
                     showPullAppsModal={this.props.showPullAppsModal}
                     handleComponentSearch={this.handleComponentSearch}
-                    app_list={this.props.app_list} // this.props.app_list
+                    // app_list={this.props.app_list}
+                    app_list={this.state.apk_list}
                     onPullAppsSelection={this.onPullAppsSelection}
                     showSelectedPullAppsModal={this.showSelectedPullAppsModal}
                     selectedPullApps={this.state.selectedPullApps}

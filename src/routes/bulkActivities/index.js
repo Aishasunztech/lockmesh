@@ -281,7 +281,7 @@ class BulkActivities extends Component {
     componentDidUpdate(prevProps) {
         if (this.props.pushAppsResponseModal !== prevProps.pushAppsResponseModal) {
             this.setState({
-                pushAppsResponseModal: this.props.pushAppsResponseModal
+                pushAppsResponseModal: true
             })
         }
     }
@@ -533,6 +533,8 @@ class BulkActivities extends Component {
         // let actionList = [];
         // console.log('this.state.selectedDealers ', this.state.selectedDealers)
         // if (this.props.location.state) {
+
+        const { pull_push_action } = this.props;
         return (
             <Fragment>
                 <Card >
@@ -675,7 +677,7 @@ class BulkActivities extends Component {
                 >
                     {this.props.failed_device_ids && this.props.failed_device_ids.length ?
                         <Fragment>
-                            <h2>Failed to push apps on these Devices</h2>
+                            <h2>{`Failed to ${pull_push_action === "pull" ? "Pull apps from " : "Push apps on "}these Devices`}</h2>
                             <Table
                                 bordered
                                 size="middle"
@@ -693,7 +695,7 @@ class BulkActivities extends Component {
                     {this.props.queue_device_ids && this.props.queue_device_ids.length ?
                         <Fragment>
                             <h2>Offline Devices</h2>
-                            <p><small>(Apps pushed to these devices. Action will be performed when devices back online)</small></p>
+                            <p><small>{`(Apps will be ${pull_push_action === "pull" ? "Pulled soon from " : "Pushed soon to "}these devices. Action will be performed when devices back online)`}</small></p>
                             <Table
                                 bordered
                                 size="middle"
@@ -709,7 +711,7 @@ class BulkActivities extends Component {
                         : null}
 
 
-                    <h2>Apps are being Pushed on these Devices</h2>
+                    <h2>{`Apps will be ${pull_push_action === "pull" ? "Pulled soon from " : "Pushed soon on "}these Devices`}</h2>
                     <Table
                         size="middle"
                         pagination={false}
@@ -728,7 +730,7 @@ class BulkActivities extends Component {
                     pullAppsModal={this.state.pullAppsModal}
                     apk_list={this.props.apk_list}
                     app_list={this.props.app_list} // .app_list
-                    onPushAppsSelection={this.onPushAppsSelection}
+                    // onPushAppsSelection={this.onPushAppsSelection}
                     setBulkPushApps={this.props.setBulkPushApps}
                     setBulkPullApps={this.props.setBulkPullApps}
                     translation={this.props.translation}
@@ -783,7 +785,8 @@ const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users,
         pushAppsResponseModal: bulkDevices.pushAppsResponseModal,
         failed_device_ids: bulkDevices.failed_device_ids,
         queue_device_ids: bulkDevices.queue_device_ids,
-        pushed_device_ids: bulkDevices.pushed_device_ids
+        pushed_device_ids: bulkDevices.pushed_device_ids,
+        pull_push_action: bulkDevices.pull_push_action
     };
 }
 

@@ -16,7 +16,7 @@ import AddDealer from './addDealer';
 import Users from './users';
 import InvalidPage from "./InvalidPage";
 import FourOFour from "./404/";
-import AppMarket from "./appMaket/index";
+import AppMarket from "./appMarket/index";
 import ManageData from './account/ManageData/index'
 import SetPrice from './account/PricesPakages/index'
 import Domains from "./domains/index";

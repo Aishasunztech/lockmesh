@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Input, Icon, Modal, Select, Button, Tooltip, Popover, Transfer, Card, Avatar, Row, Col, Switch, Table } from "antd";
-import CircularProgress from "components/CircularProgress/index";
+import CircularProgress from "components/CircularProgress";
 //import {getDevicesList} from '../../appRedux/actions/Devices';
 import { BASE_URL } from '../../constants/Application';
 
