@@ -2309,7 +2309,7 @@ export function apkColumns(translation) {
             key: 'apk_size',
             // className: ''
         },
-        
+
         {
             title: convertToLang(translation[""], "LABEL"),
             dataIndex: 'label',
@@ -2325,7 +2325,7 @@ export function apkColumns(translation) {
             dataIndex: 'version',
             key: 'version',
         },
-        
+
         {
             title: convertToLang(translation[""], "UPLOAD DATE"),
             dataIndex: 'created_at',
@@ -3447,6 +3447,8 @@ export function appMarketColumns(translation, handleSearch, removeSMapps) {
                     {
                         title: "APP NAME",
                         dataIndex: 'app_name',
+                        sorter: (a, b) => { return a.app_name - b.app_name },
+                        sortDirections: ['ascend', 'descend'],
                     }
                 ]
 
