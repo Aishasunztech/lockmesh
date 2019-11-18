@@ -521,20 +521,26 @@ class BulkActivities extends Component {
 
     render() {
 
-        // console.log("parent this.props.devices ", this.props.devices)
-        // let data = "NULL ";
-        // if (this.state.selectedDealers.length) {
-        //     data = this.state.selectedDealers.map((item) => { return `${item.label}, ` });
-        // }
-        // console.log('data is: ', this.props.dealerList.length , this.state.selectedDealers.length);
-        // console.log('update data is: ', ...data.slice(0, ...data.length - 1));
+        const { response_modal_action } = this.props;
+        let failedTitle = '';
+        // let expireTitle = '';
+        let offlineTitle = '';
+        let onlineTitle = '';
+        let content = '';
 
-
-        // let actionList = [];
-        // console.log('this.state.selectedDealers ', this.state.selectedDealers)
-        // if (this.props.location.state) {
-
-        const { pull_push_action } = this.props;
+        if (response_modal_action === "pull") {
+            failedTitle = "Failed to Pull apps from these Devices";
+            // expireTitle = "Already Expired Devices"
+        }
+        else if (response_modal_action === "push") {
+            failedTitle = "Failed to Push apps on these Devices"
+        }
+        else if (response_modal_action === "active") {
+            failedTitle = "Failed to Push apps on these Devices"
+        }
+        else if (response_modal_action === "suspend") {
+            failedTitle = "Failed to Push apps on these Devices"
+        }
         return (
             <Fragment>
                 <Card >
@@ -677,7 +683,7 @@ class BulkActivities extends Component {
                 >
                     {this.props.failed_device_ids && this.props.failed_device_ids.length ?
                         <Fragment>
-                            <h2>{`Failed to ${pull_push_action === "pull" ? "Pull apps from " : "Push apps on "}these Devices`}</h2>
+                            <h2>{failedTitle}</h2>
                             <Table
                                 bordered
                                 size="middle"
@@ -692,10 +698,27 @@ class BulkActivities extends Component {
                         </Fragment>
                         : null}
 
+                    {this.props.expire_device_ids && this.props.expire_device_ids.length ?
+                        <Fragment>
+                            <h2>{`Already Expired Devices`}</h2>
+                            <Table
+                                bordered
+                                size="middle"
+                                pagination={false}
+                                className="dup_table"
+                                columns={this.pushAppsModalColumns}
+                                dataSource={this.renderResponseList(this.props.expire_device_ids)}
+                            />
+                            <span className="warning_hr">
+                                <hr />
+                            </span>
+                        </Fragment>
+                        : null}
+
                     {this.props.queue_device_ids && this.props.queue_device_ids.length ?
                         <Fragment>
                             <h2>Offline Devices</h2>
-                            <p><small>{`(Apps will be ${pull_push_action === "pull" ? "Pulled soon from " : "Pushed soon to "}these devices. Action will be performed when devices back online)`}</small></p>
+                            <p><small>{`(Apps will be ${response_modal_action === "pull" ? "Pulled soon from " : "Pushed soon to "}these devices. Action will be performed when devices back online)`}</small></p>
                             <Table
                                 bordered
                                 size="middle"
@@ -710,16 +733,19 @@ class BulkActivities extends Component {
                         </Fragment>
                         : null}
 
-
-                    <h2>{`Apps will be ${pull_push_action === "pull" ? "Pulled soon from " : "Pushed soon on "}these Devices`}</h2>
-                    <Table
-                        size="middle"
-                        pagination={false}
-                        bordered
-                        className="dup_table"
-                        columns={this.pushAppsModalColumns}
-                        dataSource={this.renderResponseList(this.props.pushed_device_ids)}
-                    />
+                    {this.props.pushed_device_ids && this.props.pushed_device_ids.length ?
+                        <Fragment>
+                            <h2>{`Apps will be ${response_modal_action === "pull" ? "Pulled soon from " : "Pushed soon on "}these Devices`}</h2>
+                            <Table
+                                size="middle"
+                                pagination={false}
+                                bordered
+                                className="dup_table"
+                                columns={this.pushAppsModalColumns}
+                                dataSource={this.renderResponseList(this.props.pushed_device_ids)}
+                            />
+                        </Fragment>
+                        : null}
                 </Modal>
 
 
@@ -786,7 +812,8 @@ const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users,
         failed_device_ids: bulkDevices.failed_device_ids,
         queue_device_ids: bulkDevices.queue_device_ids,
         pushed_device_ids: bulkDevices.pushed_device_ids,
-        pull_push_action: bulkDevices.pull_push_action
+        response_modal_action: bulkDevices.response_modal_action,
+        expire_device_ids: bulkDevices.expire_device_ids
     };
 }
 

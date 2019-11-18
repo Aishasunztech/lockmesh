@@ -37,7 +37,7 @@ export function getBulkDevicesList(data) {
 
 export function bulkSuspendDevice(devices) {
 
-    console.log("bulkSuspendDevice action file =========> ", devices);
+    // console.log("bulkSuspendDevice action file =========> ", devices);
     return (dispatch) => {
 
         RestService.bulkSuspendDevice(devices).then((response) => {
@@ -46,7 +46,7 @@ export function bulkSuspendDevice(devices) {
                 if (response.data.status) {
                     dispatch({
                         type: BULK_SUSPEND_DEVICES,
-                        response: response.data,
+                        payload: response.data,
                     });
                 }
 
@@ -64,20 +64,16 @@ export function bulkSuspendDevice(devices) {
 
 
 export function bulkActivateDevice(devices) {
-
+    // console.log('bulkActivateDevice at action file ', devices)
     return (dispatch) => {
 
         RestService.bulkActivateDevice(devices).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 // console.log('response', response.data);
-                // device.account_status = '';
-
-                if (response.data.status) {
-                    dispatch({
-                        type: BULK_ACTIVATE_DEVICES,
-                        response: response.data,
-                    });
-                }
+                dispatch({
+                    type: BULK_ACTIVATE_DEVICES,
+                    payload: response.data,
+                });
 
             } else {
                 dispatch({

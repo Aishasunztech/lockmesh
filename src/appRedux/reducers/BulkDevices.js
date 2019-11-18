@@ -25,7 +25,8 @@ const initialState = {
     failed_device_ids: [],
     queue_device_ids: [],
     pushed_device_ids: [],
-    pull_push_action: ''
+    expire_device_ids: [],
+    response_modal_action: ''
 };
 
 export default (state = initialState, action) => {
@@ -91,65 +92,177 @@ export default (state = initialState, action) => {
                 }
             }
 
-        case BULK_SUSPEND_DEVICES:
-            let devices = state.bulkDevices;
-            if (action.response.status) {
+        // case BULK_SUSPEND_DEVICES:
+        //     let devices = state.bulkDevices;
+        //     if (action.response.status) {
 
-                console.log('BULK_SUSPEND_DEVICES ', state.bulkDevices)
-                action.response.data.map((item) => {
-                    let bulkObjIndex = devices.findIndex((obj => obj.device_id === item.device_id));
-                    if (bulkObjIndex !== -1) {
-                        devices[bulkObjIndex] = item;
-                    }
-                })
-                success({
-                    title: action.response.msg,
-                });
-            }
-            else {
+        //         console.log('BULK_SUSPEND_DEVICES ', state.bulkDevices)
+        //         action.response.data.map((item) => {
+        //             let bulkObjIndex = devices.findIndex((obj => obj.device_id === item.device_id));
+        //             if (bulkObjIndex !== -1) {
+        //                 devices[bulkObjIndex] = item;
+        //             }
+        //         })
+        //         success({
+        //             title: action.response.msg,
+        //         });
+        //     }
+        //     else {
+        //         error({
+        //             title: action.response.msg,
+        //         });
+        //     }
+
+        //     console.log('BULK_SUSPEND_DEVICES after', devices)
+        //     return {
+        //         ...state,
+        //         bulkDevices: devices,
+        //         msg: action.response.msg,
+        //         showMsg: true,
+        //     }
+
+        case BULK_SUSPEND_DEVICES: {
+            console.log('BULK_SUSPEND_DEVICES reducer data:: ', action.payload);
+
+            let showResponseModal = false;
+
+            if (action.payload.status) {
+                if (action.payload.online && !action.payload.offline && !action.payload.failed && !action.payload.expire) {
+
+                    // action.response.data.map((item) => {
+                    //     let bulkObjIndex = devices.findIndex((obj => obj.device_id === item.device_id));
+                    //     if (bulkObjIndex !== -1) {
+                    //         state.bulkDevices[bulkObjIndex] = item;
+                    //     }
+                    // })
+
+                    success({
+                        title: action.payload.msg,
+                    });
+                } else if (!action.payload.online && action.payload.offline && !action.payload.failed && !action.payload.expire) {
+                    warning({
+                        title: action.payload.msg,
+                        content: action.payload.content
+                    });
+                } else if (!action.payload.online && !action.payload.offline && !action.payload.failed && action.payload.expire) {
+                    warning({
+                        title: action.payload.msg,
+                        // content: action.payload.content
+                    });
+                } else {
+                    state.failed_device_ids = action.payload.data.failed_device_ids;
+                    state.queue_device_ids = action.payload.data.queue_device_ids;
+                    state.pushed_device_ids = action.payload.data.pushed_device_ids;
+                    state.expire_device_ids = action.payload.data.expire_device_ids;
+                    showResponseModal = new Date();
+                }
+
+            } else {
                 error({
-                    title: action.response.msg,
+                    title: action.payload.msg,
                 });
             }
 
-            console.log('BULK_SUSPEND_DEVICES after', devices)
             return {
                 ...state,
-                bulkDevices: devices,
-                msg: action.response.msg,
-                showMsg: true,
+                // bulkDevices: [...state.bulkDevices],
+                // msg: action.response.msg,
+                // showMsg: true,
+                failed_device_ids: [...state.failed_device_ids],
+                queue_device_ids: [...state.queue_device_ids],
+                pushed_device_ids: [...state.pushed_device_ids],
+                expire_device_ids: [...state.expire_device_ids],
+                pushAppsResponseModal: showResponseModal,
+                response_modal_action: "suspend"
             }
+        }
 
 
 
-        case BULK_ACTIVATE_DEVICES:
+        // case BULK_ACTIVATE_DEVICES:
 
-            console.log('at red BULK_ACTIVATE_DEVICES ', action.response)
-            if (action.response.status) {
+        //     console.log('at red BULK_ACTIVATE_DEVICES ', action.response)
+        //     if (action.response.status) {
 
-                action.response.data.map((item) => {
-                    let objIndex = state.bulkDevices.findIndex((obj => obj.device_id === item.device_id));
-                    if (objIndex !== -1) {
-                        state.bulkDevices[objIndex] = item;
-                    }
-                })
+        //         action.response.data.map((item) => {
+        //             let objIndex = state.bulkDevices.findIndex((obj => obj.device_id === item.device_id));
+        //             if (objIndex !== -1) {
+        //                 state.bulkDevices[objIndex] = item;
+        //             }
+        //         })
 
-                success({
-                    title: action.response.msg,
-                });
-            }
-            else {
+        //         success({
+        //             title: action.response.msg,
+        //         });
+        //     }
+        //     else {
+        //         error({
+        //             title: action.response.msg,
+        //         });
+
+        //     }
+        //     return {
+        //         ...state,
+        //         bulkDevices: [...state.bulkDevices],
+        //         msg: action.response.msg,
+        //         showMsg: true,
+        //     }
+
+        case BULK_ACTIVATE_DEVICES: {
+            console.log('BULK_ACTIVATE_DEVICES reducer data:: ', action.payload);
+
+            let showResponseModal = false;
+
+            if (action.payload.status) {
+                if (action.payload.online && !action.payload.offline && !action.payload.failed && !action.payload.expire) {
+
+                    // action.response.data.map((item) => {
+                    //     let objIndex = state.bulkDevices.findIndex((obj => obj.device_id === item.device_id));
+                    //     if (objIndex !== -1) {
+                    //         state.bulkDevices[objIndex] = item;
+                    //     }
+                    // })
+
+                    success({
+                        title: action.payload.msg, // "Apps are Being pushed"
+                    });
+                } else if (!action.payload.online && action.payload.offline && !action.payload.failed && !action.payload.expire) {
+                    warning({
+                        title: action.payload.msg,
+                        content: action.payload.content
+                    });
+                } else if (!action.payload.online && !action.payload.offline && !action.payload.failed && action.payload.expire) {
+                    warning({
+                        title: action.payload.msg,
+                        // content: action.payload.content
+                    });
+                } else {
+                    state.failed_device_ids = action.payload.data.failed_device_ids;
+                    state.queue_device_ids = action.payload.data.queue_device_ids;
+                    state.pushed_device_ids = action.payload.data.pushed_device_ids;
+                    state.expire_device_ids = action.payload.data.expire_device_ids;
+                    showResponseModal = new Date();
+                }
+
+            } else {
                 error({
-                    title: action.response.msg,
+                    title: action.payload.msg,
                 });
-
             }
+
             return {
                 ...state,
-                bulkDevices: [...state.bulkDevices],
-                msg: action.response.msg,
-                showMsg: true,
+                // bulkDevices: [...state.bulkDevices],
+                // msg: action.response.msg,
+                // showMsg: true,
+                failed_device_ids: [...state.failed_device_ids],
+                queue_device_ids: [...state.queue_device_ids],
+                pushed_device_ids: [...state.pushed_device_ids],
+                expire_device_ids: [...state.expire_device_ids],
+                pushAppsResponseModal: showResponseModal,
+                response_modal_action: "active"
             }
+        }
 
 
         case BULK_PUSH_APPS: {
@@ -186,7 +299,7 @@ export default (state = initialState, action) => {
                 queue_device_ids: [...state.queue_device_ids],
                 pushed_device_ids: [...state.pushed_device_ids],
                 pushAppsResponseModal: showResponseModal,
-                pull_push_action: "push"
+                response_modal_action: "push"
             }
         }
 
@@ -224,7 +337,7 @@ export default (state = initialState, action) => {
                 queue_device_ids: [...state.queue_device_ids],
                 pushed_device_ids: [...state.pushed_device_ids],
                 pushAppsResponseModal: showResponseModal,
-                pull_push_action: "pull"
+                response_modal_action: "pull"
             }
         }
 
