@@ -241,7 +241,7 @@ class ApkMarket extends React.Component {
                     <Fragment>
                         <Avatar size="medium" src={BASE_URL + "users/getFile/" + app.logo} />
                     </Fragment>,
-                app_name: <span className="sm_labels"> {app.app_name} </span>,
+                app_name: app.app_name,
                 uninstall: <Fragment>
                     {(app.dealer_type !== undefined) ? <span>
                         <Switch className="sm_uninstall" size='small' unCheckedChildren={convertToLang(this.props.translation[Switch_Button_Uninstall], "Uninstall")} checkedChildren={convertToLang(this.props.translation[Switch_Button_Uninstall], "Uninstall")} onChange={(e) => { this.handleCheckChange(app.id, e, spaceType) }} defaultChecked={(app.is_restrict_uninstall === 0) ? true : false} disabled={(this.props.user.type === ADMIN) ? false : app.disabled}></Switch>
