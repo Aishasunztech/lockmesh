@@ -14,7 +14,8 @@ import {
     applyBulkPushApps,
     applyBulkPullApps,
     setBulkPushApps,
-    setBulkPullApps
+    setBulkPullApps,
+    setSelectedBulkDevices
 } from "../../appRedux/actions/BulkDevices";
 
 // import {
@@ -204,7 +205,7 @@ class BulkActivities extends Component {
     // End Action related
 
     handleTableChange = (pagination, query, sorter) => {
-        console.log('check sorter func: ', sorter)
+        // console.log('check sorter func: ', sorter)
         let columns = this.state.columns;
 
         columns.forEach(column => {
@@ -389,19 +390,19 @@ class BulkActivities extends Component {
     }
 
     historyModal = () => {
-        console.log('hi')
+        // console.log('hi')
         this.setState({ historyModalShow: true });
 
         this.props.getbulkHistory();
     }
 
     handleHistoryCancel = () => {
-        console.log('hi')
+        // console.log('hi')
         this.setState({ historyModalShow: false });
     }
 
     renderResponseList(list) {
-        console.log("list: ", list);
+        // console.log("list: ", list);
         return list.map(item => {
             return {
                 device_id: item
@@ -414,7 +415,7 @@ class BulkActivities extends Component {
         return list.map((device, index) => {
 
             var status = device.finalStatus;
-            console.log("status ", status)
+            // console.log("status ", status)
 
             let color = getColor(status);
             var style = { margin: '0', width: 'auto', textTransform: 'uppercase' }
@@ -500,7 +501,7 @@ class BulkActivities extends Component {
             users: this.state.selectedUsers
         }
 
-        console.log('handle change data is: ', data)
+        // console.log('handle change data is: ', data)
         this.props.getBulkDevicesList(data);
         this.setState({ selectedDealers });
 
@@ -531,15 +532,23 @@ class BulkActivities extends Component {
         if (response_modal_action === "pull") {
             failedTitle = "Failed to Pull apps from these Devices";
             // expireTitle = "Already Expired Devices"
+            offlineTitle = "(Apps will be Pulled soon from these devices. Action will be performed when devices back online)"
+            onlineTitle = "Apps will be Pulled soon from these Devices";
         }
         else if (response_modal_action === "push") {
             failedTitle = "Failed to Push apps on these Devices"
+            offlineTitle = "(Apps will be Pushed soon to these devices. Action will be performed when devices back online)"
+            onlineTitle = "Apps will be Pushed soon on these Devices";
         }
         else if (response_modal_action === "active") {
-            failedTitle = "Failed to Push apps on these Devices"
+            failedTitle = "Failed to Push apps on these Devices";
+            offlineTitle = "(These Devices will be Activated Soon when back online)"
+            onlineTitle = "These Devices are Activate Successfully";
         }
         else if (response_modal_action === "suspend") {
-            failedTitle = "Failed to Push apps on these Devices"
+            failedTitle = "Failed to Push apps on these Devices";
+            offlineTitle = "(These Devices will be Suspended Soon when back online)"
+            onlineTitle = "These Devices are Suspended Successfully";
         }
         return (
             <Fragment>
@@ -593,7 +602,7 @@ class BulkActivities extends Component {
                             <Select
                                 mode="multiple"
                                 labelInValue
-                                maxTagCount="2"
+                                maxTagCount={2}
                                 style={{ width: '100%' }}
                                 placeholder={convertToLang(this.props.translation[""], "Select Dealers")}
                                 onChange={this.handleChangeDealer}
@@ -624,7 +633,7 @@ class BulkActivities extends Component {
                             <Select
                                 mode="multiple"
                                 labelInValue
-                                maxTagCount="2"
+                                maxTagCount={2}
                                 style={{ width: '100%' }}
                                 // onBlur={this.handleMultipleSelect}
                                 // onDeselect={this.handleCancel}
@@ -659,6 +668,8 @@ class BulkActivities extends Component {
                         renderList={this.renderList}
                         translation={this.props.translation}
                         onChangeTableSorting={this.handleTableChange}
+                        selectedDevices={this.props.selectedDevices}
+                        setSelectedBulkDevices={this.props.setSelectedBulkDevices}
                     />
 
                 </Card>
@@ -718,7 +729,7 @@ class BulkActivities extends Component {
                     {this.props.queue_device_ids && this.props.queue_device_ids.length ?
                         <Fragment>
                             <h2>Offline Devices</h2>
-                            <p><small>{`(Apps will be ${response_modal_action === "pull" ? "Pulled soon from " : "Pushed soon to "}these devices. Action will be performed when devices back online)`}</small></p>
+                            <p><small>{offlineTitle}</small></p>
                             <Table
                                 bordered
                                 size="middle"
@@ -735,7 +746,7 @@ class BulkActivities extends Component {
 
                     {this.props.pushed_device_ids && this.props.pushed_device_ids.length ?
                         <Fragment>
-                            <h2>{`Apps will be ${response_modal_action === "pull" ? "Pulled soon from " : "Pushed soon on "}these Devices`}</h2>
+                            <h2>{onlineTitle}</h2>
                             <Table
                                 size="middle"
                                 pagination={false}
@@ -755,7 +766,7 @@ class BulkActivities extends Component {
                     showPullAppsModal={this.showPullAppsModal}
                     pullAppsModal={this.state.pullAppsModal}
                     apk_list={this.props.apk_list}
-                    app_list={this.props.app_list} // .app_list
+                    app_list={this.props.app_list}
                     // onPushAppsSelection={this.onPushAppsSelection}
                     setBulkPushApps={this.props.setBulkPushApps}
                     setBulkPullApps={this.props.setBulkPullApps}
@@ -783,6 +794,7 @@ const mapDispatchToProps = (dispatch) => {
         applyPullApps: applyBulkPullApps,
         setBulkPushApps: setBulkPushApps,
         setBulkPullApps: setBulkPullApps,
+        setSelectedBulkDevices: setSelectedBulkDevices,
 
         // ackFinishedPullApps: ackFinishedPullApps,
         // ackFinishedBulkPushApps: ackFinishedBulkPushApps,
@@ -793,7 +805,7 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users, device_details, socket }, otherProps) => {
     // console.log(bulkDevices.usersOfDealers, 'usersOfDealers ,devices.bulkDevices ', bulkDevices.bulkDevices);
-    console.log("bulkDevices.pushAppsResponseModal", bulkDevices.pushAppsResponseModal, "device_details.apk_list ", device_details.apk_list);
+    console.log("bulkDevices.selectedDevices", bulkDevices.selectedDevices);
     return {
         socket: socket.socket,
         user: auth.authUser,
@@ -813,7 +825,8 @@ const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users,
         queue_device_ids: bulkDevices.queue_device_ids,
         pushed_device_ids: bulkDevices.pushed_device_ids,
         response_modal_action: bulkDevices.response_modal_action,
-        expire_device_ids: bulkDevices.expire_device_ids
+        expire_device_ids: bulkDevices.expire_device_ids,
+        selectedDevices: bulkDevices.selectedDevices
     };
 }
 

@@ -1,4 +1,4 @@
-import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS } from "../../constants/ActionTypes";
+import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
 
@@ -43,12 +43,13 @@ export function bulkSuspendDevice(devices) {
         RestService.bulkSuspendDevice(devices).then((response) => {
 
             if (RestService.checkAuth(response.data)) {
-                if (response.data.status) {
+                // console.log('response', response.data);
+                // if (response.data.status) {
                     dispatch({
                         type: BULK_SUSPEND_DEVICES,
                         payload: response.data,
                     });
-                }
+                // }
 
 
             } else {
@@ -205,6 +206,17 @@ export const applyBulkPullApps = (data) => {
                     type: INVALID_TOKEN
                 })
             }
+        })
+    }
+}
+
+// Set Selected Devices
+export const setSelectedBulkDevices = (data) => {
+    return (dispatch) => {
+        dispatch({
+            type: SET_SELECTED_BULK_DEVICES,
+            payload: data
+
         })
     }
 }

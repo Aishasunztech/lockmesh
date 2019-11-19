@@ -243,7 +243,7 @@ const PullAppsModal = (props) => {
 
 
 const SelectedPullApps = (props) => {
-    console.log("SelectedPullApps ", props)
+    // console.log("SelectedPullApps ", props)
     return (
         <Modal
             maskClosable={false}
@@ -382,13 +382,13 @@ export default class PushPullApps extends Component {
         let dumyList = [];
         if (this.state.selectedPullAppKeys.length && this.state.selectedPullApps.length) {
             for (let app of this.state.selectedPullApps) {
-                console.log(app)
+                // console.log(app)
                 if (this.state.selectedPullAppKeys.includes(app.app_id)) {
                     dumyList.push(app)
                 }
             }
         }
-        console.log("dumyList ", dumyList)
+        // console.log("dumyList ", dumyList)
         this.setState({
             selectedPullAppsModal: visible,
             pullApps: dumyList
@@ -397,7 +397,7 @@ export default class PushPullApps extends Component {
 
     handleComponentSearch = (value, labelApps) => {
         try {
-            console.log(value, 'value')
+            // console.log(value, 'value')
             if (value.length) {
                 // console.log(value, 'value')
                 if (status) {
@@ -405,7 +405,7 @@ export default class PushPullApps extends Component {
                     coppyList = this.state.apk_list;
                     status = false;
                 }
-                console.log(this.state.apk_list, 'coppy de', coppyList)
+                // console.log(this.state.apk_list, 'coppy de', coppyList)
                 let foundList = componentSearch(coppyList, value);
                 // console.log('found devics', foundList)
                 if (foundList.length) {
@@ -430,7 +430,7 @@ export default class PushPullApps extends Component {
 
 
     componentWillReceiveProps(nextProps) {
-        console.log('hi')
+        // console.log('hi')
 
         this.setState({
             apk_list: nextProps.apk_list
@@ -438,7 +438,7 @@ export default class PushPullApps extends Component {
     }
 
     applyPushApps = (apps) => {
-        console.log("applyPushApps ", this.state.pushApps, this.props.device_id, this.props.usr_acc_id)
+        // console.log("applyPushApps ", this.state.pushApps, this.props.device_id, this.props.usr_acc_id)
 
         // this.props.applyPushApps(this.state.pushApps, this.props.device_id, this.props.usr_acc_id);
         this.props.setBulkPushApps(this.state.pushApps);
@@ -455,7 +455,7 @@ export default class PushPullApps extends Component {
     }
 
     render() {
-        console.log("this.props.apk_list ", this.props.apk_list)
+        // console.log("this.props.apk_list ", this.props.apk_list)
         return (
             <div>
                 <PushAppsModal

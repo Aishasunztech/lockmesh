@@ -190,10 +190,10 @@ export default class Activity extends Component {
 
     renderList = () => {
         let data = this.props.history;
-        console.log("history is: ", data)
+        // console.log("history is: ", data)
         if (data.length) {
             return data.map((row, index) => {
-                console.log(row);
+                // console.log(row);
                 return {
                     key: index,
                     action_name: row.action.toUpperCase(),
@@ -266,7 +266,7 @@ export default class Activity extends Component {
                         onExpand={this.onExpandRow}
                         dataSource={this.renderList()}
                         expandedRowRender={record => {
-                            console.log('recored', record)
+                            // console.log('recored', record)
 
                             return (
                                 <Table

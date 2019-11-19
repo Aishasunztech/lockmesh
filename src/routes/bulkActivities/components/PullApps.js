@@ -8,7 +8,7 @@ import { convertToLang } from '../../utils/commonUtils';
 
 
 const renderApps = (apk_list, selectedApps = false) => {
-    console.log(selectedApps, "selectedApps apk_list renderApps ", apk_list)
+    // console.log(selectedApps, "selectedApps apk_list renderApps ", apk_list)
     let app_list = []
 
     if (selectedApps) {

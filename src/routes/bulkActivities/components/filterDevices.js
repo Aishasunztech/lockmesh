@@ -56,7 +56,7 @@ class FilterDevices extends Component {
       // redirect: false,
       dealer_id: '',
       // goToPage: '/dealer/dealer',
-      selectedDevices: [],
+      selectedDevices: props.selectedDevices ? props.selectedDevices : [], // [],
       copySelectedDevices: []
     }
 
@@ -127,7 +127,9 @@ class FilterDevices extends Component {
 
 
   componentWillReceiveProps(nextProps) {
+    console.log("nextProps.selectedDevices ", nextProps.selectedDevices, this.props.selectedDevices)
 
+    // if (this.props !== nextProps) {
     if (this.props.translation !== nextProps.translation) {
       let columns = userDevicesListColumns(nextProps.translation, this.handleSearch);
 
@@ -142,6 +144,11 @@ class FilterDevices extends Component {
         copySelectedDevices: []
       })
     }
+     else {
+      this.setState({
+        selectedDevices: nextProps.selectedDevices,
+      })
+    }
 
     let action = nextProps.handleActionValue;
     if (this.props.handleActionValue != action) {
@@ -152,7 +159,7 @@ class FilterDevices extends Component {
       //   )
       // })
 
-      console.log('child this.props.devices ', this.props.devices)
+      // console.log('child this.props.devices ', this.props.devices)
 
 
       let updateSelectedDevices = this.state.selectedDevices;
@@ -173,12 +180,13 @@ class FilterDevices extends Component {
           updateSelectedDevices = copySelectedDevices;
         }
 
+        this.props.setSelectedBulkDevices(updateSelectedDevices);
         this.setState({
           selectedDevices: updateSelectedDevices
         });
       }
     }
-
+    // }
   }
 
   showPermissionedDealersModal = (visible) => {
@@ -243,6 +251,8 @@ class FilterDevices extends Component {
   }
 
   saveAllDealers = () => {
+    console.log("add all")
+    this.props.setSelectedBulkDevices(this.props.devices);
     this.setState({
       selectedDevices: this.props.devices,
       copySelectedDevices: this.props.devices,
@@ -258,6 +268,7 @@ class FilterDevices extends Component {
           selectedDevices.push(device);
         }
       })
+      this.props.setSelectedBulkDevices(selectedDevices);
       this.setState({
         selectedRowKeys: [],
         selectedDevices: selectedDevices,
@@ -446,10 +457,12 @@ class FilterDevices extends Component {
 
       });
       // console.log("searched value", demoDevices);
+      this.props.setSelectedBulkDevices(demoDevices);
       this.setState({
         selectedDevices: demoDevices
       })
     } else {
+      this.props.setSelectedBulkDevices(copyDevices);
       this.setState({
         selectedDevices: copyDevices
       })
@@ -490,7 +503,7 @@ class FilterDevices extends Component {
   }
 
   removeAllDealers = () => {
-
+    this.props.setSelectedBulkDevices([]);
     this.setState({
       selectedDevices: [],
       copySelectedDevices: []
@@ -504,12 +517,13 @@ class FilterDevices extends Component {
   }
 
   removeSelectedDealers = () => {
-    console.log(this.state.selectedDevices, "this.state.selectedRowKeys ", this.state.selectedRowKeys);
+    // console.log(this.state.selectedDevices, "this.state.selectedRowKeys ", this.state.selectedRowKeys);
 
     let permittedDevices = this.state.selectedDevices;
     let selectedRows = this.state.selectedRowKeys;
     var selectedDevices = permittedDevices.filter(e => selectedRows.includes(e.id));
 
+    this.props.setSelectedBulkDevices(selectedDevices);
     this.setState({
       removeSelectedDealersModal: false,
       device_ids: [],
@@ -600,7 +614,7 @@ class FilterDevices extends Component {
 
   getUnSelectedDevices = (devices) => {
 
-    console.log('this.state.selectedDevices filter ', this.state.selectedDevices)
+    // console.log('this.state.selectedDevices filter ', this.state.selectedDevices)
     if (this.state.selectedDevices.length > 0) {
       let selectedIDs = this.state.selectedDevices.map((item) => item.id);
       let fDevices = devices.filter(e => !selectedIDs.includes(e.id));
@@ -611,7 +625,7 @@ class FilterDevices extends Component {
   }
 
   applyAction = () => {
-    console.log(this.props.selectedDealers, this.props.selectedUsers, 'action apply', this.props.handleActionValue);
+    // console.log(this.props.selectedDealers, this.props.selectedUsers, 'action apply', this.props.handleActionValue);
 
     let action = this.props.handleActionValue;
     if (action !== "NOT SELECTED") {

@@ -1,6 +1,6 @@
 
 import {
-    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS,
+    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES,
 } from "../../constants/ActionTypes";
 import { message, Modal } from 'antd';
 
@@ -46,6 +46,15 @@ export default (state = initialState, action) => {
                 bulkSelectedPullApps: action.payload
             }
         }
+
+        case SET_SELECTED_BULK_DEVICES: {
+            return {
+                ...state,
+                selectedDevices: action.payload
+            }
+        }
+
+
         case BULK_LOADING:
             return {
                 ...state,
@@ -57,7 +66,7 @@ export default (state = initialState, action) => {
 
         case BULK_HISTORY:
 
-            console.log("action.payload history at red : ", action.payload)
+            // console.log("action.payload history at red : ", action.payload)
             return {
                 ...state,
                 isloading: false,
@@ -66,7 +75,7 @@ export default (state = initialState, action) => {
 
         case BULK_USERS:
 
-            console.log("action.payload BULK_USERS at red : ", action.payload)
+            // console.log("action.payload BULK_USERS at red : ", action.payload)
             if (action.payload.status) {
                 return {
                     ...state,
@@ -78,7 +87,7 @@ export default (state = initialState, action) => {
 
 
         case BULK_DEVICES_LIST:
-            console.log("action.payload BULK_DEVICES_LIST, ", action.payload)
+            // console.log("action.payload BULK_DEVICES_LIST, ", action.payload)
             if (action.payload.status) {
                 return {
                     ...state,
@@ -122,20 +131,21 @@ export default (state = initialState, action) => {
         //     }
 
         case BULK_SUSPEND_DEVICES: {
-            console.log('BULK_SUSPEND_DEVICES reducer data:: ', action.payload);
-
+            // console.log('BULK_SUSPEND_DEVICES reducer data:: ', action.payload, state.selectedDevices);
+            let updatePrevBulkDevices = [];
             let showResponseModal = false;
-
             if (action.payload.status) {
+
+                let allSuspendedDevices = [...action.payload.data.queue_device_ids, ...action.payload.data.pushed_device_ids];
+                updatePrevBulkDevices = state.bulkDevices.map((item) => {
+                    let bulkObjIndex = allSuspendedDevices.findIndex(obj => obj === item.device_id);
+                    if (bulkObjIndex !== -1) {
+                        item.finalStatus = "Suspended";
+                        item.account_status = "suspended";
+                    }
+                    return item;
+                })
                 if (action.payload.online && !action.payload.offline && !action.payload.failed && !action.payload.expire) {
-
-                    // action.response.data.map((item) => {
-                    //     let bulkObjIndex = devices.findIndex((obj => obj.device_id === item.device_id));
-                    //     if (bulkObjIndex !== -1) {
-                    //         state.bulkDevices[bulkObjIndex] = item;
-                    //     }
-                    // })
-
                     success({
                         title: action.payload.msg,
                     });
@@ -147,7 +157,6 @@ export default (state = initialState, action) => {
                 } else if (!action.payload.online && !action.payload.offline && !action.payload.failed && action.payload.expire) {
                     warning({
                         title: action.payload.msg,
-                        // content: action.payload.content
                     });
                 } else {
                     state.failed_device_ids = action.payload.data.failed_device_ids;
@@ -158,14 +167,16 @@ export default (state = initialState, action) => {
                 }
 
             } else {
+                updatePrevBulkDevices = state.bulkDevices;
                 error({
                     title: action.payload.msg,
                 });
             }
 
+            // console.log("state.bulkDevices ", state.bulkDevices)
             return {
                 ...state,
-                // bulkDevices: [...state.bulkDevices],
+                bulkDevices: updatePrevBulkDevices,
                 // msg: action.response.msg,
                 // showMsg: true,
                 failed_device_ids: [...state.failed_device_ids],
@@ -173,7 +184,8 @@ export default (state = initialState, action) => {
                 pushed_device_ids: [...state.pushed_device_ids],
                 expire_device_ids: [...state.expire_device_ids],
                 pushAppsResponseModal: showResponseModal,
-                response_modal_action: "suspend"
+                response_modal_action: "suspend",
+                selectedDevices: []
             }
         }
 
@@ -209,22 +221,23 @@ export default (state = initialState, action) => {
         //     }
 
         case BULK_ACTIVATE_DEVICES: {
-            console.log('BULK_ACTIVATE_DEVICES reducer data:: ', action.payload);
-
+            // console.log('BULK_ACTIVATE_DEVICES reducer data:: ', action.payload);
+            let updatePrevBulkDevices = [];
             let showResponseModal = false;
-
             if (action.payload.status) {
+
+                let allSuspendedDevices = [...action.payload.data.queue_device_ids, ...action.payload.data.pushed_device_ids];
+                updatePrevBulkDevices = state.bulkDevices.map((item) => {
+                    let bulkObjIndex = allSuspendedDevices.findIndex(obj => obj === item.device_id);
+                    if (bulkObjIndex !== -1) {
+                        item.finalStatus = "Active";
+                        item.account_status = "";
+                    }
+                    return item;
+                })
                 if (action.payload.online && !action.payload.offline && !action.payload.failed && !action.payload.expire) {
-
-                    // action.response.data.map((item) => {
-                    //     let objIndex = state.bulkDevices.findIndex((obj => obj.device_id === item.device_id));
-                    //     if (objIndex !== -1) {
-                    //         state.bulkDevices[objIndex] = item;
-                    //     }
-                    // })
-
                     success({
-                        title: action.payload.msg, // "Apps are Being pushed"
+                        title: action.payload.msg,
                     });
                 } else if (!action.payload.online && action.payload.offline && !action.payload.failed && !action.payload.expire) {
                     warning({
@@ -234,7 +247,6 @@ export default (state = initialState, action) => {
                 } else if (!action.payload.online && !action.payload.offline && !action.payload.failed && action.payload.expire) {
                     warning({
                         title: action.payload.msg,
-                        // content: action.payload.content
                     });
                 } else {
                     state.failed_device_ids = action.payload.data.failed_device_ids;
@@ -245,6 +257,7 @@ export default (state = initialState, action) => {
                 }
 
             } else {
+                updatePrevBulkDevices = state.bulkDevices;
                 error({
                     title: action.payload.msg,
                 });
@@ -252,7 +265,7 @@ export default (state = initialState, action) => {
 
             return {
                 ...state,
-                // bulkDevices: [...state.bulkDevices],
+                bulkDevices: updatePrevBulkDevices,
                 // msg: action.response.msg,
                 // showMsg: true,
                 failed_device_ids: [...state.failed_device_ids],
@@ -260,7 +273,8 @@ export default (state = initialState, action) => {
                 pushed_device_ids: [...state.pushed_device_ids],
                 expire_device_ids: [...state.expire_device_ids],
                 pushAppsResponseModal: showResponseModal,
-                response_modal_action: "active"
+                response_modal_action: "active",
+                selectedDevices: []
             }
         }
 
@@ -299,7 +313,8 @@ export default (state = initialState, action) => {
                 queue_device_ids: [...state.queue_device_ids],
                 pushed_device_ids: [...state.pushed_device_ids],
                 pushAppsResponseModal: showResponseModal,
-                response_modal_action: "push"
+                response_modal_action: "push",
+                selectedDevices: []
             }
         }
 
@@ -337,7 +352,8 @@ export default (state = initialState, action) => {
                 queue_device_ids: [...state.queue_device_ids],
                 pushed_device_ids: [...state.pushed_device_ids],
                 pushAppsResponseModal: showResponseModal,
-                response_modal_action: "pull"
+                response_modal_action: "pull",
+                selectedDevices: []
             }
         }
 
