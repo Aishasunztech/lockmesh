@@ -640,80 +640,40 @@ class ApkMarket extends React.Component {
                                         </CustomScrollbars>
                                     </Card>
                                 </Col>
+                                <Modal
+                                    maskClosable={false}
+                                    destroyOnClose={true}
+                                    bodyStyle={{ height: 500, overflow: 'overlay' }}
+                                    title={convertToLang(this.props.translation[""], `Add Available Apps To ${initCap(this.state.space)} Space`)}
+                                    visible={this.state.availableAppModal}
+                                    onOk={() => {
+                                        this.saveApps(this.state.space)
+                                    }}
+                                    okText={convertToLang(this.props.translation[""], "Add")}
+                                    cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
+                                    onCancel={() => {
+                                        this.setState({
+                                            availableAppModal: false,
+                                            selectedRowKeys: [],
+                                            app_ids: [],
+                                            guestAvailableApps: mGuestCopySearch,
+                                            encryptedAvailableApps: mEncryptedCopySearch
+                                        });
+
+                                    }}
+                                // bodyStyle={{ height: 500, overflow: "overlay" }}
+                                >
+                                    <AppMarketList
+                                        dataSource={this.renderAvailableAppList(this.state.space === "guest" ? this.state.guestAvailableApps : this.state.encryptedAvailableApps)}
+                                        columns={columnsModal.filter((item) => (item.dataIndex !== "removeAllGuest" && item.dataIndex !== "removeAllEncrypted" && item.dataIndex !== "counter" && item.dataIndex !== "uninstall"))}
+                                        onChangeTableSorting={this.props.onChangeTableSorting}
+                                        onSelectChange={this.onSelectChange}
+                                        hideDefaultSelections={this.state.hideDefaultSelections}
+                                        selectedRows={this.state.app_ids}
+                                        selectedRowKeys={this.state.selectedRowKeys}
+                                    />
+                                </Modal>
                             </Row>
-                            {/* <Transfer
-                                titles={[
-                                    (
-
-                                        <div>
-                                            <h4 className="sm_heading2">
-                                                <b>{convertToLang(this.props.translation[SPA_TITEL_AVAILABLE_APPS], "Available Apps")}</b>
-                                            </h4>
-
-                                        </div>
-
-                                    ),
-                                    (
-                                        <div>
-                                            <h4 className="sm_heading2">
-                                                <b>{convertToLang(this.props.translation[SPA_TITLE_SECURE_MARKET], "Secure Market")}</b>
-                                            </h4>
-                                            <span>
-                                                <Popover placement="topRight" content={<Markup content={convertToLang(this.props.translation[SPA_UNINSTALL_HELPING_TEXT_FUN], "<span>Turn toggle OFF to restrict app <br /> from being uninstalled by user</span>")} />}>
-                                                    <span className="helping_txt"><Icon type="info-circle" /></span>
-                                                </Popover>
-                                            </span>
-
-                                        </div>
-                                    )
-                                ]}
-                                className="transfer_box"
-                                dataSource={this.renderList(this.state.availbleAppList, this.state.secureMarketList)}
-                                showSearch
-                                filterOption={this.filterOption}
-                                targetKeys={this.state.targetKeys}
-                                onChange={this.handleChange}
-                                onSearch={this.handleSearch}
-                                onSelectChange={this.handleSelect}
-                                render={item => item.title}
-                                locale={{ itemUnit: convertToLang(this.props.translation[SPA_APP], "App"), itemsUnit: convertToLang(this.props.translation[SPA_APP], "Apps") }}
-                                onItemSelect={this.handleSelect}
-
-                            /> */}
-
-                            <Modal
-                                maskClosable={false}
-                                destroyOnClose={true}
-                                bodyStyle={{ height: 500, overflow: 'overlay' }}
-                                title={convertToLang(this.props.translation[""], `Add Available Apps To ${initCap(this.state.space)} Space`)}
-                                visible={this.state.availableAppModal}
-                                onOk={() => {
-                                    this.saveApps(this.state.space)
-                                }}
-                                okText={convertToLang(this.props.translation[""], "Add")}
-                                cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
-                                onCancel={() => {
-                                    this.setState({
-                                        availableAppModal: false,
-                                        selectedRowKeys: [],
-                                        app_ids: [],
-                                        guestAvailableApps: mGuestCopySearch,
-                                        encryptedAvailableApps: mEncryptedCopySearch
-                                    });
-
-                                }}
-                            // bodyStyle={{ height: 500, overflow: "overlay" }}
-                            >
-                                <AppMarketList
-                                    dataSource={this.renderAvailableAppList(this.state.space === "guest" ? this.state.guestAvailableApps : this.state.encryptedAvailableApps)}
-                                    columns={columnsModal.filter((item) => (item.dataIndex !== "removeAllGuest" && item.dataIndex !== "removeAllEncrypted" && item.dataIndex !== "counter" && item.dataIndex !== "uninstall"))}
-                                    onChangeTableSorting={this.props.onChangeTableSorting}
-                                    onSelectChange={this.onSelectChange}
-                                    hideDefaultSelections={this.state.hideDefaultSelections}
-                                    selectedRows={this.state.app_ids}
-                                    selectedRowKeys={this.state.selectedRowKeys}
-                                />
-                            </Modal>
                         </Card>
                 }
             </div>

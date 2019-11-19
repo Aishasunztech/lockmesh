@@ -143,7 +143,7 @@ class RightSidebar extends Component {
           // className="gx-customizer-option"
           className='container-notification-icon'
         >
-          <Button type="primary" onClick={() => this.toggleRightSidebar()}>
+          <Button className="right_bell_icon" type="primary" onClick={() => this.toggleRightSidebar()}>
             <i className="icon icon-notification bell-icon" />
           </Button>
         </div>
