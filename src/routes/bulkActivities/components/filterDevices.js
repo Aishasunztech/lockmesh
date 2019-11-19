@@ -127,7 +127,7 @@ class FilterDevices extends Component {
 
 
   componentWillReceiveProps(nextProps) {
-    console.log("nextProps.selectedDevices ", nextProps.selectedDevices, this.props.selectedDevices)
+    // console.log("nextProps.selectedDevices ", nextProps.selectedDevices, this.props.selectedDevices)
 
     // if (this.props !== nextProps) {
     if (this.props.translation !== nextProps.translation) {

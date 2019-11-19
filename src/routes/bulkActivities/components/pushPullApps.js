@@ -92,6 +92,7 @@ var status = true;
 
 
 const PushAppsModal = (props) => {
+    console.log("PushAppsModal ", props.selectedPushApps)
     return (
         <Modal
             maskClosable={false}
@@ -122,7 +123,7 @@ const PushAppsModal = (props) => {
                     props.showSelectedPushAppsModal(true);
                 }
             }}
-            onCancel={() => { props.showPushAppsModal(false); props.resetSeletedRows() }}
+            onCancel={() => { props.showPushAppsModal(false);  }} // props.resetSeletedRows()
             okText={convertToLang(props.translation[PUSH_APP_TEXT], "PUSH APP")}
             cancelText={convertToLang(props.translation[Button_Cancel], "Cancel")}
         >
@@ -162,7 +163,7 @@ const SelectedPushApps = (props) => {
                 props.showSelectedPushAppsModal(false);
                 props.showPushAppsModal(false)
                 props.showPullAppsModal(false)
-                props.resetSeletedRows()
+                // props.resetSeletedRows()
             }}
             // onCancel={() => { props.showSelectedAppsModal(false); props.resetSeletedRows() }}
             onCancel={() => {
@@ -222,7 +223,7 @@ const PullAppsModal = (props) => {
                     props.showSelectedPullAppsModal(true);
                 }
             }}
-            onCancel={() => { props.showPullAppsModal(false); props.resetSeletedRows(); }}
+            onCancel={() => { props.showPullAppsModal(false);  }} // props.resetSeletedRows();
             // okText="Pull Apps"
             okText={convertToLang(props.translation[PULL_APPS_TEXT], "PULL APP")}
             cancelText={convertToLang(props.translation[Button_Cancel], "Cancel")}
@@ -258,7 +259,7 @@ const SelectedPullApps = (props) => {
                 props.showSelectedPullAppsModal(false);
                 props.showPushAppsModal(false)
                 props.showPullAppsModal(false)
-                props.resetSeletedRows()
+                // props.resetSeletedRows()
             }}
             onCancel={() => {
                 props.showPushAppsModal(true);

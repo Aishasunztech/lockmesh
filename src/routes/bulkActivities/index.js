@@ -145,7 +145,8 @@ class BulkActivities extends Component {
             pushAppsModal: false,
             pullAppsModal: false,
             apk_list: [],
-            pushAppsResponseModal: false
+            pushAppsResponseModal: false,
+            handleModalBtn: false
         }
     }
 
@@ -509,15 +510,29 @@ class BulkActivities extends Component {
 
     handleChangeAction = (e) => {
 
-        if (e === "PUSH APPS") {
-            this.setState({ pushAppsModal: true });
-        }
-        else if (e === "PULL APPS") {
-            this.setState({ pullAppsModal: true });
+        if (e === "PUSH APPS" || e === "PULL APPS") {
+            if (e === "PUSH APPS") {
+                this.setState({ pushAppsModal: true, handleModalBtn: true });
+            }
+            else if (e === "PULL APPS") {
+                this.setState({ pullAppsModal: true, handleModalBtn: true });
+            }
         }
 
         this.setState({ selectedAction: e });
 
+    }
+
+    handleViewChangePushPullApps = () => {
+        let actionName = this.state.selectedAction;
+        // console.log("actionName handleViewChangePushPullApps ", actionName)
+
+        if (actionName === "PUSH APPS") {
+            this.setState({ pushAppsModal: true });
+        }
+        else if (actionName === "PULL APPS") {
+            this.setState({ pullAppsModal: true });
+        }
     }
 
     render() {
@@ -589,13 +604,18 @@ class BulkActivities extends Component {
                                 })}
                             </Select>
                         </Col>
+                        <Col className="col-md-4 col-sm-4 col-xs-4">
+                            {this.state.handleModalBtn ?
+                                <Button onClick={this.handleViewChangePushPullApps}>View/Change</Button>
+                                : null}
+                        </Col>
                     </Row>
                     <p>Selected: <span className="font_26">{this.state.selectedAction.toUpperCase()}</span></p>
 
 
                     <Row gutter={24} className="">
                         <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
-                            <span className=""> {convertToLang(this.props.translation[""], "Select Dealers:")} </span>
+                            <span className=""> {convertToLang(this.props.translation[""], "Select Dealers/S-Dealers:")} </span>
                         </Col>
 
                         <Col className="col-md-4 col-sm-4 col-xs-4">
@@ -604,7 +624,7 @@ class BulkActivities extends Component {
                                 labelInValue
                                 maxTagCount={2}
                                 style={{ width: '100%' }}
-                                placeholder={convertToLang(this.props.translation[""], "Select Dealers")}
+                                placeholder={convertToLang(this.props.translation[""], "Select Dealers/S-Dealers")}
                                 onChange={this.handleChangeDealer}
                             // onDeselect={this.handleCancel}
                             // onBlur={() => { this.handleMultipleSelect() }}
@@ -619,7 +639,7 @@ class BulkActivities extends Component {
                     </Row>
                     <br />
 
-                    <p>Dealers Selected: <span className="font_26">{((this.state.selectedDealers.length) ?
+                    <p>Dealers/S-Dealers Selected: <span className="font_26">{((this.state.selectedDealers.length) ?
                         this.state.selectedDealers.map((item, index) =>
                             this.state.selectedDealers.length - 1 !== index ? `${item.label}, ` : `${item.label}`
                         )
@@ -805,7 +825,7 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users, device_details, socket }, otherProps) => {
     // console.log(bulkDevices.usersOfDealers, 'usersOfDealers ,devices.bulkDevices ', bulkDevices.bulkDevices);
-    console.log("bulkDevices.selectedDevices", bulkDevices.selectedDevices);
+    // console.log("bulkDevices.selectedDevices", bulkDevices.selectedDevices, "bulkDevices.bulkSelectedPushApps ", bulkDevices.bulkSelectedPushApps, "bulkDevices.bulkSelectedPullApps ", bulkDevices.bulkSelectedPullApps);
     return {
         socket: socket.socket,
         user: auth.authUser,
