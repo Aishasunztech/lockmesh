@@ -56,6 +56,10 @@
     z-index: 1;
 }
 
+.fix_card_sm .ant-table-bordered .ant-table-thead>tr>th {
+    white-space: nowrap;
+}
+
 .fix_card .ant-table-thead>tr>th.ant-table-column-has-actions.ant-table-column-has-sorters {
     position: sticky !important;
     top: 40px;
@@ -148,6 +152,16 @@
     bottom: 25px;
     left: 16px;
     right: 16px;
+}
+
+.fix_card_sm {
+    position: relative;
+    top: 50px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 412px;
+    margin-bottom: 50px !important;
 }
 
 .dealer_fix_card {
@@ -367,6 +381,10 @@
     .b_p-8 {
         padding: 0 16px;
     }
+
+    .fix_card_sm {
+        margin-bottom: 66px !important;
+    }
 }
 
 @media screen and (max-width: 575px) {
@@ -531,7 +549,7 @@
 }
 
 .mb-16 {
-    margin-bottom: 16px;
+    margin-bottom: 16px !important;
 }
 
 .mb-20 {
