@@ -3447,7 +3447,7 @@ export function appMarketColumns(translation, handleSearch, removeSMapps) {
                     {
                         title: "APP NAME",
                         dataIndex: 'app_name',
-                        sorter: (a, b) => { return a.app_name - b.app_name },
+                        sorter: (a, b) => { return a.app_name.localeCompare(b.app_name) },
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
