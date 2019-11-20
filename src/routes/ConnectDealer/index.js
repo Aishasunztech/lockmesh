@@ -8,17 +8,14 @@ import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs } fr
 import AppFilter from '../../components/AppFilter';
 
 import { getColor, isBase64, convertToLang } from "../utils/commonUtils"
+import { getDealerDetails } from '../../appRedux/actions'
 
 
-const success = Modal.success
-const error = Modal.error
-const TabPane = Tabs.TabPane;
 class ConnectDealer extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-
             dealer_id: isBase64(props.match.params.dealer_id),
         }
         // console.log("hello every body", this.props);
@@ -27,24 +24,26 @@ class ConnectDealer extends Component {
 
     componentDidMount() {
         const dealer_id = isBase64(this.props.match.params.dealer_id);
-        alert(dealer_id);
+        if(dealer_id){
+            this.props.getDealerDetails(dealer_id);
+        }
     }
 
 
     componentDidUpdate(prevProps) {
         // console.log('hi')
-        const dealer_id = isBase64(this.props.match.params.dealer_id);
-
+        // const dealer_id = isBase64(this.props.match.params.dealer_id);
+        
     }
 
     componentWillReceiveProps(nextProps) {
-        const dealer_id = isBase64(nextProps.match.params.dealer_id);
+        // const dealer_id = isBase64(nextProps.match.params.dealer_id);
 
     }
 
 
     componentWillUnmount() {
-        const dealer_id = isBase64(this.props.match.params.dealer_id);
+        // const dealer_id = isBase64(this.props.match.params.dealer_id);
     }
 
     render() {
@@ -73,27 +72,7 @@ class ConnectDealer extends Component {
 
                     </Col>
                     <Col className="gutter-row right_bar" xs={24} sm={24} md={24} lg={24} xl={8}>
-                        {/* <SideActions
-                            translation={this.props.translation}
-                            device={this.props.device_details}
-                            profiles={this.props.profiles}
-                            policies={this.props.policies}
-                            histories={this.props.histories}
-                            activateDevice={this.props.activateDevice2}
-                            suspendDevice={this.props.suspendDevice2}
-                            editDevice={this.props.editDevice}
-                            unlinkDevice={this.props.unlinkDevice}
-                            flagged={this.props.flagged}
-                            unflagged={this.props.unflagged}
-                            wipe={this.props.wipe}
-                            checkPass={this.props.checkPass}
-                            history={this.props.history}
-                            getDevicesList={this.props.getDevicesList}
-                            refreshDevice={this.refreshDevice}
-                            imei_list={this.props.imei_list}
-                            apk_list={this.state.apk_list}
-                        // applySetting = {this.applyActions}
-                        /> */}
+                        
 
                     </Col>
                 </Row>
@@ -106,14 +85,14 @@ class ConnectDealer extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-
+        getDealerDetails: getDealerDetails
     }, dispatch);
 }
-var mapStateToProps = ({ routing, device_details, auth, socket, settings }, ownProps) => {
-
-
+var mapStateToProps = ({ dealer_details, settings }, ownProps) => {
+    console.log(dealer_details);
     return {
-
+        dealer: dealer_details.dealer,
+        translation: settings.translation,
     };
 }
 

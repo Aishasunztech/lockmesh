@@ -1,7 +1,7 @@
 import {
     INVALID_TOKEN,
-
-} from "constants/ActionTypes"
+    DEALER_DETAILS
+} from "../../constants/ActionTypes"
 // import { message } from 'antd';
 
 import RestService from '../services/RestServices';
@@ -14,14 +14,14 @@ export function getDealerDetails(dealerId) {
         //     spinloading: true
         // });
 
-        RestService.getDealerDetails().then((response) => {
+        RestService.getDealerDetails(dealerId).then((response) => {
 
             if (RestService.checkAuth(response.data)) {
 
-                // dispatch({
-                //     type: DEALERS_LIST,
-                //     payload: response.data
-                // });
+                dispatch({
+                    type: DEALER_DETAILS,
+                    payload: response.data
+                });
             } else {
                 dispatch({
                     type: INVALID_TOKEN
