@@ -115,8 +115,8 @@ class BulkActivities extends Component {
         ]
 
         this.actionList = [
-            { key: 'PUSH APPS', value: "Push Apps" },
-            { key: 'PULL APPS', value: "Pull Apps" },
+            // { key: 'PUSH APPS', value: "Push Apps" },
+            // { key: 'PULL APPS', value: "Pull Apps" },
             // { key: 'PUSH POLICY', value: "Push Policy" },
             // { key: 'SET PERMISSIONS', value: "Set Permissions" },
             { key: 'ACTIVATE DEVICES', value: "Activate Devices" },
