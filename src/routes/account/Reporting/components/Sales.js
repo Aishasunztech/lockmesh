@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal, Tabs, Col, Input, Form, Row, DatePicker, Select } from "antd";
 import moment from 'moment';
 import styles from '../reporting.css'
-import {convertToLang, generatePDF, generateExcel, formatMoney, getDateFromTimestamp} from "../../../utils/commonUtils";
+import { convertToLang, generatePDF, generateExcel, formatMoney, getDateFromTimestamp } from "../../../utils/commonUtils";
 import {
   DEVICE_PRE_ACTIVATION
 } from "../../../../constants/Constants";
@@ -270,7 +270,7 @@ class Sales extends Component {
     return (
       <Row>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-          <Card  >
+          <Card bordered={false} style={{ height: '460px', overflow: 'scroll' }}>
             <Form onSubmit={this.handleSubmit} autoComplete="new-password">
 
               <Form.Item
@@ -417,7 +417,7 @@ class Sales extends Component {
 
         </Col>
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
-          <Card style={{ height: '500px', overflow: 'scroll' }}>
+          <Card bordered={false} style={{ height: '460px', overflow: 'scroll' }}>
             {(this.state.reportCard) ?
               <Fragment>
                 <Row>
