@@ -13,7 +13,7 @@ export default class BulkPullApps extends Component {
     }
 
     handleBulkPullApps = (devices, dealers, users) => {
-        console.log("devices lklk", devices)
+        // console.log("devices lklk", devices)
         let selectedDevices = [];
         let dealer_ids = [];
         let user_ids = [];
@@ -38,14 +38,7 @@ export default class BulkPullApps extends Component {
             user_ids
         }
 
-        const title = `${convertToLang(this.props.translation[""], "Are you sure, you want to pull selected apps from these devices ")}  
-        ${selectedDevices.map((item, index) =>
-        // `${item.device_id}, `
-        {
-            // console.log("logs:: ", devices.length - 1, index, item.device_id)
-            return selectedDevices.length - 1 !== index ? `${item.device_id}, ` : `${item.device_id}`
-        }
-        )} ?`;
+        const title = `${convertToLang(this.props.translation[""], "Are you sure, you want to pull selected apps from these devices ")} ${selectedDevices.map((item, index) => ` ${item.device_id}`)} ?`;
         this.confirm({
             title: title,
             content: '',

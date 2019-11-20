@@ -18,7 +18,7 @@ export function getBulkDevicesList(data) {
         RestService.getBulkDevicesList(data).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
-                    console.log('at action file on response', response)
+                    // console.log('at action file on response', response)
                     dispatch({
                         type: BULK_DEVICES_LIST,
                         payload: response.data,

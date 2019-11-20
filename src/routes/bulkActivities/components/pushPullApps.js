@@ -92,7 +92,7 @@ var status = true;
 
 
 const PushAppsModal = (props) => {
-    console.log("PushAppsModal ", props.selectedPushApps)
+    // console.log("PushAppsModal ", props.selectedPushApps)
     return (
         <Modal
             maskClosable={false}

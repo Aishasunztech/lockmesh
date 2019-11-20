@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Modal, Col, Row, Card, Button, Input, Select, Table, Icon } from 'antd';
+import { Modal, Col, Row, Card, Button, Input, Select, Table, Icon, Tag } from 'antd';
 import { getAllDealers } from "../../appRedux/actions/Dealers";
 import HistoryModal from "./components/bulkHistory";
 import {
@@ -146,7 +146,9 @@ class BulkActivities extends Component {
             pullAppsModal: false,
             apk_list: [],
             pushAppsResponseModal: false,
-            handleModalBtn: false
+            handleModalBtn: false,
+            checkAllSelectedDealers: false,
+            checkAllSelectedUsers: false
         }
     }
 
@@ -386,8 +388,18 @@ class BulkActivities extends Component {
 
 
 
-    handleCancel = () => {
-        this.handleMultipleSelect();
+    handleCancel = (e, dealerOrUser = '') => {
+
+        if (dealerOrUser == "dealers") {
+            let updateDealers = this.state.selectedDealers.filter(item => item.key != e.key);
+            this.state.selectedDealers = updateDealers;
+            this.state.checkAllSelectedDealers = false;
+        } else if (dealerOrUser == "users") {
+            let updateUsers = this.state.selectedUsers.filter(item => item.key != e.key);
+            this.state.selectedUsers = updateUsers;
+            this.state.checkAllSelectedUsers = false;
+        }
+
     }
 
     historyModal = () => {
@@ -474,37 +486,71 @@ class BulkActivities extends Component {
     }
 
     handleChangeUser = (values) => {
+        // console.log("handleChangeUser values ", values, this.state.selectedUsers, this.props.users_list, this.state.allUsers);
+        let checkAllUsers = this.state.checkAllSelectedUsers
+
         let selectAll = values.filter(e => e.key === "all");
         let selectedUsers = values.filter(e => e.key !== "all");
 
+
         if (selectAll.length > 0) {
-            selectedUsers = this.state.allUsers;
+            checkAllUsers = !this.state.checkAllSelectedUsers;
+            if (this.state.checkAllSelectedUsers) {
+                selectedUsers = [];
+            } else {
+                selectedUsers = this.state.allUsers; // [...this.state.allUsers, {key: "all", label: "Select All"}];
+            }
+        }
+        else if (values.length === this.props.users_list.length) {
+            selectedUsers = this.state.allUsers
+            checkAllUsers = true;
+        }
+        else {
+            selectedUsers = values.filter(e => e.key !== "all");
         }
 
         let data = {
             dealers: this.state.selectedDealers,
             users: selectedUsers
         }
+        // console.log("users data is: ", data)
         this.props.getBulkDevicesList(data);
-        this.setState({ selectedUsers })
+        this.setState({ selectedUsers, checkAllSelectedUsers: checkAllUsers })
     }
 
     handleChangeDealer = (values) => {
+        // console.log("handleChangeDealer values ", values, this.state.selectedDealers.length, this.state.dealerList.length);
+
+        let checkAllDealers = this.state.checkAllSelectedDealers
+
         let selectAll = values.filter(e => e.key === "all");
-        let selectedDealers = values.filter(e => e.key !== "all");
+        let selectedDealers = [];
 
         if (selectAll.length > 0) {
-            selectedDealers = this.state.allDealers;
+            checkAllDealers = !this.state.checkAllSelectedDealers;
+            if (this.state.checkAllSelectedDealers) {
+                selectedDealers = [];
+            } else {
+                selectedDealers = this.state.allDealers // [...this.state.allDealers, {key: "all", label: "Select All"}];
+            }
+        }
+        else if (values.length === this.props.dealerList.length) {
+            selectedDealers = this.state.allDealers
+            checkAllDealers = true;
+        }
+        else {
+            selectedDealers = values.filter(e => e.key !== "all");
         }
 
+
         let data = {
-            dealers: selectedDealers,
+            dealers: selectedDealers, //.filter(e => e.key !== "all"),
             users: this.state.selectedUsers
         }
 
         // console.log('handle change data is: ', data)
         this.props.getBulkDevicesList(data);
-        this.setState({ selectedDealers });
+        this.setState({ selectedDealers, checkAllSelectedDealers: checkAllDealers });
 
     }
 
@@ -537,6 +583,10 @@ class BulkActivities extends Component {
         }
     }
 
+    hanldeTags = (e) => {
+        console.log("hanldeTags ", e);
+    }
+
     render() {
 
         const { response_modal_action } = this.props;
@@ -567,6 +617,15 @@ class BulkActivities extends Component {
             offlineTitle = "(These Devices will be Suspended Soon when back online)"
             onlineTitle = "These Devices are Suspended Successfully";
         }
+
+
+        // let checkAllDealers = this.state.selectedDealers;
+        // checkAllDealers = checkAllDealers.filter(item => item.key == "all")
+        // if (checkAllDealers.length) {
+        //     checkAllDealers = [{ key: "all", label: "Select All" }]
+        // } else {
+        //     checkAllDealers = this.state.selectedDealers;
+        // }
         return (
             <Fragment>
                 <Card >
@@ -602,7 +661,7 @@ class BulkActivities extends Component {
                             >
                                 <Select.Option value="NOT SELECTED">{convertToLang(this.props.translation[""], "Select any action")}</Select.Option>
                                 {this.actionList.map((item, index) => {
-                                    return (<Select.Option key={item.id} value={item.key}>{item.value}</Select.Option>)
+                                    return (<Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)
                                 })}
                             </Select>
                         </Col>
@@ -622,19 +681,22 @@ class BulkActivities extends Component {
 
                         <Col className="col-md-4 col-sm-4 col-xs-4">
                             <Select
+                                value={this.state.selectedDealers}
                                 mode="multiple"
                                 labelInValue
-                                maxTagCount={2}
+                                maxTagCount={this.state.checkAllSelectedDealers ? 0 : 2}
+                                maxTagTextLength={10}
+                                maxTagPlaceholder={this.state.checkAllSelectedDealers ? "All Selected" : `${this.state.selectedDealers.length - 2} more`}
                                 style={{ width: '100%' }}
                                 placeholder={convertToLang(this.props.translation[""], "Select Dealers/S-Dealers")}
                                 onChange={this.handleChangeDealer}
-                            // onDeselect={this.handleCancel}
+                                onDeselect={(e) => this.handleCancel(e, "dealers")}
                             // onBlur={() => { this.handleMultipleSelect() }}
                             >
                                 <Select.Option key="allDealers" value="all">Select All</Select.Option>
                                 {this.props.dealerList.map((item, index) => {
                                     // disabled={(this.props.dealerList.length === this.state.selectedDealers.length) ? true : false}
-                                    return (<Select.Option key={item.id} value={item.dealer_id}>{item.dealer_name}</Select.Option>)
+                                    return (<Select.Option key={item.dealer_id} value={item.dealer_id}>{item.dealer_name}</Select.Option>)
                                 })}
                             </Select>
                         </Col>
@@ -643,7 +705,8 @@ class BulkActivities extends Component {
 
                     <p>Dealers/S-Dealers Selected: <span className="font_26">{((this.state.selectedDealers.length) ?
                         this.state.selectedDealers.map((item, index) =>
-                            this.state.selectedDealers.length - 1 !== index ? `${item.label}, ` : `${item.label}`
+                            // <Tag>{this.state.selectedDealers.length - 1 !== index ? `${item.label}, ` : `${item.label}`}</Tag>
+                            <Tag>{item.label}</Tag>
                         )
                         : "NOT SELECTED")}</span></p>
                     <Row gutter={24} className="">
@@ -653,12 +716,15 @@ class BulkActivities extends Component {
 
                         <Col className="col-md-4 col-sm-4 col-xs-4">
                             <Select
+                                value={this.state.selectedUsers}
                                 mode="multiple"
                                 labelInValue
-                                maxTagCount={2}
+                                maxTagCount={this.state.checkAllSelectedUsers ? 0 : 2}
+                                maxTagTextLength={10}
+                                maxTagPlaceholder={this.state.checkAllSelectedUsers ? "All Selected" : `${this.state.selectedUsers.length - 2} more`}
                                 style={{ width: '100%' }}
                                 // onBlur={this.handleMultipleSelect}
-                                // onDeselect={this.handleCancel}
+                                onDeselect={(e) => this.handleCancel(e, "users")}
                                 placeholder={convertToLang(this.props.translation[""], "Select Users")}
                                 onChange={this.handleChangeUser}
                             >
@@ -673,7 +739,8 @@ class BulkActivities extends Component {
                     <br />
                     <p>Users Selected: <span className="font_26">{(this.state.selectedUsers.length) ?
                         this.state.selectedUsers.map((item, index) =>
-                            this.state.selectedUsers.length - 1 !== index ? `${item.label}, ` : `${item.label}`
+                            // <Tag>{this.state.selectedUsers.length - 1 !== index ? `${item.label}, ` : `${item.label}`}</Tag>
+                            <Tag>{item.label}</Tag>
                         ) : "NOT SELECTED"}</span></p>
 
                     <FilterDeives

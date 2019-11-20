@@ -39,7 +39,7 @@ class FilterDevices extends Component {
   constructor(props) {
     super(props);
     // let columns = bulkDevicesColumns(props.translation, this.handleSearch);
-    let columns = userDevicesListColumns(props.translation, this.handleSearch); //devicesColumns(props.translation, this.handleSearch);
+    let columns = userDevicesListColumns(props.translation, this.handleSearchInModal); //devicesColumns(props.translation, this.handleSearch);
 
     this.state = {
       columns: columns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
@@ -58,7 +58,9 @@ class FilterDevices extends Component {
       // goToPage: '/dealer/dealer',
       selectedDevices: props.selectedDevices ? props.selectedDevices : [], // [],
       copySelectedDevices: [],
-      callSelectedDeviceAction: true
+      callSelectedDeviceAction: true,
+      allBulkDevices: [],
+      searchRemoveModal: []
     }
 
 
@@ -128,11 +130,13 @@ class FilterDevices extends Component {
 
 
   componentWillReceiveProps(nextProps) {
-    console.log("nextProps.selectedDevices ", nextProps.selectedDevices, this.props.selectedDevices)
+    // console.log("nextProps.selectedDevices ", nextProps.selectedDevices, this.props.selectedDevices)
 
-    // if (this.props !== nextProps) {
+    if (this.props.devices !== nextProps.devices) {
+      this.setState({ allBulkDevices: nextProps.devices })
+    }
     if (this.props.translation !== nextProps.translation) {
-      let columns = userDevicesListColumns(nextProps.translation, this.handleSearch);
+      let columns = userDevicesListColumns(nextProps.translation, this.handleSearchInModal);
 
       this.setState({
         columns: columns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
@@ -400,23 +404,14 @@ class FilterDevices extends Component {
 
     let fieldName = e.target.name;
     let fieldValue = e.target.value;
-    // console.log("fieldName", fieldName);
-    // console.log("fieldValue", fieldValue);
-    // console.log("global", global);
-    if (global) {
-      let searchedData = this.searchAllFields(this.props.dealerList, fieldValue)
-      // console.log("searchedData", searchedData);
-      this.setState({
-        dealerListForModal: searchedData
-      });
-    } else {
 
-      let searchedData = this.searchField(this.props.dealerList, fieldName, fieldValue);
-      // console.log("searchedData", searchedData);
-      this.setState({
-        dealerListForModal: searchedData
-      });
-    }
+    let searchedData = this.searchField(this.props.devices, fieldName, fieldValue);
+    let searcheSelectedDevicedData = this.searchField(this.state.selectedDevices, fieldName, fieldValue);
+    // console.log("searchedData", searchedData);
+    this.setState({
+      allBulkDevices: searchedData,
+      searchRemoveModal: searcheSelectedDevicedData
+    });
   }
 
 
@@ -491,9 +486,7 @@ class FilterDevices extends Component {
 
   rejectPemission = (dealer_id) => {
     let dealers = this.state.permissions;
-    // console.log("permissions",dealers);
     var index = dealers.indexOf(dealer_id);
-    // console.log("array index", index);
     if (index > -1) {
       dealers.splice(index, 1);
     }
@@ -797,7 +790,7 @@ class FilterDevices extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            devices={this.props.renderList(this.getUnSelectedDevices(this.props.devices))}
+            devices={this.props.renderList(this.getUnSelectedDevices(this.state.allBulkDevices))}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
@@ -828,7 +821,7 @@ class FilterDevices extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            devices={this.props.renderList(this.state.selectedDevices)}
+            devices={this.props.renderList(this.state.searchRemoveModal)}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
@@ -859,7 +852,7 @@ class FilterDevices extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            devices={this.props.renderList(this.getUnSelectedDevices(this.props.devices))}
+            devices={this.props.renderList(this.getUnSelectedDevices(this.state.allBulkDevices))}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
