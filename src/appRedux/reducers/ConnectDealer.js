@@ -25,7 +25,7 @@ const initialState = {
     messageType: '',
     showMessage: false,
 
-    dealer: {},
+    dealer: null,
     
 };
 
@@ -34,9 +34,10 @@ export default (state = initialState, action) => {
     switch (action.type) {
 
         case DEALER_DETAILS: {
+            console.log(action.payload)
             return {
                 ...state,
-                dealer: action.payload
+                dealer: action.payload.dealer
             }
         }
         default:
