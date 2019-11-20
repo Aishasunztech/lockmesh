@@ -658,6 +658,10 @@ const RestService = {
         // console.log(data, 'data')
         return axios.post(BASE_URL + 'users/save-package', { data }, RestService.getHeader());
     },
+    editPackage: (data) => {
+        // console.log(data, 'data')
+        return axios.put(BASE_URL + 'users/edit-package', { data }, RestService.getHeader());
+    },
     getPrices: () => {
         // console.log(dealer_id, 'whte label on get price')
         return axios.get(BASE_URL + 'users/get-prices', RestService.getHeader());
@@ -894,8 +898,8 @@ const RestService = {
         return axios.delete(BASE_URL + 'users/delete_package/' + id, RestService.getHeader());
     },
 
-    modifyItemPrice: (id, price, isModify, type) => {
-        return axios.put(BASE_URL + 'users/modify_item_price/' + id, { price, isModify, type }, RestService.getHeader());
+    modifyItemPrice: (id, price, retail_price, isModify, type) => {
+        return axios.put(BASE_URL + 'users/modify_item_price/' + id, { price, retail_price, isModify, type }, RestService.getHeader());
     },
 
     getDashboardData: () => {

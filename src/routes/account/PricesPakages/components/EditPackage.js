@@ -4,25 +4,14 @@ import {
     Button, Modal, Tabs, Row, Col, Divider
 } from "antd";
 
-import PackagePricingForm from './components/PackagePricingForm';
+import { pkg_features, ADMIN, one_month, three_month, six_month, twelve_month, sim, chat, pgp, vpn, sim2 } from '../../../../constants/Constants';
 
-import { sim, chat, pgp, vpn, pkg_features, sim2, ADMIN } from '../../../constants/Constants';
+import { convertToLang } from '../../../utils/commonUtils';
 import {
-    Button_SET_PRICE,
-    Button_Save
-} from '../../../constants/ButtonConstants'
-import { convertToLang } from '../../utils/commonUtils';
-
-
-
-import React, { Component, Fragment } from 'react'
-
-import {
-    Form, Input, Row, Col, Button, Select,
+    Form, Input, Select,
 } from "antd";
 // import styles from '../../../whitelabels.css';
 import RestService from '../../../../appRedux/services/RestServices';
-import { convertToLang } from '../../../utils/commonUtils';
 import {
     PACKAGE_NAME,
     PACKAGE_TERM,
@@ -42,10 +31,13 @@ import {
 } from '../../../../constants/LabelConstants';
 import {
     Button_SET,
-    Button_UNSET
+    Button_UNSET,
+    Button_SET_PRICE,
+    Button_Save
 } from '../../../../constants/ButtonConstants'
 
-import { one_month, three_month, six_month, twelve_month, sim, chat, pgp, vpn, sim2 } from '../../../../constants/Constants';
+import { } from '../../../../constants/Constants';
+import { Tab_SET_PACKAGES_PRICES } from '../../../../constants/TabConstants';
 
 const { TabPane } = Tabs;
 
@@ -54,10 +46,10 @@ class PackagePricingForm extends Component {
         super(props)
         this.state = {
             pkgPrice: 0,
-            sim: false,
-            sim2: false,
-            chat: false,
-            pgp: false,
+            sim_id: false,
+            sim_id2: false,
+            chat_id: false,
+            pgp_email: false,
             vpn: false,
             help: '',
             validateStatus: 'success',
@@ -89,9 +81,9 @@ class PackagePricingForm extends Component {
 
             if (fieldName == 'pkgPrice') {
                 var isnum = /^\d+$/.test(value);
-                console.log(isnum, 'test ', value)
+
                 if (!isnum || value <= 0) {
-                    console.log(isnum, 'if test ', value)
+
                     this.props.restrictPackageSubmit(false, fieldName)
                     this.setState({
                         validateStatus: 'error',
@@ -106,7 +98,7 @@ class PackagePricingForm extends Component {
                         [fieldName]: e
                     })
                 }
-                // console.log(isnum, 'value', e)
+                // 
             } else {
                 if (fieldName === "pkgTerms" && value === 'trial') {
                     this.setState({ pkgPrice: 0, [fieldName]: value })
@@ -123,7 +115,7 @@ class PackagePricingForm extends Component {
 
     PackageNameChange = async (rule, value, callback) => {
         let response = true
-        // console.log('value', value)
+        // 
         response = await RestService.checkPackageName(value).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
@@ -134,7 +126,7 @@ class PackagePricingForm extends Component {
                 }
             }
         });
-        // console.log(response, 'respoinse ise  d')
+        // 
         if (response) {
             this.props.restrictPackageSubmit(true, 'pkgName')
             callback()
@@ -148,20 +140,27 @@ class PackagePricingForm extends Component {
         }
     }
 
+    componentDidMount() {
+        // console.log(this.props.packageData);
+        let pkg_features = this.props.packageData ? JSON.parse(this.props.packageData.pkg_features) : {}
+        if (pkg_features.sim_id) {
+            this.setState({
+                sim_id: pkg_features.sim_id,
+                sim_id2: pkg_features.sim_id2,
+                chat_id: pkg_features.chat_id,
+                pgp_email: pkg_features.pgp_email,
+                vpn: pkg_features.vpn,
+                pkgTerms: this.props.packageData.pkg_term,
+                pkgPrice: this.props.packageData.pkg_price,
+            })
+        }
+    }
+
     render() {
 
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 24, offset: 2 },
-                sm: { span: 10, offset: 2 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 10 },
-            },
-        };
         const { getFieldDecorator } = this.props.form;
-        const { Option } = Select;
+        const { Option } = Select
+
         return (
             <Form onSubmit={this.handleSubmit}>
                 <Row>
@@ -170,6 +169,7 @@ class PackagePricingForm extends Component {
                             labelCol={{ span: 11 }}
                             wrapperCol={{ span: 13 }}>
                             {getFieldDecorator('pkgName', {
+                                initialValue: this.props.packageData.pkg_name,
                                 rules: [
                                     {
                                         required: true,
@@ -192,7 +192,7 @@ class PackagePricingForm extends Component {
                         <Form.Item label={convertToLang(this.props.translation[PACKAGE_TERM], "PACKAGE TERM")} labelCol={{ span: 11 }}
                             wrapperCol={{ span: 13 }}>
                             {getFieldDecorator('pkgTerms', {
-                                initialValue: '1 month',
+                                initialValue: this.props.packageData.pkg_term,
                                 rules: [
                                     {
                                         required: true,
@@ -234,6 +234,7 @@ class PackagePricingForm extends Component {
                             wrapperCol={{ span: 13 }}
                         >
                             {getFieldDecorator('pkgPrice', {
+                                initialValue: this.props.packageData.pkg_price,
                                 rules: [
                                     {
                                         required: true,
@@ -249,6 +250,29 @@ class PackagePricingForm extends Component {
                         <h4 className='priceText'>Price: ${this.state.pkgPrice}</h4>
                     </Col>
                 </Row>
+                {(this.props.user.type !== ADMIN) ?
+                    <Row>
+                        <Col span={17}>
+                            <Form.Item label={convertToLang(this.props.translation[""], "RETAIL PRICE")} labelCol={{ span: 11 }}
+                                wrapperCol={{ span: 13 }}>
+                                {getFieldDecorator('retail_price', {
+                                    initialValue: this.props.packageData.retail_price,
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: 'Please Input Price',
+                                        },
+                                    ],
+                                })(<Input onChange={(e => this.setPrice('retail_price', '', '', e.target.value))} type='number' min={0} />)}
+
+                            </Form.Item>
+                        </Col>
+
+                        <Col span={7}>
+                            <h4 className='priceText'>Retail Price: ${this.state.retail_price}</h4>
+                        </Col>
+                    </Row>
+                    : null}
 
                 <Row>
                     <Col span={13}>
@@ -321,35 +345,17 @@ class PackagePricingForm extends Component {
 
 PackagePricingForm = Form.create()(PackagePricingForm);
 
-PackagePricingForm;
-
-
-
-
-
-
-
-
-
-
-export default class PricingModal extends Component {
+export default class EditPackage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            innerTab: sim,
-            [sim]: {},
-            [sim2]: {},
-            [chat]: {},
-            [pgp]: {},
-            [vpn]: {},
             pkg_features: JSON.parse(JSON.stringify(pkg_features)),
-            outerTab: props.auth.type !== "admin" ? "2" : "1",
             pkgName: '',
             pkgTerms: '1 month',
             pkgPrice: 0,
             submitAvailable: true,
-            pricesFormErrors: [],
-            packageFormErrors: ['pkgName', 'pkgPrice', 'pkg_features'],
+            packageFormErrors: [],
+            packageData: {}
         }
     }
 
@@ -378,81 +384,67 @@ export default class PricingModal extends Component {
         })
     }
 
+
+    showModal(item) {
+
+        this.setState({
+            editPackageModal: true,
+            packageData: item,
+            pkgName: item.pkg_name,
+            pkgPrice: item.pkg_price,
+            pkgTerms: item.pkg_term,
+            pkg_features: JSON.parse(item.pkg_features),
+            submitAvailable: true,
+            retail_price: item.retail_price
+        })
+    }
+
     handleSubmit = () => {
 
-        if (this.state.outerTab === '1') {
-            let data = this.props.prices;
-            let errors = 0;
-            for (let key in data) {
-                Object.values(data[key]).map(value => {
+        var isnum = /^\d+$/.test(this.state.pkgPrice);
+        if (this.state.packageFormErrors && (!this.state.packageFormErrors.length || (this.state.packageFormErrors[0] === "pkgPrice" && this.state.pkgTerms === "trial")) && isnum && (this.state.pkgPrice > 0 || this.state.pkgTerms === "trial") && this.state.pkg_features && this.state.pkgName && this.state.pkgTerms && this.state.pkgName !== '' && this.state.pkgTerms !== '') {
+            let pkgName = this.state.pkgName;
+            let pkgTerm = this.state.pkgTerms;
+            let pkgPrice = this.state.pkgPrice;
+            let pkgFeatures = this.state.pkg_features;
+            let dealer_id = this.props.dealer_id
+            let package_id = this.state.packageData.id
+            let retail_price = this.state.retail_price
 
-                    if (value < 1) {
-                        errors++;
-                    }
-                })
-                if (Object.values(data[key]).length < 4) {
-                    errors++;
-                }
+            let data = {
+                pkgName: pkgName,
+                pkgTerm: pkgTerm,
+                pkgPrice: pkgTerm === "trial" ? 0 : pkgPrice,
+                pkgFeatures: pkgFeatures,
+                dealer_id: dealer_id,
+                package_id: package_id,
+                retail_price: retail_price
             }
-            // console.log(errors, 'errors are')
-
-            if (errors === 0) {
-                this.props.saveIDPrices({ data: data, dealer_id: this.props.dealer_id })
-                this.props.showPricingModal(false);
-                this.setState({
-                    [sim]: {},
-                    [chat]: {},
-                    [pgp]: {},
-                    [vpn]: {},
-                    innerTab: sim,
-                    outerTab: '1',
-                    submitAvailable: true
-                })
-            }
-        } else if (this.state.outerTab === '2') {
-
-            var isnum = /^\d+$/.test(this.state.pkgPrice);
-            // console.log(isnum, 'name', this.state.pkgName, 'term', this.state.pkgTerms, 'list of error', this.state.packageFormErrors)
-            if (this.state.packageFormErrors && (!this.state.packageFormErrors.length || (this.state.packageFormErrors[0] === "pkgPrice" && this.state.pkgTerms === "trial")) && isnum && (this.state.pkgPrice > 0 || this.state.pkgTerms === "trial") && this.state.pkg_features && this.state.pkgName && this.state.pkgTerms && this.state.pkgName !== '' && this.state.pkgTerms !== '') {
-                let pkgName = this.state.pkgName;
-                let pkgTerm = this.state.pkgTerms;
-                let pkgPrice = this.state.pkgPrice;
-                let pkgFeatures = this.state.pkg_features;
-                let dealer_id = this.props.dealer_id
-
-                let data = {
-                    pkgName: pkgName,
-                    pkgTerm: pkgTerm,
-                    pkgPrice: pkgTerm === "trial" ? 0 : pkgPrice,
-                    pkgFeatures: pkgFeatures,
-                    dealer_id: dealer_id
-                }
-                console.log("data is ", data);
-                showConfirm(this, data)
-            }
+            showConfirm(this, data)
         }
+
     }
 
     setPkgDetail = (value, field, is_pkg_feature = false) => {
         if (is_pkg_feature) {
             this.state.pkg_features[field] = value;
             // let arr = Object.values(this.state.pkg_features);
-            // console.log(arr, 'arr', this.state.pkg_features);
+            // 
             // arr.filter(item => item !== false)
-            console.log('arr', this.state.packageFormErrors);
+
 
             if (!value) {
                 let arr = Object.values(this.state.pkg_features);
-                console.log(arr, 'arr', arr.includes(true));
-                console.log(this.state.packageFormErrors, 'error 1')
+
+
                 if (!arr.includes(true)) {
-                    // console.log('object includes', arr)
+                    // 
                     this.restrictPackageSubmit(false, 'pkg_features');
-                    console.log(this.state.packageFormErrors, 'error')
+
                 } else {
                     this.restrictPackageSubmit(true, 'pkg_features')
                 }
-                console.log(this.state.packageFormErrors, 'error 2')
+
 
             } else {
                 this.restrictPackageSubmit(true, 'pkg_features')
@@ -470,7 +462,7 @@ export default class PricingModal extends Component {
     }
 
     restrictSubmit = (available, item) => {
-        console.log("restrictSubmit", available, item)
+
         if (!available) {
             if (!this.state.pricesFormErrors.includes(item)) {
                 this.state.pricesFormErrors.push(item)
@@ -494,51 +486,44 @@ export default class PricingModal extends Component {
     }
 
     render() {
-        // console.log("auth ", this.state.pkgTerms)
-        // console.log(this.props.isPriceChanged, 'ischanged price')
-        // console.log(sim, this.state[sim], 'sim object ',this.state[chat], 'chat object ',this.state[pgp], 'pgp object',this.state[vpn], 'sim object',)
+        // 
+        // 
+        // 
         return (
             <Modal
                 maskClosable={false}
                 destroyOnClose={true}
-                title={<div>{convertToLang(this.props.translation[Button_SET_PRICE], "Set Price")}</div>}
-                visible={this.props.pricing_modal}
+                title={<div>{convertToLang(this.props.translation[''], "Edit Package")}</div>}
+                visible={this.state.editPackageModal}
                 onOk={() => { this.handleSubmit() }}
                 okText={convertToLang(this.props.translation[Button_Save], "Save")}
-                okButtonProps={{ disabled: this.state.outerTab == '1' ? (!this.props.isPriceChanged || !this.state.submitAvailable) ? true : false : this.state.packageFormErrors && this.state.packageFormErrors.length ? (this.state.packageFormErrors[0] === "pkgPrice" && this.state.pkgTerms === "trial") ? false : true : false }}
-                // okButtonProps={{ disabled: this.state.outerTab == '1' ? (!this.props.isPriceChanged || !this.state.submitAvailable) ? true : false : this.state.packageFormErrors && this.state.packageFormErrors.length ? true : false }}
+                okButtonProps={{ disabled: this.state.packageFormErrors && this.state.packageFormErrors.length ? (this.state.packageFormErrors[0] === "pkgPrice" && this.state.pkgTerms === "trial") ? false : true : false }}
                 onCancel={() => {
                     this.props.showPricingModal(false);
                     this.props.resetPrice();
                     this.setState({
-                        outerTab: '1',
                         pkgPrice: 0,
                         pkg_features: JSON.parse(JSON.stringify(pkg_features)),
                         pkgTerms: '1 month',
                         pkgName: '',
                         submitAvailable: true,
-                        packageFormErrors: ['pkgName', 'pkgPrice', 'pkg_features']
+                        packageFormErrors: [],
+                        editPackageModal: false
                     })
                 }}
                 // footer={null}
                 width='650px'
                 className="set_price_modal"
             >
-                <Tabs
-                    className="set_price"
-                    type="card"
-                    onChange={(e) => this.setState({ outerTab: e })}
-                >
-                    <TabPane tab={convertToLang(this.props.translation[Tab_SET_PACKAGES_PRICES], "Set Packages Price")} key="2">
-                        <PackagePricingForm
-                            showPricingModal={this.props.showPricingModal}
-                            setPkgDetail={this.setPkgDetail}
-                            wrappedComponentRef={(form) => this.form = form}
-                            translation={this.props.translation}
-                            restrictPackageSubmit={this.restrictPackageSubmit}
-                        />
-                    </TabPane>
-                </Tabs>
+                <PackagePricingForm
+                    showPricingModal={this.props.showPricingModal}
+                    setPkgDetail={this.setPkgDetail}
+                    wrappedComponentRef={(form) => this.form = form}
+                    translation={this.props.translation}
+                    restrictPackageSubmit={this.restrictPackageSubmit}
+                    packageData={this.state.packageData}
+                    user={this.props.auth}
+                />
             </Modal>
         )
     }
@@ -613,20 +598,19 @@ function showConfirm(_this, data) {
             </Row>
         </div>,
         onOk() {
-            // console.log('OK');
-            _this.props.setPackage(data);
-            _this.props.showPricingModal(false);
+
+            _this.props.editPackage(data);
             _this.setState({
                 pkgPrice: 0,
                 pkg_features: JSON.parse(JSON.stringify(pkg_features)),
                 pkgTerms: '1 month',
                 pkgName: '',
-                outerTab: '1',
-                packageFormErrors: ['pkgName', 'pkgPrice', 'pkg_features']
+                packageFormErrors: [],
+                editPackageModal: false
             })
         },
         onCancel() {
-            console.log('Cancel');
+            // 
         },
     });
 }

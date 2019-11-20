@@ -214,6 +214,7 @@ class ServicesList extends Component {
                         pkg_price: item.pkg_price,
                         pkg_features: services,
                         pkg_term: item.pkg_term,
+                        retail_price: item.retail_price,
                     })
                 }
             });

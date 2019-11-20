@@ -121,7 +121,7 @@ class AddDevice extends Component {
                         this.state.total_price = this.state.total_price - Number(sim_id_price[0].unit_price)
                         this.sim_id2_added = false
                     }
-
+                    // console.log("On form Submit packages : ", this.state.packages);
                     values.products = this.state.products;
                     values.packages = this.state.packages;
                     values.term = this.state.term;
@@ -274,7 +274,7 @@ class AddDevice extends Component {
         let packagesData = []
         let productData = []
         let total_price = 0
-        // console.log(products, packages);
+        console.log("SERVICES SUBMIT", packages);
         if (packages && packages.length) {
             packages.map((item) => {
                 let data = {
@@ -283,7 +283,8 @@ class AddDevice extends Component {
                     pkg_price: item.pkg_price,
                     pkg_dealer_type: item.dealer_type,
                     pkg_name: item.pkg_name,
-                    pkg_term: item.pkg_term
+                    pkg_term: item.pkg_term,
+                    retail_price: item.retail_price
                 }
                 total_price = total_price + Number(item.pkg_price)
                 packagesData.push(data)

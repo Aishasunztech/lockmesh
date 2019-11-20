@@ -7,7 +7,7 @@ import {
 } from "../../../appRedux/actions/Account";
 import {
     getPrices, resetPrice, setPackage,
-    saveIDPrices, setPrice, getPackages, deletePackage, modifyItemPrice, getHardwares
+    saveIDPrices, setPrice, getPackages, deletePackage, modifyItemPrice, getHardwares, editPackage
 } from "../../../appRedux/actions/Account";
 import PackagesInfo from './components/PackagesInfo';
 import ModifyPrice from './components/ModifyPrice';
@@ -42,6 +42,7 @@ import {
 
 import { isArray } from "util";
 import PricingModal from './PricingModal';
+import EditPackage from './components/EditPackage';
 import { DUMY_TRANS_ID } from '../../../constants/LabelConstants';
 import { SET_PRICE_PAGE_HEADING } from '../../../constants/AppFilterConstants';
 let packagesCopy = [];
@@ -332,7 +333,6 @@ class Prices extends Component {
                     }
                 ]
             }
-
         ];
         this.state = {
             pricing_modal: false,
@@ -521,8 +521,6 @@ class Prices extends Component {
         })
     }
 
-
-
     renderList = (type) => {
         if (type === "packages") {
 
@@ -544,11 +542,13 @@ class Prices extends Component {
                         rowKey: index,
                         statusAll: item.statusAll,
                         sr: ++i,
-                        action: (item.dealer_type === "super_admin" && (this.props.auth.type === ADMIN || this.props.auth.type === DEALER)) ?
+                        action: (item.dealer_type === "super_admin" && (this.props.auth.type === ADMIN || this.props.auth.type === DEALER || this.props.auth.type === SDEALER)) ?
                             (<Fragment>{ModifyBtn}</Fragment>) :
-                            (item.dealer_type === "admin" && this.props.auth.type === DEALER) ?
-                                (<Fragment>{ModifyBtn}</Fragment>)
-                                : (<Fragment>{DeleteBtn}{EditBtn}</Fragment>),
+                            (item.dealer_type === "admin" && this.props.auth.type === DEALER || this.props.auth.type === SDEALER) ?
+                                (<Fragment>{ModifyBtn}</Fragment>) :
+                                (item.dealer_type === "dealer" && this.props.auth.type === SDEALER) ?
+                                    (<Fragment>{ModifyBtn}</Fragment>)
+                                    : (<Fragment>{DeleteBtn}{EditBtn}</Fragment>),
 
                         pkg_name: item.pkg_name,
                         services:
@@ -569,7 +569,7 @@ class Prices extends Component {
                             {(item.permission_count === "All" || this.props.totalDealers === item.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : item.permission_count}
                         </span>,
                         pkg_price: item.pkg_price,
-                        pkg_retail_price: item.pkg_price,
+                        pkg_retail_price: item.retail_price,
                         pkg_term: item.pkg_term,
                         // pkg_expiry: item.pkg_expiry,
                         pkg_features: item.pkg_features ? JSON.parse(item.pkg_features) : {},
@@ -588,7 +588,7 @@ class Prices extends Component {
                             <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.modifyItem(item, true, 'hardware') }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "MODIFY PRICE")}</Button>,
                         name: item.hardware_name,
                         price: item.hardware_price,
-                        retail_price: item.hardware_price
+                        retail_price: item.retail_price
                     }
                 })
             }
@@ -682,7 +682,19 @@ class Prices extends Component {
         })
     }
     render() {
-        // console.log(this.state.packages, 'prices are coming', this.props.packages)
+
+        if (this.props.auth.type === ADMIN) {
+            this.columns[this.columns.length - 1].className = 'hide'
+            this.columns[this.columns.length - 1].children[0].className = 'hide'
+            this.hardwareColumns[this.hardwareColumns.length - 1].className = 'hide'
+            this.hardwareColumns[this.hardwareColumns.length - 1].children[0].className = 'hide'
+        } else if (this.props.auth.type === SDEALER) {
+
+            let index = this.columns.findIndex(item => item.dataIndex == 'permission')
+            this.columns[index].className = 'hide'
+            // this.columns[index].children[0].className = 'hide'
+        }
+
         return (
             <div>
                 <div>
@@ -814,14 +826,10 @@ class Prices extends Component {
                     auth={this.props.auth}
                 />
 
-                <PricingModal
+                <EditPackage
+                    ref="editPackage"
                     showPricingModal={this.showPricingModal}
-                    pricing_modal={this.state.pricing_modal}
-                    saveIDPrices={this.props.saveIDPrices}
-                    setPackage={this.props.setPackage}
-                    prices={this.state.prices}
-                    setPrice={this.props.setPrice}
-                    isPriceChanged={this.props.isPriceChanged}
+                    editPackage={this.props.editPackage}
                     resetPrice={this.props.resetPrice}
                     dealer_id={this.props.auth.dealerId}
                     translation={this.props.translation}
@@ -847,6 +855,7 @@ class Prices extends Component {
                         handleCancel={this.handleCancel}
                         modifyItemPrice={this.props.modifyItemPrice}
                         type={this.state.modify_item_type}
+                        user={this.props.auth}
                     />
                 </Modal>
 
@@ -861,6 +870,7 @@ function mapDispatchToProps(dispatch) {
         getPrices: getPrices,
         saveIDPrices: saveIDPrices,
         setPackage: setPackage,
+        editPackage: editPackage,
         resetPrice: resetPrice,
         setPrice: setPrice,
         getPackages: getPackages,

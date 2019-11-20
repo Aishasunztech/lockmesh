@@ -507,7 +507,8 @@ class EditDevice extends Component {
                     pkg_price: item.pkg_price,
                     pkg_dealer_type: item.dealer_type,
                     pkg_name: item.pkg_name,
-                    pkg_term: item.pkg_term
+                    pkg_term: item.pkg_term,
+                    retail_price: item.retail_price
                 }
                 total_price = total_price + Number(item.pkg_price)
                 packagesData.push(data)
