@@ -76,6 +76,7 @@ export function getAllDealers() {
 
     };
 }
+
 export function getUserDealers() {
     return (dispatch) => {
         dispatch({
@@ -156,8 +157,6 @@ export function activateDealer(id) {
 
     };
 }
-
-
 
 export function editDealer(formData) {
     return (dispatch) => {
@@ -261,7 +260,6 @@ export function undoDealer(id) {
         });
     };
 }
-
 
 export function updatePassword(dealer) {
     return (dispatch) => {

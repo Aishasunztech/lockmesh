@@ -1133,7 +1133,7 @@ class Account extends Component {
                                                         <Divider className="mb-0" />
                                                         <Row style={{ padding: '12px 0 0px' }}>
                                                             <Col span={8} className="" style={{ textAlign: "center" }}>
-                                                                <Icon type="dollar" className="and_icon" />
+                                                                <Icon type="dollar" className="gx-and_icon" />
                                                             </Col>
                                                             <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
                                                                 <h5>{convertToLang(this.props.translation[PURCHASE_CREDITS_DESCRIPTION], "Buy more Credits instantly with Bitcoin or Credit card and check out using our secure payment gateway.")}</h5>
