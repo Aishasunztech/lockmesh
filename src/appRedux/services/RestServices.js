@@ -1003,6 +1003,10 @@ const RestService = {
         return axios.post(BASE_URL + 'users/reports/sales', data, RestService.getHeader());
     },
 
+    //sales report
+    generateGraceDaysReport: (data) => {
+      return axios.post(BASE_URL + 'users/reports/grace-days', data, RestService.getHeader());
+    },
     //get latest payment history
     getLatestPaymentHistory: (data) => {
         return axios.post(BASE_URL + 'users/get-latest-payment-history', data, RestService.getHeader());
