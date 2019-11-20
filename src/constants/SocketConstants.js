@@ -56,3 +56,7 @@ export const SEND_JOB_TO_PANEL = 'SEND_JOB_TO_PANEL';
 // sim button
 
 export const RECV_SIM_DATA = 'receiveSimData_';
+
+
+// Bulk pull push apps
+export const FINISHED_BULK_PUSH_APPS = 'finished_push_apps_';

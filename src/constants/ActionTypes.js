@@ -80,6 +80,10 @@ export const BULK_ACTIVATE_DEVICES = 'BULK_ACTIVATE_DEVICES';
 export const BULK_HISTORY = 'BULK_HISTORY';
 export const BULK_USERS = 'BULK_USERS';
 export const BULK_PUSH_APPS = 'BULK_PUSH_APPS';
+export const BULK_PULL_APPS = 'BULK_PULL_APPS';
+export const SET_PUSH_APPS = 'SET_PUSH_APPS';
+export const SET_PULL_APPS = 'SET_PULL_APPS';
+export const SET_SELECTED_BULK_DEVICES = 'SET_SELECTED_BULK_DEVICES';
 
 
 //Dealer const

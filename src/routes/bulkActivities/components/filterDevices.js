@@ -9,6 +9,8 @@ import FilterDevicesList from "./filterDevicesList";
 import CircularProgress from "components/CircularProgress/index";
 import BulkSuspendDevices from './bulkSuspendDevices';
 import BulkActivateDevices from './bulkActivateDevices';
+import BulkPushAppsConfirmation from './bulkPushAppsConfirmation';
+import BulkPullAppsConfirmation from './bulkPullAppsConfirmation';
 import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, titleCase, convertToLang, checkRemainTermDays } from '../../utils/commonUtils'
 
 import { bulkDevicesColumns, devicesColumns, userDevicesListColumns } from '../../utils/columnsUtils';
@@ -37,7 +39,7 @@ class FilterDevices extends Component {
   constructor(props) {
     super(props);
     // let columns = bulkDevicesColumns(props.translation, this.handleSearch);
-    let columns = userDevicesListColumns(props.translation, this.handleSearch); //devicesColumns(props.translation, this.handleSearch);
+    let columns = userDevicesListColumns(props.translation, this.handleSearchInModal); //devicesColumns(props.translation, this.handleSearch);
 
     this.state = {
       columns: columns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
@@ -54,8 +56,11 @@ class FilterDevices extends Component {
       // redirect: false,
       dealer_id: '',
       // goToPage: '/dealer/dealer',
-      selectedDevices: [],
-      copySelectedDevices: []
+      selectedDevices: props.selectedDevices ? props.selectedDevices : [], // [],
+      copySelectedDevices: [],
+      callSelectedDeviceAction: true,
+      allBulkDevices: [],
+      searchRemoveModal: []
     }
 
 
@@ -125,9 +130,13 @@ class FilterDevices extends Component {
 
 
   componentWillReceiveProps(nextProps) {
+    // console.log("nextProps.selectedDevices ", nextProps.selectedDevices, this.props.selectedDevices)
 
+    if (this.props.devices !== nextProps.devices) {
+      this.setState({ allBulkDevices: nextProps.devices })
+    }
     if (this.props.translation !== nextProps.translation) {
-      let columns = userDevicesListColumns(nextProps.translation, this.handleSearch);
+      let columns = userDevicesListColumns(nextProps.translation, this.handleSearchInModal);
 
       this.setState({
         columns: columns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
@@ -135,9 +144,19 @@ class FilterDevices extends Component {
     }
 
     if (nextProps.selectedDealers.length == 0 && nextProps.selectedUsers.length == 0) {
+
+      if (this.state.callSelectedDeviceAction) {
+        this.props.setSelectedBulkDevices([]);
+        this.state.callSelectedDeviceAction = false;
+      } else {
+        this.setState({
+          selectedDevices: [],
+          copySelectedDevices: []
+        })
+      }
+    } else {
       this.setState({
-        selectedDevices: [],
-        copySelectedDevices: []
+        selectedDevices: nextProps.selectedDevices,
       })
     }
 
@@ -150,27 +169,47 @@ class FilterDevices extends Component {
       //   )
       // })
 
-      console.log('child this.props.devices ', this.props.devices)
+      // console.log('child this.props.devices ', this.props.devices)
 
 
       let updateSelectedDevices = this.state.selectedDevices;
       let { copySelectedDevices } = this.state;
 
       if (action !== "NOT SELECTED" && updateSelectedDevices.length) {
-        if (action === "SUSPEND DEVICES") {
-          updateSelectedDevices = copySelectedDevices.filter((device) => device.finalStatus != DEVICE_SUSPENDED)
-        } else if (action === "ACTIVATE DEVICES") {
-          updateSelectedDevices = copySelectedDevices.filter((device) => device.finalStatus != DEVICE_ACTIVATED)
-        } else {
-          updateSelectedDevices = copySelectedDevices;
-        }
-
+        updateSelectedDevices = this.filterOnActionBase(action, copySelectedDevices);
+        // console.log("updateSelectedDevices ", updateSelectedDevices)
+        // this.props.setSelectedBulkDevices(updateSelectedDevices);
         this.setState({
           selectedDevices: updateSelectedDevices
         });
       }
     }
+  }
 
+  filterOnActionBase = (action, copySelectedDevices) => {
+    let filteredDevices = [];
+    if (action === "SUSPEND DEVICES") {
+      copySelectedDevices.forEach((device) => {
+        if (device.finalStatus !== DEVICE_SUSPENDED) {
+          filteredDevices.push(device);
+        }
+      })
+    } else if (action === "ACTIVATE DEVICES") {
+      copySelectedDevices.forEach((device) => {
+        if (device.finalStatus !== DEVICE_ACTIVATED) {
+          filteredDevices.push(device);
+        }
+      })
+    }
+    // else if (action === "PUSH APPS") {
+    //   filteredDevices = copySelectedDevices.filter((device) => device.finalStatus != DEVICE_SUSPENDED)
+    // } else if (action === "PULL APPS") {
+    //   filteredDevices = copySelectedDevices.filter((device) => device.finalStatus != DEVICE_SUSPENDED)
+    // } 
+    else {
+      filteredDevices = copySelectedDevices;
+    }
+    return filteredDevices;
   }
 
   showPermissionedDealersModal = (visible) => {
@@ -235,8 +274,10 @@ class FilterDevices extends Component {
   }
 
   saveAllDealers = () => {
+    // console.log("add all")
+    this.props.setSelectedBulkDevices(this.props.devices);
     this.setState({
-      selectedDevices: this.props.devices,
+      // selectedDevices: this.props.devices,
       copySelectedDevices: this.props.devices,
     })
   }
@@ -250,9 +291,10 @@ class FilterDevices extends Component {
           selectedDevices.push(device);
         }
       })
+      this.props.setSelectedBulkDevices(selectedDevices);
       this.setState({
         selectedRowKeys: [],
-        selectedDevices: selectedDevices,
+        // selectedDevices: selectedDevices,
         copySelectedDevices: selectedDevices
       })
 
@@ -362,23 +404,14 @@ class FilterDevices extends Component {
 
     let fieldName = e.target.name;
     let fieldValue = e.target.value;
-    // console.log("fieldName", fieldName);
-    // console.log("fieldValue", fieldValue);
-    // console.log("global", global);
-    if (global) {
-      let searchedData = this.searchAllFields(this.props.dealerList, fieldValue)
-      // console.log("searchedData", searchedData);
-      this.setState({
-        dealerListForModal: searchedData
-      });
-    } else {
 
-      let searchedData = this.searchField(this.props.dealerList, fieldName, fieldValue);
-      // console.log("searchedData", searchedData);
-      this.setState({
-        dealerListForModal: searchedData
-      });
-    }
+    let searchedData = this.searchField(this.props.devices, fieldName, fieldValue);
+    let searcheSelectedDevicedData = this.searchField(this.state.selectedDevices, fieldName, fieldValue);
+    // console.log("searchedData", searchedData);
+    this.setState({
+      allBulkDevices: searchedData,
+      searchRemoveModal: searcheSelectedDevicedData
+    });
   }
 
 
@@ -397,15 +430,15 @@ class FilterDevices extends Component {
           Object.keys(device).map(key => {
 
             if (device[key] !== undefined && key != 'status' && key != 'account_status') {
-              if ((typeof device[key]) === 'string') { 
+              if ((typeof device[key]) === 'string') {
                 if (device[key].toUpperCase().includes(e.target.value.toUpperCase())) {
-                  if(!demoDevices.includes(device)){
+                  if (!demoDevices.includes(device)) {
                     demoDevices.push(device);
                   }
                 }
               } else if (device[key] !== null && key != 'status' && key != 'account_status') {
                 if (device[key].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
-                  if(!demoDevices.includes(device)){
+                  if (!demoDevices.includes(device)) {
                     demoDevices.push(device);
                   }
                 }
@@ -438,10 +471,12 @@ class FilterDevices extends Component {
 
       });
       // console.log("searched value", demoDevices);
+      // this.props.setSelectedBulkDevices(demoDevices);
       this.setState({
         selectedDevices: demoDevices
       })
     } else {
+      // this.props.setSelectedBulkDevices(copyDevices);
       this.setState({
         selectedDevices: copyDevices
       })
@@ -451,9 +486,7 @@ class FilterDevices extends Component {
 
   rejectPemission = (dealer_id) => {
     let dealers = this.state.permissions;
-    // console.log("permissions",dealers);
     var index = dealers.indexOf(dealer_id);
-    // console.log("array index", index);
     if (index > -1) {
       dealers.splice(index, 1);
     }
@@ -482,9 +515,9 @@ class FilterDevices extends Component {
   }
 
   removeAllDealers = () => {
-
+    this.props.setSelectedBulkDevices([]);
     this.setState({
-      selectedDevices: [],
+      // selectedDevices: [],
       copySelectedDevices: []
     })
   }
@@ -496,16 +529,17 @@ class FilterDevices extends Component {
   }
 
   removeSelectedDealers = () => {
-    console.log(this.state.selectedDevices, "this.state.selectedRowKeys ", this.state.selectedRowKeys);
+    // console.log(this.state.selectedDevices, "this.state.selectedRowKeys ", this.state.selectedRowKeys);
 
     let permittedDevices = this.state.selectedDevices;
     let selectedRows = this.state.selectedRowKeys;
     var selectedDevices = permittedDevices.filter(e => selectedRows.includes(e.id));
 
+    this.props.setSelectedBulkDevices(selectedDevices);
     this.setState({
       removeSelectedDealersModal: false,
       device_ids: [],
-      selectedDevices: selectedDevices,
+      // selectedDevices: selectedDevices,
       copySelectedDevices: selectedDevices
     })
 
@@ -592,7 +626,7 @@ class FilterDevices extends Component {
 
   getUnSelectedDevices = (devices) => {
 
-    console.log('this.state.selectedDevices filter ', this.state.selectedDevices)
+    // console.log('this.state.selectedDevices filter ', this.state.selectedDevices)
     if (this.state.selectedDevices.length > 0) {
       let selectedIDs = this.state.selectedDevices.map((item) => item.id);
       let fDevices = devices.filter(e => !selectedIDs.includes(e.id));
@@ -603,16 +637,24 @@ class FilterDevices extends Component {
   }
 
   applyAction = () => {
-    console.log(this.props.selectedDealers, this.props.selectedUsers, 'action apply', this.props.handleActionValue);
+    // console.log(this.props.selectedDealers, this.props.selectedUsers, 'action apply', this.props.handleActionValue);
 
     let action = this.props.handleActionValue;
     if (action !== "NOT SELECTED") {
       if (this.state.selectedDevices.length) {
         if (action === "SUSPEND DEVICES") {
           this.refs.bulk_suspend.handleSuspendDevice(this.state.selectedDevices, this.props.selectedDealers, this.props.selectedUsers);
-        } else if (action === "ACTIVATE DEVICES") {
+        }
+        else if (action === "ACTIVATE DEVICES") {
           this.refs.bulk_activate.handleActivateDevice(this.state.selectedDevices, this.props.selectedDealers, this.props.selectedUsers);
         }
+        else if (action === "PUSH APPS") {
+          this.refs.bulk_push_apps.handleBulkPushApps(this.state.selectedDevices, this.props.selectedDealers, this.props.selectedUsers);
+        }
+        else if (action === "PULL APPS") {
+          this.refs.bulk_pull_apps.handleBulkPullApps(this.state.selectedDevices, this.props.selectedDealers, this.props.selectedUsers);
+        }
+
       } else {
         error({
           title: `Sorry, You have not any device to perform an action`,
@@ -626,68 +668,6 @@ class FilterDevices extends Component {
   }
 
 
-  // renderList(list) {
-  //   console.log('renderList ', list)
-  //   return list.map((device, index) => {
-
-  //     var status = device.finalStatus;
-  //     console.log("status ", status)
-
-  //     let color = getColor(status);
-  //     var style = { margin: '0', width: 'auto', textTransform: 'uppercase' }
-  //     var text = convertToLang(this.props.translation[Button_Edit], "EDIT");
-
-  //     if ((status === DEVICE_PENDING_ACTIVATION) || (status === DEVICE_UNLINKED)) {
-  //       style = { margin: '0 8px 0 0', width: 'auto', display: 'none', textTransform: 'uppercase' }
-  //       text = "ACTIVATE";
-  //     }
-
-  //     return {
-  //       rowKey: index,
-  //       // key: device.device_id ? `${device.device_id}` : device.usr_device_id,
-  //       key: status == DEVICE_UNLINKED ? `${device.user_acc_id} ${device.created_at} ` : device.id,
-  //       counter: ++index,
-
-  //       status: (<span style={color} > {status}</span>),
-  //       lastOnline: checkValue(device.lastOnline),
-  //       flagged: device.flagged,
-  //       type: checkValue(device.type),
-  //       version: checkValue(device.version),
-  //       device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
-  //       // device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
-  //       user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
-  //       validity: checkValue(device.validity),
-  //       transfered_to: checkValue((device.finalStatus == "Transfered") ? device.transfered_to : null),
-  //       name: checkValue(device.name),
-  //       activation_code: checkValue(device.activation_code),
-  //       account_email: checkValue(device.account_email),
-  //       pgp_email: checkValue(device.pgp_email),
-  //       chat_id: checkValue(device.chat_id),
-  //       client_id: checkValue(device.client_id),
-  //       dealer_id: checkValue(device.dealer_id),
-  //       dealer_pin: checkValue(device.link_code),
-  //       mac_address: checkValue(device.mac_address),
-  //       sim_id: checkValue(device.sim_id),
-  //       imei_1: checkValue(device.imei),
-  //       sim_1: checkValue(device.simno),
-  //       imei_2: checkValue(device.imei2),
-  //       sim_2: checkValue(device.simno2),
-  //       serial_number: checkValue(device.serial_number),
-  //       model: checkValue(device.model),
-  //       // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
-  //       // expiry_date: device.expiry_date ? `${new Date(device.expiry_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
-  //       dealer_name: (this.props.user.type === ADMIN) ? <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a> : <a >{checkValue(device.dealer_name)}</a>,
-  //       online: device.online === 'online' ? (<span style={{ color: "green" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) : (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
-  //       s_dealer: checkValue(device.s_dealer),
-  //       s_dealer_name: checkValue(device.s_dealer_name),
-  //       remainTermDays: device.remainTermDays,
-  //       start_date: checkValue(device.start_date),
-  //       expiry_date: checkValue(device.expiry_date),
-  //     }
-  //   });
-  // }
-
-
   actionRelatedDevice = (devices) => {
     let action = this.props.handleActionValue;
     let updateSelectedDevices = devices;
@@ -697,17 +677,19 @@ class FilterDevices extends Component {
     } else if (action === "ACTIVATE DEVICES") {
       updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED)
     }
+    // else if (action === "PUSH APPS") {
+    //   updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED)
+    // } else if (action === "PULL APPS") {
+    //   updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED)
+    // }
 
-    // this.setState({
-    //   selectedDevices: updateSelectedDevices
-    // });
-
+    this.state.selectedDevices = updateSelectedDevices
     return updateSelectedDevices;
   }
 
   render() {
 
-    console.log('selected devices are: ', this.state.selectedDevices);
+    // console.log('selected devices are: ', this.state.selectedDevices);
     return (
       <Fragment>
         <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
@@ -808,7 +790,7 @@ class FilterDevices extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            devices={this.props.renderList(this.getUnSelectedDevices(this.props.devices))}
+            devices={this.props.renderList(this.getUnSelectedDevices(this.state.allBulkDevices))}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
@@ -839,7 +821,7 @@ class FilterDevices extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            devices={this.props.renderList(this.state.selectedDevices)}
+            devices={this.props.renderList(this.state.searchRemoveModal)}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
@@ -870,7 +852,7 @@ class FilterDevices extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            devices={this.props.renderList(this.getUnSelectedDevices(this.props.devices))}
+            devices={this.props.renderList(this.getUnSelectedDevices(this.state.allBulkDevices))}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
@@ -892,6 +874,20 @@ class FilterDevices extends Component {
         <BulkActivateDevices
           ref="bulk_activate"
           bulkActivateDevice={this.props.bulkActivateDevice}
+          translation={this.props.translation}
+        />
+
+        <BulkPushAppsConfirmation
+          ref="bulk_push_apps"
+          applyPushApps={this.props.applyPushApps}
+          selectedPushAppsList={this.props.selectedPushAppsList}
+          translation={this.props.translation}
+        />
+
+        <BulkPullAppsConfirmation
+          ref="bulk_pull_apps"
+          applyPullApps={this.props.applyPullApps}
+          selectedPullAppsList={this.props.selectedPullAppsList}
           translation={this.props.translation}
         />
 

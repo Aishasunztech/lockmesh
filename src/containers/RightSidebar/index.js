@@ -119,7 +119,7 @@ class RightSidebar extends Component {
     this.props.getSocketProcesses();
   }
   componentWillReceiveProps(nextProps) {
-    console.log("rightSidebar: ", nextProps);
+    // console.log("rightSidebar: ", nextProps);
     if (nextProps.socket && nextProps.socket.connected) {
       nextProps.getNotification(nextProps.socket)
     }

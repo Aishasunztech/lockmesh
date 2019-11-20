@@ -2327,12 +2327,12 @@ export function apkColumns(translation) {
         },
 
         {
-            title: convertToLang(translation[""], "UPLOAD DATE"),
+            title: convertToLang(translation[""], "LAST UPLOADED"),
             dataIndex: 'created_at',
             key: 'created_at',
         },
         {
-            title: convertToLang(translation[""], "LAST EDIT"),
+            title: convertToLang(translation[""], "LAST UPDATED"),
             dataIndex: 'updated_at',
             key: 'updated_at',
         },
@@ -2391,7 +2391,7 @@ export function featureApkColumns(translation) {
             key: 'apk_version',
         },
         {
-            title: convertToLang(translation["UPDATED DATE"], "LAST UPDATE"),
+            title: convertToLang(translation["UPDATED DATE"], "LAST UPDATED"),
             dataIndex: 'updated_date',
             key: 'updated_date',
         },

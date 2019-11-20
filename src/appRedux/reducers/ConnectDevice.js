@@ -462,6 +462,7 @@ export default (state = initialState, action) => {
                 checkExt = handleCheckedAllExts(action.payload.extensions);
             }
 
+            console.log("check applist  01")
             return {
                 ...state,
                 app_list: action.payload.app_list,
@@ -608,6 +609,7 @@ export default (state = initialState, action) => {
             // console.log(LOAD_PROFILE);
             state.undoApps.push(action.payload);
             let check = handleCheckedAll(action.payload);
+            console.log("check applist  02")
             return {
                 ...state,
                 app_list: action.payload,
@@ -1019,7 +1021,7 @@ export default (state = initialState, action) => {
             state.app_list = JSON.parse(JSON.stringify(changedMainSetting));
             // state.undoControls.push(JSON.parse(JSON.stringify(changedMainSetting)));
             // console.log('reduver aongds', state.controls);
-
+            console.log("check applist  03")
             return {
                 ...state,
                 app_list: changedMainSetting,
@@ -1044,6 +1046,7 @@ export default (state = initialState, action) => {
             // state.undoControls.push(JSON.parse(JSON.stringify(changedMainSetting)));
             // console.log('reduver aongds', state.controls);
 
+            console.log("check applist  04")
             return {
                 ...state,
                 app_list: changedMainSetting,
@@ -1317,6 +1320,7 @@ export default (state = initialState, action) => {
             state[action.payload.keyAll] = action.payload.value;
             state.undoApps.push(JSON.parse(JSON.stringify(applications)));
 
+            console.log("check applist  05")
             return {
                 ...state,
                 app_list: applications,
@@ -1340,6 +1344,7 @@ export default (state = initialState, action) => {
 
                 state.redoApps.push(JSON.parse(JSON.stringify(apps)));
 
+                console.log("check applist  05")
                 if (state.undoApps.length === 1) {
                     return {
                         ...state,
@@ -1745,6 +1750,7 @@ export default (state = initialState, action) => {
         }
 
         case ACK_INSTALLED_APPS: {
+console.log("check applist ")
             // console.log("add app in app_list")
             let app_list = state.app_list;
             if (action.payload.status) {
@@ -1757,6 +1763,7 @@ export default (state = initialState, action) => {
             } else {
 
             }
+            console.log("ACK_INSTALLED_APPS ", app_list)
             return {
                 ...state,
                 app_list: app_list,
@@ -1783,6 +1790,7 @@ export default (state = initialState, action) => {
 
             }
 
+            console.log("ACK_UNINSTALLED_APPS ", [...app_list])
             return {
                 ...state,
                 app_list: [...app_list],

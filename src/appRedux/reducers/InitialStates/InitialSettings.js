@@ -137,8 +137,8 @@ export var initialSettings = {
     { "key": "package_name", "value": "PACKAGE NAME" },
     { "key": "version", "value": "VERSION" },
     { "key": "used_by", "value": "USED BY" },
-    { "key": "created_at", "value": "UPLOAD DATE" },
-    { "key": "updated_at", "value": "EDIT DATE" },
+    { "key": "created_at", "value": "LAST UPLOADED" },
+    { "key": "updated_at", "value": "LAST UPDATED" },
   ],
   //  locale: {
   //   languageId: 'english',
