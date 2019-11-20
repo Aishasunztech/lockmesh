@@ -373,7 +373,7 @@ class CreditIcon extends Component {
 
         />
         <Modal
-          width={'55%'}
+          // width={'55%'}
           maskClosable={false}
           visible={this.state.visible}
           onOk={this.handleOk}
@@ -385,7 +385,7 @@ class CreditIcon extends Component {
           <Fragment>
 
             <Row>
-              <Col xs={24} sm={24} md={10} lg={10} xl={10}>
+              <Col xs={24} sm={24} md={10} lg={10} xl={10} className="mb-16">
                 <Table
                   className="ac_status_table"
                   dataSource={this.renderAccountStatus()}
@@ -397,9 +397,9 @@ class CreditIcon extends Component {
                 />
                 <h6 className="mt-6"> {account_status_paragraph}</h6>
               </Col>
-              <Col xs={24} sm={24} md={4} lg={4} xl={4}>
+              <Col xs={24} sm={24} md={0} lg={4} xl={4}>
               </Col>
-              <Col xs={24} sm={24} md={10} lg={10} xl={10}>
+              <Col xs={24} sm={24} md={14} lg={10} xl={10}>
                 <Table
                   className="ac_status_table"
                   dataSource={this.renderCreditBalance()}
@@ -421,6 +421,7 @@ class CreditIcon extends Component {
                     title={this.overdue_title}
                     bordered
                     size="small"
+                    scroll={{ x: true }}
                   />
                 </Col>
               </Row>
@@ -435,6 +436,7 @@ class CreditIcon extends Component {
                 bordered
                 title={this.pay_history_title}
                 pagination={false}
+                scroll={{ x: true }}
               />
             </div>
 
