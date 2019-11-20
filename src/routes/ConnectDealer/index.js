@@ -14,10 +14,7 @@ import { getDealerDetails, editDealer } from '../../appRedux/actions'
 import RestService from "../../appRedux/services/RestServices";
 import styles from './connect_dealer.css'
 
-
 class ConnectDealer extends Component {
-
-
     constructor(props) {
         super(props);
         this.state = {
@@ -25,18 +22,28 @@ class ConnectDealer extends Component {
             currency: 'USD',
             currency_sign: '$',
         }
-        this.dealerInfoColumns = [
+        this.dealerInfoColumns1 = [
             {
-                // title: 'Dealer Name',
                 dataIndex: 'name',
                 key: 'name',
                 className: 'ac_pro_txt',
             },
             {
-                // title: 'Age',
                 dataIndex: 'value',
                 key: 'value',
                 className: 'ac_pro_val',
+            },
+        ]
+        this.dealerInfoColumns = [
+            {
+                dataIndex: 'name',
+                key: 'name',
+                className: 'dealer_info',
+            },
+            {
+                dataIndex: 'value',
+                key: 'value',
+                className: '',
             },
         ]
         this.overDueColumns = [
@@ -67,14 +74,12 @@ class ConnectDealer extends Component {
         ]
     }
 
-
     componentDidMount() {
         const dealer_id = isBase64(this.props.match.params.dealer_id);
         if (dealer_id) {
             this.props.getDealerDetails(dealer_id);
         }
     }
-
 
     componentDidUpdate(prevProps) {
         // console.log('hi')
@@ -118,59 +123,59 @@ class ConnectDealer extends Component {
     }
 
     renderDealerInfo = () => {
-        console.log('dealer info:', this.props.dealer);
+        console.log('dealer info', this.props.dealer);
         let dealer = this.props.dealer;
         if (dealer) {
             const dealer_status = (dealer.account_status === "suspended") ? "Activate" : "Suspend";
             return [
                 {
                     key: '1',
-                    name: 'Dealer Name:',
+                    name: <a>Dealer Name</a>,
                     value: (dealer.dealer_name) ? dealer.dealer_name : 'N/A',
                 },
                 {
                     key: '2',
-                    name: 'Dealer Pin:',
+                    name: <a>Dealer Pin</a>,
                     value: (dealer.link_code) ? dealer.link_code : 'N/A',
                 },
                 {
                     key: '3',
-                    name: 'Dealer ID:',
+                    name: <a>Dealer ID</a>,
                     value: (dealer.dealer_id) ? dealer.dealer_id : 'N/A',
                 },
                 {
                     key: '4',
-                    name: 'Dealer Email:',
+                    name: <a>Dealer Email</a>,
                     value: (dealer.dealer_email) ? dealer.dealer_email : 'N/A',
                 },
                 {
                     key: '5',
-                    name: 'Devices:',
+                    name: <a>Devices</a>,
                     value: (dealer.connected_devices) ? dealer.connected_devices : 'N/A',
                 },
                 {
                     key: '6',
-                    name: 'Demos:',
+                    name: <a>Demos</a>,
                     value: 'N/A',
                 },
                 {
                     key: '7',
-                    name: 'Status:',
+                    name: <a>Status</a>,
                     value: dealer_status,
                 },
                 {
                     key: '8',
-                    name: 'Parent Dealer:',
+                    name: <a>Parent Dealer</a>,
                     value: (dealer.parent_dealer) ? dealer.parent_dealer : 'N/A',
                 },
                 {
                     key: '9',
-                    name: 'Last Login:',
+                    name: <a>Last Login</a>,
                     value: (dealer.last_login) ? dealer.last_login : 'N/A',
                 },
                 {
                     key: '10',
-                    name: 'Start Date:',
+                    name: <a>Start Date</a>,
                     value: this.props.dealer.created,
                 },
             ]
@@ -178,6 +183,7 @@ class ConnectDealer extends Component {
             return []
         }
     }
+
     renderAccountData = () => {
         let dealer = this.props.dealer;
         if (dealer) {
@@ -192,9 +198,7 @@ class ConnectDealer extends Component {
                     key: '2',
                     name: 'Currency:',
                     value: (
-                        <Select defaultValue="USD"
-                            onChange={(e) => { this.onChangeCurrency(e, 'currency') }}
-                        >
+                        <Select style={{ margin: '-8px 0', width: '100%' }} defaultValue="USD" onChange={(e) => { this.onChangeCurrency(e, 'currency') }} >
                             <Select.Option value="USD">USD</Select.Option>
                             <Select.Option value="CAD">CAD</Select.Option>
                             <Select.Option value="EUR">EUR</Select.Option>
@@ -218,6 +222,7 @@ class ConnectDealer extends Component {
             return []
         }
     }
+
     renderOverDue = () => {
         console.log('dealer info overdue:', this.props.dealer);
         let dealer = this.props.dealer;
@@ -234,10 +239,6 @@ class ConnectDealer extends Component {
             // _0to21_dues,
             // _21to30,
             // _21to30_dues,
-
-
-
-
             return [
                 {
                     key: '1',
@@ -261,15 +262,16 @@ class ConnectDealer extends Component {
                 />
                 <Row gutter={16} type="flex" align="top">
                     <Col className="" xs={24} sm={24} md={8} lg={8} xl={8}>
-                        <Card>
-                            <h3>Dealer Info</h3>
+                        <Card style={{ borderRadius: 12 }}>
+                            <h2 style={{ textAlign: "center" }}>Dealer Info</h2>
+                            <Divider className="mb-0" />
                             <Table
                                 columns={this.dealerInfoColumns}
                                 bordered
                                 showHeader={false}
                                 dataSource={this.renderDealerInfo()}
                                 pagination={false}
-                                className="ac_pro_table"
+                                className="ac_pro_table profile_table"
                             />
                         </Card>
                     </Col>
@@ -281,11 +283,11 @@ class ConnectDealer extends Component {
                                 <Col span={8} className="text-center ">
                                     <img src={require("assets/images/profile-image.png")} className="mb-8 mt-16"></img>
                                     <h1 className="mb-0" style={{ fontSize: '3vh', textTransform: 'capitalize' }}>{(this.props.dealer) ? this.props.dealer.dealer_name : 'N/A'}</h1>
-                                    <p style={{ textTransform: 'capitalize' }}>({(this.props.dealer) ? this.props.dealer.dealer_type : 'N/A'})</p>
+                                    <p style={{ textTransform: 'capitalize', marginBottom: '0' }}>({(this.props.dealer) ? this.props.dealer.dealer_type : 'N/A'})</p>
                                 </Col>
                                 <Col span={16} style={{ padding: '0px 15px 0 0', }}>
                                     <Table
-                                        columns={this.dealerInfoColumns}
+                                        columns={this.dealerInfoColumns1}
                                         bordered
                                         showHeader={false}
                                         dataSource={this.renderAccountData()}
@@ -306,7 +308,7 @@ class ConnectDealer extends Component {
                         </Card>
                     </Col>
                     <Col className="side_action right_bar" xs={24} sm={24} md={8} lg={8} xl={8} >
-                        <Card>
+                        <Card style={{ borderRadius: 12 }}>
                             <Row gutter={16} type="flex" justify="center" align="top">
                                 <Col span={12} className="gutter-row" justify="center" >
                                     <Button style={{ width: "100%", marginBottom: 16, }} >
@@ -340,7 +342,7 @@ class ConnectDealer extends Component {
                                 </Col>
                             </Row>
                         </Card>
-                        <Card>
+                        <Card style={{ borderRadius: 12 }}>
                             <Row gutter={16} type="flex" justify="center" align="top">
                                 <Col span={12} className="gutter-row" justify="center" >
                                     <Button disabled style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} >
@@ -389,6 +391,7 @@ function mapDispatchToProps(dispatch) {
         editDealer: editDealer
     }, dispatch);
 }
+
 var mapStateToProps = ({ dealer_details, settings }, ownProps) => {
     // console.log(dealer_details);
     return {
