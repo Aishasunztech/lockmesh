@@ -357,6 +357,10 @@
     border-top: 0 !important;
 }
 
+.credit_popup {
+    width: 60% !important;
+}
+
 .credit_popup .ant-modal-body {
     padding: 8%;
 }
@@ -505,19 +509,45 @@
     padding-left: 0;
 }
 
+@media screen and (max-width: 991px) {
+    .credit_popup {
+        width: 85% !important;
+    }
+}
+
 @media screen and (max-width: 768px) {
 
-    /* .add_user_btn {
-        position: absolute;
-        left: 230px;
-        top: -9px;
-        width: 40%;
-        padding : 0;
-        float: right;
-        margin: 8px 0 4px;
+    .credit_popup {
+        width: 95% !important;
     }
-    */
+
+    .credit_popup .ant-modal-body {
+        padding: 40px 20px;
+    }
+
     .edit_form .ant-form-item-label {
         text-align: left;
+    }
+
+    .disp_n_768 {
+        display: none;
+    }
+
+    .apply_services label {
+        display: inline-block;
+    }
+
+    .overdue_table,
+    .pay_history {
+        margin-top: 20px;
+    }
+
+    .full_list_btn {
+        margin-right: 16px;
+    }
+
+    .overdue_table .ant-table-content {
+        width: 100%;
+        float: none;
     }
 }

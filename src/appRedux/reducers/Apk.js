@@ -308,14 +308,14 @@ export default (state = initialState, action) => {
 							let allDealers = oldDealers.filter((item) => !newDealers.includes(item.dealer_id));
 							// state.apk_list[index].permissions = allDealers;
 							// state.apk_list[index].permission_count = allDealers.length;
-							if (user && user.type !== "admin") {
-								let filterDealers = allDealers.filter((item) => item.dealer_type === "admin");
-								state.apk_list[index].permissions = filterDealers;
-								state.apk_list[index].permission_count = filterDealers.length;
-							} else {
+							// if (user && user.type !== "admin") {
+							// 	let filterDealers = allDealers.filter((item) => item.dealer_type === "admin");
+							// 	state.apk_list[index].permissions = filterDealers;
+							// 	state.apk_list[index].permission_count = filterDealers.length;
+							// } else {
 								state.apk_list[index].permissions = allDealers;
 								state.apk_list[index].permission_count = allDealers.length;
-							}
+							// }
 							state.apk_list[index].statusAll = false;
 						} else {
 							if (user && user.type !== "admin") {

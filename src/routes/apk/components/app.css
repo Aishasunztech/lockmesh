@@ -69,6 +69,10 @@
     width: 0;
 }
 
+.feat_btns {
+    background: #fff;
+    padding: 16px 16px;
+}
 
 @media (max-width: 768px) {
     .mob_m_t {
@@ -80,6 +84,7 @@
     .manage_sec .ant-card-body {
         height: 280px;
     }
+
     .policy_icon {
         font-size: 22px !important;
         padding: 12px !important;

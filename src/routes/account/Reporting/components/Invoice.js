@@ -89,7 +89,8 @@ class Invoice extends Component {
 
     this.state = {
       reportCard: false,
-      reportFormData: {}
+      reportFormData: {},
+      deviceList: props.devices,
     };
   }
 
@@ -105,6 +106,15 @@ class Invoice extends Component {
       this.props.generateInvoiceReport(values)
     });
   };
+
+  componentWillReceiveProps(nextProps) {
+    // console.log("nextProps.devices ", nextProps.devices)
+    if (nextProps.devices !== this.props.devices) {
+      this.setState({
+        deviceList: nextProps.devices
+      })
+    }
+  }
 
   componentDidMount() {
 
@@ -166,6 +176,19 @@ class Invoice extends Component {
     return data;
   };
 
+  handleDealerChange = (e) => {
+    let devices = [];
+    if (e == '') {
+      devices = this.props.devices
+    } else {
+      devices = this.props.devices.filter(device => device.dealer_id == e);
+      // console.log("handleDealerChange ", devices);
+    }
+    this.setState({
+      deviceList: devices
+    })
+  }
+
   render() {
     return (
       <Row>
@@ -205,7 +228,10 @@ class Invoice extends Component {
                       },
                     ],
                   })(
-                    <Select style={{ width: '100%' }}>
+                    <Select
+                      style={{ width: '100%' }}
+                      onChange={(e) => this.handleDealerChange(e)}
+                    >
                       <Select.Option value=''>ALL</Select.Option>
                       <Select.Option value={this.props.user.dealerId} key={this.props.user.dealerId}>My Report</Select.Option>
                       {this.props.dealerList.map((dealer, index) => {
@@ -233,7 +259,7 @@ class Invoice extends Component {
                   <Select style={{ width: '100%' }}>
                     <Select.Option value=''>ALL</Select.Option>
                     <Select.Option value={DEVICE_PRE_ACTIVATION}>{DEVICE_PRE_ACTIVATION}</Select.Option>
-                    {this.props.devices.map((device, index) => {
+                    {this.state.deviceList.map((device, index) => {
                       return (<Select.Option key={device.device_id} value={device.device_id}>{device.device_id}</Select.Option>)
                     })}
                   </Select>
