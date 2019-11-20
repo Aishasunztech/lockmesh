@@ -98,6 +98,9 @@ export const UNDO_DEALER = 'UNDO_DEALER';
 export const ADD_DEALER = 'ADD_DEALER';
 export const DEALERS_LIST_IN_SDEALER = 'DEALERS_LIST_IN_SDEALER';
 
+// Dealer Connect
+export const DEALER_DETAILS = 'DEALER_DETAILS';
+
 // Apk const
 export const APK_LOADING = 'APK_LOADING';
 export const APK_LIST = 'APK_LIST';

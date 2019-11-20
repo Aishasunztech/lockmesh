@@ -245,7 +245,7 @@ export function checkRemainTermDays(createDate, endDate) {
 }
 
 export function isBase64(str) {
-  if (str === '' || str.trim() === '') { return false; }
+  if (!str || str.trim() === '') { return false; }
   try {
     return atob(str)
   } catch (err) {
@@ -338,7 +338,7 @@ export function getDefaultLanguage(transaction_id) {
 
     // apk Columns
     case "show.on.device.id":
-      return "SHOW ON DEVICE";
+      return "SHOW ON DEVICE1";
     case "app.name.id":
       return "APP NAME";
     case "app.logo.id":

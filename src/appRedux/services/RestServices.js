@@ -222,6 +222,8 @@ const RestService = {
     getUsedChatIds: () => {
         return axios.get(BASE_URL + 'users/get_used_chat_ids', RestService.getHeader());
     },
+
+    // Dealers
     DealerList: (dealer) => {
         return axios.get(BASE_URL + 'users/dealers/' + dealer, RestService.getHeader());
     },
@@ -231,6 +233,10 @@ const RestService = {
     getUserDealers: () => {
         return axios.get(BASE_URL + 'users/user_dealers', RestService.getHeader());
     },
+    getDealerDetails:(dealerId) => {
+        return axios.get(BASE_URL + 'users/connect-dealer/' + dealerId, RestService.getHeader());
+    },
+
     ApkList: () => {
         return axios.get(BASE_URL + 'users/apklist', RestService.getHeader());
     },

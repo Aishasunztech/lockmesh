@@ -2243,6 +2243,7 @@ export function apkColumns(translation) {
             key: 'action',
             className: 'row m-0'
         },
+
         {
             title: (
                 <span>
@@ -2261,9 +2262,14 @@ export function apkColumns(translation) {
             // className: ''
         },
         {
+            title: convertToLang(translation[""], "USED BY"),
+            dataIndex: 'used_by',
+            key: 'used_by',
+        },
+        {
             title:
                 <span>
-                    {convertToLang(translation[APK_SHOW_ON_DEVICE], "SHOW ON DEVICE")}
+                    {convertToLang(translation[APK_SHOW_ON_DEVICE], "SHOW ON DEVICE3")}
                     <Popover placement="top"
                         content={(<Markup content={convertToLang(translation[SHOW_ON_DEVCIE_HELPING_TEXT],
                             `<p>Shows app in <b>Install Apps</b> <br />menu on Devices`)} />)}>
@@ -2303,6 +2309,7 @@ export function apkColumns(translation) {
             key: 'apk_size',
             // className: ''
         },
+
         {
             title: convertToLang(translation[""], "LABEL"),
             dataIndex: 'label',
@@ -2318,6 +2325,7 @@ export function apkColumns(translation) {
             dataIndex: 'version',
             key: 'version',
         },
+
         {
             title: convertToLang(translation[""], "LAST UPLOADED"),
             dataIndex: 'created_at',
@@ -3439,6 +3447,8 @@ export function appMarketColumns(translation, handleSearch, removeSMapps) {
                     {
                         title: "APP NAME",
                         dataIndex: 'app_name',
+                        sorter: (a, b) => { return a.app_name.localeCompare(b.app_name) },
+                        sortDirections: ['ascend', 'descend'],
                     }
                 ]
 

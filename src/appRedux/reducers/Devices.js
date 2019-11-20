@@ -25,8 +25,8 @@ import {
     UNLINK_DEVICE,
     ADD_DEVICE,
     BULK_DEVICES_LIST,
-  DEVICES_LIST_FOR_REPORT,
-  TRANSFER_DEVICE,
+    DEVICES_LIST_FOR_REPORT,
+    TRANSFER_DEVICE,
     FLAG_DEVICE,
     GET_PARENT_HARDWARES,
     ACCEPT_REQUEST
@@ -588,11 +588,11 @@ export default (state = initialState, action) => {
                 product_prices: action.response.data,
             }
 
-      case DEVICES_LIST_FOR_REPORT:
-        return {
-          ...state,
-          devicesForReport: action.payload.data,
-        }
+        case DEVICES_LIST_FOR_REPORT:
+            return {
+                ...state,
+                devicesForReport: action.payload.data,
+            }
 
         default:
             return state;

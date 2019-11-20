@@ -111,7 +111,6 @@ class ConnectDevice extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      device_id: '',
 
       // removed these states from component did mount so I wrote in constructor
       // pageName: MAIN_MENU,

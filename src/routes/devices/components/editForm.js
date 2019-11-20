@@ -7,7 +7,7 @@ import { checkValue, convertToLang } from '../../utils/commonUtils'
 
 import { getSimIDs, getChatIDs, getPGPEmails, getParentPackages, getProductPrices, extendServices } from "../../../appRedux/actions/Devices";
 import {
-    DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, ADMIN, Model_text, Expire_Date, one_month, three_month, six_month, twelve_month, Days, Start_Date, Expire_Date_Require, Not_valid_Email
+    DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, ADMIN, Model_text, Expire_Date, one_month, three_month, six_month, twelve_month, Days, Start_Date, Expire_Date_Require, Not_valid_Email, DEVICE_EXPIRED
 } from '../../../constants/Constants';
 import AddUser from '../../users/components/AddUser';
 import {
@@ -76,7 +76,7 @@ class EditDevice extends Component {
             product_prices: [],
             products: [],
             packages: [],
-            expiry_date: this.props.device.expiry_date,
+            expiry_date: this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION ? this.props.device.expiry_date : this.props.device.expiry_months + " month",
             services: false,
             checkServices: {
                 display: 'none',
@@ -100,7 +100,7 @@ class EditDevice extends Component {
         }
     }
     handleUserChange = (e) => {
-        // console.log(e)
+        // 
         this.setState({ addNewUserValue: e });
     }
 
@@ -109,11 +109,12 @@ class EditDevice extends Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                // console.log('edit device form values are: ', values);
-                // console.log("Device List", values)
+                // 
+                // 
                 values.prevPGP = this.props.device.pgp_email;
                 values.prevChatID = this.props.device.chat_id;
                 values.prevSimId = this.props.device.sim_id;
+                values.prevSimId2 = this.props.device.sim_id2;
                 values.finalStatus = this.props.device.finalStatus;
                 values.prevService = this.props.device.services
                 if (this.props.user.type === ADMIN) {
@@ -199,6 +200,39 @@ class EditDevice extends Component {
         this.props.getUserList();
         this.props.getParentPackages()
         this.props.getProductPrices()
+        if (this.props.device.services && this.props.user.type === ADMIN) {
+            let disableChat = true
+            let disablePgp = true
+            let disableSim2 = true
+            let disableSim = true
+            let disableVpn = true
+            let packgaes = JSON.parse(this.props.device.services.packages)
+            let pkg_features = packgaes[0].pkg_features
+            if (pkg_features) {
+                if (pkg_features.pgp_email) {
+                    disablePgp = false
+                }
+                if (pkg_features.sim_id) {
+                    disableSim = false
+                }
+                if (pkg_features.sim_id2) {
+                    disableSim2 = false
+                }
+                if (pkg_features.chat_id) {
+                    disableChat = false
+                }
+                if (pkg_features.vpn) {
+                    disableVpn = false
+                }
+                this.setState({
+                    disablePgp: disablePgp,
+                    disableChat: disableChat,
+                    disableSim: disableSim,
+                    disableSim2: disableSim2,
+                    disableVpn: disableVpn,
+                })
+            }
+        }
     }
 
 
@@ -296,12 +330,12 @@ class EditDevice extends Component {
         }
 
         var current_date = year + '/' + month + '/' + day;
-        // console.log('date', current_date);
+        // 
         return current_date;
     }
 
     confirmRenderList(packages, products, term = this.state ? this.state.term : null, duplicate = this.state ? this.state.duplicate : 1) {
-        // console.log(products, packages)
+        // 
         let counter = 0
         let packagesList = packages.map((item, index) => {
             // let services = JSON.parse(item.pkg_features)
@@ -407,7 +441,7 @@ class EditDevice extends Component {
 
 
     handleChangetab = (value) => {
-        // console.log(value);
+        // 
         switch (value) {
             case '0':
                 this.setState({
@@ -461,7 +495,7 @@ class EditDevice extends Component {
         let disableSim = true;
         let disableSim2 = true;
         let vpn = '';
-        console.log(this.state.applyServicesValue, products, packages, term);
+        // 
         let packagesData = []
         let productData = []
         let total_price = 0
@@ -498,7 +532,7 @@ class EditDevice extends Component {
                 if (services.vpn) {
                     vpn = "1"
                 }
-                // console.log(item.pkg_features);
+                // 
             })
         }
         // if (products && products.length) {
@@ -533,7 +567,7 @@ class EditDevice extends Component {
             expiry_date = term + " Months";
         }
         let services = (packages.length > 0 || products.length > 0) ? true : false;
-        console.log(services);
+
 
         this.setState({
             pgp_email: (this.state.pgp_email && !disablePgp) ? this.state.pgp_email : (this.props.pgp_emails.length && !disablePgp) ? this.props.pgp_emails[0].pgp_email : '',
@@ -575,7 +609,7 @@ class EditDevice extends Component {
 
 
         // this.state.serviceData.pay_now = pay_now
-        // console.log(this.state.serviceData);
+        // 
         // if (this.state.total_price <= this.props.user_credit) {
         //     this.props.editDeviceFunc(this.state.serviceData)
         //     this.props.hideModal();
@@ -590,7 +624,7 @@ class EditDevice extends Component {
     }
 
     handleOkInvoice = () => {
-        // console.log(this.state.serviceData);
+        // 
         if (this.state.serviceData.total_price <= this.props.user_credit || !this.state.serviceData.pay_now) {
             this.state.serviceData.paid_by_user = this.state.paidByUser
             if (this.state.renewService || this.state.applyServicesValue === 'extend') {
@@ -617,7 +651,7 @@ class EditDevice extends Component {
     }
 
     handlePaidUser = (e) => {
-        // console.log(e);
+        // 
         if (e) {
             this.setState({
                 paidByUser: "PAID"
@@ -642,7 +676,7 @@ class EditDevice extends Component {
                 total_price = total_price + Number(item.unit_price)
             })
         }
-        // console.log(this.state.tabselect, "Tab select");
+        // 
 
         this.setState({
             packages: packagesData,
@@ -661,7 +695,11 @@ class EditDevice extends Component {
 
     disabledDate = (current) => {
         // Can not select days before today and today
-        return current && current < moment().endOf('day');
+        // 
+        // let expiry_date = 
+        // 
+        return ((current && current < moment().endOf('day')) || current > moment(this.props.device.expiry_date).add(1, 'M'))
+        // return ;
     }
     validateValidDays = (rule, value, callback) => {
         // console.log(value);
@@ -680,7 +718,7 @@ class EditDevice extends Component {
     }
 
     render() {
-        // console.log("DEVICE DATA: ", this.props.device);
+        // 
         const { users_list } = this.props;
 
         return (
@@ -712,7 +750,7 @@ class EditDevice extends Component {
 
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
-                                    label={(this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ? convertToLang(this.props.translation[DEVICE_ID], DEVICE_ID) : null}
+                                    label={(this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ? convertToLang(this.props.translation[DEVICE_ID], "DEVICE ID") : null}
                                     labelCol={{ span: 8 }}
                                     wrapperCol={{ span: 16 }}
                                 >
@@ -760,7 +798,7 @@ class EditDevice extends Component {
                                         onChange={this.handleUserChange}
                                         filterOption={
                                             (input, option) => {
-                                                // console.log("searching: ",input," from:", option.props);
+                                                // 
                                                 // return null;
                                                 return (option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0)
                                             }
@@ -888,10 +926,10 @@ class EditDevice extends Component {
                                     )}
                                 </Form.Item>
                             </Col>
-                            {this.props.user.type === ADMIN ?
+                            {this.props.user.type === ADMIN && this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION ?
                                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                     <Form.Item
-                                        label={<Markup content={convertToLang(this.props.translation[""], "Adjust <br>Expire Date")} />}
+                                        label={convertToLang(this.props.translation[""], <span>Adjust <br className="disp_n_768" /> Date Expiry</span>)}
                                         labelCol={{ span: 8 }}
                                         wrapperCol={{ span: 16 }}
                                         className="apply_services"
@@ -902,7 +940,7 @@ class EditDevice extends Component {
                                             //     required: true, message: convertToLang(this.props.translation[Expire_Date_Require], "Expiry Date is Required ! "),
                                             // }],
                                         })(
-                                            <DatePicker style={{ width: '100%' }} disabledDate={this.disabledDate} format={'YYYY/MM/DD'} disabled />
+                                            <DatePicker style={{ width: '100%' }} disabledDate={this.disabledDate} format={'YYYY/MM/DD'} disabled={(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION)} />
                                         )}
 
                                     </Form.Item>
@@ -1312,7 +1350,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ routing, devices, users, auth, settings, sidebar }) => {
-    // console.log("sdfsaf", devices);
+    // 
 
     return {
         invoiceID: users.invoiceID,
