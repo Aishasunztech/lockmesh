@@ -2,15 +2,14 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Divider, Table } from "antd";
+import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Divider, Table, Select } from "antd";
 
 // methods, constants and components
 import AppFilter from '../../components/AppFilter';
 
 import { getColor, isBase64, convertToLang } from "../utils/commonUtils"
 import { getDealerDetails } from '../../appRedux/actions'
-
-import { Edit_Profile } from "../../constants/Constants";
+import RestService from "../../appRedux/services/RestServices";
 import styles from './connect_dealer.css'
 
 
@@ -21,6 +20,8 @@ class ConnectDealer extends Component {
         super(props);
         this.state = {
             dealer_id: isBase64(props.match.params.dealer_id),
+            currency: 'USD',
+            currency_sign: '$',
         }
         this.dealerInfoColumns = [
             {
@@ -85,6 +86,35 @@ class ConnectDealer extends Component {
     componentWillUnmount() {
         // const dealer_id = isBase64(this.props.match.params.dealer_id);
     }
+
+    onChangeCurrency = (e, field) => {
+
+        if (e === 'USD') {
+            // this.setState({
+            //     currency: 'usd',
+            //     currency_price: this.props.user_credit,
+            //     currency_unit_price: 1,
+            // })
+        } else {
+            // RestService.exchangeCurrency(e).then((response) => {
+            //     if (response.data.status) {
+            //         if (this.props.user_credit > 0) {
+            //             this.setState({
+            //                 currency: e,
+            //                 currency_unit_price: response.data.currency_unit,
+            //                 currency_price: this.props.user_credit * response.data.currency_unit
+            //             })
+            //         } else {
+            //             this.setState({
+            //                 currency: e,
+            //                 currency_unit_price: response.data.currency_unit,
+            //             })
+            //         }
+            //     }
+            // })
+        }
+    }
+
     renderDealerInfo = () => {
         console.log('dealer info:', this.props.dealer);
         let dealer = this.props.dealer;
@@ -159,7 +189,17 @@ class ConnectDealer extends Component {
                 {
                     key: '2',
                     name: 'Currency:',
-                    value: 'USD',
+                    value: (
+                        <Select defaultValue="USD"
+                            onChange={(e) => { this.onChangeCurrency(e, 'currency') }}
+                        >
+                            <Select.Option value="USD">USD</Select.Option>
+                            <Select.Option value="CAD">CAD</Select.Option>
+                            <Select.Option value="EUR">EUR</Select.Option>
+                            <Select.Option value="VND">VND</Select.Option>
+                            <Select.Option value="CNY">CNY</Select.Option>
+                        </Select>
+                    ),
                 },
                 {
                     key: '3',
@@ -180,10 +220,10 @@ class ConnectDealer extends Component {
         console.log('dealer info overdue:', this.props.dealer);
         let dealer = this.props.dealer;
         if (dealer) {
-            console.log(dealer._0to21, 
-                dealer._0to21_dues, 
-                dealer._21to30, 
-                dealer._21to30_dues, 
+            console.log(dealer._0to21,
+                dealer._0to21_dues,
+                dealer._21to30,
+                dealer._21to30_dues,
                 dealer._30to60,
                 dealer._30to60_dues,
                 dealer._60toOnward,
@@ -238,8 +278,8 @@ class ConnectDealer extends Component {
                             <Row>
                                 <Col span={8} className="text-center ">
                                     <img src={require("assets/images/profile-image.png")} className="mb-8 mt-16"></img>
-                                    <h1 className="mb-0" style={{ fontSize: '3vh' }}>Barry</h1>
-                                    <p>(Dealer)</p>
+                                    <h1 className="mb-0" style={{ fontSize: '3vh', textTransform: 'capitalize'  }}>{(this.props.dealer)? this.props.dealer.dealer_name : 'N/A'}</h1>
+                                    <p style= {{ textTransform: 'capitalize'}}>({(this.props.dealer)? this.props.dealer.dealer_type : 'N/A'})</p>
                                 </Col>
                                 <Col span={16} style={{ padding: '0px 15px 0 0', }}>
                                     <Table
