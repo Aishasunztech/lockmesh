@@ -9,7 +9,7 @@ import {
     bulkSuspendDevice,
     bulkActivateDevice,
     getbulkHistory,
-    getUsersOfDealers,
+    // getUsersOfDealers,
 
     applyBulkPushApps,
     applyBulkPullApps,
@@ -517,6 +517,8 @@ class BulkActivities extends Component {
             else if (e === "PULL APPS") {
                 this.setState({ pullAppsModal: true, handleModalBtn: true });
             }
+        } else {
+            this.setState({ handleModalBtn: false });
         }
 
         this.setState({ selectedAction: e });
@@ -806,7 +808,7 @@ const mapDispatchToProps = (dispatch) => {
         bulkSuspendDevice: bulkSuspendDevice,
         bulkActivateDevice: bulkActivateDevice,
         getbulkHistory: getbulkHistory,
-        getUsersOfDealers: getUsersOfDealers,
+        // getUsersOfDealers: getUsersOfDealers,
 
         showPushAppsModal: showPushAppsModal,
         getDealerApps: getDealerApps,

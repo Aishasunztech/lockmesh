@@ -93,6 +93,7 @@ export default (state = initialState, action) => {
                     ...state,
                     isloading: false,
                     bulkDevices: action.payload.data,
+                    selectedDevices: [],
                     usersOfDealers: action.payload.users_list
                 }
             } else {

@@ -927,10 +927,10 @@ const RestService = {
     },
 
     // get users of selected dealers
-    getUsersOfDealers: (data) => {
-        console.log("at rest file", data)
-        return axios.post(BASE_URL + 'users/getUsersOfDealers', data, RestService.getHeader())
-    },
+    // getUsersOfDealers: (data) => {
+    //     console.log("at rest file", data)
+    //     return axios.post(BASE_URL + 'users/getUsersOfDealers', data, RestService.getHeader())
+    // },
 
     applyBulkPushApps: (data) => {
         return axios.post(BASE_URL + 'users/apply_bulk_pushapps', data, RestService.getHeader());

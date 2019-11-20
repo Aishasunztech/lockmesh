@@ -57,7 +57,8 @@ class FilterDevices extends Component {
       dealer_id: '',
       // goToPage: '/dealer/dealer',
       selectedDevices: props.selectedDevices ? props.selectedDevices : [], // [],
-      copySelectedDevices: []
+      copySelectedDevices: [],
+      callSelectedDeviceAction: true
     }
 
 
@@ -127,7 +128,7 @@ class FilterDevices extends Component {
 
 
   componentWillReceiveProps(nextProps) {
-    // console.log("nextProps.selectedDevices ", nextProps.selectedDevices, this.props.selectedDevices)
+    console.log("nextProps.selectedDevices ", nextProps.selectedDevices, this.props.selectedDevices)
 
     // if (this.props !== nextProps) {
     if (this.props.translation !== nextProps.translation) {
@@ -139,12 +140,17 @@ class FilterDevices extends Component {
     }
 
     if (nextProps.selectedDealers.length == 0 && nextProps.selectedUsers.length == 0) {
-      this.setState({
-        selectedDevices: [],
-        copySelectedDevices: []
-      })
-    }
-     else {
+
+      if (this.state.callSelectedDeviceAction) {
+        this.props.setSelectedBulkDevices([]);
+        this.state.callSelectedDeviceAction = false;
+      } else {
+        this.setState({
+          selectedDevices: [],
+          copySelectedDevices: []
+        })
+      }
+    } else {
       this.setState({
         selectedDevices: nextProps.selectedDevices,
       })
@@ -166,27 +172,40 @@ class FilterDevices extends Component {
       let { copySelectedDevices } = this.state;
 
       if (action !== "NOT SELECTED" && updateSelectedDevices.length) {
-        if (action === "SUSPEND DEVICES") {
-          updateSelectedDevices = copySelectedDevices.filter((device) => device.finalStatus != DEVICE_SUSPENDED)
-        } else if (action === "ACTIVATE DEVICES") {
-          updateSelectedDevices = copySelectedDevices.filter((device) => device.finalStatus != DEVICE_ACTIVATED)
-        }
-        // else if (action === "PUSH APPS") {
-        //   updateSelectedDevices = copySelectedDevices.filter((device) => device.finalStatus != DEVICE_SUSPENDED)
-        // } else if (action === "PULL APPS") {
-        //   updateSelectedDevices = copySelectedDevices.filter((device) => device.finalStatus != DEVICE_SUSPENDED)
-        // } 
-        else {
-          updateSelectedDevices = copySelectedDevices;
-        }
-
-        this.props.setSelectedBulkDevices(updateSelectedDevices);
+        updateSelectedDevices = this.filterOnActionBase(action, copySelectedDevices);
+        // console.log("updateSelectedDevices ", updateSelectedDevices)
+        // this.props.setSelectedBulkDevices(updateSelectedDevices);
         this.setState({
           selectedDevices: updateSelectedDevices
         });
       }
     }
-    // }
+  }
+
+  filterOnActionBase = (action, copySelectedDevices) => {
+    let filteredDevices = [];
+    if (action === "SUSPEND DEVICES") {
+      copySelectedDevices.forEach((device) => {
+        if (device.finalStatus !== DEVICE_SUSPENDED) {
+          filteredDevices.push(device);
+        }
+      })
+    } else if (action === "ACTIVATE DEVICES") {
+      copySelectedDevices.forEach((device) => {
+        if (device.finalStatus !== DEVICE_ACTIVATED) {
+          filteredDevices.push(device);
+        }
+      })
+    }
+    // else if (action === "PUSH APPS") {
+    //   filteredDevices = copySelectedDevices.filter((device) => device.finalStatus != DEVICE_SUSPENDED)
+    // } else if (action === "PULL APPS") {
+    //   filteredDevices = copySelectedDevices.filter((device) => device.finalStatus != DEVICE_SUSPENDED)
+    // } 
+    else {
+      filteredDevices = copySelectedDevices;
+    }
+    return filteredDevices;
   }
 
   showPermissionedDealersModal = (visible) => {
@@ -251,10 +270,10 @@ class FilterDevices extends Component {
   }
 
   saveAllDealers = () => {
-    console.log("add all")
+    // console.log("add all")
     this.props.setSelectedBulkDevices(this.props.devices);
     this.setState({
-      selectedDevices: this.props.devices,
+      // selectedDevices: this.props.devices,
       copySelectedDevices: this.props.devices,
     })
   }
@@ -271,7 +290,7 @@ class FilterDevices extends Component {
       this.props.setSelectedBulkDevices(selectedDevices);
       this.setState({
         selectedRowKeys: [],
-        selectedDevices: selectedDevices,
+        // selectedDevices: selectedDevices,
         copySelectedDevices: selectedDevices
       })
 
@@ -457,12 +476,12 @@ class FilterDevices extends Component {
 
       });
       // console.log("searched value", demoDevices);
-      this.props.setSelectedBulkDevices(demoDevices);
+      // this.props.setSelectedBulkDevices(demoDevices);
       this.setState({
         selectedDevices: demoDevices
       })
     } else {
-      this.props.setSelectedBulkDevices(copyDevices);
+      // this.props.setSelectedBulkDevices(copyDevices);
       this.setState({
         selectedDevices: copyDevices
       })
@@ -505,7 +524,7 @@ class FilterDevices extends Component {
   removeAllDealers = () => {
     this.props.setSelectedBulkDevices([]);
     this.setState({
-      selectedDevices: [],
+      // selectedDevices: [],
       copySelectedDevices: []
     })
   }
@@ -527,7 +546,7 @@ class FilterDevices extends Component {
     this.setState({
       removeSelectedDealersModal: false,
       device_ids: [],
-      selectedDevices: selectedDevices,
+      // selectedDevices: selectedDevices,
       copySelectedDevices: selectedDevices
     })
 

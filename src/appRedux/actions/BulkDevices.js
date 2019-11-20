@@ -8,7 +8,7 @@ import RestService from '../services/RestServices';
 
 
 export function getBulkDevicesList(data) {
-    console.log('at action file ', data)
+    // console.log('at action file ', data)
 
     return (dispatch) => {
         dispatch({
@@ -110,29 +110,29 @@ export function getbulkHistory() {
 
 }
 
-export function getUsersOfDealers(data) {
-    console.log("getUsersOfDealers ", data)
-    return (dispatch) => {
-        RestService.getUsersOfDealers(data).then((response) => {
-            if (RestService.checkAuth(response.data)) {
-                // console.log('response', response.data);
+// export function getUsersOfDealers(data) {
+//     console.log("getUsersOfDealers ", data)
+//     return (dispatch) => {
+//         RestService.getUsersOfDealers(data).then((response) => {
+//             if (RestService.checkAuth(response.data)) {
+//                 // console.log('response', response.data);
 
-                if (response.data) {
-                    dispatch({
-                        type: BULK_USERS,
-                        payload: response.data,
-                    });
-                }
+//                 if (response.data) {
+//                     dispatch({
+//                         type: BULK_USERS,
+//                         payload: response.data,
+//                     });
+//                 }
 
-            } else {
-                dispatch({
-                    type: INVALID_TOKEN
-                });
-            }
-        });
-    }
+//             } else {
+//                 dispatch({
+//                     type: INVALID_TOKEN
+//                 });
+//             }
+//         });
+//     }
 
-}
+// }
 
 
 
