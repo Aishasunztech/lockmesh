@@ -658,74 +658,12 @@ class Dealers extends Component {
                                 ref='dealerList'
                                 translation={this.props.translation}
                             />
-                            {/* <Card>
-                        <Table size="middle"
-                            className="gx-table-responsive devices table"
-                            bordered
-                            scroll={{ x: 500 }}
-                            columns={this.state.columns}
-                            rowKey='row_key'
-                            align='center' dataSource={this.renderList()}
-                            pagination={{ pageSize: this.state.pagination , size: "midddle"}}
-                        />
-
-                    </Card> */}
-                            <EditDealer ref='editDealer' getDealerList={this.props.getDealerList} translation={this.props.translation} />
+                           
                         </div>
                 }
             </div>
         );
     }
-
-    // handleSearch = (e) => {
-
-    //     let demoDealers = [];
-    //     if (status) {
-    //         coppydealers = this.state.dealers;
-    //         status = false;
-    //     }
-    //     // console.log("devices", coppydealers);
-
-    //     if (e.target.value.length) {
-    //         // console.log("keyname", e.target.name);
-    //         // console.log("value", e.target.value);
-    //         // console.log(this.state.dealers);
-    //         coppydealers.forEach((dealer) => {
-    //             // console.log("device", dealer);
-    //             // console.log('dealer amount is', dealer[e.target.name])
-
-    //             if (dealer[e.target.name] !== undefined) {
-    //                 if ((typeof dealer[e.target.name]) === 'string') {
-    //                     if (dealer[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
-    //                         demoDealers.push(dealer);
-    //                     }
-    //                 } else if (dealer[e.target.name] !== null) {
-    //                     if (dealer[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
-    //                         demoDealers.push(dealer);
-    //                     }
-    //                     if (isArray(dealer[e.target.name])) {
-    //                         // console.log('is it working', e.target.name)
-    //                         if (dealer[e.target.name][0]['total'].includes(e.target.value)) {
-    //                             demoDealers.push(dealer);
-    //                         }
-    //                     }
-    //                 } else {
-    //                     // demoDevices.push(device);
-    //                 }
-    //             } else {
-    //                 demoDealers.push(dealer);
-    //             }
-    //         });
-    //         // console.log("searched value", demoDealers);
-    //         this.setState({
-    //             dealers: demoDealers
-    //         })
-    //     } else {
-    //         this.setState({
-    //             dealers: coppydealers
-    //         })
-    //     }
-    // }
 
     handleSearch = (e) => {
 
@@ -874,10 +812,6 @@ class Dealers extends Component {
 
 
 var mapStateToProps = (state) => {
-    // console.log("mapStateToProps");
-    // console.log(state.dealers.isloading);
-    // console.log('state.dealer', state.dealers.dealers);
-    // console.log("selected options Dealer", state.settings.dealerOptions);
     return {
         isloading: state.dealers.isloading,
         dealers: state.dealers.dealers,
@@ -892,25 +826,6 @@ var mapStateToProps = (state) => {
     };
 }
 
-
-
-// function showConfirm(id, action, btn_title) {
-//     confirm({
-//         title: 'Do you want to ' + btn_title + ' this ' + window.location.pathname.split("/").pop() + ' ?',
-//         onOk() {
-//             return new Promise((resolve, reject) => {
-//                 setTimeout(Math.random() > 0.5 ? resolve : reject);
-//                 if (btn_title === 'RESET PASSWORD') {
-//                     id.pageName = 'dealer'
-//                 }
-//                 action(id);
-//                 //  success();
-
-//             }).catch(() => console.log('Oops errors!'));
-//         },
-//         onCancel() { },
-//     });
-// }
 
 
 export default connect(mapStateToProps, { getDealerList, suspendDealer, deleteDealer, activateDealer, undoDealer, updatePassword, editDealer, getDropdown, postDropdown, postPagination, getPagination, resetUploadForm })(Dealers)

@@ -326,8 +326,8 @@ class DealerList extends Component {
                         expandIconAsCell={false}
                         defaultExpandedRowKeys={(this.props.location.state) ? [this.props.location.state.id] : []}
                     />
-                    <EditDealer ref='editDealer' getDealerList={this.props.getDealerList} translation={this.props.translation} />
                 </CustomScrollbars>
+                <EditDealer ref='editDealer' translation={this.props.translation} />
             </Card>
         )
     }

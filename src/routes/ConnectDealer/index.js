@@ -6,9 +6,11 @@ import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Div
 
 // methods, constants and components
 import AppFilter from '../../components/AppFilter';
+import EditDealer from '../dealers/components/editDealer';
 
+// helpers
 import { getColor, isBase64, convertToLang } from "../utils/commonUtils"
-import { getDealerDetails } from '../../appRedux/actions'
+import { getDealerDetails, editDealer } from '../../appRedux/actions'
 import RestService from "../../appRedux/services/RestServices";
 import styles from './connect_dealer.css'
 
@@ -278,8 +280,8 @@ class ConnectDealer extends Component {
                             <Row>
                                 <Col span={8} className="text-center ">
                                     <img src={require("assets/images/profile-image.png")} className="mb-8 mt-16"></img>
-                                    <h1 className="mb-0" style={{ fontSize: '3vh', textTransform: 'capitalize'  }}>{(this.props.dealer)? this.props.dealer.dealer_name : 'N/A'}</h1>
-                                    <p style= {{ textTransform: 'capitalize'}}>({(this.props.dealer)? this.props.dealer.dealer_type : 'N/A'})</p>
+                                    <h1 className="mb-0" style={{ fontSize: '3vh', textTransform: 'capitalize' }}>{(this.props.dealer) ? this.props.dealer.dealer_name : 'N/A'}</h1>
+                                    <p style={{ textTransform: 'capitalize' }}>({(this.props.dealer) ? this.props.dealer.dealer_type : 'N/A'})</p>
                                 </Col>
                                 <Col span={16} style={{ padding: '0px 15px 0 0', }}>
                                     <Table
@@ -341,29 +343,39 @@ class ConnectDealer extends Component {
                         <Card>
                             <Row gutter={16} type="flex" justify="center" align="top">
                                 <Col span={12} className="gutter-row" justify="center" >
-                                    <Button style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} >
+                                    <Button disabled style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} >
                                         Pass Reset
                                     </Button>
                                 </Col>
                                 <Col className="gutter-row" justify="center" span={12} >
-                                    <Button style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}>
+                                    <Button
+                                    disabled
+                                        style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
+                                        onClick={() => this.refs.editDealer.showModal(this.props.dealer, this.props.editDealer)}
+                                    >
                                         <Icon type='edit' />
                                         Edit
                                     </Button>
                                 </Col>
                                 <Col className="gutter-row" justify="center" span={12} >
-                                    <Button style={{ width: "100%", marginBottom: 16, }}>
+                                    <Button disabled style={{ width: "100%", marginBottom: 16, }}>
                                         Suspend/Restrict
                                     </Button>
                                 </Col>
                                 <Col span={12} className="gutter-row" justify="center" >
-                                    <Button className="btn_break_line" style={{ width: "100%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }}>
+                                    <Button disabled className="btn_break_line" style={{ width: "100%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }}>
                                         <Icon type="lock" className="lock_icon" />
                                         Delete
                                     </Button>
                                 </Col>
                             </Row>
                         </Card>
+                        <EditDealer
+                            ref='editDealer'
+                            // getDealerList={this.props.getDealerList} 
+                            translation={this.props.translation}
+                        />
+
                     </Col>
                 </Row>
             </Fragment >
@@ -373,7 +385,8 @@ class ConnectDealer extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getDealerDetails: getDealerDetails
+        getDealerDetails: getDealerDetails,
+        editDealer: editDealer
     }, dispatch);
 }
 var mapStateToProps = ({ dealer_details, settings }, ownProps) => {
