@@ -1,46 +1,30 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal, Tabs, Col, Input, Form, Row, DatePicker, Select } from "antd";
-import moment, { now } from 'moment';
-import {
-  DEVICE_PRE_ACTIVATION
-} from "../../../../constants/Constants";
+import moment from 'moment';
 import styles from '../reporting.css'
 import { convertToLang, generatePDF, generateExcel, getDateFromTimestamp } from "../../../utils/commonUtils";
-let fileName = 'hardware_report_' + new Date().getTime();
+import {
+  DEVICE_PRE_ACTIVATION, DEVICE_UNLINKED
+} from "../../../../constants/Constants";
+
+import {
+  BASE_URL
+} from "../../../../constants/Application";
+import { PRE_ACTIVATE_DEVICE } from "../../../../constants/ActionTypes";
 var columns;
 var rows;
-
-class PaymentHistory extends Component {
+var fileName = 'grace_days_' + new Date().getTime();
+class Invoice extends Component {
   constructor(props) {
     super(props);
-
     this.columns = [
       {
-        title: "#",
+        title: '#',
         dataIndex: 'count',
-        key: 'count',
-        align: "center",
+        align: 'center',
+        className: 'row',
+        width: 50,
         sorter: (a, b) => { return a.count - b.count },
-        sortDirections: ['ascend', 'descend'],
-      },
-
-      {
-        title: convertToLang(props.translation[''], "HARDWARE"),
-        align: "center",
-        className: '',
-        dataIndex: 'hardware',
-        key: 'hardware',
-        sorter: (a, b) => { return a.hardware.localeCompare(b.hardware) },
-        sortDirections: ['ascend', 'descend'],
-      },
-
-      {
-        title: convertToLang(props.translation[''], "DEALER PIN"),
-        align: "center",
-        className: '',
-        dataIndex: 'dealer_pin',
-        key: 'dealer_pin',
-        sorter: (a, b) => { return a.dealer_pin - b.dealer_pin },
         sortDirections: ['ascend', 'descend'],
       },
 
@@ -55,6 +39,46 @@ class PaymentHistory extends Component {
       },
 
       {
+        title: convertToLang(props.translation[''], "DEALER PIN"),
+        align: "center",
+        className: '',
+        dataIndex: 'dealer_pin',
+        key: 'dealer_pin',
+        sorter: (a, b) => { return a.dealer_pin - b.dealer_pin },
+        sortDirections: ['ascend', 'descend'],
+      },
+
+      {
+        title: convertToLang(props.translation[''], "GRACE DAYS"),
+        align: "center",
+        className: '',
+        dataIndex: 'grace_days',
+        key: 'grace_days',
+        sorter: (a, b) => { return a.grace_days - b.grace_days },
+        sortDirections: ['ascend', 'descend'],
+      },
+
+      {
+        title: convertToLang(props.translation[''], "FROM"),
+        align: "center",
+        className: '',
+        dataIndex: 'from_date',
+        key: 'from_date',
+        sorter: (a, b) => { return a.from_date.localeCompare(b.from_date) },
+        sortDirections: ['ascend', 'descend'],
+      },
+
+      {
+        title: convertToLang(props.translation[''], "TO"),
+        align: "center",
+        className: '',
+        dataIndex: 'to_date',
+        key: 'to_date',
+        sorter: (a, b) => { return a.to_date.localeCompare(b.to_date) },
+        sortDirections: ['ascend', 'descend'],
+      },
+
+      {
         title: convertToLang(props.translation[''], "CREATED AT"),
         align: "center",
         className: '',
@@ -63,6 +87,7 @@ class PaymentHistory extends Component {
         sorter: (a, b) => { return a.created_at.localeCompare(b.created_at) },
         sortDirections: ['ascend', 'descend'],
       },
+
     ];
 
     this.state = {
@@ -75,14 +100,17 @@ class PaymentHistory extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
+
       values.dealerObject = this.props.dealerList.find((dealer, index) => dealer.dealer_id === values.dealer);
+      if (!values.dealerObject && values.dealer) {
+        values.dealerObject = { link_code: this.props.user.dealer_pin };
+      }
       this.state.reportFormData = values;
-      this.props.generateHardwareReport(values)
+      this.props.generateGraceDaysReport(values)
     });
   };
 
   componentWillReceiveProps(nextProps) {
-    // console.log("nextProps.devices ", nextProps.devices)
     if (nextProps.devices !== this.props.devices) {
       this.setState({
         deviceList: nextProps.devices
@@ -90,34 +118,34 @@ class PaymentHistory extends Component {
     }
   }
 
-  componentDidMount() {
-
-  };
-
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.hardwareReport !== prevProps.hardwareReport) {
+    if (this.props.graceDaysReportReport !== prevProps.graceDaysReportReport) {
       this.setState({
-        reportCard: true
+        reportCard: true,
+        productType: this.props.productType
+      });
+
+      rows = this.props.graceDaysReportReport.map((item, index) => {
+        return {
+          count: ++index,
+          device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
+          dealer_pin: item.dealer_pin ? item.dealer_pin : 'N/A',
+          grace_days: item.grace_days ? item.grace_days : 'N/A',
+          from_date: item.from_date ? getDateFromTimestamp(item.from_date) : 'N/A',
+          to_date: item.to_date ? getDateFromTimestamp(item.to_date) : 'N/A',
+          created_at: item.created_at ? getDateFromTimestamp(item.created_at) : 'N/A',
+        }
       });
 
       columns = [
         { title: '#', dataKey: "count" },
-        { title: convertToLang(this.props.translation[''], "HARDWARE"), dataKey: "hardware" },
-        { title: convertToLang(this.props.translation[''], "DEALER PIN"), dataKey: "dealer_pin" },
         { title: convertToLang(this.props.translation[''], "DEVICE ID"), dataKey: "device_id" },
-        { title: convertToLang(this.props.translation[''], "CREATED AT"), dataKey: "created_at" },
+        { title: convertToLang(this.props.translation[''], "DEALER PIN"), dataKey: "dealer_pin" },
+        { title: convertToLang(this.props.translation[''], "GRACE DAYS"), dataKey: "grace_days" },
+        { title: convertToLang(this.props.translation[''], "FROM DATE"), dataKey: "from_date" },
+        { title: convertToLang(this.props.translation[''], "TO DATE"), dataKey: "to_date" },
+        { title: convertToLang(this.props.translation[''], "GENERATED AT"), dataKey: "created_at" },
       ];
-
-      rows = this.props.hardwareReport.map((item, index) => {
-        return {
-          count: ++index,
-          dealer_pin: item.dealer_pin,
-          device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
-          hardware: item.hardware_name,
-          created_at: getDateFromTimestamp(item.created_at)
-        }
-      })
-
     }
   }
 
@@ -130,23 +158,23 @@ class PaymentHistory extends Component {
   };
 
   renderList = (list) => {
+
+    let data = [];
     if (list) {
-      let data    = [];
-      let counter = 1;
       list.map((item, index) => {
-        let hardware = JSON.parse(item.hardware_data);
         data.push({
-          rowKey: counter++,
-          key: counter++,
-          count: counter++,
-          dealer_pin: item.dealer_pin,
-          device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
-          hardware: hardware.hardware_name,
-          created_at: getDateFromTimestamp(item.created_at)
+          'key': index,
+          'count': ++index,
+          'device_id': item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
+          'dealer_pin': item.dealer_pin ? item.dealer_pin : 'N/A',
+          'grace_days': item.grace_days ? item.grace_days : 'N/A',
+          'from_date': item.from_date ? getDateFromTimestamp(item.from_date) : 'N/A',
+          'to_date': item.to_date ? getDateFromTimestamp(item.to_date) : 'N/A',
+          'created_at': item.created_at ? getDateFromTimestamp(item.created_at) : 'N/A',
         })
       });
-      return data;
     }
+    return data;
   };
 
   handleDealerChange = (e) => {
@@ -159,42 +187,19 @@ class PaymentHistory extends Component {
     this.setState({
       deviceList: devices
     })
-  }
+  };
 
   render() {
     return (
       <Row>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-          <Card bordered={false} style={{ height: '460px', overflow: 'scroll' }} >
+          <Card bordered={false} style={{ height: '460px', overflow: 'scroll' }}>
             <Form onSubmit={this.handleSubmit} autoComplete="new-password">
 
               <Form.Item
                 labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
               >
-              </Form.Item>
-
-              <Form.Item
-                label="Hardware"
-                labelCol={{ span: 10 }}
-                wrapperCol={{ span: 14 }}
-                width='100%'
-              >
-                {this.props.form.getFieldDecorator('hardware', {
-                  initialValue: '',
-                  rules: [
-                    {
-                      required: false
-                    },
-                  ],
-                })(
-                  <Select style={{ width: '100%' }}>
-                    <Select.Option value=''>ALL</Select.Option>
-                    {this.props.hardwares.map((hardware, index) => {
-                      return (<Select.Option key={hardware.hardware_name} value={hardware.hardware_name}>{hardware.hardware_name}</Select.Option>)
-                    })}
-                  </Select>
-                )}
               </Form.Item>
 
               {(this.props.user.type === 'sdealer') ?
@@ -228,7 +233,7 @@ class PaymentHistory extends Component {
                       onChange={(e) => this.handleDealerChange(e)}
                     >
                       <Select.Option value=''>ALL</Select.Option>
-                      <Select.Option value={this.props.user.dealerId}>My Report</Select.Option>
+                      <Select.Option value={this.props.user.dealerId} key={this.props.user.dealerId}>My Report</Select.Option>
                       {this.props.dealerList.map((dealer, index) => {
                         return (<Select.Option key={dealer.dealer_id} value={dealer.dealer_id}>{dealer.dealer_name} ({dealer.link_code})</Select.Option>)
                       })}
@@ -287,7 +292,7 @@ class PaymentHistory extends Component {
                 {this.props.form.getFieldDecorator('to', {
                   rules: [
                     {
-                      required: false,
+                      required: false
                     }],
                 })(
                   <DatePicker
@@ -299,38 +304,38 @@ class PaymentHistory extends Component {
                 )}
               </Form.Item>
               <Form.Item className="edit_ftr_btn"
-                         wrapperCol={{
-                           xs: { span: 24, offset: 0 },
-                         }}
+                wrapperCol={{
+                  xs: { span: 24, offset: 0 },
+                }}
               >
                 <Button key="back" type="button" onClick={this.handleReset}>CANCEL</Button>
-                <Button type="primary" htmlType="submit">GENERATE</Button>
+                <Button type="primary" htmlType="submit" onClick={this.handleSubmit}>GENERATE</Button>
               </Form.Item>
             </Form>
-          </Card>
-        </Col>
 
+          </Card>
+
+        </Col>
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
           <Card bordered={false} style={{ height: '460px', overflow: 'scroll' }}>
             {(this.state.reportCard) ?
               <Fragment>
                 <Row>
                   <Col xs={14} sm={14} md={14} lg={14} xl={14}>
-                    <h3>Hardware Inventory Report</h3>
+                    <h3>Invoice Report</h3>
                   </Col>
                   <Col xs={10} sm={10} md={10} lg={10} xl={10}>
                     <div className="pull-right">
-                      <Button className="mb-8" type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Hardware Report', fileName, this.state.reportFormData); }}>Download PDF</Button>
+                      <Button className="mb-8" type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, '', fileName, this.state.reportFormData) }}>Download PDF</Button>
                       <Button className="mb-8" type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName) }}>Download Excel</Button>
                     </div>
                   </Col>
                 </Row>
                 <Table
                   columns={this.columns}
-                  dataSource={this.renderList(this.props.hardwareReport)}
+                  dataSource={this.renderList(this.props.graceDaysReportReport)}
                   bordered
                   pagination={false}
-
                 />
               </Fragment>
               : null}
@@ -341,5 +346,5 @@ class PaymentHistory extends Component {
   }
 }
 
-const WrappedAddDeviceForm = Form.create()(PaymentHistory);
+const WrappedAddDeviceForm = Form.create()(Invoice);
 export default WrappedAddDeviceForm;

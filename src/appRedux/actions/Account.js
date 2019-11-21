@@ -33,7 +33,7 @@ import {
     PERMISSION_SAVED,
     PERMISSION_DOMAINS,
     GET_HARDWARE,
-  LATEST_PAYMENT_HISTORY,
+    LATEST_PAYMENT_HISTORY,
     MODIFY_ITEM_PRICE
 } from "../../constants/ActionTypes"
 
@@ -324,6 +324,25 @@ export const setPackage = (data) => {
     }
 }
 
+export const editPackage = (data) => {
+    return (dispatch) => {
+        RestService.editPackage(data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: EDIT_PACKAGE,
+                    response: response.data,
+                    package_id: data.package_id
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+
+    }
+}
+
 export const getPrices = () => {
     return (dispatch) => {
         RestService.getPrices().then((response) => {
@@ -516,11 +535,11 @@ export function deletePackage(id) {
         })
     }
 }
-export function modifyItemPrice(id, price, isModify = false, type) {
+export function modifyItemPrice(id, price, retail_price = 0, isModify = false, type) {
     // alert(package_id);
 
     return (dispatch) => {
-        RestService.modifyItemPrice(id, price, isModify, type).then((response) => {
+        RestService.modifyItemPrice(id, price, retail_price, isModify, type).then((response) => {
             if (RestService.checkAuth(response.data)) {
 
                 dispatch({
@@ -599,39 +618,39 @@ export function domainPermission(id, dealers, action, statusAll = false, user) {
 
 }
 export const getLatestPaymentHistory = (data) => {
-  return (dispatch) => {
-    RestService.getLatestPaymentHistory(data).then((response) => {
-      if (RestService.checkAuth(response.data)) {
+    return (dispatch) => {
+        RestService.getLatestPaymentHistory(data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
 
-        dispatch({
-          type: LATEST_PAYMENT_HISTORY,
-          payload: response.data
+                dispatch({
+                    type: LATEST_PAYMENT_HISTORY,
+                    payload: response.data
+                })
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
         })
-
-      } else {
-        dispatch({
-          type: INVALID_TOKEN
-        });
-      }
-    })
-  }
+    }
 };
 
 
 export const getOverdueDetails = () => {
-  return (dispatch) => {
-    RestService.getOverdueDetails().then((response) => {
-      if (RestService.checkAuth(response.data)) {
-        dispatch({
-          type: GET_OVERDUE_DETAILS,
-          payload: response.data
-        })
+    return (dispatch) => {
+        RestService.getOverdueDetails().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: GET_OVERDUE_DETAILS,
+                    payload: response.data
+                })
 
-      } else {
-        dispatch({
-          type: INVALID_TOKEN
-        });
-      }
-    })
-  }
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+    }
 };

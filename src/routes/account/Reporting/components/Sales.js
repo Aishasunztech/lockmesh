@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal, Tabs, Col, Input, Form, Row, DatePicker, Select } from "antd";
 import moment from 'moment';
 import styles from '../reporting.css'
-import { convertToLang, generatePDF, generateExcel, formatMoney } from "../../../utils/commonUtils";
+import { convertToLang, generatePDF, generateExcel, formatMoney, getDateFromTimestamp } from "../../../utils/commonUtils";
 import {
   DEVICE_PRE_ACTIVATION
 } from "../../../../constants/Constants";
@@ -140,7 +140,6 @@ class Sales extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    // console.log("nextProps.devices ", nextProps.devices)
     if (nextProps.devices !== this.props.devices) {
       this.setState({
         deviceList: nextProps.devices
@@ -226,7 +225,7 @@ class Sales extends Component {
           'cost_price': item.cost_price ? item.cost_price : 0,
           'sale_price': item.sale_price ? item.sale_price : 0,
           'profit_loss': item.profit_loss ? item.profit_loss : 0,
-          'created_at': item.created_at ? item.created_at : 'N/A',
+          'created_at': item.created_at ? getDateFromTimestamp(item.created_at) : 'N/A',
         })
       });
     }
@@ -248,11 +247,6 @@ class Sales extends Component {
         key: <h6 className="weight_600 p-5"> Profit/Loss</h6>,
         value: <h6 className="weight_600 p-5"> {this.props.saleInfo.totalProfitLoss}</h6>,
       },
-      // {
-      //   totalCost: <h6 className="weight_600 p-5"> {this.props.saleInfo.totalCost}</h6>,
-      //   totalSale: <h6 className="weight_600 p-5"> {this.props.saleInfo.totalSale}</h6>,
-      //   profitLoss: <h6 className="weight_600 p-5"> {(this.props.saleInfo.totalProfitLoss) ? this.props.saleInfo.totalProfitLoss: 0}</h6>,
-      // },
     ];
   };
 
@@ -266,7 +260,6 @@ class Sales extends Component {
       devices = this.props.devices
     } else {
       devices = this.props.devices.filter(device => device.dealer_id == e);
-      // console.log("handleDealerChange ", devices);
     }
     this.setState({
       deviceList: devices
@@ -274,11 +267,10 @@ class Sales extends Component {
   }
 
   render() {
-    // console.log("render this.state.deviceList ", this.state.deviceList)
     return (
       <Row>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-          <Card  >
+          <Card bordered={false} style={{ height: '460px', overflow: 'scroll' }}>
             <Form onSubmit={this.handleSubmit} autoComplete="new-password">
 
               <Form.Item
@@ -425,7 +417,7 @@ class Sales extends Component {
 
         </Col>
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
-          <Card style={{ height: '500px', overflow: 'scroll' }}>
+          <Card bordered={false} style={{ height: '460px', overflow: 'scroll' }}>
             {(this.state.reportCard) ?
               <Fragment>
                 <Row>

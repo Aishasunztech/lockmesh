@@ -72,7 +72,7 @@ export default (state = initialState, action) => {
     switch (action.type) {
 
         case SAVE_ID_PRICES: {
-            // console.log(action.response, 'response form save id prices')
+            // 
             if (action.response.status) {
                 success({
                     title: action.response.msg
@@ -88,13 +88,13 @@ export default (state = initialState, action) => {
             }
         }
         case SAVE_PACKAGE: {
-            let dump = [];
+            let dump = JSON.parse(JSON.stringify(state.packages));
             if (action.response.status) {
                 success({
                     title: action.response.msg
                 })
                 if (action.response.data.length) {
-                    dump = JSON.parse(JSON.stringify(state.packages));
+                    // dump = JSON.parse(JSON.stringify(state.packages));
                     action.response.data[0]["permission_count"] = 0;
                     dump.push(action.response.data[0])
                 }
@@ -103,7 +103,33 @@ export default (state = initialState, action) => {
                     title: action.response.msg
                 })
             }
-            // console.log(state.packages, 'test deff',action.response, 'response form save id prices')
+            // 
+            return {
+                ...state,
+                packages: dump
+            }
+        }
+
+        case EDIT_PACKAGE: {
+            let dump = JSON.parse(JSON.stringify(state.packages));;
+
+            if (action.response.status) {
+                success({
+                    title: action.response.msg
+                })
+                let objIndex = dump.findIndex((obj => obj.id === action.package_id));
+
+                if (objIndex > -1) {
+
+                    dump[objIndex] = action.response.data
+                }
+
+            } else {
+                error({
+                    title: action.response.msg
+                })
+            }
+            // 
             return {
                 ...state,
                 packages: dump
@@ -111,7 +137,7 @@ export default (state = initialState, action) => {
         }
 
         case GET_PRICES: {
-            // console.log(action.response, 'response of get prices')
+            // 
 
             return {
                 ...state,
@@ -122,7 +148,7 @@ export default (state = initialState, action) => {
         }
 
         case GET_PACKAGES: {
-            // console.log(action.response.data, JSON.stringify(action.response.data), 'response of get prices')
+            // 
 
             return {
                 ...state,
@@ -133,7 +159,7 @@ export default (state = initialState, action) => {
         }
 
         case GET_HARDWARE: {
-            // console.log(action.response, 'response of get prices')
+            // 
 
             return {
                 ...state,
@@ -168,7 +194,7 @@ export default (state = initialState, action) => {
             if (price_for && price_for !== '') {
                 copyPrices[price_for][field] = value.toString();
             }
-            // console.log(copyPrices[price_for], 'prices are', field)
+            // 
             return {
                 ...state,
                 prices: copyPrices,
@@ -255,7 +281,7 @@ export default (state = initialState, action) => {
 
         case RELEASE_CSV: {
             // alert("hello");
-            // console.log(action.payload);
+            // 
             if (action.payload.status) {
                 success({
                     title: action.payload.msg,
@@ -308,7 +334,7 @@ export default (state = initialState, action) => {
                 }
             }
         case SHOW_BACKUP_MODAL:
-            // console.log(action.payload);
+            // 
 
             return {
                 ...state,
@@ -318,7 +344,7 @@ export default (state = initialState, action) => {
 
 
         case PURCHASE_CREDITS:
-            // console.log(action.response);
+            // 
             if (action.response.status) {
 
                 success({
@@ -336,7 +362,7 @@ export default (state = initialState, action) => {
             }
 
         // case PACKAGE_PERMSSION_SAVED: {
-        //     // console.log("dasdasdad");
+        //     // 
         //     success({
         //         title: action.payload
         //     });
@@ -352,7 +378,7 @@ export default (state = initialState, action) => {
 
         // case PACKAGE_PERMSSION_SAVED: {
 
-        //     // console.log("at reducer PACKAGE_PERMSSION_SAVED:: ", state.packages, action);
+        //     // 
         //     if (action.payload.status) {
         //         success({
         //             title: action.payload.msg
@@ -361,7 +387,7 @@ export default (state = initialState, action) => {
         //         let index = state.packages.findIndex((item) => item.id == action.formData.id);
         //         let newDealers = (JSON.parse(action.formData.dealers)) ? JSON.parse(action.formData.dealers) : [];
         //         let oldDealers = (state.packages[index].dealer_permission) ? state.packages[index].dealer_permission : [];
-        //         // console.log('index is: ', index);
+        //         // 
 
         //         // Save permission for new dealers
         //         if (action.formData.action == "save") {
@@ -377,7 +403,7 @@ export default (state = initialState, action) => {
         //                 if (!action.formData.statusAll) {
         //                     // let allDealers = findAndRemove_duplicate_in_array([...oldDealers, ...newDealers]);
         //                     let allDealers = removeDuplicateObjects([...oldDealers, ...newDealers], "dealer_id");
-        //                     // console.log("allDealers ", allDealers);
+        //                     // 
 
         //                     state.packages[index].permission_count = allDealers.length;
         //                     state.packages[index].dealer_permission = allDealers;
@@ -427,7 +453,7 @@ export default (state = initialState, action) => {
 
         case PACKAGE_PERMSSION_SAVED: {
 
-            // console.log("at reducer PACKAGE_PERMSSION_SAVED:: ", state.packages, action);
+            // 
             if (action.payload.status) {
                 success({
                     title: action.payload.msg
@@ -436,7 +462,7 @@ export default (state = initialState, action) => {
                 let index = state.packages.findIndex((item) => item.id == action.formData.id);
                 let newDealers = (JSON.parse(action.formData.dealers)) ? JSON.parse(action.formData.dealers) : [];
                 let oldDealers = (state.packages[index].dealer_permission) ? state.packages[index].dealer_permission : [];
-                // console.log('index is: ', index);
+                // 
 
                 // Save permission for new dealers
                 if (action.formData.action == "save") {
@@ -452,7 +478,7 @@ export default (state = initialState, action) => {
                         if (!action.formData.statusAll) {
                             // let allDealers = findAndRemove_duplicate_in_array([...oldDealers, ...newDealers]);
                             let allDealers = removeDuplicateObjects([...oldDealers, ...newDealers], "dealer_id");
-                            // console.log("allDealers ", allDealers);
+                            // 
 
                             state.packages[index].permission_count = allDealers.length;
                             state.packages[index].dealer_permission = allDealers;
@@ -539,7 +565,7 @@ export default (state = initialState, action) => {
                     title: action.payload.msg
                 });
                 let objIndex = packages.findIndex((obj => obj.id === action.package_id));
-                // console.log(objIndex, "INDEX");
+                // 
                 if (objIndex > -1) {
                     packages.splice(objIndex, 1)
                 }
@@ -555,7 +581,7 @@ export default (state = initialState, action) => {
             }
         }
         case MODIFY_ITEM_PRICE: {
-            // console.log(action.item_type);
+            // 
             if (action.item_type === 'package') {
                 let packages = state.packages
                 if (action.payload.status) {
@@ -600,7 +626,7 @@ export default (state = initialState, action) => {
         }
 
         case GET_DOMAINS: {
-            // console.log('get domains:: ', action.payload.domains)
+            // 
             return {
                 ...state,
                 isloading: false,
@@ -610,7 +636,7 @@ export default (state = initialState, action) => {
 
         case PERMISSION_DOMAINS: {
 
-            // console.log("at reducer PERMISSION_DOMAINS:: ", state.domainList, action.formData.id, action.formData.dealers);
+            // 
             if (action.payload.status) {
                 success({
                     title: action.payload.msg
@@ -619,9 +645,9 @@ export default (state = initialState, action) => {
                 let index = state.domainList.findIndex((item) => item.id == action.formData.id);
                 let newDealers = (JSON.parse(action.formData.dealers)) ? JSON.parse(action.formData.dealers) : [];
                 let oldDealers = (JSON.parse(state.domainList[index].dealers)) ? JSON.parse(state.domainList[index].dealers) : [];
-                // console.log('index is: ', index);
-                // console.log('newDealers is: ', newDealers);
-                // console.log('oldDealers is: ', oldDealers);
+                // 
+                // 
+                // 
 
                 // Save permission for new dealers
                 if (action.formData.action == "save") {
@@ -637,7 +663,7 @@ export default (state = initialState, action) => {
 
                             // let allDealers = findAndRemove_duplicate_in_array([...oldDealers, ...newDealers]);
                             let allDealers = removeDuplicateObjects([...oldDealers, ...newDealers], "dealer_id");
-                            // console.log("allDealers ", allDealers);
+                            // 
 
                             state.domainList[index].permission_count = allDealers.length;
                             state.domainList[index].dealers = JSON.stringify(allDealers);
@@ -699,7 +725,7 @@ export default (state = initialState, action) => {
                 });
             }
 
-            // console.log(" [...state.domainList] ", [...state.domainList])
+            // 
             return {
                 ...state,
                 isloading: false,

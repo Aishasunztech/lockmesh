@@ -7,6 +7,7 @@ import ProductInventory  from './components/ProductInventory';
 import HardwareInventory  from './components/HardwareInventory';
 import PaymentHistory from './components/PaymentHistory';
 import Sales from './components/Sales';
+import GraceDays from './components/GraceDays';
 import AppFilter from '../../../components/AppFilter';
 import { convertToLang } from "../../utils/commonUtils";
 import {
@@ -16,6 +17,7 @@ import {
   generateInvoiceReport,
   generatePaymentHistoryReport,
   generateHardwareReport,
+  generateGraceDaysReport,
   getHardwares, getDevicesForReport
 } from '../../../appRedux/actions/';
 import styles from './reporting.css'
@@ -126,6 +128,19 @@ class Reporting extends Component {
                   devices={this.props.devices}
                 />
               </TabPane>
+
+              {(this.props.user.type === 'admin') ?
+                <TabPane tab="GRACE DAYS" key="6">
+                  <GraceDays
+                    dealerList={this.props.dealerList}
+                    translation={this.props.translation}
+                    generateGraceDaysReport={this.props.generateGraceDaysReport}
+                    graceDaysReportReport={this.props.graceDaysReportReport}
+                    user={this.props.user}
+                    devices={this.props.devices}
+                  />
+                </TabPane>
+                : '' }
             </Tabs>
           </div>
         }
@@ -147,6 +162,7 @@ var mapStateToProps = ({ dealers, settings, reporting  , auth, account, devices}
     hardwareReport: reporting.hardwareData,
     invoiceReport: reporting.invoiceData,
     salesReport: reporting.salesData,
+    graceDaysReportReport: reporting.graceDaysReportData,
     saleInfo: reporting.saleInfo,
     paymentHistoryReport: reporting.paymentHistoryData,
     productType: reporting.productType,
@@ -163,6 +179,7 @@ function mapDispatchToProps(dispatch) {
     generatePaymentHistoryReport: generatePaymentHistoryReport,
     generateHardwareReport: generateHardwareReport,
     generateSalesReport: generateSalesReport,
+    generateGraceDaysReport: generateGraceDaysReport,
     getHardwaresList: getHardwares,
   }, dispatch);
 };

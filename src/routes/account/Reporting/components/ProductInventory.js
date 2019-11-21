@@ -607,7 +607,7 @@ class ProductInventory extends Component {
     return (
       <Row>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-          <Card  >
+          <Card bordered={false} style={{ height: '460px', overflow: 'scroll' }} >
             <Form onSubmit={this.handleSubmit} autoComplete="new-password">
 
               <Form.Item
@@ -772,26 +772,25 @@ class ProductInventory extends Component {
                 <Button type="primary" htmlType="submit" onClick={this.handleSubmit}>GENERATE</Button>
               </Form.Item>
             </Form>
-
           </Card>
 
         </Col>
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
-          <Card bordered={false} style={{ height: '500px', overflow: 'scroll' }} >
+          <Card bordered={false} style={{ height: '460px', overflow: 'scroll' }} >
             {(this.state.reportCard) ?
               <Fragment>
                 <Row>
-                  <Col xs={14} sm={14} md={14} lg={14} xl={14}>
+                  <Col xs={14} sm={14} md={12} lg={12} xl={12}>
                     <h3>Product Inventory Report</h3>
                   </Col>
-                  <Col xs={10} sm={10} md={10} lg={10} xl={10}>
+                  <Col xs={10} sm={10} md={12} lg={12} xl={12}>
                     <div className="pull-right">
                       <Button className="mb-8" type="dotted" icon="download" size="small" onClick={this.createPDFReport}>Download PDF</Button>
                       <Button className="mb-8" type="primary" icon="download" size="small" onClick={this.createExcelReport}>Download Excel</Button>
                     </div>
                   </Col>
                 </Row>
-                <Tabs defaultActiveKey="1" activeKey={this.state.innerTabSelect} type="card" tabPosition="left" className="prod_in_rept_tab" onChange={this.handleChangeCardTabs}>
+                <Tabs defaultActiveKey="1" activeKey={this.state.innerTabSelect} type="card" className="" onChange={this.handleChangeCardTabs}>
 
                   {(this.state.productType === 'ALL' || this.state.productType === 'CHAT') ?
                     < TabPane tab={convertToLang(this.props.translation[TAB_CHAT_ID], "CHAT")} key="1" forceRender={true}>
@@ -815,7 +814,7 @@ class ProductInventory extends Component {
                 </Tabs>
                 <Table
                   size="middle"
-                  className="gx-table-responsive devices table m_d_table m_d_table1"
+                  className="gx-table-responsive devices "
                   bordered
                   columns={this.state.columns}
                   rowKey='row_key'

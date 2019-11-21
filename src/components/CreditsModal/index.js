@@ -50,12 +50,12 @@ class CreditIcon extends Component {
       paymentHistoryColumns: paymentHistoryColumns,
       visible: false,
       currency: 'USD',
-      currency_sign: '$',
       currency_price: this.props.user_credit,
       currency_unit_price: 1,
       purchase_modal: false,
 
-    }
+    };
+
     this.paymentHistoryColumns = [
       {
         title: "Transaction #",
@@ -111,14 +111,12 @@ class CreditIcon extends Component {
 
     this.cr_blnc_columns = [
       {
-        title: <h4 className="weight_600 bg_light_yellow p-5">TOTAL</h4>,
-        dataIndex: 'name1',
-        key: 'name1',
+        dataIndex: 'title',
+        key: 'title',
       },
       {
-        title: <h4 className="weight_600 bg_light_yellow p-5"> {this.props.user_credit} </h4>,
-        dataIndex: 'age1',
-        key: 'age1',
+        dataIndex: 'data',
+        key: 'data',
       },
     ];
 
@@ -176,6 +174,9 @@ class CreditIcon extends Component {
   showModal = () => {
     this.setState({
       visible: true,
+      currency: 'USD',
+      currency_price: this.props.user_credit,
+      currency_unit_price: 1,
     });
   };
 
@@ -198,8 +199,6 @@ class CreditIcon extends Component {
   cr_blnc_title = () => {
     return <h4 className="credit_modal_heading weight_600">{convertToLang(this.props.translation[""], "CURRENT BALANCE (Credits)")}</h4>
   };
-
-
 
   overdue_title = () => {
     return <div className="credit_modal_heading">
@@ -296,9 +295,14 @@ class CreditIcon extends Component {
     return [
 
       {
-        name1: <h6 className="weight_600 p-5"> CURRENCY</h6>,
-        age1: <Select defaultValue="USD"
-          onChange={(e) => { this.onChangeCurrency(e, 'currency') }}
+        title: <h4 className="weight_600 bg_light_yellow p-5">TOTAL</h4>,
+        data: <h4 className="weight_600 bg_light_yellow p-5"> {this.props.user_credit} </h4>,
+
+      },
+
+      {
+        title: <h6 className="weight_600 p-5"> CURRENCY</h6>,
+        data: <Select defaultValue="USD" onChange={(e) => { this.onChangeCurrency(e, 'currency') }}
         >
           <Select.Option value="USD">USD</Select.Option>
           <Select.Option value="CAD">CAD</Select.Option>
@@ -309,18 +313,18 @@ class CreditIcon extends Component {
 
       },
       {
-        name1: <h6 className="weight_600 p-5"> {this.state.currency.toUpperCase() + ' (EQUIVALENT)'}</h6>,
-        age1: <h6 className="weight_600 p-5 float-right"> {formatMoney(this.state.currency_price)}</h6>,
+        title: <h6 className="weight_600 p-5"> {this.state.currency.toUpperCase() + ' (EQUIVALENT)'}</h6>,
+        data: <h6 className="weight_600 p-5"> {formatMoney(this.state.currency_price)}</h6>,
 
       },
 
       {
-        name1: <span className="p-8"></span>,
-        age1: <span className="p-8"></span>,
+        title: <span className="p-8"></span>,
+        data: <span className="p-8"></span>,
       },
       {
         name1: <h5 className="weight_600">PURCHASE CREDITS</h5>,
-        age1: <Button type="default" size="small" className="buy_btn_invo" onClick={(e) => { this.showPurchaseModal(e, true); }}>
+        data: <Button type="default" size="small" className="buy_btn_invo" onClick={(e) => { this.showPurchaseModal(e, true); }}>
           BUY
         </Button>,
 
@@ -332,14 +336,14 @@ class CreditIcon extends Component {
 
     if (e === 'USD') {
       this.setState({
-        currency: 'usd',
+        currency: 'USD',
         currency_price: this.props.user_credit,
         currency_unit_price: 1,
       })
     } else {
       RestService.exchangeCurrency(e).then((response) => {
         if (response.data.status) {
-          if (this.props.user_credit > 0) {
+          if (this.props.user_credit !== 0) {
             this.setState({
               currency: e,
               currency_unit_price: response.data.currency_unit,
