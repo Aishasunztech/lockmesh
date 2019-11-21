@@ -247,16 +247,18 @@ class DealerList extends Component {
                     <span>
                         {/* Suspend/Active Button */}
                         <Button type={button_type} size='small' style={{ margin: '0 8px 0 0', textTransform: "uppercase" }}
-                            onClick={() => ((dealer.account_status === '') || (dealer.account_status === null)) ? showConfirm(this, dealer.dealer_id, this.props.suspendDealer, 'SUSPEND') : showConfirm(this, dealer.dealer_id, this.props.activateDealer, 'ACTIVATE')}>
+                            onClick={() => ((dealer.account_status === '') || (dealer.account_status === null)) ? showConfirm(this, dealer.dealer_id, this.props.suspendDealer, 'SUSPEND') : showConfirm(this, dealer.dealer_id, this.props.activateDealer, 'ACTIVATE')}
+                        >
                             {((dealer.account_status === '') || (dealer.account_status === null)) ? <div>{convertToLang(this.props.translation[Button_Suspend], "Suspend")}</div> : <div> {convertToLang(this.props.translation[Button_Activate], "Activate")}</div>}
                         </Button>
-                        
+
                         {/* Edit Dealer Button */}
                         <Button type="primary" style={{ margin: '0 8px 0 0', textTransform: "uppercase" }} size='small' onClick={() => this.refs.editDealer.showModal(dealer, this.props.editDealer)}>{convertToLang(this.props.translation[Button_Edit], "Edit")}</Button>
-                        
+
                         {/* Delete Dealer Button*/}
                         <Button type={undo_button_type} size='small' style={{ margin: '0', textTransform: "uppercase" }}
-                            onClick={() => (dealer.unlink_status === 0) ? showConfirm(this, dealer.dealer_id, this.props.deleteDealer, 'DELETE') : showConfirm(this, dealer.dealer_id, this.props.undoDealer, 'UNDELETE')}>
+                            onClick={() => (dealer.unlink_status === 0) ? showConfirm(this, dealer.dealer_id, this.props.deleteDealer, 'DELETE') : showConfirm(this, dealer.dealer_id, this.props.undoDealer, 'UNDELETE')}
+                        >
                             {(dealer.unlink_status === 0) ? <div>{convertToLang(this.props.translation[Button_Delete], 'DELETE')} </div> : <div> {convertToLang(this.props.translation[Button_Undo], "UNDELETE")} </div>}
                         </Button>
 
