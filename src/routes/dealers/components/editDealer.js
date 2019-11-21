@@ -9,6 +9,7 @@ import { convertToLang } from '../../utils/commonUtils';
 import { EDIT_DEALER } from '../../../constants/ActionTypes';
 
 let func;
+let actionType;
 export default class EditDealer extends Component {
 
     constructor(props) {
@@ -20,8 +21,9 @@ export default class EditDealer extends Component {
     }
 
 
-    showModal = (dealer, edit_func) => {
-        func = edit_func
+    showModal = (dealer, edit_func, actionTypeParam = EDIT_DEALER) => {
+        func = edit_func;
+        actionType = actionTypeParam
         this.setState({
             visible: true,
             dealer_id: dealer.dealer_id,
@@ -112,7 +114,7 @@ export default class EditDealer extends Component {
 
         if(!error) {
 
-            func(formData);
+            func(formData, actionType);
             this.handleCancel();
         }
     }

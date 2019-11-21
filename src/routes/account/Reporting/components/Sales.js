@@ -270,7 +270,7 @@ class Sales extends Component {
     return (
       <Row>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-          <Card bordered={false} style={{ height: '460px', overflow: 'scroll' }}>
+          <Card bordered={false} style={{ height: '520px', overflow: 'scroll' }}>
             <Form onSubmit={this.handleSubmit} autoComplete="new-password">
 
               <Form.Item
@@ -404,9 +404,9 @@ class Sales extends Component {
                 )}
               </Form.Item>
               <Form.Item className="edit_ftr_btn"
-                wrapperCol={{
-                  xs: { span: 24, offset: 0 },
-                }}
+                         wrapperCol={{
+                           xs: { span: 24, offset: 0 },
+                         }}
               >
                 <Button key="back" type="button" onClick={this.handleReset}>CANCEL</Button>
                 <Button type="primary" htmlType="submit" onClick={this.handleSubmit}>GENERATE</Button>
@@ -417,7 +417,7 @@ class Sales extends Component {
 
         </Col>
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
-          <Card bordered={false} style={{ height: '460px', overflow: 'scroll' }}>
+          <Card bordered={false} style={{ height: '520px', overflow: 'scroll' }}>
             {(this.state.reportCard) ?
               <Fragment>
                 <Row>

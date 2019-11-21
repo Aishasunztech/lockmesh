@@ -607,7 +607,7 @@ class ProductInventory extends Component {
     return (
       <Row>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-          <Card bordered={false} style={{ height: '460px', overflow: 'scroll' }} >
+          <Card bordered={false} style={{ height: '520px', overflow: 'scroll' }} >
             <Form onSubmit={this.handleSubmit} autoComplete="new-password">
 
               <Form.Item
@@ -776,7 +776,7 @@ class ProductInventory extends Component {
 
         </Col>
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
-          <Card bordered={false} style={{ height: '460px', overflow: 'scroll' }} >
+          <Card bordered={false} style={{ height: '520px', overflow: 'scroll' }} >
             {(this.state.reportCard) ?
               <Fragment>
                 <Row>
