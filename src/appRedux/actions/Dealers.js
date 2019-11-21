@@ -10,8 +10,13 @@ import {
     LOADING, ADD_DEALER,
     // INIT_URL,
     SPIN_lOADING,
-    DEALERS_LIST_IN_SDEALER
-} from "constants/ActionTypes"
+    DEALERS_LIST_IN_SDEALER,
+    CONNECT_DELETE_DEALER,
+    CONNECT_UNDO_DEALER,
+    CONNECT_SUSPEND_DEALER,
+    CONNECT_ACTIVATE_DEALER,
+
+} from "../../constants/ActionTypes"
 // import { message } from 'antd';
 
 import RestService from '../services/RestServices';
@@ -102,15 +107,18 @@ export function getUserDealers() {
     };
 }
 
-export function suspendDealer(id) {
+export function suspendDealer(id, actionType= null) {
     return (dispatch) => {
         RestService.suspendDealer(id).then((response) => {
 
             if (RestService.checkAuth(response.data)) {
                 // console.log('suspend response',response.data);
-
+                let action = SUSPEND_DEALERS
+                if(actionType){
+                    action = CONNECT_SUSPEND_DEALER
+                }
                 dispatch({
-                    type: SUSPEND_DEALERS,
+                    type: action,
                     response: response.data,
                     payload: {
                         id: id,
@@ -130,15 +138,18 @@ export function suspendDealer(id) {
     };
 }
 
-export function activateDealer(id) {
+export function activateDealer(id, actionType= null) {
     return (dispatch) => {
         RestService.activateDealer(id).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 // console.log('active response',response.data);
-
+                let action = ACTIVATE_DEALER
+                if(actionType){
+                    action = CONNECT_ACTIVATE_DEALER
+                }
                 if (response.data.status) {
                     dispatch({
-                        type: ACTIVATE_DEALER,
+                        type: action,
                         response: response.data,
                         payload: {
                             id: id,
@@ -210,14 +221,17 @@ export function addDealer(formData) {
     };
 }
 
-export function deleteDealer(id) {
+export function deleteDealer(id, actionType= null) {
     return (dispatch) => {
         RestService.unlinkDealer(id).then((response) => {
 
             if (RestService.checkAuth(response.data)) {
-
+                let action = DELETE_DEALERS
+                if(actionType){
+                    action = CONNECT_DELETE_DEALER
+                }
                 dispatch({
-                    type: DELETE_DEALERS,
+                    type: action,
                     response: response.data,
                     payload: {
                         id: id,
@@ -235,14 +249,17 @@ export function deleteDealer(id) {
     };
 }
 
-export function undoDealer(id) {
+export function undoDealer(id, actionType= null) {
     return (dispatch) => {
         RestService.undoDealer(id).then((response) => {
 
             if (RestService.checkAuth(response.data)) {
-
+                let action = UNDO_DEALER
+                if(actionType){
+                    action = CONNECT_UNDO_DEALER
+                }
                 dispatch({
-                    type: UNDO_DEALER,
+                    type: action,
                     response: response.data,
                     payload: {
                         id: id,
@@ -263,7 +280,7 @@ export function undoDealer(id) {
 
 export function updatePassword(dealer) {
     return (dispatch) => {
-        // console.log('functino call', dealer);
+        
         RestService.updatePassword(dealer).then((response) => {
             if (RestService.checkAuth(response.data)) {
 

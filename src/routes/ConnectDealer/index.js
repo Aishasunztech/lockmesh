@@ -10,7 +10,7 @@ import EditDealer from '../dealers/components/editDealer';
 
 // helpers
 import { getColor, isBase64, convertToLang } from "../utils/commonUtils"
-import { getDealerDetails, editDealer } from '../../appRedux/actions'
+import { getDealerDetails, editDealer, updatePassword, suspendDealer, activateDealer, deleteDealer, undoDealer } from '../../appRedux/actions'
 import RestService from "../../appRedux/services/RestServices";
 import styles from './connect_dealer.css'
 import { DealerAction } from "./components/DealerActions";
@@ -127,7 +127,7 @@ class ConnectDealer extends Component {
         console.log('dealer info', this.props.dealer);
         let dealer = this.props.dealer;
         if (dealer) {
-            const dealer_status = (dealer.account_status === "suspended") ? "Suspended" : "Activated";
+            const dealer_status = (dealer.unlink_status==1)?"Archived":(dealer.account_status === "suspended") ? "Suspended" : "Activated";
             return [
                 {
                     key: '1',
@@ -316,9 +316,20 @@ class ConnectDealer extends Component {
                     {/* Dealer Action Buttons */}
                     <Col className="side_action right_bar" xs={24} sm={24} md={8} lg={8} xl={8} >
                         <DealerAction 
-                            dealer = {this.props.dealer}
-                            editDealer = {this.props.editDealer}
+                            // translation
                             translation={this.props.translation}
+
+                            // dealer information
+                            dealer = {this.props.dealer}
+
+                            // dealer actions
+                            updatePassword = {this.props.updatePassword}
+                            editDealer = {this.props.editDealer}
+
+                            suspendDealer = {this.props.suspendDealer}
+                            activateDealer = {this.props.activateDealer}
+                            deleteDealer = {this.props.deleteDealer}
+                            undoDealer = {this.props.undoDealer}
                         />
 
                     </Col>
@@ -331,11 +342,16 @@ class ConnectDealer extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getDealerDetails: getDealerDetails,
-        editDealer: editDealer
+        editDealer: editDealer,
+        updatePassword: updatePassword,
+        suspendDealer: suspendDealer,
+        activateDealer: activateDealer,
+        deleteDealer: deleteDealer,
+        undoDealer: undoDealer
     }, dispatch);
 }
 
-var mapStateToProps = ({ dealer_details, settings }, ownProps) => {
+var mapStateToProps = ({ dealer_details, settings }) => {
     // console.log(dealer_details);
     return {
         dealer: dealer_details.dealer,
