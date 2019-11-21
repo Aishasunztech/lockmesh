@@ -1602,29 +1602,29 @@ export function dealerColumns(translation, handleSearch) {
     {
         title: (
             <Input.Search
-                name="dealer_token"
-                key="dealer_token"
-                id="dealer_token"
+                name="dealer_credits"
+                key="dealer_credits"
+                id="dealer_credits"
                 className="search_heading"
                 autoComplete="new-password"
-                placeholder={convertToLang(translation[DEALER_TOKENS], "TOKENS")}
+                placeholder={convertToLang(translation[""], "CREDITS")}
                 onChange={handleSearch}
 
             />
         ),
-        dataIndex: 'dealer_token',
+        dataIndex: 'dealer_credits',
         className: '',
         children: [
             {
-                title: convertToLang(translation[DEALER_TOKENS], "TOKENS"),
-                dataIndex: 'dealer_token',
-                key: 'dealer_token',
+                title: convertToLang(translation[""], "CREDITS"),
+                dataIndex: 'dealer_credits',
+                key: 'dealer_credits',
                 // sorter: (a, b) => {
                 //     console.log(a);
                 //     // console.log(b);
-                //     return a.dealer_token.length;
+                //     return a.dealer_credits.length;
                 // },
-                sorter: (a, b) => { return a.dealer_token.localeCompare(b.dealer_token) },
+                sorter: (a, b) => { return a.dealer_credits - b.dealer_credits },
 
             }
         ]

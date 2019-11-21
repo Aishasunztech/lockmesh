@@ -269,7 +269,7 @@ class DealerList extends Component {
                 'parent_dealer': dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
                 'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
                 'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
-                'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A',
+                'dealer_credits': dealer.dealer_credits ? dealer.dealer_credits : 0,
                 'devicesList': dealer.devicesList
 
             })

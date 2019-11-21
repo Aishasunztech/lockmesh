@@ -55,7 +55,8 @@ import {
   DEALER_DEVICES,
   DEALER_TOKENS,
   Parent_Dealer,
-  Parent_Dealer_ID
+  Parent_Dealer_ID,
+  DEALER_CREDITS
 } from '../../../constants/DealerConstants';
 
 import {
@@ -122,7 +123,7 @@ export var initialSettings = {
     { "key": "dealer_email", "value": DEALER_EMAIL },
     { "key": "link_code", "value": DEALER_PIN },
     { "key": "connected_devices", "value": DEALER_DEVICES },
-    { "key": "dealer_token", "value": DEALER_TOKENS },
+    { "key": "dealer_credits", "value": DEALER_CREDITS },
     { "key": "parent_dealer", "value": Parent_Dealer },
     { "key": "parent_dealer_id", "value": Parent_Dealer_ID },
   ],
