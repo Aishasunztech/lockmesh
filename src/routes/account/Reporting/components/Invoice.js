@@ -13,7 +13,7 @@ import {
 import { PRE_ACTIVATE_DEVICE } from "../../../../constants/ActionTypes";
 var columns;
 var rows;
-var fileName = 'invoice_' + new Date().getTime()
+var fileName = 'invoice_' + new Date().getTime();
 class Invoice extends Component {
   constructor(props) {
     super(props);

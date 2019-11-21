@@ -131,16 +131,17 @@ class PaymentHistory extends Component {
 
   renderList = (list) => {
     if (list) {
-      let data = [];
+      let data    = [];
       let counter = 1;
       list.map((item, index) => {
+        let hardware = JSON.parse(item.hardware_data);
         data.push({
           rowKey: counter++,
           key: counter++,
           count: counter++,
           dealer_pin: item.dealer_pin,
           device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
-          hardware: item.hardware_name,
+          hardware: hardware.hardware_name,
           created_at: getDateFromTimestamp(item.created_at)
         })
       });
@@ -154,7 +155,6 @@ class PaymentHistory extends Component {
       devices = this.props.devices
     } else {
       devices = this.props.devices.filter(device => device.dealer_id == e);
-      // console.log("handleDealerChange ", devices);
     }
     this.setState({
       deviceList: devices
@@ -299,9 +299,9 @@ class PaymentHistory extends Component {
                 )}
               </Form.Item>
               <Form.Item className="edit_ftr_btn"
-                wrapperCol={{
-                  xs: { span: 24, offset: 0 },
-                }}
+                         wrapperCol={{
+                           xs: { span: 24, offset: 0 },
+                         }}
               >
                 <Button key="back" type="button" onClick={this.handleReset}>CANCEL</Button>
                 <Button type="primary" htmlType="submit">GENERATE</Button>
@@ -316,7 +316,7 @@ class PaymentHistory extends Component {
               <Fragment>
                 <Row>
                   <Col xs={14} sm={14} md={14} lg={14} xl={14}>
-                    <h3>Hardware Invenotory Report</h3>
+                    <h3>Hardware Inventory Report</h3>
                   </Col>
                   <Col xs={10} sm={10} md={10} lg={10} xl={10}>
                     <div className="pull-right">
