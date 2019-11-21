@@ -5,15 +5,15 @@ import { convertToLang } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 
 
-export default class BulkPullApps extends Component {
+export default class BulkUnlink extends Component {
 
     constructor(props) {
         super(props)
         this.confirm = Modal.confirm;
     }
 
-    handleBulkPullApps = (devices, dealers, users) => {
-        // console.log("devices lklk", devices)
+    handleBulkUnlink = (devices, dealers, users) => {
+        console.log("devices lklk", devices)
         let selectedDevices = [];
         let dealer_ids = [];
         let user_ids = [];
@@ -32,20 +32,20 @@ export default class BulkPullApps extends Component {
         });
 
         let data = {
-            apps: this.props.selectedPullAppsList,
-            selectedDevices,
+            // apps:  // this.props.selectedPushAppsList,
+            selectedDevices: JSON.stringify(devices),
             dealer_ids,
             user_ids
         }
 
-        const title = `${convertToLang(this.props.translation[""], "Are you sure, you want to pull selected apps from these devices ")} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`;
+        const title = `${convertToLang(this.props.translation[""], "Are you sure, you want to unlink these selected devices ")} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`;
         this.confirm({
             title: title,
             content: '',
             okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
             cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
             onOk: (() => {
-                this.props.applyPullApps(data);
+                this.props.unlinkBulkDevices(data);
             }),
             onCancel() { },
         });

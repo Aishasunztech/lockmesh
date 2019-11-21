@@ -9,8 +9,10 @@ import FilterDevicesList from "./filterDevicesList";
 import CircularProgress from "components/CircularProgress/index";
 import BulkSuspendDevices from './bulkSuspendDevices';
 import BulkActivateDevices from './bulkActivateDevices';
+import BulkUnlinkConfirmation from './bulkUnlinkConfirmation';
 import BulkPushAppsConfirmation from './bulkPushAppsConfirmation';
 import BulkPullAppsConfirmation from './bulkPullAppsConfirmation';
+import BulkWipeConfirmation from './bulkWipeConfirmation';
 import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, titleCase, convertToLang, checkRemainTermDays } from '../../utils/commonUtils'
 
 import { bulkDevicesColumns, devicesColumns, userDevicesListColumns } from '../../utils/columnsUtils';
@@ -151,12 +153,15 @@ class FilterDevices extends Component {
       } else {
         this.setState({
           selectedDevices: [],
-          copySelectedDevices: []
+          copySelectedDevices: [],
+          searchRemoveModal: []
         })
       }
     } else {
       this.setState({
         selectedDevices: nextProps.selectedDevices,
+        copySelectedDevices: nextProps.selectedDevices,
+        searchRemoveModal: nextProps.selectedDevices
       })
     }
 
@@ -201,6 +206,12 @@ class FilterDevices extends Component {
         }
       })
     }
+    // else if (action === "UNLINK DEVICES") {
+    //   if (device.finalStatus !== DEVICE_ACTIVATED) {
+    //     filteredDevices.push(device);
+    //   }
+    //   unlinkBulkDevices
+    // }
     // else if (action === "PUSH APPS") {
     //   filteredDevices = copySelectedDevices.filter((device) => device.finalStatus != DEVICE_SUSPENDED)
     // } else if (action === "PULL APPS") {
@@ -640,19 +651,29 @@ class FilterDevices extends Component {
     // console.log(this.props.selectedDealers, this.props.selectedUsers, 'action apply', this.props.handleActionValue);
 
     let action = this.props.handleActionValue;
+    let devices = this.state.selectedDevices;
+    let dealers = this.props.selectedDealers;
+    let users = this.props.selectedUsers;
+
     if (action !== "NOT SELECTED") {
-      if (this.state.selectedDevices.length) {
+      if (devices.length) {
         if (action === "SUSPEND DEVICES") {
-          this.refs.bulk_suspend.handleSuspendDevice(this.state.selectedDevices, this.props.selectedDealers, this.props.selectedUsers);
+          this.refs.bulk_suspend.handleSuspendDevice(devices, dealers, users);
         }
         else if (action === "ACTIVATE DEVICES") {
-          this.refs.bulk_activate.handleActivateDevice(this.state.selectedDevices, this.props.selectedDealers, this.props.selectedUsers);
+          this.refs.bulk_activate.handleActivateDevice(devices, dealers, users);
         }
         else if (action === "PUSH APPS") {
-          this.refs.bulk_push_apps.handleBulkPushApps(this.state.selectedDevices, this.props.selectedDealers, this.props.selectedUsers);
+          this.refs.bulk_push_apps.handleBulkPushApps(devices, dealers, users);
         }
         else if (action === "PULL APPS") {
-          this.refs.bulk_pull_apps.handleBulkPullApps(this.state.selectedDevices, this.props.selectedDealers, this.props.selectedUsers);
+          this.refs.bulk_pull_apps.handleBulkPullApps(devices, dealers, users);
+        }
+        else if (action === "UNLINK DEVICES") {
+          this.refs.bulk_unlink.handleBulkUnlink(devices, dealers, users);
+        }
+        else if (action === "WIPE DEVICES") {
+          this.refs.bulk_wipe.handleBulkWipe(devices, dealers, users);
         }
 
       } else {
@@ -877,6 +898,12 @@ class FilterDevices extends Component {
           translation={this.props.translation}
         />
 
+        <BulkUnlinkConfirmation
+          ref="bulk_unlink"
+          unlinkBulkDevices={this.props.unlinkBulkDevices}
+          translation={this.props.translation}
+        />
+
         <BulkPushAppsConfirmation
           ref="bulk_push_apps"
           applyPushApps={this.props.applyPushApps}
@@ -888,6 +915,12 @@ class FilterDevices extends Component {
           ref="bulk_pull_apps"
           applyPullApps={this.props.applyPullApps}
           selectedPullAppsList={this.props.selectedPullAppsList}
+          translation={this.props.translation}
+        />
+
+        <BulkWipeConfirmation
+          ref="bulk_wipe"
+          wipeBulkDevices={this.props.wipeBulkDevices}
           translation={this.props.translation}
         />
 

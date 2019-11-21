@@ -1,4 +1,4 @@
-import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES } from "../../constants/ActionTypes";
+import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES, WIPE_BULK_DEVICES, UNLINK_BULK_DEVICES, CLOSE_RESPONSE_MODAL } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
 
@@ -45,10 +45,10 @@ export function bulkSuspendDevice(devices) {
             if (RestService.checkAuth(response.data)) {
                 // console.log('response', response.data);
                 // if (response.data.status) {
-                    dispatch({
-                        type: BULK_SUSPEND_DEVICES,
-                        payload: response.data,
-                    });
+                dispatch({
+                    type: BULK_SUSPEND_DEVICES,
+                    payload: response.data,
+                });
                 // }
 
 
@@ -218,5 +218,47 @@ export const setSelectedBulkDevices = (data) => {
             payload: data
 
         })
+    }
+}
+
+export function unlinkBulkDevices(data) {
+    console.log('you are at action file of unlinkBulkDevices', data)
+    return (dispatch) => {
+        RestService.unlinkBulkDevices(data).then((response) => {
+            // console.log('response to unlink device', response);
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    payload: response.data,
+                    type: UNLINK_BULK_DEVICES,
+                    // payload: device,
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+    }
+}
+
+export function wipeBulkDevices(device) {
+    return (dispatch) => {
+        RestService.wipeBulkDevices(device.usr_device_id).then((response) => {
+
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: WIPE_BULK_DEVICES,
+                    response: response.data,
+                });
+            }
+        });
+    }
+}
+
+export function closeResponseModal() {
+    return (dispatch) => {
+        dispatch({
+            type: CLOSE_RESPONSE_MODAL,
+        });
     }
 }

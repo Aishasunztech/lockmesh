@@ -233,7 +233,7 @@ const RestService = {
     getUserDealers: () => {
         return axios.get(BASE_URL + 'users/user_dealers', RestService.getHeader());
     },
-    getDealerDetails:(dealerId) => {
+    getDealerDetails: (dealerId) => {
         return axios.get(BASE_URL + 'users/connect-dealer/' + dealerId, RestService.getHeader());
     },
 
@@ -914,7 +914,7 @@ const RestService = {
     // suspend accounts
     bulkSuspendDevice: (devices) => {
         console.log('at rest services page ', devices)
-        return axios.post(BASE_URL + 'users/bulkSuspend', devices,
+        return axios.post(BASE_URL + 'users/bulk-suspend', devices,
             RestService.getHeader()
         )
     },
@@ -922,14 +922,14 @@ const RestService = {
 
     // activate accounts
     bulkActivateDevice: (device_ids) => {
-        return axios.post(BASE_URL + 'users/bulkActivate', device_ids,
+        return axios.post(BASE_URL + 'users/bulk-activate', device_ids,
             RestService.getHeader()
         )
     },
 
     // get bulk devices history
     getbulkHistory: () => {
-        return axios.get(BASE_URL + 'users/getBulkHistory', RestService.getHeader())
+        return axios.get(BASE_URL + 'users/get-bulk-history', RestService.getHeader())
     },
 
     // get users of selected dealers
@@ -952,6 +952,19 @@ const RestService = {
             userAccIds: userAccIds
         }, RestService.getHeader());
     },
+
+
+    // unlink bulk Devices
+    unlinkBulkDevices: (data) => {
+        return axios.post(BASE_URL + 'users/bulk-unlink', data, RestService.getHeader());
+    },
+
+    // wipe bulk Devices
+    wipeBulkDevices: (data) => {
+        return axios.post(BASE_URL + 'users/bulk-unlink', data, RestService.getHeader());
+    },
+
+    // *************************** end of bulk end points
 
 
     submtPassword: (data) => {
