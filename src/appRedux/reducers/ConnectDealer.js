@@ -8,6 +8,9 @@ import {
 // import { convertToLang } from '../../routes/utils/commonUtils';
 // import { WIPE_DEVICE_DESCRIPTION } from '../../constants/DeviceConstants';
 
+const success = Modal.success
+const error = Modal.error
+
 const initialState = {
     isLoading: false,
     messageText: '',
@@ -35,7 +38,19 @@ export default (state = initialState, action) => {
             if(action.response.status){
                 dealer.dealer_name = action.payload.formData.name;
                 dealer.dealer_email = action.payload.formData.email;
-
+                if (action.response.alreadyAvailable === false) {
+                    success({
+                        title: action.response.msg,
+                    });
+                } else {
+                    error({
+                        title: action.response.msg, // "Given email is already in use. Please choose different Email",
+                    });
+                }
+            } else {
+                error({
+                    title: action.response.msg,
+                });
             }
             return {
                 ...state,
