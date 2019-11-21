@@ -13,6 +13,7 @@ import { getColor, isBase64, convertToLang } from "../utils/commonUtils"
 import { getDealerDetails, editDealer } from '../../appRedux/actions'
 import RestService from "../../appRedux/services/RestServices";
 import styles from './connect_dealer.css'
+import { DealerAction } from "./components/DealerActions";
 
 class ConnectDealer extends Component {
     constructor(props) {
@@ -126,7 +127,7 @@ class ConnectDealer extends Component {
         console.log('dealer info', this.props.dealer);
         let dealer = this.props.dealer;
         if (dealer) {
-            const dealer_status = (dealer.account_status === "suspended") ? "Activate" : "Suspend";
+            const dealer_status = (dealer.account_status === "suspended") ? "Suspended" : "Activated";
             return [
                 {
                     key: '1',
@@ -261,6 +262,8 @@ class ConnectDealer extends Component {
                     pageHeading="Dealer Profile Page"
                 />
                 <Row gutter={16} type="flex" align="top">
+
+                    {/* Dealer Information */}
                     <Col className="" xs={24} sm={24} md={8} lg={8} xl={8}>
                         <Card style={{ borderRadius: 12 }}>
                             <h2 style={{ textAlign: "center" }}>Dealer Info</h2>
@@ -275,6 +278,8 @@ class ConnectDealer extends Component {
                             />
                         </Card>
                     </Col>
+
+                    {/* Dealer Account Information */}
                     <Col className="" xs={24} sm={24} md={8} lg={8} xl={8}>
                         <Card className="" style={{ borderRadius: 12 }}>
                             <h2 style={{ textAlign: "center" }}>Account Profile</h2>
@@ -307,74 +312,12 @@ class ConnectDealer extends Component {
                             </Row>
                         </Card>
                     </Col>
+
+                    {/* Dealer Action Buttons */}
                     <Col className="side_action right_bar" xs={24} sm={24} md={8} lg={8} xl={8} >
-                        <Card style={{ borderRadius: 12 }}>
-                            <Row gutter={16} type="flex" justify="center" align="top">
-                                <Col span={12} className="gutter-row" justify="center" >
-                                    <Button style={{ width: "100%", marginBottom: 16, }} >
-                                        <h6 className="mb-0">Activity</h6>
-                                    </Button>
-                                </Col>
-                                <Col span={12} className="gutter-row" justify="center" >
-                                    <Button style={{ width: "100%", marginBottom: 16, }}>
-                                        <h6 className="mb-0">Domains</h6>
-                                    </Button>
-                                </Col>
-                                <Col className="gutter-row" justify="center" span={12} >
-                                    <Button style={{ width: "100%", marginBottom: 16, }}>
-                                        <h6 className="mb-0">Credit Limit</h6>
-                                    </Button>
-                                </Col>
-                                <Col className="gutter-row" justify="center" span={12} >
-                                    <Button style={{ width: "100%", marginBottom: 16, }}>
-                                        <h6 className="mb-0">DEMO</h6>
-                                    </Button>
-                                </Col>
-                                <Col className="gutter-row" justify="center" span={12} >
-                                    <Button style={{ width: "100%", marginBottom: 16, }}>
-                                        <h6 className="mb-0">Payment History</h6>
-                                    </Button>
-                                </Col>
-                                <Col className="gutter-row" justify="center" span={12} >
-                                    <Button style={{ width: "100%", marginBottom: 16, }}>
-                                        <h6 className="mb-0">Sales History</h6>
-                                    </Button>
-                                </Col>
-                            </Row>
-                        </Card>
-                        <Card style={{ borderRadius: 12 }}>
-                            <Row gutter={16} type="flex" justify="center" align="top">
-                                <Col span={12} className="gutter-row" justify="center" >
-                                    <Button disabled style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} >
-                                        Pass Reset
-                                    </Button>
-                                </Col>
-                                <Col className="gutter-row" justify="center" span={12} >
-                                    <Button
-                                    disabled
-                                        style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
-                                        onClick={() => this.refs.editDealer.showModal(this.props.dealer, this.props.editDealer)}
-                                    >
-                                        <Icon type='edit' />
-                                        Edit
-                                    </Button>
-                                </Col>
-                                <Col className="gutter-row" justify="center" span={12} >
-                                    <Button disabled style={{ width: "100%", marginBottom: 16, }}>
-                                        Suspend/Restrict
-                                    </Button>
-                                </Col>
-                                <Col span={12} className="gutter-row" justify="center" >
-                                    <Button disabled className="btn_break_line" style={{ width: "100%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }}>
-                                        <Icon type="lock" className="lock_icon" />
-                                        Delete
-                                    </Button>
-                                </Col>
-                            </Row>
-                        </Card>
-                        <EditDealer
-                            ref='editDealer'
-                            // getDealerList={this.props.getDealerList} 
+                        <DealerAction 
+                            dealer = {this.props.dealer}
+                            editDealer = {this.props.editDealer}
                             translation={this.props.translation}
                         />
 

@@ -158,14 +158,14 @@ export function activateDealer(id) {
     };
 }
 
-export function editDealer(formData) {
+export function editDealer(formData, actionType) {
     return (dispatch) => {
         RestService.updateDealerDetails(formData).then((response) => {
 
             if (RestService.checkAuth(response.data)) {
 
                 dispatch({
-                    type: EDIT_DEALER,
+                    type: actionType,
                     response: response.data,
                     payload: {
                         formData: formData,
