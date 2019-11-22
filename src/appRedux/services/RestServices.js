@@ -945,12 +945,9 @@ const RestService = {
     applyBulkPullApps: (data) => {
         return axios.post(BASE_URL + 'users/apply_bulk_pullapps', data, RestService.getHeader());
     },
-    applyBulkPolicy: (deviceIds, userAccIds, policyId) => {
-        return axios.post(BASE_URL + 'users/apply_bulk_policy', {
-            deviceIds: deviceIds,
-            policyId: policyId,
-            userAccIds: userAccIds
-        }, RestService.getHeader());
+    
+    applyBulkPolicy: (data) => {
+        return axios.post(BASE_URL + 'users/apply_bulk_policy', data, RestService.getHeader());
     },
 
 

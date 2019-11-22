@@ -13,7 +13,8 @@ import BulkUnlinkConfirmation from './bulkUnlinkConfirmation';
 import BulkPushAppsConfirmation from './bulkPushAppsConfirmation';
 import BulkPullAppsConfirmation from './bulkPullAppsConfirmation';
 import BulkWipeConfirmation from './bulkWipeConfirmation';
-import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, titleCase, convertToLang, checkRemainTermDays } from '../../utils/commonUtils'
+import BulkPolicyConfirmation from './bulkPushPolicyConfirmation';
+import { checkValue, titleCase, convertToLang } from '../../utils/commonUtils'
 
 import { bulkDevicesColumns, devicesColumns, userDevicesListColumns } from '../../utils/columnsUtils';
 
@@ -40,8 +41,7 @@ var status = true;
 class FilterDevices extends Component {
   constructor(props) {
     super(props);
-    // let columns = bulkDevicesColumns(props.translation, this.handleSearch);
-    let columns = userDevicesListColumns(props.translation, this.handleSearchInModal); //devicesColumns(props.translation, this.handleSearch);
+    let columns = userDevicesListColumns(props.translation, this.handleSearchInModal);
 
     this.state = {
       columns: columns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
@@ -55,17 +55,13 @@ class FilterDevices extends Component {
       hideDefaultSelections: false,
       removeSelectedDealersModal: false,
       addSelectedDealersModal: false,
-      // redirect: false,
       dealer_id: '',
-      // goToPage: '/dealer/dealer',
-      selectedDevices: props.selectedDevices ? props.selectedDevices : [], // [],
+      selectedDevices: props.selectedDevices ? props.selectedDevices : [],
       copySelectedDevices: [],
       callSelectedDeviceAction: true,
       allBulkDevices: [],
       searchRemoveModal: []
     }
-
-
   }
 
 
@@ -675,6 +671,15 @@ class FilterDevices extends Component {
         else if (action === "WIPE DEVICES") {
           this.refs.bulk_wipe.handleBulkWipe(devices, dealers, users);
         }
+        else if (action === "PUSH POLICY") {
+          if (this.props.selectedPolicy !== '') {
+            this.refs.bulk_policy.handleBulkPolicy(devices, dealers, users, this.props.selectedPolicy);
+          } else {
+            error({
+              title: `Sorry, Policy not selected. Please try again`,
+            });
+          }
+        }
 
       } else {
         error({
@@ -921,6 +926,12 @@ class FilterDevices extends Component {
         <BulkWipeConfirmation
           ref="bulk_wipe"
           wipeBulkDevices={this.props.wipeBulkDevices}
+          translation={this.props.translation}
+        />
+
+        <BulkPolicyConfirmation
+          ref="bulk_policy"
+          bulkApplyPolicy={this.props.bulkApplyPolicy}
           translation={this.props.translation}
         />
 

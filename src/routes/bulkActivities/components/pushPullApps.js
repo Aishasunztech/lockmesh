@@ -123,8 +123,8 @@ const PushAppsModal = (props) => {
                     props.showSelectedPushAppsModal(true);
                 }
             }}
-            onCancel={() => { props.showPushAppsModal(false);  }} // props.resetSeletedRows()
-            okText={convertToLang(props.translation[PUSH_APP_TEXT], "PUSH APP")}
+            onCancel={() => { props.showPushAppsModal(false); }} // props.resetSeletedRows()
+            okText={convertToLang(props.translation[PUSH_APP_TEXT], "SELECT APPS")}
             cancelText={convertToLang(props.translation[Button_Cancel], "Cancel")}
         >
             <DealerApps
@@ -172,7 +172,7 @@ const SelectedPushApps = (props) => {
             }}
             // cancelText='Back'
             cancelText={convertToLang(props.translation[Button_Back], "Back")}
-            okText={convertToLang(props.translation[PUSH_APP_TEXT], "PUSH APP")}
+            okText={convertToLang(props.translation[PUSH_APP_TEXT], "ADD APPS")}
             destroyOnClose={true}
         >
             <DealerApps
@@ -223,9 +223,9 @@ const PullAppsModal = (props) => {
                     props.showSelectedPullAppsModal(true);
                 }
             }}
-            onCancel={() => { props.showPullAppsModal(false);  }} // props.resetSeletedRows();
+            onCancel={() => { props.showPullAppsModal(false); }} // props.resetSeletedRows();
             // okText="Pull Apps"
-            okText={convertToLang(props.translation[PULL_APPS_TEXT], "PULL APP")}
+            okText={convertToLang(props.translation[PULL_APPS_TEXT], "SELECT APPS")}
             cancelText={convertToLang(props.translation[Button_Cancel], "Cancel")}
         >
             <PullApps
@@ -262,12 +262,12 @@ const SelectedPullApps = (props) => {
                 // props.resetSeletedRows()
             }}
             onCancel={() => {
-                props.showPushAppsModal(true);
+                props.showPullAppsModal(true);
                 props.showSelectedPullAppsModal(false);
             }}
             // cancelText='Back'
             cancelText={convertToLang(props.translation[Button_Back], "Back")}
-            okText={convertToLang(props.translation[PULL_APPS_TEXT], "PULL APPS")}
+            okText={convertToLang(props.translation[PULL_APPS_TEXT], "ADD APPS")}
             destroyOnClose={true}
         >
             <PullApps

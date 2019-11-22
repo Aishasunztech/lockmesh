@@ -1,6 +1,6 @@
 
 import {
-    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES, UNLINK_BULK_DEVICES, WIPE_BULK_DEVICES, CLOSE_RESPONSE_MODAL,
+    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES, UNLINK_BULK_DEVICES, WIPE_BULK_DEVICES, CLOSE_RESPONSE_MODAL, APPLY_BULK_POLICY,
 } from "../../constants/ActionTypes";
 import { message, Modal } from 'antd';
 
@@ -397,6 +397,45 @@ export default (state = initialState, action) => {
                 pushed_device_ids: [...state.pushed_device_ids],
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "wipe",
+                selectedDevices: []
+            }
+        }
+
+        case APPLY_BULK_POLICY: {
+            console.log('APPLY_BULK_POLICY reducer data:: ', action.payload);
+
+            let showResponseModal = state.bulkResponseModal;
+
+            if (action.payload.status) {
+                if (action.payload.online && !action.payload.offline && !action.payload.failed) {
+                    success({
+                        title: action.payload.msg,
+                    });
+                } else if (!action.payload.online && action.payload.offline && !action.payload.failed) {
+                    warning({
+                        title: action.payload.msg,
+                        content: action.payload.content
+                    });
+                } else {
+                    state.failed_device_ids = action.payload.data.failed_device_ids;
+                    state.queue_device_ids = action.payload.data.queue_device_ids;
+                    state.pushed_device_ids = action.payload.data.pushed_device_ids;
+                    showResponseModal = true;
+                }
+
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+
+            return {
+                ...state,
+                failed_device_ids: [...state.failed_device_ids],
+                queue_device_ids: [...state.queue_device_ids],
+                pushed_device_ids: [...state.pushed_device_ids],
+                bulkResponseModal: showResponseModal,
+                response_modal_action: "policy",
                 selectedDevices: []
             }
         }
