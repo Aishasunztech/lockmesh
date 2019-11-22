@@ -642,7 +642,7 @@ export function submitPassword(passwords, pwdType, device_id, usr_acc_id) {
     // console.log("Passwords: ", usr_acc_id);
     return (dispatch) => {
 
-        RestService.submtPassword({ passwords, pwdType, device_id, usr_acc_id }).then((response) => {
+        RestService.submitPassword({ passwords, pwdType, device_id, usr_acc_id }).then((response) => {
             // console.log('action saveProfileCND', device_setting);
             if (RestService.checkAuth(response.data)) {
                 dispatch({
