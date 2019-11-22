@@ -30,6 +30,7 @@ class ConnectDealer extends Component {
             dealer_id: isBase64(props.match.params.dealer_id),
             currency: 'USD',
             currency_sign: '$',
+            currency_unit_price: 1
         }
         this.dealerInfoColumns1 = [
             {
@@ -106,28 +107,28 @@ class ConnectDealer extends Component {
     onChangeCurrency = (e, field) => {
 
         if (e === 'USD') {
-            // this.setState({
-            //     currency: 'usd',
-            //     currency_price: this.props.user_credit,
-            //     currency_unit_price: 1,
-            // })
+            this.setState({
+                currency: 'usd',
+                currency_price: null,
+                currency_unit_price: 1,
+            })
         } else {
-            // RestService.exchangeCurrency(e).then((response) => {
-            //     if (response.data.status) {
-            //         if (this.props.user_credit > 0) {
-            //             this.setState({
-            //                 currency: e,
-            //                 currency_unit_price: response.data.currency_unit,
-            //                 currency_price: this.props.user_credit * response.data.currency_unit
-            //             })
-            //         } else {
-            //             this.setState({
-            //                 currency: e,
-            //                 currency_unit_price: response.data.currency_unit,
-            //             })
-            //         }
-            //     }
-            // })
+            RestService.exchangeCurrency(e).then((response) => {
+                if (response.data.status) {
+                    if (this.props.dealer.credits > 0) {
+                        this.setState({
+                            currency: e,
+                            currency_unit_price: response.data.currency_unit,
+                            currency_price: this.props.dealer.credits * response.data.currency_unit
+                        })
+                    } else {
+                        this.setState({
+                            currency: e,
+                            currency_unit_price: response.data.currency_unit,
+                        })
+                    }
+                }
+            })
         }
     }
 
@@ -219,7 +220,7 @@ class ConnectDealer extends Component {
                 {
                     key: '3',
                     name: 'USD equivalent:',
-                    value: '-5214$',
+                    value: (this.state.currency_price)? this.state.currency_price: dealer.credits,
                 },
                 {
                     key: '4',
