@@ -104,7 +104,7 @@ export default class DealerPaymentHistory extends Component {
               key: ++index,
               transaction_no: item.id,
               created_at: item.created_at,
-              payment_method: JSON.parse(item.transection_data).request_type,
+              payment_method: item.transection_type,
               amount: "$ " + formatMoney(item.credits),
               total_credits: item.credits,
             }

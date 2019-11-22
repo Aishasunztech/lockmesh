@@ -89,22 +89,22 @@ export default class DealerAction extends Component {
                 <Card style={{ borderRadius: 12 }}>
                     <Row gutter={16} type="flex" justify="center" align="top">
                         <Col span={12} className="gutter-row" justify="center" >
-                            <Button style={{ width: "100%", marginBottom: 16, }} >
+                            <Button disabled style={{ width: "100%", marginBottom: 16, }} >
                                 <h6 className="mb-0">Activity</h6>
                             </Button>
                         </Col>
                         <Col span={12} className="gutter-row" justify="center" >
-                            <Button style={{ width: "100%", marginBottom: 16, }}>
+                            <Button disabled style={{ width: "100%", marginBottom: 16, }}>
                                 <h6 className="mb-0">Domains</h6>
                             </Button>
                         </Col>
                         <Col className="gutter-row" justify="center" span={12} >
-                            <Button style={{ width: "100%", marginBottom: 16, }}>
+                            <Button disabled style={{ width: "100%", marginBottom: 16, }}>
                                 <h6 className="mb-0">Credit Limit</h6>
                             </Button>
                         </Col>
                         <Col className="gutter-row" justify="center" span={12} >
-                            <Button style={{ width: "100%", marginBottom: 16, }}>
+                            <Button disabled style={{ width: "100%", marginBottom: 16, }}>
                                 <h6 className="mb-0">DEMO</h6>
                             </Button>
                         </Col>
@@ -126,6 +126,7 @@ export default class DealerAction extends Component {
                             span={12}
                         >
                             <Button
+                                disabled
                                 style={{ width: "100%", marginBottom: 16, }}
                             >
                                 <h6 className="mb-0">Sales History</h6>
