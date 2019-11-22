@@ -105,6 +105,7 @@ export const DEALERS_LIST_IN_SDEALER = 'DEALERS_LIST_IN_SDEALER';
 
 // Dealer Connect
 export const DEALER_DETAILS = 'DEALER_DETAILS';
+export const DEALER_PAYMENT_HISTORY = 'DEALER_PAYMENT_HISTORY';
 
 // Apk const
 export const APK_LOADING = 'APK_LOADING';

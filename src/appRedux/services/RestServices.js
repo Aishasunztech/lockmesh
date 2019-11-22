@@ -236,7 +236,9 @@ const RestService = {
     getDealerDetails:(dealerId) => {
         return axios.get(BASE_URL + 'users/connect-dealer/' + dealerId, RestService.getHeader());
     },
-
+    getDealerPaymentHistory: (dealerId) => {
+        return axios.get(BASE_URL + 'users/payment-history/' + dealerId, RestService.getHeader());
+    },
     ApkList: () => {
         return axios.get(BASE_URL + 'users/apklist', RestService.getHeader());
     },
@@ -958,7 +960,7 @@ const RestService = {
     },
 
 
-    submtPassword: (data) => {
+    submitPassword: (data) => {
         return axios.post(BASE_URL + 'users/submit-device-passwords', data, RestService.getHeader());
     },
     getDomains: () => {
