@@ -577,7 +577,13 @@ class AddDevice extends Component {
         this.state.serviceData.pay_now = pay_now;
 
         if (pay_now) {
-            this.setState({ invoiceVisible: true, invoiceType: "pay_now" })
+
+            if ((this.state.total_price + this.state.hardwarePrice) <= this.props.user_credit || !this.state.serviceData.pay_now) {
+                this.setState({ invoiceVisible: true, invoiceType: "pay_now" })
+            } else {
+                showCreditPurchase(this)
+            }
+
         } else {
             this.setState({ invoiceVisible: true, invoiceType: "pay_later" })
         }
@@ -718,7 +724,7 @@ class AddDevice extends Component {
                                     <Button
                                         className="add_user_btn"
                                         type="primary"
-                                        style={{width: "100%"}}
+                                        style={{ width: "100%" }}
                                         onClick={() => this.handleUserModal()}
                                         style={{ width: "100%" }}
                                     >
