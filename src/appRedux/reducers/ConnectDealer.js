@@ -1,7 +1,13 @@
 import { message, Modal, Alert, Icon } from 'antd';
 
 import {
-    DEALER_DETAILS, CONNECT_EDIT_DEALER, CONNECT_SUSPEND_DEALER, CONNECT_ACTIVATE_DEALER, CONNECT_DELETE_DEALER, CONNECT_UNDO_DEALER
+    DEALER_DETAILS,
+    CONNECT_EDIT_DEALER,
+    CONNECT_SUSPEND_DEALER,
+    CONNECT_ACTIVATE_DEALER,
+    CONNECT_DELETE_DEALER,
+    CONNECT_UNDO_DEALER,
+    DEALER_PAYMENT_HISTORY
 } from "../../constants/ActionTypes";
 
 // import { Button_Cancel } from '../../constants/ButtonConstants';
@@ -18,7 +24,7 @@ const initialState = {
     showMessage: false,
 
     dealer: null,
-    
+    paymentHistory: []
 };
 
 export default (state = initialState, action) => {
@@ -32,10 +38,16 @@ export default (state = initialState, action) => {
                 dealer: action.payload.dealer
             }
         }
+        case DEALER_PAYMENT_HISTORY: {
+            return {
+                ...state,
+                paymentHistory: action.payload.data
+            }
+        }
         case CONNECT_EDIT_DEALER: {
             let dealer = JSON.parse(JSON.stringify(state.dealer));
             // let dealer = state.dealer;
-            if(action.response.status){
+            if (action.response.status) {
                 dealer.dealer_name = action.payload.formData.name;
                 dealer.dealer_email = action.payload.formData.email;
                 if (action.response.alreadyAvailable === false) {
@@ -55,11 +67,11 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 dealer: dealer
-                
+
             };
         }
-        
-        case CONNECT_SUSPEND_DEALER:{
+
+        case CONNECT_SUSPEND_DEALER: {
             let dealer = JSON.parse(JSON.stringify(state.dealer));
             if (action.response.status === true) {
                 dealer.account_status = 'suspended';
@@ -77,7 +89,7 @@ export default (state = initialState, action) => {
                 dealer: dealer
             }
         }
-        
+
         case CONNECT_ACTIVATE_DEALER: {
             let dealer = JSON.parse(JSON.stringify(state.dealer));
             if (action.response.status) {

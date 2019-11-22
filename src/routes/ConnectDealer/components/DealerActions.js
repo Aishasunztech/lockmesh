@@ -4,6 +4,7 @@ import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Div
 
 // Components
 import EditDealer from '../../dealers/components/editDealer';
+import DealerPaymentHistory from './DealerPaymentHistory';
 
 // Helpers
 import { convertToLang } from '../../utils/commonUtils'
@@ -69,7 +70,7 @@ function showConfirm(_this, dealer, action, btn_title, name = "") {
     });
 }
 
-export class DealerAction extends Component {
+export default class DealerAction extends Component {
 
     render() {
         if (!this.props.dealer) {
@@ -107,20 +108,38 @@ export class DealerAction extends Component {
                                 <h6 className="mb-0">DEMO</h6>
                             </Button>
                         </Col>
-                        <Col className="gutter-row" justify="center" span={12} >
-                            <Button style={{ width: "100%", marginBottom: 16, }}>
+                        <Col
+                            className="gutter-row"
+                            justify="center"
+                            span={12}
+                        >
+                            <Button
+                                style={{ width: "100%", marginBottom: 16, }}
+                                onClick={() => this.refs.dealerPaymentHistory.showModal(this.props.dealer, this.props.getDealerPaymentHistory)}
+                            >
                                 <h6 className="mb-0">Payment History</h6>
                             </Button>
                         </Col>
-                        <Col className="gutter-row" justify="center" span={12} >
-                            <Button style={{ width: "100%", marginBottom: 16, }}>
+                        <Col
+                            className="gutter-row"
+                            justify="center"
+                            span={12}
+                        >
+                            <Button
+                                style={{ width: "100%", marginBottom: 16, }}
+                            >
                                 <h6 className="mb-0">Sales History</h6>
                             </Button>
                         </Col>
                     </Row>
                 </Card>
                 <Card style={{ borderRadius: 12 }}>
-                    <Row gutter={16} type="flex" justify="center" align="top">
+                    <Row
+                        gutter={16}
+                        type="flex"
+                        justify="center"
+                        align="top"
+                    >
                         <Col span={12} className="gutter-row" justify="center" >
                             <Button
                                 style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }}
@@ -161,9 +180,9 @@ export class DealerAction extends Component {
                                     // backgroundColor: '#f31517', color: '#fff'
                                 }}
                                 onClick={
-                                    () => (dealer.unlink_status === 0) ? 
-                                    showConfirm(this, dealer.dealer_id, this.props.deleteDealer, 'DELETE') : 
-                                    showConfirm(this, dealer.dealer_id, this.props.undoDealer, 'UNDELETE')
+                                    () => (dealer.unlink_status === 0) ?
+                                        showConfirm(this, dealer.dealer_id, this.props.deleteDealer, 'DELETE') :
+                                        showConfirm(this, dealer.dealer_id, this.props.undoDealer, 'UNDELETE')
                                 }
 
                             >
@@ -177,6 +196,11 @@ export class DealerAction extends Component {
                     ref='editDealer'
                     // getDealerList={this.props.getDealerList} 
                     translation={this.props.translation}
+                />
+                <DealerPaymentHistory
+                    ref='dealerPaymentHistory'
+                    translation={this.props.translation}
+                    paymentHistory={this.props.paymentHistory}
                 />
             </Fragment >
         )

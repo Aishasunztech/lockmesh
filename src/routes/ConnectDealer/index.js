@@ -6,14 +6,22 @@ import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Div
 
 // methods, constants and components
 import AppFilter from '../../components/AppFilter';
-import EditDealer from '../dealers/components/editDealer';
+import DealerAction from "./components/DealerActions";
 
-// helpers
-import { getColor, isBase64, convertToLang } from "../utils/commonUtils"
-import { getDealerDetails, editDealer, updatePassword, suspendDealer, activateDealer, deleteDealer, undoDealer } from '../../appRedux/actions'
+// helpers and actions
 import RestService from "../../appRedux/services/RestServices";
+import { getColor, isBase64, convertToLang } from "../utils/commonUtils"
+import {
+    getDealerDetails,
+    editDealer,
+    updatePassword,
+    suspendDealer,
+    activateDealer,
+    deleteDealer,
+    undoDealer,
+    getDealerPaymentHistory
+} from '../../appRedux/actions'
 import styles from './connect_dealer.css'
-import { DealerAction } from "./components/DealerActions";
 
 class ConnectDealer extends Component {
     constructor(props) {
@@ -127,7 +135,7 @@ class ConnectDealer extends Component {
         console.log('dealer info', this.props.dealer);
         let dealer = this.props.dealer;
         if (dealer) {
-            const dealer_status = (dealer.unlink_status==1)?"Archived":(dealer.account_status === "suspended") ? "Suspended" : "Activated";
+            const dealer_status = (dealer.unlink_status == 1) ? "Archived" : (dealer.account_status === "suspended") ? "Suspended" : "Activated";
             return [
                 {
                     key: '1',
@@ -225,7 +233,6 @@ class ConnectDealer extends Component {
     }
 
     renderOverDue = () => {
-        console.log('dealer info overdue:', this.props.dealer);
         let dealer = this.props.dealer;
         if (dealer) {
             console.log(dealer._0to21,
@@ -315,26 +322,28 @@ class ConnectDealer extends Component {
 
                     {/* Dealer Action Buttons */}
                     <Col className="side_action right_bar" xs={24} sm={24} md={8} lg={8} xl={8} >
-                        <DealerAction 
+                        <DealerAction
                             // translation
                             translation={this.props.translation}
 
                             // dealer information
-                            dealer = {this.props.dealer}
-
+                            dealer={this.props.dealer}
+                            paymentHistory={this.props.paymentHistory}
                             // dealer actions
-                            updatePassword = {this.props.updatePassword}
-                            editDealer = {this.props.editDealer}
+                            updatePassword={this.props.updatePassword}
+                            editDealer={this.props.editDealer}
 
-                            suspendDealer = {this.props.suspendDealer}
-                            activateDealer = {this.props.activateDealer}
-                            deleteDealer = {this.props.deleteDealer}
-                            undoDealer = {this.props.undoDealer}
+                            suspendDealer={this.props.suspendDealer}
+                            activateDealer={this.props.activateDealer}
+                            deleteDealer={this.props.deleteDealer}
+                            undoDealer={this.props.undoDealer}
+
+                            getDealerPaymentHistory={this.props.getDealerPaymentHistory}
                         />
 
                     </Col>
                 </Row>
-            </Fragment >
+            </Fragment>
         )
     }
 }
@@ -347,7 +356,8 @@ function mapDispatchToProps(dispatch) {
         suspendDealer: suspendDealer,
         activateDealer: activateDealer,
         deleteDealer: deleteDealer,
-        undoDealer: undoDealer
+        undoDealer: undoDealer,
+        getDealerPaymentHistory: getDealerPaymentHistory
     }, dispatch);
 }
 
@@ -356,6 +366,7 @@ var mapStateToProps = ({ dealer_details, settings }) => {
     return {
         dealer: dealer_details.dealer,
         translation: settings.translation,
+        paymentHistory: dealer_details.paymentHistory
     };
 }
 
