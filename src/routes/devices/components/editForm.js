@@ -603,7 +603,11 @@ class EditDevice extends Component {
         this.state.serviceData.pay_now = pay_now;
 
         if (pay_now) {
-            this.setState({ invoiceVisible: true, invoiceType: "pay_now" })
+            if (this.state.serviceData.total_price <= this.props.user_credit || !this.state.serviceData.pay_now) {
+                this.setState({ invoiceVisible: true, invoiceType: "pay_now" })
+            } else {
+                showCreditPurchase(this)
+            }
         } else {
             this.setState({ invoiceVisible: true, invoiceType: "pay_later" })
         }
