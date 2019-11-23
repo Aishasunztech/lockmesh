@@ -3,7 +3,7 @@ import React, { Component, Fragment } from "react";
 import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Divider, Table, Select } from "antd";
 
 // Components
-import EditDealer from '../../dealers/components/editDealer';
+// import EditDealer from '../../dealers/components/editDealer';
 
 // Helpers
 import { convertToLang, formatMoney} from '../../utils/commonUtils'
@@ -89,7 +89,7 @@ export default class DealerPaymentHistory extends Component {
         this.setState({ visible: false });
     }
     componentWillReceiveProps(nextProps) {
-        if (this.props.paymentHistory !== nextProps.paymentHistory.length) {
+        if (this.props.paymentHistory.length !== nextProps.paymentHistory.length) {
             this.setState({
                 paymentHistory: nextProps.paymentHistory
             })
