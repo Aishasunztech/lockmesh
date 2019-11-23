@@ -8,6 +8,7 @@ import {
     CONNECT_DELETE_DEALER,
     CONNECT_UNDO_DEALER,
     DEALER_PAYMENT_HISTORY,
+    SET_DEALER_LIMIT,
     DEALER_SALES_HISTORY
 } from "../../constants/ActionTypes";
 
@@ -162,7 +163,26 @@ export default (state = initialState, action) => {
                 dealer: dealer
             }
         }
-        
+
+        case SET_DEALER_LIMIT: {
+            let dealer = JSON.parse(JSON.stringify(state.dealer));
+            // let dealer = state.dealer;
+            if (action.payload.status) {
+                dealer.credits_limit = action.formData.credits_limit;
+                success({
+                    title: action.payload.msg,
+                });
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+            return {
+                ...state,
+                dealer: dealer
+            };
+        }
+
         default:
             return state;
 

@@ -1,6 +1,6 @@
 // libraries
 import React, { Component, Fragment } from "react";
-import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Divider, Table, Select } from "antd";
+import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Divider, Table, Select, Form } from "antd";
 
 // Components
 import EditDealer from '../../dealers/components/editDealer';
@@ -30,6 +30,7 @@ import { DO_YOU_WANT_TO, OF_THIS } from '../../../constants/DeviceConstants';
 import {
     DEALER_TEXT
 } from '../../../constants/DealerConstants';
+import CreditsLimits from "./CreditLimits";
 
 
 // user defined
@@ -101,7 +102,9 @@ export default class DealerAction extends Component {
                             </Button>
                         </Col>
                         <Col className="gutter-row" justify="center" span={12} >
-                            <Button disabled style={{ width: "100%", marginBottom: 16, }}>
+                            <Button style={{ width: "100%", marginBottom: 16, }}
+                                onClick={() => { this.form1.showModal() }}
+                            >
                                 <h6 className="mb-0">Credit Limit</h6>
                             </Button>
                         </Col>
@@ -206,10 +209,19 @@ export default class DealerAction extends Component {
                     translation={this.props.translation}
                     paymentHistory={this.props.paymentHistory}
                 />
-                <DealerSalesHistory 
-                    ref= 'dealerSalesHistory'
+
+                <CreditsLimits
+                    ref='credits_limits'
                     translation={this.props.translation}
-                    salesHistory = {this.props.salesHistory}
+                    wrappedComponentRef={(form) => this.form1 = form}
+                    dealer={this.props.dealer}
+                    credits_limit={this.props.dealer.credits_limit}
+                    setCreditLimit={this.props.setCreditLimit}
+                />
+                <DealerSalesHistory
+                    ref='dealerSalesHistory'
+                    translation={this.props.translation}
+                    salesHistory={this.props.salesHistory}
                 />
             </Fragment >
         )

@@ -2,6 +2,7 @@ import {
     INVALID_TOKEN,
     DEALER_DETAILS,
     DEALER_PAYMENT_HISTORY,
+    SET_DEALER_LIMIT,
     DEALER_SALES_HISTORY
 } from "../../constants/ActionTypes"
 // import { message } from 'antd';
@@ -34,7 +35,7 @@ export function getDealerDetails(dealerId) {
     };
 }
 
-export function getDealerPaymentHistory(dealerId){
+export function getDealerPaymentHistory(dealerId) {
     return (dispatch) => {
         RestService.getDealerPaymentHistory(dealerId).then((response) => {
 
@@ -43,6 +44,27 @@ export function getDealerPaymentHistory(dealerId){
                 dispatch({
                     type: DEALER_PAYMENT_HISTORY,
                     payload: response.data
+                });
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        });
+
+    }
+}
+
+export function setCreditLimit(data) {
+    return (dispatch) => {
+        RestService.setCreditLimit(data).then((response) => {
+
+            if (RestService.checkAuth(response.data)) {
+                console.log(response.data)
+                dispatch({
+                    type: SET_DEALER_LIMIT,
+                    payload: response.data,
+                    formData: data
                 });
             } else {
                 dispatch({
@@ -72,3 +94,4 @@ export function getDealerSalesHistory(dealerId){
         })
     }
 }
+

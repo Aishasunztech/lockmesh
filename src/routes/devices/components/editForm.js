@@ -609,23 +609,14 @@ class EditDevice extends Component {
                 showCreditPurchase(this)
             }
         } else {
-            this.setState({ invoiceVisible: true, invoiceType: "pay_later" })
+            let after_pay_credits = this.props.user_credit - this.state.serviceData.total_price
+            let credits_limit = this.props.credits_limit
+            if (credits_limit > after_pay_credits) {
+                showCreditPurchase(this, "Your Credits limits will exceed after apply this service. Please select other services OR Purchase Credits.")
+            } else {
+                this.setState({ invoiceVisible: true, invoiceType: "pay_later" })
+            }
         }
-
-
-        // this.state.serviceData.pay_now = pay_now
-        // 
-        // if (this.state.total_price <= this.props.user_credit) {
-        //     this.props.editDeviceFunc(this.state.serviceData)
-        //     this.props.hideModal();
-        //     this.handleReset();
-        //     this.setState({
-        //         serviceData: {},
-        //         showConfirmCredit: false
-        //     })
-        // } else {
-        //     showCreditPurchase(this)
-        // }
     }
 
     handleOkInvoice = () => {
@@ -1370,6 +1361,7 @@ var mapStateToProps = ({ routing, devices, users, auth, settings, sidebar }) => 
         parent_packages: devices.parent_packages,
         product_prices: devices.product_prices,
         user_credit: sidebar.user_credit,
+        credits_limit: sidebar.credits_limit,
     };
 }
 

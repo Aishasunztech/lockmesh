@@ -20,6 +20,7 @@ import {
     deleteDealer,
     undoDealer,
     getDealerPaymentHistory,
+    setCreditLimit,
     getDealerSalesHistory
 } from '../../appRedux/actions'
 import styles from './connect_dealer.css'
@@ -221,12 +222,12 @@ class ConnectDealer extends Component {
                 {
                     key: '3',
                     name: 'USD equivalent:',
-                    value: (this.state.currency_price)? this.state.currency_price: dealer.credits,
+                    value: (this.state.currency_price) ? this.state.currency_price : dealer.credits,
                 },
                 {
                     key: '4',
                     name: 'Credit Limit (Credits):',
-                    value: 'N/A',
+                    value: dealer.credits_limit,
                 }
             ]
         } else {
@@ -237,14 +238,14 @@ class ConnectDealer extends Component {
     renderOverDue = () => {
         let dealer = this.props.dealer;
         if (dealer) {
-            console.log(dealer._0to21,
-                dealer._0to21_dues,
-                dealer._21to30,
-                dealer._21to30_dues,
-                dealer._30to60,
-                dealer._30to60_dues,
-                dealer._60toOnward,
-                dealer._60toOnward_dues)
+            // console.log(dealer._0to21,
+            //     dealer._0to21_dues,
+            //     dealer._21to30,
+            //     dealer._21to30_dues,
+            //     dealer._30to60,
+            //     dealer._30to60_dues,
+            //     dealer._60toOnward,
+            //     dealer._60toOnward_dues)
             // _0to21,
             // _0to21_dues,
             // _21to30,
@@ -343,6 +344,7 @@ class ConnectDealer extends Component {
                             undoDealer={this.props.undoDealer}
 
                             getDealerPaymentHistory={this.props.getDealerPaymentHistory}
+                            setCreditLimit={this.props.setCreditLimit}
                             getDealerSalesHistory={this.props.getDealerSalesHistory}
                         />
 
@@ -363,6 +365,7 @@ function mapDispatchToProps(dispatch) {
         deleteDealer: deleteDealer,
         undoDealer: undoDealer,
         getDealerPaymentHistory: getDealerPaymentHistory,
+        setCreditLimit: setCreditLimit,
         getDealerSalesHistory: getDealerSalesHistory
     }, dispatch);
 }
