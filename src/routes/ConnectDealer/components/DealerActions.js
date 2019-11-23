@@ -5,6 +5,7 @@ import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Div
 // Components
 import EditDealer from '../../dealers/components/editDealer';
 import DealerPaymentHistory from './DealerPaymentHistory';
+import DealerSalesHistory from "./DealerSalesHistory";
 
 // Helpers
 import { convertToLang } from '../../utils/commonUtils'
@@ -30,6 +31,7 @@ import {
     DEALER_TEXT
 } from '../../../constants/DealerConstants';
 import CreditsLimits from "./CreditLimits";
+
 
 // user defined
 const confirm = Modal.confirm;
@@ -129,8 +131,9 @@ export default class DealerAction extends Component {
                             span={12}
                         >
                             <Button
-                                disabled
                                 style={{ width: "100%", marginBottom: 16, }}
+                                onClick={() => this.refs.dealerSalesHistory.showModal(this.props.dealer, this.props.getDealerSalesHistory)}
+
                             >
                                 <h6 className="mb-0">Sales History</h6>
                             </Button>
@@ -214,6 +217,11 @@ export default class DealerAction extends Component {
                     dealer={this.props.dealer}
                     credits_limit={this.props.dealer.credits_limit}
                     setCreditLimit={this.props.setCreditLimit}
+                />
+                <DealerSalesHistory
+                    ref='dealerSalesHistory'
+                    translation={this.props.translation}
+                    salesHistory={this.props.salesHistory}
                 />
             </Fragment >
         )

@@ -8,7 +8,8 @@ import {
     CONNECT_DELETE_DEALER,
     CONNECT_UNDO_DEALER,
     DEALER_PAYMENT_HISTORY,
-    SET_DEALER_LIMIT
+    SET_DEALER_LIMIT,
+    DEALER_SALES_HISTORY
 } from "../../constants/ActionTypes";
 
 // import { Button_Cancel } from '../../constants/ButtonConstants';
@@ -25,7 +26,8 @@ const initialState = {
     showMessage: false,
 
     dealer: null,
-    paymentHistory: []
+    paymentHistory: [],
+    salesHistory: []
 };
 
 export default (state = initialState, action) => {
@@ -37,6 +39,13 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 dealer: action.payload.dealer
+            }
+        }
+        case DEALER_SALES_HISTORY: {
+            return {
+                ...state,
+                salesHistory: action.payload.data
+
             }
         }
         case DEALER_PAYMENT_HISTORY: {

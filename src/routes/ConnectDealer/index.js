@@ -20,7 +20,8 @@ import {
     deleteDealer,
     undoDealer,
     getDealerPaymentHistory,
-    setCreditLimit
+    setCreditLimit,
+    getDealerSalesHistory
 } from '../../appRedux/actions'
 import styles from './connect_dealer.css'
 
@@ -331,6 +332,8 @@ class ConnectDealer extends Component {
                             // dealer information
                             dealer={this.props.dealer}
                             paymentHistory={this.props.paymentHistory}
+                            salesHistory={this.props.salesHistory}
+
                             // dealer actions
                             updatePassword={this.props.updatePassword}
                             editDealer={this.props.editDealer}
@@ -342,6 +345,7 @@ class ConnectDealer extends Component {
 
                             getDealerPaymentHistory={this.props.getDealerPaymentHistory}
                             setCreditLimit={this.props.setCreditLimit}
+                            getDealerSalesHistory={this.props.getDealerSalesHistory}
                         />
 
                     </Col>
@@ -361,7 +365,8 @@ function mapDispatchToProps(dispatch) {
         deleteDealer: deleteDealer,
         undoDealer: undoDealer,
         getDealerPaymentHistory: getDealerPaymentHistory,
-        setCreditLimit: setCreditLimit
+        setCreditLimit: setCreditLimit,
+        getDealerSalesHistory: getDealerSalesHistory
     }, dispatch);
 }
 
@@ -370,7 +375,8 @@ var mapStateToProps = ({ dealer_details, settings }) => {
     return {
         dealer: dealer_details.dealer,
         translation: settings.translation,
-        paymentHistory: dealer_details.paymentHistory
+        paymentHistory: dealer_details.paymentHistory,
+        salesHistory: dealer_details.salesHistory
     };
 }
 
