@@ -581,11 +581,17 @@ class AddDevice extends Component {
             if ((this.state.total_price + this.state.hardwarePrice) <= this.props.user_credit || !this.state.serviceData.pay_now) {
                 this.setState({ invoiceVisible: true, invoiceType: "pay_now" })
             } else {
-                showCreditPurchase(this)
+                showCreditPurchase(this, "Your Credits are not enough to apply these services. Please select other services OR Purchase Credits.")
             }
 
         } else {
-            this.setState({ invoiceVisible: true, invoiceType: "pay_later" })
+            let after_pay_credits = this.props.user_credit - (this.state.total_price + this.state.hardwarePrice)
+            let credits_limit = this.props.credits_limit
+            if (credits_limit > after_pay_credits) {
+                showCreditPurchase(this, "Your Credits limits will exceed after apply this service. Please select other services OR Purchase Credits.")
+            } else {
+                this.setState({ invoiceVisible: true, invoiceType: "pay_later" })
+            }
         }
 
     }
@@ -1398,7 +1404,7 @@ function mapDispatchToProps(dispatch) {
 }
 var mapStateToProps = ({ routing, devices, device_details, users, settings, sidebar, auth }) => {
     // console.log("users.invoiceID at componente", users.invoiceID);
-    console.log("devices.parent_packages ", devices.parent_packages);
+    // console.log("devices.parent_packages ", devices.parent_packages);
     return {
         invoiceID: users.invoiceID,
         routing: routing,
@@ -1413,6 +1419,7 @@ var mapStateToProps = ({ routing, devices, device_details, users, settings, side
         product_prices: devices.product_prices,
         parent_hardwares: devices.parent_hardwares,
         user_credit: sidebar.user_credit,
+        credits_limit: sidebar.credits_limit,
         user: auth.authUser,
     };
 }
@@ -1430,9 +1437,9 @@ function showConfirm(_this, values) {
     });
 }
 
-function showCreditPurchase(_this) {
+function showCreditPurchase(_this, msg) {
     confirm({
-        title: "Your Credits are not enough to apply these services. Please select other services OR Purchase Credits.",
+        title: msg,
         okText: "PURCHASE CREDITS",
         onOk() {
             _this.props.history.push('/account')

@@ -233,12 +233,17 @@ const RestService = {
     getUserDealers: () => {
         return axios.get(BASE_URL + 'users/user_dealers', RestService.getHeader());
     },
-    getDealerDetails:(dealerId) => {
+    getDealerDetails: (dealerId) => {
         return axios.get(BASE_URL + 'users/connect-dealer/' + dealerId, RestService.getHeader());
     },
     getDealerPaymentHistory: (dealerId) => {
         return axios.get(BASE_URL + 'users/payment-history/' + dealerId, RestService.getHeader());
     },
+
+    setCreditLimit: (data) => {
+        return axios.put(BASE_URL + 'users/set_credits_limit', data, RestService.getHeader());
+    },
+
     ApkList: () => {
         return axios.get(BASE_URL + 'users/apklist', RestService.getHeader());
     },
@@ -1005,7 +1010,7 @@ const RestService = {
 
     //sales report
     generateGraceDaysReport: (data) => {
-      return axios.post(BASE_URL + 'users/reports/grace-days', data, RestService.getHeader());
+        return axios.post(BASE_URL + 'users/reports/grace-days', data, RestService.getHeader());
     },
     //get latest payment history
     getLatestPaymentHistory: (data) => {
