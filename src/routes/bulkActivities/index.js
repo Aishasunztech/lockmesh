@@ -565,7 +565,11 @@ class BulkActivities extends Component {
 
         // console.log('handle change data is: ', data)
         this.props.getBulkDevicesList(data);
-        this.setState({ selectedDealers, checkAllSelectedDealers: checkAllDealers });
+        this.setState({
+            selectedDealers,
+            selectedUsers: [],
+            checkAllSelectedDealers: checkAllDealers,
+        });
 
     }
 
@@ -657,7 +661,7 @@ class BulkActivities extends Component {
         else if (response_modal_action === "active") {
             failedTitle = "Failed to Push apps on these Devices";
             offlineTitle = "(These Devices will be Activated Soon when back online)"
-            onlineTitle = "These Devices are Activate Successfully";
+            onlineTitle = "These Devices are Activated Successfully";
         }
         else if (response_modal_action === "suspend") {
             failedTitle = "Failed to Push apps on these Devices";
@@ -686,7 +690,7 @@ class BulkActivities extends Component {
         // }
 
         // console.log("this.state.bulkResponseModal ", this.state.bulkResponseModal)
-        console.log("this.state.allDealers ", this.state.allDealers)
+        // console.log("this.state.allDealers ", this.state.allDealers)
         return (
             <Fragment>
                 <Card >

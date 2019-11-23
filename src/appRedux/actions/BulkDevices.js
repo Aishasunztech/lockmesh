@@ -139,13 +139,13 @@ export function getbulkHistory() {
 
 export const setBulkPushApps = (apps) => {
     // console.log("apps at action file for push apps ", apps)
-    // apps.forEach((el) => {
-    //     el.enable = (typeof (el.enable) === Boolean || typeof (el.enable) === 'Boolean' || typeof (el.enable) === 'boolean') ? el.enable : false;
-    //     el.guest = (typeof (el.guest) === Boolean || typeof (el.guest) === 'Boolean' || typeof (el.guest) === 'boolean') ? el.guest : false;
-    //     el.encrypted = (typeof (el.encrypted) === Boolean || typeof (el.encrypted) === 'Boolean' || typeof (el.encrypted) === 'boolean') ? el.encrypted : false;
-    //     delete el.apk_logo;
-    //     delete el.apk_status;
-    // })
+    apps.forEach((el) => {
+        // el.enable = (typeof (el.enable) === Boolean || typeof (el.enable) === 'Boolean' || typeof (el.enable) === 'boolean') ? el.enable : false;
+        // el.guest = (typeof (el.guest) === Boolean || typeof (el.guest) === 'Boolean' || typeof (el.guest) === 'boolean') ? el.guest : false;
+        // el.encrypted = (typeof (el.encrypted) === Boolean || typeof (el.encrypted) === 'Boolean' || typeof (el.encrypted) === 'boolean') ? el.encrypted : false;
+        delete el.apk_logo;
+        delete el.apk_status;
+    })
     return (dispatch) => {
         dispatch({
             type: SET_PUSH_APPS,
@@ -155,9 +155,11 @@ export const setBulkPushApps = (apps) => {
 }
 
 export const applyBulkPushApps = (data) => {
+    // console.log("applyBulkPushApps data at action file: ", data);
     return (dispatch) => {
         RestService.applyBulkPushApps(data).then((response) => {
             if (RestService.checkAuth(response.data)) {
+                // console.log('response is ', response.data);
                 dispatch({
                     type: BULK_PUSH_APPS,
                     payload: response.data,
@@ -242,14 +244,14 @@ export function unlinkBulkDevices(data) {
     }
 }
 
-export function wipeBulkDevices(device) {
+export function wipeBulkDevices(data) {
     return (dispatch) => {
-        RestService.wipeBulkDevices(device.usr_device_id).then((response) => {
+        RestService.wipeBulkDevices(data).then((response) => {
 
             if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: WIPE_BULK_DEVICES,
-                    response: response.data,
+                    payload: response.data,
                 });
             }
         });

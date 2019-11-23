@@ -652,7 +652,7 @@ class FilterDevices extends Component {
   }
 
   applyAction = () => {
-    // console.log(this.props.selectedDealers, this.props.selectedUsers, 'action apply', this.props.handleActionValue);
+    console.log(this.props.selectedDealers, this.props.selectedUsers, 'action apply', this.props.handleActionValue);
 
     let action = this.props.handleActionValue;
     let devices = this.state.selectedDevices;

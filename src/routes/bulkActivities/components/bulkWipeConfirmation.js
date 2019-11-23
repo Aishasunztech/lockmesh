@@ -20,7 +20,7 @@ export default class BulkWipe extends Component {
 
         devices.forEach((item) => {
             if (item.device_id) {
-                selectedDevices.push({ device_id: item.device_id, usrAccId: item.id, usr_device_id: item.usr_device_id });
+                selectedDevices.push(item.usr_device_id);
             }
         });
         dealers.forEach((item) => {
@@ -36,14 +36,16 @@ export default class BulkWipe extends Component {
             user_ids
         }
 
-        const title = `${convertToLang(this.props.translation[""], "Are you sure, you want to wipe these selected devices ")} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`;
+        console.log("data ", data)
+
+        const title = `${convertToLang(this.props.translation[""], "Are you sure, you want to wipe these selected devices ")} ${devices.map(item => ` ${item.device_id}`)} ?`;
         this.confirm({
             title: title,
             content: '',
             okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
             cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
             onOk: (() => {
-                this.props.unlinkBulkDevices(data);
+                this.props.wipeBulkDevices(data);
             }),
             onCancel() { },
         });

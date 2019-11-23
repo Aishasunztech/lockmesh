@@ -939,6 +939,7 @@ const RestService = {
     // },
 
     applyBulkPushApps: (data) => {
+        // console.log('at rest serv file', data)
         return axios.post(BASE_URL + 'users/apply_bulk_pushapps', data, RestService.getHeader());
     },
 
@@ -958,7 +959,7 @@ const RestService = {
 
     // wipe bulk Devices
     wipeBulkDevices: (data) => {
-        return axios.post(BASE_URL + 'users/bulk-unlink', data, RestService.getHeader());
+        return axios.post(BASE_URL + 'users/bulk-wipe', data, RestService.getHeader());
     },
 
     // *************************** end of bulk end points

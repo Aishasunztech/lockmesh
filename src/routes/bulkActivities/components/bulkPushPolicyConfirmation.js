@@ -20,7 +20,7 @@ export default class BulkPushPolicy extends Component {
 
         devices.forEach((item) => {
             if (item.usr_device_id) {
-                device_ids.push({ device_id: item.device_id, usr_device_id: item.usr_device_id });
+                device_ids.push({ device_id: item.device_id, usrAccId: item.id, usr_device_id: item.usr_device_id });
             }
         });
         dealers.forEach((item) => {
