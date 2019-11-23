@@ -7,7 +7,8 @@ import {
     CONNECT_ACTIVATE_DEALER,
     CONNECT_DELETE_DEALER,
     CONNECT_UNDO_DEALER,
-    DEALER_PAYMENT_HISTORY
+    DEALER_PAYMENT_HISTORY,
+    DEALER_SALES_HISTORY
 } from "../../constants/ActionTypes";
 
 // import { Button_Cancel } from '../../constants/ButtonConstants';
@@ -24,7 +25,8 @@ const initialState = {
     showMessage: false,
 
     dealer: null,
-    paymentHistory: []
+    paymentHistory: [],
+    salesHistory: []
 };
 
 export default (state = initialState, action) => {
@@ -36,6 +38,13 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 dealer: action.payload.dealer
+            }
+        }
+        case DEALER_SALES_HISTORY: {
+            return {
+                ...state,
+                salesHistory: action.payload.data
+
             }
         }
         case DEALER_PAYMENT_HISTORY: {
@@ -153,6 +162,7 @@ export default (state = initialState, action) => {
                 dealer: dealer
             }
         }
+        
         default:
             return state;
 

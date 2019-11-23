@@ -5,6 +5,7 @@ import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Div
 // Components
 import EditDealer from '../../dealers/components/editDealer';
 import DealerPaymentHistory from './DealerPaymentHistory';
+import DealerSalesHistory from "./DealerSalesHistory";
 
 // Helpers
 import { convertToLang } from '../../utils/commonUtils'
@@ -29,6 +30,7 @@ import { DO_YOU_WANT_TO, OF_THIS } from '../../../constants/DeviceConstants';
 import {
     DEALER_TEXT
 } from '../../../constants/DealerConstants';
+
 
 // user defined
 const confirm = Modal.confirm;
@@ -126,8 +128,9 @@ export default class DealerAction extends Component {
                             span={12}
                         >
                             <Button
-                                disabled
                                 style={{ width: "100%", marginBottom: 16, }}
+                                onClick={() => this.refs.dealerSalesHistory.showModal(this.props.dealer, this.props.getDealerSalesHistory)}
+
                             >
                                 <h6 className="mb-0">Sales History</h6>
                             </Button>
@@ -202,6 +205,11 @@ export default class DealerAction extends Component {
                     ref='dealerPaymentHistory'
                     translation={this.props.translation}
                     paymentHistory={this.props.paymentHistory}
+                />
+                <DealerSalesHistory 
+                    ref= 'dealerSalesHistory'
+                    translation={this.props.translation}
+                    salesHistory = {this.props.salesHistory}
                 />
             </Fragment >
         )
