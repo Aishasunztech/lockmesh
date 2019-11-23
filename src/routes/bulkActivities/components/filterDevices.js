@@ -672,7 +672,7 @@ class FilterDevices extends Component {
           this.refs.bulk_wipe.handleBulkWipe(devices, dealers, users);
         }
         else if (action === "PUSH POLICY") {
-          if (this.props.selectedPolicy !== '') {
+          if (this.props.selectedPolicy) {
             this.refs.bulk_policy.handleBulkPolicy(devices, dealers, users, this.props.selectedPolicy);
           } else {
             error({

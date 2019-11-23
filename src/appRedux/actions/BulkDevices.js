@@ -138,13 +138,14 @@ export function getbulkHistory() {
 
 
 export const setBulkPushApps = (apps) => {
-    apps.forEach((el) => {
-        el.enable = (typeof (el.enable) === Boolean || typeof (el.enable) === 'Boolean' || typeof (el.enable) === 'boolean') ? el.enable : false;
-        el.guest = (typeof (el.guest) === Boolean || typeof (el.guest) === 'Boolean' || typeof (el.guest) === 'boolean') ? el.guest : false;
-        el.encrypted = (typeof (el.encrypted) === Boolean || typeof (el.encrypted) === 'Boolean' || typeof (el.encrypted) === 'boolean') ? el.encrypted : false;
-        delete el.apk_logo;
-        delete el.apk_status;
-    })
+    // console.log("apps at action file for push apps ", apps)
+    // apps.forEach((el) => {
+    //     el.enable = (typeof (el.enable) === Boolean || typeof (el.enable) === 'Boolean' || typeof (el.enable) === 'boolean') ? el.enable : false;
+    //     el.guest = (typeof (el.guest) === Boolean || typeof (el.guest) === 'Boolean' || typeof (el.guest) === 'boolean') ? el.guest : false;
+    //     el.encrypted = (typeof (el.encrypted) === Boolean || typeof (el.encrypted) === 'Boolean' || typeof (el.encrypted) === 'boolean') ? el.encrypted : false;
+    //     delete el.apk_logo;
+    //     delete el.apk_status;
+    // })
     return (dispatch) => {
         dispatch({
             type: SET_PUSH_APPS,
