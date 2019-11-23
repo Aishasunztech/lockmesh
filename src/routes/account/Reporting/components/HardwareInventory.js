@@ -138,7 +138,7 @@ class PaymentHistory extends Component {
         data.push({
           rowKey: counter++,
           key: counter++,
-          count: counter++,
+          count: ++index,
           dealer_pin: item.dealer_pin,
           device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
           hardware: hardware.hardware_name,
