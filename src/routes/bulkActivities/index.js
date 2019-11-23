@@ -502,6 +502,7 @@ class BulkActivities extends Component {
     }
 
     handleChangeUser = (values) => {
+        console.log("values ", values);
         // console.log("handleChangeUser values ", values, this.state.selectedUsers, this.props.users_list, this.state.allUsers);
         let checkAllUsers = this.state.checkAllSelectedUsers
 
@@ -536,9 +537,7 @@ class BulkActivities extends Component {
 
     handleChangeDealer = (values) => {
         // console.log("handleChangeDealer values ", values, this.state.selectedDealers.length, this.state.dealerList.length);
-
         let checkAllDealers = this.state.checkAllSelectedDealers
-
         let selectAll = values.filter(e => e.key === "all");
         let selectedDealers = [];
 
@@ -687,7 +686,7 @@ class BulkActivities extends Component {
         // }
 
         // console.log("this.state.bulkResponseModal ", this.state.bulkResponseModal)
-
+        console.log("this.state.allDealers ", this.state.allDealers)
         return (
             <Fragment>
                 <Card >
@@ -746,6 +745,8 @@ class BulkActivities extends Component {
                                 value={this.state.selectedDealers}
                                 mode="multiple"
                                 labelInValue
+                                showSearch
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                 maxTagCount={this.state.checkAllSelectedDealers ? 0 : 2}
                                 maxTagTextLength={10}
                                 maxTagPlaceholder={this.state.checkAllSelectedDealers ? "All Selected" : `${this.state.selectedDealers.length - 2} more`}
@@ -755,9 +756,7 @@ class BulkActivities extends Component {
                                 onDeselect={(e) => this.handleCancel(e, "dealers")}
                             >
                                 <Select.Option key="allDealers" value="all">Select All</Select.Option>
-                                {this.props.dealerList.map((item, index) => {
-                                    return (<Select.Option key={item.dealer_id} value={item.dealer_id}>{item.dealer_name}</Select.Option>)
-                                })}
+                                {this.state.allDealers.map(item => <Select.Option key={item.key} value={item.key}>{item.label}</Select.Option>)}
                             </Select>
                         </Col>
                     </Row>
@@ -772,6 +771,8 @@ class BulkActivities extends Component {
                         <Col className="col-md-4 col-sm-4 col-xs-4">
                             <Select
                                 value={this.state.selectedUsers}
+                                showSearch
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}// showSearch={false}
                                 mode="multiple"
                                 labelInValue
                                 maxTagCount={this.state.checkAllSelectedUsers ? 0 : 2}
@@ -783,14 +784,12 @@ class BulkActivities extends Component {
                                 onChange={this.handleChangeUser}
                             >
                                 <Select.Option key="allUsers" value="all">Select All</Select.Option>
-                                {this.props.users_list.map((item, index) => {
-                                    return (<Select.Option value={item.user_id}>{item.user_name}</Select.Option>)
-                                })}
+                                {this.props.users_list.map(item => <Select.Option key={item.user_id} value={item.user_id} >{item.user_name}</Select.Option>)}
                             </Select>
                         </Col>
                     </Row>
                     <br />
-                    <p>Users Selected: <span className="font_26">{(this.state.selectedUsers.length) ? this.state.selectedUsers.map((item, index) => <Tag>{item.label}</Tag>) : "NOT SELECTED"}</span></p>
+                    <p>Users Selected: <span className="font_26">{(this.state.selectedUsers.length) ? this.state.selectedUsers.map(item => <Tag>{item.label}</Tag>) : "NOT SELECTED"}</span></p>
 
                     <FilterDevices
                         devices={this.state.filteredDevices}

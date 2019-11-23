@@ -42,9 +42,11 @@ class FilterDevices extends Component {
   constructor(props) {
     super(props);
     let columns = userDevicesListColumns(props.translation, this.handleSearchInModal);
+    let selectedDevicesColumns = userDevicesListColumns(props.translation, this.handleSearch);
 
     this.state = {
       columns: columns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
+      selectedDevicesColumns: selectedDevicesColumns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
       sorterKey: '',
       sortOrder: 'ascend',
       showDealersModal: false,
@@ -135,9 +137,11 @@ class FilterDevices extends Component {
     }
     if (this.props.translation !== nextProps.translation) {
       let columns = userDevicesListColumns(nextProps.translation, this.handleSearchInModal);
+      let selectedDevicesColumns = userDevicesListColumns(nextProps.translation, this.handleSearch);
 
       this.setState({
         columns: columns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
+        selectedDevicesColumns: selectedDevicesColumns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
       })
     }
 
@@ -423,6 +427,10 @@ class FilterDevices extends Component {
 
 
   handleSearch = (e) => {
+    let fieldName = e.target.name;
+    let fieldValue = e.target.value;
+    console.log("fieldName", fieldName);
+    console.log("fieldValue", fieldValue);
 
     let demoDevices = [];
     if (status) {
@@ -791,7 +799,7 @@ class FilterDevices extends Component {
                   className={"devices "}
                   size="middle"
                   bordered
-                  columns={this.state.columns}
+                  columns={this.state.selectedDevicesColumns}
                   onChange={this.props.onChangeTableSorting}
                   dataSource={this.props.renderList(this.actionRelatedDevice(this.state.selectedDevices))}
                   pagination={false}
