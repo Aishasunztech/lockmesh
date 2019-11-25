@@ -46,7 +46,8 @@ import {
     handleChecked,
     resetPushApps,
     handleCheckedAllPushApps,
-    transferHistory
+    transferHistory,
+    getDeviceListConnectDevice
 } from "../../../appRedux/actions/ConnectDevice";
 
 import { getNewDevicesList } from "../../../appRedux/actions/Common";
@@ -404,6 +405,7 @@ class SideActions extends Component {
             this.props.simHistory(this.props.device_id);
         }
         this.props.getNewDevicesList();
+        this.props.getDeviceListConnectDevice()
 
         this.setState({
             historyModal: this.props.historyModal,
@@ -857,12 +859,9 @@ class SideActions extends Component {
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                 defaultValue={this.props.device.device_id}
                             >
-                                {/* {this.props.device_list.map((item, index) => {
-                                        return (<Select.Option key={index} value={item.device_id}>{item.device_id}</Select.Option>)
-                                    })} */}
-                                <Option value="DLAE007804">DLAE007804</Option>
-                                <Option value="ELAF406912">ELAF406912</Option>
-                                <Option value="ALAF283363">ALAF283363</Option>
+                                {this.props.device_list.map((item, index) => {
+                                    return (<Option key={index} value={item.device_id}>{item.device_id} ({item.finalStatus})</Option>)
+                                })}
                             </Select>
                         </Col>
                     </Row>
@@ -1419,10 +1418,11 @@ function mapDispatchToProps(dispatch) {
         resetPushApps: resetPushApps,
         handleCheckedAllPushApps: handleCheckedAllPushApps,
         transferHistory: transferHistory,
+        getDeviceListConnectDevice: getDeviceListConnectDevice
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth, settings, devices, sidebar }, otherProps) => {
-    // console.log(device_details.app_list, 'device_details.app_list')
+    // console.log(device_details.device_list, 'device_details')
     return {
         requests: sidebar.newRequests,
         devices: devices.newDevices,
@@ -1463,7 +1463,8 @@ var mapStateToProps = ({ device_details, auth, settings, devices, sidebar }, oth
         wipeDevieStatus: device_details.wipeDevieStatus,
         guestAllPushApps: device_details.guestAllPushApps,
         enableAllPushApps: device_details.enableAllPushApps,
-        encryptedAllPushApps: device_details.encryptedAllPushApps
+        encryptedAllPushApps: device_details.encryptedAllPushApps,
+        device_list: device_details.device_list
     };
 }
 
