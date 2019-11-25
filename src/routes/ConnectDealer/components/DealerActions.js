@@ -83,17 +83,18 @@ export default class DealerAction extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.dealerList.length !== nextProps.dealerList.length) {
-            this.setState({
-                dealerList: nextProps.dealerList
-            })
-        }
+        // if (this.props.dealerList.length !== nextProps.dealerList.length) {
+        //     this.setState({
+        //         dealerList: nextProps.dealerList
+        //     })
+        // }
     }
-    onChangeDealer = (e) => {
-        // alert(e)
+    onChangeDealer = (dealer_id) => {
+        let path = `${btoa(dealer_id)}`.trim()
+        this.props.history.push(path)
     }
     renderDealerList = () => {
-        let dealerList = this.state.dealerList
+        let dealerList = this.props.dealerList
         return dealerList.map((dealer, index) => {
             return (<Select.Option key={index} value={dealer.dealer_id}>{dealer.dealer_name}</Select.Option>)
         })

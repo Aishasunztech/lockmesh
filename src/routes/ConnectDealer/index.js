@@ -337,6 +337,7 @@ class ConnectDealer extends Component {
                             paymentHistory={this.props.paymentHistory}
                             salesHistory={this.props.salesHistory}
                             domains={this.props.domains}
+                            history={this.props.history}
 
                             // dealer actions
                             updatePassword={this.props.updatePassword}
@@ -378,7 +379,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 var mapStateToProps = ({ dealer_details, dealers, settings }) => {
-    console.log(dealers.parent_dealers);
+    // console.log(dealers.parent_dealers);
     return {
         translation: settings.translation,
         dealer: dealer_details.dealer,
