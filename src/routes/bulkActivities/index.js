@@ -577,7 +577,7 @@ class BulkActivities extends Component {
 
         if (e === "PUSH APPS" || e === "PULL APPS" || e === "PUSH POLICY") {
             if (e === "PUSH APPS") {
-                this.setState({ pushAppsModal: true, handleModalBtn: true });
+                this.setState({ pushAppsModal: true, handleModalBtn: true }); // hanldeModalBtn used for View/Change
             }
             else if (e === "PULL APPS") {
                 this.setState({ pullAppsModal: true, handleModalBtn: true });

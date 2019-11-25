@@ -789,6 +789,7 @@ class FilterDevices extends Component {
           </Col>
 
         </Row>
+        {/* <span>(Only allow active & trial devices for your selected action)</span> */}
         <Row gutter={24} style={{ marginBottom: '24px' }}>
           {
             this.props.spinloading ? <CircularProgress /> :

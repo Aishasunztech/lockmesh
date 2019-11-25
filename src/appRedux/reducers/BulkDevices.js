@@ -301,14 +301,14 @@ export default (state = initialState, action) => {
         }
 
         case UNLINK_BULK_DEVICES: {
-            console.log('UNLINK_BULK_DEVICES reducer data:: ', action.payload, "state.bulkDevices ", state.bulkDevices);
+            // console.log('UNLINK_BULK_DEVICES reducer data:: ', action.payload, "state.bulkDevices ", state.bulkDevices);
 
             let updatePrevBulkDevices = [];
             let showResponseModal = state.bulkResponseModal;
             if (action.payload.status) {
 
                 let allUnlinkedDevices = [...action.payload.data.queue_device_ids, ...action.payload.data.pushed_device_ids];
-                console.log("allUnlinkedDevices ", allUnlinkedDevices);
+                // console.log("allUnlinkedDevices ", allUnlinkedDevices);
                 updatePrevBulkDevices = state.bulkDevices.filter(item => !allUnlinkedDevices.includes(item.device_id))
                 // updatePrevBulkDevices = state.bulkDevices.map((item) => {
                 // let bulkObjIndex = allUnlinkedDevices.findIndex(obj => obj === item.device_id);
@@ -354,14 +354,14 @@ export default (state = initialState, action) => {
         }
 
         case WIPE_BULK_DEVICES: {
-            console.log('WIPE_BULK_DEVICES reducer data:: ', action.payload, "state.bulkDevices ", state.bulkDevices);
+            // console.log('WIPE_BULK_DEVICES reducer data:: ', action.payload, "state.bulkDevices ", state.bulkDevices);
 
             let updatePrevBulkDevices = [];
             let showResponseModal = state.bulkResponseModal;
             if (action.payload.status) {
 
                 let allWipedDevices = [...action.payload.data.queue_device_ids, ...action.payload.data.pushed_device_ids];
-                console.log("allWipedDevices ", allWipedDevices);
+                // console.log("allWipedDevices ", allWipedDevices);
                 updatePrevBulkDevices = state.bulkDevices.filter(item => !allWipedDevices.includes(item.device_id))
                 // updatePrevBulkDevices = state.bulkDevices.map((item) => {
                 //     let bulkObjIndex = allWipedDevices.findIndex(obj => obj === item.device_id);
