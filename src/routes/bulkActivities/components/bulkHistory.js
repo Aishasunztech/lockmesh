@@ -9,7 +9,7 @@ import { POLICY_APP_NAME, POLICY_NAME, ACTIVITY } from '../../../constants/Polic
 import { Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
 import { DEVICE_IMEI_1, DEVICE_IMEI_2, ACTIVITIES, DEVICE_ID } from '../../../constants/DeviceConstants';
 
-var coppyActivities = [];
+var copyActivities = [];
 var status = true;
 export default class Activity extends Component {
 
@@ -68,16 +68,25 @@ export default class Activity extends Component {
         ];
         this.state = {
             visible: false,
-            activities: this.props.activities,
+            activities: props.history ? props.history : [],
             expandedRowKeys: [],
             device: {}
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (this.props.history !== nextProps.history) {
+            this.setState({
+                activities: nextProps.history
+            })
+        }
+    }
+
     showModal = () => {
+        // console.log("this.props.activities show modal: ", this.props.activities)
         this.setState({
             visible: true,
-            activities: this.props.activities
+            activities: this.props.history
 
         });
     }
@@ -91,41 +100,87 @@ export default class Activity extends Component {
     //     })
     // }
 
+    // handleComponentSearch = (e) => {
+
+    //     try {
+    //         let value = e.target.value;
+    //         console.log(status,'searched value', e.target.value)
+    //         if (value.length) {
+    //             // console.log(status,'searched value', value)
+    //             if (status) {
+    //                 // console.log('status')
+    //                 copyActivities = this.state.activities;
+    //                 status = false;
+    //             }
+    //             // console.log(this.state.users,'coppy de', coppyDevices)
+    //             let foundActivities = componentSearch(copyActivities, value);
+    //             //  console.log('found devics', foundImeis)
+    //             if (foundActivities.length) {
+
+    //                 this.setState({
+    //                     activities: foundActivities,
+    //                 })
+    //             } else {
+
+    //                 this.setState({
+    //                     activities: [],
+    //                 })
+    //             }
+    //         } else {
+    //             status = true;
+    //             this.setState({
+    //                 activities: copyActivities,
+    //             })
+    //         }
+
+    //     } catch (error) {
+    //         console.log('error')
+    //         // alert("hello");
+    //     }
+    // }
+
     handleComponentSearch = (e) => {
-        try {
-            let value = e.target.value;
-            // console.log(status,'searched value', e.target.value)
-            if (value.length) {
-                // console.log(status,'searched value', value)
-                if (status) {
-                    // console.log('status')
-                    coppyActivities = this.state.activities;
-                    status = false;
-                }
-                // console.log(this.state.users,'coppy de', coppyDevices)
-                let foundActivities = componentSearch(coppyActivities, value);
-                //  console.log('found devics', foundImeis)
-                if (foundActivities.length) {
 
-                    this.setState({
-                        activities: foundActivities,
-                    })
-                } else {
+        let demoHistory = [];
+        if (status) {
+            copyActivities = this.props.history;
+            status = false;
+        }
+        console.log("copyActivities ", copyActivities);
+        // return [];
 
-                    this.setState({
-                        activities: [],
-                    })
-                }
-            } else {
-                status = true;
-                this.setState({
-                    activities: coppyActivities,
+        if (e.target.value.length) {
+            // let foundDevices = componentSearch(copyActivities, e.target.value);
+
+            // console.log("foundDevices ", foundDevices);
+            copyActivities.forEach((device) => {
+                Object.keys(device).map(key => {
+                    // console.log("device[key] ", device[key])
+                    if (device[key] !== undefined) {
+                        if ((typeof device[key]) === 'string') {
+                            if (device[key].toUpperCase().includes(e.target.value.toUpperCase())) {
+                                if (!demoHistory.includes(device)) {
+                                    demoHistory.push(device);
+                                }
+                            }
+                        } else if (device[key] !== null) {
+                            if (device[key].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
+                                if (!demoHistory.includes(device)) {
+                                    demoHistory.push(device);
+                                }
+                            }
+                        }
+                    }
                 })
-            }
-
-        } catch (error) {
-            console.log('error')
-            // alert("hello");
+            });
+            // console.log("searched value", demoHistory);
+            this.setState({
+                activities: demoHistory
+            })
+        } else {
+            this.setState({
+                activities: copyActivities
+            })
         }
     }
 
@@ -189,14 +244,15 @@ export default class Activity extends Component {
 
 
     renderList = () => {
-        let data = this.props.history;
-        console.log("history is: ", data)
+        // let data = this.props.history;
+        let data = this.state.activities;
+        // console.log("history is: ", data)
         if (data.length) {
             return data.map((row, index) => {
-                console.log(row);
+                // console.log(row);
                 return {
                     key: index,
-                    action_name: row.action.toUpperCase(),
+                    action: row.action.toUpperCase(),
                     created_at: getFormattedDate(row.created_at),
                     data: row.data
                 }
@@ -214,7 +270,7 @@ export default class Activity extends Component {
                     width="880px"
                     maskClosable={false}
                     visible={this.props.historyModalShow}
-                    title={convertToLang(this.props.translation["Bulk Activities"], "Bulk Activities")}
+                    title={convertToLang(this.props.translation[""], "History of Bulk Device Activities")}
                     onOk={this.handleOk}
                     onCancel={this.props.handleHistoryCancel}
                     footer={null}
@@ -239,10 +295,10 @@ export default class Activity extends Component {
                             {
                                 title: convertToLang(this.props.translation[ACTIVITY], "ACTIVITY"),
                                 align: "center",
-                                dataIndex: 'action_name',
-                                key: "action_name",
+                                dataIndex: 'action',
+                                key: "action",
                                 className: '',
-                                sorter: (a, b) => { return a.action_name.localeCompare(b.action_name) },
+                                sorter: (a, b) => { return a.action.localeCompare(b.action) },
                                 sortDirections: ['ascend', 'descend'],
 
                             },
@@ -266,7 +322,7 @@ export default class Activity extends Component {
                         onExpand={this.onExpandRow}
                         dataSource={this.renderList()}
                         expandedRowRender={record => {
-                            console.log('recored', record)
+                            // console.log('recored', record)
 
                             return (
                                 <Table

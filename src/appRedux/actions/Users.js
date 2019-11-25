@@ -6,7 +6,9 @@ import {
     LOADING,
     EDIT_USERS,
     DELETE_USER,
-    UNDO_DELETE_USER
+    UNDO_DELETE_USER,
+    DEALER_USERS,
+    INVOICE_ID
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -22,6 +24,55 @@ export function getUserList() {
                     dispatch({
                         type: USERS_LIST,
                         payload: response.data.data,
+                    });
+                }
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+
+    };
+}
+
+export function getInvoiceId() {
+    return (dispatch) => {
+        RestService.getInvoiceId().then((response) => {
+
+            if (RestService.checkAuth(response.data)) {
+                console.log("getInvoiceId response", response)
+                if (response.data.status) {
+                    dispatch({
+                        type: INVOICE_ID,
+                        payload: response.data.data,
+                    });
+                }
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+
+    };
+}
+
+//GET User List against device dealer
+export function getDeaerUsers(dealerId) {
+    return (dispatch) => {
+        dispatch({
+            type: LOADING
+        });
+        RestService.userListOfDevice(dealerId).then((response) => {
+            // console.log("data form server");
+            // console.log(response.data);
+            if (RestService.checkAuth(response.data)) {
+                // console.log(response.data)
+                if (response.data.status) {
+                    dispatch({
+                        type: DEALER_USERS,
+                        payload: response.data,
                     });
                 }
             } else {

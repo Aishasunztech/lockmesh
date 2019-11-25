@@ -7,6 +7,7 @@ import {
   THEME_COLOR_SELECTION_PRESET,
   THEME_TYPE,
   THEME_TYPE_SEMI_DARK,
+  NAV_STYLE_NO_HEADER_EXPANDED_SIDEBAR,
 
 } from "../../../constants/ThemeSetting";
 // import { convertToLang } from '../../../routes/utils/commonUtils';
@@ -54,7 +55,8 @@ import {
   DEALER_DEVICES,
   DEALER_TOKENS,
   Parent_Dealer,
-  Parent_Dealer_ID
+  Parent_Dealer_ID,
+  DEALER_CREDITS
 } from '../../../constants/DealerConstants';
 
 import {
@@ -68,7 +70,7 @@ import {
 
 export var initialSettings = {
   navCollapsed: true,
-  navStyle: NAV_STYLE_FIXED,
+  navStyle: NAV_STYLE_NO_HEADER_EXPANDED_SIDEBAR,
   layoutType: LAYOUT_TYPE_FULL,
   themeType: THEME_TYPE_SEMI_DARK,
   colorSelection: THEME_COLOR_SELECTION_PRESET,
@@ -83,7 +85,6 @@ export var initialSettings = {
     { "key": "device_id", "value": DEVICE_ID },
     { "key": "user_id", "value": USER_ID },
     { "key": "validity", "value": DEVICE_REMAINING_DAYS },
-    // { "key": "transfered_to", "value": DEVICE_TRANSFERED },
     { "key": "status", "value": DEVICE_STATUS },
     { "key": "lastOnline", "value": DEVICE_LASTONLINE },
     { "key": "online", "value": DEVICE_MODE },
@@ -91,12 +92,14 @@ export var initialSettings = {
     { "key": "version", "value": DEVICE_VERSION },
     { "key": "firmware_info", "value": DEVICE_FIRMWAREINFO },
     { "key": "flagged", "value": DEVICE_FLAGGED },
+    { "key": "transfered_to", "value": DEVICE_TRANSFERED },
     { "key": "name", "value": DEVICE_NAME },
     { "key": "account_email", "value": DEVICE_ACCOUNT_EMAIL },
     { "key": "client_id", "value": DEVICE_CLIENT_ID },
     { "key": "activation_code", "value": DEVICE_ACTIVATION_CODE },
     { "key": "pgp_email", "value": DEVICE_PGP_EMAIL },
     { "key": "sim_id", "value": DEVICE_SIM_ID },
+    { "key": "sim_id2", "value": "SIM ID 2" },
     { "key": "chat_id", "value": DEVICE_CHAT_ID },
     { "key": "dealer_id", "value": DEVICE_DEALER_ID },
     { "key": "dealer_name", "value": DEVICE_DEALER_NAME },
@@ -120,7 +123,7 @@ export var initialSettings = {
     { "key": "dealer_email", "value": DEALER_EMAIL },
     { "key": "link_code", "value": DEALER_PIN },
     { "key": "connected_devices", "value": DEALER_DEVICES },
-    { "key": "dealer_token", "value": DEALER_TOKENS },
+    { "key": "dealer_credits", "value": DEALER_CREDITS },
     { "key": "parent_dealer", "value": Parent_Dealer },
     { "key": "parent_dealer_id", "value": Parent_Dealer_ID },
   ],
@@ -134,8 +137,9 @@ export var initialSettings = {
     { "key": "label", "value": "LABEL" },
     { "key": "package_name", "value": "PACKAGE NAME" },
     { "key": "version", "value": "VERSION" },
-    { "key": "created_at", "value": "UPLOAD DATE" },
-    { "key": "updated_at", "value": "EDIT DATE" },
+    { "key": "used_by", "value": "USED BY" },
+    { "key": "created_at", "value": "LAST UPLOADED" },
+    { "key": "updated_at", "value": "LAST UPDATED" },
   ],
   //  locale: {
   //   languageId: 'english',

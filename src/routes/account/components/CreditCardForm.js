@@ -6,6 +6,7 @@ import 'react-credit-cards/es/styles-compiled.css';
 import { convertToLang } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel, Button_Confirm } from '../../../constants/ButtonConstants';
 import { WARNING } from '../../../constants/Constants';
+import MaskedInput from 'antd-mask-input'
 // import axios from 'axios';
 // import 'react-credit-cards/lib/styles.scss';
 
@@ -53,34 +54,33 @@ class CreditCardForm extends Component {
             if (e.target.value.length <= 4) {
                 this.setState({
                     [field]: e.target.value,
-
                 })
             }
         }
         else if (field === 'expiry') {
-            if (e.target.value.length <= 7) {
-                if (e.target.value.length > 1) {
-                    if (e.target.value.length > 2) {
-                        this.setState({
-                            expiry: e.target.value.replace(' / ', ''),
-                        })
-                    } else {
-                        this.setState({
-                            expiry: e.target.value,
-                        })
-                    }
-                    if (e.target.value.length === 2) {
-                        document.getElementById('expiry').value = e.target.value + ' / '
-                    } else {
-                        document.getElementById('expiry').value = e.target.value
-                    }
-                }
-                else {
-                    this.setState({
-                        [field]: e.target.value,
-                    })
-                }
-            }
+            // if (e.target.value.length <= 5) {
+            // if (e.target.value.length > 1) {
+            //     if (e.target.value.length > 2) {
+            //         this.setState({
+            //             expiry: e.target.value.replace(' / ', ''),
+            //         })
+            //     } else {
+            //         this.setState({
+            //             expiry: e.target.value,
+            //         })
+            //     }
+            //     if (e.target.value.length === 2) {
+            //         document.getElementById('expiry').value = e.target.value + ' / '
+            //     } else {
+            //         document.getElementById('expiry').value = e.target.value
+            //     }
+            // }
+            // else {
+            this.setState({
+                [field]: e.target.value,
+            })
+            // }
+            // }
         }
         else {
             this.setState({
@@ -104,9 +104,18 @@ class CreditCardForm extends Component {
         }
     }
 
+    checkExpiryDate = (rule, value, callback) => {
+        let dateValue = value.replace('_', '')
+        if (dateValue.length === 5) {
+            callback();
+        } else {
+            callback('Please enter date Required format.');
+        }
+    }
+
 
     render() {
-        
+
         return (
             <Fragment>
                 <Modal
@@ -177,16 +186,21 @@ class CreditCardForm extends Component {
                         >
                             {this.props.form.getFieldDecorator('expiry', {
                                 initialValue: this.state.expiryInput,
-                                getValueFromEvent: this.getExpiry,
+                                // getValueFromEvent: this.getExpiry,
                                 rules: [{
                                     required: true, message: ' ',
                                 },
                                 {
-                                    len: 7, message: ' ',
+                                    validator: this.checkExpiryDate,
                                 }
+                                    // {
+                                    //     len: 7, message: ' ',
+                                    // }
                                 ],
                             })(
-                                <Input id='expiry' onChange={(e) => { this.handleCardInputs(e, 'expiry') }} onFocus={(e) => { this.handleCardFocus('expiry') }} />
+                                <MaskedInput mask="11/11" name="expiry" placeholder="MM/YY" onChange={(e) => { this.handleCardInputs(e, 'expiry') }} onFocus={(e) => { this.handleCardFocus('expiry') }} />
+
+                                // <Input id='expiry' onChange={(e) => { this.handleCardInputs(e, 'expiry') }} onFocus={(e) => { this.handleCardFocus('expiry') }} />
                             )}
                         </Form.Item>
                         <Form.Item
@@ -200,7 +214,10 @@ class CreditCardForm extends Component {
                                     required: true, message: ' ',
                                 },
                                 {
-                                    len: 4, message: ' ',
+                                    min: 3, message: ' ',
+                                },
+                                {
+                                    max: 4, message: ' ',
                                 }
                                 ],
                             })(
@@ -230,11 +247,11 @@ export default CreditCardForm;
 
 function showConfirm(_this, msg, values, creditInfo) {
     confirm({
-        title: convertToLang(this.props.translation[WARNING], "WARNING!"),
+        title: convertToLang(_this.props.translation[WARNING], "WARNING!"),
         content: msg,
         // okText: "Confirm",
-        okText:  convertToLang(this.props.translation[Button_Confirm], "Confirm"),
-        cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
+        okText: convertToLang(_this.props.translation[Button_Confirm], "Confirm"),
+        cancelText: convertToLang(_this.props.translation[Button_Cancel], "Cancel"),
         onOk() {
             _this.props.purchaseCreditsFromCC(values, creditInfo)
             _this.props.cancelPurchaseModal()

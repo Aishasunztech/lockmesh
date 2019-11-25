@@ -13,6 +13,7 @@ import {
     DUPLICATE_SIM_IDS,
     NEW_DATA_INSERTED,
     CREATE_BACKUP_DB,
+    GET_OVERDUE_DETAILS,
     CHECK_BACKUP_PASS,
     SHOW_BACKUP_MODAL,
     SAVE_ID_PRICES,
@@ -23,7 +24,17 @@ import {
     GET_PACKAGES,
     PURCHASE_CREDITS,
     GET_PARENT_PACKAGES,
-    RESYNC_IDS
+    PACKAGE_PERMSSION_SAVED,
+    DELETE_PACKAGE,
+    EDIT_PACKAGE,
+    RESYNC_IDS,
+    USER_CREDITS,
+    GET_DOMAINS,
+    PERMISSION_SAVED,
+    PERMISSION_DOMAINS,
+    GET_HARDWARE,
+    LATEST_PAYMENT_HISTORY,
+    MODIFY_ITEM_PRICE
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -313,6 +324,25 @@ export const setPackage = (data) => {
     }
 }
 
+export const editPackage = (data) => {
+    return (dispatch) => {
+        RestService.editPackage(data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: EDIT_PACKAGE,
+                    response: response.data,
+                    package_id: data.package_id
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+
+    }
+}
+
 export const getPrices = () => {
     return (dispatch) => {
         RestService.getPrices().then((response) => {
@@ -338,6 +368,25 @@ export const getPackages = () => {
                 // console.log(response.data);
                 dispatch({
                     type: GET_PACKAGES,
+                    response: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+
+    }
+}
+
+export const getHardwares = () => {
+    return (dispatch) => {
+        RestService.getHardwares().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                // console.log(response.data);
+                dispatch({
+                    type: GET_HARDWARE,
                     response: response.data
                 })
             } else {
@@ -398,12 +447,115 @@ export const purchaseCreditsFromCC = (cardInfo, creditInfo) => {
                     type: PURCHASE_CREDITS,
                     response: response.data
                 })
+                if (response.data.status) {
+                    dispatch({
+                        type: USER_CREDITS,
+                        response: response.data
+                    })
+                }
             } else {
                 dispatch({
                     type: INVALID_TOKEN
                 })
             }
         });
+    }
+}
+
+export function packagePermission(id, dealers, action, statusAll = false, user) {
+    console.log('at domainPermission action ', id, dealers, action, statusAll)
+    return (dispatch) => {
+        RestService.dealerPermissions(id, dealers, action, statusAll, 'package').then((response) => {
+            if (RestService.checkAuth(response.data)) {
+
+                dispatch({
+                    type: PACKAGE_PERMSSION_SAVED,
+                    payload: response.data,
+                    formData: {
+                        id,
+                        dealers,
+                        action,
+                        statusAll,
+                        user
+                    }
+                })
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+    }
+
+}
+
+// export function savePermission(package_id, dealers, action) {
+//     // alert(package_id);
+
+//     return (dispatch) => {
+//         RestService.savePackagePermissions(package_id, dealers, action).then((response) => {
+//             if (RestService.checkAuth(response.data)) {
+
+//                 dispatch({
+//                     type: PACKAGE_PERMSSION_SAVED,
+//                     payload: response.data.msg,
+//                     permission_count: response.data.permission_count,
+//                     package_id: package_id,
+//                     dealers: dealers
+//                 })
+
+//             } else {
+//                 dispatch({
+//                     type: INVALID_TOKEN
+//                 });
+//             }
+//         })
+//     }
+
+// }
+export function deletePackage(id) {
+    // alert(package_id);
+
+    return (dispatch) => {
+        RestService.deletePackage(id).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+
+                dispatch({
+                    type: DELETE_PACKAGE,
+                    payload: response.data,
+                    package_id: id
+                })
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+    }
+}
+export function modifyItemPrice(id, price, retail_price = 0, isModify = false, type) {
+    // alert(package_id);
+
+    return (dispatch) => {
+        RestService.modifyItemPrice(id, price, retail_price, isModify, type).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+
+                dispatch({
+                    type: MODIFY_ITEM_PRICE,
+                    payload: response.data,
+                    item_id: id,
+                    price: price,
+                    item_type: type
+                })
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
     }
 }
 export const resyncIds = () => {
@@ -413,3 +565,92 @@ export const resyncIds = () => {
         })
     }
 }
+
+export function getDomains() {
+    return (dispatch) => {
+        dispatch({
+            type: LOADING,
+            isloading: true
+        });
+        RestService.getDomains().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                if (response.data.status) {
+                    dispatch({
+                        type: GET_DOMAINS,
+                        payload: response.data
+                    });
+                }
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        });
+
+    };
+}
+
+export function domainPermission(id, dealers, action, statusAll = false, user) {
+    // console.log('at domainPermission action ', id, dealers, action, statusAll)
+    return (dispatch) => {
+        RestService.dealerPermissions(id, dealers, action, statusAll, 'domain').then((response) => {
+            if (RestService.checkAuth(response.data)) {
+
+                dispatch({
+                    type: PERMISSION_DOMAINS,
+                    payload: response.data,
+                    formData: {
+                        id,
+                        dealers,
+                        action,
+                        statusAll,
+                        user
+                    }
+                })
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+    }
+
+}
+export const getLatestPaymentHistory = (data) => {
+    return (dispatch) => {
+        RestService.getLatestPaymentHistory(data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+
+                dispatch({
+                    type: LATEST_PAYMENT_HISTORY,
+                    payload: response.data
+                })
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+    }
+};
+
+
+export const getOverdueDetails = () => {
+    return (dispatch) => {
+        RestService.getOverdueDetails().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: GET_OVERDUE_DETAILS,
+                    payload: response.data
+                })
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+    }
+};

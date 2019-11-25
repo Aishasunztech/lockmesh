@@ -67,12 +67,16 @@ export default class EditDealer extends Component {
                     width="600px"
                     visible={visible}
                     maskClosable={false}
-                    title={<div> {convertToLang(this.props.translation[DEVICE_EDIT], "Edit Device")} <br /> <span> {convertToLang(this.props.translation[DEVICE_ID], "DEVICE ID")}: {this.state.device.device_id} </span></div>}
+                    title={''
+                        // <div> {convertToLang(this.props.translation[DEVICE_EDIT], "Edit Device")} <br />
+                        //     <span> {convertToLang(this.props.translation[DEVICE_ID], "DEVICE ID")}: {this.state.device.device_id} </span>
+                        // </div>
+                    }
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}
-                    className="edit_form"
-                    maskClosable={false}
+                    className="edit_form add_device"
+                    destroyOnClose={true}
                     okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
                     cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                 >
@@ -82,6 +86,7 @@ export default class EditDealer extends Component {
                         hideModal={this.handleCancel}
                         editDeviceFunc={this.state.func}
                         handleCancel={this.handleCancel}
+                        history={this.props.history}
                     // translation={this.props.translation}
                     />
 

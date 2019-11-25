@@ -23,7 +23,8 @@ import {
     Name,
     Value,
     ALERT_TO_SURE_DELETE_ALL_DEVICES,
-    DEALER
+    DEALER,
+    ACTION
 } from '../../../constants/Constants'
 import {
     Button_Modify,
@@ -43,6 +44,7 @@ import {
     Button_No,
     Button_ACCEPT,
     Button_Decline,
+    Button_Transfer,
 } from '../../../constants/ButtonConstants';
 
 import {
@@ -62,7 +64,7 @@ import {
 
 import { isNull } from 'util';
 import { unlink } from 'fs';
-import { ARE_YOU_SURE_YOU_WANT_DELETE_THE_DEVICE, DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE, ARE_YOU_SURE_YOU_WANT_UNLINK_THE_DEVICE } from '../../../constants/DeviceConstants';
+import { ARE_YOU_SURE_YOU_WANT_DELETE_THE_DEVICE, DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE, ARE_YOU_SURE_YOU_WANT_UNLINK_THE_DEVICE, DEVICE_ID, DEVICE_SERIAL_NUMBER, DEVICE_SIM_1, DEVICE_IMEI_1, DEVICE_SIM_2, DEVICE_IMEI_2 } from '../../../constants/DeviceConstants';
 
 const TabPane = Tabs.TabPane;
 class DevicesList extends Component {
@@ -71,7 +73,18 @@ class DevicesList extends Component {
         super(props);
         this.confirm = Modal.confirm;
 
+        const flaggedDevicesColumns = [
+            { title: convertToLang(props.translation[ACTION], "Action"), dataIndex: 'action', key: 'action', align: "center" },
+            { title: convertToLang(props.translation[DEVICE_ID], "DEVICE ID"), dataIndex: 'device_id', key: 'device_id', align: "center" },
+            { title: convertToLang(props.translation[DEVICE_SERIAL_NUMBER], "SERIAL NUMBER"), dataIndex: 'serial_number', key: 'serial_number', align: "center" },
+            { title: convertToLang(props.translation[DEVICE_SIM_1], "SIM 1"), dataIndex: 'sim_1', key: 'sim_1', align: "center" },
+            { title: convertToLang(props.translation[DEVICE_IMEI_1], "IMEI 1"), dataIndex: 'imei_1', key: 'imei_1', align: "center" },
+            { title: convertToLang(props.translation[DEVICE_SIM_2], "SIM 2"), dataIndex: 'sim_2', key: 'sim_2', align: "center" },
+            { title: convertToLang(props.translation[DEVICE_IMEI_2], "IMEI 2"), dataIndex: 'imei_2', key: 'imei_2', align: "center" },
+        ];
+
         this.state = {
+            flaggedDevicesColumns: flaggedDevicesColumns,
             searchText: '',
             showMsg: false,
             editing: false,
@@ -86,7 +99,9 @@ class DevicesList extends Component {
             user_id: '',
             expandedRowKeys: [],
             dealer_id: '',
-            goToPage: '/dealer/dealer'
+            goToPage: '/dealer/dealer',
+            flaggedDevicesModal: false,
+            requestDevice: ''
         };
         this.renderList = this.renderList.bind(this);
         this.sideScroll = this.sideScroll.bind(this);
@@ -138,23 +153,41 @@ class DevicesList extends Component {
         }
     }
 
+    showFlaggedDevices = (device) => {
+        this.setState({ flaggedDevicesModal: true, requestDevice: device })
+    }
+
+    handleTransfer = (flagDevice) => {
+        this.props.transferDeviceProfile({ flagged_device: flagDevice, reqDevice: this.state.requestDevice });
+        this.setState({ flaggedDevicesModal: false })
+    }
+
+
+
+    renderFlaggedList(list) {
+
+        return list.map((device) => {
+            let transferButton = <Button type="default" size="small" style={{ margin: '0 8px 0 8px', textTransform: "uppercase" }} onClick={() => this.handleTransfer(device)}>{convertToLang(this.props.translation[Button_Transfer], "TRANSFER")}</Button>
+
+            return {
+                key: device.device_id ? `${device.device_id}` : "N/A",
+                action: transferButton,
+                device_id: device.device_id ? `${device.device_id}` : "N/A",
+                imei_1: device.imei ? `${device.imei}` : "N/A",
+                sim_1: device.simno ? `${device.simno}` : "N/A",
+                imei_2: device.imei2 ? `${device.imei2}` : "N/A",
+                sim_2: device.simno2 ? `${device.simno2}` : "N/A",
+                serial_number: device.serial_number ? `${device.serial_number}` : "N/A",
+            }
+        });
+
+    }
+
 
     // renderList
     renderList(list) {
         // console.log('list of dec', list)
         return list.map((device, index) => {
-
-            // console.log('device finalStatus is: ', this.props.user.dealer_pin)
-            // console.log('device is: ', device)
-            // console.log('tab Select is: ', this.props.tabselect)
-
-            // var remainDays = checkRemainDays(device.created_at, device.validity)
-            // console.log('Remain Days are: ', remainDays);   
-
-            //  console.log(this.props.user.type, 'lkslkdflk');
-            // const device_status = (device.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";
-            // const device_status =  "SUSPEND"; 
-
             var status = device.finalStatus;
             const button_type = (status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ? "danger" : "dashed";
             const flagged = device.flagged;
@@ -172,13 +205,13 @@ class DevicesList extends Component {
                 text = "ACTIVATE";
                 // icon = 'add'
             }
-
+            let transferButton = <Button type="default" size="small" style={{ margin: '0 8px 0 8px', textTransform: "uppercase" }} onClick={() => this.showFlaggedDevices(device)}>{convertToLang(this.props.translation[Button_Transfer], "TRANSFER")}</Button>
             let SuspendBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleSuspendDevice(device)}> {convertToLang(this.props.translation[Button_Suspend], "SUSPEND")}</Button>;
             let ActiveBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleActivateDevice(device)}> {convertToLang(this.props.translation[Button_Unsuspend], "UN-SUSPEND")}</Button>;
             let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px ', textTransform: 'uppercase' }} onClick={() => this.deleteUnlinkedDevice('unlink', device)} >{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
             let ConnectBtn = <Link to={`connect-device/${btoa(device.device_id)}`.trim()}><Button type="default" size="small" style={style}>  {convertToLang(this.props.translation[Button_Connect], "CONNECT")}</Button></Link>
             let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
-            let EditBtnPreActive = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
+            // let EditBtnPreActive = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
             let AcceptBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.refs.add_device.showModal(device, this.props.addDevice) }}> {convertToLang(this.props.translation[Button_ACCEPT], "ACCEPT")} </Button>;
             let DeclineBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.handleRejectDevice(device) }}>{convertToLang(this.props.translation[Button_Decline], "DECLINE")}</Button>
             let DeleteBtnPreActive = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => this.deleteUnlinkedDevice('pre-active', device)}>{convertToLang(this.props.translation[Button_Delete], "DELETE")} </Button>
@@ -186,7 +219,7 @@ class DevicesList extends Component {
                 type="defualt"
                 size="small"
                 style={{ margin: '0 8px 0 0', color: "#fff", background: "#000", textTransform: 'uppercase' }}
-                onClick={() => { (device.finalStatus == "Transfered") ? this.props.unlinkConfirm(device) : this.props.unflagConfirm(device) }}
+                onClick={() => { (device.finalStatus == "Transfered") ? this.props.unlinkConfirm(device, true) : this.props.unflagConfirm(device) }}
             // disabled={(device.finalStatus == "Transfered") ? true : false}
             >{convertToLang(this.props.translation[Button_UNFLAG], "UNFLAG")} </Button>;
 
@@ -204,12 +237,17 @@ class DevicesList extends Component {
                 action: ((status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ?
                     (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                     : (status === DEVICE_PRE_ACTIVATION) ?
-                        (<Fragment><Fragment>{DeleteBtnPreActive}</Fragment><Fragment>{EditBtnPreActive}</Fragment></Fragment>)
+                        (<Fragment>
+                            {(this.props.user.type !== ADMIN) ?
+                                <Fragment>{DeleteBtnPreActive}</Fragment> : null
+                            }
+                            <Fragment>{EditBtn/* EditBtnPreActive */}</Fragment>
+                        </Fragment>)
                         // : (device.flagged !== 'Not flagged') ?
                         //     (<Fragment><Fragment>{Unflagbtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                        : (device.flagged !== 'Not flagged' && device.transfer_status == 0 && device.finalStatus == "Flagged") ?
+                        : (device.flagged !== 'Not flagged' && device.transfer_status === 0 && device.finalStatus === "Flagged") ?
                             (<Fragment><Fragment>{Unflagbtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                            : (device.flagged !== 'Not flagged' && device.transfer_status == 1 && device.finalStatus == "Transfered") ?
+                            : (device.flagged !== 'Not flagged' && device.transfer_status === 1 && device.finalStatus === "Transfered") ?
                                 (<Fragment><Fragment>{Unflagbtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                                 : (status === DEVICE_SUSPENDED) ?
                                     (<Fragment><Fragment>{ActiveBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
@@ -219,7 +257,7 @@ class DevicesList extends Component {
                                             (<Fragment>{DeleteBtn}</Fragment>)
                                             : (status === DEVICE_PENDING_ACTIVATION && this.props.user.type !== ADMIN && device.link_code === this.props.user.dealer_pin) ?
                                                 (<Fragment>
-                                                    <Fragment>{DeclineBtn}</Fragment><Fragment>{AcceptBtn}</Fragment>
+                                                    <Fragment>{DeclineBtn}</Fragment><Fragment>{AcceptBtn}</Fragment><Fragment>{transferButton}</Fragment>
                                                 </Fragment>)
                                                 : (device.status === DEVICE_PRE_ACTIVATION) ?
                                                     false
@@ -250,6 +288,7 @@ class DevicesList extends Component {
                 dealer_pin: checkValue(device.link_code),
                 mac_address: checkValue(device.mac_address),
                 sim_id: checkValue(device.sim_id),
+                sim_id2: checkValue(device.sim_id2),
                 imei_1: checkValue(device.imei),
                 sim_1: checkValue(device.simno),
                 imei_2: checkValue(device.imei2),
@@ -262,7 +301,7 @@ class DevicesList extends Component {
                 online: device.online === 'online' ? (<span style={{ color: "green" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) : (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
                 s_dealer: checkValue(device.s_dealer),
                 s_dealer_name: checkValue(device.s_dealer_name),
-                remainTermDays: device.remainTermDays,
+                remainTermDays: (Number(device.remainTermDays) > 0) ? device.remainTermDays : 0,
                 start_date: checkValue(device.start_date),
                 expiry_date: checkValue(device.expiry_date),
             }
@@ -283,21 +322,23 @@ class DevicesList extends Component {
     }
 
     deleteAllUnlinkedDevice = (type) => {
-        // console.log(this.state.selectedRows, 'selected keys', this.state.selectedRowKeys)
-        // console.log(type);
         if (this.state.selectedRowKeys.length) {
             let title = convertToLang(this.props.translation[ALERT_TO_SURE_DELETE_ALL_DEVICES], " Are you sure, you want to delete All these devices");
             let arr = [];
             // console.log('delete the device', this.state.selectedRowKeys);
             for (let id of this.state.selectedRowKeys) {
-                for (let device of this.props.devices) {
-                    if (type !== 'unlink') {
+                if (type !== 'unlink') {
+                    for (let device of this.props.preActiveDevices) {
                         if (id === device.id) {
                             arr.push(device)
                         }
                     }
-                    else {
-                        if (id === device.user_acc_id) {
+                } else {
+                    for (let device of this.props.unlinkedDevices) {
+                        let user_acc_id = id.split(' ')
+                        // console.log(user_acc_id[0], device.user_acc_id);
+                        if (user_acc_id[0] == device.user_acc_id) {
+
                             arr.push(device)
                         }
                     }
@@ -367,13 +408,6 @@ class DevicesList extends Component {
         }
     }
 
-    // componentWillReceiveProps() {
-    //     this.setState({
-    //         devices: this.props.devices,
-    //         columns: this.props.columns
-    //     })
-
-    // }
 
     scrollBack = () => {
         let element = document.getElementById('scrolltablelist');
@@ -417,7 +451,6 @@ class DevicesList extends Component {
 
     render() {
 
-        // console.log(this.state, 'selected keys', )
         const { activateDevice, suspendDevice } = this.props;
         const { redirect } = this.state
         if (redirect && this.state.user_id !== '') {
@@ -713,10 +746,37 @@ class DevicesList extends Component {
                     getSimIDs={this.props.getSimIDs}
                     getChatIDs={this.props.getChatIDs}
                     getPgpEmails={this.props.getPgpEmails}
+                    history={this.props.history}
                 />
                 <AddDevice ref="add_device"
                     translation={this.props.translation}
+                    history={this.props.history}
                 />
+
+                <Modal
+                    width={1000}
+                    maskClosable={false}
+                    visible={this.state.flaggedDevicesModal}
+                    onCancel={() => this.setState({ flaggedDevicesModal: false })}
+                    footer={null}
+                // onOk={this.handleTransfer}
+                // okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
+                // cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
+                >
+                    <Fragment>
+                        <h1>{convertToLang(this.props.translation["FLAGGED DEVICES"], "FLAGGED DEVICES")}</h1>
+                        <Table
+                            bordered
+                            columns={this.state.flaggedDevicesColumns}
+                            style={{ marginTop: 20 }}
+                            dataSource={this.renderFlaggedList(this.props.flaggedDevices)}
+                            // dataSource={[]}
+                            pagination={false}
+                        // scroll={{ x: true }}
+                        />
+                    </Fragment>
+
+                </Modal>
             </div >
 
         )
@@ -786,15 +846,15 @@ export default class Tab extends Component {
         });
     }
 
-    unlinkConfirm = (device) => {
+    unlinkConfirm = (device, transfered = false) => {
         let _this = this;
         confirm({
-            title: convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_UNLINK_THE_DEVICE], "Do you really want to unlink the device ") + device.device_id,
+            title: convertToLang(this.props.translation[""], "Do you really want to unlink the transfered device ") + device.device_id,
             okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
             cancelText: convertToLang(this.props.translation[Button_No], 'No'),
             onOk() {
                 // console.log('unlinkConfirm ', device);
-                _this.props.unlinkDevice(device)
+                _this.props.unlinkDevice(device, transfered)
             },
             onCancel() {
                 // console.log('Cancel');
@@ -805,14 +865,12 @@ export default class Tab extends Component {
     componentDidUpdate(prevProps) {
 
         if (this.props !== prevProps) {
-
             this.setState({
                 devices: this.props.devices,
                 columns: this.props.columns,
                 tabselect: this.props.tabselect,
                 selectedOptions: this.props.selectedOptions
             })
-            // this.refs.devciesList.handlePagination(this.state.tabselect);
         }
     }
 
@@ -823,32 +881,43 @@ export default class Tab extends Component {
             <Fragment>
                 <div>
                     <Tabs type="card" className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
-                        <TabPane tab={<span className="green">{convertToLang(translation[Tab_All], "All")} ({this.props.allDevices})</span>} key="1" >
+                        <TabPane tab={<span className="green">{convertToLang(translation[Tab_All], "All")} ({this.props.allDevices.length})</span>} key="1" >
                         </TabPane>
-                        <TabPane tab={<span className="green">{convertToLang(translation[Tab_Active], "Active")} ({this.props.activeDevices})</span>} key="4" forceRender={true}>
+                        <TabPane tab={<span className="green">{convertToLang(translation[Tab_Active], "Active")} ({this.props.activeDevices.length})</span>} key="4" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="red">{convertToLang(translation[Tab_Expired], "Expired")} ({this.props.expireDevices})</span>} key="6" forceRender={true}>
+                        <TabPane tab={<span className="red">{convertToLang(translation[Tab_Expired], "Expired")} ({this.props.expireDevices.length})</span>} key="6" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="green">{convertToLang(translation[Tab_Trial], "Trial")} ({this.props.trialDevices})</span>} key="9" forceRender={true}>
+                        <TabPane tab={<span className="green">{convertToLang(translation[Tab_Trial], "Trial")} ({this.props.trialDevices.length})</span>} key="9" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="yellow">{convertToLang(translation[Tab_Suspended], "Suspended")} ({this.props.suspendDevices})</span>} key="7" forceRender={true}>
+                        <TabPane tab={<span className="yellow">{convertToLang(translation[Tab_Suspended], "Suspended")} ({this.props.suspendDevices.length})</span>} key="7" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="blue">{convertToLang(translation[Tab_PreActivated], "Pre-Activated")}  ({this.props.preActiveDevices})</span>} key="3" forceRender={true}>
+                        <TabPane tab={<span className="blue">{convertToLang(translation[Tab_PreActivated], "Pre-Activated")}  ({this.props.preActiveDevices.length})</span>} key="3" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="gray">{convertToLang(translation[Tab_PendingActivation], "Pending Activation")}  ({this.props.pendingDevices})</span>} key="2" forceRender={true}>
+                        <TabPane tab={<span className="gray">{convertToLang(translation[Tab_PendingActivation], "Pending Activation")}  ({this.props.pendingDevices.length})</span>} key="2" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="purple">{convertToLang(translation[Tab_Transfer], "Transfer")} ({this.props.transferredDevices})</span>} key="8" forceRender={true}>
+                        <TabPane tab={<span className="purple">{convertToLang(translation[Tab_Transfer], "Transfer")} ({this.props.transferredDevices.length})</span>} key="8" forceRender={true}>
                             <h2 className="coming_s">{convertToLang(translation[Tab_ComingSoon], "ComingSoon")}</h2>
                         </TabPane>
-                        <TabPane tab={<span className="orange">{convertToLang(translation[Tab_Unlinked], "Unlinked")} ({this.props.unlinkedDevices})</span>} key="5" forceRender={true}>
+                        <TabPane tab={<span className="orange">{convertToLang(translation[Tab_Unlinked], "Unlinked")} ({this.props.unlinkedDevices.length})</span>} key="5" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="black">{convertToLang(translation[Tab_Flagged], "Flagged")}({this.props.flaggedDevices})</span>} key="10" forceRender={true}>
+                        <TabPane tab={<span className="black">{convertToLang(translation[Tab_Flagged], "Flagged")}({this.props.flaggedDevices.length})</span>} key="10" forceRender={true}>
                         </TabPane>
 
                     </Tabs>
                     <DevicesList
+                        transferDeviceProfile={this.props.transferDeviceProfile}
                         styleType={this.props.styleType}
                         devices={this.state.devices}
+                        allDevices={this.props.allDevices}
+                        activeDevices={this.props.activeDevices}
+                        expireDevices={this.props.expireDevices}
+                        suspendDevices={this.props.suspendDevices}
+                        preActiveDevices={this.props.preActiveDevices}
+                        pendingDevices={this.props.pendingDevices}
+                        unlinkedDevices={this.props.unlinkedDevices}
+                        flaggedDevices={this.props.flaggedDevices}
+                        transferredDevices={this.props.transferredDevices}
+                        trialDevices={this.props.trialDevices}
                         suspendDevice={this.props.suspendDevice}
                         activateDevice={this.props.activateDevice}
                         columns={this.props.columns}

@@ -1,11 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
-
-import NextApp from './NextApp';
-// import {registerServiceWorker, unregister} from './registerServiceWorker';
-import registerServiceWorker from './registerServiceWorker';
-// Add this import:
 import { AppContainer } from 'react-hot-loader';
+// import { getDateTimeOfClientTimeZone} from './routes/utils/commonUtils'
+import NextApp from './NextApp';
+
+import registerServiceWorker from './registerServiceWorker';
+
 import {style} from './consoleStyle.js';
 
 function noop() { }
@@ -22,6 +22,7 @@ if (process.env.NODE_ENV !== 'development') {
 
 // Wrap the rendering in a function:
 const render = Component => {
+  // console.log(getDateTimeOfClientTimeZone(Date(), 'YYYY/MM/DD H:m:s ZZ'))
   ReactDOM.render(
     // Wrap App inside AppContainer
     <AppContainer>

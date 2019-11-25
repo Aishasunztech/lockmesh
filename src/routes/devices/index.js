@@ -1,8 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import Highlighter from 'react-highlight-words';
-import { Input, Button, Icon, Select } from "antd";
-
+import { Input, Button, Icon, Select, Modal } from "antd";
 
 import { bindActionCreators } from "redux";
 
@@ -46,7 +45,7 @@ import {
 } from '../../constants/AppFilterConstants';
 
 import {
-    Button_Add_Device
+    Button_Add_Device, Button_Yes, Button_No
 } from '../../constants/ButtonConstants'
 
 import {
@@ -75,25 +74,32 @@ import {
     getPagination
 } from '../../appRedux/actions/Common';
 
-import { unflagged, unlinkDevice } from '../../appRedux/actions/ConnectDevice';
+import { unflagged, unlinkDevice, transferDeviceProfile } from '../../appRedux/actions/ConnectDevice';
 
-import {
-    getNotification
-} from "../../appRedux/actions/Socket";
 
 import AppFilter from '../../components/AppFilter';
 import DevicesList from './components/DevicesList';
 import ShowMsg from './components/ShowMsg';
 // import Column from "antd/lib/table/Column";
-import { getStatus, componentSearch, titleCase, dealerColsWithSearch, convertToLang, checkValue, handleMultipleSearch, filterData_RelatedToMultipleSearch } from '../utils/commonUtils';
+import {
+    getStatus,
+    componentSearch,
+    titleCase,
+    dealerColsWithSearch,
+    convertToLang,
+    checkValue,
+    handleMultipleSearch,
+    filterData_RelatedToMultipleSearch
+} from '../utils/commonUtils';
 import CircularProgress from "components/CircularProgress/index";
 import AddDevice from './components/AddDevice';
 import { devicesColumns } from '../utils/columnsUtils';
-import { Sidebar_devices } from "../../constants/SidebarConstants";
-
+import { Sidebar_devices, Sidebar_users_devices } from "../../constants/SidebarConstants";
+const confirm = Modal.confirm
 
 var copyDevices = [];
 var status = true;
+var selectOptionsStatus = true;
 
 class Devices extends Component {
     constructor(props) {
@@ -122,6 +128,7 @@ class Devices extends Component {
             translation: {},
             SearchValues: [],
             globalSearchedValue: "",
+            selectedOptions: [],
         }
         this.copyDevices = [];
 
@@ -161,16 +168,31 @@ class Devices extends Component {
         alert('Its working')
     }
 
+    transferDeviceProfile = (obj) => {
+        // 
+        let _this = this;
+        Modal.confirm({
+            content: `Are you sure you want to Transfer, from ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
+            onOk() {
+                // 
+                _this.props.transferDeviceProfile(obj);
+            },
+            onCancel() { },
+            okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
+            cancelText: convertToLang(this.props.translation[Button_No], 'No'),
+        });
+    }
+
     filterList = (type, devices) => {
         let dumyDevices = [];
 
         if (type === DEVICE_FLAGGED) {
-            // console.log('11111 flagged', type)
+            // 
             devices.filter(function (device) {
                 if (device.finalStatus !== DEVICE_UNLINKED) {
                     // let deviceStatus = getStatus(device.status, device.account_status, device.unlink_status, device.device_status, device.activation_status);
                     let deviceStatus = device.flagged;
-                    // console.log('22222 flagged', device.flagged)
+                    // 
                     if ((deviceStatus === 'Defective' || deviceStatus === 'Lost' || deviceStatus === 'Stolen' || deviceStatus === 'Other') && (device.finalStatus === "Flagged")) {
                         dumyDevices.push(device);
                     }
@@ -191,23 +213,24 @@ class Devices extends Component {
     }
 
     handleChange(value) {
-        // console.log('filtede dis0')
+        // this.handleCheckChange(this.props.selectedOptions)
+        // 
 
-        let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
+        // let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
         let indxAction = this.state.columns.findIndex(k => k.dataIndex === 'action');
         if (value === DEVICE_UNLINKED && this.props.user.type === ADMIN) {
             //  indx = this.state.columns.findIndex(k => k.dataIndex =='action');
             if (indxAction >= 0) {
                 this.state.columns.splice(indxAction, 1)
 
-                let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
+                // let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
 
-                if (indexTransfered >= 0 && indexTransfered !== undefined) {
-                    this.state.columns[indexTransfered].className = 'hide';
-                    this.state.columns[indexTransfered].children[0].className = 'hide';
-                }
+                // if (indexTransfered >= 0 && indexTransfered !== undefined) {
+                //     this.state.columns[indexTransfered].className = 'hide';
+                //     this.state.columns[indexTransfered].children[0].className = 'hide';
+                // }
             }
-            //    console.log('CLGGGG', this.state.columns)
+            //    
 
         } else {
             if (indxAction < 0) {
@@ -219,36 +242,27 @@ class Devices extends Component {
                     width: 800,
 
                 })
-                let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
-
-                if (indexTransfered >= 0 && indexTransfered !== undefined) {
-                    this.state.columns[indexTransfered].className = 'hide';
-                    this.state.columns[indexTransfered].children[0].className = 'hide';
-                }
-
             }
         }
         let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex === 'activation_code');
         let indexFlagged = this.state.columns.findIndex(k => k.dataIndex === 'flagged');
         if (value === DEVICE_UNLINKED && (this.props.user.type !== ADMIN)) {
-            // console.log('tab 5', this.state.columns);
             this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >DELETE SELECTED</Button>;
-
-            let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
-            if (indexTransfered >= 0 && indexTransfered !== undefined) {
-                this.state.columns[indexTransfered].className = 'hide';
-                this.state.columns[indexTransfered].children[0].className = 'hide';
-            }
         }
         else if (value === DEVICE_PRE_ACTIVATION) {
+            let isCheckedColumn = this.props.selectedOptions.findIndex((item) => { return item.key === "validity" });
             let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
-            // console.log('index of 3 tab', indxRemainingDays)
+            // 
             if (indxAction >= 0) {
                 // this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >DELETE SELECTED</Button>
             }
-            if (indxRemainingDays >= 0 && indxRemainingDays !== undefined) {
+            if (indxRemainingDays >= 0 && indxRemainingDays !== undefined && isCheckedColumn !== -1) {
                 this.state.columns[indxRemainingDays].className = '';
                 this.state.columns[indxRemainingDays].children[0].className = '';
+            }
+            else {
+                this.state.columns[indxRemainingDays].className = 'hide';
+                this.state.columns[indxRemainingDays].children[0].className = 'hide';
             }
             let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex === 'activation_code');
             if (activationCodeIndex >= 0) {
@@ -257,12 +271,6 @@ class Devices extends Component {
             let indexFlagged = this.state.columns.findIndex(k => k.dataIndex === 'flagged');
             if (indexFlagged >= 0) {
                 this.state.columns.splice(7, 0, this.state.columns.splice(indexFlagged, 1)[0]);
-            }
-
-            let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
-            if (indexTransfered >= 0 && indexTransfered !== undefined) {
-                this.state.columns[indexTransfered].className = 'hide';
-                this.state.columns[indexTransfered].children[0].className = 'hide';
             }
         }
         else if (value === DEVICE_FLAGGED) {
@@ -277,35 +285,38 @@ class Devices extends Component {
                 this.state.columns.splice(11, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
             }
 
-            let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
-            if (indexTransfered >= 0 && indexTransfered !== undefined) {
-                this.state.columns[indexTransfered].className = 'hide';
-                this.state.columns[indexTransfered].children[0].className = 'hide';
-            }
+        } else {
+            this.state.columns[1]['title'] = 'ACTION';
 
-        } else if (value === DEVICE_TRANSFERED) {
-            let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
-            this.state.columns[1]['title'] = '';
-
-            if (indexTransfered > -1) {
-                if (indexTransfered >= 0 && indexTransfered !== undefined) {
-                    this.state.columns[indexTransfered].className = '';
-                    this.state.columns[indexTransfered].children[0].className = '';
-                }
-            }
-        }
-        else {
+            let isCheckedColumn = this.props.selectedOptions.findIndex((item) => { return item.key === "validity" });
             let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
-            this.state.columns[1]['title'] = '';
-
-            if (indxRemainingDays >= 0 && indxRemainingDays !== undefined) {
+            if (indxRemainingDays >= 0 && indxRemainingDays !== undefined && isCheckedColumn !== -1) {
                 this.state.columns[indxRemainingDays].className = 'hide';
                 this.state.columns[indxRemainingDays].children[0].className = 'hide';
             }
 
+            // if (indexTransfered > -1) {
+            if (value === DEVICE_TRANSFERED) {
+                let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
+                isCheckedColumn = this.props.selectedOptions.findIndex((item) => { return item.key === "transfered_to" }); // item.key === "transfered_to"
+                if (indexTransfered >= 0 && indexTransfered !== undefined && isCheckedColumn !== -1) {
+                    this.state.columns[indexTransfered].className = '';
+                    this.state.columns[indexTransfered].children[0].className = '';
+                }
+            } else {
+                this.state.columns[indexTransfered].className = 'hide';
+                this.state.columns[indexTransfered].children[0].className = 'hide';
+            }
+            // }
+
             let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
 
-            if (indexTransfered >= 0 && indexTransfered !== undefined) {
+            if (value === '8' || value === '1') {
+                if (indexTransfered >= 0 && indexTransfered !== undefined && isCheckedColumn !== -1) {
+                    this.state.columns[indexTransfered].className = '';
+                    this.state.columns[indexTransfered].children[0].className = '';
+                }
+            } else {
                 this.state.columns[indexTransfered].className = 'hide';
                 this.state.columns[indexTransfered].children[0].className = 'hide';
             }
@@ -332,7 +343,7 @@ class Devices extends Component {
                 devices = this.state.activeDevices;
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
-                    devices: this.handleSearch12(devices),
+                    devices: this.handleSearchOnTabChange(devices),
                     filteredDevices: devices,
                     tabselect: '4',
                     copy_status: true
@@ -343,7 +354,7 @@ class Devices extends Component {
                 devices = this.state.trialDevices;
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
-                    devices: this.handleSearch12(devices),
+                    devices: this.handleSearchOnTabChange(devices),
                     filteredDevices: devices,
                     tabselect: '9',
                     copy_status: true
@@ -354,27 +365,29 @@ class Devices extends Component {
                 devices = this.state.suspendDevices;
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
-                    devices: this.handleSearch12(devices),
+                    devices: this.handleSearchOnTabChange(devices),
                     filteredDevices: devices,
                     tabselect: '7',
                     copy_status: true
                 })
                 break;
             case DEVICE_TRANSFERED:
-                devices = this.state.transferredDevices;
+                // devices = this.state.transferredDevices;
+                devices = this.filterList(DEVICE_TRANSFERED, this.props.devices);
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
-                    devices: this.handleSearch12(devices),
+                    devices: this.handleSearchOnTabChange(devices),
                     filteredDevices: devices,
                     tabselect: '8',
                     copy_status: true
                 })
                 break;
             case DEVICE_FLAGGED:
-                devices = this.state.flaggedDevices;
+                // devices = this.state.flaggedDevices;
+                devices = this.filterList(DEVICE_FLAGGED, this.props.devices);
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
-                    devices: this.handleSearch12(devices),
+                    devices: this.handleSearchOnTabChange(devices),
                     filteredDevices: devices,
                     tabselect: '10',
                     copy_status: true
@@ -384,7 +397,7 @@ class Devices extends Component {
                 devices = this.state.expireDevices;
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
-                    devices: this.handleSearch12(devices),
+                    devices: this.handleSearchOnTabChange(devices),
                     filteredDevices: devices,
                     tabselect: '6',
                     copy_status: true
@@ -394,17 +407,18 @@ class Devices extends Component {
                 devices = this.state.allDevices;
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
-                    devices: this.handleSearch12(devices),
+                    devices: this.handleSearchOnTabChange(devices),
                     filteredDevices: devices,
                     tabselect: '1',
                     copy_status: true
                 })
                 break;
             case DEVICE_UNLINKED:
-                devices = this.state.unlinkedDevices;
+                // devices = this.state.unlinkedDevices;
+                devices = this.filterList(DEVICE_UNLINKED, this.props.devices);
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
-                    devices: this.handleSearch12(devices),
+                    devices: this.handleSearchOnTabChange(devices),
                     filteredDevices: devices,
                     tabselect: '5',
                     copy_status: true
@@ -415,7 +429,7 @@ class Devices extends Component {
                 devices = this.state.pendingDevices;
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
-                    devices: this.handleSearch12(devices),
+                    devices: this.handleSearchOnTabChange(devices),
                     filteredDevices: devices,
                     tabselect: '2',
                     copy_status: true
@@ -425,7 +439,7 @@ class Devices extends Component {
                 devices = this.state.preActiveDevices;
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
-                    devices: this.handleSearch12(devices),
+                    devices: this.handleSearchOnTabChange(devices),
                     filteredDevices: devices,
                     tabselect: '3',
                     copy_status: true
@@ -446,15 +460,15 @@ class Devices extends Component {
 
     handleChangetab = (value) => {
 
-
-        // console.log('tab is: ', value)
-        // console.log('============= value index is: ', value)
-        let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
+        // this.handleCheckChange(this.props.selectedOptions);
+        // 
+        // 
+        // let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
         let indxAction = this.state.columns.findIndex(k => k.dataIndex == 'action');
         if (value == '5' && this.props.user.type == ADMIN) {
             //  indx = this.state.columns.findIndex(k => k.dataIndex =='action');
             if (indxAction >= 0) { this.state.columns.splice(indxAction, 1) }
-            //    console.log('CLGGGG', this.state.columns)
+            //    
 
         } else {
             if (indxAction < 0) {
@@ -471,38 +485,26 @@ class Devices extends Component {
         let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex === 'activation_code');
 
         if (value === '5' && (this.props.user.type !== ADMIN)) {
-            // console.log('tab 5', this.state.columns);
             this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >DELETE SELECTED</Button>;
-
-            let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
-
-            if (indexTransfered >= 0 && indexTransfered !== undefined) {
-                this.state.columns[indexTransfered].className = 'hide';
-                this.state.columns[indexTransfered].children[0].className = 'hide';
-            }
-
-        } else if (value === '2' && (this.props.user.type === ADMIN)) {
+        }
+        else if (value === '2' && (this.props.user.type === ADMIN)) {
             this.state.columns.splice(indxAction, 1)
-
-            let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
-
-            if (indexTransfered >= 0 && indexTransfered !== undefined) {
-                this.state.columns[indexTransfered].className = 'hide';
-                this.state.columns[indexTransfered].children[0].className = 'hide';
-            }
-
         }
         else if (value === '3') {
+            let isCheckedColumn = this.props.selectedOptions.findIndex((item) => { return item.key === "validity" });
             let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
-            // console.log('index of 3 tab', indxRemainingDays)
-            if (indxAction >= 0) {
+            if (indxAction >= 0 && (this.props.user.type !== ADMIN)) {
                 this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >DELETE SELECTED</Button>
             }
-            if (indxRemainingDays >= 0 && indxRemainingDays !== undefined) {
+            if (indxRemainingDays >= 0 && indxRemainingDays !== undefined && isCheckedColumn !== -1) { //  && isCheckedColumn !== -1
                 this.state.columns[indxRemainingDays].className = '';
                 this.state.columns[indxRemainingDays].children[0].className = '';
             }
-            let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex === 'activation_code');
+            else {
+                this.state.columns[indxRemainingDays].className = 'hide';
+                this.state.columns[indxRemainingDays].children[0].className = 'hide';
+            }
+            // let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex === 'activation_code');
             if (activationCodeIndex >= 0) {
                 this.state.columns.splice(2, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
             }
@@ -510,14 +512,6 @@ class Devices extends Component {
             if (indexFlagged >= 0) {
                 this.state.columns.splice(7, 0, this.state.columns.splice(indexFlagged, 1)[0]);
             }
-
-            let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
-
-            if (indexTransfered >= 0 && indexTransfered !== undefined) {
-                this.state.columns[indexTransfered].className = 'hide';
-                this.state.columns[indexTransfered].children[0].className = 'hide';
-            }
-
         }
         else if (value === '10') {
             let indexFlagged = this.state.columns.findIndex(k => k.dataIndex === 'flagged');
@@ -526,68 +520,53 @@ class Devices extends Component {
             if (indexFlagged > -1) {
                 this.state.columns.splice(2, 0, this.state.columns.splice(indexFlagged, 1)[0]);
             }
-            let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex === 'activation_code');
+            // let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex === 'activation_code');
             if (activationCodeIndex >= 0) {
                 this.state.columns.splice(11, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
             }
 
-            let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
-
-            if (indexTransfered >= 0 && indexTransfered !== undefined) {
-                this.state.columns[indexTransfered].className = 'hide';
-                this.state.columns[indexTransfered].children[0].className = 'hide';
-            }
-
-        } else if (value === '8') {
-            let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
+        } else {
             this.state.columns[1]['title'] = 'ACTION';
 
-            if (indexTransfered > -1) {
-                if (indexTransfered >= 0 && indexTransfered !== undefined) {
+            let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
+            if (value === '1') {
+                // check column from dropdown, checked or not
+                let isCheckedColumn = this.props.selectedOptions.findIndex((item) => { return item.key === "validity" });
+
+                if (indxRemainingDays >= 0 && indxRemainingDays !== undefined && isCheckedColumn !== -1) {
+                    this.state.columns[indxRemainingDays].className = '';
+                    this.state.columns[indxRemainingDays].children[0].className = '';
+                }
+            } else {
+                this.state.columns[indxRemainingDays].className = 'hide';
+                this.state.columns[indxRemainingDays].children[0].className = 'hide';
+            }
+
+
+            let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
+            let isCheckedColumn = this.props.selectedOptions.findIndex((item) => { return item.key === "transfered_to" }); // item.key === "transfered_to"
+            // 
+
+            if (value === '8' || value === '1') {
+                if (indexTransfered >= 0 && indexTransfered !== undefined && isCheckedColumn !== -1) {
                     this.state.columns[indexTransfered].className = '';
                     this.state.columns[indexTransfered].children[0].className = '';
                 }
-            }
-        }
-        else {
-            let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
-            this.state.columns[1]['title'] = '';
-
-            if (indxRemainingDays >= 0 && indxRemainingDays !== undefined) {
-                if (value === '1') {
-                    this.state.columns[indxRemainingDays].className = '';
-                    this.state.columns[indxRemainingDays].children[0].className = '';
-                } else {
-                    this.state.columns[indxRemainingDays].className = 'hide';
-                    this.state.columns[indxRemainingDays].children[0].className = 'hide';
-                }
-
-            }
-
-            let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
-            if (indexTransfered >= 0 && indexTransfered !== undefined) {
-                // if (value === '1') {
-                //     this.state.columns[indexTransfered].className = '';
-                //     this.state.columns[indexTransfered].children[0].className = '';
-                // } else {
+            } else {
                 this.state.columns[indexTransfered].className = 'hide';
                 this.state.columns[indexTransfered].children[0].className = 'hide';
-                // }
             }
 
-            if (activationCodeIndex >= 0) {
-                this.state.columns.splice(11, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
+            if (value === '1') {
+                if (activationCodeIndex >= 0) {
+                    this.state.columns.splice(11, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
+                }
             }
             let indexFlagged = this.state.columns.findIndex(k => k.dataIndex === 'flagged');
-            // this.state.columns[indexFlagged]['title'] = '';
             if (indexFlagged >= 0) {
                 this.state.columns.splice(7, 0, this.state.columns.splice(indexFlagged, 1)[0]);
             }
         }
-
-        // this.setState({
-        //     columns: devicesColumns(this.props.translation, this.handleSearch, this.state.SearchValues)
-        // })
 
         var devices = [];
         switch (value) {
@@ -595,38 +574,37 @@ class Devices extends Component {
                 devices = this.filterList(DEVICE_ACTIVATED, this.props.devices);
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
-                    devices: this.handleSearch12(devices),
+                    devices: this.handleSearchOnTabChange(devices),
                     tabselect: '4',
                     filteredDevices: devices,
                     copy_status: true
                 })
                 break;
             case '9':
-                devices = this.state.trialDevices;
+                devices = this.filterList(DEVICE_TRIAL, this.props.devices)
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
-                // devices = this.state.trialDevices
                 this.setState({
-                    devices: this.handleSearch12(devices),
+                    devices: this.handleSearchOnTabChange(devices),
                     filteredDevices: devices,
                     tabselect: '9',
                     copy_status: true
                 })
                 break;
             case '7':
-                devices = this.state.suspendDevices;
+                devices = this.filterList(DEVICE_SUSPENDED, this.props.devices);
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
-                    devices: this.handleSearch12(devices),
+                    devices: this.handleSearchOnTabChange(devices),
                     filteredDevices: devices,
                     tabselect: '7',
                     copy_status: true
                 })
                 break;
             case '6':
-                devices = this.state.expireDevices;
+                devices = this.filterList(DEVICE_EXPIRED, this.props.devices)
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
-                    devices: this.handleSearch12(devices),
+                    devices: this.handleSearchOnTabChange(devices),
                     filteredDevices: devices,
                     tabselect: '6',
                     copy_status: true
@@ -636,57 +614,57 @@ class Devices extends Component {
                 devices = this.props.devices;
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
-                    devices: this.handleSearch12(devices),
+                    devices: this.handleSearchOnTabChange(devices),
                     filteredDevices: devices,
                     tabselect: '1',
                     copy_status: true
                 })
                 break;
             case "5":
-                devices = this.state.unlinkedDevices
+                devices = this.filterList(DEVICE_UNLINKED, this.props.devices);
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
-                    devices: this.handleSearch12(devices),
+                    devices: this.handleSearchOnTabChange(devices),
                     filteredDevices: devices,
                     tabselect: '5',
                     copy_status: true
                 })
                 break;
             case "2":
-                devices = this.state.pendingDevices
+                devices = this.filterList(DEVICE_PENDING_ACTIVATION, this.props.devices)
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
-                    devices: this.handleSearch12(devices),
+                    devices: this.handleSearchOnTabChange(devices),
                     filteredDevices: devices,
                     tabselect: '2',
                     copy_status: true
                 })
                 break;
             case "3":
-                devices = this.state.preActiveDevices
+                devices = this.filterList(DEVICE_PRE_ACTIVATION, this.props.devices)
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
-                    devices: this.handleSearch12(devices),
+                    devices: this.handleSearchOnTabChange(devices),
                     filteredDevices: devices,
                     tabselect: '3',
                     copy_status: true
                 })
                 break;
             case "8":
-                devices = this.state.transferredDevices
+                devices = this.filterList(DEVICE_TRANSFERED, this.props.devices);
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
-                    devices: this.handleSearch12(devices),
+                    devices: this.handleSearchOnTabChange(devices),
                     filteredDevices: devices,
                     tabselect: '8',
                     copy_status: true
                 })
                 break;
             case "10":
-                devices = this.state.flaggedDevices
+                devices = this.filterList(DEVICE_FLAGGED, this.props.devices);
                 devices = (this.state.globalSearchedValue === "") ? devices : this.handleGlobalSearch(devices);
                 this.setState({
-                    devices: this.handleSearch12(devices),
+                    devices: this.handleSearchOnTabChange(devices),
                     filteredDevices: devices,
                     tabselect: '10',
                     copy_status: true
@@ -706,7 +684,7 @@ class Devices extends Component {
     }
 
     handleGlobalSearch(devices) {
-        console.log("HANDLE GLOBAL SEARCH");
+        // 
         if (devices.length) {
             if (this.state.globalSearchedValue !== "") {
                 status = true
@@ -733,10 +711,10 @@ class Devices extends Component {
 
 
     handleCheckChange(values) {
-        // console.log('handleCheckChange values are: ', values)
+        // 
         let dumydata = this.state.columns;
 
-        // console.log("dumyData", dumydata);
+        // 
         if (values.length) {
             this.state.columns.map((column, index) => {
 
@@ -748,12 +726,12 @@ class Devices extends Component {
                     }
                     // dumydata[]
                 }
-                // console.log(this.state.tabselect)
+                // 
                 values.map((value) => {
                     if (column.className !== 'row') {
                         if (column.dataIndex === value.key) {
-                            if (this.state.tabselect !== '3') {
-                                if (column.dataIndex !== 'validity') {
+                            if (this.state.tabselect !== '3' && this.state.tabselect !== '8') {
+                                if (column.dataIndex !== 'validity' && column.dataIndex !== 'transfered_to') {
                                     dumydata[index].className = '';
                                     dumydata[index].children[0].className = '';
                                 }
@@ -768,7 +746,7 @@ class Devices extends Component {
                 });
             });
 
-            this.setState({ columns: dumydata });
+            this.setState({ columns: dumydata, selectedOptions: values });
         } else {
 
             const newState = this.state.columns.map((column) => {
@@ -780,18 +758,56 @@ class Devices extends Component {
                 }
             });
 
-            this.setState({ columns: newState });
+            this.setState({ columns: newState, selectedOptions: values });
         }
+        // 
         this.props.postDropdown(values, 'devices');
-
+        // this.props.getDropdown('devices');
     }
 
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
-            // console.log('this.props ', this.props.DisplayPages);
+            let devicesList = []
+            switch (this.state.tabselect) {
+                case '4':
+                    devicesList = this.filterList(DEVICE_ACTIVATED, this.props.devices);
+                    break;
+                case '9':
+                    devicesList = this.filterList(DEVICE_TRIAL, this.props.devices);
+                    break;
+                case '7':
+                    devicesList = this.filterList(DEVICE_SUSPENDED, this.props.devices);
+                    break;
+                case '6':
+                    devicesList = this.filterList(DEVICE_EXPIRED, this.props.devices)
+                    break;
+                case '1':
+                    devicesList = this.props.devices;
+                    break;
+                case "5":
+                    devicesList = this.filterList(DEVICE_UNLINKED, this.props.devices)
+                    break;
+                case "2":
+                    devicesList = this.filterList(DEVICE_PENDING_ACTIVATION, this.props.devices)
+                    break;
+                case "3":
+                    devicesList = this.filterList(DEVICE_PRE_ACTIVATION, this.props.devices)
+                    break;
+                case "8":
+                    // devicesList = this.state.transferredDevices
+                    devicesList = this.filterList(DEVICE_TRANSFERED, this.props.devices);
+
+                case "10":
+                    // devicesList = this.state.flaggedDevices
+                    devicesList = this.filterList(DEVICE_FLAGGED, this.props.devices);
+                    break;
+                default:
+                    devicesList = this.filterList(DEVICE_ACTIVATED, this.props.devices);
+                    break;
+            }
             this.setState({
                 translation: this.props.translation,
-                devices: this.filterList(DEVICE_ACTIVATED, this.props.devices),
+                devices: devicesList,
                 columns: this.state.columns,
                 defaultPagingValue: this.props.DisplayPages,
                 selectedOptions: this.props.selectedOptions,
@@ -805,27 +821,17 @@ class Devices extends Component {
                 unlinkedDevices: this.filterList(DEVICE_UNLINKED, this.props.devices),
                 flaggedDevices: this.filterList(DEVICE_FLAGGED, this.props.devices),
                 transferredDevices: this.filterList(DEVICE_TRANSFERED, this.props.devices),
-                // transferDevices: this.filterList(DEVICE_TRANSFERED,this.props.devices),
-
-
             })
             this.handleChangetab(this.state.tabselect);
-
         }
 
         if (this.props.translation !== prevProps.translation) {
             this.setState({
-                columns: devicesColumns(this.props.translation, this.handleSearch, this.state.SearchValues)
+                columns: devicesColumns(this.props.translation, this.handleSearch)
             })
         }
 
-
-
-        // console.log('updated');
-
         if (this.props.selectedOptions !== prevProps.selectedOptions) {
-            // console.log('==================== componentDidUpdate  ======================== ');
-            // console.log(this.props.selectedOptions)
             this.handleCheckChange(this.props.selectedOptions)
         }
     }
@@ -836,11 +842,18 @@ class Devices extends Component {
                 translation: nextProps.translation
             })
         }
+
+        // if (this.props.selectedOptions !== nextProps.selectedOptions) {
+        //     this.handleCheckChange(nextProps.selectedOptions);
+        //     this.setState({
+        //         selectedOptions: nextProps.selectedOptions
+        //     })
+        // }
     }
 
     handlePagination = (value) => {
         //  alert(value);
-        //  console.log('pagination value of ', value)
+        //  
         this.refs.devcieList.handlePagination(value);
         this.props.postPagination(value, 'devices');
     }
@@ -848,7 +861,6 @@ class Devices extends Component {
         this.props.getDevicesList();
         this.props.getDropdown('devices');
         this.props.getPagination('devices');
-        // this.props.getNotification();
     }
 
 
@@ -892,7 +904,7 @@ class Devices extends Component {
             }
             if (value.length) {
 
-                // console.log("DEVICES LIST", copyDevices);
+                // 
                 let foundDevices = componentSearch(copyDevices, value);
                 if (foundDevices.length) {
                     this.setState({
@@ -951,9 +963,13 @@ class Devices extends Component {
 
     handleDeviceModal = (visible) => {
         let device = {};
-        this.refs.add_device.showModal(device, (device) => {
-            this.props.preActiveDevice(device);
-        }, true);
+        if (this.props.user.account_balance_status === 'suspended') {
+            showSupendAccountWarning(this)
+        } else {
+            this.refs.add_device.showModal(device, (device) => {
+                this.props.preActiveDevice(device);
+            }, true);
+        }
     }
 
 
@@ -973,7 +989,8 @@ class Devices extends Component {
 
 
     render() {
-        // console.log('search data is: ', this.state.devices);
+
+        // 
         let type = this.props.user.type
         let styleType = {};
         if (type === ADMIN) {
@@ -981,7 +998,7 @@ class Devices extends Component {
         } else {
             styleType = "devices_fix_card_dealer"
         }
-        // console.log(this.props.selectedOptions, 'props are the ')
+        // 
         return (
             <Fragment>
                 {/* <Button type="danger" size="small" onClick={() => dealerColsWithSearch()}>Testing</Button> */}
@@ -1006,21 +1023,23 @@ class Devices extends Component {
                                 handleComponentSearch={this.handleComponentSearch}
                                 locale={this.props.locale}
                                 translation={this.state.translation}
-                                pageHeading={convertToLang(this.props.translation[Sidebar_devices], "Devices")}
+                                // provide page heading if you need
+                                pageHeading={convertToLang(this.props.translation[Sidebar_users_devices], "Users & Devices")}
                             />
                             <DevicesList
+                                transferDeviceProfile={this.transferDeviceProfile}
                                 onChangeTableSorting={this.handleTableChange}
                                 devices={this.state.devices}
-                                allDevices={this.state.allDevices.length}
-                                activeDevices={this.state.activeDevices.length}
-                                expireDevices={this.state.expireDevices.length}
-                                suspendDevices={this.state.suspendDevices.length}
-                                preActiveDevices={this.state.preActiveDevices.length}
-                                pendingDevices={this.state.pendingDevices.length}
-                                unlinkedDevices={this.state.unlinkedDevices.length}
-                                flaggedDevices={this.state.flaggedDevices.length}
-                                transferredDevices={this.state.transferredDevices.length}
-                                trialDevices={this.state.trialDevices.length}
+                                allDevices={this.state.allDevices}
+                                activeDevices={this.state.activeDevices}
+                                expireDevices={this.state.expireDevices}
+                                suspendDevices={this.state.suspendDevices}
+                                preActiveDevices={this.state.preActiveDevices}
+                                pendingDevices={this.state.pendingDevices}
+                                unlinkedDevices={this.state.unlinkedDevices}
+                                flaggedDevices={this.state.flaggedDevices}
+                                transferredDevices={this.state.transferredDevices}
+                                trialDevices={this.state.trialDevices}
                                 suspendDevice={this.props.suspendDevice}
                                 activateDevice={this.props.activateDevice}
                                 columns={this.state.columns}
@@ -1062,10 +1081,10 @@ class Devices extends Component {
     handleSearch = (e) => {
 
         this.state.SearchValues[e.target.name] = { key: e.target.name, value: e.target.value };
-        // console.log()
+        // 
         let response = handleMultipleSearch(e, this.state.copy_status, copyDevices, this.state.SearchValues, this.state.filteredDevices)
 
-        console.log(response.SearchValues, "response is: ===========> ", response)
+        // 
         this.setState({
             devices: response.demoData,
             SearchValues: response.SearchValues
@@ -1089,7 +1108,7 @@ class Devices extends Component {
         //     this.state.SearchValues[targetName] = { key: targetName, value: targetValue };
 
         //     copyDevices.forEach((device) => {
-        //         // console.log('device is: ', device);
+        //         // 
         //         if ((typeof device[targetName]) === 'string' && device[targetName] !== null && device[targetName] !== undefined) {
 
         //             let searchColsAre = Object.keys(demoSearchValues).length;
@@ -1131,7 +1150,7 @@ class Devices extends Component {
     }
 
 
-    handleSearch12 = (devices) => {
+    handleSearchOnTabChange = (devices) => {
 
         let response = filterData_RelatedToMultipleSearch(devices, this.state.SearchValues);
         return response;
@@ -1145,8 +1164,8 @@ class Devices extends Component {
         //         let searchDevices = 0;
 
         //         for (let search of searchData) {
-        //             // console.log('search is: ', search)
-        //             // console.log('search key is: ', search.key)
+        //             // 
+        //             // 
         //             if (search.value == "") {
         //                 searchDevices++;
         //             } else if (device[search.key].toUpperCase().includes(search.value.toUpperCase())) {
@@ -1181,20 +1200,17 @@ function mapDispatchToProps(dispatch) {
         preActiveDevice: preActiveDevice,
         postPagination: postPagination,
         getPagination: getPagination,
-        getNotification: getNotification,
         deleteUnlinkDevice: deleteUnlinkDevice,
         unflagged: unflagged,
         unlinkDevice: unlinkDevice,
         getSimIDs: getSimIDs,
         getChatIDs: getChatIDs,
-        getPgpEmails: getPGPEmails
+        getPgpEmails: getPGPEmails,
+        transferDeviceProfile: transferDeviceProfile
     }, dispatch);
 }
 
 var mapStateToProps = ({ devices, auth, settings }) => {
-    // console.log('check traslatin log at component:: ', settings.translation)
-    // console.log('devices AUTH', auth);
-    //   console.log(settings.deviceOptions,' Hamza.. devices OPTION');
     return {
         devices: devices.devices,
         msg: devices.msg,
@@ -1211,3 +1227,18 @@ var mapStateToProps = ({ devices, auth, settings }) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Devices)
+
+
+function showSupendAccountWarning(_this) {
+    confirm({
+        title: "Your account is past due, please make a payment of past due to bring your account up to date to use the ADD DEVICE feature.",
+        okText: "PURCHASE CREDITS",
+        onOk() {
+            _this.props.history.push('/account')
+        },
+        onCancel() {
+
+        },
+
+    })
+}

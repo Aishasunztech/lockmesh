@@ -204,7 +204,7 @@ export default class Activity extends Component {
         let data = this.state.activities;
         if (data.length) {
             return data.map((row, index) => {
-                console.log(row.data);
+                // console.log(row.data);
                 return {
                     key: index,
                     action_name: row.action_name.toUpperCase() === 'PASSWORD' ? 'PASSWORD CHANGED' : row.action_name.toUpperCase(),
