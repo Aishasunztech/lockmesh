@@ -104,6 +104,7 @@ export default class DealerDomains extends Component {
     handleCancel = () => {
         this.setState({ visible: false });
     }
+    
     componentWillReceiveProps(nextProps) {
         if (this.props.domains.length !== nextProps.domains.length) {
             this.setState({

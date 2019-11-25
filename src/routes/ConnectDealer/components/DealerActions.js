@@ -75,7 +75,29 @@ function showConfirm(_this, dealer, action, btn_title, name = "") {
 }
 
 export default class DealerAction extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            dealerList: []
+        }
+    }
 
+    componentWillReceiveProps(nextProps) {
+        if (this.props.dealerList.length !== nextProps.dealerList.length) {
+            this.setState({
+                dealerList: nextProps.dealerList
+            })
+        }
+    }
+    onChangeDealer = (e) => {
+        // alert(e)
+    }
+    renderDealerList = () => {
+        let dealerList = this.state.dealerList
+        return dealerList.map((dealer, index) => {
+            return (<Select.Option key={index} value={dealer.dealer_id}>{dealer.dealer_name}</Select.Option>)
+        })
+    }
     render() {
         if (!this.props.dealer) {
             return null;
@@ -90,6 +112,23 @@ export default class DealerAction extends Component {
         const undo_button_text = (dealer.unlink_status === 0) ? 'Delete' : 'Undelete'
         return (
             <Fragment>
+                <Card className="search_dev_id">
+                    <Row gutter={16} type="flex" justify="center" align="top">
+                        <Col span={24} className="gutter-row" justify="center" >
+                            <h4 className="mb-6">Search Dealer ID</h4>
+                            <Select
+                                showSearch={true}
+
+                                style={{ width: '100%' }}
+                                placeholder="Search Dealer ID"
+                                onChange={this.onChangeDealer}
+                            >
+                                {this.renderDealerList()}
+                            </Select>
+                        </Col>
+                    </Row>
+                </Card>
+
                 <Card style={{ borderRadius: 12 }}>
                     <Row gutter={16} type="flex" justify="center" align="top">
                         <Col span={12} className="gutter-row" justify="center" >
