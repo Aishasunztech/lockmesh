@@ -236,6 +236,9 @@ const RestService = {
     getDealerDetails: (dealerId) => {
         return axios.get(BASE_URL + 'users/connect-dealer/' + dealerId, RestService.getHeader());
     },
+    getDealerDomains: (dealerId) => {
+        return axios.get(BASE_URL + 'users/dealer-domains/' + dealerId, RestService.getHeader());
+    },
     getDealerPaymentHistory: (dealerId) => {
         return axios.get(BASE_URL + 'users/payment-history/' + dealerId, RestService.getHeader());
     },

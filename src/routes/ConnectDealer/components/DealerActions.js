@@ -6,6 +6,7 @@ import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Div
 import EditDealer from '../../dealers/components/editDealer';
 import DealerPaymentHistory from './DealerPaymentHistory';
 import DealerSalesHistory from "./DealerSalesHistory";
+import DealerDomains from './DealerDomains';
 
 // Helpers
 import { convertToLang } from '../../utils/commonUtils'
@@ -96,8 +97,15 @@ export default class DealerAction extends Component {
                                 <h6 className="mb-0">Activity</h6>
                             </Button>
                         </Col>
-                        <Col span={12} className="gutter-row" justify="center" >
-                            <Button disabled style={{ width: "100%", marginBottom: 16, }}>
+                        <Col
+                            span={12}
+                            className="gutter-row"
+                            justify="center"
+                        >
+                            <Button
+                                onClick={() => this.refs.dealerDomains.showModal(this.props.dealer, this.props.getDealerDomains)}
+                                style={{ width: "100%", marginBottom: 16, }}
+                            >
                                 <h6 className="mb-0">Domains</h6>
                             </Button>
                         </Col>
@@ -199,11 +207,13 @@ export default class DealerAction extends Component {
                         </Col>
                     </Row>
                 </Card>
+
                 <EditDealer
                     ref='editDealer'
                     // getDealerList={this.props.getDealerList} 
                     translation={this.props.translation}
                 />
+
                 <DealerPaymentHistory
                     ref='dealerPaymentHistory'
                     translation={this.props.translation}
@@ -218,11 +228,20 @@ export default class DealerAction extends Component {
                     credits_limit={this.props.dealer.credits_limit}
                     setCreditLimit={this.props.setCreditLimit}
                 />
+
                 <DealerSalesHistory
                     ref='dealerSalesHistory'
                     translation={this.props.translation}
                     salesHistory={this.props.salesHistory}
                 />
+
+                <DealerDomains
+                    ref="dealerDomains"
+                    translation={this.props.translation}
+                    domains={this.props.domains}
+                // dealerDomains
+                />
+
             </Fragment >
         )
     }
