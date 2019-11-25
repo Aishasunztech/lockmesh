@@ -67,7 +67,8 @@ import {
     SERVICES_DETAIL,
     SERVICES_HISTORY,
     CANCEL_EXTENDED_SERVICE,
-    USER_CREDITS
+    USER_CREDITS,
+    GET_DEVICE_LIST
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -102,6 +103,29 @@ export function getDeviceDetails(deviceId) {
                 if (response.data) {
                     dispatch({
                         type: GET_DEVICE_DETAILS,
+                        payload: response.data.data
+                    })
+                }
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        });
+
+    };
+}
+export function getDeviceListConnectDevice(deviceId) {
+    //console.log('object is callse')
+    return (dispatch) => {
+        RestService.getDeviceListConnectDevice(deviceId).then((response) => {
+            // console.log("slkdflaskdfjlasf", response.data);
+            if (RestService.checkAuth(response.data)) {
+                // console.log("slkdflaskdfjlasf", response.data);
+                if (response.data) {
+                    dispatch({
+                        type: GET_DEVICE_LIST,
                         payload: response.data.data
                     })
                 }

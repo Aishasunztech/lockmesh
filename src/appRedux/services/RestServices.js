@@ -263,6 +263,11 @@ const RestService = {
         //console.log('rest apoi')
         return axios.get(BASE_URL + 'users/connect/' + device_id, RestService.getHeader());
     },
+    // getDeviceList for connect page
+    getDeviceListConnectDevice: (device_id) => {
+        //console.log('rest apoi')
+        return axios.get(BASE_URL + 'users/connect/get-device-list' , RestService.getHeader());
+    },
     // getAppJobQueue
     getAppJobQueue: (device_id) => {
         //console.log('rest apoi')
