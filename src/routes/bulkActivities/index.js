@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 import { Modal, Col, Row, Card, Button, Input, Select, Table, Icon, Tag } from 'antd';
 import { getAllDealers } from "../../appRedux/actions/Dealers";
 import HistoryModal from "./components/bulkHistory";
+import TableHistory from "./components/TableHistory";
 import {
     getBulkDevicesList,
     bulkSuspendDevice,
@@ -15,8 +16,14 @@ import {
     applyBulkPullApps,
     setBulkPushApps,
     setBulkPullApps,
-    setSelectedBulkDevices
+    setSelectedBulkDevices,
+    unlinkBulkDevices,
+    wipeBulkDevices,
+    closeResponseModal,
+    applyBulkPolicy
 } from "../../appRedux/actions/BulkDevices";
+
+import { getPolicies } from "../../appRedux/actions/ConnectDevice";
 
 // import {
 //     connectSocket,
@@ -56,7 +63,7 @@ import {
     writeImei,
     getActivities,
     hidePolicyConfirm,
-    applyPolicy,
+    // applyPolicy,
     applySetting,
     getProfiles,
     wipe,
@@ -73,10 +80,10 @@ import CustomScrollbars from "../../util/CustomScrollbars";
 import { getUserList } from "../../appRedux/actions/Users";
 import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, componentSearch, titleCase, convertToLang, checkRemainTermDays } from '../utils/commonUtils'
 // import { ADMIN } from '../../constants/Constants';
-import { Button_Confirm, Button_Cancel, Button_Edit } from '../../constants/ButtonConstants';
+import { Button_Confirm, Button_Cancel, Button_Edit, Button_Ok } from '../../constants/ButtonConstants';
 import { devicesColumns, userDevicesListColumns } from '../utils/columnsUtils';
 
-import FilterDeives from './components/filterDevices';
+import FilterDevices from './components/filterDevices';
 import PushPullApps from './components/pushPullApps';
 
 import {
@@ -87,6 +94,7 @@ import {
     DEVICE_SUSPENDED,
     DEVICE_ACTIVATED
 } from '../../constants/Constants'
+import { DO_YOU_WANT_TO_APPLY } from '../../constants/DeviceConstants';
 
 var copyDealerAgents = [];
 var status = true;
@@ -115,14 +123,14 @@ class BulkActivities extends Component {
         ]
 
         this.actionList = [
-            // { key: 'PUSH APPS', value: "Push Apps" },
-            // { key: 'PULL APPS', value: "Pull Apps" },
-            // { key: 'PUSH POLICY', value: "Push Policy" },
+            { key: 'PUSH APPS', value: "Push Apps" },
+            { key: 'PULL APPS', value: "Pull Apps" },
+            { key: 'PUSH POLICY', value: "Push Policy" },
             // { key: 'SET PERMISSIONS', value: "Set Permissions" },
             { key: 'ACTIVATE DEVICES', value: "Activate Devices" },
             { key: 'SUSPEND DEVICES', value: "Suspend Devices" },
-            // { key: 'UNLINK DEVICES', value: "Unlink Devices" },
-            // { key: 'WIPE DEVICES', value: "Wipe Devices" }
+            { key: 'UNLINK DEVICES', value: "Unlink Devices" },
+            { key: 'WIPE DEVICES', value: "Wipe Devices" }
         ];
 
         // let columns = devicesColumns(props.translation, this.handleColumnSearch);
@@ -145,10 +153,11 @@ class BulkActivities extends Component {
             pushAppsModal: false,
             pullAppsModal: false,
             apk_list: [],
-            pushAppsResponseModal: false,
+            bulkResponseModal: false,
             handleModalBtn: false,
             checkAllSelectedDealers: false,
-            checkAllSelectedUsers: false
+            checkAllSelectedUsers: false,
+            selectedPolicy: '',
         }
     }
 
@@ -241,6 +250,7 @@ class BulkActivities extends Component {
         this.props.getAllDealers();
         this.props.getUserList();
         this.props.getDealerApps();
+        this.props.getPolicies();
 
 
         this.setState({
@@ -248,6 +258,7 @@ class BulkActivities extends Component {
             dealerList: this.props.dealerList,
         })
     }
+
 
     componentWillReceiveProps(nextProps) {
         // console.log('hi')
@@ -283,18 +294,23 @@ class BulkActivities extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.pushAppsResponseModal !== prevProps.pushAppsResponseModal) {
+        // console.log("this.props.bulkResponseModal !== prevProps.bulkResponseModal ", this.props.bulkResponseModal, prevProps.bulkResponseModal)
+        if (this.props.bulkResponseModal !== prevProps.bulkResponseModal) {
+            // console.log("hi")
             this.setState({
-                pushAppsResponseModal: true
+                bulkResponseModal: this.props.bulkResponseModal
             })
         }
+        //  else {
+        //     this.state.bulkResponseModal = false;
+        // }
     }
 
-    handleCancelDuplicate = () => {
+    handleCancelResponseModal = () => {
         this.setState({
-            pushAppsResponseModal: false
+            bulkResponseModal: false
         })
-        // this.props.insertNewData({ newData: [], submit: false });
+        this.props.closeResponseModal();
     }
 
     handleColumnSearch = (e) => {
@@ -486,6 +502,7 @@ class BulkActivities extends Component {
     }
 
     handleChangeUser = (values) => {
+        console.log("values ", values);
         // console.log("handleChangeUser values ", values, this.state.selectedUsers, this.props.users_list, this.state.allUsers);
         let checkAllUsers = this.state.checkAllSelectedUsers
 
@@ -520,9 +537,7 @@ class BulkActivities extends Component {
 
     handleChangeDealer = (values) => {
         // console.log("handleChangeDealer values ", values, this.state.selectedDealers.length, this.state.dealerList.length);
-
         let checkAllDealers = this.state.checkAllSelectedDealers
-
         let selectAll = values.filter(e => e.key === "all");
         let selectedDealers = [];
 
@@ -550,18 +565,24 @@ class BulkActivities extends Component {
 
         // console.log('handle change data is: ', data)
         this.props.getBulkDevicesList(data);
-        this.setState({ selectedDealers, checkAllSelectedDealers: checkAllDealers });
+        this.setState({
+            selectedDealers,
+            selectedUsers: [],
+            checkAllSelectedDealers: checkAllDealers,
+        });
 
     }
 
     handleChangeAction = (e) => {
 
-        if (e === "PUSH APPS" || e === "PULL APPS") {
+        if (e === "PUSH APPS" || e === "PULL APPS" || e === "PUSH POLICY") {
             if (e === "PUSH APPS") {
-                this.setState({ pushAppsModal: true, handleModalBtn: true });
+                this.setState({ pushAppsModal: true, handleModalBtn: true }); // hanldeModalBtn used for View/Change
             }
             else if (e === "PULL APPS") {
                 this.setState({ pullAppsModal: true, handleModalBtn: true });
+            } else if (e === "PUSH POLICY") {
+                this.setState({ pushPolicyModal: true, handleModalBtn: true })
             }
         } else {
             this.setState({ handleModalBtn: false });
@@ -573,7 +594,7 @@ class BulkActivities extends Component {
 
     handleViewChangePushPullApps = () => {
         let actionName = this.state.selectedAction;
-        // console.log("actionName handleViewChangePushPullApps ", actionName)
+        console.log("actionName handleViewChangePushPullApps ", actionName)
 
         if (actionName === "PUSH APPS") {
             this.setState({ pushAppsModal: true });
@@ -581,24 +602,54 @@ class BulkActivities extends Component {
         else if (actionName === "PULL APPS") {
             this.setState({ pullAppsModal: true });
         }
+        else if (actionName === "PUSH POLICY") {
+            this.setState({ pushPolicyModal: true });
+        }
     }
 
     hanldeTags = (e) => {
         console.log("hanldeTags ", e);
     }
 
-    render() {
+    setPolicy = (policy, remove = false) => {
+        console.log("called apply policy function ", policy)
 
-        const { response_modal_action } = this.props;
+        let updatePolicies = this.state.selectedPolicy;
+
+        if (remove) {
+            updatePolicies = '';
+        } else {
+            updatePolicies = policy;
+        }
+
+        this.setState({
+            selectedPolicy: updatePolicies
+        })
+    }
+
+
+
+
+    render() {
+        const {
+            response_modal_action,
+            failed_device_ids,
+            expire_device_ids,
+            queue_device_ids,
+            pushed_device_ids,
+        } = this.props;
+
         let failedTitle = '';
-        // let expireTitle = '';
         let offlineTitle = '';
         let onlineTitle = '';
         let content = '';
 
+        // if (((failed_device_ids && failed_device_ids.length) || (expire_device_ids && expire_device_ids.length) || (queue_device_ids && queue_device_ids.length) || (pushed_device_ids && pushed_device_ids.length)) && response_modal_action !== '') {
+
+        // this.state.bulkResponseModal = true;
+
         if (response_modal_action === "pull") {
             failedTitle = "Failed to Pull apps from these Devices";
-            // expireTitle = "Already Expired Devices"
             offlineTitle = "(Apps will be Pulled soon from these devices. Action will be performed when devices back online)"
             onlineTitle = "Apps will be Pulled soon from these Devices";
         }
@@ -610,22 +661,36 @@ class BulkActivities extends Component {
         else if (response_modal_action === "active") {
             failedTitle = "Failed to Push apps on these Devices";
             offlineTitle = "(These Devices will be Activated Soon when back online)"
-            onlineTitle = "These Devices are Activate Successfully";
+            onlineTitle = "These Devices are Activated Successfully";
         }
         else if (response_modal_action === "suspend") {
             failedTitle = "Failed to Push apps on these Devices";
             offlineTitle = "(These Devices will be Suspended Soon when back online)"
             onlineTitle = "These Devices are Suspended Successfully";
         }
+        else if (response_modal_action === "unlink") {
+            failedTitle = "Failed to Unlink these Devices";
+            offlineTitle = "(These Devices will be Unlinked Soon when back online)"
+            onlineTitle = "These Devices are Unlinked Successfully";
+        }
+        else if (response_modal_action === "wipe") {
+            failedTitle = "Failed to Wipe these Devices";
+            offlineTitle = "(These Devices will be Wiped Soon when back online)"
+            onlineTitle = "These Devices are Wiped Successfully";
+        }
+        else if (response_modal_action === "policy") {
+            failedTitle = "Failed to apply policy on these Devices";
+            offlineTitle = "(Policy will be applied Soon on these Devices when back online)"
+            onlineTitle = "Policy Successfully applied on these Devices";
+        }
 
-
-        // let checkAllDealers = this.state.selectedDealers;
-        // checkAllDealers = checkAllDealers.filter(item => item.key == "all")
-        // if (checkAllDealers.length) {
-        //     checkAllDealers = [{ key: "all", label: "Select All" }]
-        // } else {
-        //     checkAllDealers = this.state.selectedDealers;
+        // } 
+        // else {
+        //     this.state.bulkResponseModal = false;
         // }
+
+        // console.log("this.state.bulkResponseModal ", this.state.bulkResponseModal)
+        // console.log("this.state.allDealers ", this.state.allDealers)
         return (
             <Fragment>
                 <Card >
@@ -684,6 +749,8 @@ class BulkActivities extends Component {
                                 value={this.state.selectedDealers}
                                 mode="multiple"
                                 labelInValue
+                                showSearch
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                 maxTagCount={this.state.checkAllSelectedDealers ? 0 : 2}
                                 maxTagTextLength={10}
                                 maxTagPlaceholder={this.state.checkAllSelectedDealers ? "All Selected" : `${this.state.selectedDealers.length - 2} more`}
@@ -691,24 +758,15 @@ class BulkActivities extends Component {
                                 placeholder={convertToLang(this.props.translation[""], "Select Dealers/S-Dealers")}
                                 onChange={this.handleChangeDealer}
                                 onDeselect={(e) => this.handleCancel(e, "dealers")}
-                            // onBlur={() => { this.handleMultipleSelect() }}
                             >
                                 <Select.Option key="allDealers" value="all">Select All</Select.Option>
-                                {this.props.dealerList.map((item, index) => {
-                                    // disabled={(this.props.dealerList.length === this.state.selectedDealers.length) ? true : false}
-                                    return (<Select.Option key={item.dealer_id} value={item.dealer_id}>{item.dealer_name}</Select.Option>)
-                                })}
+                                {this.state.allDealers.map(item => <Select.Option key={item.key} value={item.key}>{item.label}</Select.Option>)}
                             </Select>
                         </Col>
                     </Row>
                     <br />
 
-                    <p>Dealers/S-Dealers Selected: <span className="font_26">{((this.state.selectedDealers.length) ?
-                        this.state.selectedDealers.map((item, index) =>
-                            // <Tag>{this.state.selectedDealers.length - 1 !== index ? `${item.label}, ` : `${item.label}`}</Tag>
-                            <Tag>{item.label}</Tag>
-                        )
-                        : "NOT SELECTED")}</span></p>
+                    <p>Dealers/S-Dealers Selected: <span className="font_26">{((this.state.selectedDealers.length) ? this.state.selectedDealers.map(item => <Tag>{item.label}</Tag>) : "NOT SELECTED")}</span></p>
                     <Row gutter={24} className="">
                         <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
                             <span className=""> {convertToLang(this.props.translation[""], "Select Users:")} </span>
@@ -717,33 +775,27 @@ class BulkActivities extends Component {
                         <Col className="col-md-4 col-sm-4 col-xs-4">
                             <Select
                                 value={this.state.selectedUsers}
+                                showSearch
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}// showSearch={false}
                                 mode="multiple"
                                 labelInValue
                                 maxTagCount={this.state.checkAllSelectedUsers ? 0 : 2}
                                 maxTagTextLength={10}
                                 maxTagPlaceholder={this.state.checkAllSelectedUsers ? "All Selected" : `${this.state.selectedUsers.length - 2} more`}
                                 style={{ width: '100%' }}
-                                // onBlur={this.handleMultipleSelect}
                                 onDeselect={(e) => this.handleCancel(e, "users")}
                                 placeholder={convertToLang(this.props.translation[""], "Select Users")}
                                 onChange={this.handleChangeUser}
                             >
                                 <Select.Option key="allUsers" value="all">Select All</Select.Option>
-                                {this.props.users_list.map((item, index) => {
-                                    // disabled={(this.props.users_list.length === this.state.selectedUsers.length) ? true : false} key={item.id}
-                                    return (<Select.Option value={item.user_id}>{item.user_name}</Select.Option>)
-                                })}
+                                {this.props.users_list.map(item => <Select.Option key={item.user_id} value={item.user_id} >{item.user_name}</Select.Option>)}
                             </Select>
                         </Col>
                     </Row>
                     <br />
-                    <p>Users Selected: <span className="font_26">{(this.state.selectedUsers.length) ?
-                        this.state.selectedUsers.map((item, index) =>
-                            // <Tag>{this.state.selectedUsers.length - 1 !== index ? `${item.label}, ` : `${item.label}`}</Tag>
-                            <Tag>{item.label}</Tag>
-                        ) : "NOT SELECTED"}</span></p>
+                    <p>Users Selected: <span className="font_26">{(this.state.selectedUsers.length) ? this.state.selectedUsers.map(item => <Tag>{item.label}</Tag>) : "NOT SELECTED"}</span></p>
 
-                    <FilterDeives
+                    <FilterDevices
                         devices={this.state.filteredDevices}
                         selectedDealers={this.state.selectedDealers}
                         selectedUsers={this.state.selectedUsers}
@@ -759,6 +811,10 @@ class BulkActivities extends Component {
                         onChangeTableSorting={this.handleTableChange}
                         selectedDevices={this.props.selectedDevices}
                         setSelectedBulkDevices={this.props.setSelectedBulkDevices}
+                        unlinkBulkDevices={this.props.unlinkBulkDevices}
+                        wipeBulkDevices={this.props.wipeBulkDevices}
+                        bulkApplyPolicy={this.props.applyBulkPolicy}
+                        selectedPolicy={this.state.selectedPolicy}
                     />
 
                 </Card>
@@ -776,12 +832,12 @@ class BulkActivities extends Component {
                 {/* Push Apps responses handle through modal */}
                 <Modal
                     maskClosable={false}
-                    title={<div><Icon type="question-circle" className='warning' /><span> WARNNING! </span></div>}
-                    visible={this.state.pushAppsResponseModal}
-                    onCancel={this.handleCancelDuplicate}
+                    title={<div><Icon type="question-circle" className='warning' /><span> WARNING! </span></div>}
+                    visible={this.state.bulkResponseModal}
+                    onCancel={this.handleCancelResponseModal}
                     footer={false}
                 >
-                    {this.props.failed_device_ids && this.props.failed_device_ids.length ?
+                    {failed_device_ids && failed_device_ids.length ?
                         <Fragment>
                             <h2>{failedTitle}</h2>
                             <Table
@@ -798,7 +854,7 @@ class BulkActivities extends Component {
                         </Fragment>
                         : null}
 
-                    {this.props.expire_device_ids && this.props.expire_device_ids.length ?
+                    {expire_device_ids && expire_device_ids.length ?
                         <Fragment>
                             <h2>{`Already Expired Devices`}</h2>
                             <Table
@@ -815,7 +871,7 @@ class BulkActivities extends Component {
                         </Fragment>
                         : null}
 
-                    {this.props.queue_device_ids && this.props.queue_device_ids.length ?
+                    {queue_device_ids && queue_device_ids.length ?
                         <Fragment>
                             <h2>Offline Devices</h2>
                             <p><small>{offlineTitle}</small></p>
@@ -833,7 +889,7 @@ class BulkActivities extends Component {
                         </Fragment>
                         : null}
 
-                    {this.props.pushed_device_ids && this.props.pushed_device_ids.length ?
+                    {pushed_device_ids && pushed_device_ids.length ?
                         <Fragment>
                             <h2>{onlineTitle}</h2>
                             <Table
@@ -862,6 +918,33 @@ class BulkActivities extends Component {
                     translation={this.props.translation}
                 />
 
+
+                {/* Push Policy modal */}
+                <Modal
+                    title={convertToLang(this.props.translation["Policy"], "Policy")}
+                    maskClosable={false}
+                    style={{ top: 20 }}
+                    visible={this.state.pushPolicyModal}
+                    onOk={() => this.setState({ pushPolicyModal: false })}
+                    onCancel={() => this.setState({ pushPolicyModal: false })}
+                    className="load_policy_popup"
+                    footer={false}
+                // okText={convertToLang(this.props.translation["Button_Ok"], "Add Policy")}
+                // cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
+                >
+                    {
+                        <TableHistory
+                            histories={this.props.policies}
+                            type={"policy"}
+                            setPolicy={this.setPolicy}
+                            selectedPolicy={this.state.selectedPolicy}
+                            translation={this.props.translation}
+                            auth={this.props.user}
+                        />
+                    }
+
+                </Modal>
+
             </Fragment >
         )
     }
@@ -884,6 +967,11 @@ const mapDispatchToProps = (dispatch) => {
         setBulkPushApps: setBulkPushApps,
         setBulkPullApps: setBulkPullApps,
         setSelectedBulkDevices: setSelectedBulkDevices,
+        unlinkBulkDevices: unlinkBulkDevices,
+        wipeBulkDevices: wipeBulkDevices,
+        closeResponseModal: closeResponseModal,
+        applyBulkPolicy: applyBulkPolicy,
+        getPolicies: getPolicies,
 
         // ackFinishedPullApps: ackFinishedPullApps,
         // ackFinishedBulkPushApps: ackFinishedBulkPushApps,
@@ -895,6 +983,7 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users, device_details, socket }, otherProps) => {
     // console.log(bulkDevices.usersOfDealers, 'usersOfDealers ,devices.bulkDevices ', bulkDevices.bulkDevices);
     // console.log("bulkDevices.selectedDevices", bulkDevices.selectedDevices, "bulkDevices.bulkSelectedPushApps ", bulkDevices.bulkSelectedPushApps, "bulkDevices.bulkSelectedPullApps ", bulkDevices.bulkSelectedPullApps);
+    // console.log("bulkDevices.bulkResponseModal ", bulkDevices.bulkResponseModal)
     return {
         socket: socket.socket,
         user: auth.authUser,
@@ -909,13 +998,14 @@ const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users,
         pushAppsModal: device_details.pushAppsModal,
         apk_list: device_details.apk_list,
         app_list: device_details.app_list,
-        pushAppsResponseModal: bulkDevices.pushAppsResponseModal,
+        bulkResponseModal: bulkDevices.bulkResponseModal,
         failed_device_ids: bulkDevices.failed_device_ids,
         queue_device_ids: bulkDevices.queue_device_ids,
         pushed_device_ids: bulkDevices.pushed_device_ids,
         response_modal_action: bulkDevices.response_modal_action,
         expire_device_ids: bulkDevices.expire_device_ids,
-        selectedDevices: bulkDevices.selectedDevices
+        selectedDevices: bulkDevices.selectedDevices,
+        policies: device_details.policies,
     };
 }
 

@@ -179,7 +179,7 @@ class ConnectDevice extends Component {
       this.props.getAppJobQueue(device_id);
       this.props.getDeviceApps(device_id);
       this.props.getProfiles(device_id);
-      this.props.getPolicies(device_id);
+      this.props.getPolicies();
       this.props.getDeviceHistories(device_id);
       this.props.getImeiHistory(device_id);
       this.props.getDealerApps();
@@ -502,7 +502,7 @@ class ConnectDevice extends Component {
         this.props.getAppJobQueue(deviceId);
         this.props.getDeviceApps(deviceId);
         this.props.getProfiles(deviceId);
-        this.props.getPolicies(deviceId);
+        this.props.getPolicies();
         this.props.getDeviceHistories(deviceId);
         this.props.getImeiHistory(deviceId);
         this.props.getDealerApps();
@@ -515,7 +515,7 @@ class ConnectDevice extends Component {
       this.props.getAppJobQueue(deviceId);
       this.props.getDeviceApps(deviceId);
       this.props.getProfiles(deviceId);
-      this.props.getPolicies(deviceId);
+      this.props.getPolicies();
       this.props.getDeviceHistories(deviceId);
       this.props.getImeiHistory(deviceId);
       this.props.getDealerApps();

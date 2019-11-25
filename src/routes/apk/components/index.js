@@ -378,13 +378,16 @@ class Apk extends Component {
                                                             </Col>
                                                             <Col span={16} style={{ padding: '0' }}>
                                                                 <h5 style={{ display: 'inline-flex' }}><span className="diamond_icon">&#9670;</span>
-                                                                    <Markup content={convertToLang(this.props.translation[""], "PUSH/PULL Apks To All OR Selected Devices.")} />
+                                                                    <Markup content={convertToLang(this.props.translation[""], "PUSH/PULL Apks To All OR Selected Devices")} />
+                                                                </h5>
+                                                                {/* <h5 style={{ display: 'inline-flex' }}><span className="diamond_icon">&#9670;</span>
+                                                                    <Markup content={convertToLang(this.props.translation[""], "Make Permission Changes To All OR Selected Devices")} />
+                                                                </h5> */}
+                                                                <h5 style={{ marginBottom: 0, display: 'inline-flex' }}><span className="diamond_icon">&#9670;</span>
+                                                                    <Markup content={convertToLang(this.props.translation[""], "Push Policy, Acitvate, Suspend to ALL OR Selected Devices")} />
                                                                 </h5>
                                                                 <h5 style={{ display: 'inline-flex' }}><span className="diamond_icon">&#9670;</span>
-                                                                    <Markup content={convertToLang(this.props.translation[""], "Make Permission Changes To All OR Selected Devices")} />
-                                                                </h5>
-                                                                <h5 style={{ marginBottom: 0, display: 'inline-flex' }}><span className="diamond_icon">&#9670;</span>
-                                                                    <Markup content={convertToLang(this.props.translation[""], "Push Policy, Suspend, Wipe to ALL OR Selected Devices ")} />
+                                                                    <Markup content={convertToLang(this.props.translation[""], "Unlink, Wipe To All OR Selected Devices")} />
                                                                 </h5>
                                                                 <h5 className="" > {convertToLang(this.props.translation[""], "and more...")} </h5>
                                                             </Col>
