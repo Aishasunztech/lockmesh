@@ -20,7 +20,8 @@ import {
     unlinkBulkDevices,
     wipeBulkDevices,
     closeResponseModal,
-    applyBulkPolicy
+    applyBulkPolicy,
+    setBulkMsg
 } from "../../appRedux/actions/BulkDevices";
 
 import { getPolicies } from "../../appRedux/actions/ConnectDevice";
@@ -85,6 +86,7 @@ import { devicesColumns, userDevicesListColumns } from '../utils/columnsUtils';
 
 import FilterDevices from './components/filterDevices';
 import PushPullApps from './components/pushPullApps';
+import SendMsgForm from './components/SendMsgForm';
 
 import {
     DEVICE_PENDING_ACTIVATION,
@@ -130,7 +132,8 @@ class BulkActivities extends Component {
             { key: 'ACTIVATE DEVICES', value: "Activate Devices" },
             { key: 'SUSPEND DEVICES', value: "Suspend Devices" },
             { key: 'UNLINK DEVICES', value: "Unlink Devices" },
-            { key: 'WIPE DEVICES', value: "Wipe Devices" }
+            { key: 'WIPE DEVICES', value: "Wipe Devices" },
+            // { key: 'SEND MESSAGE', value: "Send Message" }
         ];
 
         // let columns = devicesColumns(props.translation, this.handleColumnSearch);
@@ -154,10 +157,11 @@ class BulkActivities extends Component {
             pullAppsModal: false,
             apk_list: [],
             bulkResponseModal: false,
-            handleModalBtn: false,
+            handleViewChange: false,
             checkAllSelectedDealers: false,
             checkAllSelectedUsers: false,
             selectedPolicy: '',
+            sendMsgModal: false
         }
     }
 
@@ -574,27 +578,31 @@ class BulkActivities extends Component {
     }
 
     handleChangeAction = (e) => {
-
-        if (e === "PUSH APPS" || e === "PULL APPS" || e === "PUSH POLICY") {
+        // console.log("e value is: ", e)
+        if (e === "PUSH APPS" || e === "PULL APPS" || e === "PUSH POLICY" || e === "SEND MESSAGE") {
             if (e === "PUSH APPS") {
-                this.setState({ pushAppsModal: true, handleModalBtn: true }); // hanldeModalBtn used for View/Change
+                this.setState({ pushAppsModal: true, handleViewChange: true });
             }
             else if (e === "PULL APPS") {
-                this.setState({ pullAppsModal: true, handleModalBtn: true });
+                this.setState({ pullAppsModal: true, handleViewChange: true });
             } else if (e === "PUSH POLICY") {
-                this.setState({ pushPolicyModal: true, handleModalBtn: true })
+                this.setState({ pushPolicyModal: true, handleViewChange: true })
+            } else if (e === "SEND MESSAGE") {
+                this.setState({ sendMsgModal: true, handleViewChange: true })
             }
         } else {
-            this.setState({ handleModalBtn: false });
+            this.setState({ handleViewChange: false });
         }
+
+
 
         this.setState({ selectedAction: e });
 
     }
 
-    handleViewChangePushPullApps = () => {
+    handleViewChangeModal = () => {
         let actionName = this.state.selectedAction;
-        console.log("actionName handleViewChangePushPullApps ", actionName)
+        // console.log("actionName handleViewChangeModal ", actionName)
 
         if (actionName === "PUSH APPS") {
             this.setState({ pushAppsModal: true });
@@ -604,6 +612,9 @@ class BulkActivities extends Component {
         }
         else if (actionName === "PUSH POLICY") {
             this.setState({ pushPolicyModal: true });
+        }
+        else if (actionName === "SEND MESSAGE") {
+            this.setState({ sendMsgModal: true });
         }
     }
 
@@ -628,7 +639,9 @@ class BulkActivities extends Component {
     }
 
 
-
+    handleCancelMsgModal = () => {
+        this.setState({ sendMsgModal: false })
+    }
 
     render() {
         const {
@@ -683,6 +696,11 @@ class BulkActivities extends Component {
             offlineTitle = "(Policy will be applied Soon on these Devices when back online)"
             onlineTitle = "Policy Successfully applied on these Devices";
         }
+        else if (response_modal_action === "send_msg") {
+            failedTitle = "Failed to send message on these Devices";
+            offlineTitle = "(Message will be Send soon to these devices. Action will be performed when devices back online)"
+            onlineTitle = "Message Successfully Send on these Devices";
+        }
 
         // } 
         // else {
@@ -731,8 +749,8 @@ class BulkActivities extends Component {
                             </Select>
                         </Col>
                         <Col className="col-md-4 col-sm-4 col-xs-4">
-                            {this.state.handleModalBtn ?
-                                <Button onClick={this.handleViewChangePushPullApps}>View/Change</Button>
+                            {this.state.handleViewChange ?
+                                <Button onClick={this.handleViewChangeModal}>View/Change</Button>
                                 : null}
                         </Col>
                     </Row>
@@ -945,6 +963,30 @@ class BulkActivities extends Component {
 
                 </Modal>
 
+                {/* Send Message modal */}
+                <Modal
+                    title={convertToLang(this.props.translation[""], "Send Message to Selected Devcies")}
+                    maskClosable={false}
+                    style={{ top: 20 }}
+                    visible={this.state.sendMsgModal}
+                    onOk={() => this.setState({ sendMsgModal: false })}
+                    onCancel={() => this.setState({ sendMsgModal: false })}
+                    // className="load_policy_popup"
+                    footer={false}
+                // okText={convertToLang(this.props.translation[Button_Ok], "SEND")}
+                // cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
+                >
+                    <SendMsgForm
+                        setBulkMsg={this.props.setBulkMsg}
+                        bulkMsg={this.props.bulkMsg}
+                        handleCancel={this.handleCancelMsgModal}
+                        user={this.state.user}
+                        ref='send_msg_form'
+                        translation={this.props.translation}
+                    />
+
+                </Modal>
+
             </Fragment >
         )
     }
@@ -972,6 +1014,7 @@ const mapDispatchToProps = (dispatch) => {
         closeResponseModal: closeResponseModal,
         applyBulkPolicy: applyBulkPolicy,
         getPolicies: getPolicies,
+        setBulkMsg: setBulkMsg
 
         // ackFinishedPullApps: ackFinishedPullApps,
         // ackFinishedBulkPushApps: ackFinishedBulkPushApps,
@@ -983,7 +1026,7 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users, device_details, socket }, otherProps) => {
     // console.log(bulkDevices.usersOfDealers, 'usersOfDealers ,devices.bulkDevices ', bulkDevices.bulkDevices);
     // console.log("bulkDevices.selectedDevices", bulkDevices.selectedDevices, "bulkDevices.bulkSelectedPushApps ", bulkDevices.bulkSelectedPushApps, "bulkDevices.bulkSelectedPullApps ", bulkDevices.bulkSelectedPullApps);
-    // console.log("bulkDevices.bulkResponseModal ", bulkDevices.bulkResponseModal)
+    // console.log("bulkDevices.bulkMsg ", bulkDevices.bulkMsg)
     return {
         socket: socket.socket,
         user: auth.authUser,
@@ -1006,6 +1049,7 @@ const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users,
         expire_device_ids: bulkDevices.expire_device_ids,
         selectedDevices: bulkDevices.selectedDevices,
         policies: device_details.policies,
+        bulkMsg: bulkDevices.bulkMsg,
     };
 }
 

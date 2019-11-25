@@ -965,6 +965,10 @@ const RestService = {
         return axios.post(BASE_URL + 'users/apply_bulk_policy', data, RestService.getHeader());
     },
 
+    sendBulkMsg: (data) => {
+        return axios.post(BASE_URL + 'users/send_bulk_msg', data, RestService.getHeader());
+    },
+
 
     // unlink bulk Devices
     unlinkBulkDevices: (data) => {
