@@ -104,6 +104,7 @@ export default class DealerDomains extends Component {
     handleCancel = () => {
         this.setState({ visible: false });
     }
+
     componentWillReceiveProps(nextProps) {
         if (this.props.domains.length !== nextProps.domains.length) {
             this.setState({
@@ -112,7 +113,6 @@ export default class DealerDomains extends Component {
         }
     }
     renderDealerDomainList = (list) => {
-        console.log("domain list:", list)
         if (list) {
             return list.map((item, index) => {
                 return {

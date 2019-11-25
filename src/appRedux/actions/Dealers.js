@@ -25,6 +25,7 @@ import { DEALER_LOADING } from "../../constants/ActionTypes";
 // action creaters 
 
 export function getDealerList(d, is_loading_show = true) {
+    // alert("test")
     return (dispatch) => {
         if (is_loading_show) {
             dispatch({

@@ -179,7 +179,7 @@ class AddDealer extends Component {
                         )}
                     </Form.Item>
 
-                    <div className='submitButton' style={{ justifycontent: 'right', alignItems: 'right' }} >
+                    <div className='submitButton' style={{ justifyContent: 'right', alignItems: 'right' }} >
                         <Button className='submitButton' onClick={this.handleSubmit}  >{this.props.dealerTypeText}</Button>
                         {/* <Button className='submitButton' onClick={this.showModal}  >Add Dealer </Button> */}
                     </div>
@@ -200,13 +200,12 @@ class AddDealer extends Component {
 const AddDealerForm = Form.create()(AddDealer);
 
 var mapStateToProps = (dealers) => {
-    // console.log('s dealer list is: ', dealers.dealers.dealers2);
     // console.log("mapStateToProps");
     // console.log(dealers);
     // console.log('dealer', dealers);
     return {
         msg: dealers.dealers.msg,
-        dealersList: dealers.dealers.dealers2,
+        dealersList: dealers.dealers.parent_dealers,
         profile: dealers.auth.authUser,
         navigate_to: dealers.navigate_to,
     }
