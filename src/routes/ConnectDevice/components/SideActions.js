@@ -849,11 +849,17 @@ class SideActions extends Component {
                         <Col span={24} className="gutter-row" justify="center" >
                             <h4 className="mb-6">Search Device ID</h4>
                             <Select
-                                showSearch
-
                                 style={{ width: '100%' }}
-                                placeholder="Search Device ID"
+                                showSearch
+                                placeholder={convertToLang(this.props.translation[""], "Select Device ID")}
+                                optionFilterProp="children"
+                                onChange={this.handleDeviceChange}
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                defaultValue={this.props.device.device_id}
                             >
+                                {/* {this.props.device_list.map((item, index) => {
+                                        return (<Select.Option key={index} value={item.device_id}>{item.device_id}</Select.Option>)
+                                    })} */}
                                 <Option value="DLAE007804">DLAE007804</Option>
                                 <Option value="ELAF406912">ELAF406912</Option>
                                 <Option value="ALAF283363">ALAF283363</Option>
@@ -863,29 +869,6 @@ class SideActions extends Component {
                 </Card>
                 <div className="gutter-example side_action">
                     <Card>
-                        <Row gutter={16} type="flex" justify="center" align="top">
-                            <Col
-                                span={16}
-                                style={{ width: '100%' }}
-                                className="gutter-row"
-                                justify="center"
-                            >
-                                <Select
-                                    style={{ width: '100%', margin: '20px 0px' }}
-                                    showSearch
-                                    placeholder={convertToLang(this.props.translation[""], "Select Device ID")}
-                                    optionFilterProp="children"
-                                    onChange={this.handleDeviceChange}
-                                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                    // defaultValue={this.props.device.device_id}
-                                >
-                                    <Select.Option key={'FLFB426780'} value='FLFB426780'>FLFB426780</Select.Option>
-                                    {/* {this.props.device_list.map((item, index) => {
-                                        return (<Select.Option key={index} value={item.device_id}>{item.device_id}</Select.Option>)
-                                    })} */}
-                                </Select>
-                            </Col>
-                        </Row>
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col
                                 span={12}
