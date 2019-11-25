@@ -180,9 +180,9 @@ export function getProfiles(device_id) {
 //     }
 // }
 
-export function getPolicies(device_id) {
+export function getPolicies() {
     return (dispatch) => {
-        RestService.getPolicies(device_id).then((response) => {
+        RestService.getPolicies().then((response) => {
 
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {

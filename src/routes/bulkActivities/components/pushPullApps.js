@@ -123,12 +123,13 @@ const PushAppsModal = (props) => {
                     props.showSelectedPushAppsModal(true);
                 }
             }}
-            onCancel={() => { props.showPushAppsModal(false);  }} // props.resetSeletedRows()
-            okText={convertToLang(props.translation[PUSH_APP_TEXT], "PUSH APP")}
+            onCancel={() => { props.showPushAppsModal(false); }} // props.resetSeletedRows()
+            okText={convertToLang(props.translation[PUSH_APP_TEXT], "SELECT APPS")}
             cancelText={convertToLang(props.translation[Button_Cancel], "Cancel")}
         >
             <DealerApps
                 apk_list={props.apk_list}
+                pushApps={props.pushApps}
                 app_list={props.app_list}
                 onPushAppsSelection={props.onPushAppsSelection}
                 isSwitchable={true}
@@ -172,7 +173,7 @@ const SelectedPushApps = (props) => {
             }}
             // cancelText='Back'
             cancelText={convertToLang(props.translation[Button_Back], "Back")}
-            okText={convertToLang(props.translation[PUSH_APP_TEXT], "PUSH APP")}
+            okText={convertToLang(props.translation[PUSH_APP_TEXT], "ADD APPS")}
             destroyOnClose={true}
         >
             <DealerApps
@@ -223,9 +224,9 @@ const PullAppsModal = (props) => {
                     props.showSelectedPullAppsModal(true);
                 }
             }}
-            onCancel={() => { props.showPullAppsModal(false);  }} // props.resetSeletedRows();
+            onCancel={() => { props.showPullAppsModal(false); }} // props.resetSeletedRows();
             // okText="Pull Apps"
-            okText={convertToLang(props.translation[PULL_APPS_TEXT], "PULL APP")}
+            okText={convertToLang(props.translation[PULL_APPS_TEXT], "SELECT APPS")}
             cancelText={convertToLang(props.translation[Button_Cancel], "Cancel")}
         >
             <PullApps
@@ -262,12 +263,12 @@ const SelectedPullApps = (props) => {
                 // props.resetSeletedRows()
             }}
             onCancel={() => {
-                props.showPushAppsModal(true);
+                props.showPullAppsModal(true);
                 props.showSelectedPullAppsModal(false);
             }}
             // cancelText='Back'
             cancelText={convertToLang(props.translation[Button_Back], "Back")}
-            okText={convertToLang(props.translation[PULL_APPS_TEXT], "PULL APPS")}
+            okText={convertToLang(props.translation[PULL_APPS_TEXT], "ADD APPS")}
             destroyOnClose={true}
         >
             <PullApps
@@ -328,8 +329,27 @@ export default class PushPullApps extends Component {
     }
 
     onPushAppsSelection = (selectedRowKeys, selectedRows) => {
+        // console.log(this.state.selectedPushAppKeys, this.state.selectedPushApps, "selectedRowKeys, selectedRows ", selectedRowKeys, selectedRows)
+
+        let allSelectedApps = this.state.selectedPushApps;
+        let data = [];
+
+        selectedRows.forEach(el => {
+            let index = allSelectedApps.findIndex(item => item.key == el.key)
+            if (index !== -1) {
+                data.push(allSelectedApps[index])
+            } else {
+                el.enable = false;
+                el.guest = false;
+                el.encrypted = false;
+                data.push(el);
+            }
+        })
+
+        // console.log("selectedRows ", data)
+
         this.setState({
-            selectedPushApps: selectedRows,
+            selectedPushApps: data,
             selectedPushAppKeys: selectedRowKeys
         })
 
@@ -348,6 +368,9 @@ export default class PushPullApps extends Component {
             if (el.apk_id === app_id) {
                 el[key] = e;
             }
+        })
+        this.setState({
+            selectedPushApps: this.state.selectedPushApps
         })
     }
 
@@ -464,8 +487,8 @@ export default class PushPullApps extends Component {
                     showPushAppsModal={this.props.showPushAppsModal}
                     handleComponentSearch={this.handleComponentSearch}
                     apk_list={this.state.apk_list}
+                    // pushApps={this.state.pushApps}
                     // app list props is added because push apps will not show installed apps again to push
-                    app_list={this.props.app_list}
                     app_list={this.props.app_list}
                     onPushAppsSelection={this.onPushAppsSelection}
                     selectedPushAppKeys={this.state.selectedPushAppKeys}

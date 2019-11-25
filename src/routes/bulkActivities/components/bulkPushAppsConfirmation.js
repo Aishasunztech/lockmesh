@@ -38,21 +38,17 @@ export default class BulkPushApps extends Component {
             user_ids
         }
 
-        const title = `${convertToLang(this.props.translation[""], "Are you sure, you want to push selected apps into these devices ")}  
-        ${selectedDevices.map((item, index) =>
-        // `${item.device_id}, `
-        {
-            // console.log("logs:: ", devices.length - 1, index, item.device_id)
-            return selectedDevices.length - 1 !== index ? `${item.device_id}, ` : `${item.device_id}`
-        }
-        )} ?`;
+        console.log('data is', data);
+
+        const title = `${convertToLang(this.props.translation[""], "Are you sure, you want to push selected apps into these devices ")} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`;
+
         this.confirm({
             title: title,
             content: '',
             okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
             cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
-            onOk: (() => {
-                this.props.applyPushApps(data);
+            onOk: (() => { console.log('click on ok btn');
+               return this.props.applyPushApps(data);
             }),
             onCancel() { },
         });
