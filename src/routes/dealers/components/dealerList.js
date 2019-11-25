@@ -242,35 +242,54 @@ class DealerList extends Component {
                 </Button>
             </Link>
             data.push({
-                'row_key': dealer.dealer_id,
-                'accounts': <span>
-                    <Button type={button_type} size='small' style={{ margin: '0 8px 0 0', textTransform: "uppercase" }}
-                        onClick={() => ((dealer.account_status === '') || (dealer.account_status === null)) ? showConfirm(this, dealer.dealer_id, this.props.suspendDealer, 'SUSPEND') : showConfirm(this, dealer.dealer_id, this.props.activateDealer, 'ACTIVATE')}>
-                        {((dealer.account_status === '') || (dealer.account_status === null)) ? <div>{convertToLang(this.props.translation[Button_Suspend], "Suspend")}</div> : <div> {convertToLang(this.props.translation[Button_Activate], "Activate")}</div>}
-                    </Button>
-                    <Button type="primary" style={{ margin: '0 8px 0 0', textTransform: "uppercase" }} size='small' onClick={() => this.refs.editDealer.showModal(dealer, this.props.editDealer)}>{convertToLang(this.props.translation[Button_Edit], "Edit")}</Button>
-                    <Button type={undo_button_type} size='small' style={{ margin: '0', textTransform: "uppercase" }}
-                        onClick={() => (dealer.unlink_status === 0) ? showConfirm(this, dealer.dealer_id, this.props.deleteDealer, 'DELETE') : showConfirm(this, dealer.dealer_id, this.props.undoDealer, 'UNDELETE')}>
-                        {(dealer.unlink_status === 0) ? <div>{convertToLang(this.props.translation[Button_Delete], 'DELETE')} </div> : <div> {convertToLang(this.props.translation[Button_Undo], "UNDELETE")} </div>}
-                    </Button>
-                    <Button type="primary" style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => showConfirm(this, dealer, this.props.updatePassword, 'RESET PASSWORD', dealer.dealer_name)} >{convertToLang(this.props.translation[Button_passwordreset], "Password Reset")}</Button>
-                    {(this.props.user.type === ADMIN) ?
-                        // <Button style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => { }} >{convertToLang(this.props.translation[Button_Connect], "Connect")}</Button>
-                        ConnectButton
-                        :
-                        null
-                    }
-                </span>,
-                'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
-                'counter': ++index,
-                'dealer_name': dealer.dealer_name ? dealer.dealer_name : 'N/A',
-                'dealer_email': dealer.dealer_email ? dealer.dealer_email : 'N/A',
-                'link_code': dealer.link_code ? dealer.link_code : 'N/A',
-                'parent_dealer': dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
-                'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
-                'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
-                'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A',
-                'devicesList': dealer.devicesList
+                row_key: dealer.dealer_id,
+                accounts: (
+                    <span>
+                        {/* Suspend/Active Button */}
+                        <Button type={button_type} size='small' style={{ margin: '0 8px 0 0', textTransform: "uppercase" }}
+                            onClick={() => ((dealer.account_status === '') || (dealer.account_status === null)) ? showConfirm(this, dealer.dealer_id, this.props.suspendDealer, 'SUSPEND') : showConfirm(this, dealer.dealer_id, this.props.activateDealer, 'ACTIVATE')}
+                        >
+                            {((dealer.account_status === '') || (dealer.account_status === null)) ? <div>{convertToLang(this.props.translation[Button_Suspend], "Suspend")}</div> : <div> {convertToLang(this.props.translation[Button_Activate], "Activate")}</div>}
+                        </Button>
+
+                        {/* Edit Dealer Button */}
+                        <Button type="primary" style={{ margin: '0 8px 0 0', textTransform: "uppercase" }} size='small' onClick={() => this.refs.editDealer.showModal(dealer, this.props.editDealer)}>{convertToLang(this.props.translation[Button_Edit], "Edit")}</Button>
+
+                        {/* Delete Dealer Button*/}
+                        <Button type={undo_button_type} size='small' style={{ margin: '0', textTransform: "uppercase" }}
+                            onClick={() => (dealer.unlink_status === 0) ? showConfirm(this, dealer.dealer_id, this.props.deleteDealer, 'DELETE') : showConfirm(this, dealer.dealer_id, this.props.undoDealer, 'UNDELETE')}
+                        >
+                            {(dealer.unlink_status === 0) ? <div>{convertToLang(this.props.translation[Button_Delete], 'DELETE')} </div> : <div> {convertToLang(this.props.translation[Button_Undo], "UNDELETE")} </div>}
+                        </Button>
+
+                        {/* Reset Password Button */}
+                        <Button
+                            type="primary"
+                            style={{ margin: '0 0 0 8px', textTransform: "uppercase" }}
+                            size='small'
+                            onClick={() => showConfirm(this, dealer, this.props.updatePassword, 'RESET PASSWORD', dealer.dealer_name)}
+                        >
+                            {convertToLang(this.props.translation[Button_passwordreset], "Password Reset")}
+                        </Button>
+
+                        {/* Connect Button */}
+                        {(this.props.user.type === ADMIN) ?
+                            ConnectButton
+                            :
+                            null
+                        }
+                    </span>
+                ),
+                dealer_id: dealer.dealer_id ? dealer.dealer_id : 'N/A',
+                counter: ++index,
+                dealer_name: dealer.dealer_name ? dealer.dealer_name : 'N/A',
+                dealer_email: dealer.dealer_email ? dealer.dealer_email : 'N/A',
+                link_code: dealer.link_code ? dealer.link_code : 'N/A',
+                parent_dealer: dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
+                parent_dealer_id: dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
+                connected_devices: dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
+                dealer_credits: dealer.dealer_credits ? dealer.dealer_credits : 0,
+                devicesList: dealer.devicesList
 
             })
         });

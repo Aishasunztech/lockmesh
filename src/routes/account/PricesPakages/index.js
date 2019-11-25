@@ -7,7 +7,7 @@ import {
 } from "../../../appRedux/actions/Account";
 import {
     getPrices, resetPrice, setPackage,
-    saveIDPrices, setPrice, getPackages, deletePackage, modifyItemPrice, getHardwares
+    saveIDPrices, setPrice, getPackages, deletePackage, modifyItemPrice, getHardwares, editPackage
 } from "../../../appRedux/actions/Account";
 import PackagesInfo from './components/PackagesInfo';
 import ModifyPrice from './components/ModifyPrice';
@@ -42,6 +42,7 @@ import {
 
 import { isArray } from "util";
 import PricingModal from './PricingModal';
+import EditPackage from './components/EditPackage';
 import { DUMY_TRANS_ID } from '../../../constants/LabelConstants';
 import { SET_PRICE_PAGE_HEADING } from '../../../constants/AppFilterConstants';
 let packagesCopy = [];
@@ -154,21 +155,21 @@ class Prices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[PACKAGE_PRICE], "PACKAGE PRICE")}
+                        placeholder={convertToLang(props.translation[""], "PACKAGE PRICE (CREDITS)")}
                     />
                 ),
                 dataIndex: 'pkg_price',
                 className: '',
                 children: [
                     {
-                        title: convertToLang(props.translation[PACKAGE_PRICE], "PACKAGE PRICE"),
+                        title: convertToLang(props.translation[""], "PACKAGE PRICE (CREDITS)"),
                         align: "center",
                         className: '',
                         dataIndex: 'pkg_price',
                         key: 'pkg_price',
                         // ...this.getColumnSearchProps('status'),
                         // sorter: (a, b) => { return a.pkg_price - b.pkg_price },
-                        sorter: (a, b) => { return a.pkg_price.localeCompare(b.pkg_price) },
+                        sorter: (a, b) => { return a.pkg_price - b.pkg_price },
 
                         sortDirections: ['ascend', 'descend'],
                     }
@@ -177,31 +178,60 @@ class Prices extends Component {
             {
                 title: (
                     <Input.Search
-                        name="pkg_expiry"
-                        key="pkg_expiry"
-                        id="pkg_expiry"
+                        name="pkg_retail_price"
+                        key="pkg_retail_price"
+                        id="pkg_retail_price"
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[PACKAGE_EXPIRY], "PACKAGE EXPIRY")}
+                        placeholder={convertToLang(props.translation[""], "RETAIL PACKAGE PRICE (CREDITS)")}
                     />
                 ),
-                dataIndex: 'pkg_expiry',
+                dataIndex: 'pkg_retail_price',
                 className: '',
                 children: [
                     {
-                        title: convertToLang(props.translation["PACKAGE_EXPIRY DAYS"], "PACKAGE EXPIRY DAYS"),
+                        title: convertToLang(props.translation[""], "RETAIL PACKAGE PRICE (CREDITS)"),
                         align: "center",
                         className: '',
-                        dataIndex: 'pkg_expiry',
-                        key: 'pkg_expiry',
+                        dataIndex: 'pkg_retail_price',
+                        key: 'pkg_retail_price',
                         // ...this.getColumnSearchProps('status'),
-                        sorter: (a, b) => { return a.pkg_expiry - b.pkg_expiry },
+                        // sorter: (a, b) => { return a.pkg_retail_price - b.pkg_retail_price },
+                        sorter: (a, b) => { return a.pkg_retail_price - b.pkg_retail_price },
 
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
-            }
+            },
+            // {
+            //     title: (
+            //         <Input.Search
+            //             name="pkg_expiry"
+            //             key="pkg_expiry"
+            //             id="pkg_expiry"
+            //             className="search_heading"
+            //             onKeyUp={this.handleSearch}
+            //             autoComplete="new-password"
+            //             placeholder={convertToLang(props.translation[PACKAGE_EXPIRY], "PACKAGE EXPIRY")}
+            //         />
+            //     ),
+            //     dataIndex: 'pkg_expiry',
+            //     className: '',
+            //     children: [
+            //         {
+            //             title: convertToLang(props.translation["PACKAGE_EXPIRY DAYS"], "PACKAGE EXPIRY DAYS"),
+            //             align: "center",
+            //             className: '',
+            //             dataIndex: 'pkg_expiry',
+            //             key: 'pkg_expiry',
+            //             // ...this.getColumnSearchProps('status'),
+            //             sorter: (a, b) => { return a.pkg_expiry - b.pkg_expiry },
+
+            //             sortDirections: ['ascend', 'descend'],
+            //         }
+            //     ]
+            // }
         ];
         this.hardwareColumns = [
             {
@@ -244,6 +274,7 @@ class Prices extends Component {
                 ]
             },
 
+
             {
                 title: (
                     <Input.Search
@@ -267,7 +298,36 @@ class Prices extends Component {
                         key: 'price',
                         // ...this.getColumnSearchProps('status'),
                         // sorter: (a, b) => { return a.price - b.price },
-                        sorter: (a, b) => { return a.price.localeCompare(b.price) },
+                        sorter: (a, b) => { return a.price - b.price },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="retail_price"
+                        key="retail_price"
+                        id="retail_price"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder='HADWARE RETAIL PRICE (CREDITS)'
+                    />
+                ),
+                dataIndex: 'retail_price',
+                className: '',
+                children: [
+                    {
+                        title: 'HADWARE RETAIL PRICE (CREDITS)',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'retail_price',
+                        key: 'retail_price',
+                        // ...this.getColumnSearchProps('status'),
+                        // sorter: (a, b) => { return a.price - b.price },
+                        sorter: (a, b) => { return a.price - b.price },
 
                         sortDirections: ['ascend', 'descend'],
                     }
@@ -440,16 +500,19 @@ class Prices extends Component {
                 _this.props.deletePackage(id);
                 // _this.resetSeletedRows();
                 // if (_this.refs.tablelist.props.rowSelection !== null) {
-                //     _this.refs.tablelist.props.rowSelection.selectedRowKeys = []
+                // _this.refs.tablelist.props.rowSelection.selectedRowKeys = []
                 // }
             }),
             onCancel() { },
         });
         // this.props.deletePackage(id)
     }
+
+    editPackage = (item) => {
+        this.refs.editPackage.showModal(item)
+    }
+
     modifyItem = (itemData, isModify, type) => {
-
-
         this.setState({
             modifyItemModal: true,
             modify_item: itemData,
@@ -457,8 +520,6 @@ class Prices extends Component {
             modify_item_type: type
         })
     }
-
-
 
     renderList = (type) => {
         if (type === "packages") {
@@ -473,7 +534,7 @@ class Prices extends Component {
                         customStyle = { display: 'none' }
                     }
                     let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px ', textTransform: 'uppercase' }} onClick={() => { this.deletePackage(item.id, item.pkg_name) }} >{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
-                    // let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "EDIT")}</Button>
+                    let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.editPackage(item) }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "EDIT")}</Button>
                     let ModifyBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase', ...customStyle }} onClick={() => { this.modifyItem(item, true, 'package') }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "MODIFY PRICE")}</Button>
                     return {
                         id: item.id,
@@ -481,11 +542,13 @@ class Prices extends Component {
                         rowKey: index,
                         statusAll: item.statusAll,
                         sr: ++i,
-                        action: (item.dealer_type === "super_admin" && (this.props.auth.type === ADMIN || this.props.auth.type === DEALER)) ?
+                        action: (item.dealer_type === "super_admin" && (this.props.auth.type === ADMIN || this.props.auth.type === DEALER || this.props.auth.type === SDEALER)) ?
                             (<Fragment>{ModifyBtn}</Fragment>) :
-                            (item.dealer_type === "admin" && this.props.auth.type === DEALER) ?
-                                (<Fragment>{ModifyBtn}</Fragment>)
-                                : (<Fragment>{DeleteBtn}</Fragment>),
+                            (item.dealer_type === "admin" && this.props.auth.type === DEALER || this.props.auth.type === SDEALER) ?
+                                (<Fragment>{ModifyBtn}</Fragment>) :
+                                (item.dealer_type === "dealer" && this.props.auth.type === SDEALER) ?
+                                    (<Fragment>{ModifyBtn}</Fragment>)
+                                    : (<Fragment>{DeleteBtn}{EditBtn}</Fragment>),
 
                         pkg_name: item.pkg_name,
                         services:
@@ -505,9 +568,10 @@ class Prices extends Component {
                             {/* {(item.permission_count == 'All') ? convertToLang(this.props.translation[Tab_All], "All") : item.permission_count > 0 ? item.permission_count : 0} */}
                             {(item.permission_count === "All" || this.props.totalDealers === item.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : item.permission_count}
                         </span>,
-                        pkg_price: "$" + item.pkg_price,
+                        pkg_price: item.pkg_price,
+                        pkg_retail_price: item.retail_price,
                         pkg_term: item.pkg_term,
-                        pkg_expiry: item.pkg_expiry,
+                        // pkg_expiry: item.pkg_expiry,
                         pkg_features: item.pkg_features ? JSON.parse(item.pkg_features) : {},
                         permissions: (item.dealer_permission !== undefined && item.dealer_permission !== null) ? item.dealer_permission : [],
 
@@ -523,7 +587,8 @@ class Prices extends Component {
                         action:
                             <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.modifyItem(item, true, 'hardware') }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "MODIFY PRICE")}</Button>,
                         name: item.hardware_name,
-                        price: item.hardware_price
+                        price: item.hardware_price,
+                        retail_price: item.retail_price
                     }
                 })
             }
@@ -617,7 +682,19 @@ class Prices extends Component {
         })
     }
     render() {
-        // console.log(this.state.packages, 'prices are coming', this.props.packages)
+
+        if (this.props.auth.type === ADMIN) {
+            this.columns[this.columns.length - 1].className = 'hide'
+            this.columns[this.columns.length - 1].children[0].className = 'hide'
+            this.hardwareColumns[this.hardwareColumns.length - 1].className = 'hide'
+            this.hardwareColumns[this.hardwareColumns.length - 1].children[0].className = 'hide'
+        } else if (this.props.auth.type === SDEALER) {
+
+            let index = this.columns.findIndex(item => item.dataIndex == 'permission')
+            this.columns[index].className = 'hide'
+            // this.columns[index].children[0].className = 'hide'
+        }
+
         return (
             <div>
                 <div>
@@ -723,6 +800,7 @@ class Prices extends Component {
                             </Tabs.TabPane>
                             <Tabs.TabPane tab="Hardware" key="3">
                                 <Table
+                                    className="devices"
                                     columns={this.hardwareColumns}
                                     dataSource={this.renderList("hardware")}
                                     bordered
@@ -748,6 +826,16 @@ class Prices extends Component {
                     auth={this.props.auth}
                 />
 
+                <EditPackage
+                    ref="editPackage"
+                    showPricingModal={this.showPricingModal}
+                    editPackage={this.props.editPackage}
+                    resetPrice={this.props.resetPrice}
+                    dealer_id={this.props.auth.dealerId}
+                    translation={this.props.translation}
+                    auth={this.props.auth}
+                />
+
                 <Modal
                     maskClosable={false}
                     destroyOnClose={true}
@@ -767,6 +855,7 @@ class Prices extends Component {
                         handleCancel={this.handleCancel}
                         modifyItemPrice={this.props.modifyItemPrice}
                         type={this.state.modify_item_type}
+                        user={this.props.auth}
                     />
                 </Modal>
 
@@ -781,6 +870,7 @@ function mapDispatchToProps(dispatch) {
         getPrices: getPrices,
         saveIDPrices: saveIDPrices,
         setPackage: setPackage,
+        editPackage: editPackage,
         resetPrice: resetPrice,
         setPrice: setPrice,
         getPackages: getPackages,

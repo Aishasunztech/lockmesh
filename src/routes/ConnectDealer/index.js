@@ -6,12 +6,23 @@ import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Div
 
 // methods, constants and components
 import AppFilter from '../../components/AppFilter';
-import EditDealer from '../dealers/components/editDealer';
+import DealerAction from "./components/DealerActions";
 
-// helpers
-import { getColor, isBase64, convertToLang } from "../utils/commonUtils"
-import { getDealerDetails, editDealer } from '../../appRedux/actions'
+// helpers and actions
 import RestService from "../../appRedux/services/RestServices";
+import { getColor, isBase64, convertToLang } from "../utils/commonUtils"
+import {
+    getDealerDetails,
+    editDealer,
+    updatePassword,
+    suspendDealer,
+    activateDealer,
+    deleteDealer,
+    undoDealer,
+    getDealerPaymentHistory,
+    setCreditLimit,
+    getDealerSalesHistory
+} from '../../appRedux/actions'
 import styles from './connect_dealer.css'
 
 class ConnectDealer extends Component {
@@ -21,6 +32,7 @@ class ConnectDealer extends Component {
             dealer_id: isBase64(props.match.params.dealer_id),
             currency: 'USD',
             currency_sign: '$',
+            currency_unit_price: 1
         }
         this.dealerInfoColumns1 = [
             {
@@ -97,28 +109,28 @@ class ConnectDealer extends Component {
     onChangeCurrency = (e, field) => {
 
         if (e === 'USD') {
-            // this.setState({
-            //     currency: 'usd',
-            //     currency_price: this.props.user_credit,
-            //     currency_unit_price: 1,
-            // })
+            this.setState({
+                currency: 'usd',
+                currency_price: null,
+                currency_unit_price: 1,
+            })
         } else {
-            // RestService.exchangeCurrency(e).then((response) => {
-            //     if (response.data.status) {
-            //         if (this.props.user_credit > 0) {
-            //             this.setState({
-            //                 currency: e,
-            //                 currency_unit_price: response.data.currency_unit,
-            //                 currency_price: this.props.user_credit * response.data.currency_unit
-            //             })
-            //         } else {
-            //             this.setState({
-            //                 currency: e,
-            //                 currency_unit_price: response.data.currency_unit,
-            //             })
-            //         }
-            //     }
-            // })
+            RestService.exchangeCurrency(e).then((response) => {
+                if (response.data.status) {
+                    if (this.props.dealer.credits > 0) {
+                        this.setState({
+                            currency: e,
+                            currency_unit_price: response.data.currency_unit,
+                            currency_price: this.props.dealer.credits * response.data.currency_unit
+                        })
+                    } else {
+                        this.setState({
+                            currency: e,
+                            currency_unit_price: response.data.currency_unit,
+                        })
+                    }
+                }
+            })
         }
     }
 
@@ -126,7 +138,7 @@ class ConnectDealer extends Component {
         console.log('dealer info', this.props.dealer);
         let dealer = this.props.dealer;
         if (dealer) {
-            const dealer_status = (dealer.account_status === "suspended") ? "Activate" : "Suspend";
+            const dealer_status = (dealer.unlink_status == 1) ? "Archived" : (dealer.account_status === "suspended") ? "Suspended" : "Activated";
             return [
                 {
                     key: '1',
@@ -210,12 +222,12 @@ class ConnectDealer extends Component {
                 {
                     key: '3',
                     name: 'USD equivalent:',
-                    value: '-5214$',
+                    value: (this.state.currency_price) ? this.state.currency_price : dealer.credits,
                 },
                 {
                     key: '4',
                     name: 'Credit Limit (Credits):',
-                    value: 'N/A',
+                    value: dealer.credits_limit,
                 }
             ]
         } else {
@@ -224,17 +236,16 @@ class ConnectDealer extends Component {
     }
 
     renderOverDue = () => {
-        console.log('dealer info overdue:', this.props.dealer);
         let dealer = this.props.dealer;
         if (dealer) {
-            console.log(dealer._0to21,
-                dealer._0to21_dues,
-                dealer._21to30,
-                dealer._21to30_dues,
-                dealer._30to60,
-                dealer._30to60_dues,
-                dealer._60toOnward,
-                dealer._60toOnward_dues)
+            // console.log(dealer._0to21,
+            //     dealer._0to21_dues,
+            //     dealer._21to30,
+            //     dealer._21to30_dues,
+            //     dealer._30to60,
+            //     dealer._30to60_dues,
+            //     dealer._60toOnward,
+            //     dealer._60toOnward_dues)
             // _0to21,
             // _0to21_dues,
             // _21to30,
@@ -261,6 +272,8 @@ class ConnectDealer extends Component {
                     pageHeading="Dealer Profile Page"
                 />
                 <Row gutter={16} type="flex" align="top">
+
+                    {/* Dealer Information */}
                     <Col className="" xs={24} sm={24} md={8} lg={8} xl={8}>
                         <Card style={{ borderRadius: 12 }}>
                             <h2 style={{ textAlign: "center" }}>Dealer Info</h2>
@@ -275,6 +288,8 @@ class ConnectDealer extends Component {
                             />
                         </Card>
                     </Col>
+
+                    {/* Dealer Account Information */}
                     <Col className="" xs={24} sm={24} md={8} lg={8} xl={8}>
                         <Card className="" style={{ borderRadius: 12 }}>
                             <h2 style={{ textAlign: "center" }}>Account Profile</h2>
@@ -307,80 +322,35 @@ class ConnectDealer extends Component {
                             </Row>
                         </Card>
                     </Col>
+
+                    {/* Dealer Action Buttons */}
                     <Col className="side_action right_bar" xs={24} sm={24} md={8} lg={8} xl={8} >
-                        <Card style={{ borderRadius: 12 }}>
-                            <Row gutter={16} type="flex" justify="center" align="top">
-                                <Col span={12} className="gutter-row" justify="center" >
-                                    <Button style={{ width: "100%", marginBottom: 16, }} >
-                                        <h6 className="mb-0">Activity</h6>
-                                    </Button>
-                                </Col>
-                                <Col span={12} className="gutter-row" justify="center" >
-                                    <Button style={{ width: "100%", marginBottom: 16, }}>
-                                        <h6 className="mb-0">Domains</h6>
-                                    </Button>
-                                </Col>
-                                <Col className="gutter-row" justify="center" span={12} >
-                                    <Button style={{ width: "100%", marginBottom: 16, }}>
-                                        <h6 className="mb-0">Credit Limit</h6>
-                                    </Button>
-                                </Col>
-                                <Col className="gutter-row" justify="center" span={12} >
-                                    <Button style={{ width: "100%", marginBottom: 16, }}>
-                                        <h6 className="mb-0">DEMO</h6>
-                                    </Button>
-                                </Col>
-                                <Col className="gutter-row" justify="center" span={12} >
-                                    <Button style={{ width: "100%", marginBottom: 16, }}>
-                                        <h6 className="mb-0">Payment History</h6>
-                                    </Button>
-                                </Col>
-                                <Col className="gutter-row" justify="center" span={12} >
-                                    <Button style={{ width: "100%", marginBottom: 16, }}>
-                                        <h6 className="mb-0">Sales History</h6>
-                                    </Button>
-                                </Col>
-                            </Row>
-                        </Card>
-                        <Card style={{ borderRadius: 12 }}>
-                            <Row gutter={16} type="flex" justify="center" align="top">
-                                <Col span={12} className="gutter-row" justify="center" >
-                                    <Button disabled style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} >
-                                        Pass Reset
-                                    </Button>
-                                </Col>
-                                <Col className="gutter-row" justify="center" span={12} >
-                                    <Button
-                                    disabled
-                                        style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
-                                        onClick={() => this.refs.editDealer.showModal(this.props.dealer, this.props.editDealer)}
-                                    >
-                                        <Icon type='edit' />
-                                        Edit
-                                    </Button>
-                                </Col>
-                                <Col className="gutter-row" justify="center" span={12} >
-                                    <Button disabled style={{ width: "100%", marginBottom: 16, }}>
-                                        Suspend/Restrict
-                                    </Button>
-                                </Col>
-                                <Col span={12} className="gutter-row" justify="center" >
-                                    <Button disabled className="btn_break_line" style={{ width: "100%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }}>
-                                        <Icon type="lock" className="lock_icon" />
-                                        Delete
-                                    </Button>
-                                </Col>
-                            </Row>
-                        </Card>
-                        <EditDealer
-                            ref='editDealer'
-                            // getDealerList={this.props.getDealerList} 
+                        <DealerAction
+                            // translation
                             translation={this.props.translation}
+
+                            // dealer information
+                            dealer={this.props.dealer}
+                            paymentHistory={this.props.paymentHistory}
+                            salesHistory={this.props.salesHistory}
+
+                            // dealer actions
+                            updatePassword={this.props.updatePassword}
+                            editDealer={this.props.editDealer}
+
+                            suspendDealer={this.props.suspendDealer}
+                            activateDealer={this.props.activateDealer}
+                            deleteDealer={this.props.deleteDealer}
+                            undoDealer={this.props.undoDealer}
+
+                            getDealerPaymentHistory={this.props.getDealerPaymentHistory}
+                            setCreditLimit={this.props.setCreditLimit}
+                            getDealerSalesHistory={this.props.getDealerSalesHistory}
                         />
 
                     </Col>
                 </Row>
-            </Fragment >
+            </Fragment>
         )
     }
 }
@@ -388,15 +358,25 @@ class ConnectDealer extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getDealerDetails: getDealerDetails,
-        editDealer: editDealer
+        editDealer: editDealer,
+        updatePassword: updatePassword,
+        suspendDealer: suspendDealer,
+        activateDealer: activateDealer,
+        deleteDealer: deleteDealer,
+        undoDealer: undoDealer,
+        getDealerPaymentHistory: getDealerPaymentHistory,
+        setCreditLimit: setCreditLimit,
+        getDealerSalesHistory: getDealerSalesHistory
     }, dispatch);
 }
 
-var mapStateToProps = ({ dealer_details, settings }, ownProps) => {
+var mapStateToProps = ({ dealer_details, settings }) => {
     // console.log(dealer_details);
     return {
         dealer: dealer_details.dealer,
         translation: settings.translation,
+        paymentHistory: dealer_details.paymentHistory,
+        salesHistory: dealer_details.salesHistory
     };
 }
 

@@ -144,12 +144,12 @@ class ConnectDevice extends Component {
     if (this.props.device_details.finalStatus === DEVICE_ACTIVATED || this.props.device_details.finalStatus === DEVICE_TRIAL) {
       if (this.props.pageName === GUEST_PASSWORD || this.props.pageName === ENCRYPTED_PASSWORD || this.props.pageName === DURESS_PASSWORD || this.props.pageName === ADMIN_PASSWORD) {
         this.props.changePage(MANAGE_PASSWORD);
-      } 
+      }
       // else if (this.props.pageName === MANAGE_PASSWORD) {
       //   this.setState({ dynamicBackButton: false })
       //   this.props.changePage(MAIN_MENU);
       // } 
-      
+
       else {
         this.setState({ dynamicBackButton: false })
         this.props.changePage(MAIN_MENU);
@@ -240,10 +240,10 @@ class ConnectDevice extends Component {
       // if(this.props.history.location.pathname !== nextProps.history.location.pathname){
       // if(this.props.pathName !== nextProps.pathName){
       if (nextProps.socket) {
-      // if (this.props.socket === null && nextProps.socket !== null) {
+        // if (this.props.socket === null && nextProps.socket !== null) {
 
         console.log("socket connected component: ", nextProps.socket.connected)
-        if(nextProps.socket.connected){
+        if (nextProps.socket.connected) {
           nextProps.sendOnlineOfflineStatus(nextProps.socket, device_id);
           nextProps.actionInProcess(nextProps.socket, device_id);
           nextProps.ackFinishedPushApps(nextProps.socket, device_id);
@@ -454,7 +454,7 @@ class ConnectDevice extends Component {
     //   }
     // }
     console.log(app_list, this.state.controls, this.props.extensions);
-    
+
     this.props.applySetting(
       app_list, {
       adminPwd: this.props.adminPwd,
@@ -494,7 +494,7 @@ class ConnectDevice extends Component {
     if (!deviceId || deviceId == '') {
       deviceId = isBase64(this.props.match.params.device_id);
     }
-    
+
     if (reSync) {
       this.props.reSyncDevice(deviceId);
       setTimeout(() => {

@@ -587,12 +587,12 @@ export function generatePDF(columns, rows, title, fileName, formData) {
     doc.setFontSize(12);
     doc.setTextColor(40);
     doc.setFontStyle('normal');
-    doc.text('Total Cost: ' + (formData.saleInfo.totalSale) ? 'Total Sale: ' + formData.saleInfo.totalSale : 'Total Sale: ' + 0, y, x += 15);
+    doc.text('Total Sale: ' + (formData.saleInfo.totalSale) ? 'Total Sale: ' + formData.saleInfo.totalSale : 'Total Sale: ' + 0, y, x += 15);
 
     doc.setFontSize(12);
     doc.setTextColor(40);
     doc.setFontStyle('normal');
-    doc.text('Total Cost: ' + (formData.saleInfo.totalProfitLoss) ? 'Profit/Loss: ' + formData.saleInfo.totalProfitLoss : 'Profit/Loss: ' + 0, y, x += 15);
+    doc.text('Profit/Loss: ' + (formData.saleInfo.totalProfitLoss) ? 'Profit/Loss: ' + formData.saleInfo.totalProfitLoss : 'Profit/Loss: ' + 0, y, x += 15);
 
     doc.setFontSize(12);
     doc.setTextColor(40);
