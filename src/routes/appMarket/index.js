@@ -576,105 +576,112 @@ class ApkMarket extends React.Component {
             <div>
                 {
                     this.props.isloading ? <CircularProgress /> :
-                        <Card>
-                            <Row>
-                                <Col md={24} sm={24} xs={24} className="text-center">
-                                    <div className="sm_top_heading">
-                                        <Row>
-                                            <Col md={3} sm={3} xs={3} className="text-center">
-                                                <Avatar size="large" src={BASE_URL + "users/getFile/icon_com.secureMarket.SecureMarketActivity_Secure%20Market.png"} /><br />
-                                                <span className="sm_labels"> Secure<br /> Market </span>
-                                            </Col>
-                                            <Col md={21} sm={21} xs={21} className="text-center disp_flx">
-                                                <h4><Markup content={convertToLang(this.props.translation[SPA_NOTIFICATION_BAR], "Move <b>(Available Apps)</b> to <b>(Secure Market)</b> to make them appear on your user's Secure Market apps on their devices.")} /> </h4>
-                                            </Col>
-                                        </Row>
-                                    </div>
-                                </Col>
-                                <Col md={12} sm={24} xs={24} className="text-center">
-                                    <div>
-                                        <div className="sm_header">
-                                            <h4 className="sm_heading1"><b>{convertToLang(this.props.translation[SPA_TITEL_AVAILABLE_APPS], "Guest Space Apps")}</b></h4>
+                        <div>
+                            <Card>
+                                <Row>
+                                    <Col md={24} sm={24} xs={24} className="text-center">
+                                        <div className="sm_top_heading">
+                                            <Row>
+                                                <Col md={3} sm={3} xs={3} className="text-center">
+                                                    <Avatar size="large" src={BASE_URL + "users/getFile/icon_com.secureMarket.SecureMarketActivity_Secure%20Market.png"} /><br />
+                                                    <span className="sm_labels"> Secure<br /> Market </span>
+                                                </Col>
+                                                <Col md={21} sm={21} xs={21} className="text-center disp_flx">
+                                                    <h4><Markup content={convertToLang(this.props.translation[SPA_NOTIFICATION_BAR],
+                                                        "Add apps for each space to make them appear on <b>Secure Market</b> app on their devices ")} /> </h4>
+                                                </Col>
+                                            </Row>
                                         </div>
-                                        <div className="sm_header">
-                                            <Button className="float-right" onClick={() => this.addIntoSpace('guest')}>Add Available Apps</Button>
+                                    </Col>
+                                </Row>
+                            </Card>
+                            <Card>
+                                <Row>
+                                    <Col md={12} sm={24} xs={24}>
+                                        <div>
+                                            <div className="sm_header">
+                                                <h4 className="sm_heading1"><b>{convertToLang(this.props.translation[SPA_TITEL_AVAILABLE_APPS], "Guest Space Apps")}</b></h4>
+                                            </div>
+                                            <div className="sm_header">
+                                                <Button className="float-right" onClick={() => this.addIntoSpace('guest')}>Add Apps</Button>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <Card className='fix_card fix_card_sm'>
-                                        <hr className="fix_header_border" style={{ top: "60px" }} />
-                                        <CustomScrollbars className="gx-popover-scroll ">
-                                            <Table
-                                                name="guestTable"
-                                                className="guestTable mb-16"
-                                                key="guest"
-                                                size="middle"
-                                                bordered
-                                                dataSource={this.renderAppList(this.state.guest_SM, 'guest')}
-                                                columns={columnsGuest.filter((item) => item.dataIndex !== "removeAllEncrypted")}
-                                                pagination={false}
-                                            />
-                                        </CustomScrollbars>
-                                    </Card>
-                                </Col>
-                                <Col md={12} sm={24} xs={24} className="text-center sec_market ">
-                                    <div>
-                                        <div className="sm_header">
-                                            <h4 className="sm_heading1"><b>{convertToLang(this.props.translation[SPA_TITLE_SECURE_MARKET], "Encrpted Space Apps")}</b></h4>
+                                        <Card className='fix_card fix_card_sm'>
+                                            <hr className="fix_header_border" style={{ top: "59px" }} />
+                                            <CustomScrollbars className="gx-popover-scroll ">
+                                                <Table
+                                                    name="guestTable"
+                                                    className="guestTable mb-16"
+                                                    key="guest"
+                                                    size="middle"
+                                                    bordered
+                                                    dataSource={this.renderAppList(this.state.guest_SM, 'guest')}
+                                                    columns={columnsGuest.filter((item) => item.dataIndex !== "removeAllEncrypted")}
+                                                    pagination={false}
+                                                />
+                                            </CustomScrollbars>
+                                        </Card>
+                                    </Col>
+                                    <Col md={12} sm={24} xs={24}>
+                                        <div>
+                                            <div className="sm_header">
+                                                <h4 className="sm_heading1"><b>{convertToLang(this.props.translation[SPA_TITLE_SECURE_MARKET], "Encrpted Space Apps")}</b></h4>
+                                            </div>
+                                            <div className="sm_header">
+                                                <Button className="float-right" onClick={() => this.addIntoSpace('encrypted')}>Add Apps</Button>
+                                            </div>
                                         </div>
-                                        <div className="sm_header">
-                                            <Button className="float-right" onClick={() => this.addIntoSpace('encrypted')}>Add Available Apps</Button>
-                                        </div>
-                                    </div>
-                                    <Card className='fix_card fix_card_sm'>
-                                        <hr className="fix_header_border" style={{ top: "60px" }} />
-                                        <CustomScrollbars className="gx-popover-scroll ">
-                                            <Table
-                                                key="encrypted"
-                                                size="middle"
-                                                bordered
-                                                dataSource={this.renderAppList(this.state.encrypted_SM, 'encrypted')}
-                                                columns={columnsEncrypted.filter((item) => item.dataIndex !== "removeAllGuest")}
-                                                pagination={false}
-                                                className="encryptedTable mb-16"
-                                            />
-                                        </CustomScrollbars>
-                                    </Card>
-                                </Col>
-                                <Modal
-                                    maskClosable={false}
-                                    destroyOnClose={true}
-                                    bodyStyle={{ height: 500, overflow: 'overlay' }}
-                                    title={convertToLang(this.props.translation[""], `Add Available Apps To ${initCap(this.state.space)} Space`)}
-                                    visible={this.state.availableAppModal}
-                                    onOk={() => {
-                                        this.saveApps(this.state.space)
-                                    }}
-                                    okText={convertToLang(this.props.translation[""], "Add")}
-                                    cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
-                                    onCancel={() => {
-                                        this.setState({
-                                            availableAppModal: false,
-                                            selectedRowKeys: [],
-                                            app_ids: [],
-                                            guestAvailableApps: mGuestCopySearch,
-                                            encryptedAvailableApps: mEncryptedCopySearch
-                                        });
+                                        <Card className='fix_card fix_card_sm'>
+                                            <hr className="fix_header_border" style={{ top: "59px" }} />
+                                            <CustomScrollbars className="gx-popover-scroll ">
+                                                <Table
+                                                    key="encrypted"
+                                                    size="middle"
+                                                    bordered
+                                                    dataSource={this.renderAppList(this.state.encrypted_SM, 'encrypted')}
+                                                    columns={columnsEncrypted.filter((item) => item.dataIndex !== "removeAllGuest")}
+                                                    pagination={false}
+                                                    className="encryptedTable mb-16"
+                                                />
+                                            </CustomScrollbars>
+                                        </Card>
+                                    </Col>
+                                    <Modal
+                                        maskClosable={false}
+                                        destroyOnClose={true}
+                                        bodyStyle={{ height: 500, overflow: 'overlay' }}
+                                        title={convertToLang(this.props.translation[""], `Add Available Apps To ${initCap(this.state.space)} Space`)}
+                                        visible={this.state.availableAppModal}
+                                        onOk={() => {
+                                            this.saveApps(this.state.space)
+                                        }}
+                                        okText={convertToLang(this.props.translation[""], "Add")}
+                                        cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
+                                        onCancel={() => {
+                                            this.setState({
+                                                availableAppModal: false,
+                                                selectedRowKeys: [],
+                                                app_ids: [],
+                                                guestAvailableApps: mGuestCopySearch,
+                                                encryptedAvailableApps: mEncryptedCopySearch
+                                            });
 
-                                    }}
-                                // bodyStyle={{ height: 500, overflow: "overlay" }}
-                                >
-                                    <AppMarketList
-                                        dataSource={this.renderAvailableAppList(this.state.space === "guest" ? this.state.guestAvailableApps : this.state.encryptedAvailableApps)}
-                                        columns={columnsModal.filter((item) => (item.dataIndex !== "removeAllGuest" && item.dataIndex !== "removeAllEncrypted" && item.dataIndex !== "counter" && item.dataIndex !== "uninstall"))}
-                                        onChangeTableSorting={this.props.onChangeTableSorting}
-                                        onSelectChange={this.onSelectChange}
-                                        hideDefaultSelections={this.state.hideDefaultSelections}
-                                        selectedRows={this.state.app_ids}
-                                        selectedRowKeys={this.state.selectedRowKeys}
-                                    />
-                                </Modal>
-                            </Row>
-                        </Card>
+                                        }}
+                                    // bodyStyle={{ height: 500, overflow: "overlay" }}
+                                    >
+                                        <AppMarketList
+                                            dataSource={this.renderAvailableAppList(this.state.space === "guest" ? this.state.guestAvailableApps : this.state.encryptedAvailableApps)}
+                                            columns={columnsModal.filter((item) => (item.dataIndex !== "removeAllGuest" && item.dataIndex !== "removeAllEncrypted" && item.dataIndex !== "counter" && item.dataIndex !== "uninstall"))}
+                                            onChangeTableSorting={this.props.onChangeTableSorting}
+                                            onSelectChange={this.onSelectChange}
+                                            hideDefaultSelections={this.state.hideDefaultSelections}
+                                            selectedRows={this.state.app_ids}
+                                            selectedRowKeys={this.state.selectedRowKeys}
+                                        />
+                                    </Modal>
+                                </Row>
+                            </Card>
+                        </div>
                 }
             </div>
         )

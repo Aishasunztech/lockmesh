@@ -101,6 +101,7 @@ var coppyAppList = [];
 var status = true;
 var appStatus = true;
 
+const { Option } = Select;
 
 class PasswordModal extends Component {
     render() {
@@ -843,6 +844,23 @@ class SideActions extends Component {
         const flagged = ((this.props.device.flagged !== 'Not flagged') ? 'Unflag' : 'flag')
         return (
             <div className="gutter-box bordered">
+                <Card className="search_dev_id">
+                    <Row gutter={16} type="flex" justify="center" align="top">
+                        <Col span={24} className="gutter-row" justify="center" >
+                            <h4 className="mb-6">Search Device ID</h4>
+                            <Select
+                                showSearch
+
+                                style={{ width: '100%' }}
+                                placeholder="Search Device ID"
+                            >
+                                <Option value="DLAE007804">DLAE007804</Option>
+                                <Option value="ELAF406912">ELAF406912</Option>
+                                <Option value="ALAF283363">ALAF283363</Option>
+                            </Select>
+                        </Col>
+                    </Row>
+                </Card>
                 <div className="gutter-example side_action">
                     <Card>
                         <Row gutter={16} type="flex" justify="center" align="top">
