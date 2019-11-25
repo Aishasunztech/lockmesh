@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip, Progress } from "antd";
+import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip, Progress, Select } from "antd";
 import TableHistory from "./TableHistory";
 import SuspendDevice from '../../devices/components/SuspendDevice';
 import ActivateDevcie from '../../devices/components/ActivateDevice';
@@ -449,8 +449,8 @@ class SideActions extends Component {
 
         if (this.props.pathname !== nextProps.pathname) {
             this.props.getNewDevicesList();
-            this.props.getNewCashRequests();
-            this.props.getUserCredit()
+            // this.props.getNewCashRequests();
+            // this.props.getUserCredit()
         }
 
         if (this.props.simDeleted != nextProps.simDeleted) {
@@ -829,6 +829,11 @@ class SideActions extends Component {
             servicesModal: visible,
         })
     }
+    handleDeviceChange = (device_id) => {
+        console.log(device_id);
+        let path = `${btoa(device_id)}`.trim()
+        this.props.history.push(path)
+    }
 
     render() {
         // console.log(this.state.app_list, 'device is: ', this.props.app_list)
@@ -840,6 +845,29 @@ class SideActions extends Component {
             <div className="gutter-box bordered">
                 <div className="gutter-example side_action">
                     <Card>
+                        <Row gutter={16} type="flex" justify="center" align="top">
+                            <Col
+                                span={16}
+                                style={{ width: '100%' }}
+                                className="gutter-row"
+                                justify="center"
+                            >
+                                <Select
+                                    style={{ width: '100%', margin: '20px 0px' }}
+                                    showSearch
+                                    placeholder={convertToLang(this.props.translation[""], "Select Device ID")}
+                                    optionFilterProp="children"
+                                    onChange={this.handleDeviceChange}
+                                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                    // defaultValue={this.props.device.device_id}
+                                >
+                                    <Select.Option key={'FLFB426780'} value='FLFB426780'>FLFB426780</Select.Option>
+                                    {/* {this.props.device_list.map((item, index) => {
+                                        return (<Select.Option key={index} value={item.device_id}>{item.device_id}</Select.Option>)
+                                    })} */}
+                                </Select>
+                            </Col>
+                        </Row>
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col
                                 span={12}
@@ -1393,7 +1421,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth, settings, devices, sidebar }, otherProps) => {
-    console.log(device_details.app_list, 'device_details.app_list')
+    // console.log(device_details.app_list, 'device_details.app_list')
     return {
         requests: sidebar.newRequests,
         devices: devices.newDevices,
