@@ -1,5 +1,5 @@
 import {
-    INVALID_TOKEN, GET_QUE_JOBS, 
+    INVALID_TOKEN, GET_QUE_JOBS,
 } from "../../constants/ActionTypes"
 import { SEND_JOB_TO_PANEL } from "../../constants/SocketConstants";
 
@@ -10,7 +10,9 @@ const initialStates = {
 export default (state = initialStates, action) => {
     switch (action.type) {
         case GET_QUE_JOBS: {
-            let tasks = action.payload
+            // console.log("GET_QUE_JOBS rightside bar reducer: ", action.payload, state.tasks);
+            let tasks = action.payload ? state.tasks.concat(action.payload) : [];
+            // console.log("tasks ", tasks)
 
             return {
                 ...state,
@@ -18,14 +20,16 @@ export default (state = initialStates, action) => {
             }
         }
         case SEND_JOB_TO_PANEL: {
-            if(action.payload){
+            // console.log("SEND_JOB_TO_PANEL rightside bar reducer: ", action.payload, state.tasks);
+            if (action.payload) {
                 console.log("new task: ", action.payload);
-                let index = state.tasks.findIndex((task)=> task.id === action.payload.id)
+                let index = state.tasks.findIndex((task) => task.id === action.payload.id)
                 console.log("new index: ", index);
-                if(index === -1){
+                if (index === -1) {
                     state.tasks.push(action.payload);
                 }
             }
+            // console.log("state.tasks ", state.tasks);
             return {
                 ...state
             }

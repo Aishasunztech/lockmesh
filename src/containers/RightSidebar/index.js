@@ -21,7 +21,8 @@ class RightSidebar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isRightSidebarOpened: false
+      isRightSidebarOpened: false,
+      offSetValue: 0
     };
     this.datalist = []
   }
@@ -37,6 +38,12 @@ class RightSidebar extends Component {
       <br></br>
       {type === 'completed' ? <i class="fa fa-times" aria-hidden="true" onClick={() => { }}></i> : null}
     </div>)
+  }
+
+  queueOnload = () => {
+    // console.log("queueOnload");
+    let offSet = this.state.offSetValue + 10;
+    this.props.getSocketProcesses(false, false, offSet, 10);
   }
 
 
@@ -62,6 +69,8 @@ class RightSidebar extends Component {
           </Collapse>
 
         </CustomScrollbars>
+        <br />
+        <Button type="primary" onClick={this.queueOnload}>Load More</Button>
       </div>
 
     )
@@ -156,6 +165,7 @@ class RightSidebar extends Component {
 // export default RightSidebar;
 const mapStateToProps = ({ rightSidebar, auth, socket }) => {
   // console.log("right sidebar:", rightSidebar, auth)
+  // console.log("rightSidebar.tasks ", rightSidebar.tasks)
   return {
     tasks: rightSidebar.tasks,
     socket: socket.socket
