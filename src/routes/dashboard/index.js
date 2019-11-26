@@ -26,10 +26,12 @@ import {
     rejectRequest,
     acceptRequest
 } from "../../appRedux/actions/SideBar";
+import { getNewDevicesList } from "../../appRedux/actions/Common";
+
 import { transferDeviceProfile } from "../../appRedux/actions/ConnectDevice";
 import { Button_Yes, Button_No } from "../../constants/ButtonConstants";
 import { APP_MANAGE_APKs, APP_SECURE_MARKET, APP_MANAGE_POLICY } from "../../constants/AppConstants";
-import { Sidebar_users, Sidebar_sdealers, Sidebar_dealers, Sidebar_devices } from "../../constants/SidebarConstants";
+import { Sidebar_users, Sidebar_sdealers, Sidebar_dealers, Sidebar_devices, Sidebar_users_devices, Sidebar_clients } from "../../constants/SidebarConstants";
 import { Tab_SET_PACKAGES_PRICES, Tab_PACKAGES, Tab_Active } from "../../constants/TabConstants";
 import { PACKAGES_AND_IDS, MANAGE_DATA } from "../../constants/AccountConstants";
 import { PURCHASE_CREDITS } from "../../constants/ActionTypes";
@@ -43,15 +45,16 @@ class Dashboard extends Component {
 
     componentDidMount() {
         this.props.getDashboardData();
+        this.props.getNewDevicesList();
     }
 
     transferDeviceProfile = (obj) => {
-        // console.log('at req transferDeviceProfile')
+
         let _this = this;
         Modal.confirm({
-            content: "Are You Sure, You want to Transfer Flagged Device to this Requested Device ?", //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
+            content: `Are you sure you want to Transfer, from ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
             onOk() {
-                // console.log('OK');
+                // 
                 _this.props.transferDeviceProfile(obj);
             },
             onCancel() { },
@@ -63,14 +66,14 @@ class Dashboard extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.props !== nextProps) {
-            console.log(nextProps.devices, 'next props are')
+
         }
     }
 
     handleLinkRequests = () => {
 
         // this.props.getNewCashRequests();
-        // this.props.getNewDevicesList()
+        this.props.getNewDevicesList()
         // this.props.getUserCredit()
 
         this.refs.new_device.showModal(false, true); // sectionvisible, showLInkRequest
@@ -79,7 +82,7 @@ class Dashboard extends Component {
     }
 
     render() {
-        console.log(this.props.devices, 'devices or new link request')
+
         return (
             <div>
                 <AppFilter
@@ -110,7 +113,7 @@ class Dashboard extends Component {
                     acceptRequest={this.props.acceptRequest}
                     rejectRequest={this.props.rejectRequest}
                     translation={this.props.translation}
-                    flaggedDevices={this.props.flaggedDevices}
+                    allDevices={this.props.allDevices}
                     transferDeviceProfile={this.transferDeviceProfile}
                 />
 
@@ -129,7 +132,7 @@ class Dashboard extends Component {
                                 </Card>
                                 <div className="dash_btm_txt">
                                     <span className='db-span-qnty'>{this.props.items.activeDevices}</span>
-                                    <span className='db-span-text'>{convertToLang(this.props.translation[Tab_Active], "Active")} {convertToLang(this.props.translation[Sidebar_devices], "Devices")}</span>
+                                    <span className='db-span-text'>{convertToLang(this.props.translation[Tab_Active], "Active")} {convertToLang(this.props.translation[Sidebar_users_devices], "Users & Devices")}</span>
                                 </div>
                             </Link>
                             </div>
@@ -146,7 +149,7 @@ class Dashboard extends Component {
                                     </Card>
                                     <div className="dash_btm_txt">
                                         <span className='db-span-qnty'>{this.props.items.onlineDevices}</span>
-                                        <span className='db-span-text'>{convertToLang(this.props.translation[ONLINE], "Online")} {convertToLang(this.props.translation[Sidebar_devices], "Devices")}</span>
+                                        <span className='db-span-text'>{convertToLang(this.props.translation[ONLINE], "Online")} {convertToLang(this.props.translation[Sidebar_users_devices], "Users & Devices")}</span>
                                     </div>
                                 </Link>
                             </div>
@@ -190,7 +193,7 @@ class Dashboard extends Component {
                                     </Card>
                                     <div className="dash_btm_txt">
                                         <span className='db-span-qnty'>{this.props.items.users}</span>
-                                        <span className='db-span-text'>{convertToLang(this.props.translation[Sidebar_users], "Users")}</span>
+                                        <span className='db-span-text'>{convertToLang(this.props.translation[Sidebar_clients], "Clients")}</span>
                                     </div>
                                 </Link>
                             </div>
@@ -332,7 +335,7 @@ class Dashboard extends Component {
                                                 </Card>
                                                 <div className="dash_btm_txt">
                                                     {/* <span className='db-span-qnty'>12</span> */}
-                                                    <span className='db-span-text'>{convertToLang(this.props.translation[MANAGE_DATA], "Manage Data")}</span>
+                                                    <span className='db-span-text'>{convertToLang(this.props.translation[MANAGE_DATA], "Manage ID Inventory")}</span>
                                                 </div>
                                             </Link>
                                         </div>
@@ -376,20 +379,21 @@ function mapDispatchToProps(dispatch) {
         rejectDevice: rejectDevice, // for link requests
         acceptRequest: acceptRequest,  // for credit requests
         rejectRequest: rejectRequest, // for credit requests
-        // transferDeviceProfile: transferDeviceProfile,
+        transferDeviceProfile: transferDeviceProfile,
 
         getNewCashRequests: getNewCashRequests,
         getUserCredit: getUserCredit,
         getDevicesList: getDevicesList,
+        getNewDevicesList: getNewDevicesList
     }, dispatch);
 }
 var mapStateToProps = ({ dashboard, auth, devices, sidebar, settings }) => {
-    console.log("dashboard::", devices.newDevices);
+
     return {
         items: dashboard.dashboard_items,
         authUser: auth.authUser,
 
-        flaggedDevices: devices.devices,
+        allDevices: devices.devices,
         devices: devices.newDevices,
         requests: sidebar.newRequests,
         translation: settings.translation,

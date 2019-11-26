@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { message, Input, Modal, Button, Popover, Icon } from "antd";
 import AppFilter from '../../components/AppFilter';
 import UserList from "./components/UserList";
-import { getStatus, componentSearch, titleCase, convertToLang, handleMultipleSearch } from '../utils/commonUtils';
+import { getStatus, componentSearch, titleCase, convertToLang, handleMultipleSearch, } from '../utils/commonUtils';
 
 import { isArray } from "util";
 import {
@@ -46,7 +46,7 @@ import { usersColumns } from '../utils/columnsUtils';
 
 import AddUser from './components/AddUser';
 import { Button_Add_User } from '../../constants/ButtonConstants';
-import { Sidebar_users } from '../../constants/SidebarConstants';
+import { Sidebar_users, Sidebar_clients } from '../../constants/SidebarConstants';
 var copyUsers = [];
 var status = true;
 // const question_txt = (
@@ -416,7 +416,7 @@ class Users extends Component {
                     handlePagination={this.handlePagination}
                     handleComponentSearch={this.handleComponentSearch}
                     translation={this.props.translation}
-                    pageHeading={convertToLang(this.props.translation[Sidebar_users], "Users")}
+                    pageHeading={convertToLang(this.props.translation[Sidebar_clients], "Clients")}
                 />
                 <AddUser ref="add_user" translation={this.props.translation} />
                 <UserList

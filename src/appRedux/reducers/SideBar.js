@@ -2,7 +2,10 @@ import {
     NEW_REQUEST_LIST,
     REJECT_REQUEST,
     ACCEPT_REQUEST,
-    USER_CREDITS
+    USER_CREDITS,
+    GET_CANCEL_REQUEST,
+    ACCEPT_SERVICE_REQUEST,
+    REJECT_SERVICES_REQUEST
 } from "../../constants/ActionTypes";
 import { Modal } from 'antd';
 
@@ -12,7 +15,10 @@ const error = Modal.error
 const initialSidebar = {
     whiteLabels: [],
     newRequests: [],
-    user_credit: 0
+    user_credit: 0,
+    due_credit: 0,
+    credits_limit: 0,
+    cancel_service_requests: []
 };
 
 export default (state = initialSidebar, action) => {
@@ -43,7 +49,6 @@ export default (state = initialSidebar, action) => {
                 });
             }
 
-console.log('reducers filterddevices', filteredRequests)
             return {
                 ...state,
                 newRequests: filteredRequests,
@@ -76,12 +81,63 @@ console.log('reducers filterddevices', filteredRequests)
         }
 
         case USER_CREDITS: {
+            // console.log("REMAINING CREDITS", action.response.credits);
             return {
                 ...state,
                 user_credit: action.response.credits,
+                credits_limit: action.response.credits_limit
+            }
+        }
+        case GET_CANCEL_REQUEST: {
+
+            return {
+                ...state,
+                cancel_service_requests: action.response.data,
             }
         }
 
+        case ACCEPT_SERVICE_REQUEST: {
+            var newRequests = state.cancel_service_requests;
+            var request_id = action.request.id;
+            var filteredRequests = newRequests;
+
+            if (action.response.status) {
+                success({
+                    title: action.response.msg,
+                });
+                filteredRequests = newRequests.filter(request => request.id !== request_id);
+            } else {
+                error({
+                    title: action.response.msg,
+                });
+            }
+            return {
+                ...state,
+                cancel_service_requests: filteredRequests,
+            }
+        }
+
+        case REJECT_SERVICES_REQUEST: {
+
+            var newRequests = state.cancel_service_requests;
+            var request_id = action.request.id;
+            var filteredRequests = newRequests;
+
+            if (action.response.status) {
+                success({
+                    title: action.response.msg,
+                });
+                filteredRequests = newRequests.filter(request => request.id !== request_id);
+            } else {
+                error({
+                    title: action.response.msg,
+                });
+            }
+            return {
+                ...state,
+                cancel_service_requests: filteredRequests,
+            }
+        }
 
         default:
             return state;

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { Modal, message } from 'antd';
+import { Modal, message, Row, Col } from 'antd';
 import AddForm from './AddForm';
 import { ADD_DEVICE } from '../../../constants/ActionTypes';
 import { convertToLang } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel, Button_Add_Device } from '../../../constants/ButtonConstants';
+import { Required_Fields } from '../../../constants/DeviceConstants';
+
 
 export default class AddDevice extends Component {
 
@@ -14,7 +16,7 @@ export default class AddDevice extends Component {
             expiry_date: 1,
             device: null,
             handleSubmit: null,
-            preActive: false
+            preActive: false,
         }
     }
 
@@ -78,18 +80,19 @@ export default class AddDevice extends Component {
         return (
             <div>
                 <Modal
-                    width="600px"
+                    width="620px"
                     visible={visible}
                     maskClosable={false}
-                    title= {convertToLang(this.props.translation[Button_Add_Device], "Add Device")} // "Add Device"
+                    title={
+                        ''
+                    } // "Add Device"
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}
-                    className="edit_form"
+                    className="edit_form add_device"
                     destroyOnClose={true}
-                    bodyStyle={{ height: 500, overflow: "overlay" }}
-                    okText= {convertToLang(this.props.translation[Button_Ok], Button_Ok)}
-                    cancelText= {convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                    okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                 >
                     <AddForm
                         device={this.state.device}
@@ -97,9 +100,10 @@ export default class AddDevice extends Component {
                         AddDeviceHandler={this.state.handleSubmit}
                         handleCancel={this.handleCancel}
                         preActive={this.state.preActive}
+                        history={this.props.history}
                     />
                 </Modal>
-            </div>
+            </div >
         )
 
     }

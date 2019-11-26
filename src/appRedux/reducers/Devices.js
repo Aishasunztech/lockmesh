@@ -21,7 +21,15 @@ import {
     DELETE_UNLINK_DEVICE,
     UNFLAG_DEVICE,
     GET_PARENT_PACKAGES,
-    UNLINK_DEVICE
+    GET_PRODUCT_PRICES,
+    UNLINK_DEVICE,
+    ADD_DEVICE,
+    BULK_DEVICES_LIST,
+    DEVICES_LIST_FOR_REPORT,
+    TRANSFER_DEVICE,
+    FLAG_DEVICE,
+    GET_PARENT_HARDWARES,
+    ACCEPT_REQUEST
 } from "../../constants/ActionTypes";
 
 // import { convertToLang } from '../../routes/utils/commonUtils';
@@ -60,6 +68,7 @@ import {
 
 import SettingStates from './InitialStates';
 import { message, Modal } from 'antd';
+import { DEVICE_PRE_ACTIVATION, DEVICE_UNLINKED } from "../../constants/Constants";
 
 var { translation } = SettingStates;
 
@@ -70,6 +79,9 @@ const error = Modal.error
 
 const initialState = {
     devices: [],
+    bulkDevices: [],
+    // allDealers: [],
+    // allUsers: [],
     msg: "",
     showMsg: false,
     isloading: true,
@@ -79,6 +91,7 @@ const initialState = {
     pgp_emails: [],
 
     parent_packages: [],
+    parent_hardwares: [],
     // options: [
     //     { "key": DEVICE_ID, "value": convertToLang(translation[DEVICE_ID], DEVICE_ID) },
     //     { "key": USER_ID, "value": convertToLang(translation[USER_ID], USER_ID) },
@@ -110,6 +123,8 @@ const initialState = {
     // ],
     // options: ["DEVICE ID", "REMAINING DAYS", "FLAGGED", "STATUS", "MODE", "DEVICE NAME", "ACCOUNT EMAIL", "ACTIVATION CODE", "PGP EMAIL", "CHAT ID", "CLIENT ID", "DEALER ID", "DEALER PIN", "MAC ADDRESS", "SIM ID", "IMEI 1", "SIM 1", "IMEI 2", "SIM 2", "SERIAL NUMBER", "MODEL", "START DATE", "EXPIRY DATE", "DEALER NAME", "S-DEALER", "S-DEALER NAME"],
     newDevices: [],
+    product_prices: [],
+    devicesForReport: [],
 };
 
 export default (state = initialState, action) => {
@@ -136,23 +151,111 @@ export default (state = initialState, action) => {
                 devices: action.payload,
             }
 
+        case ACCEPT_REQUEST: {
+            console.log("ACCEPT_REQUEST at devices", action);
+            if (action.response.status) {
+                // let objIndex = state.devices.findIndex((obj => obj.device_id === action.payload.device.device_id));
+                // if (objIndex !== -1) {
+                //     state.devices[objIndex].flagged = action.payload.device.flagged;
+                //     state.devices[objIndex].finalStatus = action.payload.device.finalStatus;
+                // }
+            }
+            return {
+                ...state,
+                // devices: [...state.devices]
+            }
+
+        }
+
+        case FLAG_DEVICE: {
+            if (action.response.status) {
+                let objIndex = state.devices.findIndex((obj => obj.device_id === action.payload.device.device_id));
+                if (objIndex !== -1) {
+                    state.devices[objIndex].flagged = action.payload.device.flagged;
+                    state.devices[objIndex].finalStatus = action.payload.device.finalStatus;
+                }
+            }
+            return {
+                ...state,
+                devices: [...state.devices]
+            }
+        }
+
         case UNFLAG_DEVICE: {
             if (action.response.status) {
-                // console.log('unflaged', action.response.device_id)
+                //
                 let objIndex = state.devices.findIndex((obj => obj.device_id === action.payload.device.device_id));
                 if (objIndex !== -1) {
                     state.devices[objIndex].flagged = 'Not flagged';
                     state.devices[objIndex].finalStatus = action.payload.device.finalStatus;
                 }
-                return {
-                    ...state,
-                    devices: [...state.devices]
+            }
+            return {
+                ...state,
+                devices: [...state.devices]
+            }
+        }
+
+        case UNLINK_DEVICE: {
+            // console.log("UNLINK_DEVICE reducer:: ", action.payload)
+            let stateDevices = state.devices;
+
+            if (action.response.status) {
+                success({
+                    title: action.response.msg,
+                });
+
+                let objIndex = stateDevices.findIndex((obj => obj.device_id === action.payload.device_id));
+                // console.log("objIndex ", objIndex)
+                if (objIndex !== -1) {
+                    stateDevices[objIndex].unlink_status = 1;
+                    stateDevices[objIndex].finalStatus = "Unlinked";
                 }
+
+                // if (action.isTransferred) {
+                //     devices = stateDevices.filter((obj => obj.device_id !== action.payload.device_id));
+                // }
+                // console.log("stateDevices", stateDevices)
+            } else {
+                error({
+                    title: action.response.msg,
+                });
+            }
+            // console.log('unlink called');
+            return {
+                ...state,
+                isLoading: false,
+                devices: [...stateDevices]
+            }
+        }
+
+        case TRANSFER_DEVICE: {
+            let stateDevices = state.devices;
+            // console.log('check devices', stateDevices)
+            if (action.response.status) {
+                success({
+                    title: action.response.msg,
+                });
+                let objIndex = stateDevices.findIndex((obj => obj.device_id === action.payload.device_id));
+                if (objIndex !== -1) {
+                    stateDevices[objIndex].finalStatus = 'Transfered';
+                    stateDevices[objIndex].transfer_status = 1;
+                }
+            } else {
+                error({
+                    title: action.response.msg,
+                });
+            }
+            // console.log('unlink called');
+            return {
+                ...state,
+                isLoading: false,
+                devices: [...stateDevices]
             }
         }
 
         case NEW_DEVICES_LIST:
-            // console.log('reducer new device', action.payload);
+            //
             return {
                 ...state,
                 isloading: false,
@@ -164,7 +267,7 @@ export default (state = initialState, action) => {
 
         case SUSPEND_DEVICE:
             if (action.response.status) {
-                // console.log('dedlksjaflkj', action.response)
+                //
                 let objIndex = state.devices.findIndex((obj => obj.device_id === action.response.data.device_id));
                 if (objIndex !== -1) {
                     state.devices[objIndex] = action.response.data;
@@ -191,7 +294,7 @@ export default (state = initialState, action) => {
 
         // case UNLINK_DEVICE:
         //     if (action.response.status) {
-        //         console.log('UNLINK_DEVICE', action.response)
+        //
         //         let objIndex = state.devices.findIndex((obj => obj.device_id === action.response.data.device_id));
         //         if (objIndex !== -1) {
         //             state.devices[objIndex] = action.response.data;
@@ -239,9 +342,15 @@ export default (state = initialState, action) => {
             }
 
         case DELETE_UNLINK_DEVICE:
+            let type = DEVICE_UNLINKED
             if (action.response.status) {
+                if (action.payload.type === 'pre-active') {
+                    type = DEVICE_PRE_ACTIVATION
+                }
+                // console.log(action.response.data, type, action);
                 for (let id of action.response.data) {
-                    let objIndex = state.devices.findIndex((obj => obj.id === id));
+                    let objIndex = state.devices.findIndex((obj => obj.id === id && obj.finalStatus == type));
+                    console.log(objIndex);
                     state.devices.splice(objIndex, 1);
                 }
                 success({
@@ -263,7 +372,6 @@ export default (state = initialState, action) => {
                 ...state,
             }
             break;
-
 
         case EDIT_DEVICE:
             let filteredDevices = state.newDevices;
@@ -298,12 +406,53 @@ export default (state = initialState, action) => {
                 // devices: action.payload,
             }
 
+        case ADD_DEVICE:
+
+            var filteredNewDevices = state.newDevices;
+            let devicess = JSON.parse(JSON.stringify(state.devices))
+            if (action.response.status) {
+                var device_id = action.payload.formData.device_id;
+                // console.log(state.devices, 'add device reducer', action.response)
+                let index = state.devices.findIndex(dev => dev.device_id == device_id)
+                // console.log(index, 'index is the');
+
+                if (index > -1) {
+                    devicess[index] = action.response.data[0]
+                }
+                var alldevices = state.newDevices;
+
+                filteredNewDevices = alldevices.filter(device => device.device_id !== device_id);
+
+                // console.log(filteredNewDevices, 'filtered new devices', alldevices)
+                success({
+                    title: action.response.msg,
+                });
+            }
+            else {
+                error({
+                    title: action.response.msg,
+                });
+            }
+
+            return {
+                ...state,
+                devices: devicess,
+                newDevices: filteredNewDevices,
+                //    selectedOptions: [...state.selectedOptions],
+                // options: state.options,
+                isloading: false,
+                msg: state.msg,
+                showMsg: "hello",
+                options: state.options,
+                // devices: action.payload,
+            }
+
             break;
 
         case PRE_ACTIVATE_DEVICE:
             let devices = [...state.devices]
             if (action.response.status) {
-                // console.log('pre activated device', action.response.data.data)
+                //
                 // state.devices.push(action.response.data.data)
                 success({
                     title: action.response.data.msg,
@@ -330,25 +479,25 @@ export default (state = initialState, action) => {
             break;
 
         case GET_DROPDOWN: {
-            // console.log( "Reducer " ,action.payload)
-            // console.log(GET_DROPDOWN);
+            //
+            //
             // console.log({
             //     ...state,
             //     selectedOptions: action.payload
             // });
-            // console.log('reducer selected options', action.payload);
+            //
             if (action.payload.length === 0) {
-                // console.log('array add', )
+                //
                 action.payload[0] = 'ACTIONS';
             }
-            // console.log('array', action.payload);
+            //
             return {
                 ...state,
                 selectedOptions: action.payload
             }
         }
         case GET_PAGINATION: {
-            // console.log(GET_DROPDOWN);
+            //
             // console.log({
             //     ...state,
             //     selectedOptions: action.payload
@@ -368,7 +517,7 @@ export default (state = initialState, action) => {
             return state
         }
         case GET_SIM_IDS: {
-            // console.log(GET_SIM_IDS);
+            //
             // console.log(
             //     action.payload
             // )
@@ -395,7 +544,7 @@ export default (state = initialState, action) => {
             let filteredDevices = state.devices;
             let filteredNewDevices = state.newDevices;
             if (action.response.status) {
-                // console.log(state.newDevices, 'new devices from reducer')
+                //
                 var alldevices = state.devices;
                 var device_id = action.device.device_id;
                 filteredDevices = alldevices.filter(device => device.device_id !== device_id);
@@ -417,12 +566,34 @@ export default (state = initialState, action) => {
         }
 
         case GET_PARENT_PACKAGES:
-            console.log(action.response.data);
+
 
             return {
                 ...state,
                 parent_packages: action.response.data,
             }
+
+        case GET_PARENT_HARDWARES:
+
+
+            return {
+                ...state,
+                parent_hardwares: action.response.data,
+            }
+        case GET_PRODUCT_PRICES:
+            //
+
+            return {
+                ...state,
+                product_prices: action.response.data,
+            }
+
+        case DEVICES_LIST_FOR_REPORT:
+            return {
+                ...state,
+                devicesForReport: action.payload.data,
+            }
+
         default:
             return state;
 

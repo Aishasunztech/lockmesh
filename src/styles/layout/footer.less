@@ -56,13 +56,23 @@
     z-index: 1;
 }
 
+.fix_card_sm .ant-table-bordered .ant-table-thead>tr>th {
+    white-space: nowrap;
+}
+
 .fix_card .ant-table-thead>tr>th.ant-table-column-has-actions.ant-table-column-has-sorters {
     position: sticky !important;
     top: 40px;
     z-index: 1;
 }
 
-.apk_fix_card .ant-table-thead>tr>th.ant-table-column-has-actions.ant-table-column-has-sorters {
+.feat_apk_fix_card_admin .ant-table-thead>tr>th.ant-table-column-has-actions.ant-table-column-has-sorters,
+.feat_apk_fix_card_dealer .ant-table-thead>tr>th.ant-table-column-has-actions.ant-table-column-has-sorters {
+    top: 0;
+}
+
+.apk_fix_card_admin .ant-table-thead>tr>th.ant-table-column-has-actions.ant-table-column-has-sorters,
+.apk_fix_card_dealer .ant-table-thead>tr>th.ant-table-column-has-actions.ant-table-column-has-sorters {
     top: -1px;
 }
 
@@ -74,8 +84,25 @@
     padding: 16px 0px !important;
 }
 
+.apk_fix_card .ant-card-body {
+    padding: 0 0px !important;
+}
+
 .m_d_fix_table .ant-card-body {
     padding: 16px 16px !important;
+}
+
+.position_absolute {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0 auto;
+}
+
+.position_relative {
+    position: relative;
 }
 
 .vertical_center {
@@ -90,6 +117,11 @@
 .font_14 {
     font-size: 14px !important;
 }
+
+.font_26_vw {
+    font-size: 1.6vw !important;
+}
+
 
 .font_26 {
     font-size: 26px !important;
@@ -122,13 +154,22 @@
     right: 16px;
 }
 
+.fix_card_sm {
+    position: relative;
+    top: 50px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 412px;
+    margin-bottom: 50px !important;
+}
+
 .dealer_fix_card {
     top: 140px;
 }
 
 .users_fix_card_admin,
 .users_fix_card_dealer,
-.apk_fix_card,
 .policy_fix_card {
     top: 102px;
 }
@@ -140,6 +181,19 @@
 .m_d_fix_table {
     top: 143px;
     overflow: scroll;
+}
+
+.apk_fix_card_dealer,
+.apk_fix_card_admin {
+    top: 140px;
+}
+
+.feat_apk_fix_card_admin {
+    top: 210px;
+}
+
+.feat_apk_fix_card_dealer {
+    top: 200px;
 }
 
 .gx-popover-scroll {
@@ -165,6 +219,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.disp_flx_end {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
 }
 
 .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-ink-bar {
@@ -200,7 +260,47 @@
     white-space: nowrap;
 }
 
+.display_none {
+    display: none;
+}
+
+.ant-table-thead>tr>th.white_normal {
+    white-space: normal !important;
+}
+
+.ant-empty-normal {
+    margin: 4px 0 0;
+}
+
+.ant-table-expanded-row .ant-table {
+    margin: 12px 12px;
+    -webkit-box-shadow: 0px 0px 10px 3px rgba(0, 51, 102, 0.3);
+    -moz-box-shadow: 0px 0px 10px 3px rgba(0, 51, 102, 0.3);
+    box-shadow: 0px 0px 10px 3px rgba(0, 51, 102, 0.3);
+}
+
+.hidden-md {
+    display: none;
+}
+
+.gx-icon-btn {
+    color: #262626;
+    width: 50px !important;
+    height: 50px !important;
+}
+
+.gx-no-header-horizontal .gx-linebar {
+    z-index: 1000;
+    background: #fff;
+    -webkit-box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.08);
+    -moz-box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.08);
+}
+
 @media (max-width: 992px) {
+    .hidden-md {
+        display: block;
+    }
 
     .devices_fix_card_admin {
         top: 293px;
@@ -232,8 +332,12 @@
         top: 344px;
     }
 
-    .apk_fix_card {
-        top: 220px;
+    .apk_fix_card_dealer {
+        top: 308px;
+    }
+
+    .apk_fix_card_admin {
+        top: 344px;
     }
 
     .policy_fix_card,
@@ -241,9 +345,31 @@
         top: 268px;
     }
 
+    .feat_apk_fix_card_admin {
+        top: 505px;
+    }
+
+    .feat_apk_fix_card_dealer {
+        top: 365px;
+    }
+
     .m_mt-16 {
         margin-top: 16px !important;
     }
+
+    .font_26_vw {
+        font-size: 26px !important;
+    }
+
+    .gx-no-header-horizontal {
+        padding: 0;
+        z-index: 1000;
+    }
+
+    .container-notification-icon {
+        top: 80px !important;
+    }
+
 }
 
 @media (max-width: 768px) {
@@ -255,14 +381,97 @@
     .b_p-8 {
         padding: 0 16px;
     }
+
+    .fix_card_sm {
+        margin-bottom: 66px !important;
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .gx-no-header-horizontal {
+        padding: 0;
+        -webkit-box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.08);
+        -moz-box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.08);
+        z-index: 1000;
+    }
+}
+
+.float-left {
+    float: left;
+}
+
+.float-right {
+    float: right;
+}
+
+.bg_yellow {
+    background: #ffff00;
+}
+
+.bg_brown {
+    background: #ffd966;
+}
+
+.bg_red {
+    background: #ff0000;
 }
 
 
+.bg_light_yellow {
+    background: #fff2cc;
+}
 
+.black {
+    color: black;
+}
 
+.border-bottom {
+    border-bottom: none !important;
+}
+
+.border-left {
+    border-left: 1px solid #e8e8e8;
+}
+
+.credit_popup .weight_600 {
+    font-weight: 600;
+    margin: 0;
+}
+
+.credit_popup .weight_400 {
+    font-weight: 400;
+    margin: 0;
+    color: #000;
+    font-size: 14px;
+}
+
+.ac_status_table .ant-table-tbody>tr:last-child {
+    background: #c6e0b4;
+}
+
+.sale_info_table .ant-table-tbody>tr>td,
+.sale_info_table .ant-table-thead>tr>th {
+    padding: 0 !important;
+}
+
+.ac_status_table .ant-table-tbody>tr>td,
+.ac_status_table .ant-table-thead>tr>th {
+    padding: 0 !important;
+}
+
+.border_bottom {
+    border-bottom: 2px solid #535353;
+    width: fit-content;
+    line-height: 13px;
+}
 
 .p-0 {
     padding: 0;
+}
+
+.p-5 {
+    padding: 5px;
 }
 
 .p-8 {
@@ -271,6 +480,14 @@
 
 .p-16 {
     padding: 16px;
+}
+
+.pt-8 {
+    padding-top: 8px;
+}
+
+.pt-12 {
+    padding-top: 12px;
 }
 
 .pl-0 {
@@ -338,7 +555,11 @@
 }
 
 .mb-16 {
-    margin-bottom: 16px;
+    margin-bottom: 16px !important;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
 }
 
 .mb-24 {
@@ -351,6 +572,10 @@
 
 .mt-4 {
     margin-top: 4px;
+}
+
+.mt-6 {
+    margin-top: 6px;
 }
 
 .mt-8 {
@@ -370,7 +595,7 @@
 }
 
 .mr-0 {
-    margin-left: 0;
+    margin-right: 0;
 }
 
 .mr-2 {

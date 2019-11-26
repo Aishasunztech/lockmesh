@@ -17,8 +17,8 @@ class RegisterSimForm extends Component {
             help: '',
             iccidHelp: '',
             visible: false,
-            guest: false,
-            encrypt: false,
+            guest: true,
+            encrypt: true,
             validateStatus: ''
         }
     }
@@ -170,7 +170,7 @@ class RegisterSimForm extends Component {
                         <Col span={6} />
                         {/* <Col span={6}></Col> */}
                         <Col span={9}>
-                            <span>{convertToLang(this.props.translation[Guest], "Guest")} </span> <Switch onClick={(e) => {
+                            <span>{convertToLang(this.props.translation[Guest], "Guest")} </span> <Switch defaultChecked={this.state.guest} onClick={(e) => {
                                 this.setState({
                                     guest: !this.state.guest
                                 })
@@ -179,7 +179,7 @@ class RegisterSimForm extends Component {
                             />
                         </Col>
                         <Col span={9}>
-                            <span>{convertToLang(this.props.translation[ENCRYPT], "Encrypt")} </span> <Switch onClick={(e) => {
+                            <span>{convertToLang(this.props.translation[ENCRYPT], "Encrypt")} </span> <Switch defaultChecked={this.state.encrypt} onClick={(e) => {
                                 this.setState({
                                     encrypt: !this.state.encrypt
                                 })

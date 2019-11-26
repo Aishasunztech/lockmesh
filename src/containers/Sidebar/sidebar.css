@@ -1,14 +1,36 @@
 /*----------Sidebar page----------*/
+
 .side_bar_main .gx-mr-3 {
     margin-right: 15px !important;
 }
 
 .side_bar_main.gx-mb-4 {
-    margin-bottom: 10px !important;
+    margin-bottom: 20px !important;
 }
 
 .notification_icn {
     font-size: 20px;
+    position: relative;
+}
+
+.notification_icn .doller-icon {
+    top: -10px;
+    left: -10px;
+    position: absolute;
+    min-width: 22px;
+    padding: 2px 6px 2px 6px;
+    background: limegreen;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.notification_icn .doller-icon1 {
+    top: -10px;
+    left: -10px;
+    position: absolute;
+    max-width: 50px;
+    padding: 2px 4px;
+    background: limegreen;
 }
 
 .ant-badge .ant-badge-count {
@@ -16,7 +38,6 @@
     min-width: 13px;
     line-height: 13px;
     padding: 0 0px;
-
 }
 
 .side_bar_main .ant-badge-count {

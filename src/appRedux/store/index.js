@@ -1,10 +1,10 @@
 import {
-  applyMiddleware, 
-  compose, 
+  applyMiddleware,
+  compose,
   createStore
 } from "redux";
 import reducers from "../reducers/index";
-import {routerMiddleware} from "react-router-redux";
+import { routerMiddleware } from "react-router-redux";
 import createHistory from "history/createBrowserHistory";
 import ReduxThunk from "redux-thunk";
 // import createSagaMiddleware from "redux-saga";
@@ -16,8 +16,8 @@ const history = createHistory();
 const routeMiddleware = routerMiddleware(history);
 // const middlewares = [sagaMiddleware, routeMiddleware];
 
-const middlewares = [ 
-  routeMiddleware, 
+const middlewares = [
+  routeMiddleware,
   ReduxThunk,
 ];
 // console.log("middlewares");
@@ -47,4 +47,4 @@ export default function configureStore(initialState) {
   }
   return store;
 }
-export {history};
+export { history };

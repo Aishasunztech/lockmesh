@@ -4,7 +4,7 @@ import {
 } from "../../constants/ActionTypes";
 
 import { message, Modal } from 'antd';
-import { CONNECT_SOCKET, DISCONNECT_SOCKET, ACK_SETTING_APPLIED, ACK_INSTALLED_APPS, ACK_UNINSTALLED_APPS } from '../../constants/SocketConstants';
+import { CONNECT_SOCKET, DISCONNECT_SOCKET, ACK_SETTING_APPLIED, ACK_INSTALLED_APPS, ACK_UNINSTALLED_APPS, FINISHED_BULK_PUSH_APPS } from '../../constants/SocketConstants';
 
 // import io from 'socket.io-client';
 
@@ -81,7 +81,20 @@ export default (state = initialState, action) => {
             }
         }
 
-        case FINISHED_PUSH_APPS: {
+        // case FINISHED_PUSH_APPS: {
+        //     // console.log("works");
+        //     success({
+        //         title: "Apps Pushed Successfully.",
+        //     });
+        //     return {
+        //         ...state,
+        //         is_in_process: false,
+        //         noOfApp_pushed_pulled: state.noOfApp_push_pull,
+        //         is_policy_process: 0
+        //     }
+        // }
+
+        case FINISHED_BULK_PUSH_APPS: {
             // console.log("works");
             success({
                 title: "Apps Pushed Successfully.",
@@ -166,6 +179,7 @@ export default (state = initialState, action) => {
                 is_policy_process: 0
             }
         }
+        
         default:
             return state;
     }

@@ -488,10 +488,8 @@ class ManageData extends Component {
                 status = true;
                 break;
         }
+    };
 
-        // this.handleCheckChange(this.props.selectedOptions)
-
-    }
     resyncIds = () => {
         this.props.getAllSimIDs();
         this.props.getAllPGPEmails();
@@ -516,7 +514,7 @@ class ManageData extends Component {
                             <Card >
                                 <Row gutter={16} className="filter_top">
                                     <Col className="col-md-6 col-sm-6 col-xs-6 vertical_center">
-                                        <span className="font_26"> {convertToLang(this.props.translation[MANAGE_DATA], "MANAGE DATA")} </span>
+                                        <span className="font_26"> {convertToLang(this.props.translation[MANAGE_DATA], "Manage ID Inventory")} </span>
                                     </Col>
                                     <Col className="col-md-2 col-sm-6 col-xs-6">
                                         <div className="m_mt-16">
@@ -571,6 +569,7 @@ class ManageData extends Component {
                                 </Row>
                             </Card>
                             <AccountList
+                                user={this.props.user}
                                 whiteLables={this.state.whiteLables}
                                 columns={this.state.columns}
                                 dataList={this.state.innerContent}
@@ -651,12 +650,15 @@ var mapStateToProps = (state) => {
     // console.log("mapStateToProps");
     // console.log(state.dealers.isloading);
     // console.log('state.dealer', state.dealers);
-    // console.log("state, ", state);
+    console.log("state.devices.chat_ids , ", state.devices.chat_ids);
+    console.log("state.devices.pgp_emails , ", state.devices.pgp_emails);
+    console.log("state.devices.sim_ids , ", state.devices.sim_ids);
     return {
         chat_ids: state.devices.chat_ids,
         pgp_emails: state.devices.pgp_emails,
         sim_ids: state.devices.sim_ids,
         translation: state.settings.translation,
+        user: state.auth.authUser
     };
 }
 

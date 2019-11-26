@@ -40,7 +40,7 @@ import {
     Appfilter_Display
 } from '../../constants/AppFilterConstants';
 
-import { convertToLang } from '../../routes/utils/commonUtils';
+import { convertToLang, getDefaultLanguage } from '../../routes/utils/commonUtils';
 import { ADMIN } from '../../constants/Constants';
 // Picky.prototype={
 //     value: new PropTypes.object(),
@@ -73,18 +73,25 @@ class AppFilter extends Component {
             this.setPagination(nextProps.defaultPagingValue)
         }
         if (this.props.selectedOptions !== nextProps.selectedOptions) {
-            //  console.log(nextProps.selectedOptions, "componentWillReceiveProps selectedOptions", this.props.selectedOptions);
+            // console.log(nextProps.selectedOptions, "componentWillReceiveProps selectedOptions", this.props.selectedOptions);
             // console.log("componentWillReceiveProps", this.state.selectedDisplayValues);
             // alert('recive props', nextProps.selectedOptions);
             // console.log(' recive props set dropdwon', nextProps);
-            this.setDropdowns(nextProps.selectedOptions);
+            // this.setDropdowns(nextProps.selectedOptions);
 
             //  this.props.handleCheckChange();
         }
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.selectedOptions !== prevProps.selectedOptions) {
+            console.log(prevProps.selectedOptions, "componentDidUpdate selectedOptions", this.props.selectedOptions);
+            this.setDropdowns(this.props.selectedOptions);
+        }
+    }
+
     setDropdowns(values) {
-        // console.log('setDropdowns val : ', values)
+        // console.log('setDropdowns val : ', values)   
         this.setState({
             selectedDisplayValues: values,
         });
@@ -136,7 +143,7 @@ class AppFilter extends Component {
 
         //  console.log('render props selectedOptions ...', this.props.selectedOptions);
         //  console.log('allSelected val this.props.selectedOptions are: ', this.props.selectedOptions)
-        //  console.log('render state selectedDisplayValues ...', this.state.selectedDisplayValues);
+        // console.log('render state selectedDisplayValues ...', this.state.selectedDisplayValues);
         let allSelectedOpt;
         if (this.state.selectedDisplayValues !== undefined && this.props.options !== undefined) {
             if (this.props.options.length === this.state.selectedDisplayValues.length) {
@@ -150,7 +157,7 @@ class AppFilter extends Component {
             <Card className="sticky_top_bar">
                 <Row gutter={24} className="filter_top">
                     <Col className={`${fullScreenClass3} col-sm-12 col-xs-12 vertical_center`}>
-                        <span className="font_26 white_now">
+                        <span className="font_26_vw white_now">
                             {(this.props.pageHeading) ? this.props.pageHeading : ""}
                         </span>
                     </Col>
@@ -158,7 +165,7 @@ class AppFilter extends Component {
                         <div className="m_mt-16">
                             {(this.props.options !== undefined && this.props.options !== null) ?
                                 <Fragment>
-                                    <Icon type="down" className="down_icon" />
+
                                     <Picky
                                         options={this.props.options}
                                         valueKey="key"
@@ -198,7 +205,6 @@ class AppFilter extends Component {
                                             }
                                         }
                                         }
-
                                         render={({
                                             style,
                                             isSelected,
@@ -216,12 +222,13 @@ class AppFilter extends Component {
                                                     key={item.key} // required
                                                     onClick={() => selectValue({ "key": item.key, "value": convertToLang(this.props.translation[item.value], item.value) })}
                                                 >
-                                                    <Checkbox checked={isSelected}>{`${convertToLang(this.props.translation[item.value], item.value)}  ${extraText}`}</Checkbox>
+                                                    <Checkbox checked={isSelected}>{`${getDefaultLanguage(convertToLang(this.props.translation[item.value], item.value))}  ${extraText}`}</Checkbox>
                                                 </li>
                                             );
                                         }
                                         }
                                     />
+                                    <Icon type="down" className="down_icon" />
                                 </Fragment>
                                 :
                                 null

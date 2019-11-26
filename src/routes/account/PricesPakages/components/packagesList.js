@@ -98,10 +98,10 @@ export default class Prices extends Component {
     }
 
     renderList = () => {
-        // console.log(this.state.packages, 'ddddddddddddddddddddddddddddddddddddd')
         if (this.state.packages) {
             return this.state.packages.map((item, index) => {
                 return {
+                    rowKey: index,
                     key: item.id,
                     sr: ++index,
                     pkg_name: item.pkg_name,
@@ -110,12 +110,12 @@ export default class Prices extends Component {
                     pkg_expiry: item.pkg_expiry
                 }
             })
+        } else {
+            return [];
         }
-        // console.log(this.props.packages, 'packages are')
     }
 
     render() {
-        // console.log(this.state.packages, 'prices are')
         return (
 
             <Table

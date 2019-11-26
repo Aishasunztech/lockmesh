@@ -190,7 +190,7 @@ class Customizer extends Component {
           <Radio.Button value={THEME_COLOR_SELECTION_CUSTOMIZE}>{convertToLang(this.props.translation[Customize], "Customize")}</Radio.Button>
         </Radio.Group>
 
-        {colorSelection === "THEME COLOR SELECTION CUSTOMIZE" ?
+        {colorSelection === THEME_COLOR_SELECTION_CUSTOMIZE ?
           <div className="gx-cus-customiz">
             {colorPickers}
             <Button className="gx-mb-0"
@@ -202,9 +202,9 @@ class Customizer extends Component {
           : this.getPresetColors()}
       </div>
 
-      <h6 className="gx-mb-3 gx-text-uppercase">{convertToLang(this.props.translation[Nav_Style], "Nav Style")}</h6>
+      {/* <h6 className="gx-mb-3 gx-text-uppercase">{convertToLang(this.props.translation[Nav_Style], "Nav Style")}</h6> */}
 
-      {this.getNavStyles(navStyle)}
+      {/* {this.getNavStyles(navStyle)} */}
 
       {/* <h6 className="gx-mb-3 gx-text-uppercase">Layout</h6>
 
@@ -320,7 +320,7 @@ class Customizer extends Component {
   };
   getNavStyles = (navStyle) => {
     return <ul className="gx-nav-option gx-list-inline">
-      <li>
+      {/* <li>
         <span onClick={this.onNavStyleChange.bind(this, NAV_STYLE_FIXED)}
           className={`gx-pointer ${navStyle === NAV_STYLE_FIXED && 'active'}`}>
           <img src={require('assets/images/layouts/fixed.png')} alt='fixed' />
@@ -343,44 +343,14 @@ class Customizer extends Component {
           className={`gx-pointer ${navStyle === NAV_STYLE_NO_HEADER_MINI_SIDEBAR && 'active'}`}>
           <img src={require('assets/images/layouts/no header mini sidebar.png')} alt='no hader mini sidebar' />
         </span>
-      </li>
+      </li> */}
       <li>
         <span onClick={this.onNavStyleChange.bind(this, NAV_STYLE_NO_HEADER_EXPANDED_SIDEBAR)}
           className={`gx-pointer ${navStyle === NAV_STYLE_NO_HEADER_EXPANDED_SIDEBAR && 'active'}`}>
           <img src={require('assets/images/layouts/vertical no header.png')} alt='vertical no header' />
         </span>
       </li>
-      {/* <li>
-        <span onClick={this.onNavStyleChange.bind(this, NAV_STYLE_DEFAULT_HORIZONTAL)}
-              className={`gx-pointer ${navStyle === NAV_STYLE_DEFAULT_HORIZONTAL && 'active'}`}>
-        <img src={require('assets/images/layouts/default horizontal.png')} alt='default horizontal'/>
-        </span>
-      </li> */}
-      {/* <li>
-        <span onClick={this.onNavStyleChange.bind(this, NAV_STYLE_DARK_HORIZONTAL)}
-              className={`gx-pointer ${navStyle === NAV_STYLE_DARK_HORIZONTAL && 'active'}`}>
-        <img src={require('assets/images/layouts/dark horizontal.png')} alt='dark horizontal'/>
-        </span>
-      </li>
-      <li>
-        <span onClick={this.onNavStyleChange.bind(this, NAV_STYLE_INSIDE_HEADER_HORIZONTAL)}
-              className={`gx-pointer ${navStyle === NAV_STYLE_INSIDE_HEADER_HORIZONTAL && 'active'}`}>
-        <img src={require('assets/images/layouts/inside header horizontal.png')} alt='inside header horizontal'/>
-        </span>
-      </li>
-      <li>
-        <span onClick={this.onNavStyleChange.bind(this, NAV_STYLE_BELOW_HEADER)}
-              className={`gx-pointer ${navStyle === NAV_STYLE_BELOW_HEADER && 'active'}`}>
-        <img src={require('assets/images/layouts/below header.png')} alt='below header'/>
-        </span>
-      </li>
-
-      <li>
-        <span onClick={this.onNavStyleChange.bind(this, NAV_STYLE_ABOVE_HEADER)}
-              className={`gx-pointer ${navStyle === NAV_STYLE_ABOVE_HEADER && 'active'}`}>
-        <img src={require('assets/images/layouts/top to header.png')} alt='top to header'/>
-        </span>
-      </li> */}
+      
     </ul>
   };
 

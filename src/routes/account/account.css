@@ -1,6 +1,5 @@
 .ac_card .ant-card-head {
     background: #f7f7f7;
-
 }
 
 .ac_card .ant-card-body {
@@ -66,7 +65,6 @@
     margin-right: 6px;
 }
 
-
 .coming_s_a {
     line-height: 130px;
     text-align: center;
@@ -89,7 +87,7 @@
 }
 
 .manage_ac .ant-card-body {
-    height: 260px;
+    height: 320px;
     position: relative;
 }
 
@@ -267,7 +265,7 @@
 
 @media (max-width:1335px) and (min-width:768px) {
     .manage_ac .ant-card-body {
-        height: 340px;
+        height: 410px;
         position: relative;
     }
 
