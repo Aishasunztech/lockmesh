@@ -33,7 +33,7 @@ const initialState = {
     isloading: false,
     subIsloading: false,
     dealers: [],
-    dealers2: [],
+    parent_dealers: [],
     suspended: 'no change',
     action: '',
     msg: 'no message',
@@ -84,7 +84,7 @@ export default (state = initialState, action) => {
         case DEALERS_LIST_IN_SDEALER: {
             return {
                 ...state,
-                dealers2: action.payload,
+                parent_dealers: action.payload,
                 isloading: false,
                 spinloading: false,
             }

@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip, Progress } from "antd";
+import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip, Progress, Select } from "antd";
 import TableHistory from "./TableHistory";
 import SuspendDevice from '../../devices/components/SuspendDevice';
 import ActivateDevcie from '../../devices/components/ActivateDevice';
@@ -46,7 +46,8 @@ import {
     handleChecked,
     resetPushApps,
     handleCheckedAllPushApps,
-    transferHistory
+    transferHistory,
+    getDeviceListConnectDevice
 } from "../../../appRedux/actions/ConnectDevice";
 
 import { getNewDevicesList } from "../../../appRedux/actions/Common";
@@ -101,6 +102,7 @@ var coppyAppList = [];
 var status = true;
 var appStatus = true;
 
+const { Option } = Select;
 
 class PasswordModal extends Component {
     render() {
@@ -403,6 +405,7 @@ class SideActions extends Component {
             this.props.simHistory(this.props.device_id);
         }
         this.props.getNewDevicesList();
+        this.props.getDeviceListConnectDevice()
 
         this.setState({
             historyModal: this.props.historyModal,
@@ -449,8 +452,8 @@ class SideActions extends Component {
 
         if (this.props.pathname !== nextProps.pathname) {
             this.props.getNewDevicesList();
-            this.props.getNewCashRequests();
-            this.props.getUserCredit()
+            // this.props.getNewCashRequests();
+            // this.props.getUserCredit()
         }
 
         if (this.props.simDeleted != nextProps.simDeleted) {
@@ -829,6 +832,11 @@ class SideActions extends Component {
             servicesModal: visible,
         })
     }
+    handleDeviceChange = (device_id) => {
+        console.log(device_id);
+        let path = `${btoa(device_id)}`.trim()
+        this.props.history.push(path)
+    }
 
     render() {
         // console.log(this.state.app_list, 'device is: ', this.props.app_list)
@@ -838,6 +846,26 @@ class SideActions extends Component {
         const flagged = ((this.props.device.flagged !== 'Not flagged') ? 'Unflag' : 'flag')
         return (
             <div className="gutter-box bordered">
+                <Card className="search_dev_id">
+                    <Row gutter={16} type="flex" justify="center" align="top">
+                        <Col span={24} className="gutter-row" justify="center" >
+                            <h4 className="mb-6">Search Device ID</h4>
+                            <Select
+                                style={{ width: '100%' }}
+                                showSearch
+                                placeholder={convertToLang(this.props.translation[""], "Select Device ID")}
+                                optionFilterProp="children"
+                                onChange={this.handleDeviceChange}
+                                filterOption={(input, option) => { return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0 }}
+                                defaultValue={this.props.device.device_id}
+                            >
+                                {this.props.device_list.map((item, index) => {
+                                    return (<Option key={index} value={item.device_id}>{item.device_id + ' (' + item.finalStatus + ')'}</Option>)
+                                })}
+                            </Select>
+                        </Col>
+                    </Row>
+                </Card>
                 <div className="gutter-example side_action">
                     <Card>
                         <Row gutter={16} type="flex" justify="center" align="top">
@@ -1390,10 +1418,11 @@ function mapDispatchToProps(dispatch) {
         resetPushApps: resetPushApps,
         handleCheckedAllPushApps: handleCheckedAllPushApps,
         transferHistory: transferHistory,
+        getDeviceListConnectDevice: getDeviceListConnectDevice
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth, settings, devices, sidebar }, otherProps) => {
-    console.log(device_details.app_list, 'device_details.app_list')
+    // console.log(device_details.device_list, 'device_details')
     return {
         requests: sidebar.newRequests,
         devices: devices.newDevices,
@@ -1434,7 +1463,8 @@ var mapStateToProps = ({ device_details, auth, settings, devices, sidebar }, oth
         wipeDevieStatus: device_details.wipeDevieStatus,
         guestAllPushApps: device_details.guestAllPushApps,
         enableAllPushApps: device_details.enableAllPushApps,
-        encryptedAllPushApps: device_details.encryptedAllPushApps
+        encryptedAllPushApps: device_details.encryptedAllPushApps,
+        device_list: device_details.device_list
     };
 }
 

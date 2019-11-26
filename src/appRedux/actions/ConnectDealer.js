@@ -3,7 +3,8 @@ import {
     DEALER_DETAILS,
     DEALER_PAYMENT_HISTORY,
     SET_DEALER_LIMIT,
-    DEALER_SALES_HISTORY
+    DEALER_SALES_HISTORY,
+    DEALER_DOMAINS
 } from "../../constants/ActionTypes"
 // import { message } from 'antd';
 
@@ -95,3 +96,20 @@ export function getDealerSalesHistory(dealerId){
     }
 }
 
+export function getDealerDomains(dealerId){
+    return (dispatch) => {
+        RestService.getDealerDomains(dealerId).then((response)=>{
+            if (RestService.checkAuth(response.data)) {
+                console.log(response.data)
+                dispatch({
+                    type: DEALER_DOMAINS,
+                    payload: response.data
+                });
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+    }
+}

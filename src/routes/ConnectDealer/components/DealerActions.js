@@ -6,6 +6,7 @@ import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Div
 import EditDealer from '../../dealers/components/editDealer';
 import DealerPaymentHistory from './DealerPaymentHistory';
 import DealerSalesHistory from "./DealerSalesHistory";
+import DealerDomains from './DealerDomains';
 
 // Helpers
 import { convertToLang } from '../../utils/commonUtils'
@@ -74,7 +75,30 @@ function showConfirm(_this, dealer, action, btn_title, name = "") {
 }
 
 export default class DealerAction extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            dealerList: []
+        }
+    }
 
+    componentWillReceiveProps(nextProps) {
+        // if (this.props.dealerList.length !== nextProps.dealerList.length) {
+        //     this.setState({
+        //         dealerList: nextProps.dealerList
+        //     })
+        // }
+    }
+    onChangeDealer = (dealer_id) => {
+        let path = `${btoa(dealer_id)}`.trim()
+        this.props.history.push(path)
+    }
+    renderDealerList = () => {
+        let dealerList = this.props.dealerList
+        return dealerList.map((dealer, index) => {
+            return (<Select.Option key={index} value={dealer.dealer_id}>{dealer.dealer_name}</Select.Option>)
+        })
+    }
     render() {
         if (!this.props.dealer) {
             return null;
@@ -89,6 +113,23 @@ export default class DealerAction extends Component {
         const undo_button_text = (dealer.unlink_status === 0) ? 'Delete' : 'Undelete'
         return (
             <Fragment>
+                <Card className="search_dev_id">
+                    <Row gutter={16} type="flex" justify="center" align="top">
+                        <Col span={24} className="gutter-row" justify="center" >
+                            <h4 className="mb-6">Search Dealer ID</h4>
+                            <Select
+                                showSearch={true}
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                style={{ width: '100%' }}
+                                placeholder="Search Dealer ID"
+                                onChange={this.onChangeDealer}
+                            >
+                                {this.renderDealerList()}
+                            </Select>
+                        </Col>
+                    </Row>
+                </Card>
+
                 <Card style={{ borderRadius: 12 }}>
                     <Row gutter={16} type="flex" justify="center" align="top">
                         <Col span={12} className="gutter-row" justify="center" >
@@ -96,8 +137,15 @@ export default class DealerAction extends Component {
                                 <h6 className="mb-0">Activity</h6>
                             </Button>
                         </Col>
-                        <Col span={12} className="gutter-row" justify="center" >
-                            <Button disabled style={{ width: "100%", marginBottom: 16, }}>
+                        <Col
+                            span={12}
+                            className="gutter-row"
+                            justify="center"
+                        >
+                            <Button
+                                onClick={() => this.refs.dealerDomains.showModal(this.props.dealer, this.props.getDealerDomains)}
+                                style={{ width: "100%", marginBottom: 16, }}
+                            >
                                 <h6 className="mb-0">Domains</h6>
                             </Button>
                         </Col>
@@ -199,11 +247,13 @@ export default class DealerAction extends Component {
                         </Col>
                     </Row>
                 </Card>
+
                 <EditDealer
                     ref='editDealer'
                     // getDealerList={this.props.getDealerList} 
                     translation={this.props.translation}
                 />
+
                 <DealerPaymentHistory
                     ref='dealerPaymentHistory'
                     translation={this.props.translation}
@@ -218,11 +268,20 @@ export default class DealerAction extends Component {
                     credits_limit={this.props.dealer.credits_limit}
                     setCreditLimit={this.props.setCreditLimit}
                 />
+
                 <DealerSalesHistory
                     ref='dealerSalesHistory'
                     translation={this.props.translation}
                     salesHistory={this.props.salesHistory}
                 />
+
+                <DealerDomains
+                    ref="dealerDomains"
+                    translation={this.props.translation}
+                    domains={this.props.domains}
+                // dealerDomains
+                />
+
             </Fragment >
         )
     }
