@@ -178,7 +178,7 @@ export default class PolicyInfo extends Component {
                             </TabPane>
                             <TabPane tab={convertToLang(this.props.translation[APPLICATION_PERMISION], "APPLICATION PERMISSION")} key="2">
                                 <AppList
-                                    apk_list={this.state.policy.app_list}
+                                    apk_list={this.state.policy && this.state.policy.app_list ? this.state.policy.app_list.filter(item => item.uniqueName !== "com.secureSetting.SecureSettingsMainSecure Settings" && item.uniqueName !== "com.android.settingsSettings") : []}
                                     handleEditPolicy={this.props.handleEditPolicy}
                                     handleCheckAll={this.props.handleCheckAll}
                                     handleCheckApp={this.handleCheckApp}

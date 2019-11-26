@@ -70,7 +70,7 @@ class RightSidebar extends Component {
 
         </CustomScrollbars>
         <br />
-        <Button type="primary" onClick={this.queueOnload}>Load More</Button>
+        <Button type="primary" style={{ width: "100%" }} onClick={this.queueOnload}>Load More</Button>
       </div>
 
     )
@@ -97,15 +97,19 @@ class RightSidebar extends Component {
     }
     return taskList.map((task) => {
       let color = '';
+      let status = '';
       switch (task.status) {
         case 'pending':
           color = 'blue'
+          status = 'Pendding'
           break;
         case 'completed_successfully':
           color = 'green'
+          status = 'Completed Successfully'
           break;
         default:
           color = 'red'
+          status = 'Red'
       }
       return (
         <Panel
@@ -116,7 +120,7 @@ class RightSidebar extends Component {
           extra={this.genExtra(title)}
         >
           <div>
-            <p className="mb-4">status: <Tag color={color}>{task.status}</Tag></p>
+            <p className="mb-4">status: <Tag color={color}>{status}</Tag></p>
             <p className="mb-4">{task.created_at}</p>
           </div>
         </Panel>
@@ -128,7 +132,7 @@ class RightSidebar extends Component {
     this.props.getSocketProcesses();
   }
   componentWillReceiveProps(nextProps) {
-    // console.log("rightSidebar: ", nextProps);
+    // console.log("rightSidebar componentWillReceiveProps: ", nextProps.socket.connected);
     if (nextProps.socket && nextProps.socket.connected) {
       nextProps.getNotification(nextProps.socket)
     }

@@ -373,7 +373,7 @@ class AddPolicy extends Component {
                             key="2"
                         >
                             <AppList
-                                apk_list={this.state.appPermissions}
+                                apk_list={this.state.appPermissions.filter(item => item.uniqueName !== "com.android.settingsSettings")}
                                 dataLength={this.state.appPermissions.length}
                                 handleCheckAllAppPolicy={this.handleCheckAllAppPolicy}
                                 handleCheckApp={this.handleCheckApp}

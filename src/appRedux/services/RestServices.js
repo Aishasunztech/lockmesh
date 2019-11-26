@@ -119,7 +119,7 @@ const RestService = {
         query = (filter) ?
             (status || offset || limit) ? query + `filter=${filter}` : query + `?filter=${filter}`
             : query.slice(0, -1);
-        console.log("query getSocketProcesses ", query);
+        // console.log("query getSocketProcesses ", query);
 
         return axios.get(BASE_URL + `users/get-processes${query}`, RestService.getHeader());
     },
