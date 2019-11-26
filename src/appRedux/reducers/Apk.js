@@ -14,7 +14,8 @@ import {
 	AUTHENTICATE_UPDATE_USER,
 	RESET_AUTH_UPDATE,
 	CHECK_BULK_PASS,
-	RESET_BULK_FLAG
+	RESET_BULK_FLAG,
+	APK_LOADING
 } from "../../constants/ActionTypes";
 
 import {
@@ -51,7 +52,7 @@ export default (state = initialState, action) => {
 
 	switch (action.type) {
 
-		case LOADING:
+		case APK_LOADING:
 			return {
 				...state,
 				isloading: true,
@@ -307,14 +308,14 @@ export default (state = initialState, action) => {
 							let allDealers = oldDealers.filter((item) => !newDealers.includes(item.dealer_id));
 							// state.apk_list[index].permissions = allDealers;
 							// state.apk_list[index].permission_count = allDealers.length;
-							if (user && user.type !== "admin") {
-								let filterDealers = allDealers.filter((item) => item.dealer_type === "admin");
-								state.apk_list[index].permissions = filterDealers;
-								state.apk_list[index].permission_count = filterDealers.length;
-							} else {
+							// if (user && user.type !== "admin") {
+							// 	let filterDealers = allDealers.filter((item) => item.dealer_type === "admin");
+							// 	state.apk_list[index].permissions = filterDealers;
+							// 	state.apk_list[index].permission_count = filterDealers.length;
+							// } else {
 								state.apk_list[index].permissions = allDealers;
 								state.apk_list[index].permission_count = allDealers.length;
-							}
+							// }
 							state.apk_list[index].statusAll = false;
 						} else {
 							if (user && user.type !== "admin") {

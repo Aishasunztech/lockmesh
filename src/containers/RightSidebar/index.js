@@ -8,13 +8,13 @@ import styles from './rightSidebar.css'
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
 
-const customPanelStyle = {
-  background: '#f7f7f7',
-  borderRadius: 4,
-  marginBottom: 24,
-  border: 0,
-  overflow: 'hidden',
-};
+// const customPanelStyle = {
+//   background: '#f7f7f7',
+//   borderRadius: 4,
+//   marginBottom: 16,
+//   border: 0,
+//   overflow: 'hidden',
+// };
 
 class RightSidebar extends Component {
 
@@ -46,28 +46,28 @@ class RightSidebar extends Component {
       // <CustomScrollbars className="gx-customizer">
       <div className="gx-customizer-item">
 
-            <br/>
-            <br/>
-            <CustomScrollbars className="gx-customizer">
+        <br />
+        <br />
+        <CustomScrollbars className="gx-customizer">
 
-              <Collapse
-                // defaultActiveKey={['1']}
-                bordered={false}
-                expandIconPosition='right'
-                onChange={() => this.callback()}
-              // style={{ height: 400 }}
-              >
-                {this.renderList(this.props.tasks, 'pending')}
-                {/* <div style={{ height: 50 }}></div> */}
-              </Collapse>
+          <Collapse
+            // defaultActiveKey={['1']}
+            bordered={false}
+            expandIconPosition='right'
+            onChange={() => this.callback()}
+          // style={{ height: 400 }}
+          >
+            {this.renderList(this.props.tasks, 'pending')}
+            {/* <div style={{ height: 50 }}></div> */}
+          </Collapse>
 
-            </CustomScrollbars>
+        </CustomScrollbars>
       </div>
 
     )
   };
 
-  
+
 
   toggleRightSidebar = () => {
     this.setState(previousState => (
@@ -82,44 +82,45 @@ class RightSidebar extends Component {
     if (data.length) {
       data.map((item, index) => {
         // if (item.status === type) {
-          taskList.push(item);
+        taskList.push(item);
         // }
       })
     }
     return taskList.map((task) => {
       let color = '';
-      switch(task.status){
+      switch (task.status) {
         case 'pending':
           color = 'blue'
-        break;
+          break;
         case 'completed_successfully':
           color = 'green'
-        break;
+          break;
         default:
           color = 'red'
       }
       return (
         <Panel
           header={task.type + ' (' + task.device_id + ')'}
-          style={customPanelStyle}
+          // style={customPanelStyle}
           key={task.id}
+          className="r_bar_cont"
           extra={this.genExtra(title)}
         >
           <div>
-            <p>status: <Tag color={color}>{task.status}</Tag></p>
-            <p>{task.created_at}</p>
+            <p className="mb-4">status: <Tag color={color}>{task.status}</Tag></p>
+            <p className="mb-4">{task.created_at}</p>
           </div>
         </Panel>
       )
     })
   }
-  
+
   componentDidMount() {
     this.props.getSocketProcesses();
   }
-  componentWillReceiveProps(nextProps){
-    console.log("rightSidebar: ", nextProps);
-    if(nextProps.socket && nextProps.socket.connected){
+  componentWillReceiveProps(nextProps) {
+    // console.log("rightSidebar: ", nextProps);
+    if (nextProps.socket && nextProps.socket.connected) {
       nextProps.getNotification(nextProps.socket)
     }
   }
@@ -142,7 +143,7 @@ class RightSidebar extends Component {
           // className="gx-customizer-option"
           className='container-notification-icon'
         >
-          <Button type="primary" onClick={() => this.toggleRightSidebar()}>
+          <Button className="right_bell_icon" type="primary" onClick={() => this.toggleRightSidebar()}>
             <i className="icon icon-notification bell-icon" />
           </Button>
         </div>

@@ -17,6 +17,7 @@ const initialSidebar = {
     newRequests: [],
     user_credit: 0,
     due_credit: 0,
+    credits_limit: 0,
     cancel_service_requests: []
 };
 
@@ -84,7 +85,7 @@ export default (state = initialSidebar, action) => {
             return {
                 ...state,
                 user_credit: action.response.credits,
-                due_credit: action.response.due_credits
+                credits_limit: action.response.credits_limit
             }
         }
         case GET_CANCEL_REQUEST: {

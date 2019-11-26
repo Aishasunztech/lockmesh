@@ -1,32 +1,32 @@
 .list_d_down {
     font-size: 25px;
-    position : relative;
-    float    : right;
-    bottom   : 0;
-    z-index  : 100;
-    right    : 12px;
+    position: relative;
+    float: right;
+    bottom: 0;
+    z-index: 100;
+    right: 12px;
 }
 
 .action_group .ant-table {
-    color     : #545454;
-    position  : relative;
-    bottom    : 56px;
+    color: #545454;
+    position: relative;
+    bottom: 56px;
     border-top: 0;
 }
 
 .ant-table-thead>tr>.device_value {
-    padding    : 2px 8px 2px 16px;
+    padding: 2px 8px 2px 16px;
 }
 
 .applist_menu .ant-checkbox-wrapper {
-    font-size  : 14px;
+    font-size: 14px;
     font-weight: 400;
-    margin-top : 8px;
+    margin-top: 8px;
 }
 
 .side_action .ant-btn>span {
     margin-left: 8px;
-    font-size  : 12px;
+    font-size: 12px;
 }
 
 .applist_menu .ant-checkbox-wrapper:first-child {
@@ -74,7 +74,7 @@
 }
 
 .first_head {
-    margin-left : 0;
+    margin-left: 0;
     margin-right: 0;
 }
 
@@ -88,9 +88,9 @@
 
 .perm_icons {
     background: #000 !important;
-    padding   : 6px;
-    width     : 30px;
-    height    : 30px;
+    padding: 6px;
+    width: 30px;
+    height: 30px;
 }
 
 .perm_icons img {
@@ -101,13 +101,13 @@
 
 .first_head img {
     height: 30px;
-    float : right;
+    float: right;
 }
 
 .sec_head {
-    margin       : 4px 8px 6px;
-    border-top   : 1px solid #e8e8e8;
-    padding      : 12px 0;
+    margin: 4px 8px 6px;
+    border-top: 1px solid #e8e8e8;
+    padding: 12px 0;
     border-bottom: 1px solid #e8e8e8;
 }
 
@@ -116,14 +116,14 @@
 }
 
 .sec_head span {
-    margin-right  : 4px;
-    font-size     : 14px;
+    margin-right: 4px;
+    font-size: 14px;
     text-transform: uppercase;
 }
 
 .sec_head .ant-col-8 {
     text-align: center;
-    padding   : 0;
+    padding: 0;
 }
 
 .sec_set_table {
@@ -131,36 +131,36 @@
 }
 
 .sec_set_table .ant-table-body {
-    margin-left : 1px;
+    margin-left: 1px;
     margin-right: 8px;
-    width       : 100%;
+    width: 100%;
 }
 
 .sec_set_table .ant-table-scroll {
-    width : 295px;
+    width: 295px;
     margin: 0 auto;
 }
 
 .lock_icon {
     border-right: 1px solid #ccc;
-    position    : absolute;
-    left        : 0;
-    top         : 4px;
-    padding     : 6px 8px 2px 12px;
-    text-align  : left !important;
+    position: absolute;
+    left: 0;
+    top: 4px;
+    padding: 6px 8px 2px 12px;
+    text-align: left !important;
 }
 
 .sec_set_table .ant-table-tbody>tr>td {
-    font-size : 13px !important;
+    font-size: 13px !important;
     text-align: left !important;
-    padding   : 6px 22px 6px 10px !important;
-    width     : 100% !important;
+    padding: 6px 22px 6px 10px !important;
+    width: 100% !important;
 }
 
 .imei_heading {
     margin-bottom: 0;
-    line-height  : 30px;
-    text-align   : center;
+    line-height: 30px;
+    text-align: center;
 }
 
 .imei_table .ant-table-thead>tr>th {
@@ -168,8 +168,8 @@
 }
 
 .imei_col_11 {
-    border       : 1px solid #e8e8e8;
-    margin       : 0 auto !important;
+    border: 1px solid #e8e8e8;
+    margin: 0 auto !important;
     margin-bottom: 16px !important;
 }
 
@@ -182,13 +182,13 @@
 }
 
 .imei_col_11 .ant-table-thead>tr>th {
-    padding    : 8px 8px;
+    padding: 8px 8px;
     white-space: nowrap;
 }
 
 .activities .ant-modal-body {
     max-height: 540px;
-    overflow  : overlay;
+    overflow: overlay;
 }
 
 .load_policy_popup .ant-modal-title {
@@ -204,21 +204,21 @@
 }
 
 .push_apps .ant-table-body {
-    height  : 440px;
+    height: 440px;
     overflow: overlay;
 }
 
 .pp_popup .search_heading1 {
-    color       : #545454;
-    width       : 30%;
-    float       : right;
+    color: #545454;
+    width: 30%;
+    float: right;
     margin-right: 40px;
 }
 
 .btn_break_line span {
-    width         : 70px;
-    line-height   : 15px;
-    white-space   : normal;
+    width: 70px;
+    line-height: 15px;
+    white-space: normal;
     vertical-align: middle;
 }
 
@@ -240,7 +240,7 @@
 
 .guest_encrypt .ant-tabs .ant-tabs-small-bar .ant-tabs-tab {
     padding: 8px 8px;
-    width  : 50%;
+    width: 50%;
 }
 
 .guest_encrypt .ant-tabs-nav {
@@ -250,6 +250,8 @@
 .guest_encrypt .ant-tabs-nav .ant-tabs-tab {
     margin: 0;
 }
+
+
 
 @media (max-width:1330px) and (min-width:1200px) {
     .sec_set_table .ant-table-tbody>tr>td {

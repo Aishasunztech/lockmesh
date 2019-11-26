@@ -1602,29 +1602,29 @@ export function dealerColumns(translation, handleSearch) {
     {
         title: (
             <Input.Search
-                name="dealer_token"
-                key="dealer_token"
-                id="dealer_token"
+                name="dealer_credits"
+                key="dealer_credits"
+                id="dealer_credits"
                 className="search_heading"
                 autoComplete="new-password"
-                placeholder={convertToLang(translation[DEALER_TOKENS], "TOKENS")}
+                placeholder={convertToLang(translation[""], "CREDITS")}
                 onChange={handleSearch}
 
             />
         ),
-        dataIndex: 'dealer_token',
+        dataIndex: 'dealer_credits',
         className: '',
         children: [
             {
-                title: convertToLang(translation[DEALER_TOKENS], "TOKENS"),
-                dataIndex: 'dealer_token',
-                key: 'dealer_token',
+                title: convertToLang(translation[""], "CREDITS"),
+                dataIndex: 'dealer_credits',
+                key: 'dealer_credits',
                 // sorter: (a, b) => {
                 //     console.log(a);
                 //     // console.log(b);
-                //     return a.dealer_token.length;
+                //     return a.dealer_credits.length;
                 // },
-                sorter: (a, b) => { return a.dealer_token.localeCompare(b.dealer_token) },
+                sorter: (a, b) => { return a.dealer_credits - b.dealer_credits },
 
             }
         ]
@@ -1840,6 +1840,7 @@ export function dealerColsWithSearch(translation, searchBar = false, callBack = 
             title: convertToLang(translation["permission_by"], "PERMISSION BY"),
             dataIndex: 'permission_by',
             key: 'permission_by',
+            name: 'permission_by',
             // sorter: (a, b) => {
             //     if (a.permission_by.props) {
             //         return a.permission_by.props.children.localeCompare(b.permission_by.props.children)
@@ -2242,6 +2243,7 @@ export function apkColumns(translation) {
             key: 'action',
             className: 'row m-0'
         },
+
         {
             title: (
                 <span>
@@ -2260,9 +2262,14 @@ export function apkColumns(translation) {
             // className: ''
         },
         {
+            title: convertToLang(translation[""], "USED BY"),
+            dataIndex: 'used_by',
+            key: 'used_by',
+        },
+        {
             title:
                 <span>
-                    {convertToLang(translation[APK_SHOW_ON_DEVICE], "SHOW ON DEVICE")}
+                    {convertToLang(translation[APK_SHOW_ON_DEVICE], "SHOW ON DEVICE3")}
                     <Popover placement="top"
                         content={(<Markup content={convertToLang(translation[SHOW_ON_DEVCIE_HELPING_TEXT],
                             `<p>Shows app in <b>Install Apps</b> <br />menu on Devices`)} />)}>
@@ -2302,6 +2309,7 @@ export function apkColumns(translation) {
             key: 'apk_size',
             // className: ''
         },
+
         {
             title: convertToLang(translation[""], "LABEL"),
             dataIndex: 'label',
@@ -2317,13 +2325,14 @@ export function apkColumns(translation) {
             dataIndex: 'version',
             key: 'version',
         },
+
         {
-            title: convertToLang(translation[""], "UPLOAD DATE"),
+            title: convertToLang(translation[""], "LAST UPLOADED"),
             dataIndex: 'created_at',
             key: 'created_at',
         },
         {
-            title: convertToLang(translation[""], "LAST EDIT"),
+            title: convertToLang(translation[""], "LAST UPDATED"),
             dataIndex: 'updated_at',
             key: 'updated_at',
         },
@@ -2358,6 +2367,16 @@ export function featureApkColumns(translation) {
             defaultSortOrder: "ascend"
         },
         {
+            title: convertToLang(translation[APK_APP_LOGO], "APP LOGO"),
+            dataIndex: 'apk_logo',
+            key: 'apk_logo',
+        },
+        {
+            title: convertToLang(translation[APK_SIZE], "APP SIZE"),
+            dataIndex: 'apk_size',
+            key: 'apk_size',
+        },
+        {
             title: convertToLang(translation[''], "PACKAGE NAME"),
             dataIndex: 'package_name',
             width: "100",
@@ -2372,17 +2391,7 @@ export function featureApkColumns(translation) {
             key: 'apk_version',
         },
         {
-            title: convertToLang(translation[APK_APP_LOGO], "APP LOGO"),
-            dataIndex: 'apk_logo',
-            key: 'apk_logo',
-        },
-        {
-            title: convertToLang(translation[APK_SIZE], "APP SIZE"),
-            dataIndex: 'apk_size',
-            key: 'apk_size',
-        },
-        {
-            title: convertToLang(translation["UPDATED DATE"], "LAST UPDATE"),
+            title: convertToLang(translation["UPDATED DATE"], "LAST UPDATED"),
             dataIndex: 'updated_date',
             key: 'updated_date',
         },
@@ -3438,6 +3447,8 @@ export function appMarketColumns(translation, handleSearch, removeSMapps) {
                     {
                         title: "APP NAME",
                         dataIndex: 'app_name',
+                        sorter: (a, b) => { return a.app_name.localeCompare(b.app_name) },
+                        sortDirections: ['ascend', 'descend'],
                     }
                 ]
 
@@ -3456,8 +3467,8 @@ export function appMarketColumns(translation, handleSearch, removeSMapps) {
     )
 }
 
-export function domainColumns(translation, handleSearch) {
-    return ([
+export function domainColumns(translation, handleSearch, isModal=false) {
+    let columns= [
         {
             title: "#",
             dataIndex: 'counter',
@@ -3465,30 +3476,9 @@ export function domainColumns(translation, handleSearch) {
             className: 'row',
             render: (text, record, index) => ++index,
         },
-        // {
-        //     title: convertToLang(translation[ACTION], "ACTION"),
-        //     dataIndex: 'action',
-        //     key: 'action',
-        //     className: 'row m-0'
-        // },
+       
         {
-            // title: (
-            //     <Input.Search
-            //         name="permission"
-            //         key="permission"
-            //         id="permission"
-            //         className="search_heading"
-            //         // onChange={handleSearch}
-            //         autoComplete="new-password"
-            //         // placeholder={titleCase(props.convertToLang(props.translation[""], "APP NAME"))}
-            //         placeholder="PERMISSION"
-            //     />
-            // ),
-            // dataIndex: 'permission',
-            // className: '',
-            // key: 'permission',
-            // children: [
-            //     {
+            
             title: (
                 <span>
                     {convertToLang(translation[APK_PERMISSION], "PERMISSION")}
@@ -3534,5 +3524,11 @@ export function domainColumns(translation, handleSearch) {
             ]
 
         },
-    ])
+    ];
+
+    if(isModal){
+        columns.splice(1, 1)
+    }
+
+    return columns;
 }

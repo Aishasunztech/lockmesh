@@ -28,7 +28,7 @@ import {
     Button_UNSET
 } from '../../../../constants/ButtonConstants'
 
-import { one_month, three_month, six_month, twelve_month, sim, chat, pgp, vpn, sim2 } from '../../../../constants/Constants';
+import { one_month, three_month, six_month, twelve_month, sim, chat, pgp, vpn, sim2, ADMIN } from '../../../../constants/Constants';
 
 class PackagePricingForm extends Component {
     constructor(props) {
@@ -70,9 +70,9 @@ class PackagePricingForm extends Component {
 
             if (fieldName == 'pkgPrice') {
                 var isnum = /^\d+$/.test(value);
-                console.log(isnum, 'test ', value)
+
                 if (!isnum || value <= 0) {
-                    console.log(isnum, 'if test ', value)
+
                     this.props.restrictPackageSubmit(false, fieldName)
                     this.setState({
                         validateStatus: 'error',
@@ -87,7 +87,7 @@ class PackagePricingForm extends Component {
                         [fieldName]: e
                     })
                 }
-                // console.log(isnum, 'value', e)
+                // 
             } else {
                 if (fieldName === "pkgTerms" && value === 'trial') {
                     this.setState({ pkgPrice: 0, [fieldName]: value })
@@ -104,7 +104,7 @@ class PackagePricingForm extends Component {
 
     PackageNameChange = async (rule, value, callback) => {
         let response = true
-        // console.log('value', value)
+        // 
         response = await RestService.checkPackageName(value).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
@@ -115,7 +115,7 @@ class PackagePricingForm extends Component {
                 }
             }
         });
-        // console.log(response, 'respoinse ise  d')
+        // 
         if (response) {
             this.props.restrictPackageSubmit(true, 'pkgName')
             callback()
@@ -230,6 +230,32 @@ class PackagePricingForm extends Component {
                         <h4 className='priceText'>Price: ${this.state.pkgPrice}</h4>
                     </Col>
                 </Row>
+                {(this.props.user.type !== ADMIN) ?
+                    <Row>
+                        <Col span={17}>
+                            <Form.Item label={convertToLang(this.props.translation[""], "PACKAGE RETAIL PRICE")} labelCol={{ span: 11 }}
+                                validateStatus={this.state.pkgTerms === "trial" ? "success" : this.state.validateStatus}
+                                help={this.state.pkgTerms === "trial" ? '' : this.state.help}
+                                wrapperCol={{ span: 13 }}
+                            >
+                                {getFieldDecorator('retail_price', {
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: 'Please Input Package Price',
+                                        },
+                                    ],
+                                })(<Input disabled={this.state.pkgTerms === "trial" ? true : false} onChange={(e => this.setPrice('retail_price', '', '', e.target.value))} type='number' min={0} />)}
+
+                            </Form.Item>
+                        </Col>
+
+                        <Col span={7}>
+                            <h4 className='priceText'>Price: ${this.state.pkgPrice}</h4>
+                        </Col>
+                    </Row>
+                    : null
+                }
 
                 <Row>
                     <Col span={13}>

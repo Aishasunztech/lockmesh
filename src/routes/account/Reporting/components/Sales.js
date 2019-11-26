@@ -2,12 +2,13 @@ import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal, Tabs, Col, Input, Form, Row, DatePicker, Select } from "antd";
 import moment from 'moment';
 import styles from '../reporting.css'
-import { convertToLang, generatePDF, generateExcel} from "../../../utils/commonUtils";
+import { convertToLang, generatePDF, generateExcel, formatMoney, getDateFromTimestamp } from "../../../utils/commonUtils";
 import {
   DEVICE_PRE_ACTIVATION
 } from "../../../../constants/Constants";
 
-import { BASE_URL
+import {
+  BASE_URL
 } from "../../../../constants/Application";
 var columns;
 var rows;
@@ -43,7 +44,7 @@ class Sales extends Component {
         className: '',
         dataIndex: 'dealer_pin',
         key: 'dealer_pin',
-        sorter: (a, b) => {  return a.dealer_pin- b.dealer_pin },
+        sorter: (a, b) => { return a.dealer_pin - b.dealer_pin },
         sortDirections: ['ascend', 'descend'],
       },
 
@@ -93,7 +94,7 @@ class Sales extends Component {
         className: '',
         dataIndex: 'profit_loss',
         key: 'profit_loss',
-        sorter: (a, b) => { return a.profit_loss-b.profit_loss },
+        sorter: (a, b) => { return a.profit_loss - b.profit_loss },
         sortDirections: ['ascend', 'descend'],
       },
 
@@ -109,9 +110,24 @@ class Sales extends Component {
       },
     ];
 
+    this.saleInfoColumn = [
+      {
+        title: '',
+        dataIndex: 'key',
+        key: 'key',
+      },
+
+      {
+        title: '',
+        dataIndex: 'value',
+        key: 'value',
+      },
+    ];
+
     this.state = {
       reportCard: false,
-      reportFormData: {}
+      reportFormData: {},
+      deviceList: props.devices,
     };
   }
 
@@ -123,26 +139,65 @@ class Sales extends Component {
     });
   };
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.salesReport !== prevProps.salesReport){
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.devices !== this.props.devices) {
       this.setState({
-        reportCard:  true
+        deviceList: nextProps.devices
       })
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.props.salesReport !== prevProps.salesReport) {
+      this.setState({
+        reportCard: true
+      });
 
       rows = this.props.salesReport.map((item, index) => {
         return {
-          count: ++index,
-          device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
-          dealer_pin: item.dealer_pin ? item.dealer_pin : 'N/A',
-          created_at: item.created_at ? item.created_at : 'N/A',
+          'key': index,
+          'count': ++index,
+          'device_id': item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
+          'dealer_pin': item.dealer_pin ? item.dealer_pin : 'N/A',
+          'type': item.type ? item.type : 'N/A',
+          'name': item.name ? item.name : 'N/A',
+          'cost_price': item.cost_price ? item.cost_price : 0,
+          'sale_price': item.sale_price ? item.sale_price : 0,
+          'profit_loss': item.profit_loss ? item.profit_loss : 0,
         }
       });
 
       columns = [
-        { title: '#', dataKey: "count" },
-        { title: convertToLang(this.props.translation[''], "DEVICE ID"), dataKey: "device_id" },
-        { title: convertToLang(this.props.translation[''], "USER PAYMENT STATUS"), dataKey: "end_user_payment_status" },
-        { title: convertToLang(this.props.translation[''], "GENERATED AT"), dataKey: "created_at" },
+        {
+          title: '#', dataKey: 'count',
+        },
+
+        {
+          title: convertToLang(this.props.translation[''], "DEVICE ID"), dataKey: 'device_id',
+        },
+
+        { title: convertToLang(this.props.translation[''], "DEALER ID"), dataKey: 'dealer_pin' },
+
+        {
+          title: convertToLang(this.props.translation[''], "TYPE"), dataKey: 'type',
+        },
+
+        {
+          title: convertToLang(this.props.translation[''], "NAME"), dataKey: 'name',
+        },
+
+        {
+          title: convertToLang(this.props.translation[''], "COST PRICE (CREDITS)"), dataKey: 'cost_price',
+        },
+
+        {
+          title: convertToLang(this.props.translation[''], "SALE PRICE (CREDITS)"), dataKey: 'sale_price',
+        },
+
+        {
+          title: convertToLang(this.props.translation[''], "PROFIT/LOSS (CREDITS)"), dataKey: 'profit_loss',
+        },
+
       ];
     }
   }
@@ -170,53 +225,63 @@ class Sales extends Component {
           'cost_price': item.cost_price ? item.cost_price : 0,
           'sale_price': item.sale_price ? item.sale_price : 0,
           'profit_loss': item.profit_loss ? item.profit_loss : 0,
-          'created_at': item.created_at ? item.created_at : 'N/A',
+          'created_at': item.created_at ? getDateFromTimestamp(item.created_at) : 'N/A',
         })
       });
     }
     return data;
   };
 
-  createPDF = () => {
-    var columns = [
-      { title: '#', dataKey: "count" },
-      { title: convertToLang(this.props.translation[''], "INVOICE ID"), dataKey: "invoice_id" },
-      { title: convertToLang(this.props.translation[''], "DEVICE ID"), dataKey: "device_id" },
-      { title: convertToLang(this.props.translation[''], "USER PAYMENT STATUS"), dataKey: "end_user_payment_status" },
-      { title: convertToLang(this.props.translation[''], "GENERATED AT"), dataKey: "created_at" },
+  renderSaleInfo = () => {
+    return [
+
+      {
+        key: <h6 className="weight_600 p-5"> Total Cost</h6>,
+        value: <h6 className="weight_600 p-5"> {this.props.saleInfo.totalCost}</h6>,
+      },
+      {
+        key: <h6 className="weight_600 p-5"> Total Sale</h6>,
+        value: <h6 className="weight_600 p-5"> {this.props.saleInfo.totalSale}</h6>,
+      },
+      {
+        key: <h6 className="weight_600 p-5"> Profit/Loss</h6>,
+        value: <h6 className="weight_600 p-5"> {this.props.saleInfo.totalProfitLoss}</h6>,
+      },
     ];
+  };
 
-    var rows = this.props.salesReport.map((item, index) => {
-      return {
-        count: ++index,
-        invoice_id: item.inv_no ? item.inv_no : 'N/A',
-        device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
-        dealer_pin: item.dealer_pin ? item.dealer_pin : 'N/A',
-        created_at: item.created_at ? item.created_at : 'N/A',
-        end_user_payment_status: item.end_user_payment_status ? item.end_user_payment_status : 'N/A',
-      }
-    });
+  saleInfoTitle = () => {
+    return <h4 className="credit_modal_heading weight_600">{convertToLang(this.props.translation[""], "SALE INFO")}</h4>
+  };
 
-    let fileName = 'invoice_' + new Date().getTime();
-
+  handleDealerChange = (e) => {
+    let devices = [];
+    if (e == '') {
+      devices = this.props.devices
+    } else {
+      devices = this.props.devices.filter(device => device.dealer_id == e);
+    }
+    this.setState({
+      deviceList: devices
+    })
   }
 
   render() {
     return (
       <Row>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-          <Card style={{ height: '500px', paddingTop: '50px' }}>
+          <Card bordered={false} style={{ height: '520px', overflow: 'scroll' }}>
             <Form onSubmit={this.handleSubmit} autoComplete="new-password">
 
               <Form.Item
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
               >
               </Form.Item>
 
               <Form.Item
                 label="Product Type"
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
                 width='100%'
               >
@@ -231,8 +296,8 @@ class Sales extends Component {
                   <Select style={{ width: '100%' }}>
                     <Select.Option value='ALL'>ALL</Select.Option>
                     <Select.Option value='PACKAGES'>PACKAGES</Select.Option>
-                    <Select.Option value='PRODUCTS'>PRODUCTS</Select.Option>
-                    <Select.Option value='HARDWARES'>HARDWARES</Select.Option>
+                    {/*<Select.Option value='PRODUCTS'>PRODUCTS</Select.Option>*/}
+                    <Select.Option value='HARDWARES'>HARDWARE</Select.Option>
                   </Select>
                 )}
               </Form.Item>
@@ -251,7 +316,7 @@ class Sales extends Component {
 
                 : <Form.Item
                   label="Dealer/Sdealer"
-                  labelCol={{ span: 8 }}
+                  labelCol={{ span: 10 }}
                   wrapperCol={{ span: 14 }}
                   width='100%'
                 >
@@ -263,7 +328,10 @@ class Sales extends Component {
                       },
                     ],
                   })(
-                    <Select style={{ width: '100%' }}>
+                    <Select
+                      style={{ width: '100%' }}
+                      onChange={(e) => this.handleDealerChange(e)}
+                    >
                       <Select.Option value=''>ALL</Select.Option>
                       <Select.Option value={this.props.user.dealerId}>My Report</Select.Option>
                       {this.props.dealerList.map((dealer, index) => {
@@ -275,8 +343,32 @@ class Sales extends Component {
               }
 
               <Form.Item
+                label="Devices"
+                labelCol={{ span: 10 }}
+                wrapperCol={{ span: 14 }}
+                width='100%'
+              >
+                {this.props.form.getFieldDecorator('device', {
+                  initialValue: '',
+                  rules: [
+                    {
+                      required: false,
+                    },
+                  ],
+                })(
+                  <Select style={{ width: '100%' }}>
+                    <Select.Option value=''>ALL</Select.Option>
+                    <Select.Option value={DEVICE_PRE_ACTIVATION}>{DEVICE_PRE_ACTIVATION}</Select.Option>
+                    {this.state.deviceList.map((device, index) => {
+                      return (<Select.Option key={device.device_id} value={device.device_id}>{device.device_id}</Select.Option>)
+                    })}
+                  </Select>
+                )}
+              </Form.Item>
+
+              <Form.Item
                 label="FROM (DATE) "
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
               >
                 {this.props.form.getFieldDecorator('from', {
@@ -294,7 +386,7 @@ class Sales extends Component {
 
               <Form.Item
                 label="TO (DATE)"
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
               >
                 {this.props.form.getFieldDecorator('to', {
@@ -313,7 +405,7 @@ class Sales extends Component {
               </Form.Item>
               <Form.Item className="edit_ftr_btn"
                          wrapperCol={{
-                           xs: { span: 22, offset: 0 },
+                           xs: { span: 24, offset: 0 },
                          }}
               >
                 <Button key="back" type="button" onClick={this.handleReset}>CANCEL</Button>
@@ -325,28 +417,39 @@ class Sales extends Component {
 
         </Col>
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
-          <Card style={{ height: '500px', overflow: 'scroll' }}>
+          <Card bordered={false} style={{ height: '520px', overflow: 'scroll' }}>
             {(this.state.reportCard) ?
               <Fragment>
-              <Row>
-                <Col xs={12} sm={12} md={12} lg={12} xl={12}>
-                  <h3>Sales Report</h3>
-                </Col>
-                  <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                <Row>
+                  <Col xs={14} sm={14} md={14} lg={14} xl={14}>
+                    <h3>Sales Report</h3>
+                  </Col>
+                  <Col xs={10} sm={10} md={10} lg={10} xl={10}>
                     <div className="pull-right">
-                      <Button type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Sales Report', fileName, this.state.reportFormData) }}>Download PDF</Button>
-                    <Button type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName) }}>Download Excel</Button>
+                      <Button className="mb-8" type="dotted" icon="download" size="small" onClick={() => { this.state.reportFormData.saleInfo = this.props.saleInfo; generatePDF(columns, rows, 'Sales Report', fileName, this.state.reportFormData) }}>Download PDF</Button>
+                      <Button className="mb-8" type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName) }}>Download Excel</Button>
                     </div>
-                </Col>
-              </Row>
-            <Table
-              columns={this.columns}
-              dataSource={this.renderList(this.props.salesReport)}
-              bordered
-              pagination={false}
+                  </Col>
+                </Row>
+
+                <Table
+                  className="sale_info_table"
+                  dataSource={this.renderSaleInfo()}
+                  columns={this.saleInfoColumn}
+                  pagination={false}
+                  showHeader={false}
+                  title={this.saleInfoTitle}
+                  bordered
+                />
+
+                <Table
+                  columns={this.columns}
+                  dataSource={this.renderList(this.props.salesReport)}
+                  bordered
+                  pagination={false}
                 />
               </Fragment>
-            : null }
+              : null}
           </Card>
         </Col>
       </Row>

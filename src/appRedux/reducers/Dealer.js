@@ -24,6 +24,7 @@ import {
 //     DEALER_TOKENS
 // } from '../../constants/DealerConstants';
 import { message, Modal } from 'antd';
+import { DEALER_LOADING } from "../../constants/ActionTypes";
 
 const success = Modal.success
 const error = Modal.error
@@ -32,7 +33,7 @@ const initialState = {
     isloading: false,
     subIsloading: false,
     dealers: [],
-    dealers2: [],
+    parent_dealers: [],
     suspended: 'no change',
     action: '',
     msg: 'no message',
@@ -53,8 +54,7 @@ export default (state = initialState, action) => {
 
     switch (action.type) {
 
-        case LOADING:
-
+        case DEALER_LOADING:
             return {
                 ...state,
                 isloading: true,
@@ -81,12 +81,14 @@ export default (state = initialState, action) => {
                 // options: state.options
             }
 
-            case DEALERS_LIST_IN_SDEALER: {
-                return {
-                    ...state,
-                    dealers2: action.payload
-                }
+        case DEALERS_LIST_IN_SDEALER: {
+            return {
+                ...state,
+                parent_dealers: action.payload,
+                isloading: false,
+                spinloading: false,
             }
+        }
 
         case SUSPEND_DEALERS:
 
@@ -247,10 +249,10 @@ export default (state = initialState, action) => {
             // console.log('item added is:',action.response.item_added[0])
 
             if (action.response.status) {
-                if(action.response.added_dealer && action.response.added_dealer.length){
+                if (action.response.added_dealer && action.response.added_dealer.length) {
                     state.dealers.unshift(action.response.added_dealer[0])
                 }
-                
+
                 success({
                     title: action.response.msg,
                 });

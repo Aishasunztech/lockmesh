@@ -67,7 +67,8 @@ import {
     SERVICES_DETAIL,
     SERVICES_HISTORY,
     CANCEL_EXTENDED_SERVICE,
-    USER_CREDITS
+    USER_CREDITS,
+    GET_DEVICE_LIST
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -102,6 +103,29 @@ export function getDeviceDetails(deviceId) {
                 if (response.data) {
                     dispatch({
                         type: GET_DEVICE_DETAILS,
+                        payload: response.data.data
+                    })
+                }
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        });
+
+    };
+}
+export function getDeviceListConnectDevice(deviceId) {
+    //console.log('object is callse')
+    return (dispatch) => {
+        RestService.getDeviceListConnectDevice(deviceId).then((response) => {
+            // console.log("slkdflaskdfjlasf", response.data);
+            if (RestService.checkAuth(response.data)) {
+                // console.log("slkdflaskdfjlasf", response.data);
+                if (response.data) {
+                    dispatch({
+                        type: GET_DEVICE_LIST,
                         payload: response.data.data
                     })
                 }
@@ -180,9 +204,9 @@ export function getProfiles(device_id) {
 //     }
 // }
 
-export function getPolicies(device_id) {
+export function getPolicies() {
     return (dispatch) => {
-        RestService.getPolicies(device_id).then((response) => {
+        RestService.getPolicies().then((response) => {
 
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
@@ -642,7 +666,7 @@ export function submitPassword(passwords, pwdType, device_id, usr_acc_id) {
     // console.log("Passwords: ", usr_acc_id);
     return (dispatch) => {
 
-        RestService.submtPassword({ passwords, pwdType, device_id, usr_acc_id }).then((response) => {
+        RestService.submitPassword({ passwords, pwdType, device_id, usr_acc_id }).then((response) => {
             // console.log('action saveProfileCND', device_setting);
             if (RestService.checkAuth(response.data)) {
                 dispatch({

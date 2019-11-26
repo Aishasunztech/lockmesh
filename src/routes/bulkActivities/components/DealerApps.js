@@ -8,11 +8,12 @@ import { convertToLang } from '../../utils/commonUtils';
 
 
 const renderApps = (props, apk_list, isSwitchable, selectedAppKeys) => {
+    // console.log("pushApps ", props.pushApps)
     let apps = [];
     if (props.app_list) {
         apk_list.forEach(apk => {
-            let index =props.app_list.findIndex((app)=> app.package_name === apk.package_name);
-            if(index === -1){
+            let index = props.app_list.findIndex((app) => app.package_name === apk.package_name);
+            if (index === -1) {
                 apps.push(apk);
             }
         });
@@ -20,7 +21,27 @@ const renderApps = (props, apk_list, isSwitchable, selectedAppKeys) => {
         apps = apk_list;
     }
 
+    // console.log(selectedAppKeys, "apps ", apps, "props.selectedApps ", props.selectedApps);
     return apps.map((app) => {
+
+        // if (props.pushApps) {
+        //     props.pushApps.forEach(apk => {
+        //         if (app.apk_id === apk.apk_id) {
+        //             app.guest = apk.guest;
+        //             app.encrypted = apk.encrypted;
+        //             app.enable = apk.enable;
+        //         }
+        //     });
+        // } else 
+        if (props.selectedApps) {
+            props.selectedApps.forEach(apk => {
+                if (app.apk_id === apk.apk_id) {
+                    app.guest = apk.guest;
+                    app.encrypted = apk.encrypted;
+                    app.enable = apk.enable;
+                }
+            });
+        }
 
         let isAvailable = selectedAppKeys !== undefined ? (selectedAppKeys.length) ? selectedAppKeys.find(el => (el === app.apk_id) ? true : false) : false : false;
         return {
@@ -33,7 +54,7 @@ const renderApps = (props, apk_list, isSwitchable, selectedAppKeys) => {
             apk_logo: (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.icon} />),
             guest: ((isSwitchable || props.disabledSwitch) ?
                 <Switch
-                    defaultChecked={app.guest === true || app.guest === 1 ? true : false}
+                    checked={app.guest === true || app.guest === 1 ? true : false}
                     disabled={!isAvailable}
                     size={"small"}
                     onClick={(e) => {
@@ -42,8 +63,7 @@ const renderApps = (props, apk_list, isSwitchable, selectedAppKeys) => {
                 /> : (app.guest === true) ? 'On' : 'Off'),
             encrypted: ((isSwitchable || props.disabledSwitch) ?
                 <Switch
-                    defaultChecked={app.encrypted === true || app.encrypted === 1 ? true : false}
-
+                    checked={app.encrypted === true || app.encrypted === 1 ? true : false}
                     disabled={!isAvailable}
                     size={"small"}
                     onClick={(e) => {
@@ -52,7 +72,7 @@ const renderApps = (props, apk_list, isSwitchable, selectedAppKeys) => {
                 /> : (app.encrypted === true) ? 'On' : 'Off'),
             enable: ((isSwitchable || props.disabledSwitch) ?
                 <Switch
-                    defaultChecked={app.enable === true || app.enable === 1 ? true : false}
+                    checked={app.enable === true || app.enable === 1 ? true : false}
                     disabled={!isAvailable}
                     size={"small"}
                     onClick={(e) => {

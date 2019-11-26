@@ -6,8 +6,9 @@ import Devices from "./Devices"
 import BulkDevices from "./BulkDevices"
 import Dealers from "./Dealer";
 import Apk_List from "./Apk";
+import ConnectDealer from './ConnectDealer';
 import ConnectDevice from "./ConnectDevice";
-import Account from "./Account"
+import Account from "./Account";
 import Policy from "./Policy";
 import Users from "./Users";
 import AppMarket from "./AppMarket";
@@ -16,7 +17,7 @@ import SideBar from "./SideBar"
 import Agents from './Agent';
 import Dashboard from './Dashboard';
 import Reporting from './Reports';
-import RightSidebar from './RightSidebar'
+import RightSidebar from './RightSidebar';
 
 const reducers = combineReducers({
   routing: routerReducer,
@@ -27,6 +28,7 @@ const reducers = combineReducers({
   dealers: Dealers,
   apk_list: Apk_List,
   device_details: ConnectDevice,
+  dealer_details: ConnectDealer,
   account: Account,
   policies: Policy,
   users: Users,

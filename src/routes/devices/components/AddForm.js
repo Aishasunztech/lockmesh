@@ -121,7 +121,7 @@ class AddDevice extends Component {
                         this.state.total_price = this.state.total_price - Number(sim_id_price[0].unit_price)
                         this.sim_id2_added = false
                     }
-
+                    // console.log("On form Submit packages : ", this.state.packages);
                     values.products = this.state.products;
                     values.packages = this.state.packages;
                     values.term = this.state.term;
@@ -274,7 +274,7 @@ class AddDevice extends Component {
         let packagesData = []
         let productData = []
         let total_price = 0
-        // console.log(products, packages);
+        console.log("SERVICES SUBMIT", packages);
         if (packages && packages.length) {
             packages.map((item) => {
                 let data = {
@@ -283,7 +283,8 @@ class AddDevice extends Component {
                     pkg_price: item.pkg_price,
                     pkg_dealer_type: item.dealer_type,
                     pkg_name: item.pkg_name,
-                    pkg_term: item.pkg_term
+                    pkg_term: item.pkg_term,
+                    retail_price: item.retail_price
                 }
                 total_price = total_price + Number(item.pkg_price)
                 packagesData.push(data)
@@ -576,9 +577,21 @@ class AddDevice extends Component {
         this.state.serviceData.pay_now = pay_now;
 
         if (pay_now) {
-            this.setState({ invoiceVisible: true, invoiceType: "pay_now" })
+
+            if ((this.state.total_price + this.state.hardwarePrice) <= this.props.user_credit || !this.state.serviceData.pay_now) {
+                this.setState({ invoiceVisible: true, invoiceType: "pay_now" })
+            } else {
+                showCreditPurchase(this, "Your Credits are not enough to apply these services. Please select other services OR Purchase Credits.")
+            }
+
         } else {
-            this.setState({ invoiceVisible: true, invoiceType: "pay_later" })
+            let after_pay_credits = this.props.user_credit - (this.state.total_price + this.state.hardwarePrice)
+            let credits_limit = this.props.credits_limit
+            if (credits_limit > after_pay_credits) {
+                showCreditPurchase(this, "Your Credits limits will exceed after apply this service. Please select other services OR Purchase Credits.")
+            } else {
+                this.setState({ invoiceVisible: true, invoiceType: "pay_later" })
+            }
         }
 
     }
@@ -649,6 +662,22 @@ class AddDevice extends Component {
             })
         }
     }
+    validateValidDays = (rule, value, callback) => {
+        // console.log(value);
+        if (value !== '') {
+            if (value % 1 !== 0) {
+                callback('Please Enter a Integer Value.');
+            }
+            else if (value > 30 || value < 1) {
+                callback('Range 1-30 Please Enter a valid input.');
+            } else {
+                callback();
+            }
+        } else {
+            callback();
+        }
+    }
+
 
     render() {
         // console.log(this.props);
@@ -701,7 +730,9 @@ class AddDevice extends Component {
                                     <Button
                                         className="add_user_btn"
                                         type="primary"
+                                        style={{ width: "100%" }}
                                         onClick={() => this.handleUserModal()}
+                                        style={{ width: "100%" }}
                                     >
                                         {convertToLang(this.props.translation[Button_Add_User], "Add User")}
                                     </Button>
@@ -750,6 +781,7 @@ class AddDevice extends Component {
                                     label={convertToLang(this.props.translation[DUMY_TRANS_ID], "SERVICES")}
                                     labelCol={{ span: 8 }}
                                     wrapperCol={{ span: 16 }}
+                                    className="l_h_20"
                                 >
                                     {this.props.form.getFieldDecorator('service', {
                                         initialValue: '',
@@ -1112,14 +1144,19 @@ class AddDevice extends Component {
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
                                             label={convertToLang(this.props.translation[Device_Valid_For], "VALID FOR(DAYS)")}
-                                            labelCol={{ span: 14 }}
-                                            wrapperCol={{ span: 10 }}
+                                            labelCol={{ span: 12 }}
+                                            wrapperCol={{ span: 12 }}
+                                            className="val_days"
                                         >
                                             {this.props.form.getFieldDecorator('validity', {
                                                 initialValue: '',
                                                 rules: [{
                                                     required: true, message: convertToLang(this.props.translation[Device_Valid_days_Required], "Valid days required"),
-                                                }],
+                                                },
+                                                {
+                                                    validator: this.validateValidDays,
+                                                }
+                                                ],
                                             })(
                                                 <InputNumber min={1} />
                                             )}
@@ -1148,7 +1185,7 @@ class AddDevice extends Component {
                                                     className="width_100"
                                                     min={2} max={10}
                                                     onChange={this.handleDuplicate} />
-                                                <span style={{ color: "red", padding: 0 }} >Maximum Multiple devices : 10</span>
+                                                <span style={{ color: "red", padding: 0, fontSize: 13, }} >Maximum Multiple devices : 10</span>
                                             </Fragment>
 
                                         )}
@@ -1367,7 +1404,7 @@ function mapDispatchToProps(dispatch) {
 }
 var mapStateToProps = ({ routing, devices, device_details, users, settings, sidebar, auth }) => {
     // console.log("users.invoiceID at componente", users.invoiceID);
-    console.log("devices.parent_packages ", devices.parent_packages);
+    // console.log("devices.parent_packages ", devices.parent_packages);
     return {
         invoiceID: users.invoiceID,
         routing: routing,
@@ -1382,6 +1419,7 @@ var mapStateToProps = ({ routing, devices, device_details, users, settings, side
         product_prices: devices.product_prices,
         parent_hardwares: devices.parent_hardwares,
         user_credit: sidebar.user_credit,
+        credits_limit: sidebar.credits_limit,
         user: auth.authUser,
     };
 }
@@ -1399,9 +1437,9 @@ function showConfirm(_this, values) {
     });
 }
 
-function showCreditPurchase(_this) {
+function showCreditPurchase(_this, msg) {
     confirm({
-        title: "Your Credits are not enough to apply these services. Please select other services OR Purchase Credits.",
+        title: msg,
         okText: "PURCHASE CREDITS",
         onOk() {
             _this.props.history.push('/account')

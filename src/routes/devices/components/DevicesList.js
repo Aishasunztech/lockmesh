@@ -188,18 +188,6 @@ class DevicesList extends Component {
     renderList(list) {
         // console.log('list of dec', list)
         return list.map((device, index) => {
-
-            // console.log('device finalStatus is: ', this.props.user.dealer_pin)
-            // console.log('device is: ', device)
-            // console.log('tab Select is: ', this.props.tabselect)
-
-            // var remainDays = checkRemainDays(device.created_at, device.validity)
-            // console.log('Remain Days are: ', remainDays);   
-
-            //  console.log(this.props.user.type, 'lkslkdflk');
-            // const device_status = (device.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";
-            // const device_status =  "SUSPEND"; 
-
             var status = device.finalStatus;
             const button_type = (status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ? "danger" : "dashed";
             const flagged = device.flagged;
@@ -249,7 +237,12 @@ class DevicesList extends Component {
                 action: ((status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ?
                     (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                     : (status === DEVICE_PRE_ACTIVATION) ?
-                        (<Fragment><Fragment>{DeleteBtnPreActive}</Fragment><Fragment>{EditBtn/* EditBtnPreActive */}</Fragment></Fragment>)
+                        (<Fragment>
+                            {(this.props.user.type !== ADMIN) ?
+                                <Fragment>{DeleteBtnPreActive}</Fragment> : null
+                            }
+                            <Fragment>{EditBtn/* EditBtnPreActive */}</Fragment>
+                        </Fragment>)
                         // : (device.flagged !== 'Not flagged') ?
                         //     (<Fragment><Fragment>{Unflagbtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                         : (device.flagged !== 'Not flagged' && device.transfer_status === 0 && device.finalStatus === "Flagged") ?

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col } from "antd";
+import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col, Tag } from "antd";
 import { BASE_URL } from '../../../constants/Application';
 import styles from './app.css';
 import CustomScrollbars from "../../../util/CustomScrollbars";
@@ -17,6 +17,19 @@ import { Tab_All } from '../../../constants/TabConstants';
 const TabPane = Tabs.TabPane;
 export default class ListApk extends Component {
     state = { visible: false }
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            searchText: '',
+            columns: [],
+            pagination: this.props.pagination,
+            expandedRowKeys: [],
+            selectedTab: '1'
+
+        };
+
+    }
 
     showModal = () => {
         this.setState({
@@ -36,17 +49,7 @@ export default class ListApk extends Component {
             visible: false,
         });
     }
-    constructor(props) {
-        super(props);
-        this.state = {
-            searchText: '',
-            columns: [],
-            pagination: this.props.pagination,
-            expandedRowKeys: [],
 
-        };
-        this.renderList = this.renderList.bind(this);
-    }
 
     handlePagination = (value) => {
 
@@ -112,103 +115,135 @@ export default class ListApk extends Component {
     }
 
     // renderList
-    renderList(list) {
+    renderList = (list) => {
         let apkList = [];
         let data
         list.map((app) => {
             if (app.package_name !== 'com.armorSec.android' && app.package_name !== 'ca.unlimitedwireless.mailpgp' && app.package_name !== 'com.rim.mobilefusion.client' && app.package_name !== 'com.secure.vpn') {
+                let usedBy = [];
+                if (app.policies && app.policies.length) {
+                    usedBy.push(<Tag color="green" key="Policies">
+                        Policies
+                    </Tag>)
+                }
+                
+                if (app.permission_count != 0) {
+                    usedBy.push(<Tag color="green" key="Permissions">Permissions</Tag>)
+                }
+
+                if (!usedBy.length) {
+                    usedBy.push(<Tag key="Not Used">Not Used</Tag>)
+                }
                 // console.log('app is: ', app)
-                if (app.deleteable) {
-                    data = {
-                        rowKey: app.apk_id,
-                        id: app.apk_id,
-                        statusAll: app.statusAll,
-                        action: (
-                            <div data-column="ACTION" style={{ display: "inline-flex" }}>
-                                <Fragment>
-                                    <Button type="primary" size="small" style={{ margin: '0px 8px 0 0px', textTransform: "uppercase" }}
-                                        onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], "EDIT")}</Button>
-                                    {(app.policies === undefined || app.policies === null || app.policies.length === 0) ? <Button type="danger" className="mob_m_t" size="small" style={{ textTransform: "uppercase" }} onClick={(e) => {
-                                        this.props.handleConfirmDelete(app.apk_id, app);
-                                    }}>{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button> : null}
-
-                                </Fragment>
-                            </div>
-                        ),
-                        permission: (
-                            <div data-column="PERMISSION" style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
-                                {/* {app.permission_count} */}
-                                {(app.permission_count === "All" || this.props.totalDealers === app.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
-                            </div>
-                        ),
-                        permissions: app.permissions,
-                        apk_status: (
-                            <div data-column="SHOW ON DEVICE">
-                                <Switch size="small" defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
-                                    this.props.handleStatusChange(e, app.apk_id);
-                                }} />
-                            </div>
-                        ),
-                        apk: (
-                            <div data-column="SHOW ON DEVICE">
-                                {app.apk ? app.apk : 'N/A'}
-                            </div>
-                        ),
-                        apk_name: app.apk_name ? app.apk_name : 'N/A',
-                        apk_logo: (
-                            <div data-column="APK LOGO">
-                                <Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />
-                            </div>),
-                        apk_size: (
-                            <div data-column="APP SIZE">
-                                {app.size ? app.size : 'N/A'}
-                            </div>
-                        ),
-                        label: app.label,
-                        package_name: app.package_name,
-                        version: app.version,
-                        policies: (app.policies === undefined || app.policies === null) ? [] : app.policies,
-                        created_at: app.created_at,
-                        updated_at: app.updated_at
-                    }
-                    apkList.push(data)
-
-                } else {
-                    data = {
-                        rowKey: app.apk_id,
-                        id: app.apk_id,
-                        statusAll: app.statusAll,
-                        action: (
+                // if (app.deleteable) {
+                data = {
+                    rowKey: app.apk_id,
+                    id: app.apk_id,
+                    statusAll: app.statusAll,
+                    action: (
+                        <div data-column="ACTION" style={{ display: "inline-flex" }}>
                             <Fragment>
-                                <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px", textTransform: "uppercase" }}
-                                    onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], "EDIT")}</Button>
-                                <Button type="danger" className="mob_m_t" size="small" style={{ textTransform: "uppercase" }} onClick={(e) => {
-                                    this.props.handleConfirmDelete(app.apk_id, app);
-                                }}>{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
+                                {/* EDIT APK BUTTON */}
+                                <Button type="primary" size="small" style={{ margin: '0px 8px 0 0px', textTransform: "uppercase" }}
+                                    onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} >
+                                    {convertToLang(this.props.translation[Button_Edit], "EDIT")}
+                                </Button>
+
+                                {/* DELETE APK BUTTON */}
+                                {/* {((!app.policies || app.policies.length === 0) && app.permission_count == 0) ? */}
+                                    <Button
+                                        type="danger"
+                                        className="mob_m_t"
+                                        size="small"
+                                        style={{ textTransform: "uppercase" }}
+                                        onClick={(e) => {
+                                            this.props.handleConfirmDelete(app.apk_id, app, usedBy);
+                                        }}
+                                    >
+                                        {convertToLang(this.props.translation[Button_Delete], "DELETE")}
+                                    </Button>
+                                 {/* : null} */}
+
                             </Fragment>
-                        ),
-                        permission: <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
+                        </div>
+                    ),
+                    permission: (
+                        <div data-column="PERMISSION" style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
                             {/* {app.permission_count} */}
                             {(app.permission_count === "All" || this.props.totalDealers === app.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
-                        </span>,
-                        permissions: app.permissions,
-                        apk_status: (<Switch size="small" disabled defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
-                            this.props.handleStatusChange(e, app.apk_id);
-                        }} />),
-                        apk: app.apk ? app.apk : 'N/A',
-                        apk_name: app.apk_name ? app.apk_name : 'N/A',
-                        apk_logo: (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
-                        apk_size: app.size ? app.size : "N/A",
-                        version: app.version,
-                        policies: (app.policies === undefined || app.policies === null) ? [] : app.policies,
-                        created_at: app.created_at,
-                        updated_at: app.updated_at,
-                        label: app.label ? app.label : 'N/A',
-                        package_name: app.package_name ? app.package_name : 'N/A',
-                    }
-                    apkList.push(data)
-
+                        </div>
+                    ),
+                    permissions: app.permissions,
+                    apk_status: (
+                        <div data-column="SHOW ON DEVICE1">
+                            <Switch size="small" checked={(app.apk_status === "On") ? true : false} onChange={(e) => {
+                                this.props.handleStatusChange(e, app.apk_id);
+                            }} />
+                        </div>
+                    ),
+                    apk: (
+                        <div data-column="SHOW ON DEVICE2">
+                            {app.apk ? app.apk : 'N/A'}
+                        </div>
+                    ),
+                    apk_name: app.apk_name ? app.apk_name : 'N/A',
+                    apk_logo: (
+                        <div data-column="APK LOGO">
+                            <Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />
+                        </div>),
+                    apk_size: (
+                        <div data-column="APP SIZE">
+                            {app.size ? app.size : 'N/A'}
+                        </div>
+                    ),
+                    label: app.label,
+                    package_name: app.package_name,
+                    version: app.version,
+                    used_by: <Fragment>{usedBy}</Fragment>,
+                    policies: (app.policies === undefined || app.policies === null) ? [] : app.policies,
+                    created_at: app.created_at,
+                    updated_at: app.updated_at
                 }
+                apkList.push(data)
+
+                // } else {
+                //     data = {
+                //         rowKey: app.apk_id,
+                //         id: app.apk_id,
+                //         statusAll: app.statusAll,
+                //         action: (
+                //             <Fragment>
+                //                 <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px", textTransform: "uppercase" }}
+                //                     onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], "EDIT")}</Button>
+                //                 {(app.permission_count === 0) ?
+                //                     <Button type="danger" className="mob_m_t" size="small" style={{ textTransform: "uppercase" }} onClick={(e) => {
+                //                         this.props.handleConfirmDelete(app.apk_id, app);
+                //                     }}>{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
+                //                     : null}
+                //             </Fragment>
+                //         ),
+                //         permission: <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
+                //             {/* {app.permission_count} */}
+                //             {(app.permission_count === "All" || this.props.totalDealers === app.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
+                //         </span>,
+                //         permissions: app.permissions,
+                //         apk_status: (<Switch size="small" disabled checked={(app.apk_status === "On") ? true : false} onChange={(e) => {
+                //             this.props.handleStatusChange(e, app.apk_id);
+                //         }} />),
+                //         apk: app.apk ? app.apk : 'N/A',
+                //         apk_name: app.apk_name ? app.apk_name : 'N/A',
+                //         apk_logo: (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
+                //         apk_size: app.size ? app.size : "N/A",
+                //         version: app.version,
+                //         policies: (app.policies === undefined || app.policies === null) ? [] : app.policies,
+                //         created_at: app.created_at,
+                //         updated_at: app.updated_at,
+                //         label: app.label ? app.label : 'N/A',
+                //         package_name: app.package_name ? app.package_name : 'N/A',
+                //     }
+                //     apkList.push(data)
+
+                // }
             }
         });
         return apkList
@@ -338,144 +373,169 @@ export default class ListApk extends Component {
             return [];
         }
     }
-    render() {
+    handleTabChange = (e) => {
+        this.setState({
+            selectedTab: e
+        })
 
+    }
+    render() {
+        let type = this.props.user.type
+        let styleType = {};
+        let styleType1 = {};
+        if (type === ADMIN) {
+            styleType = "apk_fix_card_admin"
+            styleType1 = "feat_apk_fix_card_admin"
+        } else {
+            styleType = "apk_fix_card_dealer"
+            styleType1 = "feat_apk_fix_card_dealer"
+        }
         return (
             <Fragment>
-                <Tabs type="card" className="dev_tabs">
+                <Tabs
+                    type="card" className="dev_tabs"
+                    activeKey={this.state.selectedTab}
+                    onChange={this.handleTabChange}
+                >
                     <TabPane tab={<span className="green">{convertToLang(this.props.translation["FEATURED APPS"], "FEATURED APPS")}</span>} key="1" >
-                        <Card >
-                            <Row >
-                                <Col xs={24} sm={24} md={8} lg={8} xl={8} className="vertical_center">
-                                    <h2 className="mb-0">FEATURED APPS</h2>
-                                </Col>
-                                {(this.props.user.type === ADMIN) ?
-                                    <Fragment>
-                                        <Col xs={24} sm={12} md={4} lg={4} xl={4} className="m_mt-16 b_p-8">
-                                            <Button
-                                                type="primary"
-                                                style={{ width: '100%', padding: "0" }}
-                                                onClick={() => { this.updateFeaturedApk('CHAT') }}
-                                            >
-                                                UPDATE CHAT APP</Button>
-                                        </Col>
-                                        <Col xs={24} sm={12} md={4} lg={4} xl={4} className="m_mt-16 b_p-8">
-                                            <Button
-                                                type="primary"
-                                                style={{ width: '100%', padding: "0" }}
-                                                onClick={() => { this.updateFeaturedApk('PGP') }}
-                                            >
-                                                UPDATE PGP APP</Button>
-                                        </Col>
-                                        <Col xs={24} sm={12} md={4} lg={4} xl={4} className="m_mt-16 b_p-8">
-                                            <Button
-                                                type="primary"
-                                                style={{ width: '100%', padding: "0" }}
-                                                onClick={() => { this.updateFeaturedApk('UEM') }}
-                                            >
-                                                UPDATE UEM APP</Button>
-                                        </Col>
-                                        <Col xs={24} sm={12} md={4} lg={4} xl={4} className="m_mt-16 b_p-8">
-                                            <Button
-                                                type="primary"
-                                                style={{ width: '100%', padding: "0" }}
-                                                onClick={() => { this.updateFeaturedApk('VPN') }}
-                                            >
-                                                UPDATE VPN APP</Button>
-                                        </Col>
-                                    </Fragment>
-                                    : null}
-                            </Row>
-                            <Table
-                                className="gx-table-responsive apklist_table mt-16"
-                                rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
-                                expandIcon={(props) => this.customExpandIcon(props)}
-                                expandedRowRender={(record) => {
-                                    console.log('record is: ', record);
-                                    return (
-                                        // <Permissions className="exp_row22" record={record} translation={this.props.translation} />
-                                        <Fragment>
-                                            <Tabs
-                                                className="exp_tabs_policy"
-                                                type="card"
-                                            >
-                                                <Tabs.TabPane tab={convertToLang(this.props.translation['PERMISSIONS'], "PERMISSIONS")} key="1">
-                                                    <Permissions
-                                                        className="exp_row22"
-                                                        record={record}
-                                                        permissionType="apk"
-                                                        savePermissionAction={this.props.savePermission}
-                                                        translation={this.props.translation}
-                                                    />
-                                                </Tabs.TabPane>
-                                                {(this.props.user.type === ADMIN) ?
-                                                    <Tabs.TabPane tab={convertToLang(this.props.translation['POLICIES'], "POLICIES")} key="2">
-                                                        <Table
-                                                            columns={[
-                                                                {
-                                                                    title: "#",
-                                                                    dataIndex: 'counter',
-                                                                    align: 'center',
-                                                                    className: 'row',
-                                                                    render: (text, record, index) => ++index,
-                                                                },
-                                                                {
-                                                                    key: "policy_name",
-                                                                    dataIndex: "policy_name",
-                                                                    title: 'Policy Name'
-                                                                },
-                                                                {
-                                                                    key: "policy_command",
-                                                                    dataIndex: "policy_command",
-                                                                    title: 'Policy Command'
-                                                                }
-                                                            ]}
-                                                            dataSource={this.renderPolicies(record)}
-                                                        />
-                                                    </Tabs.TabPane>
-                                                    : null
-                                                }
-                                            </Tabs>
-                                        </Fragment>
-                                        /*<Fragment>
-                                            <Tabs
-                                                className="exp_tabs_policy"
-                                                type="card"
-                                            >
-                                                <Tabs.TabPane tab={convertToLang(this.props.translation['PERMISSIONS'], "PERMISSIONS")} key="1">
-                                                    <Permissions className="exp_row22" record={record} translation={this.props.translation} />
-                                                </Tabs.TabPane>
-                                                <Tabs.TabPane tab={convertToLang(this.props.translation['POLICIES'], "POLICIES")} key="2">
-        
-                                    </Tabs.TabPane>
-                                            </Tabs>
-                                        </Fragment>*/
-                                    );
-                                }}
-                                onExpand={this.onExpandRow}
-                                expandIconColumnIndex={0}
-                                expandIconAsCell={false}
-                                size="midddle"
-                                bordered
-                                scroll={{ x: true }}
-                                columns={this.props.featureApkcolumns}
-                                dataSource={this.renderFeaturedList(this.props.apk_list)}
-                                onChange={this.props.onChangeTableSorting}
-                                pagination={false
-                                    //{ pageSize: Number(this.state.pagination) }
-                                }
-                                // scroll={{ x: 10 }}
-                                rowKey="apk_id"
-                            />
-                            <UpdateFeatureApk ref='updateFeatureApk' getApkList={this.props.getApkList} />
-                            {/* </CustomScrollbars> */}
-                        </Card>
-
                     </TabPane>
                     <TabPane tab={<span className="green">{convertToLang(this.props.translation["OTHER APPS"], "OTHER APPS")}</span>} key="4" forceRender={true}>
-                        <Card>
-                            {/* <hr className="fix_header_border" style={{ top: "15px" }} />
-                            <CustomScrollbars className="gx-popover-scroll"> */}
+                    </TabPane>
+                </Tabs>
+                {(this.state.selectedTab == '1') ?
+                    <div className="feat_btns">
+                        <Row>
+                            <Col xs={24} sm={24} md={8} lg={8} xl={8} className="ver0tical_center">
+                                <h2 className="mb-0">{convertToLang(this.props.translation["FEATURED APPS"], "FEATURED APPS")}</h2>
+                            </Col>
+                            {(this.props.user.type === ADMIN) ?
+                                <Fragment>
+                                    <Col xs={12} sm={12} md={4} lg={4} xl={4} className="m_mt-16 b_p-8">
+                                        <Button
+                                            type="primary"
+                                            style={{ width: '100%', padding: "0" }}
+                                            onClick={() => { this.updateFeaturedApk('CHAT') }}
+                                        >
+                                            UPDATE CHAT APP</Button>
+                                    </Col>
+                                    <Col xs={12} sm={12} md={4} lg={4} xl={4} className="m_mt-16 b_p-8">
+                                        <Button
+                                            type="primary"
+                                            style={{ width: '100%', padding: "0" }}
+                                            onClick={() => { this.updateFeaturedApk('PGP') }}
+                                        >
+                                            UPDATE PGP APP</Button>
+                                    </Col>
+                                    <Col xs={12} sm={12} md={4} lg={4} xl={4} className="m_mt-16 b_p-8">
+                                        <Button
+                                            type="primary"
+                                            style={{ width: '100%', padding: "0" }}
+                                            onClick={() => { this.updateFeaturedApk('UEM') }}
+                                        >
+                                            UPDATE UEM APP</Button>
+                                    </Col>
+                                    <Col xs={12} sm={12} md={4} lg={4} xl={4} className="m_mt-16 b_p-8">
+                                        <Button
+                                            type="primary"
+                                            style={{ width: '100%', padding: "0" }}
+                                            onClick={() => { this.updateFeaturedApk('VPN') }}
+                                        >
+                                            UPDATE VPN APP</Button>
+                                    </Col>
+                                </Fragment>
+                                : null}
+                        </Row>
+                        <Card className={`fix_card ${styleType1}`}>
+                            {/* <hr className="fix_header_border" style={{ top: "16px" }} /> */}
+                            <CustomScrollbars className="gx-popover-scroll ">
+                                <Table
+                                    className="gx-table-responsive apklist_table"
+                                    rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
+                                    expandIcon={(props) => this.customExpandIcon(props)}
+                                    expandedRowRender={(record) => {
+                                        console.log('record is: ', record);
+                                        return (
+                                            // <Permissions className="exp_row22" record={record} translation={this.props.translation} />
+                                            <Fragment>
+                                                <Tabs
+                                                    className="exp_tabs_policy"
+                                                    type="card"
+                                                >
+                                                    <Tabs.TabPane tab={convertToLang(this.props.translation['PERMISSIONS'], "PERMISSIONS")} key="1">
+                                                        <Permissions
+                                                            className="exp_row22"
+                                                            record={record}
+                                                            permissionType="apk"
+                                                            savePermissionAction={this.props.savePermission}
+                                                            translation={this.props.translation}
+                                                        />
+                                                    </Tabs.TabPane>
+                                                    {(this.props.user.type === ADMIN) ?
+                                                        <Tabs.TabPane tab={convertToLang(this.props.translation['POLICIES'], "POLICIES")} key="2">
+                                                            <Table
+                                                                columns={[
+                                                                    {
+                                                                        title: "#",
+                                                                        dataIndex: 'counter',
+                                                                        align: 'center',
+                                                                        className: 'row',
+                                                                        render: (text, record, index) => ++index,
+                                                                    },
+                                                                    {
+                                                                        key: "policy_name",
+                                                                        dataIndex: "policy_name",
+                                                                        title: 'Policy Name'
+                                                                    },
+                                                                    {
+                                                                        key: "policy_command",
+                                                                        dataIndex: "policy_command",
+                                                                        title: 'Policy Command'
+                                                                    }
+                                                                ]}
+                                                                dataSource={this.renderPolicies(record)}
+                                                            />
+                                                        </Tabs.TabPane>
+                                                        : null
+                                                    }
+                                                </Tabs>
+                                            </Fragment>
+                                            /*<Fragment>
+                                                <Tabs
+                                                    className="exp_tabs_policy"
+                                                    type="card"
+                                                >
+                                                    <Tabs.TabPane tab={convertToLang(this.props.translation['PERMISSIONS'], "PERMISSIONS")} key="1">
+                                                        <Permissions className="exp_row22" record={record} translation={this.props.translation} />
+                                                    </Tabs.TabPane>
+                                                    <Tabs.TabPane tab={convertToLang(this.props.translation['POLICIES'], "POLICIES")} key="2">
+            
+                                        </Tabs.TabPane>
+                                                </Tabs>
+                                            </Fragment>*/
+                                        );
+                                    }}
+                                    onExpand={this.onExpandRow}
+                                    expandIconColumnIndex={0}
+                                    expandIconAsCell={false}
+                                    size="midddle"
+                                    bordered
+                                    // scroll={{ x: true }}
+                                    columns={this.props.featureApkcolumns}
+                                    dataSource={this.renderFeaturedList(this.props.apk_list)}
+                                    onChange={this.props.onChangeTableSorting}
+                                    pagination={false
+                                        //{ pageSize: Number(this.state.pagination) }
+                                    }
+                                    // scroll={{ x: 10 }}
+                                    rowKey="apk_id"
+                                />
+                            </CustomScrollbars>
+                            <UpdateFeatureApk ref='updateFeatureApk' getApkList={this.props.getApkList} />
+                        </Card>
+                    </div> :
+                    <Card className={`fix_card ${styleType}`}>
+                        {/* <hr className="fix_header_border" style={{ top: "63px" }} /> */}
+                        <CustomScrollbars className="gx-popover-scroll ">
                             <Table
                                 className="gx-table-responsive apklist_table"
                                 // rowSelection={rowSelection}
@@ -543,16 +603,16 @@ export default class ListApk extends Component {
                                 pagination={false
                                     //{ pageSize: Number(this.state.pagination) }
                                 }
-                                scroll={{ x: true }}
+                                // scroll={{ x: true }}
                                 rowKey="apk_id"
                             />
-                            <EditApk ref='editApk' getApkList={this.props.getApkList} />
-                            {/* </CustomScrollbars> */}
-                        </Card>
+                        </CustomScrollbars>
+                        <EditApk ref='editApk' getApkList={this.props.getApkList} />
 
-                    </TabPane>
-                </Tabs>
-            </Fragment>
+                    </Card>
+                }
+
+            </Fragment >
         )
     }
 }

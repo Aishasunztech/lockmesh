@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Input, Icon, Modal, Select, Button, Tooltip, Popover, Avatar, Row, Col } from "antd";
+import { Input, Icon, Modal, Select, Button, Tooltip, Popover, Avatar, Row, Col, Tag } from "antd";
 import { Link } from 'react-router-dom';
 import Highlighter from 'react-highlight-words';
 import { apkPermission } from "../../appRedux/actions/Apk";
@@ -65,7 +65,8 @@ class Apk extends Component {
             showUploadModal: false,
             showUploadData: {},
             columns: columns,
-            featureApkcolumns: featureApkcolumns
+            featureApkcolumns: featureApkcolumns,
+            listOf: "all"
         }
 
         // this.columns = ;
@@ -107,23 +108,36 @@ class Apk extends Component {
     }
 
     // delete
-    handleConfirmDelete = (appId, appObject) => {
-        this.confirm({
-            title: convertToLang(this.props.translation[Alert_Delete_APK], "Are you sure, you want to delete the Apk ?"),
-            content: <Fragment>
-                <Avatar size="small" src={BASE_URL + "users/getFile/" + appObject.logo} />
-                {` ${appObject.apk_name} - ${appObject.size}`}
-            </Fragment>,
-            okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
-            cancelText: convertToLang(this.props.translation[Button_No], "No"),
-            onOk: () => {
-                this.props.deleteApk(appId);
-                return new Promise((resolve, reject) => {
-                    setTimeout((5 > 0.5 ? resolve : reject));
-                }).catch(() => console.log('Oops errors!'));
-            },
-            onCancel() { },
-        });
+    handleConfirmDelete = (appId, appObject, usedBy=null) => {
+        console.log(usedBy);
+
+        if ((appObject.policies && appObject.policies.length) || appObject.permission_count != 0) {
+            Modal.error({
+                title: 'App Can not be deleted',
+                content: (
+                    <Fragment>
+                        This app is used in <Fragment>{usedBy}</Fragment>
+                    </Fragment>
+                ),
+            });
+        } else {
+            this.confirm({
+                title: convertToLang(this.props.translation[Alert_Delete_APK], "Are you sure, you want to delete the Apk ?"),
+                content: <Fragment>
+                    <Avatar size="small" src={BASE_URL + "users/getFile/" + appObject.logo} />
+                    {` ${appObject.apk_name} - ${appObject.size}`}
+                </Fragment>,
+                okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
+                cancelText: convertToLang(this.props.translation[Button_No], "No"),
+                onOk: () => {
+                    this.props.deleteApk(appId);
+                    return new Promise((resolve, reject) => {
+                        setTimeout((5 > 0.5 ? resolve : reject));
+                    }).catch(() => console.log('Oops errors!'));
+                },
+                onCancel() { },
+            });
+        }
     }
 
     // toggleStatus
@@ -136,9 +150,10 @@ class Apk extends Component {
         //  console.log('will recive props');
 
         if (this.props.apk_list !== nextProps.apk_list) {
-            this.setState({
-                apk_list: nextProps.apk_list,
-            })
+            // this.setState({
+            //     apk_list: nextProps.apk_list,
+            // })
+            this.handleChange(this.state.listOf);
         }
     }
 
@@ -240,9 +255,11 @@ class Apk extends Component {
 
         switch (value) {
             case 'active':
+                // this.state.listOf = value;
                 this.setState({
                     apk_list: this.filterList('On', this.props.apk_list),
-                    column: this.columns,
+                    listOf: "active"
+                    // column: this.columns,
 
                 })
 
@@ -250,7 +267,8 @@ class Apk extends Component {
             case 'disabled':
                 this.setState({
                     apk_list: this.filterList('Off', this.props.apk_list),
-                    column: this.columns,
+                    listOf: "disabled"
+                    // column: this.columns,
 
                 })
                 break;
@@ -258,7 +276,8 @@ class Apk extends Component {
             default:
                 this.setState({
                     apk_list: this.props.apk_list,
-                    column: this.columns,
+                    listOf: "all"
+                    // column: this.columns,
 
                 })
                 break;
@@ -279,9 +298,10 @@ class Apk extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
-            this.setState({
-                apk_list: this.props.apk_list
-            })
+            // this.setState({
+            //     apk_list: this.props.apk_list
+            // })
+            this.handleChange(this.state.listOf);
         }
 
         if (this.props.selectedOptions !== prevProps.selectedOptions) {
@@ -343,6 +363,8 @@ class Apk extends Component {
 
     render() {
 
+        // console.log("this.state.apk_list ", this.state.apk_list);
+        // console.log("this.props.apk_list ", this.props.apk_list);
         if (this.props.user.type === 'dealer') {
             this.state.columns[1].className = 'hide';
         } else {
@@ -500,7 +522,8 @@ class Apk extends Component {
 // );
 
 // export default Apk;
-const mapStateToProps = ({ apk_list, auth, settings, policies, dealers }) => {
+const mapStateToProps = ({ apk_list, auth, settings, policies, dealers, appMarket }) => {
+    // console.log("appMarket: ", appMarket);
     return {
         dealerList: dealers.dealers,
         isloading: apk_list.isloading,

@@ -67,17 +67,28 @@ class PaymentHistory extends Component {
 
     this.state = {
       reportCard: false,
-      reportFormData: {}
+      reportFormData: {},
+      deviceList: props.devices,
     };
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
+      values.dealerObject = this.props.dealerList.find((dealer, index) => dealer.dealer_id === values.dealer);
       this.state.reportFormData = values;
       this.props.generateHardwareReport(values)
     });
   };
+
+  componentWillReceiveProps(nextProps) {
+    // console.log("nextProps.devices ", nextProps.devices)
+    if (nextProps.devices !== this.props.devices) {
+      this.setState({
+        deviceList: nextProps.devices
+      })
+    }
+  }
 
   componentDidMount() {
 
@@ -87,7 +98,7 @@ class PaymentHistory extends Component {
     if (this.props.hardwareReport !== prevProps.hardwareReport) {
       this.setState({
         reportCard: true
-      })
+      });
 
       columns = [
         { title: '#', dataKey: "count" },
@@ -120,42 +131,52 @@ class PaymentHistory extends Component {
 
   renderList = (list) => {
     if (list) {
-      let data = []
+      let data    = [];
       let counter = 1;
       list.map((item, index) => {
-        // let hardwares = JSON.parse(item.hardware_data)
-        // hardwares.map((hardware, i) => {
-          data.push( {
-            rowKey: counter++,
-            key: counter++,
-            count: counter++,
-            dealer_pin: item.dealer_pin,
-            device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
-            hardware: item.hardware_name,
-            created_at: getDateFromTimestamp(item.created_at)
-          })
+        let hardware = JSON.parse(item.hardware_data);
+        data.push({
+          rowKey: counter++,
+          key: counter++,
+          count: ++index,
+          dealer_pin: item.dealer_pin,
+          device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
+          hardware: hardware.hardware_name,
+          created_at: getDateFromTimestamp(item.created_at)
         })
-      // })
+      });
       return data;
     }
   };
+
+  handleDealerChange = (e) => {
+    let devices = [];
+    if (e == '') {
+      devices = this.props.devices
+    } else {
+      devices = this.props.devices.filter(device => device.dealer_id == e);
+    }
+    this.setState({
+      deviceList: devices
+    })
+  }
 
   render() {
     return (
       <Row>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-          <Card style={{ height: '500px', paddingTop: '50px' }}>
+          <Card bordered={false} style={{ height: '520px', overflow: 'scroll' }} >
             <Form onSubmit={this.handleSubmit} autoComplete="new-password">
 
               <Form.Item
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
               >
               </Form.Item>
 
               <Form.Item
                 label="Hardware"
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
                 width='100%'
               >
@@ -190,7 +211,7 @@ class PaymentHistory extends Component {
 
                 : <Form.Item
                   label="Dealer/Sdealer"
-                  labelCol={{ span: 8 }}
+                  labelCol={{ span: 10 }}
                   wrapperCol={{ span: 14 }}
                   width='100%'
                 >
@@ -202,7 +223,10 @@ class PaymentHistory extends Component {
                       },
                     ],
                   })(
-                    <Select style={{ width: '100%' }}>
+                    <Select
+                      style={{ width: '100%' }}
+                      onChange={(e) => this.handleDealerChange(e)}
+                    >
                       <Select.Option value=''>ALL</Select.Option>
                       <Select.Option value={this.props.user.dealerId}>My Report</Select.Option>
                       {this.props.dealerList.map((dealer, index) => {
@@ -214,8 +238,32 @@ class PaymentHistory extends Component {
               }
 
               <Form.Item
+                label="Devices"
+                labelCol={{ span: 10 }}
+                wrapperCol={{ span: 14 }}
+                width='100%'
+              >
+                {this.props.form.getFieldDecorator('device', {
+                  initialValue: '',
+                  rules: [
+                    {
+                      required: false,
+                    },
+                  ],
+                })(
+                  <Select style={{ width: '100%' }}>
+                    <Select.Option value=''>ALL</Select.Option>
+                    <Select.Option value={DEVICE_PRE_ACTIVATION}>{DEVICE_PRE_ACTIVATION}</Select.Option>
+                    {this.state.deviceList.map((device, index) => {
+                      return (<Select.Option key={device.device_id} value={device.device_id}>{device.device_id}</Select.Option>)
+                    })}
+                  </Select>
+                )}
+              </Form.Item>
+
+              <Form.Item
                 label="FROM (DATE) "
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
               >
                 {this.props.form.getFieldDecorator('from', {
@@ -233,7 +281,7 @@ class PaymentHistory extends Component {
 
               <Form.Item
                 label="TO (DATE)"
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
               >
                 {this.props.form.getFieldDecorator('to', {
@@ -251,9 +299,9 @@ class PaymentHistory extends Component {
                 )}
               </Form.Item>
               <Form.Item className="edit_ftr_btn"
-                wrapperCol={{
-                  xs: { span: 22, offset: 0 },
-                }}
+                         wrapperCol={{
+                           xs: { span: 24, offset: 0 },
+                         }}
               >
                 <Button key="back" type="button" onClick={this.handleReset}>CANCEL</Button>
                 <Button type="primary" htmlType="submit">GENERATE</Button>
@@ -263,25 +311,25 @@ class PaymentHistory extends Component {
         </Col>
 
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
-          <Card style={{ height: '500px', overflow: 'scroll' }}>
+          <Card bordered={false} style={{ height: '520px', overflow: 'scroll' }}>
             {(this.state.reportCard) ?
               <Fragment>
                 <Row>
-                  <Col xs={12} sm={12} md={12} lg={12} xl={12}>
-                    <h3>Hardware Invenotory Report</h3>
+                  <Col xs={14} sm={14} md={14} lg={14} xl={14}>
+                    <h3>Hardware Inventory Report</h3>
                   </Col>
-                  <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                  <Col xs={10} sm={10} md={10} lg={10} xl={10}>
                     <div className="pull-right">
-                      <Button type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Hardware Report', fileName, this.state.reportFormData);}}>Download PDF</Button>
-                      <Button type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName)}}>Download Excel</Button>
+                      <Button className="mb-8" type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Hardware Report', fileName, this.state.reportFormData); }}>Download PDF</Button>
+                      <Button className="mb-8" type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName) }}>Download Excel</Button>
                     </div>
                   </Col>
                 </Row>
-              <Table
-                columns={this.columns}
-                dataSource={this.renderList(this.props.hardwareReport)}
-                bordered
-                pagination={false}
+                <Table
+                  columns={this.columns}
+                  dataSource={this.renderList(this.props.hardwareReport)}
+                  bordered
+                  pagination={false}
 
                 />
               </Fragment>

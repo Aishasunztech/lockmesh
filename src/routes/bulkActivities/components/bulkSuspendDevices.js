@@ -20,7 +20,9 @@ export default class BulkSuspendDevices extends Component {
         let user_ids = [];
 
         devices.forEach((item) => {
-            device_ids.push(item.usr_device_id);
+            if (item.usr_device_id) {
+                device_ids.push(item.usr_device_id);
+            }
         });
         dealers.forEach((item) => {
             dealer_ids.push(item.key);
@@ -35,7 +37,7 @@ export default class BulkSuspendDevices extends Component {
             user_ids
         }
 
-        const title = `${convertToLang(this.props.translation["Are you sure, you want to suspend these devices "], "Are you sure, you want to suspend these devices ")}  ${devices.map((item) => `${item.device_id}, `)} ?`;
+        const title = `${convertToLang(this.props.translation["Are you sure, you want to suspend these devices "], "Are you sure, you want to suspend these devices ")}  ${devices.map(item => ` ${item.device_id}`)} ?`;
         this.confirm({
             title: title,
             content: '',

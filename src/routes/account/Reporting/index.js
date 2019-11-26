@@ -7,6 +7,7 @@ import ProductInventory  from './components/ProductInventory';
 import HardwareInventory  from './components/HardwareInventory';
 import PaymentHistory from './components/PaymentHistory';
 import Sales from './components/Sales';
+import GraceDays from './components/GraceDays';
 import AppFilter from '../../../components/AppFilter';
 import { convertToLang } from "../../utils/commonUtils";
 import {
@@ -16,6 +17,7 @@ import {
   generateInvoiceReport,
   generatePaymentHistoryReport,
   generateHardwareReport,
+  generateGraceDaysReport,
   getHardwares, getDevicesForReport
 } from '../../../appRedux/actions/';
 import styles from './reporting.css'
@@ -68,7 +70,7 @@ class Reporting extends Component {
         {
 
           <div>
-            <Tabs defaultActiveKey="1" type='card' className="dev_tabs" activeKey={this.state.tabselect} onChange={this.handleChangeTab}>
+            <Tabs defaultActiveKey="1" type='card' className="dev_tabs reports_tab" activeKey={this.state.tabselect} onChange={this.handleChangeTab}>
               <TabPane tab="PRODUCT INVENTORY" key="1">
                 <ProductInventory
                   dealerList={this.props.dealerList}
@@ -77,6 +79,7 @@ class Reporting extends Component {
                   productType={this.props.productType}
                   generateProductReport={this.props.generateProductReport}
                   user={this.props.user}
+                  devices={this.props.devices}
                 />
               </TabPane>
 
@@ -88,6 +91,7 @@ class Reporting extends Component {
                   generateHardwareReport={this.props.generateHardwareReport}
                   hardwareReport={this.props.hardwareReport}
                   user={this.props.user}
+                  devices={this.props.devices}
                 />
               </TabPane>
 
@@ -98,6 +102,7 @@ class Reporting extends Component {
                   generatePaymentHistoryReport={this.props.generatePaymentHistoryReport}
                   paymentHistoryReport={this.props.paymentHistoryReport}
                   user={this.props.user}
+                  devices={this.props.devices}
                 />
               </TabPane>
 
@@ -118,9 +123,24 @@ class Reporting extends Component {
                   translation={this.props.translation}
                   generateSalesReport={this.props.generateSalesReport}
                   salesReport={this.props.salesReport}
+                  saleInfo={this.props.saleInfo}
                   user={this.props.user}
+                  devices={this.props.devices}
                 />
               </TabPane>
+
+              {(this.props.user.type === 'admin') ?
+                <TabPane tab="GRACE DAYS" key="6">
+                  <GraceDays
+                    dealerList={this.props.dealerList}
+                    translation={this.props.translation}
+                    generateGraceDaysReport={this.props.generateGraceDaysReport}
+                    graceDaysReportReport={this.props.graceDaysReportReport}
+                    user={this.props.user}
+                    devices={this.props.devices}
+                  />
+                </TabPane>
+                : '' }
             </Tabs>
           </div>
         }
@@ -142,6 +162,8 @@ var mapStateToProps = ({ dealers, settings, reporting  , auth, account, devices}
     hardwareReport: reporting.hardwareData,
     invoiceReport: reporting.invoiceData,
     salesReport: reporting.salesData,
+    graceDaysReportReport: reporting.graceDaysReportData,
+    saleInfo: reporting.saleInfo,
     paymentHistoryReport: reporting.paymentHistoryData,
     productType: reporting.productType,
     translation: settings.translation,
@@ -157,6 +179,7 @@ function mapDispatchToProps(dispatch) {
     generatePaymentHistoryReport: generatePaymentHistoryReport,
     generateHardwareReport: generateHardwareReport,
     generateSalesReport: generateSalesReport,
+    generateGraceDaysReport: generateGraceDaysReport,
     getHardwaresList: getHardwares,
   }, dispatch);
 };

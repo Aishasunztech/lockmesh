@@ -5,7 +5,7 @@ import {
   DEVICE_PRE_ACTIVATION
 } from "../../../../constants/Constants";
 import styles from '../reporting.css'
-import { convertToLang, generateExcel, generatePDF} from "../../../utils/commonUtils";
+import { convertToLang, generateExcel, generatePDF } from "../../../utils/commonUtils";
 var fileName = 'payment_history_' + new Date().getTime()
 var columns;
 var rows;
@@ -102,7 +102,8 @@ class PaymentHistory extends Component {
 
     this.state = {
       reportCard: false,
-      reportFormData: {}
+      reportFormData: {},
+      deviceList: props.devices,
     };
   }
 
@@ -114,12 +115,21 @@ class PaymentHistory extends Component {
     });
   };
 
+  componentWillReceiveProps(nextProps) {
+    // console.log("nextProps.devices ", nextProps.devices)
+    if (nextProps.devices !== this.props.devices) {
+      this.setState({
+        deviceList: nextProps.devices
+      })
+    }
+  }
+
   componentDidMount() {
 
   };
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.paymentHistoryReport !== prevProps.paymentHistoryReport){
+    if (this.props.paymentHistoryReport !== prevProps.paymentHistoryReport) {
       this.setState({
         reportCard: true
       })
@@ -177,16 +187,29 @@ class PaymentHistory extends Component {
     }
   };
 
+  handleDealerChange = (e) => {
+    let devices = [];
+    if (e == '') {
+      devices = this.props.devices
+    } else {
+      devices = this.props.devices.filter(device => device.dealer_id == e);
+      // console.log("handleDealerChange ", devices);
+    }
+    this.setState({
+      deviceList: devices
+    })
+  }
+
 
   render() {
     return (
       <Row>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-          <Card style={{ height: '500px', paddingTop: '50px' }}>
+          <Card bordered={false} style={{ height: '520px', overflow: 'scroll' }}>
             <Form onSubmit={this.handleSubmit} autoComplete="new-password">
 
               <Form.Item
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
               >
               </Form.Item>
@@ -205,7 +228,7 @@ class PaymentHistory extends Component {
 
                 : <Form.Item
                   label="Dealer/Sdealer"
-                  labelCol={{ span: 8 }}
+                  labelCol={{ span: 10 }}
                   wrapperCol={{ span: 14 }}
                   width='100%'
                 >
@@ -217,7 +240,10 @@ class PaymentHistory extends Component {
                       },
                     ],
                   })(
-                    <Select style={{ width: '100%' }}>
+                    <Select
+                      style={{ width: '100%' }}
+                      onChange={(e) => this.handleDealerChange(e)}
+                    >
                       <Select.Option value=''>ALL</Select.Option>
                       <Select.Option value={this.props.user.dealerId}>My Report</Select.Option>
                       {this.props.dealerList.map((dealer, index) => {
@@ -229,8 +255,32 @@ class PaymentHistory extends Component {
               }
 
               <Form.Item
+                label="Devices"
+                labelCol={{ span: 10 }}
+                wrapperCol={{ span: 14 }}
+                width='100%'
+              >
+                {this.props.form.getFieldDecorator('device', {
+                  initialValue: '',
+                  rules: [
+                    {
+                      required: false,
+                    },
+                  ],
+                })(
+                  <Select style={{ width: '100%' }}>
+                    <Select.Option value=''>ALL</Select.Option>
+                    <Select.Option value={DEVICE_PRE_ACTIVATION}>{DEVICE_PRE_ACTIVATION}</Select.Option>
+                    {this.state.deviceList.map((device, index) => {
+                      return (<Select.Option key={device.device_id} value={device.device_id}>{device.device_id}</Select.Option>)
+                    })}
+                  </Select>
+                )}
+              </Form.Item>
+
+              <Form.Item
                 label="Product Type"
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
                 width='100%'
               >
@@ -253,7 +303,7 @@ class PaymentHistory extends Component {
 
               <Form.Item
                 label="Transaction Type"
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
                 width='100%'
               >
@@ -275,7 +325,7 @@ class PaymentHistory extends Component {
 
               <Form.Item
                 label="FROM (DATE) "
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
               >
                 {this.props.form.getFieldDecorator('from', {
@@ -293,7 +343,7 @@ class PaymentHistory extends Component {
 
               <Form.Item
                 label="TO (DATE)"
-                labelCol={{ span: 8 }}
+                labelCol={{ span: 10 }}
                 wrapperCol={{ span: 14 }}
               >
                 {this.props.form.getFieldDecorator('to', {
@@ -311,9 +361,9 @@ class PaymentHistory extends Component {
                 )}
               </Form.Item>
               <Form.Item className="edit_ftr_btn"
-                         wrapperCol={{
-                           xs: { span: 22, offset: 0 },
-                         }}
+                wrapperCol={{
+                  xs: { span: 24, offset: 0 },
+                }}
               >
                 <Button key="back" type="button" onClick={this.handleReset}>CANCEL</Button>
                 <Button type="primary" htmlType="submit">GENERATE</Button>
@@ -324,29 +374,29 @@ class PaymentHistory extends Component {
 
         </Col>
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
-          <Card style={{ height: '500px', overflow: 'overlay'}}>
+          <Card bordered={false} style={{ height: '520px', overflow: 'scroll' }}>
             {(this.state.reportCard) ?
               <Fragment>
                 <Row>
-                  <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                  <Col xs={14} sm={14} md={14} lg={14} xl={14}>
                     <h3>Payment History Report</h3>
                   </Col>
-                  <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                  <Col xs={10} sm={10} md={10} lg={10} xl={10}>
                     <div className="pull-right">
-                      <Button type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Payment History Report', fileName, this.state.reportFormData)}}>Download PDF</Button>
-                      <Button type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName)}}>Download Excel</Button>
+                      <Button className="mb-8" type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Payment History Report', fileName, this.state.reportFormData) }}>Download PDF</Button>
+                      <Button className="mb-8" type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName) }}>Download Excel</Button>
                     </div>
                   </Col>
                 </Row>
-              <Table
-                columns={this.columns}
-                dataSource={this.renderList(this.props.paymentHistoryReport)}
-                bordered
-                pagination={false}
-                scroll={{x:true}}
-                  />
+                <Table
+                  columns={this.columns}
+                  dataSource={this.renderList(this.props.paymentHistoryReport)}
+                  bordered
+                  pagination={false}
+                // scroll={{x:true}}
+                />
               </Fragment>
-            : null }
+              : null}
           </Card>
         </Col>
       </Row>

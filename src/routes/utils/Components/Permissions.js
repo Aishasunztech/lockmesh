@@ -17,6 +17,7 @@ const confirm = Modal.confirm;
 var addAllBtn = false;
 var removeAllBtn = false;
 var addBtn = false;
+var updateDealers = true;
 
 class Permissions extends Component {
   constructor(props) {
@@ -289,10 +290,25 @@ class Permissions extends Component {
     let demoData = [];
 
     if (value.length) {
-      originalData.forEach((data) => {
-        if (
-          data['dealer_id'].toString().toUpperCase().includes(value.toUpperCase())
-        ) {
+      originalData.forEach((data, index) => {
+
+        // set permission by value only one time
+        if (updateDealers) {
+          this.state.permissions.map((prm) => {
+            if (prm.dealer_id === data.dealer_id) {
+              if (prm.dealer_type === "dealer") {
+                data["permission_by"] = this.props.user.name;
+              } else {
+                data["permission_by"] = prm.dealer_type;
+              }
+            }
+          })
+          if (index === originalData.length - 1) {
+            updateDealers = false;
+          }
+        }
+
+        if (data['dealer_id'].toString().toUpperCase().includes(value.toUpperCase())) {
           demoData.push(data);
         }
         else if (data['link_code'].toString().toUpperCase().includes(value.toUpperCase())) {
@@ -300,11 +316,14 @@ class Permissions extends Component {
         }
         else if (data['dealer_name'].toString().toUpperCase().includes(value.toUpperCase())) {
           demoData.push(data);
-
         }
         else if (data['dealer_email'].toString().toUpperCase().includes(value.toUpperCase())) {
           demoData.push(data);
-        } else {
+        }
+        else if (data['permission_by'] && data['permission_by'].toUpperCase().includes(value.toUpperCase())) {
+          demoData.push(data);
+        }
+        else {
           // demoData.push(data);
         }
       });
@@ -615,7 +634,7 @@ class Permissions extends Component {
 
 
         </Row>
-        <Row gutter={24} style={{ marginBottom: '12px' }}>
+        <Row gutter={15} style={{ marginBottom: '12px' }}>
           {
             this.props.spinloading ? <CircularProgress /> :
               <Col className="gutter-row" span={24}>

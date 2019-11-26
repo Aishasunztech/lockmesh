@@ -18,8 +18,8 @@
 
 .edit_ftr_btn11 {
     text-align: right;
-    border-top: 1px solid #e8e8e8;
-    padding-top: 13px;
+    /* border-top: 1px solid #e8e8e8; */
+    padding-top: 4px;
     margin-bottom: 0px !important;
     margin-top: 16px;
 }
@@ -335,9 +335,10 @@
 }
 
 .dev_radio_btn {
-    width: 40%;
+    width: 45%;
     text-align: center;
     margin-bottom: 16px !important;
+    padding: 0;
 }
 
 .ant-radio-button-wrapper .helping_txt {
@@ -356,6 +357,10 @@
     border-top: 0 !important;
 }
 
+.credit_popup {
+    width: 60% !important;
+}
+
 .credit_popup .ant-modal-body {
     padding: 8%;
 }
@@ -363,6 +368,11 @@
 .ac_status_table .ant-table-title {
     padding: 0;
 }
+
+.sale_info_table .ant-table-title {
+    padding: 0 !important;
+}
+
 
 .buy_btn_invo {
     background-color: #548235 !important;
@@ -389,7 +399,8 @@
     margin-right: 50px;
 }
 
-.overdue_table, .pay_history {
+.overdue_table,
+.pay_history {
     margin-top: 50px;
 }
 
@@ -413,11 +424,15 @@
     padding: 0;
 }
 
-.overdue_table .ant-table-tbody>tr:hover:not(.ant-table-expanded-row)>td, .ac_status_table .ant-table-tbody>tr:hover:not(.ant-table-expanded-row)>td {
+.overdue_table .ant-table-tbody>tr:hover:not(.ant-table-expanded-row)>td,
+.ac_status_table .ant-table-tbody>tr:hover:not(.ant-table-expanded-row)>td {
     background: none;
 }
 
-.overdue_table .ant-table-thead>tr>th, .overdue_table .ant-table-tbody>tr>td, .pay_history .ant-table-thead>tr>th, .pay_history .ant-table-tbody>tr>td {
+.overdue_table .ant-table-thead>tr>th,
+.overdue_table .ant-table-tbody>tr>td,
+.pay_history .ant-table-thead>tr>th,
+.pay_history .ant-table-tbody>tr>td {
     padding: 4px 0 !important;
 }
 
@@ -465,18 +480,74 @@
     margin-top: 10;
 }
 
-@media screen and (max-width: 768px) {
-    /* .add_user_btn {
-        position: absolute;
-        left: 230px;
-        top: -9px;
-        width: 40%;
-        padding : 0;
-        float: right;
-        margin: 8px 0 4px; 
+.l_h_20 .ant-form-item-control,
+.apply_services .ant-form-item-control {
+    line-height: 20px;
+    position: relative;
+    zoom: 1;
+}
+
+.edit_dev_title {
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 500;
+    padding: 0px 8px;
+    color: #545454;
+}
+
+.apply_services label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    line-height: 16px;
+    margin-bottom: 0;
+    margin-top: 3px;
+}
+
+.val_days .ant-col-12.ant-form-item-control-wrapper {
+    padding-left: 0;
+}
+
+@media screen and (max-width: 991px) {
+    .credit_popup {
+        width: 85% !important;
     }
-    */
+}
+
+@media screen and (max-width: 768px) {
+
+    .credit_popup {
+        width: 95% !important;
+    }
+
+    .credit_popup .ant-modal-body {
+        padding: 40px 20px;
+    }
+
     .edit_form .ant-form-item-label {
         text-align: left;
+    }
+
+    .disp_n_768 {
+        display: none;
+    }
+
+    .apply_services label {
+        display: inline-block;
+    }
+
+    .overdue_table,
+    .pay_history {
+        margin-top: 20px;
+    }
+
+    .full_list_btn {
+        margin-right: 16px;
+    }
+
+    .overdue_table .ant-table-content {
+        width: 100%;
+        float: none;
     }
 }

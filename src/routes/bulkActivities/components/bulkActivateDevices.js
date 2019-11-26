@@ -19,7 +19,9 @@ export default class BulkActivateDevices extends Component {
         let user_ids = [];
 
         devices.forEach((item) => {
-            device_ids.push(item.usr_device_id);
+            if (item.usr_device_id) {
+                device_ids.push(item.usr_device_id);
+            }
         });
         dealers.forEach((item) => {
             dealer_ids.push(item.key);
@@ -35,7 +37,7 @@ export default class BulkActivateDevices extends Component {
         }
 
         this.confirm({
-            title: `${convertToLang(this.props.translation[""], "Would you like to unsuspend these Device ")} ${devices.map((item) => `${item.device_id}, `)} ?`,
+            title: `${convertToLang(this.props.translation[""], "Would you like to unsuspend these Device ")} ${devices.map(item => ` ${item.device_id}`)}?`,
             content: '',
             okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
             cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),

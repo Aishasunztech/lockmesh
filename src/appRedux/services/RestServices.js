@@ -222,6 +222,8 @@ const RestService = {
     getUsedChatIds: () => {
         return axios.get(BASE_URL + 'users/get_used_chat_ids', RestService.getHeader());
     },
+
+    // Dealers
     DealerList: (dealer) => {
         return axios.get(BASE_URL + 'users/dealers/' + dealer, RestService.getHeader());
     },
@@ -230,6 +232,23 @@ const RestService = {
     },
     getUserDealers: () => {
         return axios.get(BASE_URL + 'users/user_dealers', RestService.getHeader());
+    },
+    getDealerDetails: (dealerId) => {
+        return axios.get(BASE_URL + 'users/connect-dealer/' + dealerId, RestService.getHeader());
+    },
+    getDealerDomains: (dealerId) => {
+        return axios.get(BASE_URL + 'users/dealer-domains/' + dealerId, RestService.getHeader());
+    },
+    getDealerPaymentHistory: (dealerId) => {
+        return axios.get(BASE_URL + 'users/payment-history/' + dealerId, RestService.getHeader());
+    },
+
+    setCreditLimit: (data) => {
+        return axios.put(BASE_URL + 'users/set_credits_limit', data, RestService.getHeader());
+    },
+
+    getDealerSalesHistory: (dealerId) => {
+        return axios.get(BASE_URL + 'users/sales-history/' + dealerId, RestService.getHeader());
     },
     ApkList: () => {
         return axios.get(BASE_URL + 'users/apklist', RestService.getHeader());
@@ -243,6 +262,11 @@ const RestService = {
     getDeviceDetails: (device_id) => {
         //console.log('rest apoi')
         return axios.get(BASE_URL + 'users/connect/' + device_id, RestService.getHeader());
+    },
+    // getDeviceList for connect page
+    getDeviceListConnectDevice: (device_id) => {
+        //console.log('rest apoi')
+        return axios.get(BASE_URL + 'users/connect/get-device-list' , RestService.getHeader());
     },
     // getAppJobQueue
     getAppJobQueue: (device_id) => {
@@ -658,6 +682,10 @@ const RestService = {
         // console.log(data, 'data')
         return axios.post(BASE_URL + 'users/save-package', { data }, RestService.getHeader());
     },
+    editPackage: (data) => {
+        // console.log(data, 'data')
+        return axios.put(BASE_URL + 'users/edit-package', { data }, RestService.getHeader());
+    },
     getPrices: () => {
         // console.log(dealer_id, 'whte label on get price')
         return axios.get(BASE_URL + 'users/get-prices', RestService.getHeader());
@@ -894,8 +922,8 @@ const RestService = {
         return axios.delete(BASE_URL + 'users/delete_package/' + id, RestService.getHeader());
     },
 
-    modifyItemPrice: (id, price, isModify, type) => {
-        return axios.put(BASE_URL + 'users/modify_item_price/' + id, { price, isModify, type }, RestService.getHeader());
+    modifyItemPrice: (id, price, retail_price, isModify, type) => {
+        return axios.put(BASE_URL + 'users/modify_item_price/' + id, { price, retail_price, isModify, type }, RestService.getHeader());
     },
 
     getDashboardData: () => {
@@ -908,7 +936,7 @@ const RestService = {
     // suspend accounts
     bulkSuspendDevice: (devices) => {
         console.log('at rest services page ', devices)
-        return axios.post(BASE_URL + 'users/bulkSuspend', devices,
+        return axios.post(BASE_URL + 'users/bulk-suspend', devices,
             RestService.getHeader()
         )
     },
@@ -916,47 +944,50 @@ const RestService = {
 
     // activate accounts
     bulkActivateDevice: (device_ids) => {
-        return axios.post(BASE_URL + 'users/bulkActivate', device_ids,
+        return axios.post(BASE_URL + 'users/bulk-activate', device_ids,
             RestService.getHeader()
         )
     },
 
     // get bulk devices history
     getbulkHistory: () => {
-        return axios.get(BASE_URL + 'users/getBulkHistory', RestService.getHeader())
+        return axios.get(BASE_URL + 'users/get-bulk-history', RestService.getHeader())
     },
 
     // get users of selected dealers
-    getUsersOfDealers: (data) => {
-        console.log("at rest file", data)
-        return axios.post(BASE_URL + 'users/getUsersOfDealers', data, RestService.getHeader())
+    // getUsersOfDealers: (data) => {
+    //     console.log("at rest file", data)
+    //     return axios.post(BASE_URL + 'users/getUsersOfDealers', data, RestService.getHeader())
+    // },
+
+    applyBulkPushApps: (data) => {
+        // console.log('at rest serv file', data)
+        return axios.post(BASE_URL + 'users/apply_bulk_pushapps', data, RestService.getHeader());
     },
 
-    applyBulkPushApps: (push_apps, deviceIds, usrAccIds) => {
-        return axios.post(BASE_URL + 'users/apply_bulk_pushapps', {
-            push_apps: push_apps,
-            deviceIds: deviceIds,
-            usrAccIds: usrAccIds
-        }, RestService.getHeader());
+    applyBulkPullApps: (data) => {
+        return axios.post(BASE_URL + 'users/apply_bulk_pullapps', data, RestService.getHeader());
+    },
+    
+    applyBulkPolicy: (data) => {
+        return axios.post(BASE_URL + 'users/apply_bulk_policy', data, RestService.getHeader());
     },
 
-    applyBulkPolicy: (deviceIds, userAccIds, policyId) => {
-        return axios.post(BASE_URL + 'users/apply_bulk_policy', {
-            deviceIds: deviceIds,
-            policyId: policyId,
-            userAccIds: userAccIds
-        }, RestService.getHeader());
+
+    // unlink bulk Devices
+    unlinkBulkDevices: (data) => {
+        return axios.post(BASE_URL + 'users/bulk-unlink', data, RestService.getHeader());
     },
 
-    applyBulkPullApps: (pull_apps, deviceIds, usrAccIds) => {
-        return axios.post(BASE_URL + 'users/apply_bulk_pullapps', {
-            pull_apps: pull_apps,
-            deviceIds: deviceIds,
-            usrAccIds: usrAccIds
-        }, RestService.getHeader());
+    // wipe bulk Devices
+    wipeBulkDevices: (data) => {
+        return axios.post(BASE_URL + 'users/bulk-wipe', data, RestService.getHeader());
     },
 
-    submtPassword: (data) => {
+    // *************************** end of bulk end points
+
+
+    submitPassword: (data) => {
         return axios.post(BASE_URL + 'users/submit-device-passwords', data, RestService.getHeader());
     },
     getDomains: () => {
@@ -999,6 +1030,10 @@ const RestService = {
         return axios.post(BASE_URL + 'users/reports/sales', data, RestService.getHeader());
     },
 
+    //sales report
+    generateGraceDaysReport: (data) => {
+        return axios.post(BASE_URL + 'users/reports/grace-days', data, RestService.getHeader());
+    },
     //get latest payment history
     getLatestPaymentHistory: (data) => {
         return axios.post(BASE_URL + 'users/get-latest-payment-history', data, RestService.getHeader());

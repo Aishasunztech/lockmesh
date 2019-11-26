@@ -821,14 +821,14 @@ export default (state = initialState, action) => {
                             let allDealers = oldDealers.filter((item) => !newDealers.includes(item.dealer_id));
                             // state.policies[index].dealer_permission = allDealers;
                             // state.policies[index].permission_count = allDealers.length;
-                            if (user && user.type !== "admin") {
-                                let filterDealers = allDealers.filter((item) => item.dealer_type === "admin");
-                                state.policies[index].dealer_permission = filterDealers;
-                                state.policies[index].permission_count = filterDealers.length;
-                            } else {
+                            // if (user && user.type !== "admin") {
+                            //     let filterDealers = allDealers.filter((item) => item.dealer_type === "admin");
+                            //     state.policies[index].dealer_permission = filterDealers;
+                            //     state.policies[index].permission_count = filterDealers.length;
+                            // } else {
                                 state.policies[index].dealer_permission = allDealers;
                                 state.policies[index].permission_count = allDealers.length;
-                            }
+                            // }
                             state.policies[index].statusAll = false;
                         } else {
                             let allDealers = [];

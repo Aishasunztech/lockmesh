@@ -6,6 +6,8 @@ let hostName = window.location.hostname
 let URL = "http://localhost:3000/";
 let SUPERADMIN = "http://localhost:8042/";
 let TITLE = packageJson.name;
+let CHARSET = 'UTF-8';
+let TIMEZONE = 'Africa/Abidjan';
 
 switch (hostName) {
     case "localhost":
@@ -77,11 +79,13 @@ switch (hostName) {
         break;
 }
 
-
 export const HOST_NAME = hostName;
 export const BASE_URL = URL;
 export const APP_TITLE = TITLE;
 export const SUPERADMIN_URL = `${SUPERADMIN}api/v1/`;
+
+export const CHAR_SET = CHARSET;
+export const TIME_ZONE = TIMEZONE;
 
 // APP Constants
 export const VERSION = packageJson.version;
