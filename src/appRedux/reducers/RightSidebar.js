@@ -2,6 +2,7 @@ import {
     INVALID_TOKEN, GET_QUE_JOBS,
 } from "../../constants/ActionTypes"
 import { SEND_JOB_TO_PANEL } from "../../constants/SocketConstants";
+import { removeDuplicateObjects } from "../../routes/utils/commonUtils";
 
 const initialStates = {
     tasks: []
@@ -11,9 +12,7 @@ export default (state = initialStates, action) => {
     switch (action.type) {
         case GET_QUE_JOBS: {
             // console.log("GET_QUE_JOBS rightside bar reducer: ", action.payload, state.tasks);
-            let tasks = action.payload ? state.tasks.concat(action.payload) : [];
-            // console.log("tasks ", tasks)
-
+            let tasks = removeDuplicateObjects([...state.tasks, ...action.payload], "id");
             return {
                 ...state,
                 tasks: tasks

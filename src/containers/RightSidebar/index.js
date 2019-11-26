@@ -40,10 +40,12 @@ class RightSidebar extends Component {
     </div>)
   }
 
-  queueOnload = () => {
-    // console.log("queueOnload");
+  queueOnload = (e) => {
+    console.log("queueOnload");
+    e.preventDefault();
     let offSet = this.state.offSetValue + 10;
     this.props.getSocketProcesses(false, false, offSet, 10);
+    this.setState({ offSetValue: offSet })
   }
 
 
