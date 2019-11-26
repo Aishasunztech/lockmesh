@@ -856,11 +856,11 @@ class SideActions extends Component {
                                 placeholder={convertToLang(this.props.translation[""], "Select Device ID")}
                                 optionFilterProp="children"
                                 onChange={this.handleDeviceChange}
-                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                filterOption={(input, option) => { return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0 }}
                                 defaultValue={this.props.device.device_id}
                             >
                                 {this.props.device_list.map((item, index) => {
-                                    return (<Option key={index} value={item.device_id}>{item.device_id} ({item.finalStatus})</Option>)
+                                    return (<Option key={index} value={item.device_id}>{item.device_id + ' (' + item.finalStatus + ')'}</Option>)
                                 })}
                             </Select>
                         </Col>
