@@ -119,7 +119,7 @@ export default class DealerAction extends Component {
                             <h4 className="mb-6">Search Dealer ID</h4>
                             <Select
                                 showSearch={true}
-
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                 style={{ width: '100%' }}
                                 placeholder="Search Dealer ID"
                                 onChange={this.onChangeDealer}
