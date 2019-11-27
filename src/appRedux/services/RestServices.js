@@ -243,6 +243,9 @@ const RestService = {
     getDealerDetails: (dealerId) => {
         return axios.get(BASE_URL + 'users/connect-dealer/' + dealerId, RestService.getHeader());
     },
+    getDealerDomains: (dealerId) => {
+        return axios.get(BASE_URL + 'users/dealer-domains/' + dealerId, RestService.getHeader());
+    },
     getDealerPaymentHistory: (dealerId) => {
         return axios.get(BASE_URL + 'users/payment-history/' + dealerId, RestService.getHeader());
     },
@@ -266,6 +269,11 @@ const RestService = {
     getDeviceDetails: (device_id) => {
         //console.log('rest apoi')
         return axios.get(BASE_URL + 'users/connect/' + device_id, RestService.getHeader());
+    },
+    // getDeviceList for connect page
+    getDeviceListConnectDevice: (device_id) => {
+        //console.log('rest apoi')
+        return axios.get(BASE_URL + 'users/connect/get-device-list' , RestService.getHeader());
     },
     // getAppJobQueue
     getAppJobQueue: (device_id) => {

@@ -3467,8 +3467,8 @@ export function appMarketColumns(translation, handleSearch, removeSMapps) {
     )
 }
 
-export function domainColumns(translation, handleSearch) {
-    return ([
+export function domainColumns(translation, handleSearch, isModal=false) {
+    let columns= [
         {
             title: "#",
             dataIndex: 'counter',
@@ -3476,30 +3476,9 @@ export function domainColumns(translation, handleSearch) {
             className: 'row',
             render: (text, record, index) => ++index,
         },
-        // {
-        //     title: convertToLang(translation[ACTION], "ACTION"),
-        //     dataIndex: 'action',
-        //     key: 'action',
-        //     className: 'row m-0'
-        // },
+       
         {
-            // title: (
-            //     <Input.Search
-            //         name="permission"
-            //         key="permission"
-            //         id="permission"
-            //         className="search_heading"
-            //         // onChange={handleSearch}
-            //         autoComplete="new-password"
-            //         // placeholder={titleCase(props.convertToLang(props.translation[""], "APP NAME"))}
-            //         placeholder="PERMISSION"
-            //     />
-            // ),
-            // dataIndex: 'permission',
-            // className: '',
-            // key: 'permission',
-            // children: [
-            //     {
+            
             title: (
                 <span>
                     {convertToLang(translation[APK_PERMISSION], "PERMISSION")}
@@ -3545,5 +3524,11 @@ export function domainColumns(translation, handleSearch) {
             ]
 
         },
-    ])
+    ];
+
+    if(isModal){
+        columns.splice(1, 1)
+    }
+
+    return columns;
 }

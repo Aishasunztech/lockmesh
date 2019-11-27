@@ -21,7 +21,9 @@ import {
     undoDealer,
     getDealerPaymentHistory,
     setCreditLimit,
-    getDealerSalesHistory
+    getDealerSalesHistory,
+    getDealerDomains,
+    getDealerList
 } from '../../appRedux/actions'
 import styles from './connect_dealer.css'
 
@@ -90,6 +92,7 @@ class ConnectDealer extends Component {
         const dealer_id = isBase64(this.props.match.params.dealer_id);
         if (dealer_id) {
             this.props.getDealerDetails(dealer_id);
+            this.props.getDealerList('dealer', false);
         }
     }
 
@@ -135,7 +138,6 @@ class ConnectDealer extends Component {
     }
 
     renderDealerInfo = () => {
-        console.log('dealer info', this.props.dealer);
         let dealer = this.props.dealer;
         if (dealer) {
             const dealer_status = (dealer.unlink_status == 1) ? "Archived" : (dealer.account_status === "suspended") ? "Suspended" : "Activated";
@@ -330,9 +332,12 @@ class ConnectDealer extends Component {
                             translation={this.props.translation}
 
                             // dealer information
+                            dealerList={this.props.dealerList}
                             dealer={this.props.dealer}
                             paymentHistory={this.props.paymentHistory}
                             salesHistory={this.props.salesHistory}
+                            domains={this.props.domains}
+                            history={this.props.history}
 
                             // dealer actions
                             updatePassword={this.props.updatePassword}
@@ -343,6 +348,7 @@ class ConnectDealer extends Component {
                             deleteDealer={this.props.deleteDealer}
                             undoDealer={this.props.undoDealer}
 
+                            getDealerDomains={this.props.getDealerDomains}
                             getDealerPaymentHistory={this.props.getDealerPaymentHistory}
                             setCreditLimit={this.props.setCreditLimit}
                             getDealerSalesHistory={this.props.getDealerSalesHistory}
@@ -366,17 +372,22 @@ function mapDispatchToProps(dispatch) {
         undoDealer: undoDealer,
         getDealerPaymentHistory: getDealerPaymentHistory,
         setCreditLimit: setCreditLimit,
-        getDealerSalesHistory: getDealerSalesHistory
+        getDealerSalesHistory: getDealerSalesHistory,
+        getDealerDomains: getDealerDomains,
+        getDealerList: getDealerList
     }, dispatch);
 }
 
-var mapStateToProps = ({ dealer_details, settings }) => {
-    // console.log(dealer_details);
+var mapStateToProps = ({ dealer_details, dealers, settings }) => {
+    // console.log(dealers.parent_dealers);
     return {
-        dealer: dealer_details.dealer,
         translation: settings.translation,
+        dealer: dealer_details.dealer,
+        dealerList: dealers.parent_dealers,
+        domains: dealer_details.domains,
         paymentHistory: dealer_details.paymentHistory,
-        salesHistory: dealer_details.salesHistory
+        salesHistory: dealer_details.salesHistory,
+        // dealers: dealers.textTransform
     };
 }
 

@@ -291,6 +291,10 @@ th.device_info {
     padding: 16px 16px 0 !important;
 }
 
+.right_bar .search_dev_id .ant-card-body {
+    padding: 8px 14px 14px !important;
+}
+
 .apklist_table .ant-table-thead>tr>th {
     text-align: center;
     font-size: 13px;

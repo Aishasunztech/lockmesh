@@ -77,7 +77,8 @@ import {
     TRANSFER_DEVICE,
     SERVICES_DETAIL,
     SERVICES_HISTORY,
-    CANCEL_EXTENDED_SERVICE
+    CANCEL_EXTENDED_SERVICE,
+    GET_DEVICE_LIST
 } from "../../constants/ActionTypes";
 
 import {
@@ -207,6 +208,7 @@ const initialState = {
     enableAllPushApp: false,
     encryptedAllPushApps: false,
     servicesHistoryList: [],
+    device_list: []
 };
 let pwdObject = { "admin_password": null, "guest_password": null, "encrypted_password": null, "duress_password": null }
 
@@ -271,6 +273,13 @@ export default (state = initialState, action) => {
                 }
             } else {
                 return { ...state, device_found: false }
+            }
+
+        }
+        case GET_DEVICE_LIST: {
+            return {
+                ...state,
+                device_list: action.payload
             }
 
         }
@@ -1750,7 +1759,7 @@ export default (state = initialState, action) => {
         }
 
         case ACK_INSTALLED_APPS: {
-console.log("check applist ")
+            console.log("check applist ")
             // console.log("add app in app_list")
             let app_list = state.app_list;
             if (action.payload.status) {

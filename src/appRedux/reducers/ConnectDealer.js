@@ -9,7 +9,8 @@ import {
     CONNECT_UNDO_DEALER,
     DEALER_PAYMENT_HISTORY,
     SET_DEALER_LIMIT,
-    DEALER_SALES_HISTORY
+    DEALER_SALES_HISTORY,
+    DEALER_DOMAINS
 } from "../../constants/ActionTypes";
 
 // import { Button_Cancel } from '../../constants/ButtonConstants';
@@ -27,7 +28,8 @@ const initialState = {
 
     dealer: null,
     paymentHistory: [],
-    salesHistory: []
+    salesHistory: [],
+    domains: []
 };
 
 export default (state = initialState, action) => {
@@ -35,10 +37,17 @@ export default (state = initialState, action) => {
     switch (action.type) {
 
         case DEALER_DETAILS: {
-            console.log(action.payload)
+            // console.log(DEALER_DETAILS,':',action.payload)
             return {
                 ...state,
                 dealer: action.payload.dealer
+            }
+        }
+        case DEALER_DOMAINS: {
+            console.log(DEALER_DOMAINS,':', action.payload)
+            return {
+                ...state,
+                domains: action.payload.domains
             }
         }
         case DEALER_SALES_HISTORY: {
