@@ -995,7 +995,6 @@ export const checkPass = (user, actionType) => {
 }
 
 export const getDealerApps = () => {
-    console.log('get dealer action id')
     return (dispatch) => {
         // console.log('in return of fucntion')
         RestService.getDealerApps().then((response) => {
