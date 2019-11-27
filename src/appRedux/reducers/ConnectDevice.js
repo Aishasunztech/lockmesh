@@ -78,7 +78,8 @@ import {
     SERVICES_DETAIL,
     SERVICES_HISTORY,
     CANCEL_EXTENDED_SERVICE,
-    GET_DEVICE_LIST
+    GET_DEVICE_LIST,
+    GET_DEVICE_BILLING_HISTORY
 } from "../../constants/ActionTypes";
 
 import {
@@ -208,7 +209,8 @@ const initialState = {
     enableAllPushApp: false,
     encryptedAllPushApps: false,
     servicesHistoryList: [],
-    device_list: []
+    device_list: [],
+    device_billing_history: []
 };
 let pwdObject = { "admin_password": null, "guest_password": null, "encrypted_password": null, "duress_password": null }
 
@@ -1871,9 +1873,17 @@ export default (state = initialState, action) => {
                     })
                 }
             }
+        case GET_DEVICE_BILLING_HISTORY:
+            {
+                return {
+                    ...state,
+                    device_billing_history: action.payload.data
+                }
+
+            }
+
         default:
             return state;
-
     }
 }
 

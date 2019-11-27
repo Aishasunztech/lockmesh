@@ -68,7 +68,8 @@ import {
     SERVICES_HISTORY,
     CANCEL_EXTENDED_SERVICE,
     USER_CREDITS,
-    GET_DEVICE_LIST
+    GET_DEVICE_LIST,
+    GET_DEVICE_BILLING_HISTORY
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -1385,6 +1386,26 @@ export const cancelExtendedServices = (service_date) => {
                         response: response.data
                     });
                 }
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+
+
+        })
+    }
+}
+
+
+export const getDeviceBillingHistory = (device_id, dealer_id) => {
+    return (dispatch) => {
+        RestService.getDeviceBillingHistory(device_id, dealer_id).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: GET_DEVICE_BILLING_HISTORY,
+                    payload: response.data
+                })
             } else {
                 dispatch({
                     type: INVALID_TOKEN
