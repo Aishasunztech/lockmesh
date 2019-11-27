@@ -1,4 +1,4 @@
-import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES, WIPE_BULK_DEVICES, UNLINK_BULK_DEVICES, CLOSE_RESPONSE_MODAL, APPLY_BULK_POLICY } from "../../constants/ActionTypes";
+import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES, WIPE_BULK_DEVICES, UNLINK_BULK_DEVICES, CLOSE_RESPONSE_MODAL, APPLY_BULK_POLICY, SET_BULK_MESSAGE, SEND_BULK_MESSAGE } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
 
@@ -275,6 +275,39 @@ export const applyBulkPolicy = (data) => {
                 // console.log(response.data);
                 dispatch({
                     type: APPLY_BULK_POLICY,
+                    payload: response.data,
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+
+
+
+// Set Bulk Msg
+export const setBulkMsg = (data) => {
+    console.log("at action file")
+    return (dispatch) => {
+        dispatch({
+            type: SET_BULK_MESSAGE,
+            payload: data
+        })
+    }
+}
+
+// send msg
+// Push Policy
+export const sendBulkMsg = (data) => {
+    return (dispatch) => {
+        RestService.sendBulkMsg(data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                // console.log(response.data);
+                dispatch({
+                    type: SEND_BULK_MESSAGE,
                     payload: response.data,
                 })
             } else {

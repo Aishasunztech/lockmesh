@@ -27,7 +27,9 @@ import {
   ADMIN,
   DEVICE_SUSPENDED,
   DEVICE_ACTIVATED,
-  DEVICE_TRIAL
+  DEVICE_TRIAL,
+  DEVICE_EXPIRED,
+  DEVICE_TRANSFERED
 } from '../../../constants/Constants'
 
 import { Button_Remove, Button_Add, Button_AddAll, Button_AddExceptSelected, Button_RemoveAll, Button_RemoveExcept, Button_Save, Button_Cancel, Button_DeleteExceptSelected, Button_Yes, Button_No, Button_Edit } from '../../../constants/ButtonConstants';
@@ -165,63 +167,63 @@ class FilterDevices extends Component {
       })
     }
 
-    let action = nextProps.handleActionValue;
-    if (this.props.handleActionValue != action) {
+    // let action = nextProps.handleActionValue;
+    // if (this.props.handleActionValue != action) {
 
-      // let updateSelectedDevices = this.props.devices.map((item) => {
-      //   return (
-      //     this.state.selectedDevices.filter(e => e.device_id == item.device_id)
-      //   )
-      // })
+    //   // let updateSelectedDevices = this.props.devices.map((item) => {
+    //   //   return (
+    //   //     this.state.selectedDevices.filter(e => e.device_id == item.device_id)
+    //   //   )
+    //   // })
 
-      // console.log('child this.props.devices ', this.props.devices)
+    //   // console.log('child this.props.devices ', this.props.devices)
 
 
-      let updateSelectedDevices = this.state.selectedDevices;
-      let { copySelectedDevices } = this.state;
+    //   let updateSelectedDevices = this.state.selectedDevices;
+    //   let { copySelectedDevices } = this.state;
 
-      if (action !== "NOT SELECTED" && updateSelectedDevices.length) {
-        updateSelectedDevices = this.filterOnActionBase(action, copySelectedDevices);
-        // console.log("updateSelectedDevices ", updateSelectedDevices)
-        // this.props.setSelectedBulkDevices(updateSelectedDevices);
-        this.setState({
-          selectedDevices: updateSelectedDevices
-        });
-      }
-    }
-  }
-
-  filterOnActionBase = (action, copySelectedDevices) => {
-    let filteredDevices = [];
-    if (action === "SUSPEND DEVICES") {
-      copySelectedDevices.forEach((device) => {
-        if (device.finalStatus !== DEVICE_SUSPENDED) {
-          filteredDevices.push(device);
-        }
-      })
-    } else if (action === "ACTIVATE DEVICES") {
-      copySelectedDevices.forEach((device) => {
-        if (device.finalStatus !== DEVICE_ACTIVATED) {
-          filteredDevices.push(device);
-        }
-      })
-    }
-    // else if (action === "UNLINK DEVICES") {
-    //   if (device.finalStatus !== DEVICE_ACTIVATED) {
-    //     filteredDevices.push(device);
+    //   if (action !== "NOT SELECTED" && updateSelectedDevices.length) {
+    //     updateSelectedDevices = this.filterOnActionBase(action, copySelectedDevices);
+    //     // console.log("updateSelectedDevices ", updateSelectedDevices)
+    //     // this.props.setSelectedBulkDevices(updateSelectedDevices);
+    //     this.setState({
+    //       selectedDevices: updateSelectedDevices
+    //     });
     //   }
-    //   unlinkBulkDevices
     // }
-    // else if (action === "PUSH APPS") {
-    //   filteredDevices = copySelectedDevices.filter((device) => device.finalStatus != DEVICE_SUSPENDED)
-    // } else if (action === "PULL APPS") {
-    //   filteredDevices = copySelectedDevices.filter((device) => device.finalStatus != DEVICE_SUSPENDED)
-    // } 
-    else {
-      filteredDevices = copySelectedDevices;
-    }
-    return filteredDevices;
   }
+
+  // filterOnActionBase = (action, copySelectedDevices) => {
+  //   let filteredDevices = [];
+  //   if (action === "SUSPEND DEVICES") {
+  //     copySelectedDevices.forEach((device) => {
+  //       if (device.finalStatus !== DEVICE_SUSPENDED) {
+  //         filteredDevices.push(device);
+  //       }
+  //     })
+  //   } else if (action === "ACTIVATE DEVICES") {
+  //     copySelectedDevices.forEach((device) => {
+  //       if (device.finalStatus !== DEVICE_ACTIVATED) {
+  //         filteredDevices.push(device);
+  //       }
+  //     })
+  //   }
+  //   // else if (action === "UNLINK DEVICES") {
+  //   //   if (device.finalStatus !== DEVICE_ACTIVATED) {
+  //   //     filteredDevices.push(device);
+  //   //   }
+  //   //   unlinkBulkDevices
+  //   // }
+  //   // else if (action === "PUSH APPS") {
+  //   //   filteredDevices = copySelectedDevices.filter((device) => device.finalStatus != DEVICE_SUSPENDED)
+  //   // } else if (action === "PULL APPS") {
+  //   //   filteredDevices = copySelectedDevices.filter((device) => device.finalStatus != DEVICE_SUSPENDED)
+  //   // } 
+  //   else {
+  //     filteredDevices = copySelectedDevices;
+  //   }
+  //   return filteredDevices;
+  // }
 
   showPermissionedDealersModal = (visible) => {
     this.setState({
@@ -711,11 +713,12 @@ class FilterDevices extends Component {
     } else if (action === "ACTIVATE DEVICES") {
       updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED)
     }
-    // else if (action === "PUSH APPS") {
-    //   updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED)
-    // } else if (action === "PULL APPS") {
-    //   updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED)
-    // }
+    else if (action === "PUSH APPS" || action === "PULL APPS" || action === "UNLINK DEVICES" || action === "PUSH POLICY") {
+      updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED || device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED || device.finalStatus == DEVICE_EXPIRED)
+    }
+    else if (action === "WIPE DEVICES") {
+      updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED || device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED || device.finalStatus == DEVICE_EXPIRED || device.finalStatus == DEVICE_UNLINKED || device.finalStatus == DEVICE_TRANSFERED)
+    }
 
     this.state.selectedDevices = updateSelectedDevices
     return updateSelectedDevices;

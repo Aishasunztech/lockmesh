@@ -42,6 +42,7 @@ export default (state = initialState, action) => {
         }
 
         case GET_APP_JOBS: {
+            console.log("GET_APP_JOBS ", action.payload)
             if (action.payload.id) {
                 if (action.data_type === 'policy') {
                     return {

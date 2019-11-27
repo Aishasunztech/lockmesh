@@ -109,10 +109,17 @@ const RestService = {
     getSocketProcesses: (status, filter, offset, limit) => {
         let query = '';
 
-        query = (status) ? query + `?status=${status}&` : '';
-        query = (offset) ? query + `start=${offset}&` : '';
-        query = (limit) ? query + `limit=${limit}&` : '';
-        query = (filter) ? query + `filter=${filter}` : '';
+        query = (status) ? query + `?status=${status}&` : query;
+        query = (offset) ?
+            (status) ? query + `start=${offset}&` : query + `?start=${offset}&`
+            : query;
+        query = (limit) ?
+            (status || offset) ? query + `limit=${limit}&` : query + `?limit=${limit}&`
+            : query;
+        query = (filter) ?
+            (status || offset || limit) ? query + `filter=${filter}` : query + `?filter=${filter}`
+            : query.slice(0, -1);
+        // console.log("query getSocketProcesses ", query);
 
         return axios.get(BASE_URL + `users/get-processes${query}`, RestService.getHeader());
     },
@@ -968,9 +975,13 @@ const RestService = {
     applyBulkPullApps: (data) => {
         return axios.post(BASE_URL + 'users/apply_bulk_pullapps', data, RestService.getHeader());
     },
-    
+
     applyBulkPolicy: (data) => {
         return axios.post(BASE_URL + 'users/apply_bulk_policy', data, RestService.getHeader());
+    },
+
+    sendBulkMsg: (data) => {
+        return axios.post(BASE_URL + 'users/send_bulk_msg', data, RestService.getHeader());
     },
 
 

@@ -495,6 +495,25 @@ class EditPolicy extends Component {
 
     }
 
+    filterAddedApps = (apps) => {
+        // console.log(this.state.editAblePolicy.push_apps, 'apps =======> ', apps);
+
+        let pushedApps = [];
+        if (this.state.editAblePolicy && this.state.editAblePolicy.push_apps) {
+            apps.forEach(app => {
+                let index = this.state.editAblePolicy.push_apps.findIndex(item => item.apk_id === app.apk_id);
+                // console.log("index ", index);
+                if (index === -1) {
+                    pushedApps.push(app)
+                }
+            });
+        } else {
+            pushedApps = apps;
+        }
+
+        // console.log("pushedApps =====> ", pushedApps);
+        return pushedApps;
+    }
 
     render() {
         const { current } = this.state;
@@ -507,6 +526,7 @@ class EditPolicy extends Component {
             onChange: this.onSelectChange,
         };
 
+        // console.log("this.state.editAblePolicy.app_list ", this.state.editAblePolicy.app_list)
         return (
             <Fragment>
                 <div className="policy_steps">
@@ -539,7 +559,7 @@ class EditPolicy extends Component {
                         <TabPane tab={convertToLang(this.props.translation[APPLICATION_PERMISION], "Application Permission")} key="2">
                             <AppList
                                 dataLength={this.state.editAblePolicy.app_list.length}
-                                apk_list={this.state.editAblePolicy.app_list}
+                                apk_list={this.state.editAblePolicy.app_list.filter(item => item.uniqueName !== "com.android.settingsSettings")}
                                 handleEditPolicy={this.props.handleEditPolicy}
                                 handleCheckAll={this.props.handleCheckAll}
                                 removeAppsFromPolicies={this.props.removeAppsFromPolicies}
@@ -764,7 +784,7 @@ class EditPolicy extends Component {
                             columns={this.appsColumns}
                             align='center'
                             dataSource={
-                                this.renderApp(this.state.addDataOf === 'push_apps' ? this.props.push_apps : this.props.appPermissions)
+                                this.renderApp(this.state.addDataOf === 'push_apps' ? this.filterAddedApps(this.props.push_apps) : this.props.appPermissions)
                             }
                             pagination={false}
                             bordered
