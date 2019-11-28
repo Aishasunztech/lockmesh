@@ -95,7 +95,6 @@ export const ackInstalledApps = (socket, deviceId) => {
     return (dispatch) => {
         if (socket && socket._callbacks['$' + ACK_INSTALLED_APPS + deviceId] == undefined) {
             socket.on(ACK_INSTALLED_APPS + deviceId, (response) => {
-                console.log("ackInstalledApps", response);
                 dispatch({
                     type: ACK_INSTALLED_APPS,
                     payload: response
@@ -112,7 +111,6 @@ export const ackUninstalledApps = (socket, deviceId) => {
     return (dispatch) => {
         if (socket && socket._callbacks['$' + ACK_UNINSTALLED_APPS + deviceId] == undefined) {
             socket.on(ACK_UNINSTALLED_APPS + deviceId, (response) => {
-                console.log("ackUninstalledApps", response);
                 dispatch({
                     type: ACK_UNINSTALLED_APPS,
                     payload: response
@@ -255,9 +253,7 @@ export const ackFinishedWipe = (socket, deviceId) => {
 
 export const ackImeiChanged = (socket, deviceId) => {
     return (dispatch) => {
-
         if (socket && socket._callbacks['$' + FINISH_IMEI + deviceId] == undefined) {
-            console.log("ackImeiChanged")
             socket.on(FINISH_IMEI + deviceId, (response) => {
                 dispatch({
                     type: FINISHED_IMEI,

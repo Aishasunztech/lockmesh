@@ -137,7 +137,6 @@ export function acceptServiceRequest(request) {
 
 
 export function getCancelServiceRequests() {
-    console.log("HELLO");
     return (dispatch) => {
         RestService.getCancelServiceRequests().then((response) => {
             if (RestService.checkAuth(response.data)) {

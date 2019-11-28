@@ -14,7 +14,7 @@ import Customizer1 from './components/Customizer';
 import styles from './components/profile.css';
 import { componentSearch, getFormattedDate, convertToLang } from '../utils/commonUtils';
 import {
-    SDEALER, Login_Email, DEVICES, Name, Value, Profile_Info, Edit_Profile, Edit_Profile_02, Edit_Profile_03, Edit_Profile_01, Change_Password, Change_Email, Login_Email_Authentication, Date_Text
+    SDEALER, Login_Email, DEVICES, Name, Value, Profile_Info, Edit_Profile, Edit_Profile_02, Edit_Profile_03, Edit_Profile_01, Change_Password, Change_Email, Login_Email_Authentication, Date_Text, CREDITS, ADMIN
 } from "../../constants/Constants";
 import { DEALER_ID, DEALER_NAME, Parent_Dealer, DEALER_TOKENS, Login_History, DEALER_PIN } from '../../constants/DealerConstants';
 import { Button_Edit, Button_Cancel, Button_Open, Button_Ok, Button_On, Button_Off } from '../../constants/ButtonConstants';
@@ -110,10 +110,11 @@ class Profile extends Component {
                 key: 1,
                 name: <a> {convertToLang(this.props.translation[DEALER_ID], "DEALER ID")} </a>,
                 value: this.props.profile.id,
-            }, {
+            },
+            {
                 key: 2,
                 name: <a>{convertToLang(this.props.translation[DEALER_PIN], "DEALER PIN")}</a>,
-                value: (this.props.profile.dealer_pin) ? this.props.profile.dealer_pin : 'N/A',
+                value: this.props.profile.type !== ADMIN ? this.props.profile.dealer_pin : 'N/A',
             },
             {
                 key: 3,
@@ -146,8 +147,8 @@ class Profile extends Component {
             dataSource.push(columnData);
             dataSource.push({
                 key: 7,
-                name: <a>{convertToLang(this.props.translation[DEALER_TOKENS], "TOKENS")}</a>,
-                value: (this.props.profile.dealer_token) ? this.props.profile.dealer_token : 'N/A',
+                name: <a>{convertToLang(this.props.translation[CREDITS], "CREDITS")}</a>,
+                value: (this.props.credits) ? this.props.credits : 'N/A',
             });
 
         } else {
@@ -155,8 +156,8 @@ class Profile extends Component {
                 ...commonColumns,
                 {
                     key: 7,
-                    name: <a>{convertToLang(this.props.translation[DEALER_TOKENS], "TOKENS")}</a>,
-                    value: (this.props.profile.dealer_token) ? this.props.profile.dealer_token : 'N/A',
+                    name: <a>{convertToLang(this.props.translation[CREDITS], "CREDITS")}</a>,
+                    value: (this.props.credits) ? this.props.credits : 'N/A',
                 },
                 {
                     key: 6,
@@ -370,13 +371,14 @@ var matchDispatchToProps = (dispatch) => {
     }, dispatch);
 }
 
-var mapStateToProps = ({ auth, settings }) => {
+var mapStateToProps = ({ auth, settings, sidebar }) => {
     // console.log("mapStateToProps");
     // console.log('ooo', state.auth);
     return {
         profile: auth.authUser,
         loginHistory: auth.loginHistory,
-        translation: settings.translation
+        translation: settings.translation,
+        credits: sidebar.user_credit
     };
 }
 

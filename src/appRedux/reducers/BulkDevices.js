@@ -1,6 +1,6 @@
 
 import {
-    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES, UNLINK_BULK_DEVICES, WIPE_BULK_DEVICES, CLOSE_RESPONSE_MODAL, APPLY_BULK_POLICY,
+    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES, UNLINK_BULK_DEVICES, WIPE_BULK_DEVICES, CLOSE_RESPONSE_MODAL, APPLY_BULK_POLICY, SET_BULK_MESSAGE, SEND_BULK_MESSAGE,
 } from "../../constants/ActionTypes";
 import { message, Modal } from 'antd';
 
@@ -26,7 +26,8 @@ const initialState = {
     queue_device_ids: [],
     pushed_device_ids: [],
     expire_device_ids: [],
-    response_modal_action: ''
+    response_modal_action: '',
+    bulkMsg: ''
 };
 
 export default (state = initialState, action) => {
@@ -451,6 +452,64 @@ export default (state = initialState, action) => {
                 queue_device_ids: [],
                 pushed_device_ids: [],
                 expire_device_ids: [],
+            }
+        }
+
+        case SET_BULK_MESSAGE: {
+            console.log("reducerv ", action.payload)
+
+            if (action.payload.status) {
+                success({
+                    title: action.payload.msg,
+                });
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+
+            return {
+                ...state,
+                bulkMsg: action.payload.msg_txt
+            }
+        }
+
+        case SEND_BULK_MESSAGE: {
+            console.log('SEND_BULK_MESSAGE reducer data:: ', action.payload);
+
+            let showResponseModal = state.bulkResponseModal;
+
+            if (action.payload.status) {
+                if (action.payload.online && !action.payload.offline && !action.payload.failed) {
+                    success({
+                        title: action.payload.msg,
+                    });
+                } else if (!action.payload.online && action.payload.offline && !action.payload.failed) {
+                    warning({
+                        title: action.payload.msg,
+                        content: action.payload.content
+                    });
+                } else {
+                    state.failed_device_ids = action.payload.data.failed_device_ids;
+                    state.queue_device_ids = action.payload.data.queue_device_ids;
+                    state.pushed_device_ids = action.payload.data.pushed_device_ids;
+                    showResponseModal = true;
+                }
+
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+
+            return {
+                ...state,
+                failed_device_ids: [...state.failed_device_ids],
+                queue_device_ids: [...state.queue_device_ids],
+                pushed_device_ids: [...state.pushed_device_ids],
+                bulkResponseModal: showResponseModal,
+                response_modal_action: "send_msg",
+                bulkMsg: ''
             }
         }
 

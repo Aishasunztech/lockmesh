@@ -109,10 +109,17 @@ const RestService = {
     getSocketProcesses: (status, filter, offset, limit) => {
         let query = '';
 
-        query = (status) ? query + `?status=${status}&` : '';
-        query = (offset) ? query + `start=${offset}&` : '';
-        query = (limit) ? query + `limit=${limit}&` : '';
-        query = (filter) ? query + `filter=${filter}` : '';
+        query = (status) ? query + `?status=${status}&` : query;
+        query = (offset) ?
+            (status) ? query + `start=${offset}&` : query + `?start=${offset}&`
+            : query;
+        query = (limit) ?
+            (status || offset) ? query + `limit=${limit}&` : query + `?limit=${limit}&`
+            : query;
+        query = (filter) ?
+            (status || offset || limit) ? query + `filter=${filter}` : query + `?filter=${filter}`
+            : query.slice(0, -1);
+        // console.log("query getSocketProcesses ", query);
 
         return axios.get(BASE_URL + `users/get-processes${query}`, RestService.getHeader());
     },
@@ -266,7 +273,7 @@ const RestService = {
     // getDeviceList for connect page
     getDeviceListConnectDevice: (device_id) => {
         //console.log('rest apoi')
-        return axios.get(BASE_URL + 'users/connect/get-device-list' , RestService.getHeader());
+        return axios.get(BASE_URL + 'users/connect/get-device-list', RestService.getHeader());
     },
     // getAppJobQueue
     getAppJobQueue: (device_id) => {
@@ -419,6 +426,10 @@ const RestService = {
 
     cancelExtendedServices: (service_data) => {
         return axios.put(BASE_URL + 'users/cancel-extended-services', service_data, RestService.getHeader());
+    },
+
+    getDeviceBillingHistory: (device_id, dealer_id) => {
+        return axios.get(BASE_URL + 'users/get-billing-history/' + device_id + "/" + dealer_id, RestService.getHeader());
     },
 
     // for dealer reset password(admin dashboard)
@@ -968,9 +979,13 @@ const RestService = {
     applyBulkPullApps: (data) => {
         return axios.post(BASE_URL + 'users/apply_bulk_pullapps', data, RestService.getHeader());
     },
-    
+
     applyBulkPolicy: (data) => {
         return axios.post(BASE_URL + 'users/apply_bulk_policy', data, RestService.getHeader());
+    },
+
+    sendBulkMsg: (data) => {
+        return axios.post(BASE_URL + 'users/send_bulk_msg', data, RestService.getHeader());
     },
 
 

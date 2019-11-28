@@ -21,7 +21,8 @@ class RightSidebar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isRightSidebarOpened: false
+      isRightSidebarOpened: false,
+      offSetValue: 0
     };
     this.datalist = []
   }
@@ -37,6 +38,14 @@ class RightSidebar extends Component {
       <br></br>
       {type === 'completed' ? <i class="fa fa-times" aria-hidden="true" onClick={() => { }}></i> : null}
     </div>)
+  }
+
+  queueOnload = (e) => {
+    console.log("queueOnload");
+    e.preventDefault();
+    let offSet = this.state.offSetValue + 10;
+    this.props.getSocketProcesses(false, false, offSet, 10);
+    this.setState({ offSetValue: offSet })
   }
 
 
@@ -62,6 +71,8 @@ class RightSidebar extends Component {
           </Collapse>
 
         </CustomScrollbars>
+        <br />
+        <Button type="primary" style={{ width: "100%" }} onClick={this.queueOnload}>Load More</Button>
       </div>
 
     )
@@ -88,15 +99,19 @@ class RightSidebar extends Component {
     }
     return taskList.map((task) => {
       let color = '';
+      let status = '';
       switch (task.status) {
         case 'pending':
           color = 'blue'
+          status = 'Pendding'
           break;
         case 'completed_successfully':
           color = 'green'
+          status = 'Completed Successfully'
           break;
         default:
           color = 'red'
+          status = 'Red'
       }
       return (
         <Panel
@@ -107,7 +122,7 @@ class RightSidebar extends Component {
           extra={this.genExtra(title)}
         >
           <div>
-            <p className="mb-4">status: <Tag color={color}>{task.status}</Tag></p>
+            <p className="mb-4">status: <Tag color={color}>{status}</Tag></p>
             <p className="mb-4">{task.created_at}</p>
           </div>
         </Panel>
@@ -119,7 +134,7 @@ class RightSidebar extends Component {
     this.props.getSocketProcesses();
   }
   componentWillReceiveProps(nextProps) {
-    // console.log("rightSidebar: ", nextProps);
+    // console.log("rightSidebar componentWillReceiveProps: ", nextProps.socket.connected);
     if (nextProps.socket && nextProps.socket.connected) {
       nextProps.getNotification(nextProps.socket)
     }
@@ -156,6 +171,7 @@ class RightSidebar extends Component {
 // export default RightSidebar;
 const mapStateToProps = ({ rightSidebar, auth, socket }) => {
   // console.log("right sidebar:", rightSidebar, auth)
+  // console.log("rightSidebar.tasks ", rightSidebar.tasks)
   return {
     tasks: rightSidebar.tasks,
     socket: socket.socket
