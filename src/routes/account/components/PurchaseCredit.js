@@ -109,7 +109,6 @@ class PurchaseCredit extends Component {
                 if (values.method === 'CASH') {
 
                     showConfirm(this, <span>Are you sure you want to request for <strong> "{values.credits} Credits"</strong> on <strong>"CASH"</strong> ?'</span>, values)
-                    // console.log("Hello");
                 } else if (values.method === 'BTC') {
                     this.setState({
                         bitCoinModal: true,

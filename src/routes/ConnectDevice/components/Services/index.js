@@ -221,7 +221,7 @@ class Services extends Component {
     console.log(serviceData);
     return (
       <div>
-        <Modal
+        {/* <Modal
           width='850px'
           maskClosable={false}
           visible={visible}
@@ -233,47 +233,63 @@ class Services extends Component {
           >Services History</Button></div>}
           onCancel={this.handleCancel}
           footer={null}
-        >
-          <h2 style={{ textAlign: 'center' }}>CURRENT SERVICES</h2>
+        > */}
+        <div>
+          <Row>
+            <Col span={5}>
+            </Col>
+            <Col span={15}>
+              <h2 style={{ textAlign: 'center' }}>CURRENT SERVICES</h2>
+            </Col>
+            <Col span={4}>
+              <Button
+                style={{ float: 'right', marginRight: '20px' }}
+                type="primary"
+                size="small"
+                onClick={this.servicesHistory}
+              >Services History</Button>
+            </Col>
+          </Row>
+        </div>
 
-          <Table
-            columns={this.state.columns}
-            bordered
-            dataSource={this.renderList(currentServices)}
-            pagination={false}
-          />
-          {(serviceData && serviceData.grace_days) ? <h4 style={{ float: "right", marginTop: 15 }}>
-            Total Grace Days Applied : {serviceData.grace_days}
-          </h4> : null}
-          <br /> <br /> <br /> <br />
-          {(this.props.extended_services) ?
-            <Fragment>
-              {/* <Row>
+        <Table
+          columns={this.state.columns}
+          bordered
+          dataSource={this.renderList(currentServices)}
+          pagination={false}
+        />
+        {(serviceData && serviceData.grace_days) ? <h4 style={{ float: "right", marginTop: 15 }}>
+          Total Grace Days Applied : {serviceData.grace_days}
+        </h4> : null}
+        <br /> <br /> <br /> <br />
+        {(this.props.extended_services) ?
+          <Fragment>
+            {/* <Row>
                 <Col xs={24} sm={24} md={15} lg={15} xl={15}></Col> */}
-              <h2 style={{ textAlign: 'center' }}>EXTENDED SERVICES</h2>
+            <h2 style={{ textAlign: 'center' }}>EXTENDED SERVICES</h2>
 
-              {(this.props.user.type !== 'admin') ?
-                // <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-                <Button disabled={(this.props.extended_services) ? false : true}
-                  style={{ float: 'right' }} type="danger" onClick={() => {
-                    this.cancelExtendedServices()
-                  }}>Cancel Extended Services</Button>
-                // </Col>
-                : ""
-              }
-              {/* </Row> */}
-              <br />
+            {(this.props.user.type !== 'admin') ?
+              // <Col xs={24} sm={24} md={9} lg={9} xl={9}>
+              <Button disabled={(this.props.extended_services) ? false : true}
+                style={{ float: 'right' }} type="danger" onClick={() => {
+                  this.cancelExtendedServices()
+                }}>Cancel Extended Services</Button>
+              // </Col>
+              : ""
+            }
+            {/* </Row> */}
+            <br />
 
-              <Table
-                columns={this.state.columns}
-                bordered
-                dataSource={this.renderList(extendedServices)}
-                pagination={false}
-              />
-              <br /> <br /> <br />
-            </Fragment>
-            : null}
-        </Modal>
+            <Table
+              columns={this.state.columns}
+              bordered
+              dataSource={this.renderList(extendedServices)}
+              pagination={false}
+            />
+            <br /> <br /> <br />
+          </Fragment>
+          : null}
+        {/* </Modal> */}
 
         <ServicesHistory
           ref="history_services"
