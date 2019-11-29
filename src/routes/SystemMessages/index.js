@@ -182,7 +182,7 @@ class SystemMessages extends Component {
         this.props.closeResponseModal();
     }
     componentDidMount() {
-        // this.props.getDomains();
+        this.props.getDomains();
         // this.props.getAllDealers();
         // this.props.getUserList();
 

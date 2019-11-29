@@ -1310,10 +1310,10 @@ class Account extends Component {
                                                             </Col>
                                                             <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
                                                                 <div className="crd_txt">
-                                                                    {/* <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Run Reports on Sales, Inventory, Profit/loss, Payment history, etc...")}</h5>
-                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Ability to select date range for each reports")}</h5>
-                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Run reports on individual Dealers/SDealers")}</h5>
-                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Export Reports in PDF format")}</h5> */}
+                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Send messages to device")}</h5>
+                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Select multiple or single devices to send your messages")}</h5>
+                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Repeat messages to devices")}</h5>
+                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Set delays or timers for each messages")}</h5>
                                                                     <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], "and more...")}</h5>
                                                                 </div>
                                                             </Col>

@@ -207,7 +207,8 @@ export default class ListMsgs extends Component {
                                             <h3>Devices: </h3>
                                         </Col>
                                         <Col span={16}>
-                                            <Tag>abc</Tag>
+                                            <Tag>ELAB797012</Tag><Tag>ELAB797012</Tag>
+                                            <Tag>ELAB797012</Tag><Tag>ELAB797012</Tag>
                                         </Col>
                                     </Row>
                                     <Row>
@@ -215,7 +216,7 @@ export default class ListMsgs extends Component {
                                             <h3>Users: </h3>
                                         </Col>
                                         <Col span={16}>
-                                            <Tag>abc</Tag>
+                                            <Tag>abc</Tag><Tag>abc</Tag><Tag>abc</Tag><Tag>abc</Tag>
                                         </Col>
                                     </Row>
                                     <Row>
@@ -223,7 +224,8 @@ export default class ListMsgs extends Component {
                                             <h3>Dealers: </h3>
                                         </Col>
                                         <Col span={16}>
-                                            <Tag>abc</Tag>
+                                            <Tag>xyz</Tag><Tag>xyz</Tag><Tag>xyz</Tag><Tag>xyz</Tag><Tag>xyz</Tag>
+                                            <Tag>xyz</Tag><Tag>xyz</Tag><Tag>xyz</Tag><Tag>xyz</Tag><Tag>xyz</Tag>
                                         </Col>
                                     </Row>
                                 </Fragment>
