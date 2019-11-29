@@ -725,7 +725,7 @@ class FilterDevices extends Component {
   }
 
   render() {
-
+    console.log("actionMsg ", this.props.actionMsg);
     // console.log('selected devices are: ', this.state.selectedDevices);
     return (
       <Fragment>
@@ -792,7 +792,8 @@ class FilterDevices extends Component {
           </Col>
 
         </Row>
-        {/* <span>(Only allow active & trial devices for your selected action)</span> */}
+        {/* <span style={{ color: 'red' }}>{this.props.actionMsg ? (this.state.selectedDevices && this.state.selectedDevices.length) ? `${this.props.actionMsg}` : "Not selected any device to perform an action" : "Not selected any action"}</span> */}
+        <span style={{ color: 'red' }}>{this.props.actionMsg ? `${this.props.actionMsg}` : ""}</span>
         <Row gutter={24} style={{ marginBottom: '24px' }}>
           {
             this.props.spinloading ? <CircularProgress /> :

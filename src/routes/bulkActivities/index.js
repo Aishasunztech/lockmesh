@@ -161,7 +161,8 @@ class BulkActivities extends Component {
             checkAllSelectedDealers: false,
             checkAllSelectedUsers: false,
             selectedPolicy: '',
-            sendMsgModal: false
+            sendMsgModal: false,
+            actionMsg: ''
         }
     }
 
@@ -578,25 +579,51 @@ class BulkActivities extends Component {
     }
 
     handleChangeAction = (e) => {
-        // console.log("e value is: ", e)
-        if (e === "PUSH APPS" || e === "PULL APPS" || e === "PUSH POLICY" || e === "SEND MESSAGE") {
+        console.log("e value is: ", e)
+
+        let pushAppsModal = false;
+        let pullAppsModal = false;
+        let pushPolicyModal = false;
+        let handleViewChange = false;
+        let actionMsg = '';
+
+        if (e === "PUSH APPS" || e === "PULL APPS" || e === "PUSH POLICY") {
+            handleViewChange = true;
             if (e === "PUSH APPS") {
-                this.setState({ pushAppsModal: true, handleViewChange: true });
+                pushAppsModal = true;
+                actionMsg = "(Only allow active, suspended, trial & expired devices to push apps)"
             }
             else if (e === "PULL APPS") {
-                this.setState({ pullAppsModal: true, handleViewChange: true });
+                pullAppsModal = true;
+                actionMsg = "(Only allow active, suspended, trial & expired devices to pull apps)"
             } else if (e === "PUSH POLICY") {
-                this.setState({ pushPolicyModal: true, handleViewChange: true })
-            } else if (e === "SEND MESSAGE") {
-                this.setState({ sendMsgModal: true, handleViewChange: true })
+                pushPolicyModal = true;
+                actionMsg = "(Only allow active, suspended, trial & expired devices to push policy)"
             }
-        } else {
-            this.setState({ handleViewChange: false });
+        }
+
+        if (e === "ACTIVATE DEVICES") {
+            actionMsg = "(Only allow suspended devices to activate)"
+        }
+        else if (e === "SUSPEND DEVICES") {
+            actionMsg = "(Only allow active devices to suspend)"
+        }
+        else if (e === "UNLINK DEVICES") {
+            actionMsg = "(Only allow active, suspended, trial & expired devices to unlink)"
+        }
+        else if (e === "WIPE DEVICES") {
+            actionMsg = "(Only allow active, suspended, trial, expired, transferred & unlink devices to wipe)"
         }
 
 
 
-        this.setState({ selectedAction: e });
+        this.setState({
+            selectedAction: e,
+            pushAppsModal,
+            pullAppsModal,
+            pushPolicyModal,
+            actionMsg,
+        });
 
     }
 
@@ -839,6 +866,7 @@ class BulkActivities extends Component {
                         wipeBulkDevices={this.props.wipeBulkDevices}
                         bulkApplyPolicy={this.props.applyBulkPolicy}
                         selectedPolicy={this.state.selectedPolicy}
+                        actionMsg={this.state.actionMsg}
                     />
 
                 </Card>
