@@ -300,7 +300,6 @@ export const setBulkMsg = (data) => {
 }
 
 // send msg
-// Push Policy
 export const sendBulkMsg = (data) => {
     return (dispatch) => {
         RestService.sendBulkMsg(data).then((response) => {

@@ -162,7 +162,7 @@ export default (state = INIT_STATE, action) => {
 				...state,
 				authUser: state.authUser,
 				loader: false,
-
+				authUser: JSON.parse(JSON.stringify(state.authUser))
 			}
 		}
 

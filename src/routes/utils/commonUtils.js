@@ -354,9 +354,27 @@ export function getDefaultLanguage(transaction_id) {
     case "package.name.id":
       return "PACKAGE NAME";
     case "created_at":
-      return "UPLOAD DATE";
+      return "LAST UPLOADED";
     case "updated_at":
-      return "EDIT DATE";
+      return "LAST UPDATED";
+
+    // dealer/sdealer Columns
+    case "dealer_id":
+      return "DEALER ID";
+    case "dealer_name":
+      return "DEALER NAME";
+    case "dealer_email":
+      return "DEALER EMAIL";
+    case "link_code":
+      return "DEALER PIN";
+    case "connected_devices":
+      return "DEALER DEVICES";
+    case "dealer_credits":
+      return "DEALER CREDITS";
+    case "parent_dealer":
+      return "Parent Dealer";
+    case "parent_dealer_id":
+      return "Parent Dealer ID";
 
     default:
       return transaction_id; // already translated language

@@ -41,7 +41,7 @@ export default class ChangePassword extends Component {
 
         e.preventDefault();
         // console.log(this.state.newPassword);
-        if (this.state.newPassword.length >= 6) {
+        if (this.state.newPassword && this.state.newPassword.length >= 6) {
             if ((this.state.newPassword !== this.state.confirmPassword) || (this.state.newPassword === '')) {
                 this.setState({
                     status: 'error',
@@ -100,7 +100,7 @@ export default class ChangePassword extends Component {
                     onCancel={this.handleCancel}
                     footer={[
                         <Button key="back" onClick={this.handleCancel}>{convertToLang(this.props.translation[Button_Cancel], "Cancel")}</Button>,
-                        <Button key="submit" type="primary" loading={loading} onClick={this.handleSubmit}>
+                        <Button key="submit" type="primary" loading={loading} onClick={this.handleSubmit} disabled={(this.state.newPassword && this.state.newPassword.length >= 6) ? false : true}>
                             {convertToLang(this.props.translation[Button_submit], "Submit")}
                         </Button>,
                     ]}
