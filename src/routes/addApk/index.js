@@ -388,7 +388,7 @@ class AddApk extends Component {
                         <Row className='modal_footer'>
                             <div>
                                 <Button key="back" className='submitButton' onClick={this.props.hideUploadApkModal}>{convertToLang(this.props.translation[Button_Cancel], "Cancel")}</Button>
-                                <Button className='submitButton' type="primary" htmlType="submit" >{convertToLang(this.props.translation[Button_Save], "Save")}</Button>
+                                <Button className='submitButton' type="primary" htmlType="submit" disabled={(logo && apk && size) ? false : true} >{convertToLang(this.props.translation[Button_Save], "Save")}</Button>
                             </div>
                         </Row>
                     </Form>

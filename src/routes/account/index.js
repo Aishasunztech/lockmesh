@@ -1293,6 +1293,7 @@ class Account extends Component {
                                 </Link>
                             </div>
                         </Col>
+                        {false ?
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
                                 <Link to={"/system-messages"}>
@@ -1327,6 +1328,7 @@ class Account extends Component {
                                 </Link>
                             </div>
                         </Col>
+                        : null }
                     </Row>
                 </div>
                 <PasswordModal
