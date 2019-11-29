@@ -95,7 +95,6 @@ export const ackInstalledApps = (socket, deviceId) => {
     return (dispatch) => {
         if (socket && socket._callbacks['$' + ACK_INSTALLED_APPS + deviceId] == undefined) {
             socket.on(ACK_INSTALLED_APPS + deviceId, (response) => {
-                console.log("ackInstalledApps", response);
                 dispatch({
                     type: ACK_INSTALLED_APPS,
                     payload: response
@@ -112,7 +111,6 @@ export const ackUninstalledApps = (socket, deviceId) => {
     return (dispatch) => {
         if (socket && socket._callbacks['$' + ACK_UNINSTALLED_APPS + deviceId] == undefined) {
             socket.on(ACK_UNINSTALLED_APPS + deviceId, (response) => {
-                console.log("ackUninstalledApps", response);
                 dispatch({
                     type: ACK_UNINSTALLED_APPS,
                     payload: response
@@ -255,9 +253,7 @@ export const ackFinishedWipe = (socket, deviceId) => {
 
 export const ackImeiChanged = (socket, deviceId) => {
     return (dispatch) => {
-
         if (socket && socket._callbacks['$' + FINISH_IMEI + deviceId] == undefined) {
-            console.log("ackImeiChanged")
             socket.on(FINISH_IMEI + deviceId, (response) => {
                 dispatch({
                     type: FINISHED_IMEI,
@@ -344,12 +340,9 @@ export const closeConnectPageSocketEvents = (socket, deviceId) => {
 
 // ===> panel events
 export const getNotification = (socket) => {
-    console.log('getNotification  action called =============== SEND_JOB_TO_PANEL')
     return (dispatch) => {
-        console.log("socket && socket._callbacks['$' + SEND_JOB_TO_PANEL] == undefined ", socket, socket._callbacks['$' + SEND_JOB_TO_PANEL])
         if (socket && socket._callbacks['$' + SEND_JOB_TO_PANEL] == undefined) {
             socket.on(SEND_JOB_TO_PANEL, (data) => {
-                console.log('response data of notifications: ', data);
                 dispatch({
                     type: SEND_JOB_TO_PANEL,
                     payload: data

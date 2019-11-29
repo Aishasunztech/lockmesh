@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip, Progress, Select } from "antd";
+import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip, Progress, Select, Tabs } from "antd";
 import TableHistory from "./TableHistory";
 import SuspendDevice from '../../devices/components/SuspendDevice';
 import ActivateDevcie from '../../devices/components/ActivateDevice';
@@ -47,7 +47,8 @@ import {
     resetPushApps,
     handleCheckedAllPushApps,
     transferHistory,
-    getDeviceListConnectDevice
+    getDeviceListConnectDevice,
+    getDeviceBillingHistory
 } from "../../../appRedux/actions/ConnectDevice";
 
 import { getNewDevicesList } from "../../../appRedux/actions/Common";
@@ -95,6 +96,7 @@ import {
 
 import TransferHistory from './TransferModule/TransferHistory'
 import Services from './Services';
+import DeviceBillingHistory from './DeviceBillingHistory';
 
 const confirm = Modal.confirm;
 var coppyList = [];
@@ -827,6 +829,9 @@ class SideActions extends Component {
         // if (this.props.device_details.device_id && visible) {
         //     this.props.getServices(this.props.device_details.device_id);
         // }
+        if (visible) {
+            this.props.getDeviceBillingHistory(this.props.device_details.id, this.props.device_details.dealer_id)
+        }
         console.log("this.props.device_details ", this.props.device_details);
         this.setState({
             servicesModal: visible,
@@ -995,17 +1000,41 @@ class SideActions extends Component {
                                 style={{ width: "46%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }}
                             >
                                 <Icon type="file" />
-                                {convertToLang(this.props.translation["SERVICES"], "SERVICES")}
+                                {convertToLang(this.props.translation["ACCOUNT INFO"], "ACCOUNT INFO")}
                             </Button>
-                            <Services
-                                translation={this.props.translation}
-                                user={this.props.authUser}
-                                handleServicesModal={this.handleServicesModal}
+
+                            <Modal
+                                title={convertToLang(this.props.translation["ACCOUNT INFO"], "ACCOUNT INFO")}
+                                maskClosable={false}
+                                width='850px'
+                                style={{ top: 20 }}
                                 visible={this.state.servicesModal}
-                                services={this.props.device_details.services}
-                                extended_services={this.props.device_details.extended_services}
-                                user_acc_id={this.props.device_details.id}
-                            />
+                                onOk={() => this.handleServicesModal(false)}
+                                onCancel={() => this.handleServicesModal(false)}
+                                okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
+                                cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
+                            >
+
+                                <Tabs type="card">
+                                    <Tabs.TabPane tab={convertToLang(this.props.translation["Services History"], "Services History")} key="1" >
+                                        <Services
+                                            translation={this.props.translation}
+                                            user={this.props.authUser}
+                                            handleServicesModal={this.handleServicesModal}
+                                            visible={this.state.servicesModal}
+                                            services={this.props.device_details.services}
+                                            extended_services={this.props.device_details.extended_services}
+                                            user_acc_id={this.props.device_details.id}
+                                        />
+                                    </Tabs.TabPane>
+                                    <Tabs.TabPane tab={convertToLang(this.props.translation["Billing Details"], "Billing Details")} key="2" >
+                                        <DeviceBillingHistory
+                                            translation={this.props.translation}
+                                            device_billing_history={this.props.device_billing_history}
+                                        />
+                                    </Tabs.TabPane>
+                                </Tabs>
+                            </Modal>
                         </Row>
                     </Card>
                     <Card>
@@ -1418,7 +1447,8 @@ function mapDispatchToProps(dispatch) {
         resetPushApps: resetPushApps,
         handleCheckedAllPushApps: handleCheckedAllPushApps,
         transferHistory: transferHistory,
-        getDeviceListConnectDevice: getDeviceListConnectDevice
+        getDeviceListConnectDevice: getDeviceListConnectDevice,
+        getDeviceBillingHistory: getDeviceBillingHistory
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth, settings, devices, sidebar }, otherProps) => {
@@ -1464,7 +1494,8 @@ var mapStateToProps = ({ device_details, auth, settings, devices, sidebar }, oth
         guestAllPushApps: device_details.guestAllPushApps,
         enableAllPushApps: device_details.enableAllPushApps,
         encryptedAllPushApps: device_details.encryptedAllPushApps,
-        device_list: device_details.device_list
+        device_list: device_details.device_list,
+        device_billing_history: device_details.device_billing_history
     };
 }
 
