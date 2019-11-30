@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Button, Modal, Row, Col, Spin, Input } from "antd";
+import { Table, Button, Modal, Row, Col, Spin, Input, Card } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import styles from './devices.css'
@@ -33,6 +33,7 @@ import {
 } from '../../../constants/Constants'
 
 import { Button_Remove, Button_Add, Button_AddAll, Button_AddExceptSelected, Button_RemoveAll, Button_RemoveExcept, Button_Save, Button_Cancel, Button_DeleteExceptSelected, Button_Yes, Button_No, Button_Edit } from '../../../constants/ButtonConstants';
+import CustomScrollbars from '../../../util/CustomScrollbars';
 const confirm = Modal.confirm;
 const success = Modal.success
 const error = Modal.error
@@ -729,7 +730,7 @@ class FilterDevices extends Component {
     // console.log('selected devices are: ', this.state.selectedDevices);
     return (
       <Fragment>
-        <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
+        <Row gutter={16}>
           <Col className="gutter-row" sm={4} xs={4} md={4}>
             <div className="gutter-box text-left">
               <h2>{convertToLang(this.props.translation["Select Devices:"], "Select Devices:")}</h2>
@@ -797,18 +798,23 @@ class FilterDevices extends Component {
           {
             this.props.spinloading ? <CircularProgress /> :
               <Col className="gutter-row" span={24}>
-                <Table
-                  id='scrolltablelist'
-                  ref='tablelist'
-                  className={"devices "}
-                  size="middle"
-                  bordered
-                  columns={this.state.selectedDevicesColumns}
-                  onChange={this.props.onChangeTableSorting}
-                  dataSource={this.props.renderList(this.actionRelatedDevice(this.state.selectedDevices))}
-                  pagination={false}
-                  scroll={{ x: true }}
-                />
+                <Card className='fix_card fix_card_bulk_act'>
+                  <hr className="fix_header_border" style={{ top: "56px" }} />
+                  <CustomScrollbars className="gx-popover-scroll ">
+                    <Table
+                      id='scrolltablelist'
+                      ref='tablelist'
+                      className={"devices "}
+                      size="small"
+                      bordered
+                      columns={this.state.selectedDevicesColumns}
+                      onChange={this.props.onChangeTableSorting}
+                      dataSource={this.props.renderList(this.actionRelatedDevice(this.state.selectedDevices))}
+                      pagination={false}
+                    // scroll={{ x: true }}
+                    />
+                  </CustomScrollbars>
+                </Card>
               </Col>
           }
         </Row>
@@ -825,7 +831,6 @@ class FilterDevices extends Component {
           onCancel={() => {
             this.showDealersModal(false)
           }}
-          bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
             devices={this.props.renderList(this.getUnSelectedDevices(this.state.allBulkDevices))}

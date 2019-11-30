@@ -32,6 +32,7 @@ import {
     DEALER_TEXT
 } from '../../../constants/DealerConstants';
 import CreditsLimits from "./CreditLimits";
+import { Markup } from "interweave";
 
 
 // user defined
@@ -39,6 +40,7 @@ const confirm = Modal.confirm;
 
 
 function showConfirm(_this, dealer, action, btn_title, name = "") {
+    console.log("dealer ", dealer)
     let title_Action = '';
     if (btn_title == 'SUSPEND') {
         title_Action = convertToLang(_this.props.translation[Button_Suspend], "SUSPEND ");
@@ -53,7 +55,8 @@ function showConfirm(_this, dealer, action, btn_title, name = "") {
     }
 
     confirm({
-        title: `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[OF_THIS], " of this ")} Dealer ${name ? `(${name})` : ""} ?`,
+        title:
+            <Markup content={convertToLang(_this.props.translation[''], `Do you wish to Permanently Delete Dealer ${name}?<br/> This action cannot be reversed!`)} />,
         onOk() {
             return new Promise((resolve, reject) => {
                 setTimeout(Math.random() > 0.5 ? resolve : reject);
@@ -236,10 +239,9 @@ export default class DealerAction extends Component {
                                 }}
                                 onClick={
                                     () => (dealer.unlink_status === 0) ?
-                                        showConfirm(this, dealer.dealer_id, this.props.deleteDealer, 'DELETE') :
+                                        showConfirm(this, dealer.dealer_id, this.props.deleteDealer, 'DELETE', this.props.dealer.dealer_name) :
                                         showConfirm(this, dealer.dealer_id, this.props.undoDealer, 'UNDELETE')
                                 }
-
                             >
                                 <Icon type="lock" className="lock_icon" />
                                 {undo_button_text}
