@@ -625,7 +625,7 @@ class ApkMarket extends React.Component {
                                     <Col md={12} sm={24} xs={24}>
                                         <div>
                                             <div className="sm_header">
-                                                <h4 className="sm_heading1"><b>{convertToLang(this.props.translation[SPA_TITLE_SECURE_MARKET], "Encrpted Space Apps")}</b></h4>
+                                                <h4 className="sm_heading1"><b>{convertToLang(this.props.translation["SPA_TITLE_SECURE_MARKET"], "Encrypted Space Apps")}</b></h4>
                                             </div>
                                             <div className="sm_header">
                                                 <Button className="float-right" onClick={() => this.addIntoSpace('encrypted')}>Add Apps</Button>

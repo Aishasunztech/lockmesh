@@ -41,7 +41,7 @@ import {
 } from '../../../constants/DeviceConstants';
 import { Button_Refresh } from '../../../constants/ButtonConstants';
 import { ADMIN } from '../../../constants/Constants';
-
+import moment from 'moment';
 let make_red = 'captilize';
 
 export default class DeviceSidebar extends Component {
@@ -244,6 +244,7 @@ export default class DeviceSidebar extends Component {
                 key: 29,
                 name: (<a>{titleCase(convertToLang(this.props.translation["Last Online"], "Last Online"))}:</a>),
                 value: checkValue(device_details.lastOnline)
+                // value: moment(device_details.lastOnline).format("MM/DD/YYYY HH:mm:ss")
             },
             {
                 key: 30,

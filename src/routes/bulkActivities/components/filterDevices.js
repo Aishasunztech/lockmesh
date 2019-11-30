@@ -33,6 +33,7 @@ import {
 } from '../../../constants/Constants'
 
 import { Button_Remove, Button_Add, Button_AddAll, Button_AddExceptSelected, Button_RemoveAll, Button_RemoveExcept, Button_Save, Button_Cancel, Button_DeleteExceptSelected, Button_Yes, Button_No, Button_Edit } from '../../../constants/ButtonConstants';
+import { handleWipePwdConfirmModal } from '../../../appRedux/actions/BulkDevices';
 const confirm = Modal.confirm;
 const success = Modal.success
 const error = Modal.error
@@ -696,10 +697,12 @@ class FilterDevices extends Component {
           title: `Sorry, You have not any device to perform an action`,
         });
       }
+      // this.props.setstateValues("errorAction", "")
     } else {
-      error({
-        title: `Sorry, You have not selected any action`,
-      });
+      this.props.setstateValues("errorAction", "Please select an action")
+      // error({
+      //   title: `Sorry, You have not selected any action`,
+      // });
     }
   }
 
@@ -939,6 +942,9 @@ class FilterDevices extends Component {
         <BulkWipeConfirmation
           ref="bulk_wipe"
           wipeBulkDevices={this.props.wipeBulkDevices}
+          handleWipePwdConfirmModal={this.props.handleWipePwdConfirmModal}
+          bulkWipePassModal={this.props.bulkWipePassModal}
+          wipePassMsg={this.props.wipePassMsg}
           translation={this.props.translation}
         />
 
@@ -956,19 +962,22 @@ class FilterDevices extends Component {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     getAllDealers: getAllDealers,
+    handleWipePwdConfirmModal: handleWipePwdConfirmModal
     // savePermission: savePermission
   }, dispatch);
 }
 
 
-const mapStateToProps = ({ dealers, settings, devices, auth }, props) => {
+const mapStateToProps = ({ dealers, settings, devices, auth, bulkDevices }, props) => {
 
   return {
     user: auth.authUser,
     dealerList: dealers.dealers,
     record: props.record,
     spinloading: dealers.spinloading,
-    translation: settings.translation
+    translation: settings.translation,
+    bulkWipePassModal: bulkDevices.bulkWipePassModal,
+    wipePassMsg: bulkDevices.wipePassMsg
   };
 }
 

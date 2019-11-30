@@ -162,7 +162,8 @@ class BulkActivities extends Component {
             checkAllSelectedUsers: false,
             selectedPolicy: '',
             sendMsgModal: false,
-            actionMsg: ''
+            actionMsg: '',
+            errorAction: '',
         }
     }
 
@@ -612,7 +613,8 @@ class BulkActivities extends Component {
             actionMsg = "(Only allow active, suspended, trial & expired devices to unlink)"
         }
         else if (e === "WIPE DEVICES") {
-            actionMsg = "(Only allow active, suspended, trial, expired, transferred & unlink devices to wipe)"
+            // actionMsg = "(Only allow active, suspended, trial, expired, transferred & unlink devices to wipe)"
+            actionMsg = "(Only allow active, suspended, trial, expired & transferred devices to wipe)"
         }
 
 
@@ -622,7 +624,9 @@ class BulkActivities extends Component {
             pushAppsModal,
             pullAppsModal,
             pushPolicyModal,
+            handleViewChange,
             actionMsg,
+            errorAction: ""
         });
 
     }
@@ -668,6 +672,10 @@ class BulkActivities extends Component {
 
     handleCancelMsgModal = () => {
         this.setState({ sendMsgModal: false })
+    }
+
+    setstateValues = (key, value) => {
+        this.setState({ [key]: value });
     }
 
     render() {
@@ -774,6 +782,7 @@ class BulkActivities extends Component {
                                     return (<Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)
                                 })}
                             </Select>
+                            {this.state.errorAction ? <span style={{ color: 'red' }}>{this.state.errorAction}</span> : null}
                         </Col>
                         <Col className="col-md-4 col-sm-4 col-xs-4">
                             {this.state.handleViewChange ?
@@ -781,8 +790,8 @@ class BulkActivities extends Component {
                                 : null}
                         </Col>
                     </Row>
-                    <p>Selected: <span className="font_26">{this.state.selectedAction.toUpperCase()}</span></p>
-
+                    {/* <p>Selected: <span className="font_26">{this.state.selectedAction.toUpperCase()}</span></p> */}
+                    <br />
 
                     <Row gutter={24} className="">
                         <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
@@ -793,6 +802,7 @@ class BulkActivities extends Component {
                             <Select
                                 value={this.state.selectedDealers}
                                 mode="multiple"
+                                // notFoundContent="no found"
                                 labelInValue
                                 showSearch
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
@@ -814,7 +824,9 @@ class BulkActivities extends Component {
                     </Row>
                     <br />
 
-                    <p>Dealers/S-Dealers Selected: <span className="font_26">{((this.state.selectedDealers.length) ? this.state.selectedDealers.map(item => <Tag>{item.label}</Tag>) : "NOT SELECTED")}</span></p>
+                    {(this.state.selectedDealers && this.state.selectedDealers.length && !this.state.checkAllSelectedDealers) ?
+                        <p>Dealers/S-Dealers Selected: <span className="font_26">{this.state.selectedDealers.map(item => <Tag>{item.label}</Tag>)}</span></p>
+                        : null}
                     <Row gutter={24} className="">
                         <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
                             <span className=""> {convertToLang(this.props.translation[""], "Select Users:")} </span>
@@ -835,17 +847,18 @@ class BulkActivities extends Component {
                                 placeholder={convertToLang(this.props.translation[""], "Select Users")}
                                 onChange={this.handleChangeUser}
                             >
-                                {(this.props.users_list && this.props.users_list.length > 0) ?
+                                {(this.state.allUsers && this.state.allUsers.length > 0) ?
                                     <Select.Option key="allUsers" value="all">Select All</Select.Option>
                                     : <Select.Option key="" value="">Data Not Found</Select.Option>
                                 }
-                                {this.props.users_list.map(item => <Select.Option key={item.user_id} value={item.user_id} >{item.user_name}</Select.Option>)}
+                                {this.state.allUsers.map(item => <Select.Option key={item.key} value={item.key} >{item.label}</Select.Option>)}
                             </Select>
                         </Col>
                     </Row>
                     <br />
-                    <p>Users Selected: <span className="font_26">{(this.state.selectedUsers.length) ? this.state.selectedUsers.map(item => <Tag>{item.label}</Tag>) : "NOT SELECTED"}</span></p>
-
+                    {(this.state.selectedUsers && this.state.selectedUsers.length && !this.state.checkAllSelectedUsers) ?
+                        <p>Users Selected: <span className="font_26">{this.state.selectedUsers.map(item => <Tag>{item.label}</Tag>)}</span></p> // NOT SELECTED
+                        : null}
                     <FilterDevices
                         devices={this.state.filteredDevices}
                         selectedDealers={this.state.selectedDealers}
@@ -867,6 +880,7 @@ class BulkActivities extends Component {
                         bulkApplyPolicy={this.props.applyBulkPolicy}
                         selectedPolicy={this.state.selectedPolicy}
                         actionMsg={this.state.actionMsg}
+                        setstateValues={this.setstateValues}
                     />
 
                 </Card>

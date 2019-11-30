@@ -1,6 +1,6 @@
 
 import {
-    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES, UNLINK_BULK_DEVICES, WIPE_BULK_DEVICES, CLOSE_RESPONSE_MODAL, APPLY_BULK_POLICY, SET_BULK_MESSAGE, SEND_BULK_MESSAGE,
+    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES, UNLINK_BULK_DEVICES, WIPE_BULK_DEVICES, CLOSE_RESPONSE_MODAL, APPLY_BULK_POLICY, SET_BULK_MESSAGE, SEND_BULK_MESSAGE, SEND_BULK_WIPE_PASS, HANDLE_BULK_WIPE_PASS,
 } from "../../constants/ActionTypes";
 import { message, Modal } from 'antd';
 
@@ -27,12 +27,21 @@ const initialState = {
     pushed_device_ids: [],
     expire_device_ids: [],
     response_modal_action: '',
-    bulkMsg: ''
+    bulkMsg: '',
+    bulkWipePassModal: false,
+    wipePassMsg: ''
 };
 
 export default (state = initialState, action) => {
 
     switch (action.type) {
+
+        case HANDLE_BULK_WIPE_PASS: {
+            return {
+                ...state,
+                bulkWipePassModal: action.payload
+            }
+        }
 
         case SET_PUSH_APPS: {
             return {
@@ -356,7 +365,8 @@ export default (state = initialState, action) => {
 
         case WIPE_BULK_DEVICES: {
             // console.log('WIPE_BULK_DEVICES reducer data:: ', action.payload, "state.bulkDevices ", state.bulkDevices);
-
+            let wipePassMsg = ''
+            let wipeModal = false;
             let updatePrevBulkDevices = [];
             let showResponseModal = state.bulkResponseModal;
             if (action.payload.status) {
@@ -387,6 +397,8 @@ export default (state = initialState, action) => {
                 }
 
             } else {
+                // wipePassMsg = action.payload.wipePassNotMatch ? action.payload.ms : false;
+                wipeModal = action.payload.wipePassNotMatch ? action.payload.wipePassNotMatch : false;
                 updatePrevBulkDevices = state.bulkDevices;
                 error({
                     title: action.payload.msg,
@@ -401,7 +413,9 @@ export default (state = initialState, action) => {
                 pushed_device_ids: [...state.pushed_device_ids],
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "wipe",
-                selectedDevices: []
+                selectedDevices: [],
+                // wipePassMsg,
+                bulkWipePassModal: wipeModal
             }
         }
 

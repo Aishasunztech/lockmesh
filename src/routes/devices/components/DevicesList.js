@@ -11,6 +11,7 @@ import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, convert
 import EditDevice from './editDevice';
 import AddDevice from './AddDevice';
 import { Tabs, Modal } from 'antd';
+import moment from 'moment';
 import {
     DEVICE_ACTIVATED,
     DEVICE_EXPIRED,
@@ -268,6 +269,7 @@ class DevicesList extends Component {
 
                 ),
                 status: (<span style={color} > {status}</span>),
+                // lastOnline: moment(device.lastOnline).format("MM/DD/YYYY HH:mm:ss"),
                 lastOnline: checkValue(device.lastOnline),
                 flagged: device.flagged,
                 type: checkValue(device.type),

@@ -20,9 +20,9 @@ export default class BulkSuspendDevices extends Component {
         let user_ids = [];
 
         devices.forEach((item) => {
-            if (item.usr_device_id) {
+            // if (item.usr_device_id) {
                 device_ids.push(item.usr_device_id);
-            }
+            // }
         });
         dealers.forEach((item) => {
             dealer_ids.push(item.key);
