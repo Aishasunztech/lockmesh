@@ -31,6 +31,7 @@ import ManageData from './account/ManageData/index'
 import SetPrice from './account/PricesPakages/index'
 import Domains from "./domains/index";
 import Reporting from './account/Reporting/index'
+import SystemMessages from './SystemMessages/index'
 import DealerAgent from './dealerAgent/index'
 import BulkActivities from './bulkActivities/index'
 // import Documents from "./documents/index";
@@ -154,6 +155,12 @@ const App = ({ match }) => {
           exact
           path={`${match.url}reporting`}
           component={Reporting}
+        />
+
+        <Route
+          exact
+          path={`${match.url}system-messages`}
+          component={SystemMessages}
         />
 
         <Route

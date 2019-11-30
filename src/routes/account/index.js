@@ -1293,6 +1293,42 @@ class Account extends Component {
                                 </Link>
                             </div>
                         </Col>
+                        {false ?
+                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                            <div>
+                                <Link to={"/system-messages"}>
+                                    <Card style={{ borderRadius: 12 }} className="manage_ac">
+                                        <div className="profile_table image_1">
+                                            <Fragment>
+                                                <Row>
+                                                    <div className="col-md-12 ac_card">
+                                                        <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[''], "System Messages")} </h2>
+                                                        <Divider className="mb-0" />
+                                                        <Row style={{ padding: '12px 0 0px' }}>
+                                                            <Col span={8} className="" style={{ textAlign: "center" }}>
+                                                                <Icon type="notification" className="and_icon" />
+                                                                {/* <Icon type="message" /> */}
+                                                            </Col>
+                                                            <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
+                                                                <div className="crd_txt">
+                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Send messages to device")}</h5>
+                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Select multiple or single devices to send your messages")}</h5>
+                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Repeat messages to devices")}</h5>
+                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Set delays or timers for each messages")}</h5>
+                                                                    <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], "and more...")}</h5>
+                                                                </div>
+                                                            </Col>
+                                                        </Row>
+                                                    </div>
+                                                </Row>
+                                            </Fragment>
+                                        </div>
+                                    </Card>
+                                    <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
+                                </Link>
+                            </div>
+                        </Col>
+                        : null }
                     </Row>
                 </div>
                 <PasswordModal

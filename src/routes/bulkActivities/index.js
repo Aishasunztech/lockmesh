@@ -777,7 +777,10 @@ class BulkActivities extends Component {
                                 onChange={this.handleChangeDealer}
                                 onDeselect={(e) => this.handleCancel(e, "dealers")}
                             >
-                                <Select.Option key="allDealers" value="all">Select All</Select.Option>
+                                {(this.state.allDealers && this.state.allDealers.length > 0) ?
+                                    <Select.Option key="allDealers" value="all">Select All</Select.Option>
+                                    : <Select.Option key="" value="">Data Not Found</Select.Option>
+                                }
                                 {this.state.allDealers.map(item => <Select.Option key={item.key} value={item.key}>{item.label}</Select.Option>)}
                             </Select>
                         </Col>
@@ -805,7 +808,10 @@ class BulkActivities extends Component {
                                 placeholder={convertToLang(this.props.translation[""], "Select Users")}
                                 onChange={this.handleChangeUser}
                             >
-                                <Select.Option key="allUsers" value="all">Select All</Select.Option>
+                                {(this.props.users_list && this.props.users_list.length > 0) ?
+                                    <Select.Option key="allUsers" value="all">Select All</Select.Option>
+                                    : <Select.Option key="" value="">Data Not Found</Select.Option>
+                                }
                                 {this.props.users_list.map(item => <Select.Option key={item.user_id} value={item.user_id} >{item.user_name}</Select.Option>)}
                             </Select>
                         </Col>
