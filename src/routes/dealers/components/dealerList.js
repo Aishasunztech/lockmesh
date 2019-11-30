@@ -269,7 +269,7 @@ class DealerList extends Component {
                             size='small'
                             onClick={() => showConfirm(this, dealer, this.props.updatePassword, 'RESET PASSWORD', dealer.dealer_name)}
                         >
-                            {convertToLang(this.props.translation[Button_passwordreset], "Password Reset")}
+                            {convertToLang(this.props.translation[Button_passwordreset], "PASS RESET")}
                         </Button>
 
                         {/* Connect Button */}
