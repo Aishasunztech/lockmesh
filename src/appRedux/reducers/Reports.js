@@ -9,6 +9,8 @@ import {
 } from "../../constants/ActionTypes";
 
 import { message, Modal } from 'antd';
+const success = Modal.success
+const error = Modal.error
 
 const initialState = {
   isloading: true,
@@ -35,7 +37,11 @@ export default (state = initialState, action) => {
       };
 
     case PRODUCT_REPORT:
-
+      if (action.payload.data.length < 1) {
+        error({
+          title: 'There is nothing to report for those selections.',
+        });
+      }
       return {
         ...state,
         productData: action.payload.data,
@@ -43,24 +49,44 @@ export default (state = initialState, action) => {
       };
 
     case INVOICE_REPORT:
+      if (action.payload.data.length < 1) {
+        error({
+          title: 'There is nothing to report for those selections.',
+        });
+      }
       return {
         ...state,
         invoiceData: action.payload.data
       };
 
     case PAYMENT_HISTORY_REPORT:
+      if (action.payload.data.length < 1) {
+        error({
+          title: 'There is nothing to report for those selections.',
+        });
+      }
       return {
         ...state,
         paymentHistoryData: action.payload.data
       };
 
     case HARDWARE_REPORT:
+      if (action.payload.data.length < 1) {
+        error({
+          title: 'There is nothing to report for those selections.',
+        });
+      }
       return {
         ...state,
         hardwareData: action.payload.data
       };
 
     case SALES_REPORT:
+      if (action.payload.data.length < 1) {
+        error({
+          title: 'There is nothing to report for those selections.',
+        });
+      }
       return {
         ...state,
         salesData: action.payload.data,
@@ -68,6 +94,11 @@ export default (state = initialState, action) => {
       };
 
     case GRACE_DAYS_REPORT:
+      if (action.payload.data.length < 1) {
+        error({
+          title: 'There is nothing to report for those selections.',
+        });
+      }
       return {
         ...state,
         graceDaysReportData: action.payload.data,

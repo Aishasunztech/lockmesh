@@ -384,7 +384,6 @@ export const getHardwares = () => {
     return (dispatch) => {
         RestService.getHardwares().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // console.log(response.data);
                 dispatch({
                     type: GET_HARDWARE,
                     response: response.data

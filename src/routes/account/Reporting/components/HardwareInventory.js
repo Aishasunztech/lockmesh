@@ -191,7 +191,7 @@ class PaymentHistory extends Component {
                   <Select style={{ width: '100%' }}>
                     <Select.Option value=''>ALL</Select.Option>
                     {this.props.hardwares.map((hardware, index) => {
-                      return (<Select.Option key={hardware.hardware_name} value={hardware.hardware_name}>{hardware.hardware_name}</Select.Option>)
+                      return (<Select.Option key={hardware.id} value={hardware.hardware_name}>{hardware.hardware_name}</Select.Option>)
                     })}
                   </Select>
                 )}
@@ -285,6 +285,7 @@ class PaymentHistory extends Component {
                 wrapperCol={{ span: 14 }}
               >
                 {this.props.form.getFieldDecorator('to', {
+                  initialValue: moment(),
                   rules: [
                     {
                       required: false,

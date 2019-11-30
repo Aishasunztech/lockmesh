@@ -169,7 +169,7 @@ class Invoice extends Component {
           'dealer_pin': item.dealer_pin ? item.dealer_pin : 'N/A',
           'created_at': item.created_at ? getDateFromTimestamp(item.created_at) : 'N/A',
           'end_user_payment_status': item.end_user_payment_status ? item.end_user_payment_status : 'N/A',
-          'file_name': <a href={BASE_URL + 'users/getFile/' + item.file_name} download><Button type="primary" size="small">Download</Button></a>,
+          'file_name': <a href={BASE_URL + 'users/getFile/' + item.file_name} target="_blank" download><Button type="primary" size="small">Download</Button></a>,
         })
       });
     }
@@ -312,6 +312,7 @@ class Invoice extends Component {
                 wrapperCol={{ span: 14 }}
               >
                 {this.props.form.getFieldDecorator('to', {
+                  initialValue: moment(),
                   rules: [
                     {
                       required: false
