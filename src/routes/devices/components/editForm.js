@@ -877,12 +877,12 @@ class EditDevice extends Component {
                                                 // className="apply_services"
                                                 // disabled={(this.props.device.extended_services) ? true : false}
                                                 >
-                                                    {(this.props.device.services && this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ?
+                                                    {(this.props.device.services && this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION && this.props.device.services.is_temp == 0) ?
 
                                                         <Select.Option value="extend">{convertToLang(this.props.translation[DUMY_TRANS_ID], "EXTEND SERVICES")}</Select.Option>
                                                         : null}
                                                     <Select.Option value="change">{convertToLang(this.props.translation[DUMY_TRANS_ID], "CHANGE SERVICES")}</Select.Option>
-                                                    {(this.props.device.services && this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ?
+                                                    {(this.props.device.services && this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION && this.props.device.services.is_temp == 0) ?
                                                         <Select.Option value="cancel">{convertToLang(this.props.translation[DUMY_TRANS_ID], "CANCEL SERVICES")}</Select.Option>
                                                         : null}
                                                 </Select>
