@@ -1,6 +1,6 @@
 // libraries
 import React, { Component, Fragment } from "react";
-import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Divider, Table, Select, Form } from "antd";
+import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Divider, Table, Select, AutoComplete, Input } from "antd";
 
 // Components
 import EditDealer from '../../dealers/components/editDealer';
@@ -78,7 +78,9 @@ export default class DealerAction extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            dealerList: []
+            dealerList: [],
+            searchedValue: '',
+            disabledSearchButton: true
         }
     }
 
@@ -89,35 +91,102 @@ export default class DealerAction extends Component {
         //     })
         // }
     }
-    onChangeDealer = (dealer_id) => {
-        let path = `${btoa(dealer_id)}`.trim()
-        this.props.history.push(path)
+
+    handleDealerSearch = (value) => {
+        console.log(this.props.dealerList)
+        let dealerList = [];
+        let index = -1;
+        let states = {}
+
+        console.log("searchedValue: ", value)
+        if (value) {
+            dealerList = this.props.dealerList.filter((dealer) => dealer.dealer_name.toLowerCase().includes(value.toLowerCase()));
+            index = this.props.dealerList.findIndex((dealer) => dealer.dealer_name.toLowerCase() === value.toLowerCase());
+        }
+
+        console.log(dealerList);
+
+        states.dealerList = dealerList;
+        // states.searchedValue = value
+
+        if (index === -1) {
+            states.disabledSearchButton = true;
+        } else {
+            states.disabledSearchButton = false
+        }
+        console.log("states:", states)
+        this.setState({
+            ...states
+        });
     }
-    renderDealerList = () => {
-        let dealerList = this.props.dealerList
-        return dealerList.map((dealer, index) => {
-            return (<Select.Option key={index} value={dealer.dealer_id}>{dealer.dealer_name}</Select.Option>)
-        })
+
+    handleDealerChange = (e) => {
+        if (e) {
+            let path = `${btoa(e)}`.trim()
+            this.props.history.push(path)
+        }
     }
+
+    handleDealerButtonClick = (e) => {
+        if (this.state.searchedValue) {
+            let path = `${btoa(this.state.searchedValue)}`.trim()
+            this.props.history.push(path)
+        }
+    }
+
     render() {
         if (!this.props.dealer) {
             return null;
         }
         let dealer = this.props.dealer;
+
+        const { dealerList } = this.state;
+        console.log("dealerList:", dealerList);
         const dealer_status = (dealer.account_status === "suspended") ? "Suspended" : "Activated";
 
         const restrict_button_type = (dealer_status === "Activated") ? "danger" : "default";
         const restrict_button_text = (dealer_status === 'Activated') ? 'Suspend/Restrict' : 'Activate';
 
         const undo_button_type = (dealer.unlink_status === 0) ? 'danger' : "default";
-        const undo_button_text = (dealer.unlink_status === 0) ? 'Delete' : 'Undelete'
+        const undo_button_text = (dealer.unlink_status === 0) ? 'Delete' : 'Undelete';
+
         return (
             <Fragment>
                 <Card className="search_dev_id">
                     <Row gutter={16} type="flex" justify="center" align="top">
                         <Col span={24} className="gutter-row" justify="center" >
                             <h4 className="mb-6">Search Dealer ID</h4>
-                            <Select
+
+                            <AutoComplete
+                                className="global-search"
+                                size="large"
+                                style={{ width: '100%' }}
+                                dataSource={dealerList.map((item, index) => {
+                                    return (<Select.Option key={index} value={item.dealer_id.toString()}>{item.dealer_name}</Select.Option>)
+                                })}
+                                onSelect={this.handleDealerChange}
+                                onSearch={this.handleDealerSearch}
+                                placeholder={convertToLang(this.props.translation[""], "Select Dealer")}
+                                optionLabelProp="text"
+                            >
+                                <Input
+                                    suffix={
+                                        <Button
+                                            className="search-btn"
+                                            style={{ marginRight: -12 }}
+                                            size="large"
+                                            type="primary"
+                                            onClick={this.handleDealerButtonClick}
+                                            disabled={this.state.disabledSearchButton}
+
+                                        >
+                                            <Icon type="search" />
+                                        </Button>
+                                    }
+                                />
+                            </AutoComplete>
+
+                            {/* <Select
                                 showSearch={true}
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                 style={{ width: '100%' }}
@@ -125,7 +194,7 @@ export default class DealerAction extends Component {
                                 onChange={this.onChangeDealer}
                             >
                                 {this.renderDealerList()}
-                            </Select>
+                            </Select> */}
                         </Col>
                     </Row>
                 </Card>
