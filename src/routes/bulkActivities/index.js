@@ -257,6 +257,10 @@ class BulkActivities extends Component {
         this.props.getUserList();
         this.props.getDealerApps();
         this.props.getPolicies();
+        this.props.getBulkDevicesList({
+            dealers: [],
+            users: []
+        })
 
 
         this.setState({
@@ -826,7 +830,9 @@ class BulkActivities extends Component {
                         <p>Dealers/S-Dealers Selected: <span className="font_26">{this.state.selectedDealers.map(item => <Tag>{item.label}</Tag>)}</span></p>
                         : null}
                     <Row gutter={24} className="">
-
+                        <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
+                            <span className=""> {convertToLang(this.props.translation[""], "Select Users:")} </span>
+                        </Col>
                         <Col className="col-md-4 col-sm-4 col-xs-4">
                             <Select
                                 value={this.state.selectedUsers}
