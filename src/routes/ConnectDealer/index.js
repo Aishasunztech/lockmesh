@@ -231,7 +231,7 @@ class ConnectDealer extends Component {
                 {
                     key: '4',
                     name: 'Credit Limit (Credits):',
-                    value: dealer.credits_limit,
+                    value: Math.abs(dealer.credits_limit),
                 }
             ]
         } else {
