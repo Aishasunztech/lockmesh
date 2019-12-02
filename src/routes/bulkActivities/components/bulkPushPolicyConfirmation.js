@@ -36,7 +36,7 @@ export default class BulkPushPolicy extends Component {
             user_ids,
             policyId: selectedPolicy.id
         }
-
+        // console.log("selectedPolicy ", selectedPolicy);
         // console.log("confrim data: ", data);
 
         this.confirm({

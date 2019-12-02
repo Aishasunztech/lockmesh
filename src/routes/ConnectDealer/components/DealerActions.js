@@ -1,6 +1,6 @@
 // libraries
 import React, { Component, Fragment } from "react";
-import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Divider, Table, Select, Form } from "antd";
+import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Divider, Table, Select, AutoComplete, Input } from "antd";
 
 // Components
 import EditDealer from '../../dealers/components/editDealer';
@@ -32,6 +32,7 @@ import {
     DEALER_TEXT
 } from '../../../constants/DealerConstants';
 import CreditsLimits from "./CreditLimits";
+import { Markup } from "interweave";
 
 
 // user defined
@@ -39,6 +40,7 @@ const confirm = Modal.confirm;
 
 
 function showConfirm(_this, dealer, action, btn_title, name = "") {
+    console.log("dealer ", dealer)
     let title_Action = '';
     if (btn_title == 'SUSPEND') {
         title_Action = convertToLang(_this.props.translation[Button_Suspend], "SUSPEND ");
@@ -53,7 +55,14 @@ function showConfirm(_this, dealer, action, btn_title, name = "") {
     }
 
     confirm({
-        title: `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[OF_THIS], " of this ")} Dealer ${name ? `(${name})` : ""} ?`,
+        title: <Markup content={(btn_title === 'DELETE') ?
+            convertToLang(_this.props.translation[''], `Do you wish to Permanently Delete Dealer ${name}?<br/> This action cannot be reversed!`)
+            :
+            (btn_title === 'RESET PASSWORD') ? 
+            `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[OF_THIS], " of this dealer")} ${name ? `(${name})` : ""} ?`
+            :
+            `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[""], " this dealer ")} ${name ? `(${name})` : ""} ?`
+        } />,
         onOk() {
             return new Promise((resolve, reject) => {
                 setTimeout(Math.random() > 0.5 ? resolve : reject);
@@ -78,7 +87,9 @@ export default class DealerAction extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            dealerList: []
+            dealerList: [],
+            searchedValue: '',
+            disabledSearchButton: true
         }
     }
 
@@ -89,35 +100,102 @@ export default class DealerAction extends Component {
         //     })
         // }
     }
-    onChangeDealer = (dealer_id) => {
-        let path = `${btoa(dealer_id)}`.trim()
-        this.props.history.push(path)
+
+    handleDealerSearch = (value) => {
+        console.log(this.props.dealerList)
+        let dealerList = [];
+        let index = -1;
+        let states = {}
+
+        console.log("searchedValue: ", value)
+        if (value) {
+            dealerList = this.props.dealerList.filter((dealer) => dealer.dealer_name.toLowerCase().includes(value.toLowerCase()));
+            index = this.props.dealerList.findIndex((dealer) => dealer.dealer_name.toLowerCase() === value.toLowerCase());
+        }
+
+        console.log(dealerList);
+
+        states.dealerList = dealerList;
+        // states.searchedValue = value
+
+        if (index === -1) {
+            states.disabledSearchButton = true;
+        } else {
+            states.disabledSearchButton = false
+        }
+        console.log("states:", states)
+        this.setState({
+            ...states
+        });
     }
-    renderDealerList = () => {
-        let dealerList = this.props.dealerList
-        return dealerList.map((dealer, index) => {
-            return (<Select.Option key={index} value={dealer.dealer_id}>{dealer.dealer_name}</Select.Option>)
-        })
+
+    handleDealerChange = (e) => {
+        if (e) {
+            let path = `${btoa(e)}`.trim()
+            this.props.history.push(path)
+        }
     }
+
+    handleDealerButtonClick = (e) => {
+        if (this.state.searchedValue) {
+            let path = `${btoa(this.state.searchedValue)}`.trim()
+            this.props.history.push(path)
+        }
+    }
+
     render() {
         if (!this.props.dealer) {
             return null;
         }
         let dealer = this.props.dealer;
+
+        const { dealerList } = this.state;
+        console.log("dealerList:", dealerList);
         const dealer_status = (dealer.account_status === "suspended") ? "Suspended" : "Activated";
 
         const restrict_button_type = (dealer_status === "Activated") ? "danger" : "default";
         const restrict_button_text = (dealer_status === 'Activated') ? 'Suspend/Restrict' : 'Activate';
 
         const undo_button_type = (dealer.unlink_status === 0) ? 'danger' : "default";
-        const undo_button_text = (dealer.unlink_status === 0) ? 'Delete' : 'Undelete'
+        const undo_button_text = (dealer.unlink_status === 0) ? 'Delete' : 'Undelete';
+
         return (
             <Fragment>
                 <Card className="search_dev_id">
                     <Row gutter={16} type="flex" justify="center" align="top">
                         <Col span={24} className="gutter-row" justify="center" >
                             <h4 className="mb-6">Search Dealer ID</h4>
-                            <Select
+
+                            <AutoComplete
+                                className="global-search"
+                                size="large"
+                                style={{ width: '100%' }}
+                                dataSource={dealerList.map((item, index) => {
+                                    return (<Select.Option key={index} value={item.dealer_id.toString()}>{item.dealer_name}</Select.Option>)
+                                })}
+                                onSelect={this.handleDealerChange}
+                                onSearch={this.handleDealerSearch}
+                                placeholder={convertToLang(this.props.translation[""], "Select Dealer")}
+                                optionLabelProp="text"
+                            >
+                                <Input
+                                    suffix={
+                                        <Button
+                                            className="search-btn"
+                                            style={{ marginRight: -12 }}
+                                            size="large"
+                                            type="primary"
+                                            onClick={this.handleDealerButtonClick}
+                                            disabled={this.state.disabledSearchButton}
+
+                                        >
+                                            <Icon type="search" />
+                                        </Button>
+                                    }
+                                />
+                            </AutoComplete>
+
+                            {/* <Select
                                 showSearch={true}
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                 style={{ width: '100%' }}
@@ -125,7 +203,7 @@ export default class DealerAction extends Component {
                                 onChange={this.onChangeDealer}
                             >
                                 {this.renderDealerList()}
-                            </Select>
+                            </Select> */}
                         </Col>
                     </Row>
                 </Card>
@@ -219,8 +297,8 @@ export default class DealerAction extends Component {
                                 style={{ width: "100%", marginBottom: 16, }}
                                 onClick={
                                     () => (!dealer.account_status) ?
-                                        showConfirm(this, dealer.dealer_id, this.props.suspendDealer, 'SUSPEND') :
-                                        showConfirm(this, dealer.dealer_id, this.props.activateDealer, 'ACTIVATE')
+                                        showConfirm(this, dealer.dealer_id, this.props.suspendDealer, 'SUSPEND', this.props.dealer.dealer_name) :
+                                        showConfirm(this, dealer.dealer_id, this.props.activateDealer, 'ACTIVATE', this.props.dealer.dealer_name)
                                 }
                             >
                                 {restrict_button_text}
@@ -236,10 +314,9 @@ export default class DealerAction extends Component {
                                 }}
                                 onClick={
                                     () => (dealer.unlink_status === 0) ?
-                                        showConfirm(this, dealer.dealer_id, this.props.deleteDealer, 'DELETE') :
+                                        showConfirm(this, dealer.dealer_id, this.props.deleteDealer, 'DELETE', this.props.dealer.dealer_name) :
                                         showConfirm(this, dealer.dealer_id, this.props.undoDealer, 'UNDELETE')
                                 }
-
                             >
                                 <Icon type="lock" className="lock_icon" />
                                 {undo_button_text}

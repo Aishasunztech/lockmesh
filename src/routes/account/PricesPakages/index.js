@@ -566,7 +566,7 @@ class Prices extends Component {
                         ,
                         permission: <span style={{ fontSize: 15, fontWeight: 400 }}>
                             {/* {(item.permission_count == 'All') ? convertToLang(this.props.translation[Tab_All], "All") : item.permission_count > 0 ? item.permission_count : 0} */}
-                            {(item.permission_count === "All" || this.props.totalDealers === item.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : item.permission_count}
+                            {(item.permission_count === "All" || (this.props.totalDealers === item.permission_count && item.permission_count !== 0)) ? convertToLang(this.props.translation[Tab_All], "All") : item.permission_count}
                         </span>,
                         pkg_price: item.pkg_price,
                         pkg_retail_price: item.retail_price,
@@ -592,6 +592,8 @@ class Prices extends Component {
                     }
                 })
             }
+        } else {
+            return [];
         }
     }
 

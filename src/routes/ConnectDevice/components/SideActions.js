@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip, Progress, Select, Tabs } from "antd";
+import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip, Progress, Select, Tabs, AutoComplete } from "antd";
 import TableHistory from "./TableHistory";
 import SuspendDevice from '../../devices/components/SuspendDevice';
 import ActivateDevcie from '../../devices/components/ActivateDevice';
@@ -386,6 +386,9 @@ class SideActions extends Component {
             selectedPullApps: [],
 
             activities: [],
+            searchedValue: '',
+            device_list: [],
+            disabledSearchButton: true,
 
             policyId: '',
             showChangesModal: false,
@@ -816,6 +819,30 @@ class SideActions extends Component {
     //     })
     // }
 
+
+
+    handleSearch = (value) => {
+        let searchedDevices = [];
+        // console.log("searchedValue: ",value)
+        searchedDevices = this.props.device_list.filter((device) => device.device_id.toLowerCase().includes(value.toLowerCase()));
+        // console.log(searchedDevices);
+        let index = this.props.device_list.findIndex((device) => device.device_id.toLowerCase() === value.toLowerCase());
+        let states = {
+            device_list: value ? searchedDevices : [],
+            searchedValue: value
+        }
+
+        if (index === -1) {
+            states.disabledSearchButton=true;            
+        } else {
+            states.disabledSearchButton = false
+        }
+
+        this.setState({
+            ...states
+        });
+    }
+
     showPushAppsModal_ = (visible) => {
         this.props.showPushAppsModal(visible);
         // this.props.resetPushApps();
@@ -837,37 +864,61 @@ class SideActions extends Component {
             servicesModal: visible,
         })
     }
-    handleDeviceChange = (device_id) => {
-        console.log(device_id);
-        let path = `${btoa(device_id)}`.trim()
-        this.props.history.push(path)
+    handleDeviceChange = (e) => {
+        if (e) {
+            let path = `${btoa(e)}`.trim()
+            this.props.history.push(path)
+        }
     }
 
+    handleDeviceButtonClick = (e) => {
+        if (this.state.searchedValue) {
+            let path = `${btoa(this.state.searchedValue)}`.trim()
+            this.props.history.push(path)
+        }
+    }
     render() {
         // console.log(this.state.app_list, 'device is: ', this.props.app_list)
         const device_status = (this.props.device.account_status === "suspended") ? "Unsuspend" : "suspended";
         const button_type = (device_status === "Unsuspend") ? "dashed" : "danger";
         const flaggedButtonText = (this.props.device.flagged !== 'Not flagged') ? convertToLang(this.props.translation[Button_UNFLAG], "UNFLAG") : convertToLang(this.props.translation[Button_Flag], "Flag");
         const flagged = ((this.props.device.flagged !== 'Not flagged') ? 'Unflag' : 'flag')
+        const { device_list } = this.state;
         return (
             <div className="gutter-box bordered">
                 <Card className="search_dev_id">
                     <Row gutter={16} type="flex" justify="center" align="top">
                         <Col span={24} className="gutter-row" justify="center" >
                             <h4 className="mb-6">Search Device ID</h4>
-                            <Select
+                            <AutoComplete
+                                className="global-search"
+                                size="large"
                                 style={{ width: '100%' }}
-                                showSearch
-                                placeholder={convertToLang(this.props.translation[""], "Select Device ID")}
-                                optionFilterProp="children"
-                                onChange={this.handleDeviceChange}
-                                filterOption={(input, option) => { return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0 }}
-                                defaultValue={this.props.device.device_id}
-                            >
-                                {this.props.device_list.map((item, index) => {
+                                dataSource={device_list.map((item, index) => {
                                     return (<Option key={index} value={item.device_id}>{item.device_id + ' (' + item.finalStatus + ')'}</Option>)
                                 })}
-                            </Select>
+                                onSelect={this.handleDeviceChange}
+                                onSearch={this.handleSearch}
+                                placeholder={convertToLang(this.props.translation[""], "Select Device ID")}
+                                optionLabelProp="text"
+                            >
+                                <Input
+                                    suffix={
+                                        <Button
+                                            className="search-btn"
+                                            style={{ marginRight: -12 }}
+                                            size="large"
+                                            type="primary"
+                                            onClick={this.handleDeviceButtonClick}
+                                            disabled={this.state.disabledSearchButton}
+
+                                        >
+                                            <Icon type="search" />
+                                        </Button>
+                                    }
+                                />
+                            </AutoComplete>
+                            
                         </Col>
                     </Row>
                 </Card>

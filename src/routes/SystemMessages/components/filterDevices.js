@@ -1,20 +1,20 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Button, Modal, Row, Col, Spin, Input, Card } from "antd";
+import { Table, Button, Modal, Row, Col, Spin, Input } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import styles from './devices.css'
+// import styles from './devices.css'
 import { getAllDealers } from "../../../appRedux/actions/Dealers";
 // import { savePermission } from "../../../appRedux/actions/Apk";
 import FilterDevicesList from "./filterDevicesList";
 import CircularProgress from "components/CircularProgress/index";
-import BulkSuspendDevices from './bulkSuspendDevices';
-import BulkActivateDevices from './bulkActivateDevices';
-import BulkUnlinkConfirmation from './bulkUnlinkConfirmation';
-import BulkPushAppsConfirmation from './bulkPushAppsConfirmation';
-import BulkPullAppsConfirmation from './bulkPullAppsConfirmation';
-import BulkWipeConfirmation from './bulkWipeConfirmation';
-import BulkPolicyConfirmation from './bulkPushPolicyConfirmation';
-import { checkValue, titleCase, convertToLang } from '../../utils/commonUtils'
+// import BulkSuspendDevices from './bulkSuspendDevices';
+// import BulkActivateDevices from './bulkActivateDevices';
+// import BulkUnlinkConfirmation from './bulkUnlinkConfirmation';
+// import BulkPushAppsConfirmation from './bulkPushAppsConfirmation';
+// import BulkPullAppsConfirmation from './bulkPullAppsConfirmation';
+// import BulkWipeConfirmation from './bulkWipeConfirmation';
+// import BulkPolicyConfirmation from './bulkPushPolicyConfirmation';
+import { checkValue, titleCase, convertToLang, getColor } from '../../utils/commonUtils'
 
 import { bulkDevicesColumns, devicesColumns, userDevicesListColumns } from '../../utils/columnsUtils';
 
@@ -33,8 +33,6 @@ import {
 } from '../../../constants/Constants'
 
 import { Button_Remove, Button_Add, Button_AddAll, Button_AddExceptSelected, Button_RemoveAll, Button_RemoveExcept, Button_Save, Button_Cancel, Button_DeleteExceptSelected, Button_Yes, Button_No, Button_Edit } from '../../../constants/ButtonConstants';
-import { handleWipePwdConfirmModal } from '../../../appRedux/actions/BulkDevices';
-import CustomScrollbars from '../../../util/CustomScrollbars';
 const confirm = Modal.confirm;
 const success = Modal.success
 const error = Modal.error
@@ -698,12 +696,10 @@ class FilterDevices extends Component {
           title: `Sorry, You have not any device to perform an action`,
         });
       }
-      // this.props.setstateValues("errorAction", "")
     } else {
-      this.props.setstateValues("errorAction", "Please select an action")
-      // error({
-      //   title: `Sorry, You have not selected any action`,
-      // });
+      error({
+        title: `Sorry, You have not selected any action`,
+      });
     }
   }
 
@@ -728,13 +724,75 @@ class FilterDevices extends Component {
     return updateSelectedDevices;
   }
 
+  renderList(list) {
+    // console.log('renderList ', list)
+    return list.map((device, index) => {
+
+        var status = device.finalStatus;
+        // console.log("status ", status)
+
+        let color = getColor(status);
+        var style = { margin: '0', width: 'auto', textTransform: 'uppercase' }
+        // var text = convertToLang(this.props.translation[Button_Edit], "EDIT");
+
+        // if ((status === DEVICE_PENDING_ACTIVATION) || (status === DEVICE_UNLINKED)) {
+        //     style = { margin: '0 8px 0 0', width: 'auto', display: 'none', textTransform: 'uppercase' }
+        //     text = "ACTIVATE";
+        // }
+
+        return {
+            rowKey: index,
+            // key: device.device_id ? `${device.device_id}` : device.usr_device_id,
+            key: status == DEVICE_UNLINKED ? `${device.user_acc_id} ${device.created_at} ` : device.id,
+            counter: ++index,
+
+            status: (<span style={color} > {status}</span>),
+            lastOnline: checkValue(device.lastOnline),
+            flagged: device.flagged,
+            type: checkValue(device.type),
+            version: checkValue(device.version),
+            device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
+            // device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
+            user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
+            validity: checkValue(device.validity),
+            transfered_to: checkValue((device.finalStatus == "Transfered") ? device.transfered_to : null),
+            name: checkValue(device.name),
+            activation_code: checkValue(device.activation_code),
+            account_email: checkValue(device.account_email),
+            pgp_email: checkValue(device.pgp_email),
+            chat_id: checkValue(device.chat_id),
+            client_id: checkValue(device.client_id),
+            dealer_id: checkValue(device.dealer_id),
+            dealer_pin: checkValue(device.link_code),
+            mac_address: checkValue(device.mac_address),
+            sim_id: checkValue(device.sim_id),
+            imei_1: checkValue(device.imei),
+            sim_1: checkValue(device.simno),
+            imei_2: checkValue(device.imei2),
+            sim_2: checkValue(device.simno2),
+            serial_number: checkValue(device.serial_number),
+            model: checkValue(device.model),
+            // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
+            // expiry_date: device.expiry_date ? `${new Date(device.expiry_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
+            dealer_name: <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a>,
+            // dealer_name: (this.props.user.type === ADMIN) ? <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a> : <a >{checkValue(device.dealer_name)}</a>,
+            online: device.online === 'online' ? (<span style={{ color: "green" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) : (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
+            s_dealer: checkValue(device.s_dealer),
+            s_dealer_name: checkValue(device.s_dealer_name),
+            remainTermDays: device.remainTermDays,
+            start_date: checkValue(device.start_date),
+            expiry_date: checkValue(device.expiry_date),
+        }
+    });
+}
+
   render() {
-    // console.log("actionMsg ", this.props.actionMsg);
+
     // console.log('selected devices are: ', this.state.selectedDevices);
     return (
       <Fragment>
-        <Row gutter={16}>
-          <Col className="gutter-row" sm={4} xs={4} md={4}>
+        <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
+          <Col className="gutter-row" sm={5} xs={5} md={5}>
             <div className="gutter-box text-left">
               <h2>{convertToLang(this.props.translation["Select Devices:"], "Select Devices:")}</h2>
             </div>
@@ -745,7 +803,7 @@ class FilterDevices extends Component {
                 onClick={() => { this.showDealersModal(true) }}>{convertToLang(this.props.translation[Button_Add], "Add")}</Button>
             </div>
           </Col>
-          <Col className="gutter-row" sm={3} xs={3} md={3}>
+          <Col className="gutter-row" sm={4} xs={4} md={4}>
             <div className="gutter-box">
               <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
                 onClick={() => { this.addSelectedDealersModal(true) }}>{convertToLang(this.props.translation[Button_AddExceptSelected], "Add Except Selected")}</Button>
@@ -757,7 +815,7 @@ class FilterDevices extends Component {
                 onClick={() => { this.saveAllDealersConfirm() }}>{convertToLang(this.props.translation[Button_AddAll], "Add All")}</Button>
             </div>
           </Col>
-          <Col className="gutter-row" sm={2} xs={2} md={2}>
+          <Col className="gutter-row" sm={3} xs={3} md={3}>
             <div className="gutter-box">
               <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger"
                 onClick={() => { this.removeAllDealersConfirm() }}>{convertToLang(this.props.translation[Button_RemoveAll], "Remove All")}</Button>
@@ -784,7 +842,7 @@ class FilterDevices extends Component {
               />
             </div>
           </Col>
-          <Col className="gutter-row" sm={9} xs={9} md={9}>
+          {/* <Col className="gutter-row" sm={9} xs={9} md={9}>
             <div className="gutter-box">
               <Button
                 style={{ marginBottom: 16, float: 'right' }}
@@ -793,32 +851,26 @@ class FilterDevices extends Component {
               >Apply Action
               </Button>
             </div>
-          </Col>
+          </Col> */}
 
         </Row>
-        {/* <span style={{ color: 'red' }}>{this.props.actionMsg ? (this.state.selectedDevices && this.state.selectedDevices.length) ? `${this.props.actionMsg}` : "Not selected any device to perform an action" : "Not selected any action"}</span> */}
-        <span style={{ color: 'red' }}>{this.props.actionMsg ? `${this.props.actionMsg}` : ""}</span>
+        {/* <span>(Only allow active & trial devices for your selected action)</span> */}
         <Row gutter={24} style={{ marginBottom: '24px' }}>
           {
             this.props.spinloading ? <CircularProgress /> :
               <Col className="gutter-row" span={24}>
-                <Card className='fix_card fix_card_bulk_act'>
-                  <hr className="fix_header_border" style={{ top: "56px" }} />
-                  <CustomScrollbars className="gx-popover-scroll ">
-                    <Table
-                      id='scrolltablelist'
-                      ref='tablelist'
-                      className={"devices "}
-                      size="small"
-                      bordered
-                      columns={this.state.selectedDevicesColumns}
-                      onChange={this.props.onChangeTableSorting}
-                      dataSource={this.props.renderList(this.actionRelatedDevice(this.state.selectedDevices))}
-                      pagination={false}
-                    // scroll={{ x: true }}
-                    />
-                  </CustomScrollbars>
-                </Card>
+                <Table
+                  id='scrolltablelist'
+                  ref='tablelist'
+                  className={"devices "}
+                  size="middle"
+                  bordered
+                  columns={this.state.selectedDevicesColumns}
+                  onChange={this.props.onChangeTableSorting}
+                  dataSource={this.renderList(this.state.selectedDevices)}
+                  pagination={false}
+                  scroll={{ x: true }}
+                />
               </Col>
           }
         </Row>
@@ -835,9 +887,10 @@ class FilterDevices extends Component {
           onCancel={() => {
             this.showDealersModal(false)
           }}
+          bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            devices={this.props.renderList(this.getUnSelectedDevices(this.state.allBulkDevices))}
+            devices={this.renderList(this.getUnSelectedDevices(this.state.allBulkDevices))}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
@@ -868,7 +921,7 @@ class FilterDevices extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            devices={this.props.renderList(this.state.searchRemoveModal)}
+            devices={this.renderList(this.state.searchRemoveModal)}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
@@ -899,7 +952,7 @@ class FilterDevices extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            devices={this.props.renderList(this.getUnSelectedDevices(this.state.allBulkDevices))}
+            devices={this.renderList(this.getUnSelectedDevices(this.state.allBulkDevices))}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
@@ -912,7 +965,7 @@ class FilterDevices extends Component {
           />
         </Modal>
 
-        <BulkSuspendDevices
+        {/* <BulkSuspendDevices
           ref="bulk_suspend"
           suspendDevice={this.props.bulkSuspendDevice}
           translation={this.props.translation}
@@ -947,9 +1000,6 @@ class FilterDevices extends Component {
         <BulkWipeConfirmation
           ref="bulk_wipe"
           wipeBulkDevices={this.props.wipeBulkDevices}
-          handleWipePwdConfirmModal={this.props.handleWipePwdConfirmModal}
-          bulkWipePassModal={this.props.bulkWipePassModal}
-          wipePassMsg={this.props.wipePassMsg}
           translation={this.props.translation}
         />
 
@@ -957,7 +1007,7 @@ class FilterDevices extends Component {
           ref="bulk_policy"
           bulkApplyPolicy={this.props.bulkApplyPolicy}
           translation={this.props.translation}
-        />
+        /> */}
 
       </Fragment>
     )
@@ -967,22 +1017,19 @@ class FilterDevices extends Component {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     getAllDealers: getAllDealers,
-    handleWipePwdConfirmModal: handleWipePwdConfirmModal
     // savePermission: savePermission
   }, dispatch);
 }
 
 
-const mapStateToProps = ({ dealers, settings, devices, auth, bulkDevices }, props) => {
+const mapStateToProps = ({ dealers, settings, devices, auth }, props) => {
 
   return {
     user: auth.authUser,
     dealerList: dealers.dealers,
     record: props.record,
     spinloading: dealers.spinloading,
-    translation: settings.translation,
-    bulkWipePassModal: bulkDevices.bulkWipePassModal,
-    wipePassMsg: bulkDevices.wipePassMsg
+    translation: settings.translation
   };
 }
 

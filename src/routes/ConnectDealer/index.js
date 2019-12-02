@@ -7,6 +7,8 @@ import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Div
 // methods, constants and components
 import AppFilter from '../../components/AppFilter';
 import DealerAction from "./components/DealerActions";
+import DealerNotFoundPage from '../InvalidPage/dealerNotFound';
+import CircularProgress from "components/CircularProgress/index";
 
 // helpers and actions
 import RestService from "../../appRedux/services/RestServices";
@@ -270,92 +272,97 @@ class ConnectDealer extends Component {
 
         return (
             <Fragment>
-                <AppFilter
-                    pageHeading="Dealer Profile Page"
-                />
-                <Row gutter={16} type="flex" align="top">
-
-                    {/* Dealer Information */}
-                    <Col className="" xs={24} sm={24} md={8} lg={8} xl={8}>
-                        <Card style={{ borderRadius: 12 }}>
-                            <h2 style={{ textAlign: "center" }}>Dealer Info</h2>
-                            <Divider className="mb-0" />
-                            <Table
-                                columns={this.dealerInfoColumns}
-                                bordered
-                                showHeader={false}
-                                dataSource={this.renderDealerInfo()}
-                                pagination={false}
-                                className="ac_pro_table profile_table"
-                            />
-                        </Card>
-                    </Col>
-
-                    {/* Dealer Account Information */}
-                    <Col className="" xs={24} sm={24} md={8} lg={8} xl={8}>
-                        <Card className="" style={{ borderRadius: 12 }}>
-                            <h2 style={{ textAlign: "center" }}>Account Profile</h2>
-                            <Divider className="mb-0" />
-                            <Row>
-                                <Col span={8} className="text-center ">
-                                    <img src={require("assets/images/profile-image.png")} className="mb-8 mt-16"></img>
-                                    <h1 className="mb-0" style={{ fontSize: '3vh', textTransform: 'capitalize' }}>{(this.props.dealer) ? this.props.dealer.dealer_name : 'N/A'}</h1>
-                                    <p style={{ textTransform: 'capitalize', marginBottom: '0' }}>({(this.props.dealer) ? this.props.dealer.dealer_type : 'N/A'})</p>
+                {this.props.isLoading ? <CircularProgress /> :
+                    <Fragment>
+                        <AppFilter
+                            pageHeading="Dealer Profile Page"
+                        />
+                        {this.props.dealer ?
+                            <Row gutter={16} type="flex" align="top">
+                                {/* Dealer Information */}
+                                <Col className="" xs={24} sm={24} md={8} lg={8} xl={8}>
+                                    <Card style={{ borderRadius: 12 }}>
+                                        <h2 style={{ textAlign: "center" }}>Dealer Info</h2>
+                                        <Divider className="mb-0" />
+                                        <Table
+                                            columns={this.dealerInfoColumns}
+                                            bordered
+                                            showHeader={false}
+                                            dataSource={this.renderDealerInfo()}
+                                            pagination={false}
+                                            className="ac_pro_table profile_table"
+                                        />
+                                    </Card>
                                 </Col>
-                                <Col span={16} style={{ padding: '0px 15px 0 0', }}>
-                                    <Table
-                                        columns={this.dealerInfoColumns1}
-                                        bordered
-                                        showHeader={false}
-                                        dataSource={this.renderAccountData()}
-                                        pagination={false}
-                                        className="ac_pro_table"
+
+                                {/* Dealer Account Information */}
+                                <Col className="" xs={24} sm={24} md={8} lg={8} xl={8}>
+                                    <Card className="" style={{ borderRadius: 12 }}>
+                                        <h2 style={{ textAlign: "center" }}>Account Profile</h2>
+                                        <Divider className="mb-0" />
+                                        <Row>
+                                            <Col span={8} className="text-center ">
+                                                <img src={require("assets/images/profile-image.png")} className="mb-8 mt-16"></img>
+                                                <h1 className="mb-0" style={{ fontSize: '3vh', textTransform: 'capitalize' }}>{(this.props.dealer) ? this.props.dealer.dealer_name : 'N/A'}</h1>
+                                                <p style={{ textTransform: 'capitalize', marginBottom: '0' }}>({(this.props.dealer) ? this.props.dealer.dealer_type : 'N/A'})</p>
+                                            </Col>
+                                            <Col span={16} style={{ padding: '0px 15px 0 0', }}>
+                                                <Table
+                                                    columns={this.dealerInfoColumns1}
+                                                    bordered
+                                                    showHeader={false}
+                                                    dataSource={this.renderAccountData()}
+                                                    pagination={false}
+                                                    className="ac_pro_table"
+                                                />
+                                                <h4 className="mt-8 border_bottom">Overdue</h4>
+                                                <Table
+                                                    columns={this.overDueColumns}
+                                                    bordered
+                                                    showHeader={false}
+                                                    dataSource={this.renderOverDue()}
+                                                    pagination={false}
+                                                    className="ovd_table"
+                                                />
+                                            </Col>
+                                        </Row>
+                                    </Card>
+                                </Col>
+
+                                {/* Dealer Action Buttons */}
+                                <Col className="side_action right_bar" xs={24} sm={24} md={8} lg={8} xl={8} >
+                                    <DealerAction
+                                        // translation
+                                        translation={this.props.translation}
+
+                                        // dealer information
+                                        dealerList={this.props.dealerList}
+                                        dealer={this.props.dealer}
+                                        paymentHistory={this.props.paymentHistory}
+                                        salesHistory={this.props.salesHistory}
+                                        domains={this.props.domains}
+                                        history={this.props.history}
+
+                                        // dealer actions
+                                        updatePassword={this.props.updatePassword}
+                                        editDealer={this.props.editDealer}
+
+                                        suspendDealer={this.props.suspendDealer}
+                                        activateDealer={this.props.activateDealer}
+                                        deleteDealer={this.props.deleteDealer}
+                                        undoDealer={this.props.undoDealer}
+
+                                        getDealerDomains={this.props.getDealerDomains}
+                                        getDealerPaymentHistory={this.props.getDealerPaymentHistory}
+                                        setCreditLimit={this.props.setCreditLimit}
+                                        getDealerSalesHistory={this.props.getDealerSalesHistory}
                                     />
-                                    <h4 className="mt-8 border_bottom">Overdue</h4>
-                                    <Table
-                                        columns={this.overDueColumns}
-                                        bordered
-                                        showHeader={false}
-                                        dataSource={this.renderOverDue()}
-                                        pagination={false}
-                                        className="ovd_table"
-                                    />
+
                                 </Col>
                             </Row>
-                        </Card>
-                    </Col>
-
-                    {/* Dealer Action Buttons */}
-                    <Col className="side_action right_bar" xs={24} sm={24} md={8} lg={8} xl={8} >
-                        <DealerAction
-                            // translation
-                            translation={this.props.translation}
-
-                            // dealer information
-                            dealerList={this.props.dealerList}
-                            dealer={this.props.dealer}
-                            paymentHistory={this.props.paymentHistory}
-                            salesHistory={this.props.salesHistory}
-                            domains={this.props.domains}
-                            history={this.props.history}
-
-                            // dealer actions
-                            updatePassword={this.props.updatePassword}
-                            editDealer={this.props.editDealer}
-
-                            suspendDealer={this.props.suspendDealer}
-                            activateDealer={this.props.activateDealer}
-                            deleteDealer={this.props.deleteDealer}
-                            undoDealer={this.props.undoDealer}
-
-                            getDealerDomains={this.props.getDealerDomains}
-                            getDealerPaymentHistory={this.props.getDealerPaymentHistory}
-                            setCreditLimit={this.props.setCreditLimit}
-                            getDealerSalesHistory={this.props.getDealerSalesHistory}
-                        />
-
-                    </Col>
-                </Row>
+                            : <DealerNotFoundPage />}
+                    </Fragment>
+                }
             </Fragment>
         )
     }
@@ -387,6 +394,7 @@ var mapStateToProps = ({ dealer_details, dealers, settings }) => {
         domains: dealer_details.domains,
         paymentHistory: dealer_details.paymentHistory,
         salesHistory: dealer_details.salesHistory,
+        isLoading: dealer_details.connectDealerLoading
         // dealers: dealers.textTransform
     };
 }

@@ -3467,8 +3467,8 @@ export function appMarketColumns(translation, handleSearch, removeSMapps) {
     )
 }
 
-export function domainColumns(translation, handleSearch, isModal=false) {
-    let columns= [
+export function domainColumns(translation, handleSearch, isModal = false) {
+    let columns = [
         {
             title: "#",
             dataIndex: 'counter',
@@ -3476,9 +3476,9 @@ export function domainColumns(translation, handleSearch, isModal=false) {
             className: 'row',
             render: (text, record, index) => ++index,
         },
-       
+
         {
-            
+
             title: (
                 <span>
                     {convertToLang(translation[APK_PERMISSION], "PERMISSION")}
@@ -3526,7 +3526,80 @@ export function domainColumns(translation, handleSearch, isModal=false) {
         },
     ];
 
-    if(isModal){
+    if (isModal) {
+        columns.splice(1, 1)
+    }
+
+    return columns;
+}
+
+export function systemMsgColumns(translation, handleSearch, isModal = false) {
+    let columns = [
+        {
+            title: "#",
+            dataIndex: 'counter',
+            align: 'center',
+            className: 'row',
+            render: (text, record, index) => ++index,
+        },
+        {
+            title: "ACTION",
+            dataIndex: 'action',
+            align: 'center',
+            className: '',
+            // render: (text, record, index) => ++index,
+        },
+
+        {
+
+            title: (
+                <span>
+                    {convertToLang(translation[""], "SEND TO")}
+                    {/* <Popover placement="top" content={(<Markup content={convertToLang(translation[""],
+                        `   <p>Press <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;">
+                                    <i className="fa fa-caret-right" aria-hidden="true"></i> 
+                                    </a> to Add, remove or View
+                                    <br/> the Dealers who have permission
+                                    <br/>to use this Domain</p>`)} />)}>
+                        <span className="helping_txt"><Icon type="info-circle" /></span>
+                    </Popover> */}
+                </span>),
+            dataIndex: 'send_to',
+            key: 'send_to',
+            // className: ''
+            //     }
+            // ]
+        },
+
+        {
+            title: (
+                <Input.Search
+                    name="msg"
+                    key="msg"
+                    id="msg"
+                    className="search_heading"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    // placeholder={titleCase(props.convertToLang(props.translation[""], "APP NAME"))}
+                    placeholder="MESSAGE"
+                />
+            ),
+            dataIndex: 'msg',
+            className: '',
+            key: 'msg',
+            children: [
+                {
+                    title: convertToLang(translation[""], "MESSAGE"),
+                    dataIndex: 'msg',
+                    key: 'msg',
+                    // className: ''
+                }
+            ]
+
+        },
+    ];
+
+    if (isModal) {
         columns.splice(1, 1)
     }
 

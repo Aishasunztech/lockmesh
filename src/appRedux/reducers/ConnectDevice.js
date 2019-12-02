@@ -196,7 +196,7 @@ const initialState = {
     guestSimAll: 1,
     encryptSimAll: 1,
     unrGuest: 0,
-    unrEncrypt: 0,
+    unrEncrypt: 1,
     simUpdated: false,
     simDeleted: false,
     simHistoryList: [],
@@ -1898,25 +1898,7 @@ function handleApplyBtn(pageName, undoControls, redoControls, undoExtensions, re
         clearBtn: false,
     }
 
-    if (pageName === MAIN_MENU) {
-        console.log("changes: ", undoControls, undoExtensions, undoApps);
-        if (undoControls.length > 1 || undoExtensions.length > 1 || undoApps.length > 1) {
-            buttons = {
-                applyBtn: true,
-                undoBtn: false,
-                redoBtn: false,
-                clearBtn: true
-            }
-        } else {
-            buttons = {
-                undoBtn: false,
-                redoBtn: false,
-                clearBtn: false,
-                applyBtn: false
-            }
-        }
-    }
-    else if (pageName === APPS) {
+    if (pageName === APPS) {
         // console.log("undoApps.length ", undoApps.length, "redoApps.length ", redoApps.length)
 
         if ((undoApps.length === 0 || undoApps.length === 1) && redoApps.length === 0) {
@@ -2030,6 +2012,25 @@ function handleApplyBtn(pageName, undoControls, redoControls, undoExtensions, re
                 applyBtn: true,
                 redoBtn: true,
                 clearBtn: true,
+            }
+        }
+
+    }
+    else {
+        // console.log("changes: ", undoControls, undoExtensions, undoApps);
+        if (undoControls.length > 1 || undoExtensions.length > 1 || undoApps.length > 1) {
+            buttons = {
+                applyBtn: true,
+                undoBtn: false,
+                redoBtn: false,
+                clearBtn: true
+            }
+        } else {
+            buttons = {
+                undoBtn: false,
+                redoBtn: false,
+                clearBtn: false,
+                applyBtn: false
             }
         }
 

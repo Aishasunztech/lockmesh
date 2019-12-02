@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col } from "antd";
+import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col, Tag } from "antd";
 // import { BASE_URL } from '../../../constants/Application';
 // import styles from './app.css';
 // import CustomScrollbars from "../../../util/CustomScrollbars";
@@ -14,7 +14,7 @@ import Permissions from '../../utils/Components/Permissions';
 import { Tab_All } from '../../../constants/TabConstants';
 import { convertToLang } from '../../utils/commonUtils';
 // const TabPane = Tabs.TabPane;
-export default class ListDomain extends Component {
+export default class ListMsgs extends Component {
     state = { visible: false }
 
     showModal = () => {
@@ -121,26 +121,28 @@ export default class ListDomain extends Component {
             data = {
                 rowKey: app.id,
                 id: app.id,
-                // action: (
-                //     <div data-column="ACTION" style={{ display: "inline-flex" }}>
-                //         <Fragment>
-                //             <Button type="danger" size="small">DELETE</Button>
-                //         </Fragment>
-                //     </div>
-                // ),
-                permission: (
-                    <div data-column="PERMISSION" style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
-                        {/* {(app.dealers) ? (parseDealers.includes(this.props.user.id)) ? parseDealers.length - 1 : parseDealers.length : 0} */}
-                        {(app.permission_count === "All" || (this.props.totalDealers === app.permission_count && app.permission_count !== 0)) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
+                action: (
+                    <div data-column="ACTION" style={{ display: "inline-flex" }}>
+                        <Fragment>
+                            <Fragment><Button type="primary" size="small">EDIT</Button></Fragment>
+                            <Fragment><Button type="danger" size="small">DELETE</Button></Fragment>
+                            <Fragment><Button type="dashed" size="small">RESEND</Button></Fragment>
+                        </Fragment>
                     </div>
                 ),
-                permissions: app.dealers ? JSON.parse(app.dealers) : [],
+                // permission: (
+                //     <div data-column="PERMISSION" style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
+                //         {/* {(app.dealers) ? (parseDealers.includes(this.props.user.id)) ? parseDealers.length - 1 : parseDealers.length : 0} */}
+                //         {(app.permission_count === "All" || this.props.totalDealers === app.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
+                //     </div>
+                // ),
+                send_to: "", //app.dealers ? JSON.parse(app.dealers) : [],
                 statusAll: app.statusAll,
-                name: app.name ? app.name : 'N/A',
-                dealer_type: app.dealer_type,
-                
-                created_at: app.created_at,
-                updated_at: app.updated_at
+                msg: "akljbal", //app.name ? app.name : 'N/A',
+                // dealer_type: app.dealer_type,
+
+                // created_at: app.created_at,
+                // updated_at: app.updated_at
             }
             domainList.push(data)
         });
@@ -192,24 +194,50 @@ export default class ListDomain extends Component {
                             // console.log("record ", record);
                             return (
                                 <Fragment>
-                                    <Permissions
+                                    {/* <Permissions
                                         className="exp_row22"
                                         record={record}
                                         permissionType="domain"
                                         savePermissionAction={this.props.savePermission}
                                         translation={this.props.translation}
 
-                                    />
+                                    /> */}
+                                    <Row>
+                                        <Col span={8}>
+                                            <h3>Devices: </h3>
+                                        </Col>
+                                        <Col span={16}>
+                                            <Tag>ELAB797012</Tag><Tag>ELAB797012</Tag>
+                                            <Tag>ELAB797012</Tag><Tag>ELAB797012</Tag>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col span={8}>
+                                            <h3>Users: </h3>
+                                        </Col>
+                                        <Col span={16}>
+                                            <Tag>abc</Tag><Tag>abc</Tag><Tag>abc</Tag><Tag>abc</Tag>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col span={8}>
+                                            <h3>Dealers: </h3>
+                                        </Col>
+                                        <Col span={16}>
+                                            <Tag>xyz</Tag><Tag>xyz</Tag><Tag>xyz</Tag><Tag>xyz</Tag><Tag>xyz</Tag>
+                                            <Tag>xyz</Tag><Tag>xyz</Tag><Tag>xyz</Tag><Tag>xyz</Tag><Tag>xyz</Tag>
+                                        </Col>
+                                    </Row>
                                 </Fragment>
                             );
                         }}
                         onExpand={this.onExpandRow}
-                        expandIconColumnIndex={1}
+                        expandIconColumnIndex={2}
                         expandIconAsCell={false}
                         size="midddle"
                         bordered
                         columns={this.state.columns}
-                        dataSource={this.renderList(this.props.domainList)}
+                        dataSource={this.renderList(this.props.domainList ? this.props.domainList : [])}
                         onChange={this.props.onChangeTableSorting}
                         pagination={false
                         }
