@@ -55,8 +55,14 @@ function showConfirm(_this, dealer, action, btn_title, name = "") {
     }
 
     confirm({
-        title:
-            <Markup content={convertToLang(_this.props.translation[''], `Do you wish to Permanently Delete Dealer ${name}?<br/> This action cannot be reversed!`)} />,
+        title: <Markup content={(btn_title === 'DELETE') ?
+            convertToLang(_this.props.translation[''], `Do you wish to Permanently Delete Dealer ${name}?<br/> This action cannot be reversed!`)
+            :
+            (btn_title === 'RESET PASSWORD') ? 
+            `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[OF_THIS], " of this dealer")} ${name ? `(${name})` : ""} ?`
+            :
+            `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[""], " this dealer ")} ${name ? `(${name})` : ""} ?`
+        } />,
         onOk() {
             return new Promise((resolve, reject) => {
                 setTimeout(Math.random() > 0.5 ? resolve : reject);
@@ -291,8 +297,8 @@ export default class DealerAction extends Component {
                                 style={{ width: "100%", marginBottom: 16, }}
                                 onClick={
                                     () => (!dealer.account_status) ?
-                                        showConfirm(this, dealer.dealer_id, this.props.suspendDealer, 'SUSPEND') :
-                                        showConfirm(this, dealer.dealer_id, this.props.activateDealer, 'ACTIVATE')
+                                        showConfirm(this, dealer.dealer_id, this.props.suspendDealer, 'SUSPEND', this.props.dealer.dealer_name) :
+                                        showConfirm(this, dealer.dealer_id, this.props.activateDealer, 'ACTIVATE', this.props.dealer.dealer_name)
                                 }
                             >
                                 {restrict_button_text}

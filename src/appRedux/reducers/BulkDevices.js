@@ -368,9 +368,11 @@ export default (state = initialState, action) => {
             let wipePassMsg = ''
             let wipeModal = false;
             let updatePrevBulkDevices = [];
+            let selectedBulkDevices = state.selectedDevices;
             let showResponseModal = state.bulkResponseModal;
-            if (action.payload.status) {
 
+            if (action.payload.status) {
+                selectedBulkDevices = [];
                 let allWipedDevices = [...action.payload.data.queue_device_ids, ...action.payload.data.pushed_device_ids];
                 // console.log("allWipedDevices ", allWipedDevices);
                 updatePrevBulkDevices = state.bulkDevices.filter(item => !allWipedDevices.includes(item.device_id))
@@ -405,6 +407,8 @@ export default (state = initialState, action) => {
                 });
             }
 
+            console.log("at reducer wipe:: ", selectedBulkDevices)
+
             return {
                 ...state,
                 bulkDevices: updatePrevBulkDevices,
@@ -413,7 +417,7 @@ export default (state = initialState, action) => {
                 pushed_device_ids: [...state.pushed_device_ids],
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "wipe",
-                selectedDevices: [],
+                selectedDevices: selectedBulkDevices,
                 // wipePassMsg,
                 bulkWipePassModal: wipeModal
             }

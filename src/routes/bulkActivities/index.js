@@ -24,7 +24,7 @@ import {
     setBulkMsg
 } from "../../appRedux/actions/BulkDevices";
 
-import { getPolicies } from "../../appRedux/actions/ConnectDevice";
+import { getPolicies, handleCheckedAllPushApps } from "../../appRedux/actions/ConnectDevice";
 
 // import {
 //     connectSocket,
@@ -164,6 +164,10 @@ class BulkActivities extends Component {
             sendMsgModal: false,
             actionMsg: '',
             errorAction: '',
+
+            guestAllPushApps: props.guestAllPushApps,
+            enableAllPushApps: props.enableAllPushApps,
+            encryptedAllPushApps: props.encryptedAllPushApps
         }
     }
 
@@ -257,6 +261,10 @@ class BulkActivities extends Component {
         this.props.getUserList();
         this.props.getDealerApps();
         this.props.getPolicies();
+        this.props.getBulkDevicesList({
+            dealers: [],
+            users: []
+        })
 
 
         this.setState({
@@ -273,6 +281,14 @@ class BulkActivities extends Component {
             this.setState({
                 filteredDevices: nextProps.devices,
                 dealerList: this.props.dealerList
+            })
+        }
+
+        if (this.props !== nextProps) {
+            this.setState({
+                guestAllPushApps: nextProps.guestAllPushApps,
+                enableAllPushApps: nextProps.enableAllPushApps,
+                encryptedAllPushApps: nextProps.encryptedAllPushApps
             })
         }
 
@@ -826,7 +842,9 @@ class BulkActivities extends Component {
                         <p>Dealers/S-Dealers Selected: <span className="font_26">{this.state.selectedDealers.map(item => <Tag>{item.label}</Tag>)}</span></p>
                         : null}
                     <Row gutter={24} className="">
-
+                        <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
+                            <span className=""> {convertToLang(this.props.translation[""], "Select Users:")} </span>
+                        </Col>
                         <Col className="col-md-4 col-sm-4 col-xs-4">
                             <Select
                                 value={this.state.selectedUsers}
@@ -978,6 +996,10 @@ class BulkActivities extends Component {
                     setBulkPushApps={this.props.setBulkPushApps}
                     setBulkPullApps={this.props.setBulkPullApps}
                     translation={this.props.translation}
+                    guestAllPushApps={this.state.guestAllPushApps}
+                    enableAllPushApps={this.state.enableAllPushApps}
+                    encryptedAllPushApps={this.state.encryptedAllPushApps}
+                    handleCheckedAllPushApps={this.props.handleCheckedAllPushApps}
                 />
 
 
@@ -1058,7 +1080,8 @@ const mapDispatchToProps = (dispatch) => {
         closeResponseModal: closeResponseModal,
         applyBulkPolicy: applyBulkPolicy,
         getPolicies: getPolicies,
-        setBulkMsg: setBulkMsg
+        setBulkMsg: setBulkMsg,
+        handleCheckedAllPushApps: handleCheckedAllPushApps,
 
         // ackFinishedPullApps: ackFinishedPullApps,
         // ackFinishedBulkPushApps: ackFinishedBulkPushApps,
@@ -1070,7 +1093,7 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users, device_details, socket }, otherProps) => {
     // console.log(bulkDevices.usersOfDealers, 'usersOfDealers ,devices.bulkDevices ', bulkDevices.bulkDevices);
     // console.log("bulkDevices.selectedDevices", bulkDevices.selectedDevices, "bulkDevices.bulkSelectedPushApps ", bulkDevices.bulkSelectedPushApps, "bulkDevices.bulkSelectedPullApps ", bulkDevices.bulkSelectedPullApps);
-    // console.log("bulkDevices.bulkMsg ", bulkDevices.bulkMsg)
+    console.log("bulkDevices.selectedDevices:: ", bulkDevices.selectedDevices)
     return {
         socket: socket.socket,
         user: auth.authUser,
@@ -1094,6 +1117,9 @@ const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users,
         selectedDevices: bulkDevices.selectedDevices,
         policies: device_details.policies,
         bulkMsg: bulkDevices.bulkMsg,
+        guestAllPushApps: device_details.guestAllPushApps,
+        enableAllPushApps: device_details.enableAllPushApps,
+        encryptedAllPushApps: device_details.encryptedAllPushApps,
     };
 }
 

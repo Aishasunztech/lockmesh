@@ -4,7 +4,8 @@ import {
     DEALER_PAYMENT_HISTORY,
     SET_DEALER_LIMIT,
     DEALER_SALES_HISTORY,
-    DEALER_DOMAINS
+    DEALER_DOMAINS,
+    CONNECT_DEALER_LOADING
 } from "../../constants/ActionTypes"
 // import { message } from 'antd';
 
@@ -13,10 +14,9 @@ import RestService from '../services/RestServices';
 
 export function getDealerDetails(dealerId) {
     return (dispatch) => {
-        // dispatch({
-        //     type: SPIN_lOADING,
-        //     spinloading: true
-        // });
+        dispatch({
+            type: CONNECT_DEALER_LOADING,
+        });
 
         RestService.getDealerDetails(dealerId).then((response) => {
 
