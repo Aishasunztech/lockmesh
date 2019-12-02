@@ -9,7 +9,7 @@ import DealerSalesHistory from "./DealerSalesHistory";
 import DealerDomains from './DealerDomains';
 
 // Helpers
-import { convertToLang } from '../../utils/commonUtils'
+import { convertToLang, componentSearch } from '../../utils/commonUtils'
 // import { getColor, isBase64, convertToLang } from "../utils/commonUtils"
 // import { getDealerDetails, editDealer } from '../../appRedux/actions'
 // import RestService from "../../appRedux/services/RestServices";
@@ -103,8 +103,9 @@ export default class DealerAction extends Component {
 
         console.log("searchedValue: ", value)
         if (value) {
-            dealerList = this.props.dealerList.filter((dealer) => dealer.dealer_name.toLowerCase().includes(value.toLowerCase()));
-            index = this.props.dealerList.findIndex((dealer) => dealer.dealer_name.toLowerCase() === value.toLowerCase());
+            dealerList = componentSearch(this.props.dealerList, value)
+            
+            index = this.props.dealerList.findIndex((dealer) => (dealer.dealer_name.toLowerCase() === value.toLowerCase() || dealer.dealer_id.toString().toLowerCase() === value.toLowerCase() || dealer.dealer_email.toLowerCase() === value.toLowerCase() || dealer.link_code.toString().toLowerCase() === value.toLowerCase()));
         }
 
         console.log(dealerList);
