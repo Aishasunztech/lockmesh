@@ -196,7 +196,7 @@ const initialState = {
     guestSimAll: 1,
     encryptSimAll: 1,
     unrGuest: 0,
-    unrEncrypt: 0,
+    unrEncrypt: 1,
     simUpdated: false,
     simDeleted: false,
     simHistoryList: [],
