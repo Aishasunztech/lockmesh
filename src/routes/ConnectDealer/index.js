@@ -297,12 +297,16 @@ class ConnectDealer extends Component {
                             <h2 style={{ textAlign: "center" }}>Account Profile</h2>
                             <Divider className="mb-0" />
                             <Row>
-                                <Col span={8} className="text-center ">
-                                    <img src={require("assets/images/profile-image.png")} className="mb-8 mt-16"></img>
-                                    <h1 className="mb-0" style={{ fontSize: '3vh', textTransform: 'capitalize' }}>{(this.props.dealer) ? this.props.dealer.dealer_name : 'N/A'}</h1>
-                                    <p style={{ textTransform: 'capitalize', marginBottom: '0' }}>({(this.props.dealer) ? this.props.dealer.dealer_type : 'N/A'})</p>
+                                <Col span={24} className="text-center">
+                                    <div className="text-left">
+                                        <img src={require("assets/images/profile-image.png")} className="prof_pic" width="85px" />
+                                        <div className="name_type">
+                                            <h1 className="mb-0 d_n_vh_vw">{(this.props.dealer) ? this.props.dealer.dealer_name : 'N/A'}</h1>
+                                            <p style={{ textTransform: 'capitalize', }}>({(this.props.dealer) ? this.props.dealer.dealer_type : 'N/A'})</p>
+                                        </div>
+                                    </div>
                                 </Col>
-                                <Col span={16} style={{ padding: '0px 15px 0 0', }}>
+                                <Col span={24}>
                                     <Table
                                         columns={this.dealerInfoColumns1}
                                         bordered
@@ -356,7 +360,7 @@ class ConnectDealer extends Component {
 
                     </Col>
                 </Row>
-            </Fragment>
+            </Fragment >
         )
     }
 }

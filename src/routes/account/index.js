@@ -106,8 +106,6 @@ class PasswordModal extends Component {
     }
 }
 
-
-
 class Account extends Component {
     constructor(props) {
         super(props);
@@ -329,7 +327,13 @@ class Account extends Component {
     }
 
     render() {
-
+        let type = this.props.user.type
+        let styleType = {};
+        if (type === ADMIN) {
+            styleType = "manage_ac"
+        } else {
+            styleType = "manage_sec"
+        }
         if (this.props.showMsg) {
             if (this.props.msg === "imported successfully") {
                 success({
@@ -1154,7 +1158,7 @@ class Account extends Component {
                                 {/* <a href="javascript:void(0)" onClick={() => this.showPricingModal(true)}> */}
                                 <Link to={"/set-prices"}>
                                     {/* <Link to={"/set-prices/" + this.props.whiteLabelInfo.name}> */}
-                                    <Card style={{ borderRadius: 12 }} className="manage_ac">
+                                    <Card style={{ borderRadius: 12 }} className={`${styleType}`}>
                                         <div className="profile_table image_1">
                                             <Fragment>
                                                 <Row>
