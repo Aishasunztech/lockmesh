@@ -747,24 +747,24 @@ class BulkActivities extends Component {
         return (
             <Fragment>
                 <Card >
-                    <Row gutter={16} className="filter_top">
-                        <Col className="col-md-6 col-sm-6 col-xs-6 vertical_center">
-                            <span className="font_26"> {convertToLang(this.props.translation[""], "BULK ACTIVITIES")} </span>
-                        </Col>
-                    </Row>
                     <div>
-                        <h2>
-                            {convertToLang(this.props.translation[""], ` Please select from fields bellow to perform a task on ALL or Selected Devices. You can Track your activities in the "HISTORY" button bellow.`)}
-                        </h2>
+                        <Row gutter={16} className="filter_top">
+                            <Col className="col-md-10 col-sm-12 col-xs-12">
+                                <span className="font_26"> {convertToLang(this.props.translation[""], "BULK ACTIVITIES")} </span>
+                                <h2 className="mb-0">
+                                    {convertToLang(this.props.translation[""], ` Please select from fields bellow to perform a task on ALL or Selected Devices. You can Track your activities in the "HISTORY" button bellow.`)}
+                                </h2>
+                            </Col>
+                            <div className="disp_flx">
+                                <Col className="col-md-2 col-sm-12 col-xs-12">
+                                    <Button type="primary" onClick={this.historyModal}>
+                                        {convertToLang(this.props.translation[""], "History")}
+                                    </Button>
+                                </Col>
+                            </div>
+                        </Row>
                     </div>
-                    <div>
-                        <Button type="primary" onClick={this.historyModal}>
-                            {convertToLang(this.props.translation[""], "History")}
-                        </Button>
-                    </div>
-
                 </Card>
-
                 <Card >
                     <Row gutter={24} className="">
                         <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
@@ -797,7 +797,6 @@ class BulkActivities extends Component {
                         <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
                             <span className=""> {convertToLang(this.props.translation[""], "Select Dealers/S-Dealers:")} </span>
                         </Col>
-
                         <Col className="col-md-4 col-sm-4 col-xs-4">
                             <Select
                                 value={this.state.selectedDealers}
@@ -823,14 +822,10 @@ class BulkActivities extends Component {
                         </Col>
                     </Row>
                     <br />
-
                     {(this.state.selectedDealers && this.state.selectedDealers.length && !this.state.checkAllSelectedDealers) ?
                         <p>Dealers/S-Dealers Selected: <span className="font_26">{this.state.selectedDealers.map(item => <Tag>{item.label}</Tag>)}</span></p>
                         : null}
                     <Row gutter={24} className="">
-                        <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
-                            <span className=""> {convertToLang(this.props.translation[""], "Select Users:")} </span>
-                        </Col>
 
                         <Col className="col-md-4 col-sm-4 col-xs-4">
                             <Select
@@ -914,6 +909,7 @@ class BulkActivities extends Component {
                                 columns={this.pushAppsModalColumns}
                                 dataSource={this.renderResponseList(this.props.failed_device_ids)}
                             />
+
                             <span className="warning_hr">
                                 <hr />
                             </span>

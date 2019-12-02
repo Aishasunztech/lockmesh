@@ -429,13 +429,12 @@ class Account extends Component {
                 </Row>
                 <div style={{ marginTop: -60 }}>
                     <Row>
-
                         <Fragment>
                             {(this.props.user.type === ADMIN || this.props.user.type === DEALER || this.props.user.type === SDEALER) ?
                                 <Col xs={24} sm={24} md={8} lg={8} xl={8} >
                                     <Link to="/account/managedata" onClick={this.showModal}>
                                         {/* <Link to="#" > */}
-                                        <Card className="manage_ac" style={{ borderRadius: 12 }}>
+                                        <Card className="manage_sec" style={{ borderRadius: 12 }}>
                                             <div>
                                                 <h2 style={{ textAlign: "center" }}>{convertToLang(this.props.translation[MANAGE_DATA], "Manage ID Inventory")} </h2>
                                                 <Divider className="mb-0" />
@@ -539,9 +538,6 @@ class Account extends Component {
                                         />
                                     </Modal>
                                     <div>
-
-
-
                                         <Modal
                                             maskClosable={false}
                                             className="manage_data"
@@ -1061,12 +1057,9 @@ class Account extends Component {
                                         </Modal>
                                     </div>
                                 </Col>
-
-
                                 : null}
                             {(this.props.user.type === ADMIN) ?
                                 <Col xs={24} sm={24} md={8} lg={8} xl={8} >
-
                                     <Modal
                                         width="400px"
                                         className="back_db"
@@ -1087,7 +1080,7 @@ class Account extends Component {
                                     <div>
                                         <div>
                                             <Link to="#" onClick={() => this.showPwdConfirmModal(true)}>
-                                                <Card className="manage_ac" style={{ borderRadius: 12 }}>
+                                                <Card className="manage_sec" style={{ borderRadius: 12 }}>
                                                     <div>
                                                         <div>
                                                             <h2 style={{ textAlign: "center", width: "80%", margin: "0 auto" }}>
@@ -1125,7 +1118,7 @@ class Account extends Component {
                                             this.showPurchaseModal(e, true);
                                         }}
                                     >
-                                        <Card style={{ borderRadius: 12 }} className="manage_ac">
+                                        <Card style={{ borderRadius: 12 }} className="manage_sec">
                                             <div className="profile_table image_1">
                                                 <Fragment>
                                                     <div className="ac_card">
@@ -1133,7 +1126,7 @@ class Account extends Component {
                                                         <Divider className="mb-0" />
                                                         <Row style={{ padding: '12px 0 0px' }}>
                                                             <Col span={8} className="" style={{ textAlign: "center" }}>
-                                                                <Icon type="dollar" className="gx-and_icon" />
+                                                                <Icon type="dollar" className="and_icon" />
                                                             </Col>
                                                             <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
                                                                 <h5>{convertToLang(this.props.translation[PURCHASE_CREDITS_DESCRIPTION], "Buy more Credits instantly with Bitcoin or Credit card and check out using our secure payment gateway.")}</h5>
@@ -1294,41 +1287,41 @@ class Account extends Component {
                             </div>
                         </Col>
                         {false ?
-                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                            <div>
-                                <Link to={"/system-messages"}>
-                                    <Card style={{ borderRadius: 12 }} className="manage_ac">
-                                        <div className="profile_table image_1">
-                                            <Fragment>
-                                                <Row>
-                                                    <div className="col-md-12 ac_card">
-                                                        <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[''], "System Messages")} </h2>
-                                                        <Divider className="mb-0" />
-                                                        <Row style={{ padding: '12px 0 0px' }}>
-                                                            <Col span={8} className="" style={{ textAlign: "center" }}>
-                                                                <Icon type="notification" className="and_icon" />
-                                                                {/* <Icon type="message" /> */}
-                                                            </Col>
-                                                            <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
-                                                                <div className="crd_txt">
-                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Send messages to device")}</h5>
-                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Select multiple or single devices to send your messages")}</h5>
-                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Repeat messages to devices")}</h5>
-                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Set delays or timers for each messages")}</h5>
-                                                                    <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], "and more...")}</h5>
-                                                                </div>
-                                                            </Col>
-                                                        </Row>
-                                                    </div>
-                                                </Row>
-                                            </Fragment>
-                                        </div>
-                                    </Card>
-                                    <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
-                                </Link>
-                            </div>
-                        </Col>
-                        : null }
+                            <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                                <div>
+                                    <Link to={"/system-messages"}>
+                                        <Card style={{ borderRadius: 12 }} className="manage_ac">
+                                            <div className="profile_table image_1">
+                                                <Fragment>
+                                                    <Row>
+                                                        <div className="col-md-12 ac_card">
+                                                            <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[''], "System Messages")} </h2>
+                                                            <Divider className="mb-0" />
+                                                            <Row style={{ padding: '12px 0 0px' }}>
+                                                                <Col span={8} className="" style={{ textAlign: "center" }}>
+                                                                    <Icon type="notification" className="and_icon" />
+                                                                    {/* <Icon type="message" /> */}
+                                                                </Col>
+                                                                <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
+                                                                    <div className="crd_txt">
+                                                                        <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Send messages to device")}</h5>
+                                                                        <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Select multiple or single devices to send your messages")}</h5>
+                                                                        <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Repeat messages to devices")}</h5>
+                                                                        <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Set delays or timers for each messages")}</h5>
+                                                                        <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], "and more...")}</h5>
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </div>
+                                                    </Row>
+                                                </Fragment>
+                                            </div>
+                                        </Card>
+                                        <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
+                                    </Link>
+                                </div>
+                            </Col>
+                            : null}
                     </Row>
                 </div>
                 <PasswordModal
