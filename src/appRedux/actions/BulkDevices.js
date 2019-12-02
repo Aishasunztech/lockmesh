@@ -318,7 +318,7 @@ export const sendBulkMsg = (data) => {
     }
 }
 
-// Set wipe passwoed for bulk
+// handle wipe passwoed for bulk
 export const handleWipePwdConfirmModal = (data) => {
     console.log("at action file ", data);
     return (dispatch) => {

@@ -1294,7 +1294,7 @@ class EditDevice extends Component {
                     className="edit_form"
                     bodyStyle={{ overflow: "overlay" }}
                     okText={convertToLang(this.props.translation[""], "CHECKOUT")}
-                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     <Invoice
                         PkgSelectedRows={this.state.PkgSelectedRows}

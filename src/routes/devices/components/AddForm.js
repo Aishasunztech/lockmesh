@@ -1221,8 +1221,8 @@ class AddDevice extends Component {
                                 null}
                         </Col>
                         <Col xs={24} sm={24} md={24} lg={24} xl={24} className="text-right">
-                            <Button key="back" type="button" onClick={this.props.handleCancel}>{convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}</Button>
-                            <Button type="primary" htmlType="submit">{convertToLang(this.props.translation[Button_submit], Button_submit)}</Button>
+                            <Button key="back" type="button" onClick={this.props.handleCancel}>{convertToLang(this.props.translation[Button_Cancel], "CANCEL")}</Button>
+                            <Button type="primary" htmlType="submit">{convertToLang(this.props.translation[Button_submit], "SUBMIT")}</Button>
                         </Col>
                         <Form.Item className="edit_ftr_btn"
                             wrapperCol={{
@@ -1355,7 +1355,7 @@ class AddDevice extends Component {
                     className="edit_form"
                     bodyStyle={{ overflow: "overlay" }}
                     okText={convertToLang(this.props.translation[""], "CHECKOUT")}
-                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     <Invoice
                         // ref="invoice_modal"

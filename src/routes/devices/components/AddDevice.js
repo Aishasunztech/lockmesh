@@ -92,7 +92,7 @@ export default class AddDevice extends Component {
                     className="edit_form add_device"
                     destroyOnClose={true}
                     okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
-                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     <AddForm
                         device={this.state.device}
