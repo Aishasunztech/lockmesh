@@ -147,16 +147,16 @@ class AddDevice extends Component {
         });
     }
     componentDidMount() {
+        this.props.getUserList();
+        if (this.props.user.type !== ADMIN) {
+            this.props.getParentPackages();
+            this.props.getProductPrices();
+            this.props.getHardwaresPrices();
+        }
+        this.props.getPolicies();
         this.props.getSimIDs();
         this.props.getChatIDs();
         this.props.getPGPEmails();
-        this.props.getPolicies();
-        this.props.getUserList();
-        if (this.props.user.type !== ADMIN) {
-            this.props.getProductPrices();
-            this.props.getParentPackages();
-            this.props.getHardwaresPrices();
-        }
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.isloading) {
@@ -166,6 +166,12 @@ class AddDevice extends Component {
 
         if (this.props.invoiceID !== nextProps.invoiceID) {
             this.setState({ invoiceID: nextProps.invoiceID })
+        }
+        if (this.props.parent_packages !== nextProps.parent_packages) {
+            this.setState({
+                parent_packages: this.filterList('trial', nextProps.parent_packages, 'pkg'),
+                tabselect: '0',
+            })
         }
     }
 
