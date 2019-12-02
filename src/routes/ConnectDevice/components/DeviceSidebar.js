@@ -263,20 +263,24 @@ export default class DeviceSidebar extends Component {
 
     goToDealer = (dealer) => {
         if (dealer.dealer_id !== 'null' && dealer.dealer_id !== null) {
-            if (dealer.connected_dealer === 0 || dealer.connected_dealer === '' || dealer.connected_dealer === null) {
-                this.setState({
-                    redirect: true,
-                    dealer_id: dealer.dealer_id,
-                    goToPage: '/dealer/dealer'
-                })
+            if (this.props.auth.authUser.type === ADMIN) {
+                this.props.history.push(`/connect-dealer/${btoa(dealer.dealer_id.toString())}`.trim())
             } else {
-                this.setState({
-                    redirect: true,
-                    dealer_id: dealer.dealer_id,
-                    goToPage: '/dealer/sdealer'
-                })
-            }
+                if (dealer.connected_dealer === 0 || dealer.connected_dealer === '' || dealer.connected_dealer === null) {
+                    this.setState({
+                        redirect: true,
+                        dealer_id: dealer.dealer_id,
+                        goToPage: '/dealer/dealer'
+                    })
+                } else {
+                    this.setState({
+                        redirect: true,
+                        dealer_id: dealer.dealer_id,
+                        goToPage: '/dealer/sdealer'
+                    })
+                }
 
+            }
         }
     }
 
