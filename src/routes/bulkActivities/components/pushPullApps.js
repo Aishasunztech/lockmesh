@@ -82,6 +82,7 @@ import {
     SIM_SETTINGS,
     SIM_HISTORY,
 } from "../../../constants/DeviceConstants";
+import ExtensionDropdown from './ExtensionDropdown';
 
 // import TransferHistory from './TransferModule/TransferHistory'
 
@@ -127,18 +128,29 @@ const PushAppsModal = (props) => {
             okText={convertToLang(props.translation[PUSH_APP_TEXT], "SELECT APPS")}
             cancelText={convertToLang(props.translation[Button_Cancel], "Cancel")}
         >
-            <DealerApps
-                apk_list={props.apk_list}
-                pushApps={props.pushApps}
-                app_list={props.app_list}
-                onPushAppsSelection={props.onPushAppsSelection}
-                isSwitchable={true}
-                selectedApps={props.selectedPushApps}
-                selectedAppKeys={props.selectedPushAppKeys}
-                handleChecked={props.handleChecked}
-                translation={props.translation}
-            // disabledSwitch = {false}
-            />
+            <div>
+                {/* <ExtensionDropdown
+                    checked_app_id={null}
+                    encryptedAll={props.encryptedAllPushApps}
+                    guestAll={props.guestAllPushApps}
+                    enableAll={props.enableAllPushApps}
+                    handleCheckedAllPushApps={props.handleCheckedAllPushApps}
+                    translation={props.translation}
+                    isPushAppsModal={true}
+                /> */}
+                <DealerApps
+                    apk_list={props.apk_list}
+                    pushApps={props.pushApps}
+                    app_list={props.app_list}
+                    onPushAppsSelection={props.onPushAppsSelection}
+                    isSwitchable={true}
+                    selectedApps={props.selectedPushApps}
+                    selectedAppKeys={props.selectedPushAppKeys}
+                    handleChecked={props.handleChecked}
+                    translation={props.translation}
+                // disabledSwitch = {false}
+                />
+            </div>
         </Modal>
     )
 }
@@ -498,6 +510,11 @@ export default class PushPullApps extends Component {
                     handleChecked={this.handleChecked}
                     device={this.props.device}
                     translation={this.props.translation}
+
+                    guestAllPushApps={this.props.guestAllPushApps}
+                    enableAllPushApps={this.props.enableAllPushApps}
+                    encryptedAllPushApps={this.props.encryptedAllPushApps}
+                    handleCheckedAllPushApps={this.props.handleCheckedAllPushApps}
                 />
 
                 <PullAppsModal
