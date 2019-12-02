@@ -729,7 +729,7 @@ class FilterDevices extends Component {
   }
 
   render() {
-    console.log("actionMsg ", this.props.actionMsg);
+    // console.log("actionMsg ", this.props.actionMsg);
     // console.log('selected devices are: ', this.state.selectedDevices);
     return (
       <Fragment>

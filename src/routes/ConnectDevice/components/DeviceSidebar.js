@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import styles from './AppList';
 import { Card, Table, Icon } from "antd";
 import { getStatus, getColor, checkValue, titleCase, convertToLang } from '../../../routes/utils/commonUtils'
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import {
     DEVICE_ID,
     DEVICE_REMAINING_DAYS,
@@ -119,7 +119,11 @@ export default class DeviceSidebar extends Component {
             {
                 key: 13,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_NAME], "DEALER NAME"))}:</a>),
-                value: (<span className="captilize">{(this.props.auth.authUser.type === ADMIN) ? <a onClick={() => { this.goToDealer(device_details) }}>{checkValue(device_details.dealer_name)}</a> : <a >{checkValue(device_details.dealer_name)}</a>}</span>)
+                // value: (<span className="captilize">{(this.props.auth.authUser.type === ADMIN) ? <a onClick={() => { this.goToDealer(device_details) }}>{checkValue(device_details.dealer_name)}</a> : <a >{checkValue(device_details.dealer_name)}</a>}</span>)
+                value: (<span className="captilize">{(this.props.auth.authUser.type === ADMIN && device_details.dealer_id) ? <Link
+                    to={`/connect-dealer/${btoa(device_details.dealer_id.toString())}`.trim()}
+                >
+                    {checkValue(device_details.dealer_name)}</Link> : <a >{checkValue(device_details.dealer_name)}</a>}</span>)
             },
             {
                 key: 14,
@@ -264,20 +268,24 @@ export default class DeviceSidebar extends Component {
 
     goToDealer = (dealer) => {
         if (dealer.dealer_id !== 'null' && dealer.dealer_id !== null) {
-            if (dealer.connected_dealer === 0 || dealer.connected_dealer === '' || dealer.connected_dealer === null) {
-                this.setState({
-                    redirect: true,
-                    dealer_id: dealer.dealer_id,
-                    goToPage: '/dealer/dealer'
-                })
+            if (this.props.auth.authUser.type === ADMIN) {
+                this.props.history.push(`/connect-dealer/${btoa(dealer.dealer_id.toString())}`.trim())
             } else {
-                this.setState({
-                    redirect: true,
-                    dealer_id: dealer.dealer_id,
-                    goToPage: '/dealer/sdealer'
-                })
-            }
+                if (dealer.connected_dealer === 0 || dealer.connected_dealer === '' || dealer.connected_dealer === null) {
+                    this.setState({
+                        redirect: true,
+                        dealer_id: dealer.dealer_id,
+                        goToPage: '/dealer/dealer'
+                    })
+                } else {
+                    this.setState({
+                        redirect: true,
+                        dealer_id: dealer.dealer_id,
+                        goToPage: '/dealer/sdealer'
+                    })
+                }
 
+            }
         }
     }
 

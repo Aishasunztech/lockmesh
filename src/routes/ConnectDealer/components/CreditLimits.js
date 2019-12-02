@@ -38,7 +38,7 @@ const confirm = Modal.confirm;
 
 function showConfirm(_this, data, dealer_name) {
     confirm({
-        title: `Are you sure you want to change the credits limit of dealer ( ${dealer_name} ) to ${data.credits_limit} Credits ?`,
+        title: `Are you sure you want to change the credits limit of dealer ( ${dealer_name} ) to ${Math.abs(data.credits_limit)} Credits ?`,
         onOk() {
             _this.props.setCreditLimit(data)
         },
@@ -69,7 +69,8 @@ class CreditsLimits extends Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                // console.log(values);
+                values.credits_limit = -values.credits_limit
+                console.log(values.credits_limit);
                 if (values.credits_limit != this.props.dealer.credits_limit) {
                     values.dealer_id = this.props.dealer.dealer_id
                     showConfirm(this, values, this.props.dealer.dealer_name)
@@ -92,10 +93,10 @@ class CreditsLimits extends Component {
         // console.log("Value" , value);
         var isnum = Number.isInteger(Number(value));
         // console.log("Value", value, isnum);
-        if (isnum && value <= 0) {
+        if (isnum && value >= 0) {
             callback()
         } else {
-            callback(" Value must be a integer and less than or equal to zero")
+            callback(" Value must be a integer and greater than or equal to zero")
         }
     }
 
@@ -122,7 +123,7 @@ class CreditsLimits extends Component {
                         wrapperCol={{ span: 14 }}
                     >
                         {this.props.form.getFieldDecorator('credits_limit', {
-                            initialValue: this.props.credits_limit,
+                            initialValue: Math.abs(this.props.credits_limit),
                             rules: [
                                 {
                                     required: true,

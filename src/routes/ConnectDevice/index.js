@@ -605,6 +605,7 @@ class ConnectDevice extends Component {
                     endLoading={this.props.endLoading}
                     auth={this.props.auth}
                     translation={this.props.translation}
+                    history={this.props.history}
                   />
                 </Col>
                 <Col className="gutter-row action_group" span={8} xs={24} sm={24} md={24} lg={24} xl={8}>

@@ -10,7 +10,8 @@ import {
     DEALER_PAYMENT_HISTORY,
     SET_DEALER_LIMIT,
     DEALER_SALES_HISTORY,
-    DEALER_DOMAINS
+    DEALER_DOMAINS,
+    CONNECT_DEALER_LOADING
 } from "../../constants/ActionTypes";
 
 // import { Button_Cancel } from '../../constants/ButtonConstants';
@@ -29,18 +30,27 @@ const initialState = {
     dealer: null,
     paymentHistory: [],
     salesHistory: [],
-    domains: []
+    domains: [],
+    connectDealerLoading: false
 };
 
 export default (state = initialState, action) => {
 
     switch (action.type) {
 
+        case CONNECT_DEALER_LOADING: {
+            return {
+                ...state,
+                connectDealerLoading: true
+            }
+        }
+
         case DEALER_DETAILS: {
             // console.log(DEALER_DETAILS,':',action.payload)
             return {
                 ...state,
-                dealer: action.payload.dealer
+                dealer: action.payload.dealer,
+                connectDealerLoading: false
             }
         }
         case DEALER_DOMAINS: {

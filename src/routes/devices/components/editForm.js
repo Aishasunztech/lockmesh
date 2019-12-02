@@ -247,10 +247,11 @@ class EditDevice extends Component {
         if (this.props !== nextProps) {
             this.setState({
                 tabselect: this.props.device.finalStatus === DEVICE_PRE_ACTIVATION ? '0' : '1',
-                parent_packages: this.props.device.finalStatus === DEVICE_PRE_ACTIVATION ? [] : this.filterList('1 month', nextProps.parent_packages, 'pkg'),
+                parent_packages: this.props.device.finalStatus === DEVICE_PRE_ACTIVATION ? this.filterList('trial', nextProps.parent_packages, 'pkg') : this.filterList('1 month', nextProps.parent_packages, 'pkg'),
                 product_prices: this.props.device.finalStatus === DEVICE_PRE_ACTIVATION ? [] : this.filterList('1 month', nextProps.product_prices, 'product'),
             })
         }
+
     }
 
     handleUserModal = () => {
@@ -1294,7 +1295,7 @@ class EditDevice extends Component {
                     className="edit_form"
                     bodyStyle={{ overflow: "overlay" }}
                     okText={convertToLang(this.props.translation[""], "CHECKOUT")}
-                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     <Invoice
                         PkgSelectedRows={this.state.PkgSelectedRows}
