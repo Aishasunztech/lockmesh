@@ -117,7 +117,7 @@ export default class DealerAction extends Component {
         console.log(dealerList);
 
         states.dealerList = dealerList;
-        // states.searchedValue = value
+        states.searchedValue = value
 
         if (index === -1) {
             states.disabledSearchButton = true;
