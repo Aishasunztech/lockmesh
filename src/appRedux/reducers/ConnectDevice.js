@@ -79,7 +79,8 @@ import {
     SERVICES_HISTORY,
     CANCEL_EXTENDED_SERVICE,
     GET_DEVICE_LIST,
-    GET_DEVICE_BILLING_HISTORY
+    GET_DEVICE_BILLING_HISTORY,
+    DEVICE_NOT_FOUND
 } from "../../constants/ActionTypes";
 
 import {
@@ -238,6 +239,13 @@ export default (state = initialState, action) => {
                 is_policy_process: 0,
                 noOfApp_push_pull: 0,
                 noOfApp_pushed_pulled: 0,
+            }
+        }
+        case DEVICE_NOT_FOUND: {
+            // console.log("CLEAR STATE FUNCTION");
+            return {
+                ...state,
+                device_found: false,
             }
         }
         case GET_DEVICE_DETAILS: {
