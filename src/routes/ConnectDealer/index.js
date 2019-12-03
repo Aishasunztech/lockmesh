@@ -271,6 +271,7 @@ class ConnectDealer extends Component {
     render() {
 
         return (
+
             <Fragment>
                 {this.props.isLoading ? <CircularProgress /> :
                     <Fragment>
@@ -279,6 +280,7 @@ class ConnectDealer extends Component {
                         />
                         {this.props.dealer ?
                             <Row gutter={16} type="flex" align="top">
+
                                 {/* Dealer Information */}
                                 <Col className="" xs={24} sm={24} md={8} lg={8} xl={8}>
                                     <Card style={{ borderRadius: 12 }}>
@@ -301,12 +303,16 @@ class ConnectDealer extends Component {
                                         <h2 style={{ textAlign: "center" }}>Account Profile</h2>
                                         <Divider className="mb-0" />
                                         <Row>
-                                            <Col span={8} className="text-center ">
-                                                <img src={require("assets/images/profile-image.png")} className="mb-8 mt-16"></img>
-                                                <h1 className="mb-0" style={{ fontSize: '3vh', textTransform: 'capitalize' }}>{(this.props.dealer) ? this.props.dealer.dealer_name : 'N/A'}</h1>
-                                                <p style={{ textTransform: 'capitalize', marginBottom: '0' }}>({(this.props.dealer) ? this.props.dealer.dealer_type : 'N/A'})</p>
+                                            <Col span={24} className="text-center">
+                                                <div className="text-left">
+                                                    <img src={require("assets/images/profile-image.png")} className="prof_pic" width="85px" />
+                                                    <div className="name_type">
+                                                        <h1 className="mb-0 d_n_vh_vw">{(this.props.dealer) ? this.props.dealer.dealer_name : 'N/A'}</h1>
+                                                        <p style={{ textTransform: 'capitalize', }}>({(this.props.dealer) ? this.props.dealer.dealer_type : 'N/A'})</p>
+                                                    </div>
+                                                </div>
                                             </Col>
-                                            <Col span={16} style={{ padding: '0px 15px 0 0', }}>
+                                            <Col span={24}>
                                                 <Table
                                                     columns={this.dealerInfoColumns1}
                                                     bordered
@@ -325,10 +331,11 @@ class ConnectDealer extends Component {
                                                     className="ovd_table"
                                                 />
                                             </Col>
+
+
                                         </Row>
                                     </Card>
                                 </Col>
-
                                 {/* Dealer Action Buttons */}
                                 <Col className="side_action right_bar" xs={24} sm={24} md={8} lg={8} xl={8} >
                                     <DealerAction
@@ -359,11 +366,13 @@ class ConnectDealer extends Component {
                                     />
 
                                 </Col>
+
                             </Row>
+
                             : <DealerNotFoundPage />}
                     </Fragment>
                 }
-            </Fragment>
+            </Fragment >
         )
     }
 }

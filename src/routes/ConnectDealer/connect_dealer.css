@@ -22,6 +22,11 @@
     padding: 8px 4px !important;
 }
 
+.side_action .ant-btn>span {
+    margin-left: 0 !important;
+    padding: 0;
+}
+
 .overdue_txt {
     font-weight: 500;
     font-size: 13px;
@@ -36,4 +41,25 @@
 
 .ovd_table .ant-table-tbody>tr>td {
     padding: 8px 2px !important;
+}
+
+.d_n_vh_vw {
+    text-transform: capitalize;
+    font-size: 1.6vw;
+}
+
+.prof_pic {
+    margin: 11px 0 13px 0;
+}
+
+.name_type {
+    display: inline-grid;
+    margin-left: 16px;
+}
+
+@media (max-width: 768px) {
+    .d_n_vh_vw {
+        text-transform: capitalize;
+        font-size: 24px;
+    }
 }
