@@ -108,7 +108,7 @@ export default class DealerAction extends Component {
         let states = {}
 
         console.log("searchedValue: ", value)
-        if (value) {
+        if (value && this.props.dealerList && this.props.dealerList.length) {
             dealerList = componentSearch(this.props.dealerList, value)
             
             index = this.props.dealerList.findIndex((dealer) => (dealer.dealer_name.toLowerCase() === value.toLowerCase() || dealer.dealer_id.toString().toLowerCase() === value.toLowerCase() || dealer.dealer_email.toLowerCase() === value.toLowerCase() || dealer.link_code.toString().toLowerCase() === value.toLowerCase()));

@@ -66,13 +66,20 @@ class RightSidebar extends Component {
             onChange={() => this.callback()}
           // style={{ height: 400 }}
           >
-            {this.renderList(this.props.tasks, 'pending')}
-            {/* <div style={{ height: 50 }}></div> */}
+            {this.props.tasks && this.props.tasks.length ?
+              this.renderList(this.props.tasks, 'pending')
+              :
+              <div style={{ height: 50 }}>You don't have any queue job yet</div>
+            }
           </Collapse>
 
         </CustomScrollbars>
         <br />
-        <Button type="primary" style={{ width: "100%" }} onClick={this.queueOnload}>Load More</Button>
+        {/* {this.props.tasks && this.props.tasks.length > 10
+          ? */}
+        <Button disabled={this.props.tasks && this.props.tasks.length > 10 ? false : true} type="primary" style={{ width: "100%" }} onClick={this.queueOnload}>Load More</Button>
+        {/* : null
+        } */}
       </div>
 
     )
@@ -81,6 +88,9 @@ class RightSidebar extends Component {
 
 
   toggleRightSidebar = () => {
+    if (!this.state.isRightSidebarOpened) {
+      this.props.getSocketProcesses();
+    }
     this.setState(previousState => (
       {
         isRightSidebarOpened: !previousState.isRightSidebarOpened
@@ -131,7 +141,7 @@ class RightSidebar extends Component {
   }
 
   componentDidMount() {
-    this.props.getSocketProcesses();
+    // this.props.getSocketProcesses();
   }
   componentWillReceiveProps(nextProps) {
     // console.log("rightSidebar componentWillReceiveProps: ", nextProps.socket.connected);
