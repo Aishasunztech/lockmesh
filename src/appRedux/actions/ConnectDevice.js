@@ -69,7 +69,8 @@ import {
     CANCEL_EXTENDED_SERVICE,
     USER_CREDITS,
     GET_DEVICE_LIST,
-    GET_DEVICE_BILLING_HISTORY
+    GET_DEVICE_BILLING_HISTORY,
+    DEVICE_NOT_FOUND
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -101,13 +102,10 @@ export function getDeviceDetails(deviceId) {
             // console.log("slkdflaskdfjlasf", response.data);
             if (RestService.checkAuth(response.data)) {
                 // console.log("slkdflaskdfjlasf", response.data);
-                if (response.data) {
-                    dispatch({
-                        type: GET_DEVICE_DETAILS,
-                        payload: response.data.data
-                    })
-                }
-
+                dispatch({
+                    type: GET_DEVICE_DETAILS,
+                    payload: response.data.data
+                })
             } else {
                 dispatch({
                     type: INVALID_TOKEN
@@ -115,6 +113,14 @@ export function getDeviceDetails(deviceId) {
             }
         });
 
+    };
+}
+export function deviceNotFound() {
+    //console.log('object is callse')
+    return (dispatch) => {
+        dispatch({
+            type: DEVICE_NOT_FOUND
+        })
     };
 }
 export function getDeviceListConnectDevice(deviceId) {
