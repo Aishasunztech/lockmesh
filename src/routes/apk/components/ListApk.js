@@ -126,7 +126,7 @@ export default class ListApk extends Component {
                         Policies
                     </Tag>)
                 }
-                
+
                 if (app.permission_count != 0) {
                     usedBy.push(<Tag color="green" key="Permissions">Permissions</Tag>)
                 }
@@ -151,18 +151,18 @@ export default class ListApk extends Component {
 
                                 {/* DELETE APK BUTTON */}
                                 {/* {((!app.policies || app.policies.length === 0) && app.permission_count == 0) ? */}
-                                    <Button
-                                        type="danger"
-                                        className="mob_m_t"
-                                        size="small"
-                                        style={{ textTransform: "uppercase" }}
-                                        onClick={(e) => {
-                                            this.props.handleConfirmDelete(app.apk_id, app, usedBy);
-                                        }}
-                                    >
-                                        {convertToLang(this.props.translation[Button_Delete], "DELETE")}
-                                    </Button>
-                                 {/* : null} */}
+                                <Button
+                                    type="danger"
+                                    className="mob_m_t"
+                                    size="small"
+                                    style={{ textTransform: "uppercase" }}
+                                    onClick={(e) => {
+                                        this.props.handleConfirmDelete(app.apk_id, app, usedBy);
+                                    }}
+                                >
+                                    {convertToLang(this.props.translation[Button_Delete], "DELETE")}
+                                </Button>
+                                {/* : null} */}
 
                             </Fragment>
                         </div>
@@ -534,7 +534,7 @@ export default class ListApk extends Component {
                         </Card>
                     </div> :
                     <Card className={`fix_card ${styleType}`}>
-                        {/* <hr className="fix_header_border" style={{ top: "63px" }} /> */}
+                        <hr className="fix_header_border" style={{ top: "63px" }} />
                         <CustomScrollbars className="gx-popover-scroll ">
                             <Table
                                 className="gx-table-responsive apklist_table"
