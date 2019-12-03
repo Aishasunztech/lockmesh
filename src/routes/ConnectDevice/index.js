@@ -5,6 +5,7 @@ import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs } fr
 import CircularProgress from "components/CircularProgress/index";
 import DeviceSettings from './components/DeviceSettings';
 import { convertToLang } from '../../routes/utils/commonUtils';
+import DeviceNotFound from '../InvalidPage/deviceNotFound';
 import BackBtn from './back';
 import {
   getDeviceDetails,
@@ -724,7 +725,10 @@ class ConnectDevice extends Component {
                 : null : null}
 
 
-        </div> : <h1>{convertToLang(this.props.translation[DEVICE_NOT_FOUND], "Device Not Found")} </h1>
+        </div>
+        :
+        // <h1>{convertToLang(this.props.translation[DEVICE_NOT_FOUND], "Device Not Found")} </h1>
+        <DeviceNotFound />
     )
   }
 }
