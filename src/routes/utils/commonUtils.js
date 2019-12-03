@@ -2,9 +2,10 @@ import moment_timezone from "moment-timezone";
 import moment from 'moment';
 import jsPDF from 'jspdf';
 import XLSX from 'xlsx';
+import axios from 'axios';
 import jsPDFautotable from 'jspdf-autotable';
 
-import { TIME_ZONE } from '../../constants/Application';
+import {BASE_URL, TIME_ZONE} from '../../constants/Application';
 
 import {
   DEVICE_ACTIVATED,
@@ -663,10 +664,28 @@ export function generatePDF(columns, rows, title, fileName, formData) {
     theme: "striped"
   });
 
-  doc.save(fileName + '.pdf');
+  var pdf = doc.output('blob');
+  var blobToBase64 = function(blob, cb) {
+    var reader = new FileReader();
+    reader.onload = function() {
+      var dataUrl = reader.result;
+      var base64 = dataUrl.split(',')[1];
+      cb(base64);
+    };
+    reader.readAsDataURL(blob);
+  };
+
+  var FileNameToOpen = fileName+'.pdf';
+  blobToBase64(pdf, function(base64){
+    var update = {'blob': base64, 'fileName': FileNameToOpen};
+    axios.post(BASE_URL+'users/show-pdf-file', update).then( res => {
+      if (res.status){
+        window.open(BASE_URL + 'users/getFileWithFolder/report/'+ FileNameToOpen, '_blank');
+      }
+    });
+
+  });
 }
-
-
 
 export function generateExcel(rows, fileName) {
   var wb = XLSX.utils.book_new();
@@ -674,7 +693,6 @@ export function generateExcel(rows, fileName) {
   let fileNameCSV = fileName + ".xlsx";
 
   XLSX.utils.book_append_sheet(wb, ws, 'Devices');
-  console.log(wb);
   XLSX.writeFile(wb, fileNameCSV)
 
 }

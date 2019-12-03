@@ -44,7 +44,8 @@ import {
   clearApplications,
   clearState,
   clearResyncFlag,
-  resetDevice
+  resetDevice,
+  deviceNotFound
 } from "../../appRedux/actions/ConnectDevice";
 
 import { getDevicesList, editDevice } from '../../appRedux/actions/Devices';
@@ -67,7 +68,8 @@ import {
   ackUninstalledApps,
   ackSettingApplied,
   sendOnlineOfflineStatus,
-  deviceSynced
+  deviceSynced,
+
 } from "../../appRedux/actions/Socket";
 
 import imgUrl from '../../assets/images/mobile.png';
@@ -161,7 +163,7 @@ class ConnectDevice extends Component {
   componentDidMount() {
 
     const device_id = isBase64(this.props.match.params.device_id);
-
+    // console.log(device_id);
     if (device_id && device_id !== '') {
 
       // this.setState({
@@ -185,7 +187,10 @@ class ConnectDevice extends Component {
       this.props.getImeiHistory(device_id);
       this.props.getDealerApps();
       this.props.getActivities(device_id)
+    } else {
+      this.props.deviceNotFound();
     }
+
 
     // this.props.endLoading();
     setTimeout(() => {
@@ -225,7 +230,7 @@ class ConnectDevice extends Component {
 
   componentWillReceiveProps(nextProps) {
     const device_id = isBase64(nextProps.match.params.device_id);
-
+    // console.log(device_id);
     if (device_id) {
       if (this.props.translation != nextProps.translation) {
         this.mainMenu = mobileMainMenu(nextProps.translation);
@@ -237,6 +242,8 @@ class ConnectDevice extends Component {
           apk_list: nextProps.apk_list
         })
       }
+
+
       // there is no use of pathname under device id section
       // if(this.props.history.location.pathname !== nextProps.history.location.pathname){
       // if(this.props.pathName !== nextProps.pathName){
@@ -263,8 +270,9 @@ class ConnectDevice extends Component {
         }
       }
       // }
+    } else {
+      this.props.deviceNotFound();
     }
-
     if (this.props !== nextProps) {
       // console.log('object, ', nextProps.showMessage)
       if (nextProps.reSync) {
@@ -790,7 +798,8 @@ function mapDispatchToProps(dispatch) {
     ackSettingApplied: ackSettingApplied,
     sendOnlineOfflineStatus: sendOnlineOfflineStatus,
     deviceSynced: deviceSynced,
-    resetDevice: resetDevice
+    resetDevice: resetDevice,
+    deviceNotFound: deviceNotFound
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, auth, socket, settings }, ownProps) => {

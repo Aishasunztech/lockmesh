@@ -169,7 +169,7 @@ class Invoice extends Component {
           'dealer_pin': item.dealer_pin ? item.dealer_pin : 'N/A',
           'created_at': item.created_at ? getDateFromTimestamp(item.created_at) : 'N/A',
           'end_user_payment_status': item.end_user_payment_status ? item.end_user_payment_status : 'N/A',
-          'file_name': <a href={BASE_URL + 'users/getFile/' + item.file_name} download><Button type="primary" size="small">Download</Button></a>,
+          'file_name': <a href={BASE_URL + 'users/getFile/' + item.file_name} target="_blank" download><Button type="primary" size="small">Download</Button></a>,
         })
       });
     }
@@ -348,6 +348,7 @@ class Invoice extends Component {
                   </Col>
                   <Col xs={10} sm={10} md={10} lg={10} xl={10}>
                     <div className="pull-right">
+                      <Button className="mb-8" type="dotted" icon="download" size="small">Preview Report</Button>
                       <Button className="mb-8" type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Invoice Report', fileName, this.state.reportFormData) }}>Download PDF</Button>
                       <Button className="mb-8" type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName) }}>Download Excel</Button>
                     </div>
