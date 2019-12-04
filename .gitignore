@@ -3,7 +3,6 @@
 .idea/
 yarn.lock
 node_modules/
-package-lock.json/
 /nbproject/private/
 npm-debug.log
 build/

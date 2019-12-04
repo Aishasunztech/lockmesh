@@ -9,7 +9,7 @@ import DealerSalesHistory from "./DealerSalesHistory";
 import DealerDomains from './DealerDomains';
 
 // Helpers
-import { convertToLang } from '../../utils/commonUtils'
+import { convertToLang, componentSearch } from '../../utils/commonUtils'
 // import { getColor, isBase64, convertToLang } from "../utils/commonUtils"
 // import { getDealerDetails, editDealer } from '../../appRedux/actions'
 // import RestService from "../../appRedux/services/RestServices";
@@ -108,15 +108,16 @@ export default class DealerAction extends Component {
         let states = {}
 
         console.log("searchedValue: ", value)
-        if (value) {
-            dealerList = this.props.dealerList.filter((dealer) => dealer.dealer_name.toLowerCase().includes(value.toLowerCase()));
-            index = this.props.dealerList.findIndex((dealer) => dealer.dealer_name.toLowerCase() === value.toLowerCase());
+        if (value && this.props.dealerList && this.props.dealerList.length) {
+            dealerList = componentSearch(this.props.dealerList, value)
+            
+            index = this.props.dealerList.findIndex((dealer) => (dealer.dealer_name.toLowerCase() === value.toLowerCase() || dealer.dealer_id.toString().toLowerCase() === value.toLowerCase() || dealer.dealer_email.toLowerCase() === value.toLowerCase() || dealer.link_code.toString().toLowerCase() === value.toLowerCase()));
         }
 
         console.log(dealerList);
 
         states.dealerList = dealerList;
-        // states.searchedValue = value
+        states.searchedValue = value
 
         if (index === -1) {
             states.disabledSearchButton = true;
@@ -161,11 +162,10 @@ export default class DealerAction extends Component {
 
         return (
             <Fragment>
-                <Card className="search_dev_id">
+                <Card className="search_dev_id" style={{ borderRadius: 12 }}>
                     <Row gutter={16} type="flex" justify="center" align="top">
                         <Col span={24} className="gutter-row" justify="center" >
-                            <h4 className="mb-6">Search Dealer ID</h4>
-
+                            <h4 className="mb-6">Search Dealer</h4>
                             <AutoComplete
                                 className="global-search"
                                 size="large"
@@ -175,7 +175,7 @@ export default class DealerAction extends Component {
                                 })}
                                 onSelect={this.handleDealerChange}
                                 onSearch={this.handleDealerSearch}
-                                placeholder={convertToLang(this.props.translation[""], "Select Dealer")}
+                                placeholder={convertToLang(this.props.translation[""], "Search Dealer")}
                                 optionLabelProp="text"
                             >
                                 <Input
@@ -194,7 +194,6 @@ export default class DealerAction extends Component {
                                     }
                                 />
                             </AutoComplete>
-
                             {/* <Select
                                 showSearch={true}
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
@@ -218,12 +217,10 @@ export default class DealerAction extends Component {
                         <Col
                             span={12}
                             className="gutter-row"
-                            justify="center"
-                        >
+                            justify="center">
                             <Button
                                 onClick={() => this.refs.dealerDomains.showModal(this.props.dealer, this.props.getDealerDomains)}
-                                style={{ width: "100%", marginBottom: 16, }}
-                            >
+                                style={{ width: "100%", marginBottom: 16, }}>
                                 <h6 className="mb-0">Domains</h6>
                             </Button>
                         </Col>
@@ -246,8 +243,7 @@ export default class DealerAction extends Component {
                         >
                             <Button
                                 style={{ width: "100%", marginBottom: 16, }}
-                                onClick={() => this.refs.dealerPaymentHistory.showModal(this.props.dealer, this.props.getDealerPaymentHistory)}
-                            >
+                                onClick={() => this.refs.dealerPaymentHistory.showModal(this.props.dealer, this.props.getDealerPaymentHistory)}>
                                 <h6 className="mb-0">Payment History</h6>
                             </Button>
                         </Col>
