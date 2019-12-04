@@ -63,12 +63,11 @@ export class MainApp extends Component {
 
   componentWillReceiveProps(nextProps) {
 
-    // if(nextProps.socket && nextProps.socket.connected){
-    // if(nextProps.socket ){
-
-    //   // this.props.hello_web(nextProps.socket);
-    //   // this.props.getNotification(nextProps.socket)
-    // }
+    if(nextProps.socket && nextProps.socket.connected){
+     
+      this.props.hello_web(nextProps.socket);
+      // this.props.getNotification(nextProps.socket)
+    }
   }
 
   componentWillUnmount() {
@@ -197,8 +196,7 @@ export class MainApp extends Component {
 }
 
 const mapStateToProps = ({ settings, socket }) => {
-
-
+  
   const { width, navStyle } = settings;
   return { width, navStyle, socket: socket.socket }
 };

@@ -39,12 +39,28 @@ import RestService from '../services/RestServices'
 // socket should connect on login
 export const connectSocket = () => {
     return (dispatch) => {
+        let token = localStorage.getItem('token');
         let socket = RestService.connectSocket();
-        dispatch({
-            type: CONNECT_SOCKET,
-            payload: socket
+        console.log("this socket: ",socket);
+        socket.emit('authentication', {
+            token: token
         })
-        // CONNECT_SOCKET
+        socket.on('authenticated', (data)=>{
+            if(data){
+                dispatch({
+                    type: CONNECT_SOCKET,
+                    payload: socket
+                })
+                // return socket;
+            } else {
+                dispatch({
+                    type: CONNECT_SOCKET,
+                    payload: null
+                })
+            }
+            // console.log("authenticated:",)
+        })
+        
     }
 }
 
@@ -304,6 +320,7 @@ export function getAppJobQueue(deviceId) {
 
 export const closeConnectPageSocketEvents = (socket, deviceId) => {
     return (dispatch) => {
+        // alert('hello')
         if (socket) {
             // push apps
             socket.off(ACK_FINISHED_PUSH_APPS + deviceId);
@@ -326,14 +343,14 @@ export const closeConnectPageSocketEvents = (socket, deviceId) => {
 
             // test
             socket.off('hello_web');
-            socket.disconnect();
+            // socket.disconnect();
         } else {
 
         }
-        dispatch({
-            type: DISCONNECT_SOCKET,
-            payload: null
-        });
+        // dispatch({
+        //     type: DISCONNECT_SOCKET,
+        //     payload: null
+        // });
 
     }
 }
@@ -353,11 +370,12 @@ export const getNotification = (socket) => {
         }
     }
 }
+
 export const hello_web = (socket) => {
 
     return (dispatch) => {
-        if (socket && socket._callbacks['$' + 'hello_web'] == undefined) {
-            // socket.emit('join', 'testRoom');
+        if (socket && socket._callbacks[`$hello_web`] == undefined) {
+            socket.emit('hello_web:', 'hello_web');
             socket.on('hello_web', function () {
                 console.log("hello world");
             })
@@ -369,25 +387,17 @@ export const hello_web = (socket) => {
 }
 
 export const closeAllSocketEvents = (socket) => {
+    return (dispatch) => {
+        if (socket) {
+            // test
+            socket.disconnect();
+        } else {
 
+        }
+        dispatch({
+            type: DISCONNECT_SOCKET,
+            payload: null
+        });
+
+    }
 }
-
-
-
-//******************** Bulk Activities */
-
-// export const ackFinishedBulkPushApps = (socket, deviceId) => {
-//     return (dispatch) => {
-//         if (socket && socket._callbacks['$' + ACK_FINISHED_PUSH_APPS + deviceId] == undefined) {
-//             socket.on(ACK_FINISHED_PUSH_APPS + deviceId, (response) => {
-//                 // console.log("jkshdksa");
-//                 dispatch({
-//                     type: FINISHED_BULK_PUSH_APPS,
-//                     payload: true
-//                 })
-//             })
-//         } else {
-
-//         }
-//     }
-// }
