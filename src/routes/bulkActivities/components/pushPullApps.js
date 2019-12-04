@@ -116,7 +116,8 @@ const PushAppsModal = (props) => {
                         placeholder={convertToLang(props.translation[SEARCH_APPS], "Search Apps")}
                     />
                     {/* <br />{`${convertToLang(props.translation[DEVICE_ID], "DEVICE ID")}:`}  {props.device.device_id} */}
-                </div>}
+                </div>
+            }
             visible={props.pushAppsModal}
             onOk={() => {
                 if (props.selectedPushAppKeys.length) {
