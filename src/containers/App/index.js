@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import URLSearchParams from 'url-search-params'
 import { Redirect, Route, Switch } from "react-router-dom";
@@ -9,12 +9,12 @@ import Login from "../Login";
 import VerifyAuthCode from "../VerifyAuthCode";
 
 
-import { 
+import {
   setInitUrl,
-  checkComponent, 
-  onLayoutTypeChange, 
-  onNavStyleChange, 
-  setThemeType, 
+  checkComponent,
+  onLayoutTypeChange,
+  onNavStyleChange,
+  setThemeType,
   // getLanguage, 
   // getAll_Languages 
 } from '../../appRedux/actions'
@@ -38,7 +38,8 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      re_render: true
+      re_render: true,
+      online: window.navigator.onLine
     }
   }
 
@@ -73,7 +74,7 @@ class App extends Component {
   };
 
   componentWillMount() {
-    
+
     if (this.props.initURL === '') {
       this.props.setInitUrl(this.props.history.location.pathname);
     }
@@ -92,31 +93,32 @@ class App extends Component {
 
   componentDidMount() {
     document.title = APP_TITLE + ' - Admin Dashboard';
-    // this.props.getLanguage();
+    this.checkInternetConnection();
     // this.props.getAll_Languages();
 
   }
 
   componentWillReceiveProps(nextProps) {
-
-    // if (this.props.isSwitched !== nextProps.isSwitched) {
-    //   this.props.getLanguage();
-    //   // this.setState({
-    //   //   re_render: !this.state.re_render
-    //   // })
-    // }
   }
 
-  componentWillUnmount(){
-    
-  }
+  componentWillUnmount() {
 
+  }
+  checkInternetConnection() {
+    let _this = this
+    setInterval(function () {
+      _this.setState({
+        online: window.navigator.onLine
+      })
+    }, 5000);
+
+  }
   render() {
 
     const { match, location, layoutType, navStyle, locale, authUser, initURL } = this.props;
-    
+
     if (location.pathname === '/') {
-      if ( !authUser.id || !authUser.email || !authUser.token || !authUser.type) {
+      if (!authUser.id || !authUser.email || !authUser.token || !authUser.type) {
         return (<Redirect to={'/login'} />);
       } else if ((initURL === '' || initURL === '/' || initURL === '/login' || initURL === '/session_timeout')) {
         return (<Redirect to={'/dashboard'} />);
@@ -131,20 +133,26 @@ class App extends Component {
     this.setNavStyle(navStyle);
 
     return (
-
-      <Switch>
-        <Route exact path='/login' component={Login} />
-        <Route exact path="/verify-auth" component={VerifyAuthCode} />
-        <Route exact path="/session_timeout" component={SessionTimeOut} />
-
-        <RestrictedRoute
-          authUser={authUser}
-          path={`${match.url}`}
-          re_render={this.state.re_render}
-          component={MainApp}
-
-        />
-      </Switch>
+      <Fragment>
+        {this.state.online ? null :
+          <div style={{ background: 'red', width: '100%', height: '30px', textAlign: 'center' }}>
+            <h3 style={{
+              color: 'white', paddingTop: '3px'
+            }}>You are currently offline, Please check your internet connection.</h3>
+          </div>
+        }
+        <Switch>
+          <Route exact path='/login' component={Login} />
+          <Route exact path="/verify-auth" component={VerifyAuthCode} />
+          <Route exact path="/session_timeout" component={SessionTimeOut} />
+          <RestrictedRoute
+            authUser={authUser}
+            path={`${match.url}`}
+            re_render={this.state.re_render}
+            component={MainApp}
+          />
+        </Switch>
+      </Fragment>
 
     )
   }
