@@ -906,6 +906,7 @@ class BulkActivities extends Component {
                     columns={this.state.columns.filter(e => e.dataIndex != "status")}
                     // onChangeTableSorting={this.handleTableChange}
                     translation={this.props.translation}
+                    history_loading={this.props.history_loading}
                 />
 
                 {/* Push Apps responses handle through modal */}
@@ -1093,7 +1094,7 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users, device_details, socket }, otherProps) => {
     // console.log(bulkDevices.usersOfDealers, 'usersOfDealers ,devices.bulkDevices ', bulkDevices.bulkDevices);
     // console.log("bulkDevices.selectedDevices", bulkDevices.selectedDevices, "bulkDevices.bulkSelectedPushApps ", bulkDevices.bulkSelectedPushApps, "bulkDevices.bulkSelectedPullApps ", bulkDevices.bulkSelectedPullApps);
-    console.log("bulkDevices.selectedDevices:: ", bulkDevices.selectedDevices)
+    // console.log("bulkDevices.selectedDevices:: ", bulkDevices.selectedDevices)
     return {
         socket: socket.socket,
         user: auth.authUser,
@@ -1120,6 +1121,7 @@ const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users,
         guestAllPushApps: device_details.guestAllPushApps,
         enableAllPushApps: device_details.enableAllPushApps,
         encryptedAllPushApps: device_details.encryptedAllPushApps,
+        history_loading: bulkDevices.history_loading
     };
 }
 

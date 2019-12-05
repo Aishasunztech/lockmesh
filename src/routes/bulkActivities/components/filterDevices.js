@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { Table, Button, Modal, Row, Col, Spin, Input, Card } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import styles from './devices.css'
+// import styles from './devices.css'
 import { getAllDealers } from "../../../appRedux/actions/Dealers";
 // import { savePermission } from "../../../appRedux/actions/Apk";
 import FilterDevicesList from "./filterDevicesList";

@@ -3,97 +3,23 @@ import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip, Progress } from "antd";
-// import TableHistory from "./TableHistory";
-// import SuspendDevice from '../../devices/components/SuspendDevice';
-// import ActivateDevcie from '../../devices/components/ActivateDevice';
-
 import { componentSearch, convertToLang } from '../../utils/commonUtils';
-// import EditDevice from '../../devices/components/editDevice';
-// import FlagDevice from '../../ConnectDevice/components/flagDevice';
-// import WipeDevice from '../../ConnectDevice/components/wipeDevice';
-// import ImeiView from '../../ConnectDevice/components/ImeiView';
 import DealerApps from "./DealerApps";
-// import PasswordForm from './PasswordForm';
-// import DeviceSettings from './DeviceSettings';
-// import Activity from './Activity';
-// import SimSettings from './SimSettings/index';
 import PullApps from './PullApps';
-// import SimHistory from './SimSettings/SimHistory';
-// import NewDevice from '../../../components/NewDevices';
-
 
 import {
-    showHistoryModal,
-    showSaveProfileModal,
-    saveProfile,
-    savePolicy,
-    hanldeProfileInput,
-    transferDeviceProfile,
-    getDealerApps,
-    loadDeviceProfile,
-    showPushAppsModal,
-    showPullAppsModal,
-    applyPushApps,
-    applyPullApps,
-    writeImei,
-    getActivities,
-    hidePolicyConfirm,
-    applyPolicy,
-    applySetting,
-    getProfiles,
-    wipe,
-    simHistory
-} from "../../../appRedux/actions/ConnectDevice";
-
-import { getNewDevicesList } from "../../../appRedux/actions/Common";
-import {
-    rejectDevice,
-    addDevice,
-    getSimIDs,
-    getChatIDs,
-    getPGPEmails
-} from '../../../appRedux/actions/Devices';
-import {
-    getNewCashRequests,
-    getUserCredit,
-    rejectRequest,
-    acceptRequest
-} from "../../../appRedux/actions/SideBar";
-
-
-import {
-    ADMIN, DEALER, SDEALER, SECURE_SETTING, PUSH_APP, PUSH_APP_TEXT, PULL_APPS_TEXT, PUSH, PULL, Profile_Info, SAVE_PROFILE_TEXT, PUSH_APPS_TEXT, SELECTED_APPS, SELECT_APPS, PROCEED_WITH_WIPING_THE_DEVICE, Name, SEARCH_APPS, WARNING
+    PUSH_APP_TEXT, PULL_APPS_TEXT, SELECTED_APPS, SELECT_APPS, SEARCH_APPS
 } from "../../../constants/Constants";
 
 
 import { PUSH_APPS, PULL_APPS, POLICY, PROFILE } from "../../../constants/ActionTypes"
-import { Button_Push, Button_LoadProfile, Button_LoadPolicy, Button_IMEI, Button_Pull, Button_SaveProfile, Button_Activity, Button_SIM, Button_Transfer, Button_WipeDevice, Button_Unlink, Button_Edit, Button_Suspend, Button_Unsuspend, Button_Flag, Button_UNFLAG, Button_Save, Button_Cancel, Button_Ok, Button_Apply, Button_Back, Button_Yes, Button_No } from '../../../constants/ButtonConstants';
-import {
-    DEVICE_ID,
-    SETTINGS_TO_BE_SENT_TO_DEVICE,
-    ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE,
-    WIPE_DEVICE_DESCRIPTION,
-    DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE,
-    DO_YOU_WANT_TO_APPLY,
-    POLICY_ON_DEVICE,
-    ENTER,
-    DO_YOU_REALLY_WANT_TO_WIPE_THE_DEVICE,
-    ARE_YOU_SURE_YOU_WANT_UNLINK_THE_DEVICE,
-    SIM_SETTINGS,
-    SIM_HISTORY,
-} from "../../../constants/DeviceConstants";
-import ExtensionDropdown from './ExtensionDropdown';
-
-// import TransferHistory from './TransferModule/TransferHistory'
+import { Button_Cancel, Button_Back } from '../../../constants/ButtonConstants';
 
 const confirm = Modal.confirm;
 var coppyList = [];
 var status = true;
 
-
-
 const PushAppsModal = (props) => {
-    // console.log("PushAppsModal ", props.selectedPushApps)
     return (
         <Modal
             maskClosable={false}
@@ -115,7 +41,6 @@ const PushAppsModal = (props) => {
                         autoComplete="new-password"
                         placeholder={convertToLang(props.translation[SEARCH_APPS], "Search Apps")}
                     />
-                    {/* <br />{`${convertToLang(props.translation[DEVICE_ID], "DEVICE ID")}:`}  {props.device.device_id} */}
                 </div>}
             visible={props.pushAppsModal}
             onOk={() => {
@@ -165,9 +90,6 @@ const SelectedPushApps = (props) => {
             title={
                 <div>
                     {convertToLang(props.translation[SELECTED_APPS], "Selected Apps ")}
-                    {/* <br /> */}
-                    {/* {convertToLang(props.translation[DEVICE_ID], "DEVICE ID: ")} */}
-                    {/* {props.device.device_id} */}
                 </div>
             }
             visible={props.selectedAppsModal}
@@ -202,7 +124,6 @@ const SelectedPushApps = (props) => {
 }
 
 const PullAppsModal = (props) => {
-    // onPullAppsSelection
 
     return (
         <Modal
@@ -264,7 +185,6 @@ const SelectedPullApps = (props) => {
             style={{ top: 20 }}
             width="650px"
             title={<div>{convertToLang(props.translation[SELECTED_APPS], "Selected Apps ")}
-                {/* <br /> {convertToLang(props.translation[DEVICE_ID], "DEVICE ID: ")} {props.device.device_id}  */}
             </div>}
             visible={props.selectedPullAppsModal}
             onOk={() => {
@@ -341,8 +261,6 @@ export default class PushPullApps extends Component {
     }
 
     onPushAppsSelection = (selectedRowKeys, selectedRows) => {
-        // console.log(this.state.selectedPushAppKeys, this.state.selectedPushApps, "selectedRowKeys, selectedRows ", selectedRowKeys, selectedRows)
-
         let allSelectedApps = this.state.selectedPushApps;
         let data = [];
 
@@ -357,8 +275,6 @@ export default class PushPullApps extends Component {
                 data.push(el);
             }
         })
-
-        // console.log("selectedRows ", data)
 
         this.setState({
             selectedPushApps: data,
@@ -418,13 +334,11 @@ export default class PushPullApps extends Component {
         let dumyList = [];
         if (this.state.selectedPullAppKeys.length && this.state.selectedPullApps.length) {
             for (let app of this.state.selectedPullApps) {
-                // console.log(app)
                 if (this.state.selectedPullAppKeys.includes(app.app_id)) {
                     dumyList.push(app)
                 }
             }
         }
-        // console.log("dumyList ", dumyList)
         this.setState({
             selectedPullAppsModal: visible,
             pullApps: dumyList
@@ -474,24 +388,17 @@ export default class PushPullApps extends Component {
     }
 
     applyPushApps = (apps) => {
-        // console.log("applyPushApps ", this.state.pushApps, this.props.device_id, this.props.usr_acc_id)
-
-        // this.props.applyPushApps(this.state.pushApps, this.props.device_id, this.props.usr_acc_id);
         this.props.setBulkPushApps(this.state.pushApps);
         this.setState({ selectedApps: [], selectedAppKeys: [], })
-        // this.props.getActivities(this.props.device_id)
     }
 
 
     applyPullApps = () => {
-        // this.props.applyPullApps(this.state.pullApps, this.props.device_id, this.props.usr_acc_id);
         this.props.setBulkPullApps(this.state.pullApps);
         this.setState({ selectedApps: [], selectedAppKeys: [], })
-        // this.props.getActivities(this.props.device_id)
     }
 
     render() {
-        // console.log("this.props.apk_list ", this.props.apk_list)
         return (
             <div>
                 <PushAppsModal
