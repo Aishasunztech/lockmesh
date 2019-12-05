@@ -1,4 +1,4 @@
-import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES, WIPE_BULK_DEVICES, UNLINK_BULK_DEVICES, CLOSE_RESPONSE_MODAL, APPLY_BULK_POLICY, SET_BULK_MESSAGE, SEND_BULK_MESSAGE, SEND_BULK_WIPE_PASS, HANDLE_BULK_WIPE_PASS } from "../../constants/ActionTypes";
+import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES, WIPE_BULK_DEVICES, UNLINK_BULK_DEVICES, CLOSE_RESPONSE_MODAL, APPLY_BULK_POLICY, SET_BULK_MESSAGE, SEND_BULK_MESSAGE, SEND_BULK_WIPE_PASS, HANDLE_BULK_WIPE_PASS, GET_BULK_MSGS, DELETE_BULK_MSG } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
 
@@ -325,6 +325,52 @@ export const handleWipePwdConfirmModal = (data) => {
         dispatch({
             type: HANDLE_BULK_WIPE_PASS,
             payload: data
+        })
+    }
+}
+
+export function getBulkMsgsList() {
+    console.log('at action file ')
+
+    return (dispatch) => {
+        RestService.getBulkMsgsList().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                console.log('at action file on response', response)
+                if (response.data.status) {
+                    dispatch({
+                        type: GET_BULK_MSGS,
+                        payload: response.data,
+                    });
+                }
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+
+    };
+}
+
+// delete bulk msg
+export const deleteBulkMsg = (data) => {
+    console.log("at action file ", data);
+    return (dispatch) => {
+        RestService.deleteBulkMsg(data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                console.log('at action file on response', response)
+                // if (response.data.status) {
+                    dispatch({
+                        type: DELETE_BULK_MSG,
+                        payload: response.data,
+                        delete_id: data
+                    });
+                // }
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
         })
     }
 }

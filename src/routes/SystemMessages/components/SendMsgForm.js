@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Button, Form, Input, Select, InputNumber, Row, Col, Tag } from 'antd';
+import { Button, Form, Input, Select, InputNumber, Row, Col, Tag, Calendar, DatePicker } from 'antd';
 import { checkValue, convertToLang } from '../../utils/commonUtils'
 
 import {
@@ -9,6 +9,8 @@ import { Button_Cancel, Button_submit } from '../../../constants/ButtonConstants
 import { Required_Fields } from '../../../constants/DeviceConstants';
 import FilterDevices from './filterDevices'
 import BulkSendMsgConfirmation from './bulkSendMsgConfirmation';
+import RepeatMsgCalender from './repeateMsgCalender';
+import moment from 'moment';
 
 const { TextArea } = Input;
 
@@ -19,7 +21,8 @@ class AddUserForm extends Component {
         super(props);
 
         this.durationList = [
-            { key: 'NOW', value: "NOW" },
+            { key: 'NONE', value: "NONE" },
+            // { key: 'NOW', value: "NOW" },
             { key: 'DAILY', value: "DAILY" },
             { key: 'WEEKLY', value: "WEEKLY" },
             { key: 'MONTHLY', value: "MONTHLY" },
@@ -34,7 +37,10 @@ class AddUserForm extends Component {
             dealerList: [],
             allUsers: [],
             allDealers: [],
-            selectedAction: 'NOW'
+            selectedAction: 'NONE',
+            calenderValue: moment('2017-01-25'),
+            selected_dateTime: '',
+            isToday: false
         }
     }
 
@@ -66,7 +72,9 @@ class AddUserForm extends Component {
                     devices: this.props.selectedDevices,
                     dealers: this.state.selectedDealers,
                     users: this.state.selectedUsers,
-                    msg: values.msg_txt
+                    msg: values.msg_txt,
+                    repeat: this.state.selected_dateTime ? "NONE" : values.repeat,
+                    selected_date: this.state.selected_dateTime
                 }
                 console.log("data ", data);
                 this.refs.bulk_msg.handleBulkSendMsg(data);
@@ -262,83 +270,29 @@ class AddUserForm extends Component {
         });
 
     }
+
+    onPanelChange = (value, mode) => {
+        console.log("hi ", value, mode);
+    }
+
+    dateTimeOnChange = (value, dateString) => {
+        console.log('Selected Time: ', value);
+        console.log('Formatted Selected Time: ', dateString, "current data: ", moment(new Date()).format('YYYY-MM-DD HH:mm:ss'));
+        let todayVal = false;
+        if (moment(dateString).format('YYYY-MM-DD HH:mm') === moment(new Date()).format('YYYY-MM-DD HH:mm')) {
+            this.props.form.setFieldsValue({ repeat: 'NONE' });
+            todayVal = true;
+        }
+        this.setState({ selected_dateTime: dateString, isToday: todayVal });
+    }
+
     render() {
-        //   console.log('props of coming', this.props.device);
-        //  alert(this.props.device.device_id);
-        const { visible, loading } = this.state;
-        // console.log(this.state.type);
         return (
             <div>
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
-                    {/* <p>(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")} </p> */}
-                    {/* <Row gutter={24} className="">
-                        <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
-                            <span className=""> {convertToLang(this.props.translation[""], "Select Dealers/S-Dealers:")} </span>
-                        </Col>
-
-                        <Col className="col-md-6 col-sm-6 col-xs-6">
-                            <Select
-                                value={this.state.selectedDealers}
-                                mode="multiple"
-                                labelInValue
-                                showSearch
-                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                maxTagCount={this.state.checkAllSelectedDealers ? 0 : 2}
-                                maxTagTextLength={10}
-                                maxTagPlaceholder={this.state.checkAllSelectedDealers ? "All Selected" : `${this.state.selectedDealers.length - 2} more`}
-                                style={{ width: '100%' }}
-                                placeholder={convertToLang(this.props.translation[""], "Select Dealers/S-Dealers")}
-                                onChange={this.handleChangeDealer}
-                                onDeselect={(e) => this.handleDeselect(e, "dealers")}
-                            >
-                                {(this.state.allDealers && this.state.allDealers.length > 0) ?
-                                    <Select.Option key="allDealers" value="all">Select All</Select.Option>
-                                    : <Select.Option key="" value="">Data Not Found</Select.Option>
-                                }
-                                {this.state.allDealers.map(item => <Select.Option key={item.key} value={item.key}>{item.label}</Select.Option>)}
-                            </Select>
-                        </Col>
-                    </Row>
-                    <br />
-
-                    <p>Dealers/S-Dealers Selected: <span className="font_26">{((this.state.selectedDealers.length) ? this.state.selectedDealers.map(item => <Tag>{item.label}</Tag>) : "NOT SELECTED")}</span></p>
-                    <Row gutter={24} className="">
-                        <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
-                            <span className=""> {convertToLang(this.props.translation[""], "Select Users:")} </span>
-                        </Col>
-
-                        <Col className="col-md-6 col-sm-6 col-xs-6">
-                            <Select
-                                value={this.state.selectedUsers}
-                                showSearch
-                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}// showSearch={false}
-                                mode="multiple"
-                                labelInValue
-                                maxTagCount={this.state.checkAllSelectedUsers ? 0 : 2}
-                                maxTagTextLength={10}
-                                maxTagPlaceholder={this.state.checkAllSelectedUsers ? "All Selected" : `${this.state.selectedUsers.length - 2} more`}
-                                style={{ width: '100%' }}
-                                onDeselect={(e) => this.handleDeselect(e, "users")}
-                                placeholder={convertToLang(this.props.translation[""], "Select Users")}
-                                onChange={this.handleChangeUser}
-                            >
-                                {(this.props.users_list && this.props.users_list.length > 0) ?
-                                    <Select.Option key="allUsers" value="all">Select All</Select.Option>
-                                    : <Select.Option key="" value="">Data Not Found</Select.Option>
-                                }
-                                {this.props.users_list.map(item => <Select.Option key={item.user_id} value={item.user_id} >{item.user_name}</Select.Option>)}
-                            </Select>
-                        </Col>
-                    </Row>
-                    <br />
-                    <p>Users Selected: <span className="font_26">{(this.state.selectedUsers.length) ? this.state.selectedUsers.map(item => <Tag>{item.label}</Tag>) : "NOT SELECTED"}</span></p> */}
-
-
+                    <p>(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")} </p>
 
                     <Row gutter={24} className="">
-                        {/* <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
-                            <span className=""> {convertToLang(this.props.translation[""], "Select Dealers/S-Dealers:")} </span>
-                        </Col> */}
                         <Col className="col-md-9 col-sm-9 col-xs-9">
                             <Form.Item
                                 label={convertToLang(this.props.translation[""], "Select dealer/sdealers")}
@@ -348,7 +302,6 @@ class AddUserForm extends Component {
                                 <Select
                                     value={this.state.selectedDealers}
                                     mode="multiple"
-                                    // notFoundContent="no found"
                                     labelInValue
                                     showSearch
                                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
@@ -374,9 +327,6 @@ class AddUserForm extends Component {
                         <p>Dealers/S-Dealers Selected: <span className="font_26">{this.state.selectedDealers.map(item => <Tag>{item.label}</Tag>)}</span></p>
                         : null}
                     <Row gutter={24} className="">
-                        {/* <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
-                            <span className=""> {convertToLang(this.props.translation[""], "Select Users:")} </span>
-                        </Col> */}
                         <Col className="col-md-9 col-sm-9 col-xs-9">
                             <Form.Item
                                 label={convertToLang(this.props.translation[""], "Select Users")}
@@ -408,14 +358,10 @@ class AddUserForm extends Component {
                     </Row>
                     <br />
                     {(this.state.selectedUsers && this.state.selectedUsers.length && !this.state.checkAllSelectedUsers) ?
-                        <p>Users Selected: <span className="font_26">{this.state.selectedUsers.map(item => <Tag>{item.label}</Tag>)}</span></p> // NOT SELECTED
+                        <p>Users Selected: <span className="font_26">{this.state.selectedUsers.map(item => <Tag>{item.label}</Tag>)}</span></p>
                         : null}
 
                     <Row gutter={24} className="">
-                        {/* <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
-                        <span className=""> {convertToLang(this.props.translation[""], "Select Users:")} </span>
-                    </Col> */}
-
                         <Col className="col-md-9 col-sm-9 col-xs-9">
                             <Form.Item
                                 label={convertToLang(this.props.translation[""], "Message")}
@@ -436,96 +382,44 @@ class AddUserForm extends Component {
                                 )}
                             </Form.Item>
                         </Col>
+
                     </Row>
                     <br />
                     <Row gutter={24} className="">
-                        {/* <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
-                            <span className=""> {convertToLang(this.props.translation[""], "Select Time Duration:")} </span>
-                        </Col> */}
                         <Col className="col-md-9 col-sm-9 col-xs-9">
                             <Form.Item
                                 label={convertToLang(this.props.translation[""], "Select when to send Message")}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 16 }}
                             >
-                                <Select
-                                    value={this.state.selectedUsers}
-                                    // defaultActiveFirstOption={true}
-                                    // defaultValue={"NOW"}
-                                    firstActiveValue
-                                    showSearch={false}
-                                    style={{ width: '100%' }}
-                                    placeholder={convertToLang(this.props.translation[""], "Select when to send Message")}
-                                    onChange={this.handleChangeAction}
-                                >
-                                    {this.durationList.map((item, index) => {
-                                        return (<Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)
-                                    })}
-                                </Select>
-                                {this.state.errorAction ? <span style={{ color: 'red' }}>{this.state.errorAction}</span> : null}
+                                {this.props.form.getFieldDecorator('repeat', {
+                                    initialValue: '',
+                                })(
+                                    <Select
+                                        showSearch={false}
+                                        style={{ width: '100%' }}
+                                        disabled={this.state.isToday}
+                                        placeholder={convertToLang(this.props.translation[""], "Select when to send Message")}
+                                    >
+                                        {this.durationList.map((item) => <Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)}
+                                    </Select>
+                                )}
                             </Form.Item>
                         </Col>
-                        {/* <Col className="col-md-3 col-sm-3 col-xs-3">
+                    </Row>
+                    <br />
+                    <Row gutter={24} className="">
+                        <Col className="col-md-9 col-sm-9 col-xs-9">
                             <Form.Item
-                                label={convertToLang(this.props.translation[""], "Repeat")}
+                                label={convertToLang(this.props.translation[""], "Choose specific date/time")}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 16 }}
                             >
-                                {this.props.form.getFieldDecorator('repeat', {
-                                    initialValue: 0,
-                                    // rules: [{
-                                    //     required: true, message: convertToLang(this.props.translation[Device_Valid_days_Required], "Valid days required"),
-                                    // },
-                                    // {
-                                    //     validator: this.validateValidDays,
-                                    // }
-                                    // ],
-                                })(
-                                    <InputNumber min={1} />
-                                )}
+                                <DatePicker showTime placeholder="Select Date/Time" style={{ width: '100%' }} onChange={this.dateTimeOnChange} />
                             </Form.Item>
-                        </Col> */}
+                        </Col>
                     </Row>
-
                     <br />
-
-                    {/* <Form.Item
-
-                    label={convertToLang(this.props.translation[Name], "Name")}
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                    validateStatus={this.state.validateStatus}
-                    help={this.state.help}
-                >
-                    {this.props.form.getFieldDecorator('name', {
-                        initialValue: this.props.user ? this.props.user.user_name : '',
-                        rules: [
-                            {
-                                required: true, message: convertToLang(this.props.translation[User_Name_require], "Name is Required"),
-                            }
-                        ],
-                    })(
-                        <Input onChange={(e) => this.handleNameValidation(e)} />
-                    )}
-                </Form.Item>
-                <Form.Item
-
-                    label={convertToLang(this.props.translation[Email], "Email")}
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
-                    {this.props.form.getFieldDecorator('email', {
-                        initialValue: this.props.user ? this.props.user.email : '',
-                        rules: [{
-                            type: 'email', message: convertToLang(this.props.translation[Not_valid_Email], "The input is not valid E-mail!"),
-                        },
-                        {
-                            required: true, message: convertToLang(this.props.translation[Required_Email], "Email is Required!"),
-                        }],
-                    })(
-                        <Input onChange={(e) => this.check} />
-                    )}
-                </Form.Item> */}
 
                     <FilterDevices
                         devices={this.state.filteredDevices}

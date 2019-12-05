@@ -3597,6 +3597,56 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
             ]
 
         },
+        {
+            title: (
+                <Input.Search
+                    name="repeat"
+                    key="repeat"
+                    id="repeat"
+                    className="search_heading"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    placeholder="REPEAT"
+                />
+            ),
+            dataIndex: 'repeat',
+            className: '',
+            key: 'repeat',
+            children: [
+                {
+                    width: 150,
+                    title: convertToLang(translation[""], "REPEAT"),
+                    dataIndex: 'repeat',
+                    key: 'repeat',
+                }
+            ]
+
+        },
+        {
+            title: (
+                <Input.Search
+                    name="sending_time"
+                    key="sending_time"
+                    id="sending_time"
+                    className="search_heading"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    placeholder="SENDING TIME"
+                />
+            ),
+            dataIndex: 'sending_time',
+            className: '',
+            key: 'sending_time',
+            children: [
+                {
+                    width: 150,
+                    title: convertToLang(translation[""], "SENDING TIME"),
+                    dataIndex: 'sending_time',
+                    key: 'sending_time',
+                }
+            ]
+
+        },
     ];
 
     if (isModal) {

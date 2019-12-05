@@ -19,7 +19,9 @@ import {
     setSelectedBulkDevices,
     sendBulkMsg,
     closeResponseModal,
-    setBulkMsg
+    setBulkMsg,
+    getBulkMsgsList,
+    deleteBulkMsg
 } from "../../appRedux/actions/BulkDevices";
 
 import { componentSearch, titleCase } from "../utils/commonUtils";
@@ -43,7 +45,7 @@ class SystemMessages extends Component {
             sorterKey: '',
             sortOrder: 'ascend',
             apk_list: [],
-            domainList: [],
+            bulkMsgs: [],
             uploadApkModal: false,
             showUploadModal: false,
             showUploadData: {},
@@ -108,9 +110,9 @@ class SystemMessages extends Component {
 
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.domainList !== nextProps.domainList) {
+        if (this.props.bulkMsgs !== nextProps.bulkMsgs) {
             this.setState({
-                domainList: nextProps.domainList,
+                bulkMsgs: nextProps.bulkMsgs,
             })
         }
     }
@@ -124,24 +126,24 @@ class SystemMessages extends Component {
             if (value.length) {
 
                 if (status) {
-                    coppyApks = this.state.domainList;
+                    coppyApks = this.state.bulkMsgs;
                     status = false;
                 }
                 let foundApks = componentSearch(coppyApks, value);
                 if (foundApks.length) {
                     this.setState({
-                        domainList: foundApks,
+                        bulkMsgs: foundApks,
                     })
                 } else {
                     this.setState({
-                        domainList: []
+                        bulkMsgs: []
                     })
                 }
             } else {
                 status = true;
 
                 this.setState({
-                    domainList: coppyApks,
+                    bulkMsgs: coppyApks,
                 })
             }
         } catch (error) {
@@ -165,7 +167,7 @@ class SystemMessages extends Component {
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
             this.setState({
-                domainList: this.props.domainList
+                bulkMsgs: this.props.bulkMsgs
             })
         }
         if (this.props.bulkResponseModal !== prevProps.bulkResponseModal) {
@@ -182,7 +184,8 @@ class SystemMessages extends Component {
         this.props.closeResponseModal();
     }
     componentDidMount() {
-        this.props.getDomains();
+        // this.props.getDomains();
+        this.props.getBulkMsgsList();
         // this.props.getAllDealers();
         // this.props.getUserList();
 
@@ -208,7 +211,7 @@ class SystemMessages extends Component {
 
 
     render() {
-        // console.log("this.state.dealerList:: render func ", this.state.domainList)
+        // console.log("this.state.dealerList:: render func ", this.state.bulkMsgs)
         const {
             response_modal_action,
             failed_device_ids,
@@ -247,7 +250,8 @@ class SystemMessages extends Component {
                                 savePermission={this.props.domainPermission}
                                 onChangeTableSorting={this.handleTableChange}
                                 handleStatusChange={this.handleStatusChange}
-                                domainList={this.state.domainList}
+                                bulkMsgs={this.state.bulkMsgs}
+                                deleteBulkMsg={this.props.deleteBulkMsg}
                                 handleConfirmDelete={this.handleConfirmDelete}
                                 editApk={this.props.editApk}
                                 columns={this.state.columns}
@@ -377,7 +381,7 @@ class SystemMessages extends Component {
         let fieldValue = e.target.value;
 
         if (domainStatus) {
-            copyDomainList = this.props.domainList
+            copyDomainList = this.props.bulkMsgs
             domainStatus = false;
         }
 
@@ -385,7 +389,7 @@ class SystemMessages extends Component {
         let searchedData = this.searchField(copyDomainList, fieldName, fieldValue);
         // console.log("searchedData ", searchedData)
         this.setState({
-            domainList: searchedData
+            bulkMsgs: searchedData
         });
 
     }
@@ -438,14 +442,16 @@ function mapDispatchToProps(dispatch) {
         getDomains: getDomains,
         domainPermission: domainPermission,
         closeResponseModal: closeResponseModal,
+        getBulkMsgsList: getBulkMsgsList,
+        deleteBulkMsg: deleteBulkMsg
     }, dispatch);
 }
 
 const mapStateToProps = ({ account, auth, settings, dealers, bulkDevices }) => {
-    // console.log("account.domainList ", account.domainList);
+    console.log("bulkDevices.bulkMsgs ", bulkDevices.bulkMsgs);
     return {
         // dealerList: dealers.dealers,
-        domainList: account.domainList,
+        // bulkMsgs: account.bulkMsgs,
         isloading: account.isloading,
         user: auth.authUser,
 
@@ -461,6 +467,7 @@ const mapStateToProps = ({ account, auth, settings, dealers, bulkDevices }) => {
         pushed_device_ids: bulkDevices.pushed_device_ids,
         response_modal_action: bulkDevices.response_modal_action,
         expire_device_ids: bulkDevices.expire_device_ids,
+        bulkMsgs: bulkDevices.bulkMsgs
     };
 }
 
