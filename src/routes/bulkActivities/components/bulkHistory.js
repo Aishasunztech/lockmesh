@@ -9,6 +9,7 @@ import CircularProgress from "components/CircularProgress";
 import { POLICY_APP_NAME, POLICY_NAME, ACTIVITY } from '../../../constants/PolicyConstants';
 import { Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
 import { DEVICE_IMEI_1, DEVICE_IMEI_2, ACTIVITIES, DEVICE_ID } from '../../../constants/DeviceConstants';
+import { bulkDeviceHistoryColumns } from '../../utils/columnsUtils';
 
 var copyActivities = [];
 var status = true;
@@ -16,6 +17,8 @@ export default class Activity extends Component {
 
     constructor(props) {
         super(props);
+        let columns = bulkDeviceHistoryColumns(props.translation, this.handleSearch);
+
         this.appsColumns = [
             {
                 title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
@@ -68,6 +71,7 @@ export default class Activity extends Component {
             },
         ];
         this.state = {
+            columns: columns,
             visible: false,
             activities: props.history ? props.history : [],
             expandedRowKeys: [],
@@ -264,7 +268,7 @@ export default class Activity extends Component {
                                             style={{ margin: 0, padding: 0 }}
                                             size='middle'
                                             bordered={false}
-                                            columns={this.props.columns}
+                                            columns={this.state.columns}
                                             align='center'
                                             dataSource={this.props.renderList(JSON.parse(record.data))}
                                             pagination={false}
