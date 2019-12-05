@@ -267,29 +267,32 @@ export default class Activity extends Component {
         return (
             <div>
                 <Modal
-                    width="880px"
+                    width="850px"
                     maskClosable={false}
                     visible={this.props.historyModalShow}
-                    title={convertToLang(this.props.translation[""], "History of Bulk Device Activities")}
+                    title={
+                        <div className="pp_popup">
+                            {convertToLang(this.props.translation[""], "History of Bulk Device Activities")}
+                            <Input.Search
+                                name="search"
+                                key="search"
+                                id="search"
+                                className="search_heading1"
+                                onKeyUp={
+                                    (e) => {
+                                        this.handleComponentSearch(e)
+                                    }
+                                }
+                                placeholder="Search"
+                            />
+                        </div>
+                    }
                     onOk={this.handleOk}
                     onCancel={this.props.handleHistoryCancel}
                     footer={null}
                     className="activities"
                 // className="edit_form"
                 >
-                    <Input.Search
-                        name="search"
-                        key="search"
-                        id="search"
-                        // className="search_heading1"
-                        onKeyUp={
-                            (e) => {
-                                this.handleComponentSearch(e)
-                            }
-                        }
-                        placeholder="Search"
-                    />
-
                     <Table
                         columns={[
                             {
@@ -323,7 +326,6 @@ export default class Activity extends Component {
                         dataSource={this.renderList()}
                         expandedRowRender={record => {
                             // console.log('recored', record)
-
                             return (
                                 <Table
                                     style={{ margin: 0, padding: 0 }}
