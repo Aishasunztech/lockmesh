@@ -48,7 +48,7 @@ const INIT_STATE = {
 		dealer_pin: localStorage.getItem("dealer_pin"),
 		two_factor_auth: localStorage.getItem('two_factor_auth') === null ? false : localStorage.getItem('two_factor_auth'),
 		verified: false,
-    account_balance_status: localStorage.getItem("account_balance_status"),
+		account_balance_status: localStorage.getItem("account_balance_status"),
 	},
 	loginHistory: []
 };
@@ -136,7 +136,9 @@ export default (state = INIT_STATE, action) => {
 					name: null,
 					token: null,
 					type: null,
-					two_factor_auth: null
+					two_factor_auth: null,
+					demos: 0,
+					remaining_demos: 0,
 				},
 				initURL: '/',
 				loader: false,
@@ -182,7 +184,9 @@ export default (state = INIT_STATE, action) => {
 					name: null,
 					token: null,
 					type: null,
-					two_factor_auth: null
+					two_factor_auth: null,
+					demos: 0,
+					remaining_demos: 0,
 				},
 				initURL: '/',
 				loader: false
@@ -218,7 +222,7 @@ export default (state = INIT_STATE, action) => {
 			}
 		}
 		case COMPONENT_ALLOWED: {
-
+			console.log(action.payload.remaining_demos);
 			return {
 				...state,
 				isAllowed: action.payload.ComponentAllowed,
@@ -237,7 +241,9 @@ export default (state = INIT_STATE, action) => {
 					dealer_pin: action.payload.dealer_pin,
 					two_factor_auth: action.payload.two_factor_auth,
 					verified: action.payload.verified,
-          account_balance_status: action.payload.account_balance_status,
+					account_balance_status: action.payload.account_balance_status,
+					demos: action.payload.demos,
+					remaining_demos: action.payload.remaining_demos,
 				}
 			}
 			break;

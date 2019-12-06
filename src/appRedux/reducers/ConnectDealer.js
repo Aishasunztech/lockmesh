@@ -11,7 +11,8 @@ import {
     SET_DEALER_LIMIT,
     DEALER_SALES_HISTORY,
     DEALER_DOMAINS,
-    CONNECT_DEALER_LOADING
+    CONNECT_DEALER_LOADING,
+    SET_DEMOS_LIMIT
 } from "../../constants/ActionTypes";
 
 // import { Button_Cancel } from '../../constants/ButtonConstants';
@@ -54,7 +55,7 @@ export default (state = initialState, action) => {
             }
         }
         case DEALER_DOMAINS: {
-            console.log(DEALER_DOMAINS,':', action.payload)
+            console.log(DEALER_DOMAINS, ':', action.payload)
             return {
                 ...state,
                 domains: action.payload.domains
@@ -188,6 +189,26 @@ export default (state = initialState, action) => {
             // let dealer = state.dealer;
             if (action.payload.status) {
                 dealer.credits_limit = action.formData.credits_limit;
+                success({
+                    title: action.payload.msg,
+                });
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+            return {
+                ...state,
+                dealer: dealer
+            };
+        }
+
+        case SET_DEMOS_LIMIT: {
+            let dealer = JSON.parse(JSON.stringify(state.dealer));
+            // let dealer = state.dealer;
+            if (action.payload.status) {
+                dealer.demos = action.payload.data.demos;
+                dealer.remaining_demos = action.payload.data.remaining_demos;
                 success({
                     title: action.payload.msg,
                 });

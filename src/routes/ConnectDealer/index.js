@@ -25,7 +25,8 @@ import {
     setCreditLimit,
     getDealerSalesHistory,
     getDealerDomains,
-    getAllDealers
+    getAllDealers,
+    setDemosLimit
 } from '../../appRedux/actions'
 import styles from './connect_dealer.css'
 
@@ -172,25 +173,30 @@ class ConnectDealer extends Component {
                 {
                     key: '6',
                     name: <a>Demos</a>,
-                    value: 'N/A',
+                    value: dealer.demos,
                 },
                 {
                     key: '7',
+                    name: <a>Remaining Demos</a>,
+                    value: dealer.remaining_demos,
+                },
+                {
+                    key: '8',
                     name: <a>Status</a>,
                     value: dealer_status,
                 },
                 {
-                    key: '8',
+                    key: '9',
                     name: <a>Parent Dealer</a>,
                     value: (dealer.parent_dealer) ? dealer.parent_dealer : 'N/A',
                 },
                 {
-                    key: '9',
+                    key: '10',
                     name: <a>Last Login</a>,
                     value: (dealer.last_login) ? dealer.last_login : 'N/A',
                 },
                 {
-                    key: '10',
+                    key: '11',
                     name: <a>Start Date</a>,
                     value: this.props.dealer.created,
                 },
@@ -362,6 +368,7 @@ class ConnectDealer extends Component {
                                     getDealerDomains={this.props.getDealerDomains}
                                     getDealerPaymentHistory={this.props.getDealerPaymentHistory}
                                     setCreditLimit={this.props.setCreditLimit}
+                                    setDemosLimit={this.props.setDemosLimit}
                                     getDealerSalesHistory={this.props.getDealerSalesHistory}
                                 />
 
@@ -388,6 +395,7 @@ function mapDispatchToProps(dispatch) {
         undoDealer: undoDealer,
         getDealerPaymentHistory: getDealerPaymentHistory,
         setCreditLimit: setCreditLimit,
+        setDemosLimit: setDemosLimit,
         getDealerSalesHistory: getDealerSalesHistory,
         getDealerDomains: getDealerDomains,
         getAllDealers: getAllDealers

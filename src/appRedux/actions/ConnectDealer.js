@@ -5,7 +5,8 @@ import {
     SET_DEALER_LIMIT,
     DEALER_SALES_HISTORY,
     DEALER_DOMAINS,
-    CONNECT_DEALER_LOADING
+    CONNECT_DEALER_LOADING,
+    SET_DEMOS_LIMIT
 } from "../../constants/ActionTypes"
 // import { message } from 'antd';
 
@@ -77,7 +78,27 @@ export function setCreditLimit(data) {
     }
 }
 
-export function getDealerSalesHistory(dealerId){
+export function setDemosLimit(data) {
+    return (dispatch) => {
+        RestService.setDemosLimit(data).then((response) => {
+
+            if (RestService.checkAuth(response.data)) {
+                console.log(response.data)
+                dispatch({
+                    type: SET_DEMOS_LIMIT,
+                    payload: response.data,
+                });
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        });
+
+    }
+}
+
+export function getDealerSalesHistory(dealerId) {
     return (dispatch) => {
         RestService.getDealerSalesHistory(dealerId).then((response) => {
 
@@ -96,9 +117,9 @@ export function getDealerSalesHistory(dealerId){
     }
 }
 
-export function getDealerDomains(dealerId){
+export function getDealerDomains(dealerId) {
     return (dispatch) => {
-        RestService.getDealerDomains(dealerId).then((response)=>{
+        RestService.getDealerDomains(dealerId).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 console.log(response.data)
                 dispatch({

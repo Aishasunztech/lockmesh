@@ -32,6 +32,7 @@ import {
     DEALER_TEXT
 } from '../../../constants/DealerConstants';
 import CreditsLimits from "./CreditLimits";
+import DemosLimit from "./DemosLimits";
 import { Markup } from "interweave";
 
 
@@ -58,10 +59,10 @@ function showConfirm(_this, dealer, action, btn_title, name = "") {
         title: <Markup content={(btn_title === 'DELETE') ?
             convertToLang(_this.props.translation[''], `Do you wish to Permanently Delete Dealer ${name}?<br/> This action cannot be reversed!`)
             :
-            (btn_title === 'RESET PASSWORD') ? 
-            `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[OF_THIS], " of this dealer")} ${name ? `(${name})` : ""} ?`
-            :
-            `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[""], " this dealer ")} ${name ? `(${name})` : ""} ?`
+            (btn_title === 'RESET PASSWORD') ?
+                `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[OF_THIS], " of this dealer")} ${name ? `(${name})` : ""} ?`
+                :
+                `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[""], " this dealer ")} ${name ? `(${name})` : ""} ?`
         } />,
         onOk() {
             return new Promise((resolve, reject) => {
@@ -110,7 +111,7 @@ export default class DealerAction extends Component {
         console.log("searchedValue: ", value)
         if (value && this.props.dealerList && this.props.dealerList.length) {
             dealerList = componentSearch(this.props.dealerList, value)
-            
+
             index = this.props.dealerList.findIndex((dealer) => (dealer.dealer_name.toLowerCase() === value.toLowerCase() || dealer.dealer_id.toString().toLowerCase() === value.toLowerCase() || dealer.dealer_email.toLowerCase() === value.toLowerCase() || dealer.link_code.toString().toLowerCase() === value.toLowerCase()));
         }
 
@@ -232,7 +233,9 @@ export default class DealerAction extends Component {
                             </Button>
                         </Col>
                         <Col className="gutter-row" justify="center" span={12} >
-                            <Button disabled style={{ width: "100%", marginBottom: 16, }}>
+                            <Button
+                                style={{ width: "100%", marginBottom: 16, }}
+                                onClick={() => this.form2.showModal()}>
                                 <h6 className="mb-0">DEMO</h6>
                             </Button>
                         </Col>
@@ -340,6 +343,14 @@ export default class DealerAction extends Component {
                     dealer={this.props.dealer}
                     credits_limit={this.props.dealer.credits_limit}
                     setCreditLimit={this.props.setCreditLimit}
+                />
+                <DemosLimit
+                    ref='demosLimit'
+                    translation={this.props.translation}
+                    wrappedComponentRef={(form) => this.form2 = form}
+                    dealer={this.props.dealer}
+                    demos={this.props.dealer.demos}
+                    setDemosLimit={this.props.setDemosLimit}
                 />
 
                 <DealerSalesHistory
