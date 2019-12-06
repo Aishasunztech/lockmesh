@@ -25,7 +25,8 @@ import {
     setCreditLimit,
     getDealerSalesHistory,
     getDealerDomains,
-    getAllDealers
+    getAllDealers,
+    changeDealerStatus
 } from '../../appRedux/actions'
 import styles from './connect_dealer.css'
 
@@ -349,6 +350,7 @@ class ConnectDealer extends Component {
                                     salesHistory={this.props.salesHistory}
                                     domains={this.props.domains}
                                     history={this.props.history}
+                                    authUser={this.props.authUser}
 
                                     // dealer actions
                                     updatePassword={this.props.updatePassword}
@@ -363,6 +365,7 @@ class ConnectDealer extends Component {
                                     getDealerPaymentHistory={this.props.getDealerPaymentHistory}
                                     setCreditLimit={this.props.setCreditLimit}
                                     getDealerSalesHistory={this.props.getDealerSalesHistory}
+                                    changeDealerStatus={this.props.changeDealerStatus}
                                 />
 
                             </Col>
@@ -390,12 +393,13 @@ function mapDispatchToProps(dispatch) {
         setCreditLimit: setCreditLimit,
         getDealerSalesHistory: getDealerSalesHistory,
         getDealerDomains: getDealerDomains,
-        getAllDealers: getAllDealers
+        getAllDealers: getAllDealers,
+        changeDealerStatus: changeDealerStatus
     }, dispatch);
 }
 
-var mapStateToProps = ({ dealer_details, dealers, settings }) => {
-    // console.log(dealers.parent_dealers);
+var mapStateToProps = ({ dealer_details, dealers, settings, auth }) => {
+    console.log("auth=====", auth);
     return {
         translation: settings.translation,
         dealer: dealer_details.dealer,
@@ -403,7 +407,8 @@ var mapStateToProps = ({ dealer_details, dealers, settings }) => {
         domains: dealer_details.domains,
         paymentHistory: dealer_details.paymentHistory,
         salesHistory: dealer_details.salesHistory,
-        isLoading: dealer_details.connectDealerLoading
+        isLoading: dealer_details.connectDealerLoading,
+        authUser: auth.authUser
         // dealers: dealers.textTransform
     };
 }

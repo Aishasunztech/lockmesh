@@ -33,6 +33,8 @@ import {
 } from '../../../constants/DealerConstants';
 import CreditsLimits from "./CreditLimits";
 import { Markup } from "interweave";
+import RestrictDealerAccount from "./RestrictDealerAccount";
+import { ADMIN } from "../../../constants/Constants";
 
 
 // user defined
@@ -58,10 +60,10 @@ function showConfirm(_this, dealer, action, btn_title, name = "") {
         title: <Markup content={(btn_title === 'DELETE') ?
             convertToLang(_this.props.translation[''], `Do you wish to Permanently Delete Dealer ${name}?<br/> This action cannot be reversed!`)
             :
-            (btn_title === 'RESET PASSWORD') ? 
-            `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[OF_THIS], " of this dealer")} ${name ? `(${name})` : ""} ?`
-            :
-            `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[""], " this dealer ")} ${name ? `(${name})` : ""} ?`
+            (btn_title === 'RESET PASSWORD') ?
+                `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[OF_THIS], " of this dealer")} ${name ? `(${name})` : ""} ?`
+                :
+                `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[""], " this dealer ")} ${name ? `(${name})` : ""} ?`
         } />,
         onOk() {
             return new Promise((resolve, reject) => {
@@ -110,7 +112,7 @@ export default class DealerAction extends Component {
         console.log("searchedValue: ", value)
         if (value && this.props.dealerList && this.props.dealerList.length) {
             dealerList = componentSearch(this.props.dealerList, value)
-            
+
             index = this.props.dealerList.findIndex((dealer) => (dealer.dealer_name.toLowerCase() === value.toLowerCase() || dealer.dealer_id.toString().toLowerCase() === value.toLowerCase() || dealer.dealer_email.toLowerCase() === value.toLowerCase() || dealer.link_code.toString().toLowerCase() === value.toLowerCase()));
         }
 
@@ -300,6 +302,30 @@ export default class DealerAction extends Component {
                                 {restrict_button_text}
                             </Button>
                         </Col>
+                        {
+                            (this.props.authUser.type === ADMIN) ?
+                                <Col span={12} className="gutter-row" justify="center" >
+                                    <Button
+                                        className="btn_break_line"
+                                        style={{
+                                            width: "100%", marginBottom: 16,
+                                            backgroundColor: 'yellow'
+                                            // backgroundColor: '#f31517', color: '#fff'
+                                        }}
+                                        onClick={
+                                            (e) => {
+                                                this.restrictDealerAction.showModal(dealer, this.props.changeDealerStatus)
+                                            }
+                                        }
+
+                                    >
+                                        {/* <Icon type="lock" className="lock_icon" /> */}
+                                        Restrict
+                                    </Button>
+                                </Col>
+                                : null
+                        }
+
                         <Col span={12} className="gutter-row" justify="center" >
                             <Button
                                 type={undo_button_type}
@@ -349,10 +375,17 @@ export default class DealerAction extends Component {
                 />
 
                 <DealerDomains
-                    ref="dealerDomains"
+                    ref='dealerDomains'
                     translation={this.props.translation}
                     domains={this.props.domains}
                 // dealerDomains
+                />
+
+                <RestrictDealerAccount
+                    ref='restrictDealerAction'
+                    dealer={this.props.dealer}
+                    wrappedComponentRef={(form) => this.restrictDealerAction = form}
+                    translation={this.props.translation}
                 />
 
             </Fragment >

@@ -57,6 +57,16 @@
     margin-left: 16px;
 }
 
+.restrict_level label.ant-radio-wrapper {
+    display: block;
+    margin: 8px 8px;
+    border: 1px solid #e8e8e8;
+    padding: 8px 8px;
+    background: red;
+    border-radius: 6px;
+    color: #fff;
+}
+
 @media (max-width: 768px) {
     .d_n_vh_vw {
         text-transform: capitalize;

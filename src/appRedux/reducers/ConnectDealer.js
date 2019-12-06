@@ -11,7 +11,8 @@ import {
     SET_DEALER_LIMIT,
     DEALER_SALES_HISTORY,
     DEALER_DOMAINS,
-    CONNECT_DEALER_LOADING
+    CONNECT_DEALER_LOADING,
+    DEALER_ACCOUNT_STATUS
 } from "../../constants/ActionTypes";
 
 // import { Button_Cancel } from '../../constants/ButtonConstants';
@@ -53,13 +54,15 @@ export default (state = initialState, action) => {
                 connectDealerLoading: false
             }
         }
+
         case DEALER_DOMAINS: {
-            console.log(DEALER_DOMAINS,':', action.payload)
+            console.log(DEALER_DOMAINS, ':', action.payload)
             return {
                 ...state,
                 domains: action.payload.domains
             }
         }
+
         case DEALER_SALES_HISTORY: {
             return {
                 ...state,
@@ -67,12 +70,14 @@ export default (state = initialState, action) => {
 
             }
         }
+
         case DEALER_PAYMENT_HISTORY: {
             return {
                 ...state,
                 paymentHistory: action.payload.data
             }
         }
+
         case CONNECT_EDIT_DEALER: {
             let dealer = JSON.parse(JSON.stringify(state.dealer));
             // let dealer = state.dealer;
@@ -162,6 +167,7 @@ export default (state = initialState, action) => {
                 dealer: dealer
             }
         }
+
         case CONNECT_UNDO_DEALER: {
             let dealer = JSON.parse(JSON.stringify(state.dealer));
             if (action.response.status) {
@@ -200,6 +206,23 @@ export default (state = initialState, action) => {
                 ...state,
                 dealer: dealer
             };
+        }
+
+        case DEALER_ACCOUNT_STATUS: {
+            // console.log(DEALER_ACCOUNT_STATUS, ':', action.payload);
+            if (action.payload.status === true) {
+                
+                success({
+                    title: action.payload.msg,
+                });
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+            return {
+                ...state
+            }
         }
 
         default:

@@ -3,6 +3,15 @@ import { BASE_URL, SUPERADMIN_URL } from '../../constants/Application';
 import io from "socket.io-client";
 
 const RestService = {
+
+    getHeader: () => {
+        return {
+            headers: {
+                authorization: localStorage.getItem('token') //the token is a variable which holds the token
+            }
+        };
+    },
+
     // Login
     connectSocket: () => {
         let token = localStorage.getItem('token');
@@ -30,13 +39,7 @@ const RestService = {
             verify_code: verifyForm.verify_code
         });
     },
-    getHeader: () => {
-        return {
-            headers: {
-                authorization: localStorage.getItem('token') //the token is a variable which holds the token
-            }
-        };
-    },
+    
     // for logout
     authLogOut: () => {
         localStorage.removeItem('email');
@@ -240,6 +243,33 @@ const RestService = {
     getUserDealers: () => {
         return axios.get(BASE_URL + 'users/user_dealers', RestService.getHeader());
     },
+
+    // For dealer(admin dashboard)
+    updateDealerDetails: (formData) => {
+        return axios.put(BASE_URL + 'users/edit/dealers', formData, RestService.getHeader());
+    },
+    // Undo For Dealer and Sub dealer
+    undoDealer(dealer_id) {
+        return axios.post(BASE_URL + 'users/dealer/undo', { dealer_id }, RestService.getHeader())
+    },
+    // unlink Dealer.
+    unlinkDealer: (dealer_id) => {
+        return axios.post(BASE_URL + 'users/dealer/delete', { dealer_id }, RestService.getHeader());
+    },
+
+    // suspend dealer account
+    suspendDealer: (dealer_id) => {
+        return axios.post(BASE_URL + 'users/dealer/suspend/', { dealer_id },
+            RestService.getHeader()
+        )
+
+    },
+    activateDealer: (dealer_id) => {
+        return axios.post(BASE_URL + 'users/dealer/activate/', { dealer_id },
+            RestService.getHeader()
+        )
+    },
+    // Connect Dealer
     getDealerDetails: (dealerId) => {
         return axios.get(BASE_URL + 'users/connect-dealer/' + dealerId, RestService.getHeader());
     },
@@ -249,7 +279,9 @@ const RestService = {
     getDealerPaymentHistory: (dealerId) => {
         return axios.get(BASE_URL + 'users/payment-history/' + dealerId, RestService.getHeader());
     },
-
+    changeDealerStatus: (dealerId, dealerStatus) => {
+        return axios.put(`${BASE_URL}users/dealer-status/${dealerId}`, { dealerStatus: dealerStatus }, RestService.getHeader());
+    },
     setCreditLimit: (data) => {
         return axios.put(BASE_URL + 'users/set_credits_limit', data, RestService.getHeader());
     },
@@ -401,17 +433,11 @@ const RestService = {
             RestService.getHeader()
         );
     },
-    // getDealerInfo
-    getDealer: (dealer_id) => {
 
-    },
 
     // dealer profile
     getProfile: () => {
-        // this.setHeaders(this.sessionLogin('token'));
-        // this.response = this.http.get(this.baseUrl + '/users/getinfo', this.oHeaders);
-        // this.authtoken(this.response);
-        // return this.response;
+        return axios.get(BASE_URL + '/users/get-info', RestService.getHeader());
     },
 
     // For Dealer update
@@ -436,12 +462,6 @@ const RestService = {
     updatePassword: (dealer) => {
 
         return axios.post(BASE_URL + 'users/resetpwd', dealer, RestService.getHeader());
-
-    },
-
-    // For dealer(admin dashboard)
-    updateDealerDetails: (formData) => {
-        return axios.put(BASE_URL + 'users/edit/dealers', formData, RestService.getHeader());
 
     },
 
@@ -487,12 +507,6 @@ const RestService = {
 
     },
 
-
-    // unlink Dealer.
-    unlinkDealer: (dealer_id) => {
-        return axios.post(BASE_URL + 'users/dealer/delete', { dealer_id }, RestService.getHeader());
-    },
-
     // unlink Device
     unlinkDevice: (device) => {
         console.log('unlinkDevice ', device)
@@ -513,24 +527,12 @@ const RestService = {
 
 
 
-
-    // suspend dealer account
-    suspendDealer: (dealer_id) => {
-        return axios.post(BASE_URL + 'users/dealer/suspend/', { dealer_id },
-            RestService.getHeader()
-        )
-
-    },
     wipe: (device_id) => {
         return axios.post(BASE_URL + 'users/wipe/' + device_id, device_id,
             RestService.getHeader()
         )
     },
-    activateDealer: (dealer_id) => {
-        return axios.post(BASE_URL + 'users/dealer/activate/', { dealer_id },
-            RestService.getHeader()
-        )
-    },
+
 
     // activate account
     activateDevice: (device_id) => {
@@ -544,10 +546,7 @@ const RestService = {
         return axios.put(BASE_URL + 'users/delete/' + device.device_id, device, RestService.getHeader());
     },
 
-    // Undo For Dealer and Sub dealer
-    undoDealer(dealer_id) {
-        return axios.post(BASE_URL + 'users/dealer/undo', { dealer_id }, RestService.getHeader())
-    },
+
 
     // Undo For Dealer and Sub dealer
     undoDevice(id) {
