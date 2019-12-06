@@ -21,62 +21,17 @@ import {
     wipeBulkDevices,
     closeResponseModal,
     applyBulkPolicy,
-    setBulkMsg
+    setBulkMsg,
+    setBulkData
 } from "../../appRedux/actions/BulkDevices";
 
 import { getPolicies, handleCheckedAllPushApps } from "../../appRedux/actions/ConnectDevice";
 
-// import {
-//     connectSocket,
-//     ackFinishedBulkPushApps,
-//     ackFinishedPullApps,
-//     ackFinishedPolicy,
-//     ackFinishedWipe,
-//     actionInProcess,
-//     ackImeiChanged,
-//     getAppJobQueue,
-//     ackSinglePushApp,
-//     ackSinglePullApp,
-//     ackFinishedPolicyStep,
-//     receiveSim,
-//     hello_web,
-//     closeConnectPageSocketEvents,
-//     ackInstalledApps,
-//     ackUninstalledApps,
-//     ackSettingApplied,
-//     sendOnlineOfflineStatus,
-//     deviceSynced
-// } from "../../appRedux/actions/Socket";
-
 import {
-    showHistoryModal,
-    showSaveProfileModal,
-    saveProfile,
-    savePolicy,
-    hanldeProfileInput,
-    transferDeviceProfile,
     getDealerApps,
-    loadDeviceProfile,
     showPushAppsModal,
-    showPullAppsModal,
-    // applyPushApps,
-    // applyPullApps,
-    writeImei,
-    getActivities,
-    hidePolicyConfirm,
-    // applyPolicy,
-    applySetting,
-    getProfiles,
-    wipe,
-    simHistory
 } from "../../appRedux/actions/ConnectDevice";
 
-import CustomScrollbars from "../../util/CustomScrollbars";
-
-// import {
-//     convertToLang,
-//     componentSearch
-// } from '../utils/commonUtils'
 
 import { getUserList } from "../../appRedux/actions/Users";
 import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, componentSearch, titleCase, convertToLang, checkRemainTermDays } from '../utils/commonUtils'
@@ -145,7 +100,7 @@ class BulkActivities extends Component {
         this.state = {
             columns: columns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
             filteredDevices: [],
-            selectedAction: "NOT SELECTED",
+            selectedAction: "",
             selectedDealers: [],
             selectedUsers: [],
             dealerList: [],
@@ -283,25 +238,21 @@ class BulkActivities extends Component {
                 dealerList: this.props.dealerList
             })
         }
-
+        console.log("componentWillReceiveProps ", this.props.bulkAction, nextProps.bulkAction, this.props.bulkDealers, nextProps.bulkDealers, this.props.bulkUsers, nextProps.bulkUsers, nextProps.errorAction)
         if (this.props !== nextProps) {
+            console.log("ok");
             this.setState({
                 guestAllPushApps: nextProps.guestAllPushApps,
                 enableAllPushApps: nextProps.enableAllPushApps,
-                encryptedAllPushApps: nextProps.encryptedAllPushApps
+                encryptedAllPushApps: nextProps.encryptedAllPushApps,
+                selectedAction: nextProps.bulkAction,
+                selectedDealers: nextProps.bulkDealers,
+                selectedUsers: nextProps.bulkUsers,
+                errorAction: nextProps.errorAction
             })
-        }
-
-        // if (nextProps.socket) {
-        //     // if (this.props.socket === null && nextProps.socket !== null) {
-
-        //     console.log("socket connected component: ", nextProps.socket.connected)
-        //     if (nextProps.socket.connected) {
-        //         nextProps.ackFinishedBulkPushApps(nextProps.socket, nextProps.queue_device_ids);
-        //         // nextProps.ackFinishedPullApps(nextProps.socket, queue_device_ids);
-        //         // nextProps.ackFinishedPolicy(nextProps.socket, queue_device_ids);
-        //         // nextProps.ackFinishedWipe(nextProps.socket, queue_device_ids);
-        //     }
+        } 
+        // else {
+        //     this.setState({ selectedAction: nextProps.bulkAction })
         // }
 
 
@@ -325,6 +276,15 @@ class BulkActivities extends Component {
         }
         //  else {
         //     this.state.bulkResponseModal = false;
+        // }
+
+        // if (this.props !== prevProps) {
+        //     this.setState({
+        //         selectedAction: this.props.bulkAction
+        //     })
+        // } 
+        // else {
+        //     this.setState({ selectedAction: this.props.bulkAction })
         // }
     }
 
@@ -554,7 +514,10 @@ class BulkActivities extends Component {
         }
         // console.log("users data is: ", data)
         this.props.getBulkDevicesList(data);
-        this.setState({ selectedUsers, checkAllSelectedUsers: checkAllUsers })
+        this.props.setBulkData(selectedUsers, "users");
+        this.setState({ 
+            // selectedUsers, 
+            checkAllSelectedUsers: checkAllUsers })
     }
 
     handleChangeDealer = (values) => {
@@ -587,9 +550,10 @@ class BulkActivities extends Component {
 
         // console.log('handle change data is: ', data)
         this.props.getBulkDevicesList(data);
+        this.props.setBulkData(selectedDealers, "dealers");
         this.setState({
-            selectedDealers,
-            selectedUsers: [],
+            // selectedDealers,
+            // selectedUsers: [],
             checkAllSelectedDealers: checkAllDealers,
         });
 
@@ -632,11 +596,11 @@ class BulkActivities extends Component {
             // actionMsg = "(Only allow active, suspended, trial, expired, transferred & unlink devices to wipe)"
             actionMsg = "(Only allow active, suspended, trial, expired & transferred devices to wipe)"
         }
-
+        this.props.setBulkData(e, 'action');
 
 
         this.setState({
-            selectedAction: e,
+            // selectedAction: e,
             pushAppsModal,
             pullAppsModal,
             pushPolicyModal,
@@ -695,6 +659,7 @@ class BulkActivities extends Component {
     }
 
     render() {
+        console.log("bulk actin at render ", this.state.selectedAction);
         const {
             response_modal_action,
             failed_device_ids,
@@ -792,8 +757,9 @@ class BulkActivities extends Component {
                                 className="pos_rel"
                                 placeholder={convertToLang(this.props.translation[""], "Select any action")}
                                 onChange={this.handleChangeAction}
+                                value={this.state.selectedAction}
                             >
-                                <Select.Option value="NOT SELECTED">{convertToLang(this.props.translation[""], "Select any action")}</Select.Option>
+                                <Select.Option value="">{convertToLang(this.props.translation[""], "Select any action")}</Select.Option>
                                 {this.actionList.map((item, index) => {
                                     return (<Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)
                                 })}
@@ -811,7 +777,7 @@ class BulkActivities extends Component {
 
                     <Row gutter={24} className="">
                         <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
-                            <span className=""> {convertToLang(this.props.translation[""], "Select Dealers/S-Dealers:")} </span>
+                            <span className=""> {convertToLang(this.props.translation[""], "Select dealers/sdealers:")} </span>
                         </Col>
                         <Col className="col-md-4 col-sm-4 col-xs-4">
                             <Select
@@ -823,9 +789,9 @@ class BulkActivities extends Component {
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                 maxTagCount={this.state.checkAllSelectedDealers ? 0 : 2}
                                 maxTagTextLength={10}
-                                maxTagPlaceholder={this.state.checkAllSelectedDealers ? "All Selected" : `${this.state.selectedDealers.length - 2} more`}
+                                maxTagPlaceholder={this.state.checkAllSelectedDealers ? "All dealers selected" : `${this.state.selectedDealers.length - 2} more`}
                                 style={{ width: '100%' }}
-                                placeholder={convertToLang(this.props.translation[""], "Select Dealers/S-Dealers")}
+                                placeholder={convertToLang(this.props.translation[""], "Select dealers/sdealers")}
                                 onChange={this.handleChangeDealer}
                                 onDeselect={(e) => this.handleCancel(e, "dealers")}
                             >
@@ -854,10 +820,10 @@ class BulkActivities extends Component {
                                 labelInValue
                                 maxTagCount={this.state.checkAllSelectedUsers ? 0 : 2}
                                 maxTagTextLength={10}
-                                maxTagPlaceholder={this.state.checkAllSelectedUsers ? "All Selected" : `${this.state.selectedUsers.length - 2} more`}
+                                maxTagPlaceholder={this.state.checkAllSelectedUsers ? "All users selected" : `${this.state.selectedUsers.length - 2} more`}
                                 style={{ width: '100%' }}
                                 onDeselect={(e) => this.handleCancel(e, "users")}
-                                placeholder={convertToLang(this.props.translation[""], "Select Users")}
+                                placeholder={convertToLang(this.props.translation[""], "Select users")}
                                 onChange={this.handleChangeUser}
                             >
                                 {(this.state.allUsers && this.state.allUsers.length > 0) ?
@@ -870,7 +836,7 @@ class BulkActivities extends Component {
                     </Row>
                     <br />
                     {(this.state.selectedUsers && this.state.selectedUsers.length && !this.state.checkAllSelectedUsers) ?
-                        <p>Users Selected: <span className="font_26">{this.state.selectedUsers.map(item => <Tag>{item.label}</Tag>)}</span></p> // NOT SELECTED
+                        <p>Users Selected: <span className="font_26">{this.state.selectedUsers.map(item => <Tag>{item.label}</Tag>)}</span></p> // 
                         : null}
                     <FilterDevices
                         devices={this.state.filteredDevices}
@@ -893,7 +859,7 @@ class BulkActivities extends Component {
                         bulkApplyPolicy={this.props.applyBulkPolicy}
                         selectedPolicy={this.state.selectedPolicy}
                         actionMsg={this.state.actionMsg}
-                        setstateValues={this.setstateValues}
+                        setBulkData={this.props.setBulkData}
                     />
 
                 </Card>
@@ -1082,6 +1048,7 @@ const mapDispatchToProps = (dispatch) => {
         applyBulkPolicy: applyBulkPolicy,
         getPolicies: getPolicies,
         setBulkMsg: setBulkMsg,
+        setBulkData: setBulkData,
         handleCheckedAllPushApps: handleCheckedAllPushApps,
 
         // ackFinishedPullApps: ackFinishedPullApps,
@@ -1094,7 +1061,7 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users, device_details, socket }, otherProps) => {
     // console.log(bulkDevices.usersOfDealers, 'usersOfDealers ,devices.bulkDevices ', bulkDevices.bulkDevices);
     // console.log("bulkDevices.selectedDevices", bulkDevices.selectedDevices, "bulkDevices.bulkSelectedPushApps ", bulkDevices.bulkSelectedPushApps, "bulkDevices.bulkSelectedPullApps ", bulkDevices.bulkSelectedPullApps);
-    // console.log("bulkDevices.selectedDevices:: ", bulkDevices.selectedDevices)
+    console.log("bulkDevices.bulkAction:: ", bulkDevices.bulkAction)
     return {
         socket: socket.socket,
         user: auth.authUser,
@@ -1121,7 +1088,11 @@ const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users,
         guestAllPushApps: device_details.guestAllPushApps,
         enableAllPushApps: device_details.enableAllPushApps,
         encryptedAllPushApps: device_details.encryptedAllPushApps,
-        history_loading: bulkDevices.history_loading
+        history_loading: bulkDevices.history_loading,
+        bulkAction: bulkDevices.bulkAction,
+        bulkDealers: bulkDevices.bulkDealers,
+        bulkUsers: bulkDevices.bulkUsers,
+        errorAction: bulkDevices.errorAction
     };
 }
 

@@ -1,6 +1,6 @@
 
 import {
-    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES, UNLINK_BULK_DEVICES, WIPE_BULK_DEVICES, CLOSE_RESPONSE_MODAL, APPLY_BULK_POLICY, SET_BULK_MESSAGE, SEND_BULK_MESSAGE, SEND_BULK_WIPE_PASS, HANDLE_BULK_WIPE_PASS, BULK_HISTORY_LOADING,
+    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES, UNLINK_BULK_DEVICES, WIPE_BULK_DEVICES, CLOSE_RESPONSE_MODAL, APPLY_BULK_POLICY, SET_BULK_MESSAGE, SEND_BULK_MESSAGE, SEND_BULK_WIPE_PASS, HANDLE_BULK_WIPE_PASS, BULK_HISTORY_LOADING, SET_BULK_ACTION, SET_BULK_DATA,
 } from "../../constants/ActionTypes";
 import { message, Modal } from 'antd';
 
@@ -30,7 +30,11 @@ const initialState = {
     bulkMsg: '',
     bulkWipePassModal: false,
     wipePassMsg: '',
-    history_loading: false
+    history_loading: false,
+    bulkAction: '',
+    bulkDealers: [],
+    bulkUsers: [],
+    errorAction: ''
 };
 
 export default (state = initialState, action) => {
@@ -176,7 +180,13 @@ export default (state = initialState, action) => {
                 expire_device_ids: [...state.expire_device_ids],
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "suspend",
-                selectedDevices: []
+
+                selectedDevices: [],
+                bulkDevices: [],
+                bulkAction: '',
+                bulkDealers: [],
+                bulkUsers: [],
+                errorAction: ''
             }
         }
 
@@ -234,7 +244,13 @@ export default (state = initialState, action) => {
                 expire_device_ids: [...state.expire_device_ids],
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "active",
-                selectedDevices: []
+
+                selectedDevices: [],
+                bulkDevices: [],
+                bulkAction: '',
+                bulkDealers: [],
+                bulkUsers: [],
+                errorAction: ''
             }
         }
 
@@ -274,8 +290,14 @@ export default (state = initialState, action) => {
                 pushed_device_ids: [...state.pushed_device_ids],
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "push",
-                selectedDevices: [],
+              
                 // bulkSelectedPushApps: []
+                selectedDevices: [],
+                bulkDevices: [],
+                bulkAction: '',
+                bulkDealers: [],
+                bulkUsers: [],
+                errorAction: ''
             }
         }
 
@@ -314,8 +336,14 @@ export default (state = initialState, action) => {
                 pushed_device_ids: [...state.pushed_device_ids],
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "pull",
-                selectedDevices: [],
+               
                 // bulkSelectedPullApps: []
+                selectedDevices: [],
+                bulkDevices: [],
+                bulkAction: '',
+                bulkDealers: [],
+                bulkUsers: [],
+                errorAction: ''
             }
         }
 
@@ -368,7 +396,13 @@ export default (state = initialState, action) => {
                 pushed_device_ids: [...state.pushed_device_ids],
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "unlink",
-                selectedDevices: []
+                
+                selectedDevices: [],
+                bulkDevices: [],
+                bulkAction: '',
+                bulkDealers: [],
+                bulkUsers: [],
+                errorAction: ''
             }
         }
 
@@ -428,7 +462,13 @@ export default (state = initialState, action) => {
                 response_modal_action: "wipe",
                 selectedDevices: selectedBulkDevices,
                 // wipePassMsg,
-                bulkWipePassModal: wipeModal
+                bulkWipePassModal: wipeModal,
+
+                bulkDevices: [],
+                bulkAction: '',
+                bulkDealers: [],
+                bulkUsers: [],
+                errorAction: ''
             }
         }
 
@@ -467,7 +507,13 @@ export default (state = initialState, action) => {
                 pushed_device_ids: [...state.pushed_device_ids],
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "policy",
-                selectedDevices: []
+                
+                selectedDevices: [],
+                bulkDevices: [],
+                bulkAction: '',
+                bulkDealers: [],
+                bulkUsers: [],
+                errorAction: ''
             }
         }
 
@@ -479,6 +525,39 @@ export default (state = initialState, action) => {
                 queue_device_ids: [],
                 pushed_device_ids: [],
                 expire_device_ids: [],
+            }
+        }
+
+        case SET_BULK_DATA: {
+            if (action.dataType === 'action') {
+                return {
+                    ...state,
+                    bulkAction: action.payload
+                }
+            }
+            else if (action.dataType === 'dealers') {
+                return {
+                    ...state,
+                    bulkDealers: action.payload,
+                    bulkUsers: []
+                }
+            }
+            else if (action.dataType === 'users') {
+                return {
+                    ...state,
+                    bulkUsers: action.payload
+                }
+            } 
+            else if (action.dataType === 'errorAction') {
+                return {
+                    ...state,
+                    errorAction: action.payload
+                }
+            } 
+            else {
+                return {
+                    ...state,
+                }
             }
         }
 
