@@ -369,11 +369,8 @@ class ConnectDealer extends Component {
                                     getDealerSalesHistory={this.props.getDealerSalesHistory}
                                     changeDealerStatus={this.props.changeDealerStatus}
                                 />
-
                             </Col>
-
                         </Row>
-
                     </Fragment>
                     : <DealerNotFoundPage />
                 }

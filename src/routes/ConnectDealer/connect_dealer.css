@@ -57,14 +57,31 @@
     margin-left: 16px;
 }
 
+.restrict_level {
+    width: 100%;
+}
+
 .restrict_level label.ant-radio-wrapper {
-    display: block;
+
     margin: 8px 8px;
     border: 1px solid #e8e8e8;
     padding: 8px 8px;
-    background: red;
     border-radius: 6px;
-    color: #fff;
+
+}
+
+.restrict_level .yellow {
+    background: yellow;
+    color: #000;
+}
+
+.restrict_level .red {
+    background: red;
+    color: #000;
+}
+
+.restrict_level h4 {
+    line-height: 50px;
 }
 
 @media (max-width: 768px) {

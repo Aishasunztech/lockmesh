@@ -60,17 +60,19 @@ class RestrictDealerAccount extends Component {
             })
         });
     }
+
     render() {
         const { visible } = this.state;
         if (!this.state.dealer) {
             return null;
         }
+        // let dealer = props.dealer;
         return (
             <Fragment>
                 <Modal
                     visible={visible}
-                    // title={`Restrict Account for Dealer ${this.state.dealer.dealer_name}`}
-                    title={`Restrict Account for Dealer`}
+                    title={`Restrict Account for Dealer ${this.state.dealer.dealer_name}`}
+                    // title={`Restrict Account for Dealer ${dealer_name}`}
                     maskClosable={false}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
@@ -92,11 +94,9 @@ class RestrictDealerAccount extends Component {
                     ]}
                 >
                     <Form
-
                         // onSubmit={this.handleSubmit} 
                         autoComplete="new-password"
                     >
-
                         <Form.Item
                             // labelCol={{ span: 8 }}
                             wrapperCol={{ span: 24 }}
@@ -110,9 +110,22 @@ class RestrictDealerAccount extends Component {
                                     initialValue="restricted"
                                     className="restrict_level"
                                 >
-
-                                    <p>Restrict ability to PAY LATER </p><Radio value="restricted">level1</Radio>
-                                    <p>Restrict ability to add New Devices</p><Radio value="suspended">level2</Radio>
+                                    <Row>
+                                        <Col xs={24} sm={24} md={16} lg={16} xl={16}>
+                                            <h4 className="mb-0">Restrict ability to PAY LATER </h4>
+                                        </Col>
+                                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                                            <Radio value="restricted" className="yellow">Level 1</Radio>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col xs={24} sm={24} md={16} lg={16} xl={16}>
+                                            <h4 className="mb-0">Restrict ability to Add New Devices</h4>
+                                        </Col>
+                                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                                            <Radio value="suspended" className="red">Level 2</Radio>
+                                        </Col>
+                                    </Row>
                                     {/* <Radio value="active">Active</Radio> */}
                                 </Radio.Group>
                             )}
