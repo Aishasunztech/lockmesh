@@ -55,11 +55,14 @@ class ConnectDealer extends Component {
                 dataIndex: 'name',
                 key: 'name',
                 className: 'dealer_info',
+                title: 'Status',
             },
             {
                 dataIndex: 'value',
                 key: 'value',
                 className: '',
+                title: '',
+
             },
         ]
         this.overDueColumns = [
@@ -75,18 +78,18 @@ class ConnectDealer extends Component {
                 key: 'b',
                 className: '',
             },
-            {
-                title: 'C',
-                dataIndex: 'c',
-                key: 'c',
-                className: '',
-            },
-            {
-                title: 'D',
-                dataIndex: 'd',
-                key: 'd',
-                className: '',
-            },
+            // {
+            //     title: 'C',
+            //     dataIndex: 'c',
+            //     key: 'c',
+            //     className: '',
+            // },
+            // {
+            //     title: 'D',
+            //     dataIndex: 'd',
+            //     key: 'd',
+            //     className: '',
+            // },
         ]
     }
 
@@ -142,8 +145,13 @@ class ConnectDealer extends Component {
     renderDealerInfo = () => {
         let dealer = this.props.dealer;
         if (dealer) {
-            const dealer_status = (dealer.unlink_status == 1) ? "Archived" : (dealer.account_status === "suspended") ? "Suspended" : "Activated";
+            // const dealer_status = (dealer.unlink_status == 1) ? "Archived" : (dealer.account_status === "suspended") ? "Suspend" : "Active";
             return [
+                // {
+                //     key: '7',
+                //     name: <a>Status</a>,
+                //     value: dealer_status,
+                // },
                 {
                     key: '1',
                     name: <a>Dealer Name</a>,
@@ -175,24 +183,19 @@ class ConnectDealer extends Component {
                     value: 'N/A',
                 },
                 {
-                    key: '7',
-                    name: <a>Status</a>,
-                    value: dealer_status,
-                },
-                {
                     key: '8',
                     name: <a>Parent Dealer</a>,
                     value: (dealer.parent_dealer) ? dealer.parent_dealer : 'N/A',
                 },
                 {
-                    key: '9',
-                    name: <a>Last Login</a>,
-                    value: (dealer.last_login) ? dealer.last_login : 'N/A',
-                },
-                {
                     key: '10',
                     name: <a>Start Date</a>,
                     value: this.props.dealer.created,
+                },
+                {
+                    key: '9',
+                    name: <a>Last Login</a>,
+                    value: (dealer.last_login) ? dealer.last_login : 'N/A',
                 },
             ]
         } else {
@@ -259,8 +262,15 @@ class ConnectDealer extends Component {
                     key: '1',
                     a: <div><span className="overdue_txt">0-21:</span> <span className="overdue_values">{dealer._0to21_dues}</span></div>,
                     b: <div><span className="overdue_txt">21+:</span> <span className="overdue_values">{dealer._21to30_dues}</span></div>,
-                    c: <div><span className="overdue_txt">30+:</span> <span className="overdue_values">{dealer._30to60_dues}</span></div>,
-                    d: <div><span className="overdue_txt">60+:</span> <span className="overdue_values">{dealer._60toOnward_dues}</span></div>,
+                    // c: <div><span className="overdue_txt">30+:</span> <span className="overdue_values">{dealer._30to60_dues}</span></div>,
+                    // d: <div><span className="overdue_txt">60+:</span> <span className="overdue_values">{dealer._60toOnward_dues}</span></div>,
+                },
+                {
+                    key: '2',
+                    // a: <div><span className="overdue_txt">0-21:</span> <span className="overdue_values">{dealer._0to21_dues}</span></div>,
+                    // b: <div><span className="overdue_txt">21+:</span> <span className="overdue_values">{dealer._21to30_dues}</span></div>,
+                    a: <div><span className="overdue_txt">30+:</span> <span className="overdue_values">{dealer._30to60_dues}</span></div>,
+                    b: <div><span className="overdue_txt">60+:</span> <span className="overdue_values">{dealer._60toOnward_dues}</span></div>,
                 }
             ]
         } else {
@@ -269,7 +279,13 @@ class ConnectDealer extends Component {
     }
 
     render() {
-
+        let dealer = this.props.dealer;
+        let dealer_status = '';
+        if (dealer) {
+            dealer_status = (dealer.unlink_status == 1) ? "Archived" : (dealer.account_status === "suspended") ? "Suspend" : "Active";
+        }
+        console.log("dealer_status ", dealer_status)
+        this.dealerInfoColumns[1].title = dealer_status;
         return (
 
             <Fragment>
@@ -283,13 +299,13 @@ class ConnectDealer extends Component {
 
                             {/* Dealer Information */}
                             <Col className="" xs={24} sm={24} md={8} lg={8} xl={8}>
-                                <Card style={{ borderRadius: 12 }}>
+                                <Card style={{ borderRadius: 12 }} className="height_auto">
                                     <h2 style={{ textAlign: "center" }}>Dealer Info</h2>
                                     <Divider className="mb-0" />
                                     <Table
                                         columns={this.dealerInfoColumns}
                                         bordered
-                                        showHeader={false}
+                                        // showHeader={false}
                                         dataSource={this.renderDealerInfo()}
                                         pagination={false}
                                         className="ac_pro_table profile_table"
@@ -321,7 +337,7 @@ class ConnectDealer extends Component {
                                                 pagination={false}
                                                 className="ac_pro_table"
                                             />
-                                            <h4 className="mt-8 border_bottom">Overdue</h4>
+                                            <h4 className="mt-13 border_bottom">Overdue</h4>
                                             <Table
                                                 columns={this.overDueColumns}
                                                 bordered

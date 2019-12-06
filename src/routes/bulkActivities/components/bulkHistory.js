@@ -204,23 +204,17 @@ export default class Activity extends Component {
         return (
             <div>
                 <Modal
-                    width="880px"
+                    width="850px"
                     maskClosable={false}
                     visible={this.props.historyModalShow}
-                    title={convertToLang(this.props.translation[""], "History of Bulk Device Activities")}
-                    onOk={this.handleOk}
-                    onCancel={this.props.handleHistoryCancel}
-                    footer={null}
-                    className="activities"
-                // className="edit_form"
-                >
-                    {this.props.history_loading ? <CircularProgress /> :
-                        <div>
+                    title={
+                        <div className="pp_popup">
+                            {convertToLang(this.props.translation[""], "History of Bulk Device Activities")}
                             <Input.Search
                                 name="search"
                                 key="search"
                                 id="search"
-                                // className="search_heading1"
+                                className="search_heading1"
                                 onKeyUp={
                                     (e) => {
                                         this.handleComponentSearch(e)
@@ -228,63 +222,68 @@ export default class Activity extends Component {
                                 }
                                 placeholder="Search"
                             />
-
-                            <Table
-                                columns={[
-                                    {
-                                        title: convertToLang(this.props.translation[ACTIVITY], "ACTIVITY"),
-                                        align: "center",
-                                        dataIndex: 'action',
-                                        key: "action",
-                                        className: '',
-                                        sorter: (a, b) => { return a.action.localeCompare(b.action) },
-                                        sortDirections: ['ascend', 'descend'],
-
-                                    },
-                                    {
-                                        title: convertToLang(this.props.translation[DATE], "DATE"),
-                                        align: "center",
-                                        dataIndex: 'created_at',
-                                        key: "created_at",
-                                        className: '',
-                                        sorter: (a, b) => { return a.created_at.localeCompare(b.created_at) },
-                                        sortDirections: ['ascend', 'descend'],
-                                        defaultSortOrder: 'descend'
-
-                                    },
-                                ]}
-                                onChange={this.props.onChangeTableSorting}
-                                bordered
-                                rowClassName={(record, index) =>
-                                    this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''
-                                }
-                                onExpand={this.onExpandRow}
-                                dataSource={this.renderList()}
-                                expandedRowRender={record => {
-                                    // console.log('recored', record)
-
-                                    return (
-                                        <Table
-                                            style={{ margin: 0, padding: 0 }}
-                                            size='middle'
-                                            bordered={false}
-                                            columns={this.state.columns}
-                                            align='center'
-                                            dataSource={this.props.renderList(JSON.parse(record.data))}
-                                            pagination={false}
-                                            scroll={{ x: true }}
-                                        />
-                                    )
-
-                                }}
-                                // scroll={{ y: 350 }}
-                                pagination={false}
-                            />
                         </div>
-                       }
+                    }
+                    onOk={this.handleOk}
+                    onCancel={this.props.handleHistoryCancel}
+                    footer={null}
+                    className="activities"
+                // className="edit_form"
+                >
+                    {this.props.history_loading ? <CircularProgress /> :
+                        <Table
+                            columns={[
+                                {
+                                    title: convertToLang(this.props.translation[ACTIVITY], "ACTIVITY"),
+                                    align: "center",
+                                    dataIndex: 'action',
+                                    key: "action",
+                                    className: '',
+                                    sorter: (a, b) => { return a.action.localeCompare(b.action) },
+                                    sortDirections: ['ascend', 'descend'],
 
+                                },
+                                {
+                                    title: convertToLang(this.props.translation[DATE], "DATE"),
+                                    align: "center",
+                                    dataIndex: 'created_at',
+                                    key: "created_at",
+                                    className: '',
+                                    sorter: (a, b) => { return a.created_at.localeCompare(b.created_at) },
+                                    sortDirections: ['ascend', 'descend'],
+                                    defaultSortOrder: 'descend'
+
+                                },
+                            ]}
+                            onChange={this.props.onChangeTableSorting}
+                            bordered
+                            rowClassName={(record, index) =>
+                                this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''
+                            }
+                            onExpand={this.onExpandRow}
+                            dataSource={this.renderList()}
+                            expandedRowRender={record => {
+                                // console.log('recored', record)
+
+                                return (
+                                    <Table
+                                        style={{ margin: 0, padding: 0 }}
+                                        size='middle'
+                                        bordered={false}
+                                        columns={this.state.columns}
+                                        align='center'
+                                        dataSource={this.props.renderList(JSON.parse(record.data))}
+                                        pagination={false}
+                                        scroll={{ x: true }}
+                                    />
+                                )
+
+                            }}
+                            // scroll={{ y: 350 }}
+                            pagination={false}
+                        />
+                    }
                 </Modal>
-
             </div>
         )
     }
