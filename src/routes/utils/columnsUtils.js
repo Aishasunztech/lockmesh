@@ -404,7 +404,7 @@ export function devicesColumns(translation, handleSearch) {
                     align: "center",
                     dataIndex: 'flagged',
                     key: 'flagged',
-                    sorter: (a, b) => { return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
+                    sorter: (a, b) => {  return a.flagged.localeCompare(b.flagged) },
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
