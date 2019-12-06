@@ -3527,7 +3527,17 @@ export function domainColumns(translation, handleSearch, isModal = false) {
     ];
 
     if (isModal) {
-        columns.splice(1, 1)
+        let actionColumn = {
+
+            title: 'ACTION',
+            dataIndex: 'action',
+            key: 'action',
+            // className: ''
+            //     }
+            // ]
+        };
+        columns[1] = actionColumn;
+        // columns.splice(1, 1)
     }
 
     return columns;

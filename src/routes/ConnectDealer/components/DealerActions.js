@@ -153,7 +153,7 @@ export default class DealerAction extends Component {
         let dealer = this.props.dealer;
 
         const { dealerList } = this.state;
-        console.log("dealerList:", dealerList);
+        
         const dealer_status = (dealer.account_status === "suspended") ? "Suspended" : "Activated";
 
         const restrict_button_type = (dealer_status === "Activated") ? "danger" : "default";
@@ -164,6 +164,8 @@ export default class DealerAction extends Component {
 
         return (
             <Fragment>
+
+                {/* Dealer Search */}
                 <Card className="search_dev_id" style={{ borderRadius: 12 }}>
                     <Row gutter={16} type="flex" justify="center" align="top">
                         <Col span={24} className="gutter-row" justify="center" >
@@ -209,35 +211,55 @@ export default class DealerAction extends Component {
                     </Row>
                 </Card>
 
+                {/* Dealer Action */}
                 <Card style={{ borderRadius: 12 }}>
                     <Row gutter={16} type="flex" justify="center" align="top">
+
+                        {/* Activities Button */}
                         <Col span={12} className="gutter-row" justify="center" >
                             <Button disabled style={{ width: "100%", marginBottom: 16, }} >
                                 <h6 className="mb-0">Activity</h6>
                             </Button>
                         </Col>
+
+                        {/* Domains Button */}
                         <Col
                             span={12}
                             className="gutter-row"
                             justify="center">
                             <Button
-                                onClick={() => this.refs.dealerDomains.showModal(this.props.dealer, this.props.getDealerDomains)}
+                                onClick={() => this.refs.dealerDomains.showModal(this.props.dealer, this.props.getDomains, this.props.getDealerDomains)}
                                 style={{ width: "100%", marginBottom: 16, }}>
                                 <h6 className="mb-0">Domains</h6>
                             </Button>
                         </Col>
-                        <Col className="gutter-row" justify="center" span={12} >
-                            <Button style={{ width: "100%", marginBottom: 16, }}
-                                onClick={() => { this.form1.showModal() }}
-                            >
-                                <h6 className="mb-0">Credit Limit</h6>
-                            </Button>
-                        </Col>
-                        <Col className="gutter-row" justify="center" span={12} >
-                            <Button disabled style={{ width: "100%", marginBottom: 16, }}>
-                                <h6 className="mb-0">DEMO</h6>
-                            </Button>
-                        </Col>
+                        
+                        {/* Credit Limit Button */}
+                        {(this.props.authUser.type === ADMIN) ?
+                            <Col className="gutter-row" justify="center" span={12} >
+                                <Button style={{ width: "100%", marginBottom: 16, }}
+                                    onClick={() => { this.form1.showModal() }}
+                                >
+                                    <h6 className="mb-0">Credit Limit</h6>
+                                </Button>
+                            </Col>
+                            :
+                            null
+                        }
+
+                        {/* Demo Button */}
+                        {(this.props.authUser.type === ADMIN) ?
+
+                            <Col className="gutter-row" justify="center" span={12} >
+                                <Button disabled style={{ width: "100%", marginBottom: 16, }}>
+                                    <h6 className="mb-0">DEMO</h6>
+                                </Button>
+                            </Col>
+                            : 
+                            null
+                        }
+
+                        {/* Payment History Button */}
                         <Col
                             className="gutter-row"
                             justify="center"
@@ -249,6 +271,8 @@ export default class DealerAction extends Component {
                                 <h6 className="mb-0">Payment History</h6>
                             </Button>
                         </Col>
+
+                        {/* Sales History Button */}
                         <Col
                             className="gutter-row"
                             justify="center"
@@ -264,6 +288,7 @@ export default class DealerAction extends Component {
                         </Col>
                     </Row>
                 </Card>
+
                 <Card style={{ borderRadius: 12 }}>
                     <Row
                         gutter={16}
@@ -271,14 +296,17 @@ export default class DealerAction extends Component {
                         justify="center"
                         align="top"
                     >
+                        {/* Password Button */}
                         <Col span={12} className="gutter-row" justify="center" >
                             <Button
                                 style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }}
                                 onClick={() => showConfirm(this, this.props.dealer, this.props.updatePassword, 'RESET PASSWORD', this.props.dealer.dealer_name)}
                             >
                                 Pass Reset
-                        </Button>
+                            </Button>
                         </Col>
+
+                        {/* Edit Button */}
                         <Col className="gutter-row" justify="center" span={12} >
                             <Button
                                 // disabled
@@ -287,8 +315,10 @@ export default class DealerAction extends Component {
                             >
                                 <Icon type='edit' />
                                 Edit
-                        </Button>
+                            </Button>
                         </Col>
+
+                        {/* Suspend Button */}
                         <Col className="gutter-row" justify="center" span={12} >
                             <Button
                                 type={restrict_button_type}
@@ -302,6 +332,8 @@ export default class DealerAction extends Component {
                                 {restrict_button_text}
                             </Button>
                         </Col>
+                        
+                        {/* Account Limit Button */}
                         {
                             (this.props.authUser.type === ADMIN) ?
                                 <Col span={12} className="gutter-row" justify="center" >
@@ -326,6 +358,7 @@ export default class DealerAction extends Component {
                                 : null
                         }
 
+                        {/* Delete Button */}
                         <Col span={12} className="gutter-row" justify="center" >
                             <Button
                                 type={undo_button_type}
@@ -377,6 +410,7 @@ export default class DealerAction extends Component {
                 <DealerDomains
                     ref='dealerDomains'
                     translation={this.props.translation}
+
                     domains={this.props.domains}
                 // dealerDomains
                 />

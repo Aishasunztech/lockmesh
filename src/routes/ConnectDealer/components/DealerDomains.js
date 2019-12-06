@@ -14,17 +14,9 @@ import { domainColumns } from "../../utils/columnsUtils";
 
 // Constants
 // import { CONNECT_EDIT_DEALER } from "../../../constants/ActionTypes";
-// import {
-//     Button_Delete,
-//     Button_Activate,
-//     Button_Connect,
-//     Button_Suspend,
-//     Button_Undo,
-//     Button_passwordreset,
-//     Button_Ok,
-//     Button_Cancel,
-
-// } from '../../../constants/ButtonConstants';
+import {
+    Button_Remove
+} from '../../../constants/ButtonConstants';
 // import { DO_YOU_WANT_TO, OF_THIS } from '../../../constants/DeviceConstants';
 // import {
 //     DEALER_TEXT
@@ -94,12 +86,13 @@ export default class DealerDomains extends Component {
         }
     }
 
-    showModal = (dealer, callback) => {
+    showModal = (dealer, getDomains, getDealerDomains) => {
         this.setState({
             visible: true,
             dealer_id: dealer.dealer_id,
         });
-        callback(dealer.dealer_id)
+        getDomains();
+        getDealerDomains(dealer.dealer_id)
     }
     handleCancel = () => {
         this.setState({ visible: false });
@@ -118,8 +111,16 @@ export default class DealerDomains extends Component {
                 return {
                     rowKey: item.id,
                     key: ++index,
+                    action: (<Fragment>
+                        <Button size="small" type="danger"
+                        // disabled={removeBtnDisable}
+
+                        >
+                            {convertToLang(this.props.translation[Button_Remove], "Remove")}
+                        </Button>
+                    </Fragment>),
                     name: item.name,
-                    
+
                 }
             })
         } else {
@@ -132,7 +133,7 @@ export default class DealerDomains extends Component {
             <Fragment>
                 <Modal
                     visible={visible}
-                    title={""}
+                    title="Manage Domains"
                     maskClosable={false}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
@@ -144,17 +145,15 @@ export default class DealerDomains extends Component {
                             Close
                             {/* {convertToLang(this.props.translation[Button_Cancel], "Cancel")} */}
                         </Button>,
-                        // <Button
-                        //     key="submit"
-                        //     type="primary"
-                        //     onClick={this.handleSubmit}
-                        // >
-                        //     {convertToLang(this.props.translation[Button_submit], "Submit")}
-                        // </Button>,
+
                     ]}
                 >
+                    <Button size="small" type="primary" >Add Domain</Button>
+
                     <Table
-                        className="pay_history"
+                        style={{
+                            marginTop:'5px'
+                        }}
                         columns={this.columns}
                         dataSource={this.renderDealerDomainList(this.state.domains)}
                         bordered
