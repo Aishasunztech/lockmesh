@@ -200,7 +200,7 @@ class EditDevice extends Component {
         this.props.getUserList();
         this.props.getParentPackages()
         this.props.getProductPrices()
-        if (this.props.device.services && this.props.user.type === ADMIN) {
+        if (this.props.device.services) {
             let disableChat = true
             let disablePgp = true
             let disableSim2 = true

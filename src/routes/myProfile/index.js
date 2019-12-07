@@ -12,7 +12,7 @@ import ChangeProfile from './components/change_profile';
 import BASE_URL from '../../constants/Application';
 import Customizer1 from './components/Customizer';
 import styles from './components/profile.css';
-import { componentSearch, getFormattedDate, convertToLang } from '../utils/commonUtils';
+import { componentSearch, getFormattedDate, convertToLang, checkValue } from '../utils/commonUtils';
 import {
     SDEALER, Login_Email, DEVICES, Name, Value, Profile_Info, Edit_Profile, Edit_Profile_02, Edit_Profile_03, Edit_Profile_01, Change_Password, Change_Email, Login_Email_Authentication, Date_Text, CREDITS, ADMIN
 } from "../../constants/Constants";
@@ -129,42 +129,42 @@ class Profile extends Component {
             {
                 key: 41,
                 name: <a>{convertToLang(this.props.translation[""], "COMPANY NAME")}</a>,
-                value: this.props.profile.company_name,
+                value: checkValue(this.props.profile.company_name),
             },
             {
                 key: 42,
                 name: <a>{convertToLang(this.props.translation[""], "COMPANY ADDRESS")}</a>,
-                value: this.props.profile.company_address,
+                value: <span className="company_address">{checkValue(this.props.profile.company_address)}</span>,
             },
             {
                 key: 43,
                 name: <a>{convertToLang(this.props.translation[""], "CITY")}</a>,
-                value: this.props.profile.city,
+                value: checkValue(this.props.profile.city),
             },
             {
                 key: 44,
                 name: <a>{convertToLang(this.props.translation[""], "STATE/PROVINCE")}</a>,
-                value: this.props.profile.state,
+                value: checkValue(this.props.profile.state),
             },
             {
                 key: 45,
                 name: <a>{convertToLang(this.props.translation[""], "COUNTRY")}</a>,
-                value: this.props.profile.country,
+                value: checkValue(this.props.profile.country),
             },
             {
                 key: 46,
                 name: <a>{convertToLang(this.props.translation[""], "POSTAL CODE")}</a>,
-                value: this.props.profile.postal_code,
+                value: checkValue(this.props.profile.postal_code),
             },
             {
                 key: 47,
                 name: <a>{convertToLang(this.props.translation[""], "TEL #")}</a>,
-                value: this.props.profile.tel_no,
+                value: checkValue(this.props.profile.tel_no),
             },
             {
                 key: 48,
                 name: <a>{convertToLang(this.props.translation[""], "WEBSITE")}</a>,
-                value: this.props.profile.website,
+                value: checkValue(this.props.profile.website),
             },
             {
                 key: 5,
