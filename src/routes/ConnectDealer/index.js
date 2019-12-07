@@ -25,7 +25,9 @@ import {
     setCreditLimit,
     getDealerSalesHistory,
     getDealerDomains,
-    getAllDealers
+    getAllDealers,
+    changeDealerStatus,
+    getDomains
 } from '../../appRedux/actions'
 import styles from './connect_dealer.css'
 
@@ -365,7 +367,8 @@ class ConnectDealer extends Component {
                                     salesHistory={this.props.salesHistory}
                                     domains={this.props.domains}
                                     history={this.props.history}
-
+                                    authUser={this.props.authUser}
+                                    allDomainList={this.props.allDomainList}
                                     // dealer actions
                                     updatePassword={this.props.updatePassword}
                                     editDealer={this.props.editDealer}
@@ -375,16 +378,15 @@ class ConnectDealer extends Component {
                                     deleteDealer={this.props.deleteDealer}
                                     undoDealer={this.props.undoDealer}
 
+                                    getDomains={this.props.getDomains}
                                     getDealerDomains={this.props.getDealerDomains}
                                     getDealerPaymentHistory={this.props.getDealerPaymentHistory}
                                     setCreditLimit={this.props.setCreditLimit}
                                     getDealerSalesHistory={this.props.getDealerSalesHistory}
+                                    changeDealerStatus={this.props.changeDealerStatus}
                                 />
-
                             </Col>
-
                         </Row>
-
                     </Fragment>
                     : <DealerNotFoundPage />
                 }
@@ -406,20 +408,24 @@ function mapDispatchToProps(dispatch) {
         setCreditLimit: setCreditLimit,
         getDealerSalesHistory: getDealerSalesHistory,
         getDealerDomains: getDealerDomains,
-        getAllDealers: getAllDealers
+        getAllDealers: getAllDealers,
+        changeDealerStatus: changeDealerStatus,
+        getDomains: getDomains
     }, dispatch);
 }
 
-var mapStateToProps = ({ dealer_details, dealers, settings }) => {
-    // console.log(dealers.parent_dealers);
+var mapStateToProps = ({ dealer_details, dealers, settings, auth, account }) => {
+    // console.log("test: ", account);
     return {
         translation: settings.translation,
         dealer: dealer_details.dealer,
         dealerList: dealers.dealers, // dealers.parent_dealers,
         domains: dealer_details.domains,
+        allDomainList: account.domainList,
         paymentHistory: dealer_details.paymentHistory,
         salesHistory: dealer_details.salesHistory,
-        isLoading: dealer_details.connectDealerLoading
+        isLoading: dealer_details.connectDealerLoading,
+        authUser: auth.authUser
         // dealers: dealers.textTransform
     };
 }

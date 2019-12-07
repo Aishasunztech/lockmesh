@@ -5,7 +5,8 @@ import {
     SET_DEALER_LIMIT,
     DEALER_SALES_HISTORY,
     DEALER_DOMAINS,
-    CONNECT_DEALER_LOADING
+    CONNECT_DEALER_LOADING,
+    DEALER_ACCOUNT_STATUS
 } from "../../constants/ActionTypes"
 // import { message } from 'antd';
 
@@ -103,6 +104,23 @@ export function getDealerDomains(dealerId){
                 console.log(response.data)
                 dispatch({
                     type: DEALER_DOMAINS,
+                    payload: response.data
+                });
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+    }
+}
+
+export function changeDealerStatus(dealerId, dealerStatus){
+    return (dispatch) => {
+        RestService.changeDealerStatus(dealerId, dealerStatus).then((response)=>{
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: DEALER_ACCOUNT_STATUS,
                     payload: response.data
                 });
             } else {
