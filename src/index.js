@@ -6,14 +6,16 @@ import NextApp from './NextApp';
 
 import registerServiceWorker from './registerServiceWorker';
 
-import {style} from './consoleStyle.js';
+import { style } from './consoleStyle.js';
 
 function noop() { }
 
 if (process.env.NODE_ENV !== 'development') {
 
   console.log("%cPlease do not share your console data to anyone", style);
-  
+  if (typeof window.__REACT_DEVTOOLS_GLOBAL_HOOK__ === 'object') {
+    window.__REACT_DEVTOOLS_GLOBAL_HOOK__.inject = function () { };
+  }
   console.log = noop;
   console.warn = noop;
   console.error = noop;
