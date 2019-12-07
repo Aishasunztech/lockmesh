@@ -127,6 +127,46 @@ class Profile extends Component {
                 value: this.props.profile.email,
             },
             {
+                key: 41,
+                name: <a>{convertToLang(this.props.translation[""], "COMPANY NAME")}</a>,
+                value: this.props.profile.company_name,
+            },
+            {
+                key: 42,
+                name: <a>{convertToLang(this.props.translation[""], "COMPANY ADDRESS")}</a>,
+                value: this.props.profile.company_address,
+            },
+            {
+                key: 43,
+                name: <a>{convertToLang(this.props.translation[""], "CITY")}</a>,
+                value: this.props.profile.city,
+            },
+            {
+                key: 44,
+                name: <a>{convertToLang(this.props.translation[""], "STATE/PROVINCE")}</a>,
+                value: this.props.profile.state,
+            },
+            {
+                key: 45,
+                name: <a>{convertToLang(this.props.translation[""], "COUNTRY")}</a>,
+                value: this.props.profile.country,
+            },
+            {
+                key: 46,
+                name: <a>{convertToLang(this.props.translation[""], "POSTAL CODE")}</a>,
+                value: this.props.profile.postal_code,
+            },
+            {
+                key: 47,
+                name: <a>{convertToLang(this.props.translation[""], "TEL #")}</a>,
+                value: this.props.profile.tel_no,
+            },
+            {
+                key: 48,
+                name: <a>{convertToLang(this.props.translation[""], "WEBSITE")}</a>,
+                value: this.props.profile.website,
+            },
+            {
                 key: 5,
                 name: <a>{convertToLang(this.props.translation[DEVICES], "DEVICES")}</a>,
                 value: this.props.profile.type === 'admin' ? 'All' : this.props.profile.connected_devices,
@@ -159,6 +199,7 @@ class Profile extends Component {
                     name: <a>{convertToLang(this.props.translation[CREDITS], "CREDITS")}</a>,
                     value: (this.props.credits) ? this.props.credits : 'N/A',
                 },
+
                 {
                     key: 6,
                     name: <a><Markup content={convertToLang(this.props.translation[Login_History], "LOGIN HISTORY")} /> </a>,
@@ -167,7 +208,6 @@ class Profile extends Component {
 
             ];
         }
-        // console.log('datasource', dataSource);
 
         const columns = [{
             title: convertToLang(this.props.translation[Name], "Name"),
@@ -373,7 +413,7 @@ var matchDispatchToProps = (dispatch) => {
 
 var mapStateToProps = ({ auth, settings, sidebar }) => {
     // console.log("mapStateToProps");
-    // console.log('ooo', state.auth);
+    // console.log('ooo', auth.authUser);
     return {
         profile: auth.authUser,
         loginHistory: auth.loginHistory,

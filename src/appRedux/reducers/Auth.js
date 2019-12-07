@@ -49,6 +49,14 @@ const INIT_STATE = {
 		two_factor_auth: localStorage.getItem('two_factor_auth') === null ? false : localStorage.getItem('two_factor_auth'),
 		verified: false,
 		account_balance_status: localStorage.getItem("account_balance_status"),
+		company_name: null,
+		company_address: null,
+		city: null,
+		state: null,
+		country: null,
+		postal_code: null,
+		tel_no: null,
+		website: null,
 	},
 	loginHistory: []
 };
@@ -139,6 +147,14 @@ export default (state = INIT_STATE, action) => {
 					two_factor_auth: null,
 					demos: 0,
 					remaining_demos: 0,
+					company_name: null,
+					company_address: null,
+					city: null,
+					state: null,
+					country: null,
+					postal_code: null,
+					tel_no: null,
+					website: null,
 				},
 				initURL: '/',
 				loader: false,
@@ -150,6 +166,14 @@ export default (state = INIT_STATE, action) => {
 		case UPDATE_PROFILE: {
 			if (action.response.status) {
 				state.authUser.name = action.response.data.name;
+				state.authUser.company_name = action.response.data.company_name;
+				state.authUser.company_address = action.response.data.company_address;
+				state.authUser.city = action.response.data.city;
+				state.authUser.state = action.response.data.state;
+				state.authUser.country = action.response.data.country;
+				state.authUser.postal_code = action.response.data.postal_code;
+				state.authUser.tel_no = action.response.data.tel_no;
+				state.authUser.website = action.response.data.website;
 				localStorage.setItem('name', action.response.data.name);
 				success({
 					title: action.response.msg,
@@ -187,6 +211,15 @@ export default (state = INIT_STATE, action) => {
 					two_factor_auth: null,
 					demos: 0,
 					remaining_demos: 0,
+					name: null,
+					company_name: null,
+					company_address: null,
+					city: null,
+					state: null,
+					country: null,
+					postal_code: null,
+					tel_no: null,
+					website: null,
 				},
 				initURL: '/',
 				loader: false
@@ -222,7 +255,7 @@ export default (state = INIT_STATE, action) => {
 			}
 		}
 		case COMPONENT_ALLOWED: {
-			console.log(action.payload.remaining_demos);
+			console.log(action.payload);
 			return {
 				...state,
 				isAllowed: action.payload.ComponentAllowed,
@@ -244,6 +277,14 @@ export default (state = INIT_STATE, action) => {
 					account_balance_status: action.payload.account_balance_status,
 					demos: action.payload.demos,
 					remaining_demos: action.payload.remaining_demos,
+					company_name: action.payload.company_name,
+					company_address: action.payload.company_address,
+					city: action.payload.city,
+					state: action.payload.state,
+					country: action.payload.country,
+					postal_code: action.payload.postal_code,
+					tel_no: action.payload.tel_no,
+					website: action.payload.website,
 				}
 			}
 			break;
