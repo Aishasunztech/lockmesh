@@ -412,6 +412,7 @@ export default class DealerAction extends Component {
                     translation={this.props.translation}
 
                     domains={this.props.domains}
+                    allDomainList={this.props.allDomainList}
                 // dealerDomains
                 />
 

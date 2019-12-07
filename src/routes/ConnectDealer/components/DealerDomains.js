@@ -3,7 +3,7 @@ import React, { Component, Fragment } from "react";
 import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Divider, Table, Select } from "antd";
 
 // Components
-// import EditDealer from '../../dealers/components/editDealer';
+import AllDomainsModal from './AllDomainsModal';
 
 // Helpers
 import { convertToLang, formatMoney } from '../../utils/commonUtils'
@@ -112,7 +112,10 @@ export default class DealerDomains extends Component {
                     rowKey: item.id,
                     key: ++index,
                     action: (<Fragment>
-                        <Button size="small" type="danger"
+                        <Button
+                            size="small"
+                            type="danger"
+                            disabled
                         // disabled={removeBtnDisable}
 
                         >
@@ -148,20 +151,30 @@ export default class DealerDomains extends Component {
 
                     ]}
                 >
-                    <Button size="small" type="primary" >Add Domain</Button>
+                    <Button size="small" type="primary"
+                        onClick={() => this.refs.allDomainsModal.showModal()}
+                    >Add Domain</Button>
 
                     <Table
                         style={{
-                            marginTop:'5px'
+                            marginTop: '5px'
                         }}
                         columns={this.columns}
                         dataSource={this.renderDealerDomainList(this.state.domains)}
                         bordered
-                        title={this.pay_history_title}
+                        // title={this.pay_history_title}
                         pagination={false}
                         scroll={{ x: true }}
                     />
                 </Modal>
+                <AllDomainsModal
+                    ref='allDomainsModal'
+                    // props
+                    translation={this.props.translation}
+                    allDomainList={this.props.allDomainList}
+                    domains={this.props.domains}
+
+                />
             </Fragment >
         )
     }

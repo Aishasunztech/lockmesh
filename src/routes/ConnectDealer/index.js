@@ -352,7 +352,7 @@ class ConnectDealer extends Component {
                                     domains={this.props.domains}
                                     history={this.props.history}
                                     authUser={this.props.authUser}
-
+                                    allDomainList={this.props.allDomainList}
                                     // dealer actions
                                     updatePassword={this.props.updatePassword}
                                     editDealer={this.props.editDealer}
@@ -398,12 +398,14 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-var mapStateToProps = ({ dealer_details, dealers, settings, auth }) => {
+var mapStateToProps = ({ dealer_details, dealers, settings, auth, account }) => {
+    // console.log("test: ", account);
     return {
         translation: settings.translation,
         dealer: dealer_details.dealer,
         dealerList: dealers.dealers, // dealers.parent_dealers,
         domains: dealer_details.domains,
+        allDomainList: account.domainList,
         paymentHistory: dealer_details.paymentHistory,
         salesHistory: dealer_details.salesHistory,
         isLoading: dealer_details.connectDealerLoading,

@@ -3543,6 +3543,46 @@ export function domainColumns(translation, handleSearch, isModal = false) {
     return columns;
 }
 
+export function addDomainModalColumns(translation, handleSearch) {
+    let columns = [
+        {
+            title: "#",
+            dataIndex: 'counter',
+            align: 'center',
+            className: 'row',
+            render: (text, record, index) => ++index,
+        },
+
+        {
+            title: (
+                <Input.Search
+                    name="name"
+                    key="name"
+                    id="name"
+                    className="search_heading"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    // placeholder={titleCase(props.convertToLang(props.translation[""], "APP NAME"))}
+                    placeholder="DOMAIN NAME"
+                />
+            ),
+            dataIndex: 'name',
+            className: '',
+            key: 'name',
+            children: [
+                {
+                    title: convertToLang(translation[""], "DOMAIN NAME"),
+                    dataIndex: 'name',
+                    key: 'name',
+                    // className: ''
+                }
+            ]
+
+        },
+    ];
+
+    return columns;
+}
 export function systemMsgColumns(translation, handleSearch, isModal = false) {
     let columns = [
         {
