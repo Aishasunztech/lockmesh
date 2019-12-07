@@ -1,9 +1,6 @@
 .ac_pro_table .ant-table-content {
-    overflow: overlay;
     margin-top: -2px;
 }
-
-
 
 .ac_pro_table .ant-table-tbody>tr>td.ac_pro_txt {
     text-align: right;
@@ -37,6 +34,10 @@
     font-weight: 500;
     color: red;
     min-width: 45px;
+}
+
+.ovd_table .ant-table-tbody>tr:hover:not(.ant-table-expanded-row)>td {
+    background: #fff;
 }
 
 .ovd_table .ant-table-tbody>tr>td {
@@ -82,6 +83,15 @@
 
 .restrict_level h4 {
     line-height: 50px;
+}
+.profile_table .ant-table-thead>tr>th {
+    padding: 8px 8px;
+    text-align: center;
+    font-size: 15px;
+}
+
+.right_bar .ant-btn .anticon-search {
+    margin-right: 0;
 }
 
 @media (max-width: 768px) {

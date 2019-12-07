@@ -362,7 +362,7 @@
 }
 
 .credit_popup .ant-modal-body {
-    padding: 8%;
+    padding: 25px 50px;
 }
 
 .ac_status_table .ant-table-title {
@@ -401,7 +401,7 @@
 
 .overdue_table,
 .pay_history {
-    margin-top: 50px;
+    margin-top: 24px;
 }
 
 .overdue_table .ant-table-small>.ant-table-content .ant-table-row:last-child td {

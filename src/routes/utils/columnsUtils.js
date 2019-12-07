@@ -404,7 +404,7 @@ export function devicesColumns(translation, handleSearch) {
                     align: "center",
                     dataIndex: 'flagged',
                     key: 'flagged',
-                    sorter: (a, b) => { return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
+                    sorter: (a, b) => {  return a.flagged.localeCompare(b.flagged) },
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
@@ -1439,6 +1439,97 @@ export function userDevicesListColumns(translation, handleSearch) {
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
+        },
+    ]);
+}
+
+export function bulkDeviceHistoryColumns(translation) {
+    return ([
+        {
+            title: '#',
+            dataIndex: 'counter',
+            align: 'center',
+            className: 'row',
+            render: (text, record, index) => ++index,
+        },
+        {
+            title: convertToLang(translation[DEVICE_ACTIVATION_CODE], "ACTIVATION CODE"),
+            align: "center",
+            dataIndex: 'activation_code',
+            sorter: (a, b) => { return a.activation_code.localeCompare(b.activation_code) },
+            sortDirections: ['ascend', 'descend'],
+        },
+        {
+            title: convertToLang(translation[DEVICE_DEALER_PIN], "DEALER PIN"),
+            align: "center",
+            dataIndex: 'dealer_pin',
+            key: 'dealer_pin',
+            sorter: (a, b) => { return a.dealer_pin - b.dealer_pin },
+            sortDirections: ['ascend', 'descend'],
+        },
+        {
+            title: convertToLang(translation[DEVICE_ID], "DEVICE ID"),
+            align: "center",
+            dataIndex: 'device_id',
+            key: "device_id",
+            sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) },
+            sortDirections: ['ascend', 'descend'],
+
+        },
+        {
+            title: convertToLang(translation[DEVICE_STATUS], "STATUS"),
+            align: "center",
+            dataIndex: 'status',
+            key: 'status',
+            sorter: (a, b) => { return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
+
+            sortDirections: ['ascend', 'descend'],
+
+        }, {
+            title: convertToLang(translation[DEVICE_EXPIRY_DATE], "EXPIRY DATE"),
+            align: "center",
+            dataIndex: 'expiry_date',
+            key: 'expiry_date',
+            sorter: (a, b) => { return a.expiry_date.localeCompare(b.expiry_date) },
+            sortDirections: ['ascend', 'descend'],
+        },
+        {
+            title: convertToLang(translation[DEVICE_PGP_EMAIL], "PGP EMAIL"),
+            align: "center",
+            dataIndex: 'pgp_email',
+            sorter: (a, b) => { return a.pgp_email.localeCompare(b.pgp_email) },
+            sortDirections: ['ascend', 'descend'],
+        }, {
+            title: convertToLang(translation[DEVICE_CHAT_ID], "CHAT ID"),
+            align: "center",
+            dataIndex: 'chat_id',
+            key: 'chat_id',
+            sorter: (a, b) => { return a.chat_id.localeCompare(b.chat_id) },
+
+            sortDirections: ['ascend', 'descend'],
+        }, {
+            title: convertToLang(translation[DEVICE_SIM_ID], "SIM ID"),
+            align: "center",
+            dataIndex: 'sim_id',
+            key: 'sim_id',
+            sorter: (a, b) => { return a.sim_id.localeCompare(b.sim_id) },
+            sortDirections: ['ascend', 'descend'],
+        }, {
+            title: convertToLang(translation[DEVICE_IMEI_1], "IMEI 1"),
+            align: "center",
+            dataIndex: 'imei_1',
+            key: 'imei_1',
+            sorter: (a, b) => { return a.imei_1.localeCompare(b.imei_1) },
+            sortDirections: ['ascend', 'descend'],
+
+        }, {
+
+            title: convertToLang(translation[DEVICE_IMEI_2], "IMEI 2"),
+            align: "center",
+            dataIndex: 'imei_2',
+            key: 'imei_2',
+            sorter: (a, b) => { return a.imei_2.localeCompare(b.imei_2) },
+            sortDirections: ['ascend', 'descend'],
         },
     ]);
 }

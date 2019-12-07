@@ -252,7 +252,6 @@ class CreditIcon extends Component {
         invoices: <Button size="small" className="invo_btn"> {this.props.overdueDetails._30to60}</Button>
       },
       {
-
         overdue: <span className="weight_600 p-5"> 21+</span>,
         amount: <span className="weight_600 p-5"> {(this.props.overdueDetails._21to30_dues)}</span>,
         invoices: <Button size="small" className="invo_btn">{this.props.overdueDetails._21to30}</Button>
@@ -383,7 +382,6 @@ class CreditIcon extends Component {
           className="credit_popup"
         >
           <Fragment>
-
             <Row>
               <Col xs={24} sm={24} md={10} lg={10} xl={10} className="mb-16">
                 <Table

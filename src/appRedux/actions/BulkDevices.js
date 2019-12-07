@@ -1,4 +1,4 @@
-import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES, WIPE_BULK_DEVICES, UNLINK_BULK_DEVICES, CLOSE_RESPONSE_MODAL, APPLY_BULK_POLICY, SET_BULK_MESSAGE, SEND_BULK_MESSAGE, SEND_BULK_WIPE_PASS, HANDLE_BULK_WIPE_PASS } from "../../constants/ActionTypes";
+import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES, WIPE_BULK_DEVICES, UNLINK_BULK_DEVICES, CLOSE_RESPONSE_MODAL, APPLY_BULK_POLICY, SET_BULK_MESSAGE, SEND_BULK_MESSAGE, SEND_BULK_WIPE_PASS, HANDLE_BULK_WIPE_PASS, BULK_HISTORY_LOADING, SET_BULK_ACTION, SET_BULK_DATA } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
 
@@ -89,6 +89,9 @@ export function bulkActivateDevice(devices) {
 export function getbulkHistory() {
 
     return (dispatch) => {
+        dispatch({
+            type: BULK_HISTORY_LOADING,
+        });
         RestService.getbulkHistory().then((response) => {
             if (RestService.checkAuth(response.data)) {
                 // console.log('response', response.data);
@@ -295,6 +298,18 @@ export const setBulkMsg = (data) => {
         dispatch({
             type: SET_BULK_MESSAGE,
             payload: data
+        })
+    }
+}
+
+// Set Bulk action
+export const setBulkData = (data, dataType) => {
+    // console.log("at action file")
+    return (dispatch) => {
+        dispatch({
+            type: SET_BULK_DATA,
+            payload: data,
+            dataType
         })
     }
 }
