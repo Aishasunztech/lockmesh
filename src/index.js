@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { AppContainer } from 'react-hot-loader';
-// import { getDateTimeOfClientTimeZone} from './routes/utils/commonUtils'
-import NextApp from './NextApp';
+import { disableReactDevTools } from '@fvilers/disable-react-devtools';
 
+import NextApp from './NextApp';
 import registerServiceWorker from './registerServiceWorker';
 
 import { style } from './consoleStyle.js';
@@ -12,15 +12,12 @@ function noop() { }
 
 if (process.env.NODE_ENV !== 'development') {
 
+  disableReactDevTools()
   console.log("%cPlease do not share your console data to anyone", style);
-  if (typeof window.__REACT_DEVTOOLS_GLOBAL_HOOK__ === 'object') {
-    window.__REACT_DEVTOOLS_GLOBAL_HOOK__.inject = function () { };
-  }
   console.log = noop;
   console.warn = noop;
   console.error = noop;
 }
-
 
 // Wrap the rendering in a function:
 const render = Component => {
