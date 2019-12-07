@@ -1,4 +1,11 @@
-import { LANGUAGES, SWITCH_LANGUAGE, TOGGLE_COLLAPSED_NAV, WINDOW_WIDTH, GET_LANGUAGE } from "../../constants/ActionTypes";
+import { 
+  LANGUAGES, 
+  SWITCH_LANGUAGE, 
+  TOGGLE_COLLAPSED_NAV, 
+  WINDOW_WIDTH, 
+  GET_LANGUAGE 
+} from "../../constants/ActionTypes";
+
 import {
   LAYOUT_TYPE,
   LAYOUT_TYPE_FULL,
@@ -10,53 +17,8 @@ import {
   THEME_TYPE_SEMI_DARK,
 
 } from "../../constants/ThemeSetting";
-import {
-  DEVICE_ID,
-  USER_ID,
-  DEVICE_REMAINING_DAYS,
-  DEVICE_FLAGGED,
-  DEVICE_STATUS,
-  DEVICE_MODE,
-  DEVICE_NAME,
-  DEVICE_ACTIVATION_CODE,
-  DEVICE_ACCOUNT_EMAIL,
-  DEVICE_PGP_EMAIL,
-  DEVICE_CHAT_ID,
-  DEVICE_CLIENT_ID,
-  DEVICE_DEALER_ID,
-  DEVICE_DEALER_PIN,
-  DEVICE_MAC_ADDRESS,
-  DEVICE_SIM_ID,
-  DEVICE_IMEI_1,
-  DEVICE_SIM_1,
-  DEVICE_IMEI_2,
-  DEVICE_SIM_2,
-  DEVICE_SERIAL_NUMBER,
-  DEVICE_MODEL,
-  DEVICE_START_DATE,
-  DEVICE_EXPIRY_DATE,
-  DEVICE_DEALER_NAME,
-  DEVICE_S_DEALER,
-  DEVICE_S_DEALER_NAME,
-} from '../../constants/DeviceConstants';
 
-import {
-  DEALER_ID,
-  DEALER_NAME,
-  DEALER_EMAIL,
-  DEALER_PIN,
-  DEALER_DEVICES,
-  DEALER_TOKENS,
-  Parent_Dealer,
-  Parent_Dealer_ID
-} from '../../constants/DealerConstants';
-import {
-	APK_SHOW_ON_DEVICE,
-	APK,
-	APK_APP_NAME,
-	APK_APP_LOGO,
-	APK_PERMISSION
-} from '../../constants/ApkConstants';
+
 // import constants from '../constants';
 
 import SettingStates from './InitialStates';

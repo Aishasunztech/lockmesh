@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { BASE_URL } from '../../../constants/Application';
 import EditDealer from './editDealer';
 // import EditApk from './editDealer';
-import { ADMIN } from '../../../constants/Constants';
+import { ADMIN, DEALER } from '../../../constants/Constants';
 import scrollIntoView from 'scroll-into-view';
 
 import DealerDevicesList from '../../users/components/UserDeviceList';
@@ -273,7 +273,7 @@ class DealerList extends Component {
                         </Button>
 
                         {/* Connect Button */}
-                        {(this.props.user.type === ADMIN) ?
+                        {(this.props.user.type === ADMIN || this.props.user.type === DEALER) ?
                             ConnectButton
                             :
                             null

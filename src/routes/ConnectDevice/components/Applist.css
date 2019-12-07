@@ -189,6 +189,7 @@
 .activities .ant-modal-body {
     max-height: 540px;
     overflow: overlay;
+    width: 100%;
 }
 
 .load_policy_popup .ant-modal-title {

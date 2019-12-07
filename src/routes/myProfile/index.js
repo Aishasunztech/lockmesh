@@ -227,7 +227,7 @@ class Profile extends Component {
                 <Row justify='center' style={{ backgroundColor: '#012346', height: 110, paddingTop: 20 }}>
                 </Row>
                 <div style={{ marginTop: -40 }}>
-                    <Row>
+                    <Row gutter={16}>
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
                                 <Card className="manage_sec_pro height_auto" style={{ borderRadius: 12 }}>
@@ -250,13 +250,18 @@ class Profile extends Component {
                                             <h2 style={{ textAlign: "center" }}>{convertToLang(this.props.translation[Edit_Profile], "Edit Profile")}</h2>
                                             <Divider className="mb-0" />
                                             <Row style={{ padding: '12px 0px 0px' }}>
-                                                <Col span={8} className="text-center ">
-                                                    {/* <Icon type="file-text" className="policy_icon" /> */}
-                                                    <img src={require("assets/images/profile-image.png")} className="mb-8"></img>
-                                                    <h1 className="mb-0" style={{ fontSize: '3vh' }}>{this.props.profile.name}</h1>
-                                                    <p>({this.props.profile.type})</p>
+                                                <Col span={7} className="text-center ">
+                                                    <div className="text-left">
+                                                        <img src={require("assets/images/profile-image.png")} className="prof_pic" width="85px" />
+                                                        <div className="text-center">
+                                                            <p style={{ textTransform: 'capitalize', }}> ({this.props.profile.type})</p>
+                                                        </div>
+                                                    </div>
                                                 </Col>
-                                                <Col span={16} style={{ padding: 0, marginTop: 12 }}>
+                                                <Col span={17} style={{ padding: 0 }}>
+                                                    <div className="name_type">
+                                                        <h1 className="mb-12 d_n_vh_vw" >{this.props.profile.name}</h1>
+                                                    </div>
                                                     <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[Edit_Profile_01], "Change password")}</h5>
                                                     <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[Edit_Profile_02], "Change Email")}</h5>
                                                     <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[Edit_Profile_03], "Enable Dual Authentication")}  </h5>
@@ -272,7 +277,9 @@ class Profile extends Component {
 
                                         </div>
                                     </Card>
-                                    <Button type="primary" size="small" className="open_btn open_btn1">{convertToLang(this.props.translation[Button_Open], "OPEN")}</Button>
+                                    <Button type="primary" size="small" className="open_btn open_btn1">
+                                        {convertToLang(this.props.translation[Button_Open], "OPEN")}
+                                    </Button>
                                 </a>
                             </div>
                             <Modal
@@ -355,7 +362,8 @@ class Profile extends Component {
                                 />
                             </div>
                         </div> */}
-                        <div className="overflow_table">
+                        <div className="">
+                            <hr className="fix_header_border_login_history" />
                             <Table
                                 columns={[
                                     {

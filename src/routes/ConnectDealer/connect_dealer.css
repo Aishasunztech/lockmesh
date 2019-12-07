@@ -1,9 +1,6 @@
 .ac_pro_table .ant-table-content {
-    overflow: overlay;
     margin-top: -2px;
 }
-
-
 
 .ac_pro_table .ant-table-tbody>tr>td.ac_pro_txt {
     text-align: right;
@@ -39,6 +36,10 @@
     min-width: 45px;
 }
 
+.ovd_table .ant-table-tbody>tr:hover:not(.ant-table-expanded-row)>td {
+    background: #fff;
+}
+
 .ovd_table .ant-table-tbody>tr>td {
     padding: 8px 2px !important;
 }
@@ -55,6 +56,42 @@
 .name_type {
     display: inline-grid;
     margin-left: 16px;
+}
+
+.restrict_level {
+    width: 100%;
+}
+
+.restrict_level label.ant-radio-wrapper {
+
+    margin: 8px 8px;
+    border: 1px solid #e8e8e8;
+    padding: 8px 8px;
+    border-radius: 6px;
+
+}
+
+.restrict_level .yellow {
+    background: yellow;
+    color: #000;
+}
+
+.restrict_level .red {
+    background: red;
+    color: #000;
+}
+
+.restrict_level h4 {
+    line-height: 50px;
+}
+.profile_table .ant-table-thead>tr>th {
+    padding: 8px 8px;
+    text-align: center;
+    font-size: 15px;
+}
+
+.right_bar .ant-btn .anticon-search {
+    margin-right: 0;
 }
 
 @media (max-width: 768px) {

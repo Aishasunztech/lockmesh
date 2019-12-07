@@ -10,7 +10,7 @@
 
 .profile_table .ant-table-tbody>tr>td {
     font-size: 14px;
-    text-align: center;
+    text-align: left;
     padding: 6px 6px !important;
     font-weight: 400;
 }
@@ -75,14 +75,19 @@
     word-break: break-all !important;
 }
 
-@media (max-width: 768px) {
-    .open_btn1 {
-        bottom: 55px;
-    }
+.login_history .ant-table-thead>tr>th.ant-table-column-has-actions.ant-table-column-has-sorters {
+    position: sticky;
+    top: -1px;
+
 }
 
-.login_history .ant-table-thead>tr>th.ant-table-column-has-actions.ant-table-column-has-sorters {
-    top: -1;
+.login_history .ant-modal-body {
+    padding: 16px 16px;
+    height: 400px;
+    overflow: overlay;
+    padding: 0 17px;
+    margin-top: -1px;
+    border-top: 1px solid #e8e8e8;
 }
 
 .company_address {
@@ -92,5 +97,12 @@
 
 .profile_table .ant-table-tbody>tr>td.dealer_info {
     text-transform: uppercase;
-    width: 120px;
+    width: 115px;
+    text-align: right;
+}
+
+@media (max-width: 768px) {
+    .open_btn1 {
+        bottom: 33px;
+    }
 }
