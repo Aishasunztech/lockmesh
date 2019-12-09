@@ -190,11 +190,11 @@ class ConnectDealer extends Component {
                     name: <a>Remaining Demos</a>,
                     value: dealer.remaining_demos,
                 },
-                {
-                    key: '8',
-                    name: <a>Status</a>,
-                    value: dealer_status,
-                },
+                // {
+                //     key: '8',
+                //     name: <a>Status</a>,
+                //     value: dealer_status,
+                // },
                 {
                     key: '9',
                     name: <a>Parent Dealer</a>,
