@@ -33,7 +33,8 @@ export default class AllDomainsModal extends Component {
             visible: false,
             dealer_id: null,
             // allDomainList: []
-            selectedDomainList: []
+            selectedDomainList: [],
+            selectedRowKeys: []
         }
 
         this.columns = addDomainModalColumns(props.translation, this.handleSearch);
@@ -94,7 +95,9 @@ export default class AllDomainsModal extends Component {
     }
     handleCancel = () => {
         this.setState({
-            visible: false
+            visible: false,
+            selectedDomainList: [],
+            selectedRowKeys: []
         });
     }
 
@@ -124,8 +127,10 @@ export default class AllDomainsModal extends Component {
     };
 
     onCheckBoxSelection = (selectedRowKeys, selectedRows) => {
+        console.log("selectedRows ", selectedRows, "selectedRowKeys ", selectedRowKeys)
         this.setState({
-            selectedDomainList: selectedRows
+            selectedDomainList: selectedRows,
+            selectedRowKeys: selectedRowKeys
         })
     }
     getCheckboxProps = (record) => {
@@ -133,7 +138,9 @@ export default class AllDomainsModal extends Component {
     }
 
     handleAddDomain = () => {
-
+        console.log("handle add domain for connect deaeler: ", this.props.dealerId, JSON.stringify(this.state.selectedRowKeys), 'save', false, this.props.authUser);
+        this.handleCancel();
+        this.props.domainPermission(this.state.selectedRowKeys, [this.props.dealerId], 'save', false, this.props.authUser, this.state.selectedDomainList);
     }
 
     render() {
@@ -145,6 +152,7 @@ export default class AllDomainsModal extends Component {
                     visible={visible}
                     title="All Domains"
                     maskClosable={false}
+                    destroyOnClose
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={[
@@ -156,7 +164,7 @@ export default class AllDomainsModal extends Component {
                         </Button>,
                         <Button
                             key="add"
-                            disabled
+                            disabled={this.state.selectedDomainList && this.state.selectedDomainList.length ? false : true}
                             onClick={this.handleAddDomain}
                         >
                             Add

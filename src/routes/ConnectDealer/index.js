@@ -27,7 +27,8 @@ import {
     getDealerDomains,
     getAllDealers,
     changeDealerStatus,
-    getDomains
+    getDomains,
+    connectDealerDomainPermission
 } from '../../appRedux/actions'
 import styles from './connect_dealer.css'
 
@@ -384,6 +385,7 @@ class ConnectDealer extends Component {
                                     setCreditLimit={this.props.setCreditLimit}
                                     getDealerSalesHistory={this.props.getDealerSalesHistory}
                                     changeDealerStatus={this.props.changeDealerStatus}
+                                    domainPermission={this.props.domainPermission}
                                 />
                             </Col>
                         </Row>
@@ -410,7 +412,8 @@ function mapDispatchToProps(dispatch) {
         getDealerDomains: getDealerDomains,
         getAllDealers: getAllDealers,
         changeDealerStatus: changeDealerStatus,
-        getDomains: getDomains
+        getDomains: getDomains,
+        domainPermission: connectDealerDomainPermission
     }, dispatch);
 }
 
@@ -425,7 +428,7 @@ var mapStateToProps = ({ dealer_details, dealers, settings, auth, account }) => 
         paymentHistory: dealer_details.paymentHistory,
         salesHistory: dealer_details.salesHistory,
         isLoading: dealer_details.connectDealerLoading,
-        authUser: auth.authUser
+        authUser: auth.authUser,
         // dealers: dealers.textTransform
     };
 }

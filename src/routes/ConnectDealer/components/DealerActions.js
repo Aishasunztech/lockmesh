@@ -410,9 +410,11 @@ export default class DealerAction extends Component {
                 <DealerDomains
                     ref='dealerDomains'
                     translation={this.props.translation}
-
+                    domainPermission={this.props.domainPermission}
                     domains={this.props.domains}
                     allDomainList={this.props.allDomainList}
+                    authUser={this.props.authUser}
+                    getDomains={this.props.getDomains}
                 // dealerDomains
                 />
 
