@@ -404,7 +404,7 @@ export function devicesColumns(translation, handleSearch) {
                     align: "center",
                     dataIndex: 'flagged',
                     key: 'flagged',
-                    sorter: (a, b) => {  return a.flagged.localeCompare(b.flagged) },
+                    sorter: (a, b) => { return a.flagged.localeCompare(b.flagged) },
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
@@ -1536,190 +1536,221 @@ export function bulkDeviceHistoryColumns(translation) {
 
 
 export function dealerColumns(translation, handleSearch) {
-    return ([{
-        title: '#',
-        dataIndex: 'counter',
-        align: 'center',
-        className: 'row',
-        render: (text, record, index) => ++index,
-    }, {
-        title: '',
-        dataIndex: 'accounts',
-        align: 'center',
-        className: 'row',
-    },
-    {
-        title: (
-            <Input.Search
-                name="devicesList"
-                key="connected_devices"
-                id="connected_devices"
-                className="search_heading"
-                autoComplete="new-password"
-                onChange={handleSearch}
-                placeholder={convertToLang(translation[DEALER_DEVICES], "DEVICES")}
+    return ([
+        {
+            title: '#',
+            dataIndex: 'counter',
+            align: 'center',
+            className: 'row',
+            render: (text, record, index) => ++index,
+        }, 
+        {
+            title: '',
+            dataIndex: 'accounts',
+            align: 'center',
+            className: 'row',
+        },
+        {
+            title: (
+                <Input.Search
+                    name="devicesList"
+                    key="connected_devices"
+                    id="connected_devices"
+                    className="search_heading"
+                    autoComplete="new-password"
+                    onChange={handleSearch}
+                    placeholder={convertToLang(translation[DEALER_DEVICES], "DEVICES")}
 
-            />
-        ),
-        dataIndex: 'connected_devices',
-        className: '',
-        children: [
-            {
-                title: convertToLang(translation[DEALER_DEVICES], "DEVICES"),
-                dataIndex: 'connected_devices',
-                key: 'connected_devices',
-                sorter: (a, b) => { return a.connected_devices - b.connected_devices },
-                align: 'center',
-                sortDirections: ['ascend', 'descend'],
-                className: '',
-            }
-        ]
-    },
-    {
-        title: (
-            <Input.Search
-                name="dealer_id"
-                key="dealer_id"
-                id="dealer_id"
-                className="search_heading"
-                autoComplete="new-password"
-                placeholder={convertToLang(translation[DEALER_ID], "DEALER ID")}
-                onChange={handleSearch}
+                />
+            ),
+            dataIndex: 'connected_devices',
+            className: '',
+            children: [
+                {
+                    title: convertToLang(translation[DEALER_DEVICES], "DEVICES"),
+                    dataIndex: 'connected_devices',
+                    key: 'connected_devices',
+                    sorter: (a, b) => { return a.connected_devices - b.connected_devices },
+                    align: 'center',
+                    sortDirections: ['ascend', 'descend'],
+                    className: '',
+                }
+            ]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="dealer_id"
+                    key="dealer_id"
+                    id="dealer_id"
+                    className="search_heading"
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[DEALER_ID], "DEALER ID")}
+                    onChange={handleSearch}
 
-            />
-        ),
-        dataIndex: 'dealer_id',
-        className: '',
-        children: [
-            {
-                title: convertToLang(translation[DEALER_ID], "DEALER ID"),
-                dataIndex: 'dealer_id',
-                key: 'dealer_id',
-                align: 'center',
-                sorter: (a, b) => a.dealer_id - b.dealer_id,
-                sortDirections: ['ascend', 'descend'],
-                className: '',
-            }
-        ]
-    }, {
-        title: (
-            <Input.Search
-                name="link_code"
-                key="link_code"
-                id="link_code"
-                className="search_heading"
-                autoComplete="new-password"
-                placeholder={convertToLang(translation[DEALER_PIN], "DEALER PIN")}
-                onChange={handleSearch}
+                />
+            ),
+            dataIndex: 'dealer_id',
+            className: '',
+            children: [
+                {
+                    title: convertToLang(translation[DEALER_ID], "DEALER ID"),
+                    dataIndex: 'dealer_id',
+                    key: 'dealer_id',
+                    align: 'center',
+                    sorter: (a, b) => a.dealer_id - b.dealer_id,
+                    sortDirections: ['ascend', 'descend'],
+                    className: '',
+                }
+            ]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="link_code"
+                    key="link_code"
+                    id="link_code"
+                    className="search_heading"
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[DEALER_PIN], "DEALER PIN")}
+                    onChange={handleSearch}
 
-            />
-        ),
-        dataIndex: 'link_code',
-        className: '',
-        children: [
-            {
-                title: convertToLang(translation[DEALER_PIN], "DEALER PIN"),
-                dataIndex: 'link_code',
-                key: 'link_code',
-                sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
-                align: 'center',
-                sortDirections: ['ascend', 'descend'],
-                className: '',
-            }
-        ]
-    },
-    {
-        title: (
-            <Input.Search
-                name="dealer_name"
-                key="dealer_name"
-                id="dealer_name"
-                className="search_heading"
-                autoComplete="new-password"
-                placeholder={convertToLang(translation[DEALER_NAME], "DEALER NAME")}
-                onChange={handleSearch}
+                />
+            ),
+            dataIndex: 'link_code',
+            className: '',
+            children: [
+                {
+                    title: convertToLang(translation[DEALER_PIN], "DEALER PIN"),
+                    dataIndex: 'link_code',
+                    key: 'link_code',
+                    sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
+                    align: 'center',
+                    sortDirections: ['ascend', 'descend'],
+                    className: '',
+                }
+            ]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="dealer_name"
+                    key="dealer_name"
+                    id="dealer_name"
+                    className="search_heading"
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[DEALER_NAME], "DEALER NAME")}
+                    onChange={handleSearch}
 
-            />
-        ),
-        dataIndex: 'dealer_name',
-        className: '',
-        children: [
-            {
-                title: convertToLang(translation[DEALER_NAME], "DEALER NAME"),
-                dataIndex: 'dealer_name',
-                key: 'dealer_name',
-                sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
-                align: 'center',
-                sortDirections: ['ascend', 'descend'],
-                className: '',
-            }
-        ]
-    },
-    {
-        title: (
-            <Input.Search
-                name="dealer_email"
-                key="dealer_email"
-                id="dealer_email"
-                className="search_heading"
-                autoComplete="new-password"
-                placeholder={convertToLang(translation[DEALER_EMAIL], "DEALER EMAIL")}
-                onChange={handleSearch}
+                />
+            ),
+            dataIndex: 'dealer_name',
+            className: '',
+            children: [
+                {
+                    title: convertToLang(translation[DEALER_NAME], "DEALER NAME"),
+                    dataIndex: 'dealer_name',
+                    key: 'dealer_name',
+                    sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
+                    align: 'center',
+                    sortDirections: ['ascend', 'descend'],
+                    className: '',
+                }
+            ]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="dealer_email"
+                    key="dealer_email"
+                    id="dealer_email"
+                    className="search_heading"
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[DEALER_EMAIL], "DEALER EMAIL")}
+                    onChange={handleSearch}
 
-            />
-        ),
-        dataIndex: 'dealer_email',
-        className: '',
-        children: [
-            {
-                title: convertToLang(translation[DEALER_EMAIL], "DEALER EMAIL"),
-                dataIndex: 'dealer_email',
-                key: 'dealer_email',
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.dealer_email.length;
-                // },
-                sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
+                />
+            ),
+            dataIndex: 'dealer_email',
+            className: '',
+            children: [
+                {
+                    title: convertToLang(translation[DEALER_EMAIL], "DEALER EMAIL"),
+                    dataIndex: 'dealer_email',
+                    key: 'dealer_email',
+                    // sorter: (a, b) => {
+                    //     console.log(a);
+                    //     // console.log(b);
+                    //     return a.dealer_email.length;
+                    // },
+                    sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
 
-                align: 'center',
-                sortDirections: ['ascend', 'descend'],
-                className: '',
-            }
-        ]
-    },
+                    align: 'center',
+                    sortDirections: ['ascend', 'descend'],
+                    className: '',
+                }
+            ]
+        },
 
 
-    {
-        title: (
-            <Input.Search
-                name="dealer_credits"
-                key="dealer_credits"
-                id="dealer_credits"
-                className="search_heading"
-                autoComplete="new-password"
-                placeholder={convertToLang(translation[""], "CREDITS")}
-                onChange={handleSearch}
+        {
+            title: (
+                <Input.Search
+                    name="dealer_credits"
+                    key="dealer_credits"
+                    id="dealer_credits"
+                    className="search_heading"
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[""], "CREDITS")}
+                    onChange={handleSearch}
 
-            />
-        ),
-        dataIndex: 'dealer_credits',
-        className: '',
-        children: [
-            {
-                title: convertToLang(translation[""], "CREDITS"),
-                dataIndex: 'dealer_credits',
-                key: 'dealer_credits',
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.dealer_credits.length;
-                // },
-                sorter: (a, b) => { return a.dealer_credits - b.dealer_credits },
+                />
+            ),
+            dataIndex: 'dealer_credits',
+            className: '',
+            children: [
+                {
+                    title: convertToLang(translation[""], "CREDITS"),
+                    dataIndex: 'dealer_credits',
+                    key: 'dealer_credits',
+                    // sorter: (a, b) => {
+                    //     console.log(a);
+                    //     // console.log(b);
+                    //     return a.dealer_credits.length;
+                    // },
+                    sorter: (a, b) => { return a.dealer_credits - b.dealer_credits },
 
-            }
-        ]
-    }
+                }
+            ]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="last_login"
+                    key="last_login"
+                    id="last_login"
+                    className="search_heading"
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation['LAST LOGIN'], "LAST LOGIN")}
+                    onChange={handleSearch}
+
+                />
+            ),
+            dataIndex: 'last_login',
+            className: '',
+            children: [
+                {
+                    title: convertToLang(translation['LAST LOGIN'], "LAST LOGIN"),
+                    dataIndex: 'last_login',
+                    key: 'last_login',
+                    align: 'center',
+                    sorter: (a, b) => a.last_login - b.last_login,
+                    sortDirections: ['ascend', 'descend'],
+                    className: '',
+                }
+            ]
+        }
+
     ]);
 }
 
