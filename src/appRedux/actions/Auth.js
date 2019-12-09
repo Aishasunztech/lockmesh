@@ -56,7 +56,17 @@ export const loginUser = (user) => {
 						dealer_token: '',
 						account_balance_status: resp.data.user.account_balance_status,
 						account_balance_status_by: resp.data.user.account_balance_status_by,
-						two_factor_auth: resp.data.user.two_factor_auth
+						two_factor_auth: resp.data.user.two_factor_auth,
+						demos: resp.data.user.demos,
+						remaining_demos: resp.data.user.remaining_demos,
+						company_name: resp.data.user.company_name,
+						company_address: resp.data.user.company_address,
+						city: resp.data.user.city,
+						state: resp.data.user.state,
+						country: resp.data.user.country,
+						postal_code: resp.data.user.postal_code,
+						tel_no: resp.data.user.tel_no,
+						website: resp.data.user.website,
 					}
 					RestService.authLogIn(resp.data)
 					dispatch({
@@ -89,7 +99,17 @@ export const verifyCode = (verifyForm) => {
 					dealer_token: '',
 					two_factor_auth: response.data.user.two_factor_auth,
 					account_balance_status: response.data.user.account_balance_status,
-					account_balance_status_by: response.data.user.account_balance_status_by
+					account_balance_status_by: response.data.user.account_balance_status_by,
+					demos: response.data.user.demos,
+					remaining_demos: response.data.user.remaining_demos,
+					company_name: response.data.user.company_name,
+					company_address: response.data.user.company_address,
+					city: response.data.user.city,
+					state: response.data.user.state,
+					country: response.data.user.country,
+					postal_code: response.data.user.postal_code,
+					tel_no: response.data.user.tel_no,
+					website: response.data.user.website,
 				}
 				RestService.authLogIn(response.data)
 				dispatch({
@@ -140,6 +160,7 @@ export const checkComponent = (componentUri) => {
 		RestService.checkComponent(componentUri).then((resp) => {
 			if (RestService.checkAuth(resp.data)) {
 				if (resp.data.status === true) {
+					console.log(resp.data);
 					let payload = {
 						id: resp.data.user.id,
 						connected_dealer: resp.data.user.connected_dealer,
@@ -155,7 +176,17 @@ export const checkComponent = (componentUri) => {
 						two_factor_auth: resp.data.user.two_factor_auth,
 						verified: resp.data.user.verified,
 						account_balance_status: resp.data.user.account_balance_status,
-						account_balance_status_by: resp.data.user.account_balance_status_by
+						account_balance_status_by: resp.data.user.account_balance_status_by,
+						demos: resp.data.user.demos,
+						remaining_demos: resp.data.user.remaining_demos,
+						company_name: resp.data.user.company_name,
+						company_address: resp.data.user.company_address,
+						city: resp.data.user.city,
+						state: resp.data.user.state,
+						country: resp.data.user.country,
+						postal_code: resp.data.user.postal_code,
+						tel_no: resp.data.user.tel_no,
+						website: resp.data.user.website,
 					}
 					RestService.setUserData(resp.data);
 

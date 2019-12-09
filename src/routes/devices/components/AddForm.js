@@ -95,6 +95,14 @@ class AddDevice extends Component {
             // console.log('form', values);
             if (this.state.services) {
                 if (!err) {
+                    console.log(this.props.user);
+                    if (this.state.term == 0 && this.props.user.remaining_demos <= 0) {
+                        Modal.error({
+                            title: "Your Demos Limit has been exceeded, you cannot use Trial Packages. Please Contact with you admin."
+                        })
+                        return
+                    }
+
                     let product_prices = this.filterList(this.state.term + ' month', this.props.product_prices, 'product');
                     let sim_id_price = product_prices.filter((item) => {
                         if (item.price_for === 'sim_id') {
@@ -131,7 +139,6 @@ class AddDevice extends Component {
                     this.setState({
                         serviceData: values,
                         showConfirmCredit: true
-
                     })
                 }
             }
@@ -567,6 +574,7 @@ class AddDevice extends Component {
                 break;
         }
     }
+
     handleDuplicate = (e) => {
         // console.log(e);
         let duplicates = e;
@@ -668,6 +676,7 @@ class AddDevice extends Component {
             })
         }
     }
+
     validateValidDays = (rule, value, callback) => {
         // console.log(value);
         if (value !== '') {

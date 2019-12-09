@@ -9,7 +9,7 @@ import { withRouter, Redirect, Link } from 'react-router-dom';
 import { Button_Cancel, Button_submit, Button_Add_User } from '../../../constants/ButtonConstants';
 import { SINGLE_DEVICE, DUPLICATE_DEVICES, Required_Fields, USER_ID, DEVICE_ID, USER_ID_IS_REQUIRED, SELECT_PGP_EMAILS, DEVICE_Select_CHAT_ID, SELECT_USER_ID, DEVICE_CLIENT_ID, DEVICE_Select_SIM_ID, DEVICE_MODE, DEVICE_MODEL, Device_Note, Device_Valid_For, Device_Valid_days_Required, DUPLICATE_DEVICES_REQUIRED, DEVICE_IMEI_1, DEVICE_SIM_1, DEVICE_IMEI_2, DEVICE_SIM_2 } from '../../../constants/DeviceConstants';
 import { LABEL_DATA_PGP_EMAIL, LABEL_DATA_SIM_ID, LABEL_DATA_CHAT_ID, DUMY_TRANS_ID } from '../../../constants/LabelConstants';
-import { Not_valid_Email, POLICY, Start_Date, Expire_Date, Expire_Date_Require, DEVICE_PRE_ACTIVATION } from '../../../constants/Constants';
+import { Not_valid_Email, POLICY, Start_Date, Expire_Date, Expire_Date_Require, DEVICE_PRE_ACTIVATION, DEVICE_TRIAL } from '../../../constants/Constants';
 import {
     PACKAGE_NAME,
     PACKAGE_TERM,
@@ -733,7 +733,7 @@ class Services extends Component {
         return (
             <Fragment>
                 <div>
-                    {(this.props.applyServicesValue === 'extend') ?
+                    {(this.props.applyServicesValue === 'extend' && this.props.device.finalStatus !== DEVICE_TRIAL) ?
                         <Button
                             type="primary"
                             onClick={() => this.props.handleRenewService()}

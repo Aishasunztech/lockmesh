@@ -12,6 +12,7 @@ import {
     DEALER_SALES_HISTORY,
     DEALER_DOMAINS,
     CONNECT_DEALER_LOADING,
+    SET_DEMOS_LIMIT,
     DEALER_ACCOUNT_STATUS
 } from "../../constants/ActionTypes";
 
@@ -208,10 +209,30 @@ export default (state = initialState, action) => {
             };
         }
 
+        case SET_DEMOS_LIMIT: {
+            let dealer = JSON.parse(JSON.stringify(state.dealer));
+            // let dealer = state.dealer;
+            if (action.payload.status) {
+                dealer.demos = action.payload.data.demos;
+                dealer.remaining_demos = action.payload.data.remaining_demos;
+                success({
+                    title: action.payload.msg,
+                });
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+            return {
+                ...state,
+                dealer: dealer
+            };
+        }
+
         case DEALER_ACCOUNT_STATUS: {
             // console.log(DEALER_ACCOUNT_STATUS, ':', action.payload);
             if (action.payload.status === true) {
-                
+
                 success({
                     title: action.payload.msg,
                 });
