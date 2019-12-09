@@ -39,7 +39,7 @@ const RestService = {
             verify_code: verifyForm.verify_code
         });
     },
-    
+
     // for logout
     authLogOut: () => {
         localStorage.removeItem('email');
@@ -400,7 +400,7 @@ const RestService = {
         // console.log('rest ser')
         return axios.get(BASE_URL + "users/get_usr_acc_id/" + d, RestService.getHeader());
     },
-    
+
 
     //AUTHENTICATE UPDATE USER CREDENTIALS
     authenticateUpdateUser: (data) => {
@@ -992,6 +992,17 @@ const RestService = {
             dealers: dealers,
             action: action,
             statusAll: statusAll
+        },
+            RestService.getHeader()
+        );
+    },
+
+    connectDealerDomainPermission: (permissionIds, dealers, action, statusAll) => {
+        return axios.post(BASE_URL + 'users/dealer-domain-permissions', {
+            permissionIds,
+            dealers,
+            action,
+            statusAll
         },
             RestService.getHeader()
         );

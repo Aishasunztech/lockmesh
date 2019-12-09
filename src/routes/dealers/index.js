@@ -154,12 +154,14 @@ class Dealers extends Component {
 
     filterList = (type, dealers) => {
         let dumyDealers = [];
-        dealers.filter(function (dealer) {
-            let dealerStatus = getDealerStatus(dealer.unlink_status, dealer.account_status);
-            if (dealerStatus === type) {
-                dumyDealers.push(dealer);
-            }
-        });
+        if (dealers && dealers.length) {
+            dealers.filter(function (dealer) {
+                let dealerStatus = getDealerStatus(dealer.unlink_status, dealer.account_status);
+                if (dealerStatus === type) {
+                    dumyDealers.push(dealer);
+                }
+            });
+        }
         return dumyDealers;
     }
 
@@ -658,7 +660,7 @@ class Dealers extends Component {
                                 ref='dealerList'
                                 translation={this.props.translation}
                             />
-                           
+
                         </div>
                 }
             </div>

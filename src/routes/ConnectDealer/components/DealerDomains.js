@@ -105,9 +105,19 @@ export default class DealerDomains extends Component {
             })
         }
     }
+    deleteDomain = id => {
+        // this.props.deleteDomain(id);
+        this.props.domainPermission([id], [this.state.dealer_id], 'delete', false, this.props.authUser, id);
+    }
     renderDealerDomainList = (list) => {
         if (list) {
             return list.map((item, index) => {
+
+                // let removeBtnDisable = false;
+                // if (this.props.authUser.id !== item.permission_by) {
+                //     removeBtnDisable = true;
+                // }
+
                 return {
                     rowKey: item.id,
                     key: ++index,
@@ -115,7 +125,8 @@ export default class DealerDomains extends Component {
                         <Button
                             size="small"
                             type="danger"
-                            disabled
+                            onClick={() => this.deleteDomain(item.id)}
+                        // disabled
                         // disabled={removeBtnDisable}
 
                         >
@@ -173,7 +184,9 @@ export default class DealerDomains extends Component {
                     translation={this.props.translation}
                     allDomainList={this.props.allDomainList}
                     domains={this.props.domains}
-
+                    domainPermission={this.props.domainPermission}
+                    authUser={this.props.authUser}
+                    dealerId={this.state.dealer_id}
                 />
             </Fragment >
         )
