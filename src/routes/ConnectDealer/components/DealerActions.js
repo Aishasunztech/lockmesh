@@ -1,6 +1,7 @@
 // libraries
 import React, { Component, Fragment } from "react";
 import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Divider, Table, Select, AutoComplete, Input } from "antd";
+import { Markup } from "interweave";
 
 // Components
 import EditDealer from '../../dealers/components/editDealer';
@@ -33,7 +34,6 @@ import {
 } from '../../../constants/DealerConstants';
 import CreditsLimits from "./CreditLimits";
 import DemosLimit from "./DemosLimits";
-import { Markup } from "interweave";
 import RestrictDealerAccount from "./RestrictDealerAccount";
 import { ADMIN } from "../../../constants/Constants";
 
@@ -158,7 +158,7 @@ export default class DealerAction extends Component {
         const dealer_status = (dealer.account_status === "suspended") ? "Suspended" : "Activated";
 
         const restrict_button_type = (dealer_status === "Activated") ? "danger" : "default";
-        const restrict_button_text = (dealer_status === 'Activated') ? 'Suspend/Restrict' : 'Activate';
+        const restrict_button_text = (dealer_status === 'Activated') ? 'Suspend' : 'Activate';
 
         const undo_button_type = (dealer.unlink_status === 0) ? 'danger' : "default";
         const undo_button_text = (dealer.unlink_status === 0) ? 'Delete' : 'Undelete';
@@ -348,6 +348,7 @@ export default class DealerAction extends Component {
                                         onClick={
                                             (e) => {
                                                 this.restrictDealerAction.showModal(dealer, this.props.changeDealerStatus)
+                                                // showConfirm(this, this.props.dealer, this.props.handleDealerChange, 'RESET PASSWORD', this.props.dealer.dealer_name)
                                             }
                                         }
 
