@@ -9,13 +9,13 @@ import { Button_Cancel, Button_submit } from '../../../constants/ButtonConstants
 import { Required_Fields } from '../../../constants/DeviceConstants';
 import FilterDevices from './filterDevices'
 import BulkSendMsgConfirmation from './bulkSendMsgConfirmation';
-import RepeatMsgCalender from './repeateMsgCalender';
+// import RepeatMsgCalender from './repeateMsgCalender';
 import moment from 'moment';
 
 const { TextArea } = Input;
 
 
-class AddUserForm extends Component {
+class SendMsgForm extends Component {
 
     constructor(props) {
         super(props);
@@ -38,9 +38,9 @@ class AddUserForm extends Component {
             allUsers: [],
             allDealers: [],
             selectedAction: 'NONE',
-            calenderValue: moment('2017-01-25'),
             selected_dateTime: '',
-            isToday: false
+            isNowSet: false,
+            repeat_duration: 'NONE'
         }
     }
 
@@ -73,7 +73,7 @@ class AddUserForm extends Component {
                     dealers: this.state.selectedDealers,
                     users: this.state.selectedUsers,
                     msg: values.msg_txt,
-                    repeat: this.state.selected_dateTime ? "NONE" : values.repeat,
+                    repeat: this.state.isNowSet ? "NONE" : this.state.repeat_duration,
                     selected_date: this.state.selected_dateTime
                 }
                 console.log("data ", data);
@@ -177,11 +177,12 @@ class AddUserForm extends Component {
     }
     handleReset = () => {
         this.props.form.resetFields();
+        this.setState({ repeat_duration: 'NONE' })
     }
 
 
     handleCancel = () => {
-        // this.handleReset();
+        this.handleReset();
         this.props.handleCancelSendMsg(false);
     }
     handleChange = (e) => {
@@ -283,7 +284,13 @@ class AddUserForm extends Component {
             this.props.form.setFieldsValue({ repeat: 'NONE' });
             todayVal = true;
         }
-        this.setState({ selected_dateTime: dateString, isToday: todayVal });
+        this.setState({ selected_dateTime: dateString, isNowSet: todayVal });
+    }
+
+    repeatHandler = (e) => {
+        console.log("e is: ", e);
+
+        this.setState({ repeat_duration: e });
     }
 
     render() {
@@ -392,18 +399,19 @@ class AddUserForm extends Component {
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 16 }}
                             >
-                                {this.props.form.getFieldDecorator('repeat', {
+                                {/* {this.props.form.getFieldDecorator('repeat', {
                                     initialValue: '',
-                                })(
-                                    <Select
-                                        showSearch={false}
-                                        style={{ width: '100%' }}
-                                        disabled={this.state.isToday}
-                                        placeholder={convertToLang(this.props.translation[""], "Select when to send Message")}
-                                    >
-                                        {this.durationList.map((item) => <Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)}
-                                    </Select>
-                                )}
+                                })( */}
+                                <Select
+                                    showSearch={false}
+                                    style={{ width: '100%' }}
+                                    disabled={this.state.isNowSet}
+                                    placeholder={convertToLang(this.props.translation[""], "Select when to send Message")}
+                                    onChange={this.repeatHandler}
+                                >
+                                    {this.durationList.map((item) => <Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)}
+                                </Select>
+                                {/* )} */}
                             </Form.Item>
                         </Col>
                     </Row>
@@ -457,6 +465,7 @@ class AddUserForm extends Component {
                 <BulkSendMsgConfirmation
                     ref="bulk_msg"
                     sendMsgOnDevices={this.props.sendMsgOnDevices}
+                    handleCancel={this.handleCancel}
                     translation={this.props.translation}
                 />
             </div>
@@ -465,5 +474,5 @@ class AddUserForm extends Component {
     }
 }
 
-const WrappedAddDeviceForm = Form.create()(AddUserForm);
+const WrappedAddDeviceForm = Form.create()(SendMsgForm);
 export default WrappedAddDeviceForm;

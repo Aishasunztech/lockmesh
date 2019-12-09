@@ -3554,7 +3554,7 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
 
             title: (
                 <span>
-                    {convertToLang(translation[""], "SEND TO")}
+                    {convertToLang(translation[""], "DEVICES")}
                     {/* <Popover placement="top" content={(<Markup content={convertToLang(translation[""],
                         `   <p>Press <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;">
                                     <i className="fa fa-caret-right" aria-hidden="true"></i> 

@@ -49,6 +49,7 @@ export default class BulkSendMsg extends Component {
             cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
             onOk: (() => {
                 this.props.sendMsgOnDevices(saveData);
+                this.props.handleCancel();
             }),
             onCancel() { },
         });

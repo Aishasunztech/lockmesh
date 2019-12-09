@@ -83,6 +83,7 @@ export default class ListMsgs extends Component {
         let bulkMsgs = [];
         let data
         list.map((app) => {
+            // console.log("list ", app.sending_time ? "OKay" : "fail")
 
             data = {
                 rowKey: app.id,
@@ -90,7 +91,7 @@ export default class ListMsgs extends Component {
                 action: (
                     <div data-column="ACTION" style={{ display: "inline-flex" }}>
                         <Fragment>
-                            <Fragment><Button type="primary" size="small">EDIT</Button></Fragment>
+                            <Fragment><Button type="primary" disabled size="small">EDIT</Button></Fragment>
                             <Fragment><Button type="danger" size="small" onClick={() => this.deleteMsg(app.id)}>DELETE</Button></Fragment>
                             {/* <Fragment><Button type="dashed" size="small">RESEND</Button></Fragment> */}
                         </Fragment>
