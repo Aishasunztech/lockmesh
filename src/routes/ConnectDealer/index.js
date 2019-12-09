@@ -2,7 +2,7 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Divider, Table, Select } from "antd";
+import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Divider, Table, Select, Avatar } from "antd";
 
 // methods, constants and components
 import AppFilter from '../../components/AppFilter';
@@ -12,7 +12,7 @@ import CircularProgress from "components/CircularProgress/index";
 
 // helpers and actions
 import RestService from "../../appRedux/services/RestServices";
-import { getColor, isBase64, convertToLang } from "../utils/commonUtils"
+import { getColor, isBase64, convertToLang, checkValue } from "../utils/commonUtils"
 import {
     getDealerDetails,
     editDealer,
@@ -30,6 +30,7 @@ import {
     changeDealerStatus,
     getDomains
 } from '../../appRedux/actions'
+import image from '../../assets/images/warning.png'
 import styles from './connect_dealer.css'
 
 class ConnectDealer extends Component {
@@ -63,7 +64,7 @@ class ConnectDealer extends Component {
             {
                 dataIndex: 'value',
                 key: 'value',
-                className: '',
+                className: 'dealer_values',
                 title: '',
 
             },
@@ -161,13 +162,15 @@ class ConnectDealer extends Component {
     renderDealerInfo = () => {
         let dealer = this.props.dealer;
         if (dealer) {
-            // const dealer_status = (dealer.unlink_status == 1) ? "Archived" : (dealer.account_status === "suspended") ? "Suspend" : "Active";
+            const account_balance_status = (dealer.account_balance_status == 'restricted') ? "Restriction Level 1" : (dealer.account_balance_status === "suspended") ? "Restriction Level 2" : "Active";
+            let account_balance_style = (dealer.account_balance_status == 'restricted') ? 'restrict1' : (dealer.account_balance_status === "suspended") ? 'restrict2' : 'active';
             return [
-                // {
-                //     key: '7',
-                //     name: <a>Status</a>,
-                //     value: dealer_status,
-                // },
+                {
+                    key: '8',
+                    name: <a className="break_text">Account Balance Status</a>,
+                    value: <span className='text_center_td'>{account_balance_status.toUpperCase()}</span>,
+                    className: account_balance_style
+                },
                 {
                     key: '1',
                     name: <a>Dealer Name</a>,
@@ -186,7 +189,7 @@ class ConnectDealer extends Component {
                 {
                     key: '4',
                     name: <a>Dealer Email</a>,
-                    value: (dealer.dealer_email) ? dealer.dealer_email : 'N/A',
+                    value: <div className="break_text">{(dealer.dealer_email) ? dealer.dealer_email : 'N/A'}</div>,
                 },
                 {
                     key: '5',
@@ -214,6 +217,46 @@ class ConnectDealer extends Component {
                     value: (dealer.parent_dealer) ? dealer.parent_dealer : 'N/A',
                 },
                 {
+                    key: 41,
+                    name: <a>{convertToLang(this.props.translation[""], "COMPANY NAME")}</a>,
+                    value: checkValue(dealer.company_name),
+                },
+                {
+                    key: 42,
+                    name: <a>{convertToLang(this.props.translation[""], "COMPANY ADDRESS")}</a>,
+                    value: <span className="company_address">{checkValue(dealer.company_address)}</span>,
+                },
+                {
+                    key: 43,
+                    name: <a>{convertToLang(this.props.translation[""], "CITY")}</a>,
+                    value: checkValue(dealer.city),
+                },
+                {
+                    key: 44,
+                    name: <a>{convertToLang(this.props.translation[""], "STATE/PROVINCE")}</a>,
+                    value: checkValue(dealer.state),
+                },
+                {
+                    key: 45,
+                    name: <a>{convertToLang(this.props.translation[""], "COUNTRY")}</a>,
+                    value: checkValue(dealer.country),
+                },
+                {
+                    key: 46,
+                    name: <a>{convertToLang(this.props.translation[""], "POSTAL CODE")}</a>,
+                    value: checkValue(dealer.postal_code),
+                },
+                {
+                    key: 47,
+                    name: <a>{convertToLang(this.props.translation[""], "TEL #")}</a>,
+                    value: checkValue(dealer.tel_no),
+                },
+                {
+                    key: 48,
+                    name: <a>{convertToLang(this.props.translation[""], "WEBSITE")}</a>,
+                    value: checkValue(dealer.website),
+                },
+                {
                     key: '10',
                     name: <a>Last Login</a>,
                     value: (dealer.last_login) ? dealer.last_login : 'N/A',
@@ -223,7 +266,7 @@ class ConnectDealer extends Component {
                     name: <a>Start Date</a>,
                     value: this.props.dealer.created,
                 },
-                
+
             ]
         } else {
             return []
@@ -235,41 +278,41 @@ class ConnectDealer extends Component {
     };
     renderAccountStatus = () => {
         let statusBGC, statusDays;
-        let account_status_paragraph= '';
+        let account_status_paragraph = '';
         if (this.props.dealer.account_balance_status_by === 'due_credits') {
-          if (this.props.dealer.account_balance_status === 'restricted' && this.props.overdueDetails._30to60 > 0) {
-            statusBGC = 'bg_yellow';
-            statusDays = '31+ days Overdue';
-            account_status_paragraph = "Please clear payment over 31+ days to activate \"PAY LATER\" feature";
-          } else if (this.props.dealer.account_balance_status === 'restricted') {
-            statusBGC = 'bg_yellow';
-            statusDays = '21+ days Overdue';
-            account_status_paragraph = "Please clear payment over 21+ days to activate \"PAY LATER\" feature";
-          } else if (this.props.dealer.account_balance_status === 'suspended') {
+            if (this.props.dealer.account_balance_status === 'restricted' && this.props.overdueDetails._30to60 > 0) {
+                statusBGC = 'bg_yellow';
+                statusDays = '31+ days Overdue';
+                account_status_paragraph = "Please clear payment over 31+ days to activate \"PAY LATER\" feature";
+            } else if (this.props.dealer.account_balance_status === 'restricted') {
+                statusBGC = 'bg_yellow';
+                statusDays = '21+ days Overdue';
+                account_status_paragraph = "Please clear payment over 21+ days to activate \"PAY LATER\" feature";
+            } else if (this.props.dealer.account_balance_status === 'suspended') {
+                statusBGC = 'bg_red';
+                statusDays = '60+ days Overdue';
+                account_status_paragraph = "Please clear 60+ days payment to allow new device activation";
+            } else {
+                statusBGC = 'bg_green';
+                statusDays = 'No Overdue';
+            }
+        } else if (this.props.dealer.account_balance_status_by === 'admin') {
             statusBGC = 'bg_red';
-            statusDays = '60+ days Overdue';
-            account_status_paragraph = "Please clear 60+ days payment to allow new device activation";
-          } else {
+            statusDays = 'admin';
+        } else {
             statusBGC = 'bg_green';
             statusDays = 'No Overdue';
-          }
-        } else if (this.props.dealer.account_balance_status_by === 'admin') {
-          statusBGC = 'bg_red';
-          statusDays = 'admin';
-        } else {
-          statusBGC = 'bg_green';
-          statusDays = 'No Overdue';
         }
-    
+
         return [
-          {
-            name: <h5 className={'weight_600 p-5 text-uppercase ' + statusBGC} >Restricted By</h5>,
-            value: statusDays
-          },
-          {
-            name: <h5 className={'weight_600 p-5 text-uppercase ' + statusBGC} >{this.props.dealer.account_balance_status}</h5>,
-            value: <h5 className="weight_600 bg_brown p-5">{statusDays} </h5>,
-          }
+            {
+                name: <h5 className={'weight_600 p-5 text-uppercase ' + statusBGC} >Restricted By</h5>,
+                value: statusDays
+            },
+            {
+                name: <h5 className={'weight_600 p-5 text-uppercase ' + statusBGC} >{this.props.dealer.account_balance_status}</h5>,
+                value: <h5 className="weight_600 bg_brown p-5">{statusDays} </h5>,
+            }
         ];
     };
 
@@ -351,11 +394,21 @@ class ConnectDealer extends Component {
     render() {
         let dealer = this.props.dealer;
         let dealer_status = '';
+        let restricted_by = ''
+        let restricted_level = ''
+        let account_status_message1 = ''
+        let account_status_message2 = ''
         if (dealer) {
             dealer_status = (dealer.unlink_status == 1) ? "Archived" : (dealer.account_status === "suspended") ? "Suspend" : "Active";
+            restricted_by = dealer.account_balance_status_by === 'admin' ? 'Admin' : "Due Credits"
+            restricted_level = dealer.account_balance_status === 'restricted' ? 'Restriction Level 1' : 'Restriction Level 2'
+            account_status_message1 = "Account " + restricted_level + " by " + restricted_by
+            account_status_message2 = (dealer.account_balance_status === 'restricted' ? "(Pay Later feature disabled)" : "(You may not add new devices)")
+
         }
+
         console.log("dealer_status ", dealer_status)
-        this.dealerInfoColumns[1].title = dealer_status;
+        this.dealerInfoColumns[1].title = dealer_status.toUpperCase();
         return (
 
             <Fragment>
@@ -377,6 +430,7 @@ class ConnectDealer extends Component {
                                         bordered
                                         // showHeader={false}
                                         dataSource={this.renderDealerInfo()}
+                                        rowClassName={(record) => (record.className) ? record.className : ''}
                                         pagination={false}
                                         className="ac_pro_table profile_table"
                                     />
@@ -388,6 +442,22 @@ class ConnectDealer extends Component {
                                 <Card className="" style={{ borderRadius: 12 }}>
                                     <h2 style={{ textAlign: "center" }}>Account Profile</h2>
                                     <Divider className="mb-0" />
+                                    {dealer.account_balance_status !== 'active' ?
+                                        <Row style={{ marginTop: 10 }}>
+                                            <Col span={20}>
+                                                <div style={{ textAlign: 'center' }}>
+                                                    <h4>{account_status_message1} <br /> {account_status_message2}</h4>
+                                                </div>
+
+                                            </Col>
+                                            <Col span={4}>
+                                                <Avatar className="gx-size-30"
+                                                    alt={""}
+                                                    src={image} />
+                                            </Col>
+
+                                        </Row>
+                                        : null}
                                     <Row>
                                         <Col span={24} className="text-center">
                                             <div className="text-left">
@@ -400,7 +470,7 @@ class ConnectDealer extends Component {
                                         </Col>
                                         <Col span={24}>
 
-                                            <Table
+                                            {/* <Table
                                                 className="ac_status_table"
                                                 dataSource={this.renderAccountStatus()}
                                                 columns={this.a_s_columns}
@@ -409,7 +479,7 @@ class ConnectDealer extends Component {
                                                 bordered
                                                 showHeader={false}
                                             />
-                                            <br/>
+                                            <br /> */}
                                             <Table
                                                 columns={this.dealerInfoColumns1}
                                                 bordered
