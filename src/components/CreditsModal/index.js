@@ -103,8 +103,8 @@ class CreditIcon extends Component {
       },
       {
         title: '21+ days Overdue',
-        dataIndex: 'age',
-        key: 'age',
+        dataIndex: 'value',
+        key: 'value',
       },
     ];
 
@@ -284,9 +284,13 @@ class CreditIcon extends Component {
     }
     return [
       {
-        name: <h5 className={'weight_600 p-5 text-uppercase ' + statusBGC} >{this.props.account_balance_status}</h5>,
-        age: <h5 className="weight_600 bg_brown p-5">{statusDays} </h5>,
+        name: <h5 className={'weight_600 p-5 text-uppercase ' + statusBGC} >Restricted By</h5>,
+        value: 'N/A'
       },
+      {
+        name: <h5 className={'weight_600 p-5 text-uppercase ' + statusBGC} >{this.props.account_balance_status}</h5>,
+        value: <h5 className="weight_600 bg_brown p-5">{statusDays} </h5>,
+      }
     ];
   };
 

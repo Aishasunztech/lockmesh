@@ -48,7 +48,8 @@ const INIT_STATE = {
 		dealer_pin: localStorage.getItem("dealer_pin"),
 		two_factor_auth: localStorage.getItem('two_factor_auth') === null ? false : localStorage.getItem('two_factor_auth'),
 		verified: false,
-    account_balance_status: localStorage.getItem("account_balance_status"),
+		account_balance_status: localStorage.getItem("account_balance_status"),
+		account_balance_status_by: localStorage.getItem('account_balance_status_by')
 	},
 	loginHistory: []
 };
@@ -237,7 +238,8 @@ export default (state = INIT_STATE, action) => {
 					dealer_pin: action.payload.dealer_pin,
 					two_factor_auth: action.payload.two_factor_auth,
 					verified: action.payload.verified,
-          account_balance_status: action.payload.account_balance_status,
+					account_balance_status: action.payload.account_balance_status,
+					account_balance_status_by: action.payload.account_balance_status_by
 				}
 			}
 			break;

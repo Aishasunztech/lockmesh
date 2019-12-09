@@ -153,14 +153,14 @@ class Dealers extends Component {
 
 
     filterList = (type, dealers) => {
-        let dumyDealers = [];
+        let dummyDealers = [];
         dealers.filter(function (dealer) {
             let dealerStatus = getDealerStatus(dealer.unlink_status, dealer.account_status);
             if (dealerStatus === type) {
-                dumyDealers.push(dealer);
+                dummyDealers.push(dealer);
             }
         });
-        return dumyDealers;
+        return dummyDealers;
     }
 
     handleChange(value) {

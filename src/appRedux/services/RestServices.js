@@ -84,6 +84,7 @@ const RestService = {
         localStorage.setItem('dealer_pin', data.user.link_code);
         localStorage.setItem('two_factor_auth', data.user.two_factor_auth);
         localStorage.setItem('account_balance_status', data.user.account_balance_status);
+        localStorage.setItem('account_balance_status_by', data.user.account_balance_status_by)
 
     },
     // checkAuth
