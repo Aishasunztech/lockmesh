@@ -266,26 +266,36 @@ class CreditIcon extends Component {
 
   renderAccountStatus = () => {
     let statusBGC, statusDays;
-    if (this.props.account_balance_status === 'restricted' && this.props.overdueDetails._30to60 > 0) {
-      statusBGC = 'bg_yellow';
-      statusDays = '31+ days Overdue';
-      account_status_paragraph = "Please clear payment over 31+ days to activate \"PAY LATER\" feature";
-    } else if (this.props.account_balance_status === 'restricted') {
-      statusBGC = 'bg_yellow';
-      statusDays = '21+ days Overdue';
-      account_status_paragraph = "Please clear payment over 21+ days to activate \"PAY LATER\" feature";
-    } else if (this.props.account_balance_status === 'suspended') {
+
+    if (this.props.account_balance_status_by === 'due_credits') {
+      if (this.props.account_balance_status === 'restricted' && this.props.overdueDetails._30to60 > 0) {
+        statusBGC = 'bg_yellow';
+        statusDays = '31+ days Overdue';
+        account_status_paragraph = "Please clear payment over 31+ days to activate \"PAY LATER\" feature";
+      } else if (this.props.account_balance_status === 'restricted') {
+        statusBGC = 'bg_yellow';
+        statusDays = '21+ days Overdue';
+        account_status_paragraph = "Please clear payment over 21+ days to activate \"PAY LATER\" feature";
+      } else if (this.props.account_balance_status === 'suspended') {
+        statusBGC = 'bg_red';
+        statusDays = '60+ days Overdue';
+        account_status_paragraph = "Please clear 60+ days payment to allow new device activation";
+      } else {
+        statusBGC = 'bg_green';
+        statusDays = 'No Overdue';
+      }
+    } else if (this.props.account_balance_status_by === 'admin') {
       statusBGC = 'bg_red';
-      statusDays = '60+ days Overdue';
-      account_status_paragraph = "Please clear 60+ days payment to allow new device activation";
+      statusDays = 'admin';
     } else {
       statusBGC = 'bg_green';
       statusDays = 'No Overdue';
     }
+
     return [
       {
         name: <h5 className={'weight_600 p-5 text-uppercase ' + statusBGC} >Restricted By</h5>,
-        value: 'N/A'
+        value: statusDays
       },
       {
         name: <h5 className={'weight_600 p-5 text-uppercase ' + statusBGC} >{this.props.account_balance_status}</h5>,

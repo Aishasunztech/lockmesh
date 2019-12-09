@@ -94,6 +94,19 @@ class ConnectDealer extends Component {
             //     className: '',
             // },
         ]
+
+        this.a_s_columns = [
+            {
+                title: 'RESTRICTED',
+                dataIndex: 'name',
+                key: 'name',
+            },
+            {
+                title: '21+ days Overdue',
+                dataIndex: 'value',
+                key: 'value',
+            },
+        ];
     }
 
     componentDidMount() {
@@ -210,16 +223,55 @@ class ConnectDealer extends Component {
                     name: <a>Start Date</a>,
                     value: this.props.dealer.created,
                 },
-                {
-                    key: '9',
-                    name: <a>Last Login</a>,
-                    value: (dealer.last_login) ? dealer.last_login : 'N/A',
-                },
+                
             ]
         } else {
             return []
         }
     }
+
+    ac_st_title = () => {
+        return <h4 className="credit_modal_heading weight_600">{convertToLang(this.props.translation[""], "ACCOUNT STATUS")}</h4>
+    };
+    renderAccountStatus = () => {
+        let statusBGC, statusDays;
+        let account_status_paragraph= '';
+        if (this.props.dealer.account_balance_status_by === 'due_credits') {
+          if (this.props.dealer.account_balance_status === 'restricted' && this.props.overdueDetails._30to60 > 0) {
+            statusBGC = 'bg_yellow';
+            statusDays = '31+ days Overdue';
+            account_status_paragraph = "Please clear payment over 31+ days to activate \"PAY LATER\" feature";
+          } else if (this.props.dealer.account_balance_status === 'restricted') {
+            statusBGC = 'bg_yellow';
+            statusDays = '21+ days Overdue';
+            account_status_paragraph = "Please clear payment over 21+ days to activate \"PAY LATER\" feature";
+          } else if (this.props.dealer.account_balance_status === 'suspended') {
+            statusBGC = 'bg_red';
+            statusDays = '60+ days Overdue';
+            account_status_paragraph = "Please clear 60+ days payment to allow new device activation";
+          } else {
+            statusBGC = 'bg_green';
+            statusDays = 'No Overdue';
+          }
+        } else if (this.props.dealer.account_balance_status_by === 'admin') {
+          statusBGC = 'bg_red';
+          statusDays = 'admin';
+        } else {
+          statusBGC = 'bg_green';
+          statusDays = 'No Overdue';
+        }
+    
+        return [
+          {
+            name: <h5 className={'weight_600 p-5 text-uppercase ' + statusBGC} >Restricted By</h5>,
+            value: statusDays
+          },
+          {
+            name: <h5 className={'weight_600 p-5 text-uppercase ' + statusBGC} >{this.props.dealer.account_balance_status}</h5>,
+            value: <h5 className="weight_600 bg_brown p-5">{statusDays} </h5>,
+          }
+        ];
+    };
 
     renderAccountData = () => {
         let dealer = this.props.dealer;
@@ -347,6 +399,17 @@ class ConnectDealer extends Component {
                                             </div>
                                         </Col>
                                         <Col span={24}>
+
+                                            <Table
+                                                className="ac_status_table"
+                                                dataSource={this.renderAccountStatus()}
+                                                columns={this.a_s_columns}
+                                                pagination={false}
+                                                title={this.ac_st_title}
+                                                bordered
+                                                showHeader={false}
+                                            />
+                                            <br/>
                                             <Table
                                                 columns={this.dealerInfoColumns1}
                                                 bordered

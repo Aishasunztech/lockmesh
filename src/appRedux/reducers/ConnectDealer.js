@@ -231,8 +231,10 @@ export default (state = initialState, action) => {
 
         case DEALER_ACCOUNT_STATUS: {
             // console.log(DEALER_ACCOUNT_STATUS, ':', action.payload);
+            let dealer = JSON.parse(JSON.stringify(state.dealer));
             if (action.payload.status === true) {
-
+                dealer.account_balance_status = action.payload.account_balance_status;
+                dealer.account_balance_status_by = action.payload.account_balance_status_by;
                 success({
                     title: action.payload.msg,
                 });
@@ -242,7 +244,9 @@ export default (state = initialState, action) => {
                 });
             }
             return {
-                ...state
+                ...state,
+                dealer: dealer
+
             }
         }
 
