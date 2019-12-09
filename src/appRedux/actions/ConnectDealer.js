@@ -7,7 +7,8 @@ import {
     DEALER_DOMAINS,
     CONNECT_DEALER_LOADING,
     DEALER_ACCOUNT_STATUS,
-    CD_PERMISSION_DOMAINS
+    CD_PERMISSION_DOMAINS,
+    SET_DEMOS_LIMIT,
 } from "../../constants/ActionTypes"
 // import { message } from 'antd';
 
@@ -68,6 +69,26 @@ export function setCreditLimit(data) {
                     type: SET_DEALER_LIMIT,
                     payload: response.data,
                     formData: data
+                });
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        });
+
+    }
+}
+
+export function setDemosLimit(data) {
+    return (dispatch) => {
+        RestService.setDemosLimit(data).then((response) => {
+
+            if (RestService.checkAuth(response.data)) {
+                console.log(response.data)
+                dispatch({
+                    type: SET_DEMOS_LIMIT,
+                    payload: response.data,
                 });
             } else {
                 dispatch({

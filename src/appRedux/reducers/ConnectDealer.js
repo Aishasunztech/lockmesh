@@ -13,6 +13,7 @@ import {
     DEALER_DOMAINS,
     CONNECT_DEALER_LOADING,
     DEALER_ACCOUNT_STATUS,
+    SET_DEMOS_LIMIT,
     CD_PERMISSION_DOMAINS
 } from "../../constants/ActionTypes";
 
@@ -195,6 +196,26 @@ export default (state = initialState, action) => {
             // let dealer = state.dealer;
             if (action.payload.status) {
                 dealer.credits_limit = action.formData.credits_limit;
+                success({
+                    title: action.payload.msg,
+                });
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+            return {
+                ...state,
+                dealer: dealer
+            };
+        }
+
+        case SET_DEMOS_LIMIT: {
+            let dealer = JSON.parse(JSON.stringify(state.dealer));
+            // let dealer = state.dealer;
+            if (action.payload.status) {
+                dealer.demos = action.payload.data.demos;
+                dealer.remaining_demos = action.payload.data.remaining_demos;
                 success({
                     title: action.payload.msg,
                 });

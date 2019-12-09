@@ -1,10 +1,10 @@
 /*---- Apk List Css----*/
+
 .ant-table-filter-dropdown .ant-btn {
     margin-bottom: 0;
 }
 
-.change_pass .ant-btn,
-.change_email .ant-btn {
+.change_pass .ant-btn, .change_email .ant-btn {
     padding: 0;
 }
 
@@ -31,13 +31,13 @@
 
 .open_btn {
     width: 40%;
-    position: absolute;
-    bottom: 33px;
+    position: relative;
+    bottom: 55px;
     left: 33%;
 }
 
 .open_btn1 {
-    bottom: 70px;
+    bottom: 55px;
 }
 
 .ant-btn>.anticon+span {
@@ -88,6 +88,11 @@
     padding: 0 17px;
     margin-top: -1px;
     border-top: 1px solid #e8e8e8;
+}
+
+.company_address {
+    word-break: break-word !important;
+    white-space: normal;
 }
 
 .profile_table .ant-table-tbody>tr>td.dealer_info {

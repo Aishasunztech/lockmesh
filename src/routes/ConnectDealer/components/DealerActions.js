@@ -32,6 +32,7 @@ import {
     DEALER_TEXT
 } from '../../../constants/DealerConstants';
 import CreditsLimits from "./CreditLimits";
+import DemosLimit from "./DemosLimits";
 import { Markup } from "interweave";
 import RestrictDealerAccount from "./RestrictDealerAccount";
 import { ADMIN } from "../../../constants/Constants";
@@ -153,7 +154,7 @@ export default class DealerAction extends Component {
         let dealer = this.props.dealer;
 
         const { dealerList } = this.state;
-        
+
         const dealer_status = (dealer.account_status === "suspended") ? "Suspended" : "Activated";
 
         const restrict_button_type = (dealer_status === "Activated") ? "danger" : "default";
@@ -233,7 +234,7 @@ export default class DealerAction extends Component {
                                 <h6 className="mb-0">Domains</h6>
                             </Button>
                         </Col>
-                        
+
                         {/* Credit Limit Button */}
                         {(this.props.authUser.type === ADMIN) ?
                             <Col className="gutter-row" justify="center" span={12} >
@@ -255,7 +256,7 @@ export default class DealerAction extends Component {
                                     <h6 className="mb-0">DEMO</h6>
                                 </Button>
                             </Col>
-                            : 
+                            :
                             null
                         }
 
@@ -332,7 +333,7 @@ export default class DealerAction extends Component {
                                 {restrict_button_text}
                             </Button>
                         </Col>
-                        
+
                         {/* Account Limit Button */}
                         {
                             (this.props.authUser.type === ADMIN) ?
@@ -399,6 +400,14 @@ export default class DealerAction extends Component {
                     dealer={this.props.dealer}
                     credits_limit={this.props.dealer.credits_limit}
                     setCreditLimit={this.props.setCreditLimit}
+                />
+                <DemosLimit
+                    ref='demosLimit'
+                    translation={this.props.translation}
+                    wrappedComponentRef={(form) => this.form2 = form}
+                    dealer={this.props.dealer}
+                    demos={this.props.dealer.demos}
+                    setDemosLimit={this.props.setDemosLimit}
                 />
 
                 <DealerSalesHistory

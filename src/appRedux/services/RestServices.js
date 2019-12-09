@@ -286,6 +286,10 @@ const RestService = {
         return axios.put(BASE_URL + 'users/set_credits_limit', data, RestService.getHeader());
     },
 
+    setDemosLimit: (data) => {
+        return axios.put(BASE_URL + 'users/set_demos_limit', data, RestService.getHeader());
+    },
+
     getDealerSalesHistory: (dealerId) => {
         return axios.get(BASE_URL + 'users/sales-history/' + dealerId, RestService.getHeader());
     },
