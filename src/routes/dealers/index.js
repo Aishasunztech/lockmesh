@@ -153,14 +153,16 @@ class Dealers extends Component {
 
 
     filterList = (type, dealers) => {
-        let dummyDealers = [];
-        dealers.filter(function (dealer) {
-            let dealerStatus = getDealerStatus(dealer.unlink_status, dealer.account_status);
-            if (dealerStatus === type) {
-                dummyDealers.push(dealer);
-            }
-        });
-        return dummyDealers;
+        let dumyDealers = [];
+        if (dealers && dealers.length) {
+            dealers.filter(function (dealer) {
+                let dealerStatus = getDealerStatus(dealer.unlink_status, dealer.account_status);
+                if (dealerStatus === type) {
+                    dumyDealers.push(dealer);
+                }
+            });
+        }
+        return dumyDealers;
     }
 
     handleChange(value) {
@@ -427,24 +429,24 @@ class Dealers extends Component {
     componentDidUpdate(prevProps) {
         // console.log('updated', this.state.columns);
 
-        if ((window.location.pathname.split("/").pop() === 'sdealer') && (this.state.columns !== undefined) && (this.state.options !== undefined) && (this.state.columns !== null) && (this.state.columns.length <= 8)) {
+        if ((window.location.pathname.split("/").pop() === 'sdealer') && (this.state.columns !== undefined) && (this.state.options !== undefined) && (this.state.columns !== null) && (this.state.columns.length <= 9)) {
             //  alert('if sdealer')
             status = true;
             let sDealerCols = sDealerColumns(this.props.translation, this.handleSearch);
             this.state.columns.push(...sDealerCols);
             // this.state.columns = this.state.columns
         }
-        if ((window.location.pathname.split("/").pop() === 'sdealer') && (this.state.options.length <= 6)) {
+        if ((window.location.pathname.split("/").pop() === 'sdealer') && (this.state.options.length <= 7)) {
             // alert('if sdealer')
             status = true;
             this.state.options.push(convertToLang(this.props.translation[Parent_Dealer], "PARENT DEALER"), convertToLang(this.props.translation[Parent_Dealer_ID], "PARENT DEALER ID"));
         }
-        else if ((window.location.pathname.split("/").pop() === 'dealer') && ((this.state.columns.length > 8) || (this.state.options.length > 6))) {
+        else if ((window.location.pathname.split("/").pop() === 'dealer') && ((this.state.columns.length > 9) || (this.state.options.length > 7))) {
             // alert('if dealer')
             status = true;
             this.state.columns = this.state.columns.filter(lst => lst.title !== convertToLang(this.props.translation[Parent_Dealer_ID], "PARENT DEALER ID"));
             this.state.columns = this.state.columns.filter(lst => lst.title !== convertToLang(this.props.translation[Parent_Dealer], "PARENT DEALER"));
-            this.state.options = this.state.options.slice(0, 6);
+            this.state.options = this.state.options.slice(0, 7);
         }
 
 
@@ -658,7 +660,7 @@ class Dealers extends Component {
                                 ref='dealerList'
                                 translation={this.props.translation}
                             />
-                           
+
                         </div>
                 }
             </div>
