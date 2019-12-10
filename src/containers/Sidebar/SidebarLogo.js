@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -51,7 +51,7 @@ class SidebarLogo extends Component {
           </div>
         ) : null}
 
-        <a href="/" className="gx-site-logo">
+        <a href="/" className="gx-site-logo" style={{width: '100%'}}>
           {navStyle === NAV_STYLE_NO_HEADER_MINI_SIDEBAR &&
             width >= TAB_SIZE ? (
               <p className="mb-0" style={{ fontSize: 18 }}>
@@ -62,9 +62,15 @@ class SidebarLogo extends Component {
                 {APP_TITLE}
               </p>
             ) : (
-                <p className="mb-0" style={{ fontSize: 18 }}>
-                  {APP_TITLE}
-                </p>
+                <Fragment>
+                  <p className="mb-0" style={{ fontSize: 18 }}>
+                    {APP_TITLE}
+                  </p>
+                  <p className="mb-0" style={{ fontSize: 18 }}>
+                    06:48
+                  </p>
+
+                </Fragment>
               )}
         </a>
       </div>
