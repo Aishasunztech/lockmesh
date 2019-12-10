@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Button, Form, Input, Select, InputNumber, Row, Col, Tag, Calendar, DatePicker, TimePicker } from 'antd';
+import { Button, Form, Input, Select, InputNumber, Row, Col, Tag, Calendar, DatePicker, TimePicker, Modal } from 'antd';
 import { checkValue, convertToLang } from '../../utils/commonUtils'
 
 import {
@@ -12,6 +12,9 @@ import BulkSendMsgConfirmation from './bulkSendMsgConfirmation';
 // import RepeatMsgCalender from './repeateMsgCalender';
 import moment from 'moment';
 
+const confirm = Modal.confirm;
+const success = Modal.success
+const error = Modal.error
 const { TextArea } = Input;
 
 
@@ -61,7 +64,6 @@ class SendMsgForm extends Component {
             // }
             if (!err) {
 
-
                 // if (/[^A-Za-z \d]/.test(values.name)) {
                 //     this.setState({
                 //         validateStatus: 'error',
@@ -71,20 +73,41 @@ class SendMsgForm extends Component {
                 // this.props.setBulkMsg(values);
                 // this.props.handleCancelSendMsg(false);
                 // this.handleReset();
-                let data = {
-                    devices: this.props.selectedDevices,
-                    dealers: this.state.selectedDealers,
-                    users: this.state.selectedUsers,
-                    msg: values.msg_txt,
-                    repeat: this.state.isNowSet ? "NONE" : this.state.repeat_duration,
-                    selected_date: this.state.selected_dateTime
+
+                if (this.props.selectedDevices && this.props.selectedDevices.length) {
+                    let repeatVal = '';
+                    let dateTimeVal = '';
+
+                    if (this.state.timer === "NOW") {
+                        dateTimeVal = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+                        repeatVal = "NONE";
+                    } else if (this.state.timer === "DATE/TIME") {
+                        dateTimeVal = this.state.selected_dateTime;
+                        repeatVal = "NONE";
+                    } else if (this.state.timer === "REPEAT") {
+                        dateTimeVal = this.state.selected_dateTime;
+                        repeatVal = this.state.repeat_duration;
+                    }
+
+
+                    let data = {
+                        devices: this.props.selectedDevices,
+                        dealers: this.state.selectedDealers,
+                        users: this.state.selectedUsers,
+                        msg: values.msg_txt,
+                        repeat: repeatVal,
+                        selected_date: dateTimeVal,
+                        timer: values.timer,
+                    }
+                    console.log("data ", data);
+                    this.refs.bulk_msg.handleBulkSendMsg(data);
+                    // this.props.sendMsgOnDevices(data);
+                } else {
+                    error({
+                        title: `Sorry, You have not any device to perform an action, to add devices please select dealers/users`,
+                    });
+                    // this.setState({ errorTime: "" })
                 }
-                console.log("data ", data);
-                this.refs.bulk_msg.handleBulkSendMsg(data);
-                // this.props.sendMsgOnDevices(data);
-
-
-                // }
             }
 
         });
@@ -282,12 +305,12 @@ class SendMsgForm extends Component {
     dateTimeOnChange = (value, dateString) => {
         console.log('Selected Time: ', value);
         console.log('Formatted Selected Time: ', dateString, "current data: ", moment(new Date()).format('YYYY-MM-DD HH:mm:ss'));
-        let todayVal = false;
-        if (moment(dateString).format('YYYY-MM-DD HH:mm') === moment(new Date()).format('YYYY-MM-DD HH:mm')) {
-            this.props.form.setFieldsValue({ repeat: 'NONE' });
-            todayVal = true;
-        }
-        this.setState({ selected_dateTime: dateString, isNowSet: todayVal });
+        // let todayVal = false;
+        // if (moment(dateString).format('YYYY-MM-DD HH:mm') === moment(new Date()).format('YYYY-MM-DD HH:mm')) {
+        //     this.props.form.setFieldsValue({ repeat: 'NONE' });
+        //     todayVal = true;
+        // }
+        this.setState({ selected_dateTime: dateString });
     }
 
     repeatHandler = (e) => {
@@ -300,6 +323,27 @@ class SendMsgForm extends Component {
         console.log("e is: ", e);
 
         this.setState({ timer: e });
+    }
+
+    range = (start, end) => {
+        const result = [];
+        for (let i = start; i < end; i++) {
+            result.push(i);
+        }
+        return result;
+    }
+
+    disabledDate = (current) => {
+        // Can not select days before today and today
+        return current && current < moment().endOf('day');
+    }
+
+    disabledDateTime = () => {
+        // return {
+        //     disabledHours: () => this.range(0, 24).splice(4, 20),
+        //     disabledMinutes: () => this.range(30, 60),
+        //     disabledSeconds: () => [55, 56],
+        // };
     }
 
     render() {
@@ -400,28 +444,7 @@ class SendMsgForm extends Component {
                         </Col>
 
                     </Row>
-                    {/* <br />
-                    <Row gutter={24} className="">
-                        <Col className="col-md-9 col-sm-9 col-xs-9">
-                            <Form.Item
-                                label={convertToLang(this.props.translation[""], "Select when to send Message")}
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 16 }}
-                            >
-                                <Select
-                                    showSearch={false}
-                                    style={{ width: '100%' }}
-                                    disabled={this.state.isNowSet}
-                                    placeholder={convertToLang(this.props.translation[""], "Select when to send Message")}
-                                    onChange={this.repeatHandler}
-                                >
-                                    {this.durationList.map((item) => <Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)}
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                    </Row> */}
                     <br />
-                    {/* {this.state.repeat_duration !== "NONE" ? */}
                     <Row gutter={24} className="">
                         <Col className="col-md-9 col-sm-9 col-xs-9">
                             <Form.Item
@@ -429,47 +452,62 @@ class SendMsgForm extends Component {
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 16 }}
                             >
-                                {/* {this.state.repeat_duration === "" ?
-                                        <DatePicker showTime placeholder="Select Message Timer" style={{ width: '100%' }} onChange={this.dateTimeOnChange} />
-                                        :
-                                        <TimePicker defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} placeholder="Select Message Timer" style={{ width: '100%' }} onChange={this.dateTimeOnChange} />
-                                    } */}
-                                <Select
-                                    showSearch={false}
-                                    style={{ width: '100%' }}
-                                    // disabled={this.state.isNowSet}
-                                    placeholder={convertToLang(this.props.translation[""], "Select Message Timer")}
-                                    onChange={this.handleTimer}
-                                >
-                                    <Select.Option key={"NOW"} value={"NOW"}>{"NOW"}</Select.Option>
-                                    <Select.Option key={"Date/Time"} value={"Date/Time"}>{"Date/Time"}</Select.Option>
-                                    <Select.Option key={"Repeat"} value={"Repeat"}>{"Repeat"}</Select.Option>
-                                </Select>
+                                {this.props.form.getFieldDecorator('timer', {
+                                    initialValue: '',
+                                    rules: [
+                                        {
+                                            required: true, message: convertToLang(this.props.translation[""], "Timer field is required"),
+                                        }
+                                    ],
+                                })(
+                                    <Select
+                                        showSearch={false}
+                                        style={{ width: '100%' }}
+                                        placeholder={convertToLang(this.props.translation[""], "Select Message Timer")}
+                                        onChange={this.handleTimer}
+                                    >
+                                        <Select.Option key={"NOW"} value={"NOW"}>{"NOW"}</Select.Option>
+                                        <Select.Option key={"DATE/TIME"} value={"DATE/TIME"}>{"Date/Time"}</Select.Option>
+                                        <Select.Option key={"REPEAT"} value={"REPEAT"}>{"Repeat"}</Select.Option>
+                                    </Select>
+                                )}
                             </Form.Item>
                         </Col>
                     </Row>
-                    {/* : null} */}
 
-                    {this.state.timer === "Date/Time" ?
+                    {this.state.timer === "DATE/TIME" ?
                         <Row gutter={24} className="">
                             <Col className="col-md-9 col-sm-9 col-xs-9">
                                 <Form.Item
-                                    label={convertToLang(this.props.translation[""], "Choose data/time")}
+                                    label={convertToLang(this.props.translation[""], "Choose Data/Time")}
                                     labelCol={{ span: 8 }}
                                     wrapperCol={{ span: 16 }}
                                 >
-                                    {/* {this.state.repeat_duration === "" ? */}
-                                    <DatePicker showTime placeholder="Choose data/time" style={{ width: '100%' }} onChange={this.dateTimeOnChange} />
-                                    {/* :
-                                        <TimePicker defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} placeholder="Choose data/time" style={{ width: '100%' }} onChange={this.dateTimeOnChange} />
-                                    } */}
+                                    {this.props.form.getFieldDecorator('date/time', {
+                                        initialValue: '',
+                                        rules: [
+                                            {
+                                                required: true, message: convertToLang(this.props.translation[""], "Date/Time field is required"),
+                                            }
+                                        ],
+                                    })(
+                                        <DatePicker
+                                            onChange={this.dateTimeOnChange}
+                                            placeholder="Choose data/time"
+                                            style={{ width: '100%' }}
+                                            format="YYYY-MM-DD HH:mm:ss"
+                                            disabledDate={this.disabledDate}
+                                            disabledTime={this.disabledDateTime}
+                                            showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
+                                        />
+                                    )}
                                 </Form.Item>
                             </Col>
                         </Row>
                         : null}
 
                     <br />
-                    {this.state.timer === "Repeat" ?
+                    {this.state.timer === "REPEAT" ?
                         <Row gutter={24} className="">
                             <Col className="col-md-9 col-sm-9 col-xs-9">
                                 <Form.Item
@@ -477,15 +515,53 @@ class SendMsgForm extends Component {
                                     labelCol={{ span: 8 }}
                                     wrapperCol={{ span: 16 }}
                                 >
-                                    <Select
-                                        showSearch={false}
-                                        style={{ width: '100%' }}
-                                        disabled={this.state.isNowSet}
-                                        placeholder={convertToLang(this.props.translation[""], "Select when to send Message")}
-                                        onChange={this.repeatHandler}
-                                    >
-                                        {this.durationList.map((item) => <Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)}
-                                    </Select>
+                                    {this.props.form.getFieldDecorator('repeat', {
+                                        initialValue: '',
+                                        rules: [
+                                            {
+                                                required: true, message: convertToLang(this.props.translation[""], "Repeat Message field is required"),
+                                            }
+                                        ],
+                                    })(
+                                        <Select
+                                            showSearch={false}
+                                            style={{ width: '100%' }}
+                                            // disabled={this.state.isNowSet}
+                                            placeholder={convertToLang(this.props.translation[""], "Select when to send Message")}
+                                            onChange={this.repeatHandler}
+                                        >
+                                            {this.durationList.map((item) => <Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)}
+                                        </Select>
+                                    )}
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                        : null}
+
+                    {this.state.repeat_duration !== "NONE" && this.state.timer === "REPEAT" ?
+                        <Row gutter={24} className="">
+                            <Col className="col-md-9 col-sm-9 col-xs-9">
+                                <Form.Item
+                                    label={convertToLang(this.props.translation[""], "Select any Time")}
+                                    labelCol={{ span: 8 }}
+                                    wrapperCol={{ span: 16 }}
+                                >
+                                    {this.props.form.getFieldDecorator('time', {
+                                        initialValue: '',
+                                        rules: [
+                                            {
+                                                required: true, message: convertToLang(this.props.translation[""], "Time field is required"),
+                                            }
+                                        ],
+                                    })(
+                                        <TimePicker
+                                            onChange={this.dateTimeOnChange}
+                                            placeholder={"Select any time"}
+                                            // format="YYYY-MM-DD HH:mm:ss"
+                                            style={{ width: '100%' }}
+                                        // defaultValue= {moment('00:00:00', '00:00:00')}
+                                        />
+                                    )}
                                 </Form.Item>
                             </Col>
                         </Row>
@@ -511,6 +587,7 @@ class SendMsgForm extends Component {
                         wipeBulkDevices={this.props.wipeBulkDevices}
                         bulkApplyPolicy={this.props.applyBulkPolicy}
                         selectedPolicy={this.state.selectedPolicy}
+                        renderList={this.props.renderList}
                     />
 
                     <Form.Item className="edit_ftr_btn"

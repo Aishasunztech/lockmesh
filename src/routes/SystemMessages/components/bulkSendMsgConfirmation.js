@@ -36,7 +36,8 @@ export default class BulkSendMsg extends Component {
             user_ids,
             msg: data.msg,
             repeat: data.repeat,
-            date: data.selected_date
+            date: data.selected_date,
+            timer: data.timer,
         }
 
         console.log("saveData ", saveData);

@@ -2,11 +2,28 @@ import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col, Tag, Modal } from "antd";
 import { convertToLang, checkValue } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
+// import DevicesList from './devicesList';
 import moment from 'moment';
+import { userDevicesListColumns } from '../../utils/columnsUtils';
 
 
 export default class ListMsgs extends Component {
-    state = { visible: false }
+
+    constructor(props) {
+        super(props);
+        let selectedDevicesColumns = userDevicesListColumns(props.translation, this.handleSearch);
+        this.state = {
+            selectedDevicesColumns: selectedDevicesColumns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
+            searchText: '',
+            columns: [],
+            pagination: this.props.pagination,
+            expandedRowKeys: [],
+            visible: false,
+
+        };
+        this.renderList = this.renderList.bind(this);
+        this.confirm = Modal.confirm;
+    }
 
     showModal = () => {
         this.setState({
@@ -26,18 +43,7 @@ export default class ListMsgs extends Component {
             visible: false,
         });
     }
-    constructor(props) {
-        super(props);
-        this.state = {
-            searchText: '',
-            columns: [],
-            pagination: this.props.pagination,
-            expandedRowKeys: [],
 
-        };
-        this.renderList = this.renderList.bind(this);
-        this.confirm = Modal.confirm;
-    }
 
     handlePagination = (value) => {
 
@@ -97,11 +103,11 @@ export default class ListMsgs extends Component {
                         </Fragment>
                     </div>
                 ),
-
-                send_to: app,
                 msg: checkValue(app.msg),
+                timer_status: app.timer_status ? app.timer_status : "N/A",
                 repeat: checkValue(app.repeat_duration),
-                sending_time: app.sending_time ? moment(app.sending_time).format('YYYY-MM-DD HH:mm') : "N/A",
+                sending_time: app.sending_time && app.sending_time !== "0000-00-00 00:00:00" ? moment(app.sending_time).format('YYYY-MM-DD HH:mm') : "N/A",
+                data: app,
             }
             bulkMsgs.push(data)
         });
@@ -146,45 +152,23 @@ export default class ListMsgs extends Component {
             <Fragment>
                 <Card>
                     <Table
-                        className="gx-table-responsive bulk_msg"
+                        className="gx-table-responsive"
                         rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
-                            console.log("record ", record);
+                            // console.log("record ", record);
                             return (
                                 <Fragment>
-                                    {/* <Permissions
-                                        className="exp_row22"
-                                        record={record}
-                                        permissionType="domain"
-                                        savePermissionAction={this.props.savePermission}
-                                        translation={this.props.translation}
-
-                                    /> */}
-                                    <Row>
-                                        <Col span={8}>
-                                            <h3>Devices: </h3>
-                                        </Col>
-                                        <Col span={16}>
-                                            {JSON.parse(record.send_to.device_ids).map(item => <Tag>{item}</Tag>)}
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col span={8}>
-                                            <h3>Users: </h3>
-                                        </Col>
-                                        <Col span={16}>
-                                            {JSON.parse(record.send_to.user_ids).map(item => <Tag>{item}</Tag>)}
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col span={8}>
-                                            <h3>Dealers: </h3>
-                                        </Col>
-                                        <Col span={16}>
-                                            {JSON.parse(record.send_to.dealer_ids).map(item => <Tag>{item}</Tag>)}
-                                        </Col>
-                                    </Row>
+                                    <Table
+                                        style={{ margin: 10 }}
+                                        size="middle"
+                                        bordered
+                                        columns={this.state.selectedDevicesColumns}
+                                        onChange={this.props.onChangeTableSorting}
+                                        dataSource={this.props.renderDevicesList(JSON.parse(record.data.data))}
+                                        pagination={false}
+                                        scroll={{ x: true }}
+                                    />
                                 </Fragment>
                             );
                         }}
