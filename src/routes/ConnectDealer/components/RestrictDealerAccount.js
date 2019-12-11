@@ -90,12 +90,12 @@ class RestrictDealerAccount extends Component {
         if (!this.state.dealer) {
             return null;
         }
-        // let dealer = props.dealer;
+        const {dealer} = this.state;
         return (
             <Fragment>
                 <Modal
                     visible={visible}
-                    title={`Restrict Account for Dealer ${this.state.dealer.dealer_name}`}
+                    title={`Restrict Account for Dealer ${dealer.dealer_name}`}
                     // title={`Restrict Account for Dealer ${dealer_name}`}
                     maskClosable={false}
                     onOk={this.handleOk}
@@ -127,7 +127,7 @@ class RestrictDealerAccount extends Component {
                             className="l_h_20"
                         >
                             {this.props.form.getFieldDecorator('dealerStatus', {
-                                initialValue: 'restricted',
+                                initialValue: (dealer.account_balance_status)? dealer.account_balance_status: 'active',
                             })(
                                 <Radio.Group
                                     onChange={this.onSelectOption}
