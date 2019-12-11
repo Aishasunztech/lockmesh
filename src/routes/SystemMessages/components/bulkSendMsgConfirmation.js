@@ -13,7 +13,7 @@ export default class BulkSendMsg extends Component {
     }
 
     handleBulkSendMsg = (data) => {
-        console.log("devices lklk", data.devices)
+        console.log("handleBulkSendMsg ", data);
         let selectedDevices = [];
         let dealer_ids = [];
         let user_ids = [];
@@ -34,8 +34,13 @@ export default class BulkSendMsg extends Component {
             selectedDevices,
             dealer_ids,
             user_ids,
-            msg: data.msg
+            msg: data.msg,
+            repeat: data.repeat,
+            date: data.selected_date,
+            timer: data.timer,
         }
+
+        console.log("saveData ", saveData);
 
         const title = `${convertToLang(this.props.translation[""], "Are you sure, you want to send message on these selected devices ")} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`;
         this.confirm({
@@ -45,6 +50,7 @@ export default class BulkSendMsg extends Component {
             cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
             onOk: (() => {
                 this.props.sendMsgOnDevices(saveData);
+                this.props.handleCancel();
             }),
             onCancel() { },
         });

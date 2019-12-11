@@ -93,6 +93,8 @@ export const SET_BULK_MESSAGE = "SET_BULK_MESSAGE"
 export const SET_BULK_DATA = "SET_BULK_DATA"
 export const SEND_BULK_MESSAGE = "SEND_BULK_MESSAGE"
 export const HANDLE_BULK_WIPE_PASS = "HANDLE_BULK_WIPE_PASS"
+export const GET_BULK_MSGS = "GET_BULK_MSGS"
+export const DELETE_BULK_MSG = "DELETE_BULK_MSG"
 
 
 //Dealer const
