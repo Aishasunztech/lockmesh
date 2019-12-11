@@ -1,18 +1,28 @@
-
+// libraries
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-
 import { Card, Button, Row, Col, Select, Input, Checkbox, Icon } from "antd";
 
+// components
 import AppFilter from '../../../components/AppFilter';
-
-import CircularProgress from "components/CircularProgress/index";
+import CircularProgress from "../../../components/CircularProgress";
 import AccountList from "./components/accountList";
-import styles from './manage_data.css'
+import AddProductModal from './components/AddProductModal';
 
+// actions
+import {
+    getAllSimIDs,
+    getAllChatIDs,
+    getAllPGPEmails,
+    exportCSV,
+    resyncIds
+} from "../../../appRedux/actions";
+
+// Helpers 
 import { componentSearch, getDealerStatus, titleCase, convertToLang } from '../../utils/commonUtils';
 
+// constants
 import {
     LABEL,
     LABEL_DATA_CHAT_ID,
@@ -31,13 +41,10 @@ import {
     Appfilter_Export
 } from '../../../constants/AppFilterConstants';
 
-import { exportCSV, resyncIds } from '../../../appRedux/actions/Account'
+// Styles
+import styles from './manage_data.css'
 
-import {
-    getAllSimIDs,
-    getAllChatIDs,
-    getAllPGPEmails,
-} from "../../../appRedux/actions/Devices";
+
 
 var copyInnerContent = [];
 var status = true;
@@ -46,7 +53,7 @@ class ManageData extends Component {
     constructor(props) {
         super(props);
 
-        const columnsSimids = [
+        const columnsSimIds = [
             {
                 title: '#',
                 dataIndex: 'count',
@@ -109,7 +116,8 @@ class ManageData extends Component {
                 ]
             },
         ]
-        const columnsChatids = [
+
+        const columnsChatIds = [
             {
                 title: '#',
                 dataIndex: 'count',
@@ -237,7 +245,7 @@ class ManageData extends Component {
             },
         ]
 
-        const columnsPgpemails = [
+        const columnsPgpEmails = [
             {
                 title: '#',
                 dataIndex: 'count',
@@ -312,16 +320,15 @@ class ManageData extends Component {
             chat_ids: [],
             pgp_emails: [],
             sim_ids: [],
-            columns: columnsChatids,
-            columnsChatids: columnsChatids,
-            columnsSimids: columnsSimids,
-            columnsPgpemails: columnsPgpemails,
+            columns: columnsChatIds,
+            columnsChatIds: columnsChatIds,
+            columnsSimIds: columnsSimIds,
+            columnsPgpEmails: columnsPgpEmails,
             columnsVpn: columnsVpn,
             options: this.props.options,
             pagination: 10,
             tabselect: 'all',
             innerTabSelect: '1',
-            whiteLables: []
         };
     }
 
@@ -378,30 +385,24 @@ class ManageData extends Component {
                 sim_ids: nextProps.sim_ids,
             })
         }
-        // if (nextProps.whiteLabels.length) {
-        //     // console.log(nextProps.whiteLabels);
-        //     this.setState({
-        //         whiteLables: nextProps.whiteLabels
-        //     })
-        // }
 
     }
 
     handleComponentSearch = (value) => {
 
-        // console.log('searched keyword', value);
+        // console.log('searched keyword:', value);
 
         try {
-            if (value.length) {
+            if (value && value.length) {
                 if (status) {
                     copyInnerContent = this.state.innerContent;
                     status = false;
                 }
-                let founddealers = componentSearch(copyInnerContent, value);
-                // console.log("found dealers", founddealers);
-                if (founddealers.length) {
+                let foundContent = componentSearch(copyInnerContent, value);
+
+                if (foundContent.length) {
                     this.setState({
-                        innerContent: founddealers,
+                        innerContent: foundContent,
                     })
                 } else {
                     this.setState({
@@ -421,11 +422,11 @@ class ManageData extends Component {
 
 
     handlePagination = (value) => {
-        this.refs.dealerList.handlePagination(value);
+        this.refs.dataList.handlePagination(value);
         this.props.postPagination(value, this.state.dealer_type);
     }
 
-    handleChangetab = (value) => {
+    handleChangeTab = (value) => {
 
         if (value === 'all') {
             this.setState({
@@ -446,7 +447,7 @@ class ManageData extends Component {
             case '1':
                 this.setState({
                     innerContent: this.props.chat_ids,
-                    columns: this.state.columnsChatids,
+                    columns: this.state.columnsChatIds,
                     innerTabSelect: '1'
                 })
                 status = true;
@@ -454,7 +455,7 @@ class ManageData extends Component {
             case '2':
                 this.setState({
                     innerContent: this.props.pgp_emails,
-                    columns: this.state.columnsPgpemails,
+                    columns: this.state.columnsPgpEmails,
                     innerTabSelect: '2'
                 })
                 status = true;
@@ -463,14 +464,13 @@ class ManageData extends Component {
             case "3":
                 this.setState({
                     innerContent: this.props.sim_ids,
-                    columns: this.state.columnsSimids,
+                    columns: this.state.columnsSimIds,
                     innerTabSelect: '3'
                 })
                 status = true;
                 break;
             case '4':
                 this.setState({
-                    // dealers: this.filterList('suspended', this.props.dealers),
                     innerContent: [],
                     columns: this.state.columnsVpn,
                     innerTabSelect: '4'
@@ -482,7 +482,7 @@ class ManageData extends Component {
             default:
                 this.setState({
                     innerContent: this.props.chat_ids,
-                    columns: this.state.columnsChatids,
+                    columns: this.state.columnsChatIds,
                     innerTabSelect: '1'
                 })
                 status = true;
@@ -499,101 +499,6 @@ class ManageData extends Component {
         }, 1000);
 
     }
-
-    render() {
-        const Search = Input.Search;
-        // console.log(this.state.tabselect);
-        // console.log(this.state.columns, window.location.pathname.split("/").pop(), this.state.options)
-        return (
-
-            <div>
-                {
-                    this.props.isloading ? <CircularProgress /> :
-
-                        <div>
-                            <Card >
-                                <Row gutter={16} className="filter_top">
-                                    <Col className="col-md-6 col-sm-6 col-xs-6 vertical_center">
-                                        <span className="font_26"> {convertToLang(this.props.translation[MANAGE_DATA], "Manage ID Inventory")} </span>
-                                    </Col>
-                                    <Col className="col-md-2 col-sm-6 col-xs-6">
-                                        <div className="m_mt-16">
-                                            <Select
-                                                value={convertToLang(this.props.translation[Appfilter_Export], "Export")}
-                                                //  defaultValue={this.state.DisplayPages}
-                                                style={{ width: '100%' }}
-                                            // onSelect={value => this.setState({DisplayPages:value})}
-                                            // onChange={value => this.handlePagination(value)}
-                                            >
-                                                <Select.Option value="10"
-                                                    onClick={() => {
-                                                        this.props.exportCSV('sim_ids');
-                                                    }}
-                                                > {convertToLang(this.props.translation[Appfilter_Export], "Export")} {convertToLang(this.props.translation[LABEL_DATA_SIM_ID], "SIM_ID")} </Select.Option>
-                                                <Select.Option value="20"
-                                                    onClick={() => {
-                                                        this.props.exportCSV('chat_ids');
-                                                    }}
-                                                > {convertToLang(this.props.translation[Appfilter_Export], "Export")} {convertToLang(this.props.translation[LABEL_DATA_CHAT_ID], "CHAT ID")} </Select.Option>
-                                                <Select.Option value="30"
-                                                    onClick={() => {
-                                                        this.props.exportCSV('pgp_emails');
-                                                    }}
-                                                > {convertToLang(this.props.translation[Appfilter_Export], "Export")} {convertToLang(this.props.translation[LABEL_DATA_PGP_EMAIL], "PGP EMAIL")} </Select.Option>
-                                                <Select.Option value="50"
-                                                // onClick={() => {
-                                                //     this.exportCSV('vpn');
-                                                // }}
-                                                > {convertToLang(this.props.translation[Appfilter_Export], "Export")} {convertToLang(this.props.translation[LABEL_DATA_VPN], "VPN")} </Select.Option>
-                                            </Select>
-                                        </div>
-                                    </Col>
-                                    <Col className="col-md-2 col-sm-6 col-xs-6 m_mt-16">
-                                        <Search
-                                            placeholder={convertToLang(this.props.translation[Appfilter_SearchManageData], "Search")}
-                                            onChange={e => this.handleComponentSearch(e.target.value)}
-                                            style={{ width: '100%' }}
-                                        />
-                                    </Col>
-                                    <Col className="col-md-2 col-sm-6 col-xs-6 m_mt-16">
-                                        <div className="">
-                                            <Button
-                                                type="primary"
-                                                style={{ width: '100%' }}
-                                                onClick={() => this.resyncIds()}
-                                            >
-                                                REFRESH ID'S DATA
-                                            </Button>
-                                        </div>
-                                    </Col>
-                                </Row>
-                            </Card>
-                            <AccountList
-                                user={this.props.user}
-                                whiteLables={this.state.whiteLables}
-                                columns={this.state.columns}
-                                dataList={this.state.innerContent}
-                                // suspendDealer={this.props.suspendDealer}
-                                // activateDealer={this.props.activateDealer}
-                                // deleteDealer={this.props.deleteDealer}
-                                // undoDealer={this.props.undoDealer}
-                                // editDealer={this.props.editDealer}
-                                pagination={this.props.DisplayPages}
-                                // getDealerList={this.props.getDealerList}
-                                tabselect={this.state.tabselect}
-                                innerTabSelect={this.state.innerTabSelect}
-                                handleChangetab={this.handleChangetab}
-                                handleChangeInnerTab={this.handleChangeInnerTab}
-                                // updatePassword={this.props.updatePassword}
-                                ref='dealerList'
-                                translation={this.props.translation}
-                            />
-                        </div>
-                }
-            </div>
-        );
-    }
-
     handleSearch = (e) => {
         // console.log('hi search val is: ', e.target.value);
         // console.log('hi inner content val is: ', this.state.innerContent);
@@ -643,22 +548,147 @@ class ManageData extends Component {
             }
         });
     }
+
+    render() {
+        // console.log(this.state.tabselect);
+        // console.log(this.state.columns, window.location.pathname.split("/").pop(), this.state.options)
+        return (
+
+            <div>
+                {
+                    this.props.isloading ?
+                        <CircularProgress />
+                        :
+                        <div>
+                            <Card >
+                                <Row gutter={16} className="filter_top">
+                                    <Col className="col-md-4 col-sm-6 col-xs-6 vertical_center">
+                                        <span className="font_26"> {convertToLang(this.props.translation[MANAGE_DATA], "Manage ID Inventory")} </span>
+                                    </Col>
+                                    <Col className="col-md-2 col-sm-6 col-xs-6">
+                                        <div className="m_mt-16">
+                                            <Select
+                                                value={convertToLang(this.props.translation[Appfilter_Export], "Export")}
+                                                //  defaultValue={this.state.DisplayPages}
+                                                style={{ width: '100%' }}
+                                            // onSelect={value => this.setState({DisplayPages:value})}
+                                            // onChange={value => this.handlePagination(value)}
+                                            >
+                                                <Select.Option value="10"
+                                                    onClick={() => {
+                                                        this.props.exportCSV('sim_ids');
+                                                    }}
+                                                > {convertToLang(this.props.translation[Appfilter_Export], "Export")} {convertToLang(this.props.translation[LABEL_DATA_SIM_ID], "SIM_ID")} </Select.Option>
+                                                <Select.Option value="20"
+                                                    onClick={() => {
+                                                        this.props.exportCSV('chat_ids');
+                                                    }}
+                                                > {convertToLang(this.props.translation[Appfilter_Export], "Export")} {convertToLang(this.props.translation[LABEL_DATA_CHAT_ID], "CHAT ID")} </Select.Option>
+                                                <Select.Option value="30"
+                                                    onClick={() => {
+                                                        this.props.exportCSV('pgp_emails');
+                                                    }}
+                                                > {convertToLang(this.props.translation[Appfilter_Export], "Export")} {convertToLang(this.props.translation[LABEL_DATA_PGP_EMAIL], "PGP EMAIL")} </Select.Option>
+                                                <Select.Option value="50"
+                                                // onClick={() => {
+                                                //     this.exportCSV('vpn');
+                                                // }}
+                                                > {convertToLang(this.props.translation[Appfilter_Export], "Export")} {convertToLang(this.props.translation[LABEL_DATA_VPN], "VPN")} </Select.Option>
+                                            </Select>
+                                        </div>
+                                    </Col>
+                                    <Col className="col-md-2 col-sm-6 col-xs-6 m_mt-16">
+                                        <Input.Search
+                                            placeholder={convertToLang(this.props.translation[Appfilter_SearchManageData], "Search")}
+                                            onChange={e => this.handleComponentSearch(e.target.value)}
+                                            style={{ width: '100%' }}
+                                        />
+                                    </Col>
+                                    <Col className="col-md-2 col-sm-6 col-xs-6 m_mt-16">
+                                        <div className="">
+                                            <Button
+                                                type="primary"
+                                                style={{ width: '100%' }}
+                                                onClick={() => this.resyncIds()}
+                                            >
+                                                REFRESH ID'S DATA
+                                            </Button>
+                                        </div>
+                                    </Col>
+                                    <Col className="col-md-2 col-sm-6 col-xs-6 m_mt-16">
+                                        <div className="">
+                                            <Button
+                                                type="primary"
+                                                style={{ width: '100%' }}
+                                                onClick={() => this.addProductModal.showModal()}
+                                            >
+                                                Create Data
+                                            </Button>
+                                        </div>
+                                    </Col>
+                                    {/* <Col className="col-md-2 col-sm-6 col-xs-6 m_mt-16">
+                                        <div className="">
+                                            <Button
+                                                type="primary"
+                                                style={{ width: '100%' }}
+                                                onClick={() => this.refs.addProductModal.showModal()}
+                                            >
+                                                Create Chat IDs
+                                            </Button>
+                                        </div>
+                                    </Col> */}
+                                </Row>
+                            </Card>
+                            
+                            {/* Product List */}
+                            <AccountList
+                                user={this.props.user}
+
+                                columns={this.state.columns}
+                                dataList={this.state.innerContent}
+                                // suspendDealer={this.props.suspendDealer}
+                                // activateDealer={this.props.activateDealer}
+                                // deleteDealer={this.props.deleteDealer}
+                                // undoDealer={this.props.undoDealer}
+                                // editDealer={this.props.editDealer}
+                                pagination={this.props.DisplayPages}
+                                // getDealerList={this.props.getDealerList}
+                                tabselect={this.state.tabselect}
+                                innerTabSelect={this.state.innerTabSelect}
+                                handleChangeTab={this.handleChangeTab}
+                                handleChangeInnerTab={this.handleChangeInnerTab}
+                                // updatePassword={this.props.updatePassword}
+                                ref='dataList'
+                                translation={this.props.translation}
+                            />
+
+                            <AddProductModal
+                                ref='addProductModal'
+                                translation={this.props.translation}
+                                wrappedComponentRef={(form) => this.addProductModal = form}
+
+
+
+
+                            />
+                        </div>
+                }
+            </div>
+        );
+    }
+
+
 }
 
 
-var mapStateToProps = (state) => {
-    // console.log("mapStateToProps");
-    // console.log(state.dealers.isloading);
-    // console.log('state.dealer', state.dealers);
-    console.log("state.devices.chat_ids , ", state.devices.chat_ids);
-    console.log("state.devices.pgp_emails , ", state.devices.pgp_emails);
-    console.log("state.devices.sim_ids , ", state.devices.sim_ids);
+var mapStateToProps = ({ devices, settings, auth }) => {
+
     return {
-        chat_ids: state.devices.chat_ids,
-        pgp_emails: state.devices.pgp_emails,
-        sim_ids: state.devices.sim_ids,
-        translation: state.settings.translation,
-        user: state.auth.authUser
+        chat_ids: devices.chat_ids,
+        pgp_emails: devices.pgp_emails,
+        sim_ids: devices.sim_ids,
+        translation: settings.translation,
+        user: auth.authUser
     };
 }
 
