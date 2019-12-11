@@ -348,7 +348,7 @@ export default class DeviceSidebar extends Component {
                     dataSource={
                         this.renderDetailsData(this.props.device_details)
                     }
-                    scroll={{ y: 546 }}
+                    scroll={{ y: 551 }}
                     pagination={false}
                 />
             </Card>

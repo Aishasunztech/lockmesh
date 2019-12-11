@@ -189,6 +189,7 @@
 .activities .ant-modal-body {
     max-height: 540px;
     overflow: overlay;
+    width: 100%;
 }
 
 .load_policy_popup .ant-modal-title {
@@ -204,7 +205,7 @@
 }
 
 .push_apps .ant-table-body {
-    height: 440px;
+    height: 350px;
     overflow: overlay;
 }
 

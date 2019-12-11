@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { BASE_URL } from '../../../constants/Application';
 import EditDealer from './editDealer';
 // import EditApk from './editDealer';
-import { ADMIN } from '../../../constants/Constants';
+import { ADMIN, DEALER } from '../../../constants/Constants';
 import scrollIntoView from 'scroll-into-view';
 
 import DealerDevicesList from '../../users/components/UserDeviceList';
@@ -109,7 +109,7 @@ class DealerList extends Component {
             dealer_id: '',
             scrollStatus: true
         };
-        this.renderList = this.renderList.bind(this);
+        
     }
 
     handleScroll = () => {
@@ -220,7 +220,7 @@ class DealerList extends Component {
         this.props.postDropdown(values, this.state.dealer_type);
     }
 
-    renderList(list) {
+    renderList = (list) => {
         data = [];
         list.map((dealer, index) => {
             // console.log('dealer list is: ', dealer.dealer_name)
@@ -273,7 +273,7 @@ class DealerList extends Component {
                         </Button>
 
                         {/* Connect Button */}
-                        {(this.props.user.type === ADMIN) ?
+                        {(this.props.user.type === ADMIN || this.props.user.type === DEALER) ?
                             ConnectButton
                             :
                             null
@@ -289,7 +289,8 @@ class DealerList extends Component {
                 parent_dealer_id: dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
                 connected_devices: dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
                 dealer_credits: dealer.dealer_credits ? dealer.dealer_credits : 0,
-                devicesList: dealer.devicesList
+                devicesList: dealer.devicesList,
+                last_login: dealer.last_login? dealer.last_login : 'N/A'
 
             })
         });

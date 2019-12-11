@@ -200,7 +200,7 @@ class EditDevice extends Component {
         this.props.getUserList();
         this.props.getParentPackages()
         this.props.getProductPrices()
-        if (this.props.device.services && this.props.user.type === ADMIN) {
+        if (this.props.device.services) {
             let disableChat = true
             let disablePgp = true
             let disableSim2 = true
@@ -660,34 +660,36 @@ class EditDevice extends Component {
         }
     }
     handleRenewService = () => {
-        let packagesData = this.props.device.services ? JSON.parse(this.props.device.services.packages) : []
-        let productData = this.props.device.services ? JSON.parse(this.props.device.services.products) : []
-        let total_price = 0
-        if (packagesData && packagesData.length) {
-            packagesData.map((item) => {
-                total_price = total_price + Number(item.pkg_price)
-            })
-        }
-        if (productData && productData.length) {
-            productData.map((item) => {
-                total_price = total_price + Number(item.unit_price)
-            })
-        }
-        // 
+        if (this.props.device.finalStatus !== DEVICE_TRIAL) {
+            let packagesData = this.props.device.services ? JSON.parse(this.props.device.services.packages) : []
+            let productData = this.props.device.services ? JSON.parse(this.props.device.services.products) : []
+            let total_price = 0
+            if (packagesData && packagesData.length) {
+                packagesData.map((item) => {
+                    total_price = total_price + Number(item.pkg_price)
+                })
+            }
+            if (productData && productData.length) {
+                productData.map((item) => {
+                    total_price = total_price + Number(item.unit_price)
+                })
+            }
+            // 
 
-        this.setState({
-            packages: packagesData,
-            products: productData,
-            total_price: total_price,
-            visible: false,
-            servicesModal: false,
-            renewService: true,
-            checkServices: { display: 'inline', color: "Red", margin: 0 },
-            changeServiceMsg: "You requested to renew current services.",
-            PkgSelectedRows: packagesData,
-            proSelectedRows: productData,
-            expiry_date: this.state.tabselect + " Months"
-        })
+            this.setState({
+                packages: packagesData,
+                products: productData,
+                total_price: total_price,
+                visible: false,
+                servicesModal: false,
+                renewService: true,
+                checkServices: { display: 'inline', color: "Red", margin: 0 },
+                changeServiceMsg: "You requested to renew current services.",
+                PkgSelectedRows: packagesData,
+                proSelectedRows: productData,
+                expiry_date: this.state.tabselect + " Months"
+            })
+        }
     }
 
     disabledDate = (current) => {

@@ -68,6 +68,18 @@ class Prices extends Component {
             },
             {
                 title: (
+                    <span>
+                        {convertToLang(props.translation[""], "PERMISSIONS")}
+                        {/* <Popover placement="top" content='dumy'>
+                                <span className="helping_txt"><Icon type="info-circle" /></span>
+                            </Popover> */}
+                    </span>),
+                dataIndex: 'permission',
+                key: 'permission',
+                className: 'row'
+            },
+            {
+                title: (
                     <Input.Search
                         name="pkg_name"
                         key="pkg_name"
@@ -133,19 +145,7 @@ class Prices extends Component {
                 key: 'services',
                 className: 'row '
             },
-            {
-                title: (
-                    <span>
-                        {convertToLang(props.translation[""], "PERMISSIONS")}
-                        {/* <Popover placement="top" content='dumy'>
-                                <span className="helping_txt"><Icon type="info-circle" /></span>
-                            </Popover> */}
-                    </span>),
-                dataIndex: 'permission',
-                key: 'permission',
-                className: 'row'
-            },
-
+        
             {
                 title: (
                     <Input.Search
@@ -788,7 +788,7 @@ class Prices extends Component {
                                             )
                                         }
                                     }}
-                                    expandIconColumnIndex={5}
+                                    expandIconColumnIndex={2}
                                     expandedRowKeys={this.state.expandedRowKeys}
                                     expandIconAsCell={false}
                                     columns={this.columns}

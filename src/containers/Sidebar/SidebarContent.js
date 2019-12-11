@@ -229,6 +229,7 @@ class SidebarContent extends Component {
               latestPaymentTransaction={this.props.latestPaymentTransaction}
               overdueDetails={this.props.overdueDetails}
               account_balance_status={this.props.account_balance_status}
+              account_balance_status_by={this.props.account_balance_status_by}
             />
             <NewDevice
               ref='new_device'
@@ -416,7 +417,8 @@ const mapStateToProps = ({ settings, devices, sidebar, account, auth }) => {
     translation: translation,
     lng_id: translation["lng_id"],
     isSwitched: isSwitched,
-    account_balance_status: auth.authUser.account_balance_status
+    account_balance_status: auth.authUser.account_balance_status,
+    account_balance_status_by: auth.authUser.account_balance_status_by
   }
 };
 export default connect(mapStateToProps,

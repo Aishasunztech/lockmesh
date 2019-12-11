@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col, Tag, Modal } from "antd";
 import { convertToLang, checkValue } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
-// import DevicesList from './devicesList';
 import moment from 'moment';
 import { userDevicesListColumns } from '../../utils/columnsUtils';
 

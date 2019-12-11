@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { Table, Button, Modal, Row, Col, Spin, Input, Card } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import styles from './devices.css'
+// import styles from './devices.css'
 import { getAllDealers } from "../../../appRedux/actions/Dealers";
 // import { savePermission } from "../../../appRedux/actions/Apk";
 import FilterDevicesList from "./filterDevicesList";
@@ -663,7 +663,7 @@ class FilterDevices extends Component {
     let dealers = this.props.selectedDealers;
     let users = this.props.selectedUsers;
 
-    if (action !== "NOT SELECTED") {
+    if (action) {
       if (devices.length) {
         if (action === "SUSPEND DEVICES") {
           this.refs.bulk_suspend.handleSuspendDevice(devices, dealers, users);
@@ -698,9 +698,9 @@ class FilterDevices extends Component {
           title: `Sorry, You have not any device to perform an action`,
         });
       }
-      // this.props.setstateValues("errorAction", "")
+
     } else {
-      this.props.setstateValues("errorAction", "Please select an action")
+      this.props.setBulkData("Please select an action", "errorAction")
       // error({
       //   title: `Sorry, You have not selected any action`,
       // });
@@ -721,7 +721,8 @@ class FilterDevices extends Component {
       updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED || device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED || device.finalStatus == DEVICE_EXPIRED)
     }
     else if (action === "WIPE DEVICES") {
-      updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED || device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED || device.finalStatus == DEVICE_EXPIRED || device.finalStatus == DEVICE_UNLINKED || device.finalStatus == DEVICE_TRANSFERED)
+      // updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED || device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED || device.finalStatus == DEVICE_EXPIRED || device.finalStatus == DEVICE_UNLINKED || device.finalStatus == DEVICE_TRANSFERED)
+      updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED || device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED || device.finalStatus == DEVICE_EXPIRED || device.finalStatus == DEVICE_TRANSFERED)
     }
 
     this.state.selectedDevices = updateSelectedDevices

@@ -103,8 +103,8 @@ class CreditIcon extends Component {
       },
       {
         title: '21+ days Overdue',
-        dataIndex: 'age',
-        key: 'age',
+        dataIndex: 'value',
+        key: 'value',
       },
     ];
 
@@ -240,19 +240,18 @@ class CreditIcon extends Component {
   renderOverData = () => {
     return [
       {
-        status: <span className="p-5 weight_600 black"> Account Suspension</span>,
+        status: <span className="p-5 weight_600 black"> Restriction Level 2</span>,
         overdue: <span className="weight_600 p-5"> 60+</span>,
         amount: <span className="weight_600 p-5"> {(this.props.overdueDetails._60toOnward_dues) ? '-' + this.props.overdueDetails._60toOnward_dues : 0}</span>,
         invoices: <Button size="small" className="invo_btn">{this.props.overdueDetails._60toOnward}</Button>
       },
       {
-        status: <span className="p-5 weight_600"> Account Restriction</span>,
+        status: <span className="p-5 weight_600"> Restriction Level 1</span>,
         overdue: <span className="weight_600 p-5"> 30+</span>,
         amount: <span className="weight_600 p-5"> {(this.props.overdueDetails._30to60_dues) ? '-' + this.props.overdueDetails._30to60_dues : 0}</span>,
         invoices: <Button size="small" className="invo_btn"> {this.props.overdueDetails._30to60}</Button>
       },
       {
-
         overdue: <span className="weight_600 p-5"> 21+</span>,
         amount: <span className="weight_600 p-5"> {(this.props.overdueDetails._21to30_dues)}</span>,
         invoices: <Button size="small" className="invo_btn">{this.props.overdueDetails._21to30}</Button>
@@ -267,27 +266,41 @@ class CreditIcon extends Component {
 
   renderAccountStatus = () => {
     let statusBGC, statusDays;
-    if (this.props.account_balance_status === 'restricted' && this.props.overdueDetails._30to60 > 0) {
-      statusBGC = 'bg_yellow';
-      statusDays = '31+ days Overdue';
-      account_status_paragraph = "Please clear payment over 31+ days to activate \"PAY LATER\" feature";
-    } else if (this.props.account_balance_status === 'restricted') {
-      statusBGC = 'bg_yellow';
-      statusDays = '21+ days Overdue';
-      account_status_paragraph = "Please clear payment over 21+ days to activate \"PAY LATER\" feature";
-    } else if (this.props.account_balance_status === 'suspended') {
+
+    if (this.props.account_balance_status_by === 'due_credits') {
+      if (this.props.account_balance_status === 'restricted' && this.props.overdueDetails._30to60 > 0) {
+        statusBGC = 'bg_yellow';
+        statusDays = '31+ days Overdue';
+        account_status_paragraph = "Please clear payment over 31+ days to activate \"PAY LATER\" feature";
+      } else if (this.props.account_balance_status === 'restricted') {
+        statusBGC = 'bg_yellow';
+        statusDays = '21+ days Overdue';
+        account_status_paragraph = "Please clear payment over 21+ days to activate \"PAY LATER\" feature";
+      } else if (this.props.account_balance_status === 'suspended') {
+        statusBGC = 'bg_red';
+        statusDays = '60+ days Overdue';
+        account_status_paragraph = "Please clear 60+ days payment to allow new device activation";
+      } else {
+        statusBGC = 'bg_green';
+        statusDays = 'No Overdue';
+      }
+    } else if (this.props.account_balance_status_by === 'admin') {
       statusBGC = 'bg_red';
-      statusDays = '60+ days Overdue';
-      account_status_paragraph = "Please clear 60+ days payment to allow new device activation";
+      statusDays = 'admin';
     } else {
       statusBGC = 'bg_green';
       statusDays = 'No Overdue';
     }
+
     return [
       {
-        name: <h5 className={'weight_600 p-5 text-uppercase ' + statusBGC} >{this.props.account_balance_status}</h5>,
-        age: <h5 className="weight_600 bg_brown p-5">{statusDays} </h5>,
+        name: <h5 className={'weight_600 p-5 text-uppercase ' + statusBGC} >Restricted By</h5>,
+        value: statusDays
       },
+      {
+        name: <h5 className={'weight_600 p-5 text-uppercase ' + statusBGC} >{this.props.account_balance_status}</h5>,
+        value: <h5 className="weight_600 bg_brown p-5">{statusDays} </h5>,
+      }
     ];
   };
 
@@ -383,7 +396,6 @@ class CreditIcon extends Component {
           className="credit_popup"
         >
           <Fragment>
-
             <Row>
               <Col xs={24} sm={24} md={10} lg={10} xl={10} className="mb-16">
                 <Table
