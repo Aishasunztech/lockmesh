@@ -35,13 +35,13 @@ import {
 } from "../../appRedux/actions";
 import { connect } from "react-redux";
 import RestService from "../../appRedux/services/RestServices";
+import styles from './creditModal.css'
 const confirm = Modal.confirm;
 let paymentHistoryColumns;
 let account_status_paragraph = '';
 
 
 class CreditIcon extends Component {
-
 
   constructor(props) {
     super(props);
@@ -193,13 +193,22 @@ class CreditIcon extends Component {
   };
 
   ac_st_title = () => {
+    let class_name = (this.props.account_balance_status == 'active') ?
+      "bg_green" : (this.props.account_balance_status === 'restricted') ?
+        "bg_yellow" :
+        "bg_red"
     return <div>
-      <Row>
-        <Col span={12}>
-          <h4 className="credit_modal_heading weight_600">{convertToLang(this.props.translation[""], "ACCOUNT STATUS")}</h4>
+      <Row gutter="16">
+        <Col span={12} className="credit_modal_heading ">
+          <h4 className="weight_600">{convertToLang(this.props.translation[""], "ACCOUNT STATUS")}</h4>
         </Col>
-        <Col span={12}>
-          <h4 className="credit_modal_heading weight_600">{convertToLang(this.props.translation[""], (this.props.account_balance_status == 'active') ? <span className="">ACTIVE</span> : (this.props.account_balance_status === 'restricted') ? <span className=""> Restriction Level 1</span> : <span className="" > Restriction Level 2</span>)}</h4>
+        <Col span={12} className={"credit_modal_heading " + class_name}>
+          <h4 className=" weight_600">
+            {convertToLang(this.props.translation[""], (this.props.account_balance_status == 'active') ?
+              <span className="">ACTIVE</span> : (this.props.account_balance_status === 'restricted') ?
+                <span> Restriction Level 1</span> :
+                <span className="" > Restriction Level 2</span>)
+            }</h4>
         </Col>
       </Row>
     </div>
@@ -310,16 +319,17 @@ class CreditIcon extends Component {
       account_status_paragraph = "No Overdue"
       return [
         {
-          name: <h5 className={'weight_600 p-5 text-uppercase '} >INFO</h5>,
+          name: <h5 className={'ac_st_info '} >INFO</h5>,
           value: <h5 className={"weight_600 bg_brown p-5 " + statusBGC} >{account_status_paragraph} </h5>,
         }
       ];
     }
 
     return [
+      
       {
-        name: <h5 className={'weight_600 p-5 text-uppercase '} >Restricted By</h5>,
-        value: <h5 className={"weight_600 bg_brown p-5 " + statusBGC} >{statusDays} </h5>
+        name: <h5 className={'restricted_by'} >Restricted By</h5>,
+        value: <h5 className={"weight_600 bg_brown p-5 "} >{statusDays} </h5>
       },
       {
         name: <h5 className={'weight_600 p-5 text-uppercase '} >INFO</h5>,
@@ -421,7 +431,7 @@ class CreditIcon extends Component {
         >
           <Fragment>
             <Row>
-              <Col xs={24} sm={24} md={10} lg={10} xl={10} className="mb-16">
+              <Col xs={24} sm={24} md={11} lg={11} xl={11} className="mb-16">
                 <Table
                   className="ac_status_table"
                   dataSource={this.renderAccountStatus()}
@@ -433,9 +443,9 @@ class CreditIcon extends Component {
                 />
                 {/* <h6 className="mt-6"> {account_status_paragraph}</h6> */}
               </Col>
-              <Col xs={24} sm={24} md={0} lg={4} xl={4}>
+              <Col xs={24} sm={24} md={0} lg={1} xl={1}>
               </Col>
-              <Col xs={24} sm={24} md={14} lg={10} xl={10}>
+              <Col xs={24} sm={24} md={14} lg={12} xl={12}>
                 <Table
                   className="ac_status_table"
                   dataSource={this.renderCreditBalance()}
