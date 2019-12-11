@@ -3723,25 +3723,21 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
         },
 
         {
-
             title: (
                 <span>
-                    {convertToLang(translation[""], "SEND TO")}
-                    {/* <Popover placement="top" content={(<Markup content={convertToLang(translation[""],
+                    {convertToLang(translation[""], "DEVICES")}
+                    <Popover placement="top" content={(<Markup content={convertToLang(translation[""],
                         `   <p>Press <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;">
                                     <i className="fa fa-caret-right" aria-hidden="true"></i> 
-                                    </a> to Add, remove or View
-                                    <br/> the Dealers who have permission
-                                    <br/>to use this Domain</p>`)} />)}>
+                                    </a> to see deives list</p>`)} />)}>
                         <span className="helping_txt"><Icon type="info-circle" /></span>
-                    </Popover> */}
+                    </Popover>
                 </span>),
             dataIndex: 'send_to',
             key: 'send_to',
-            // className: ''
-            //     }
-            // ]
         },
+
+
 
         {
             title: (
@@ -3765,6 +3761,81 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                     dataIndex: 'msg',
                     key: 'msg',
                     // className: ''
+                }
+            ]
+
+        },
+        {
+            title: (
+                <Input.Search
+                    name="msg"
+                    key="msg"
+                    id="msg"
+                    className="search_heading"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    placeholder="TIMER STATUS"
+                />
+            ),
+            key: 'timer_status',
+            dataIndex: 'timer_status',
+            key: 'timer_status',
+            className: '',
+            children: [
+                {
+                    width: 120,
+                    title: convertToLang(translation[""], "TIMER STATUS"),
+                    dataIndex: 'timer_status',
+                    key: 'timer_status',
+                }
+            ]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="repeat"
+                    key="repeat"
+                    id="repeat"
+                    className="search_heading"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    placeholder="REPEAT"
+                />
+            ),
+            dataIndex: 'repeat',
+            className: '',
+            key: 'repeat',
+            children: [
+                {
+                    width: 100,
+                    title: convertToLang(translation[""], "REPEAT"),
+                    dataIndex: 'repeat',
+                    key: 'repeat',
+                }
+            ]
+
+        },
+        {
+            title: (
+                <Input.Search
+                    name="sending_time"
+                    key="sending_time"
+                    id="sending_time"
+                    className="search_heading"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    placeholder="SENDING TIME"
+                />
+            ),
+            dataIndex: 'sending_time',
+            className: '',
+            key: 'sending_time',
+            children: [
+                {
+                    width: 130,
+                    title: convertToLang(translation[""], "SENDING TIME"),
+                    dataIndex: 'sending_time',
+                    key: 'sending_time',
                 }
             ]
 
