@@ -658,7 +658,7 @@ class Dealers extends Component {
                                 ref='dealerList'
                                 translation={this.props.translation}
                             />
-                           
+
                         </div>
                 }
             </div>

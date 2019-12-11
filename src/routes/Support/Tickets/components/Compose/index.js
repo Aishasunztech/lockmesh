@@ -1,9 +1,6 @@
 import React from "react";
 import {Button, Input, message, Modal, Upload} from "antd";
 import Moment from "moment";
-
-import IntlMessages from "../../Tickets/util/IntlMessages";
-
 const {TextArea} = Input;
 
 const props = {
@@ -41,7 +38,7 @@ class ComposeMail extends React.Component {
     const {to, subject, message} = this.state;
     return (
       <Modal onCancel={onClose} visible={this.props.open}
-             title={<IntlMessages id="mail.title"/>}
+             title='kskfjsdkj'
              closable={false}
              onOk={() => {
                if (to === '')

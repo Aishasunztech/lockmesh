@@ -2,13 +2,11 @@ export default [
   {
     'id': 0,
     'handle': 'starred',
-    'title': 'Starred',
-    'icon': 'star'
+    'title': 'Open',
   },
   {
     'id': 1,
     'handle': 'important',
-    'title': 'Important',
-    'icon': 'tag'
+    'title': 'Closed',
   }
 ];

@@ -31,12 +31,6 @@ class AppModuleHeader extends React.Component {
             <span className="gx-search-icon gx-pointer"><i className="icon icon-search"/></span>
           </div>
         </div>
-        <div className="gx-module-box-header-right">
-          <span className="gx-fs-xl"> <i
-            className="icon icon-apps gx-icon-btn"/></span>
-          <span className="gx-fs-xl"><i
-            className="icon icon-notification gx-icon-btn"/></span>
-        </div>
       </div>
     )
   }

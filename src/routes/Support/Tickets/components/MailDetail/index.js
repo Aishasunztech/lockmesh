@@ -1,30 +1,13 @@
 import React from "react";
-import {Avatar, Dropdown, Menu} from "antd";
+import {Avatar, Checkbox, Dropdown, Menu} from "antd";
 import CustomScrollbars from 'util/CustomScrollbars'
 
-import labels from "../../Tickets/data/labels";
-
-const options = [
-  'Reply',
-  'Forward',
-  'Print',
-];
+import labels from "../../data/labels";
 
 class MailDetail extends React.Component {
 
   state = {
     showDetail: false
-  };
-
-  optionMenu = () => {
-    return (
-      <Menu id="long-menu">
-        {options.map(option =>
-          <Menu.Item key={option}>
-            {option}
-          </Menu.Item>,
-        )}
-      </Menu>)
   };
 
   render() {
@@ -48,19 +31,11 @@ class MailDetail extends React.Component {
                   })}
                 </div>
 
-
               </div>
 
               <div className="gx-mail-header-actions">
-
-                <div onClick={() => {
-                  onStartSelect(mail);
-                }}>
-                  {mail.starred ?
-                    <i className="icon icon-star gx-icon-btn"/> :
-                    <i className="icon icon-star-o gx-icon-btn"/>
-                  }
-
+                <div>
+                   <i className="icon icon-reply gx-icon-btn"/>
                 </div>
                 <div onClick={() => {
                   onImportantSelect(mail);
@@ -72,45 +47,13 @@ class MailDetail extends React.Component {
                   }
                 </div>
               </div>
-
             </div>
+
             <hr/>
 
-            <div className="gx-mail-user-info gx-ml-0 gx-mb-3">
-
-              {mail.from.avatar === '' ?
-                <Avatar
-                  className="gx-avatar gx-bg-blue gx-size-40 gx-mr-3"> {mail.from.name.charAt(0).toUpperCase()}</Avatar> :
-                <Avatar className="gx-size-40 gx-mr-3" alt="Alice Freeman"
-                        src={mail.from.avatar}/>
-              }
-
-              <div className="gx-sender-name">{mail.from.name}
-                <div className="gx-send-to gx-text-grey">to me</div>
-              </div>
-
-              <Dropdown trigger={['click']} overlay={this.optionMenu()}>
-                <span className="gx-ml-auto"><i className="icon icon-ellipse-v gx-icon-btn"/></span>
-              </Dropdown>
-
+            <div className="gx-mail-user-info gx-ml-0 gx-mr-3">
+              <div className="gx-sender-name">{mail.from.name} (753609)</div>
             </div>
-
-            <div className="gx-show-link" onClick={() => {
-              this.setState({showDetail: !this.state.showDetail});
-            }}>{this.state.showDetail ? 'Hide Detail' : 'Show Detail'}</div>
-            {this.state.showDetail && (<div className="gx-show-detail">
-              <div>
-                <strong>From: </strong>{mail.from.email}
-              </div>
-              <div>
-                <strong> To: </strong>
-                {
-                  mail.to.map((to, index) => <span>{index > 0 && ', '} {to.email}</span>)
-                }
-              </div>
-              <div><strong>Date: </strong>{mail.time} </div>
-            </div>)}
-
 
             <p>
               {mail.message}
@@ -129,7 +72,53 @@ class MailDetail extends React.Component {
               </div>
             </div>
             }
+
+            <h2>Replies (25)</h2>
+
+            <div className="gx-module-list-item gx-mail-cell">
+              <div className="gx-mail-list-info">
+                <div className="gx-module-list-content">
+                  <div className="gx-mail-user-des">
+                    <span className="gx-sender-name">Admin</span>
+                    <div className="gx-time">24 Dec</div>
+                  </div>
+                  <div className="gx-message">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A accusamus beatae doloremque eligendi est excepturi harum hic impedit libero nobis officia quaerat qui quibusdam, quis quo quos rem sit temporibus?</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="gx-module-list-item gx-mail-cell">
+              <div className="gx-mail-list-info">
+                <div className="gx-module-list-content">
+                  <div className="gx-mail-user-des">
+                    <span className="gx-sender-name">Admin</span>
+                    <div className="gx-time">24 Dec</div>
+                  </div>
+                  <div className="gx-message">
+                    <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur, cumque dolor et itaque modi provident quisquam quos sit vero! Adipisci autem culpa cupiditate eveniet impedit maxime necessitatibus quidem unde vitae?</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="gx-module-list-item gx-mail-cell">
+              <div className="gx-mail-list-info">
+                <div className="gx-module-list-content">
+                  <div className="gx-mail-user-des">
+                    <span className="gx-sender-name">{mail.from.name} (753609)</span>
+                    <div className="gx-time">24 Dec</div>
+                  </div>
+                  <div className="gx-message">
+                    <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur, cumque dolor et itaque modi provident quisquam quos sit vero! Adipisci autem culpa cupiditate eveniet impedit maxime necessitatibus quidem unde vitae?</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
+
         </CustomScrollbars>
       </div>
     );

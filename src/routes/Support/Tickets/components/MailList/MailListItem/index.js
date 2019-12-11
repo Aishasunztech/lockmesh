@@ -1,7 +1,7 @@
 import React from "react";
 import {Avatar, Checkbox} from "antd";
 
-import labels from "../../../Tickets/data/labels";
+import labels from "../../../data/labels";
 
 const MailListItem = ({mail, onMailSelect, onMailChecked, onStartSelect}) => {
   return (
@@ -15,23 +15,7 @@ const MailListItem = ({mail, onMailSelect, onMailChecked, onStartSelect}) => {
                   }}
                   value="SelectMail"
         />
-        <div onClick={() => {
-          onStartSelect(mail);
-        }}>
-          {mail.starred ?
-            <i className="gx-icon-btn icon icon-star"/> :
-            <i className="gx-icon-btn icon icon-star-o"/>
-          }
 
-        </div>
-
-        <div className="gx-ml-2">
-          {mail.from.avatar === '' ?
-            <Avatar className="gx-avatar gx-bg-blue gx-size-40"> {mail.from.name.charAt(0).toUpperCase()}</Avatar> :
-            <Avatar className="gx-size-40" alt="Alice Freeman"
-                    src={mail.from.avatar}/>
-          }
-        </div>
       </div>
 
       <div className="gx-mail-list-info" onClick={() => {

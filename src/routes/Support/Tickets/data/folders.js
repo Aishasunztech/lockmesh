@@ -2,7 +2,7 @@ export default [
   {
     'id': 0,
     'handle': 'inbox',
-    'title': 'Inbox',
+    'title': 'Inboxss',
     'icon': 'inbox'
   },
   {
@@ -25,6 +25,12 @@ export default [
   },
   {
     'id': 4,
+    'handle': 'trash',
+    'title': 'Trash',
+    'icon': 'trash'
+  },
+  {
+    'id': 5,
     'handle': 'trash',
     'title': 'Trash',
     'icon': 'trash'
