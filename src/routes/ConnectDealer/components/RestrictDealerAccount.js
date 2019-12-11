@@ -136,6 +136,15 @@ class RestrictDealerAccount extends Component {
                                 >
                                     <Row>
                                         <Col xs={24} sm={24} md={16} lg={16} xl={16}>
+                                            <h4 className="mb-0">Activate Dealer Account Balance</h4>
+                                        </Col>
+                                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                                            <Radio value="active" className="green">Active</Radio>
+                                        </Col>
+                                    </Row>
+
+                                    <Row>
+                                        <Col xs={24} sm={24} md={16} lg={16} xl={16}>
                                             <h4 className="mb-0">Restrict ability to PAY LATER </h4>
                                         </Col>
                                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
