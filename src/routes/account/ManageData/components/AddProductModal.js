@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Divider, Table, Input, Form } from "antd";
+import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Divider, Table, Input, Form, Select } from "antd";
 import { convertToLang } from '../../../utils/commonUtils';
 
 class AddProductModal extends Component {
@@ -7,6 +7,7 @@ class AddProductModal extends Component {
         super(props);
         this.state = {
             visible: false,
+            selectedTab: '1'
         }
     }
 
@@ -19,6 +20,60 @@ class AddProductModal extends Component {
         this.setState({
             visible: false
         })
+    }
+    handleChangeTab = (e) => {
+        console.log('handleChangeTab:', e);
+        this.setState({
+            selectedTab: e
+        })
+    }
+    renderFormInputs = () => {
+        let content = [];
+        let { selectedTab } = this.state;
+        if (selectedTab === '1') {
+            content.push(
+                [
+                    <Form.Item label="Domain">
+                        {this.props.form.getFieldDecorator('domain', {
+                            rules: [
+                                {
+                                    message: 'The input is not valid E-mail!',
+                                },
+                                {
+                                    required: true,
+                                    message: 'Please input your E-mail!',
+                                },
+                            ],
+                        })(
+                            // <Select >
+                            //     <Select.Option key=''>
+                            //         Select Domain
+                            //     </Select.Option>
+                            // </Select>
+                            <Input />
+                        )}
+                    </Form.Item>,
+                    <Form.Item label="Username">
+                        {this.props.form.getFieldDecorator('email', {
+                            rules: [
+                                {
+                                    type: 'email',
+                                    message: 'The input is not valid E-mail!',
+                                },
+                                {
+                                    required: true,
+                                    message: 'Please input your E-mail!',
+                                },
+                            ],
+                        })(<Input />)}
+                    </Form.Item>,
+                ]
+            )
+        }
+        if(!content.length){
+            return null;
+        }
+        return content
     }
     render() {
         const { visible } = this.state;
@@ -41,89 +96,23 @@ class AddProductModal extends Component {
 
                     ]}
                 >
-                    <Tabs defaultActiveKey="all" type='card' className="dev_tabs dev_tabs1" activeKey={this.state.tabselect} onChange={this.callback}>
+                    <Tabs defaultActiveKey="all" type='card' className="dev_tabs dev_tabs1" activeKey={this.state.selectedTab} onChange={this.handleChangeTab}>
 
                         <Tabs.TabPane tab={'PGP Email'} key="1" forceRender={true} > </Tabs.TabPane>
-                        
-                        <Tabs.TabPane tab={'Chat ID'} key="0" forceRender={true} > </Tabs.TabPane>
-                        
-                        <Tabs.TabPane tab={'SIM ID'} key="0" forceRender={true} > </Tabs.TabPane>
-                        
+
+                        <Tabs.TabPane tab={'Chat ID'} key="2" forceRender={true} > </Tabs.TabPane>
+
+                        <Tabs.TabPane tab={'SIM ID'} key="3" forceRender={true} > </Tabs.TabPane>
+
                         {/* VPN */}
                         {/* <Tabs.TabPane tab={'SIM ID'} key="0" forceRender={true} > </Tabs.TabPane> */}
 
                     </Tabs>
 
-                    <AddPGPEmailForm />
-
-                    <Form >
-                        <Form.Item label="E-mail">
-                            {this.props.form.getFieldDecorator('email', {
-                                rules: [
-                                    {
-                                        type: 'email',
-                                        message: 'The input is not valid E-mail!',
-                                    },
-                                    {
-                                        required: true,
-                                        message: 'Please input your E-mail!',
-                                    },
-                                ],
-                            })(<Input />)}
-                        </Form.Item>
-                        <Form.Item label="Password" hasFeedback>
-                            {this.props.form.getFieldDecorator('password', {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: 'Please input your password!',
-                                    },
-                                    {
-                                        validator: this.validateToNextPassword,
-                                    },
-                                ],
-                            })(<Input.Password />)}
-                        </Form.Item>
-                        <Form.Item label="Confirm Password" hasFeedback>
-                            {this.props.form.getFieldDecorator('confirm', {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: 'Please confirm your password!',
-                                    },
-                                    {
-                                        validator: this.compareToFirstPassword,
-                                    },
-                                ],
-                            })(<Input.Password onBlur={this.handleConfirmBlur} />)}
-                        </Form.Item>
-                        <Form.Item
-                            label={
-                                <span>
-                                    Nickname
-                                </span>
-                            }
-                        >
-                            {this.props.form.getFieldDecorator('nickname', {
-                                rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }],
-                            })(<Input />)}
-                        </Form.Item>
-                        
-                    
-                        <Form.Item label="Captcha" extra="We must make sure that your are a human.">
-                            <Row gutter={8}>
-                                <Col span={12}>
-                                    {this.props.form.getFieldDecorator('captcha', {
-                                        rules: [{ required: true, message: 'Please input the captcha you got!' }],
-                                    })(<Input />)}
-                                </Col>
-                                <Col span={12}>
-                                    <Button>Get captcha</Button>
-                                </Col>
-                            </Row>
-                        </Form.Item>
-                       
-                        
+                    <Form style={{
+                        marginLeft: '10px'
+                    }}>
+                        {this.renderFormInputs()}
                     </Form>
 
                 </Modal>

@@ -562,7 +562,7 @@ class ManageData extends Component {
                         <div>
                             <Card >
                                 <Row gutter={16} className="filter_top">
-                                    <Col className="col-md-4 col-sm-6 col-xs-6 vertical_center">
+                                    <Col className="col-md-6 col-sm-6 col-xs-6 vertical_center">
                                         <span className="font_26"> {convertToLang(this.props.translation[MANAGE_DATA], "Manage ID Inventory")} </span>
                                     </Col>
                                     <Col className="col-md-2 col-sm-6 col-xs-6">
@@ -615,9 +615,10 @@ class ManageData extends Component {
                                             </Button>
                                         </div>
                                     </Col>
-                                    <Col className="col-md-2 col-sm-6 col-xs-6 m_mt-16">
+                                    {/* <Col className="col-md-2 col-sm-6 col-xs-6 m_mt-16">
                                         <div className="">
                                             <Button
+                                                disabled
                                                 type="primary"
                                                 style={{ width: '100%' }}
                                                 onClick={() => this.addProductModal.showModal()}
@@ -625,7 +626,7 @@ class ManageData extends Component {
                                                 Create Data
                                             </Button>
                                         </div>
-                                    </Col>
+                                    </Col> */}
                                     {/* <Col className="col-md-2 col-sm-6 col-xs-6 m_mt-16">
                                         <div className="">
                                             <Button
