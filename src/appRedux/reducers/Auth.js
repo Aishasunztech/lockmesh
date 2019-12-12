@@ -57,6 +57,7 @@ const INIT_STATE = {
 		postal_code: null,
 		tel_no: null,
 		website: null,
+		timezone: localStorage.getItem("timezone"),
 	},
 	loginHistory: []
 };
@@ -174,6 +175,7 @@ export default (state = INIT_STATE, action) => {
 				state.authUser.postal_code = action.response.data.postal_code;
 				state.authUser.tel_no = action.response.data.tel_no;
 				state.authUser.website = action.response.data.website;
+				state.authUser.timezone = action.response.data.timezone;
 				localStorage.setItem('name', action.response.data.name);
 				success({
 					title: action.response.msg,
@@ -220,6 +222,7 @@ export default (state = INIT_STATE, action) => {
 					postal_code: null,
 					tel_no: null,
 					website: null,
+					timezone: null
 				},
 				initURL: '/',
 				loader: false
@@ -285,6 +288,7 @@ export default (state = INIT_STATE, action) => {
 					postal_code: action.payload.postal_code,
 					tel_no: action.payload.tel_no,
 					website: action.payload.website,
+					timezone: action.payload.timezone,
 				}
 			}
 			break;

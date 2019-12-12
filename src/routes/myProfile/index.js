@@ -4,10 +4,11 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import CustomScrollbars from "../../util/CustomScrollbars";
 import { Markup } from 'interweave';
-import { updatePassword } from "../../appRedux/actions/Dealers";
+import { updatePassword, changeTimeZone } from "../../appRedux/actions/Dealers";
 import { updateUserProfile, twoFactorAuth, getLoginHistory } from "../../appRedux/actions/Auth";
 import { Row, Col, Card, Table, Button, Divider, Icon, Modal, Switch, Input } from 'antd';
 import ChangePassword from './components/changePassword';
+import SetTimezone from './components/setTimezone';
 import ChangeProfile from './components/change_profile';
 import BASE_URL from '../../constants/Application';
 import Customizer1 from './components/Customizer';
@@ -102,6 +103,8 @@ class Profile extends Component {
         return data;
     }
 
+
+    
     render() {
         // console.log(this.props.loginHistory);
         let columnData = null
@@ -297,8 +300,22 @@ class Profile extends Component {
                                         <Button type="primary" size="small" style={{ width: "100%" }}
                                             onClick={() => this.refs.change_password.showModal()} icon="unlock">{convertToLang(this.props.translation[Change_Password], "Change Password")}</Button>
                                     </Col>
-                                    <Col span={6}></Col>
-                                    <Col span={6}></Col>
+                                    <Col span={12} style={{ padding: "0 16px 0" }} className="  ">
+                                        <Button type="primary" size="small" style={{ width: "100%" }}
+                                            onClick={() => this.refs.set_timezone.showModal()}
+                                            icon="unlock">{convertToLang(this.props.translation[""], "Change Timezone")}</Button>
+                                    </Col>
+
+                                    {/* <TimezonePicker
+                                        value="Asia/Yerevan"
+                                        onChange={timezone => console.log('New Timezone Selected:', timezone)}
+                                        inputProps={{
+                                            placeholder: 'Select Timezone...',
+                                            name: 'timezone',
+                                        }}
+                                    /> */}
+                                    {/* <Col span={6}></Col>*/}
+                                    {/* <Col span={6}>  <TimezonePicker onChange={this.handleTimezone} /></Col>  */}
                                     <Col span={12} style={{ padding: "16px 16px 0 " }} className="change_email">
                                         <Button disabled size="small" type="primary" style={{ width: "100%" }} icon="mail">{convertToLang(this.props.translation[Change_Email], "Change Email")}</Button>
                                     </Col>
@@ -323,6 +340,11 @@ class Profile extends Component {
                     </Row>
                 </div>
                 <ChangePassword ref="change_password" profile={this.props.profile} func={this.props.updatePassword} translation={this.props.translation} />
+                <SetTimezone
+                    ref="set_timezone"
+                    changeTimeZone={this.props.changeTimeZone}
+                    translation={this.props.translation}
+                />
                 <ChangeProfile
                     ref="change_profile"
                     profile={this.props.profile}
@@ -415,7 +437,8 @@ var matchDispatchToProps = (dispatch) => {
     return bindActionCreators({
         twoFactorAuth: twoFactorAuth,
         updatePassword, updateUserProfile,
-        getLoginHistory: getLoginHistory
+        getLoginHistory: getLoginHistory,
+        changeTimeZone: changeTimeZone
     }, dispatch);
 }
 
