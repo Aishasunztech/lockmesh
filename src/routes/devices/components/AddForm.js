@@ -30,7 +30,9 @@ import {
     addUser,
     getUserList,
     getInvoiceId,
-    getPolicies
+    getPolicies,
+    getDomains,
+    addProduct
 } from "../../../appRedux/actions";
 
 // constants
@@ -287,10 +289,10 @@ class AddDevice extends Component {
     }
 
     handlePGPModal = () => {
-        let handleSubmit = () => {};
+        let handleSubmit = () => { };
         this.addPGPEmailModal.showModal(handleSubmit);
     }
-    
+
     handleSimPermissionModal = () => {
         let handleSubmit = this.props.addSimPermission;
         this.refs.add_sim_permission.showModal(handleSubmit);
@@ -305,8 +307,7 @@ class AddDevice extends Component {
 
         let packagesData = []
         let productData = []
-        let total_price = 0
-        console.log("SERVICES SUBMIT", packages);
+        let total_price = 0;
         if (packages && packages.length) {
             packages.map((item) => {
                 let data = {
@@ -712,7 +713,7 @@ class AddDevice extends Component {
         }
     }
 
-    
+
 
     render() {
         // console.log(this.props);
@@ -1383,7 +1384,10 @@ class AddDevice extends Component {
                 </Form>
 
                 {/* AddUserModal */}
-                <AddUser ref="add_user" translation={this.props.translation} />
+                <AddUser
+                    ref="add_user"
+                    translation={this.props.translation}
+                />
 
                 {/**
                  * @author Usman Hafeez
@@ -1395,13 +1399,20 @@ class AddDevice extends Component {
                     translation={this.props.translation}
                     wrappedComponentRef={(form) => this.addPGPEmailModal = form}
 
+                    // actions
+                    getDomains={this.props.getDomains}
+                    addProduct={this.props.addProduct}
+
+                    // data
+                    domainList={this.props.domainList}
+
                 />
 
                 {/* <AddSimPermission ref="add_sim_permission" /> */}
                 <Modal
                     width={750}
                     visible={this.state.servicesModal}
-                    title={convertToLang(this.props.translation[DUMY_TRANS_ID], "SEVCIES")}
+                    title={convertToLang(this.props.translation[DUMY_TRANS_ID], "SERVICES")}
                     maskClosable={false}
                     onOk={this.handleOk}
                     closable={false}
@@ -1415,7 +1426,7 @@ class AddDevice extends Component {
                         parent_packages={this.state.parent_packages}
                         product_prices={this.state.product_prices}
                         tabselect={this.state.tabselect}
-                        handleChangetab={this.handleChangetab}
+                        handleChangeTab={this.handleChangetab}
                         translation={this.props.translation}
                         handleServicesSubmit={this.handleServicesSubmit}
                         user_credit={this.props.user_credit}
@@ -1423,6 +1434,7 @@ class AddDevice extends Component {
                     />
                 </Modal>
 
+                {/* Confirmation Modal */}
                 <Modal
                     width={900}
                     visible={this.state.showConfirmCredit}
@@ -1533,12 +1545,13 @@ function mapDispatchToProps(dispatch) {
         getParentPackages: getParentPackages,
         getProductPrices: getProductPrices,
         getHardwaresPrices: getHardwaresPrices,
-        addSimPermission: null
+        addSimPermission: null,
+        getDomains: getDomains,
+        addProduct: addProduct
     }, dispatch);
 }
-var mapStateToProps = ({ routing, devices, device_details, users, settings, sidebar, auth }) => {
-    // console.log("users.invoiceID at componente", users.invoiceID);
-    // console.log("devices.parent_packages ", devices.parent_packages);
+var mapStateToProps = ({ routing, devices, device_details, users, settings, sidebar, auth, account }) => {
+
     return {
         invoiceID: users.invoiceID,
         routing: routing,
@@ -1555,6 +1568,7 @@ var mapStateToProps = ({ routing, devices, device_details, users, settings, side
         user_credit: sidebar.user_credit,
         credits_limit: sidebar.credits_limit,
         user: auth.authUser,
+        domainList: account.domainList
     };
 }
 

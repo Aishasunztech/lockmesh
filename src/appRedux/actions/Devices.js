@@ -169,7 +169,6 @@ export function deleteUnlinkDevice(action, devices) {
     }
 }
 
-
 export function suspendDevice(device) {
 
     console.log("suspendDevice action file =========> ", device);
@@ -234,6 +233,24 @@ export function activateDevice(device) {
 
 }
 
+export function rejectDevice(device) {
+    return (dispatch) => {
+        //
+        RestService.rejectDevice(device).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: REJECT_DEVICE,
+                    response: response.data,
+                    device: device,
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+    }
+}
 
 export function connectDevice(device_id) {
 
@@ -367,24 +384,7 @@ export function getAllPGPEmails() {
         });
     }
 }
-export function rejectDevice(device) {
-    return (dispatch) => {
-        //
-        RestService.rejectDevice(device).then((response) => {
-            if (RestService.checkAuth(response.data)) {
-                dispatch({
-                    type: REJECT_DEVICE,
-                    response: response.data,
-                    device: device,
-                })
-            } else {
-                dispatch({
-                    type: INVALID_TOKEN
-                })
-            }
-        });
-    }
-}
+
 
 export function addDevice(device) {
     return (dispatch) => {
@@ -461,6 +461,7 @@ export const getParentPackages = () => {
 
     }
 }
+
 export const getHardwaresPrices = () => {
     return (dispatch) => {
         RestService.getHardwaresPrices().then((response) => {
@@ -499,6 +500,28 @@ export const getProductPrices = () => {
     }
 }
 
+/**
+ * @author Usman Hafeez
+ * @description action for creating pgp, chat and sim
+ */
+
+ export const addProduct = (payload) => {
+    return (dispatch) => {
+        RestService.addProduct(payload).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                // dispatch({
+                //     type: GET_PRODUCT_PRICES,
+                //     response: response.data
+                // })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+
+    }
+ }
 // export function getBulkDevicesList(data) {
 //     console.log('at action file ', data)
 

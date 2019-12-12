@@ -542,12 +542,14 @@ export const resyncIds = () => {
     }
 }
 
-export function getDomains() {
+export function getDomains(noLoading=true) {
     return (dispatch) => {
-        dispatch({
-            type: LOADING,
-            isloading: true
-        });
+        if(noLoading){
+            dispatch({
+                type: LOADING,
+                isloading: true
+            });
+        }
         RestService.getDomains().then((response) => {
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {

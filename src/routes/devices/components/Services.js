@@ -724,7 +724,7 @@ class Services extends Component {
     callback = (key) => {
         // console.log(this.refs.services.resetSeletedRows);
         this.refs.services.resetSeletedRows();
-        this.props.handleChangetab(key);
+        this.props.handleChangeTab(key);
     }
 
     render() {

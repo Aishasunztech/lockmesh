@@ -137,7 +137,7 @@ const RestService = {
         // return this.response;
     },
 
-    // getuserType
+    // getUserType
     getUserType: () => {
 
     },
@@ -168,6 +168,9 @@ const RestService = {
         return axios.get(BASE_URL + 'users/getServicesHistory/' + usr_acc_id, RestService.getHeader());
     },
 
+    /**
+     * @section Devices
+     */
 
     // getDevices
     DeviceList: () => {
@@ -233,6 +236,13 @@ const RestService = {
     getUsedChatIds: () => {
         return axios.get(BASE_URL + 'users/get_used_chat_ids', RestService.getHeader());
     },
+    addProduct: (payload) => {
+        return axios.post(`${BASE_URL}users/create-service-product`, payload, RestService.getHeader());
+    },
+
+    /**
+     * @section Dealers
+     */
 
     // Dealers
     DealerList: (dealer) => {
@@ -270,7 +280,10 @@ const RestService = {
             RestService.getHeader()
         )
     },
-    // Connect Dealer
+
+    /**
+     * @section Connect Dealer
+     */
     getDealerDetails: (dealerId) => {
         return axios.get(BASE_URL + 'users/connect-dealer/' + dealerId, RestService.getHeader());
     },
@@ -294,6 +307,7 @@ const RestService = {
     getDealerSalesHistory: (dealerId) => {
         return axios.get(BASE_URL + 'users/sales-history/' + dealerId, RestService.getHeader());
     },
+
     ApkList: () => {
         return axios.get(BASE_URL + 'users/apklist', RestService.getHeader());
     },
