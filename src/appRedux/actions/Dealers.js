@@ -313,6 +313,7 @@ export function changeTimeZone(data) {
                 dispatch({
                     type: CHANGE_TIMEZONE,
                     response: response.data,
+                    data
                 });
             } else {
                 dispatch({
