@@ -87,6 +87,7 @@ const RestService = {
         localStorage.setItem('two_factor_auth', data.user.two_factor_auth);
         localStorage.setItem('account_balance_status', data.user.account_balance_status);
         localStorage.setItem('timezone', data.user.timezone);
+        localStorage.setItem('account_balance_status_by', data.user.account_balance_status_by)
 
     },
     // checkAuth
@@ -973,6 +974,14 @@ const RestService = {
         return axios.post(BASE_URL + 'users/send_bulk_msg', data, RestService.getHeader());
     },
 
+    getBulkMsgsList: () => {
+        return axios.get(BASE_URL + 'users/get_bulk_msgs', RestService.getHeader());
+    },
+
+    deleteBulkMsg: (id) => {
+        return axios.get(BASE_URL + 'users/delete_bulk_msg/' + id, RestService.getHeader());
+    },
+
 
     // unlink bulk Devices
     unlinkBulkDevices: (data) => {
@@ -1000,6 +1009,17 @@ const RestService = {
             dealers: dealers,
             action: action,
             statusAll: statusAll
+        },
+            RestService.getHeader()
+        );
+    },
+
+    connectDealerDomainPermission: (permissionIds, dealers, action, statusAll) => {
+        return axios.post(BASE_URL + 'users/dealer-domain-permissions', {
+            permissionIds,
+            dealers,
+            action,
+            statusAll
         },
             RestService.getHeader()
         );

@@ -6,8 +6,9 @@ import {
     DEALER_SALES_HISTORY,
     DEALER_DOMAINS,
     CONNECT_DEALER_LOADING,
+    DEALER_ACCOUNT_STATUS,
+    CD_PERMISSION_DOMAINS,
     SET_DEMOS_LIMIT,
-    DEALER_ACCOUNT_STATUS
 } from "../../constants/ActionTypes"
 // import { message } from 'antd';
 
@@ -136,9 +137,9 @@ export function getDealerDomains(dealerId) {
     }
 }
 
-export function changeDealerStatus(dealerId, dealerStatus){
+export function changeDealerStatus(dealerId, dealerStatus) {
     return (dispatch) => {
-        RestService.changeDealerStatus(dealerId, dealerStatus).then((response)=>{
+        RestService.changeDealerStatus(dealerId, dealerStatus).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: DEALER_ACCOUNT_STATUS,
@@ -151,4 +152,33 @@ export function changeDealerStatus(dealerId, dealerStatus){
             }
         })
     }
+}
+
+export function connectDealerDomainPermission(id, dealers, action, statusAll = false, user, selectedDomains) {
+    console.log('at connectDealerDomainPermission action ', id, dealers, action, statusAll)
+    return (dispatch) => {
+        RestService.connectDealerDomainPermission(id, dealers, action, statusAll).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+
+                dispatch({
+                    type: CD_PERMISSION_DOMAINS,
+                    payload: response.data,
+                    formData: {
+                        id,
+                        dealers,
+                        action,
+                        statusAll,
+                        user
+                    },
+                    selectedDomains
+                })
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+    }
+
 }

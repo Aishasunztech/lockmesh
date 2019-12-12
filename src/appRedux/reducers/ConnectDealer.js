@@ -12,8 +12,9 @@ import {
     DEALER_SALES_HISTORY,
     DEALER_DOMAINS,
     CONNECT_DEALER_LOADING,
+    DEALER_ACCOUNT_STATUS,
     SET_DEMOS_LIMIT,
-    DEALER_ACCOUNT_STATUS
+    CD_PERMISSION_DOMAINS
 } from "../../constants/ActionTypes";
 
 // import { Button_Cancel } from '../../constants/ButtonConstants';
@@ -231,8 +232,10 @@ export default (state = initialState, action) => {
 
         case DEALER_ACCOUNT_STATUS: {
             // console.log(DEALER_ACCOUNT_STATUS, ':', action.payload);
+            let dealer = JSON.parse(JSON.stringify(state.dealer));
             if (action.payload.status === true) {
-
+                dealer.account_balance_status = action.payload.account_balance_status;
+                dealer.account_balance_status_by = action.payload.account_balance_status_by;
                 success({
                     title: action.payload.msg,
                 });
@@ -242,7 +245,38 @@ export default (state = initialState, action) => {
                 });
             }
             return {
-                ...state
+                ...state,
+                dealer: dealer
+
+            }
+        }
+
+        case CD_PERMISSION_DOMAINS: {
+            // console.log("action.selectedDomains ", action.selectedDomains, state.domains);
+            let dealerDomains = state.domains;
+
+            if (action.payload.status) {
+                success({
+                    title: action.payload.msg
+                });
+
+                // Save permission for new dealers
+                if (action.formData.action == "save") {
+                    dealerDomains = state.domains.concat(action.selectedDomains)
+                }
+                else if (action.formData.action == "delete") {
+                    dealerDomains = state.domains.filter(item => item.id !== action.selectedDomains)
+                }
+            } else {
+                error({
+                    title: action.payload.msg
+                });
+            }
+
+            return {
+                ...state,
+                isloading: false,
+                domains: dealerDomains
             }
         }
 

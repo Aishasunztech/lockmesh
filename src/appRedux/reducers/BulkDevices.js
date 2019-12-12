@@ -1,6 +1,6 @@
 
 import {
-    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES, UNLINK_BULK_DEVICES, WIPE_BULK_DEVICES, CLOSE_RESPONSE_MODAL, APPLY_BULK_POLICY, SET_BULK_MESSAGE, SEND_BULK_MESSAGE, SEND_BULK_WIPE_PASS, HANDLE_BULK_WIPE_PASS, BULK_HISTORY_LOADING, SET_BULK_ACTION, SET_BULK_DATA,
+    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES, UNLINK_BULK_DEVICES, WIPE_BULK_DEVICES, CLOSE_RESPONSE_MODAL, APPLY_BULK_POLICY, SET_BULK_MESSAGE, SEND_BULK_MESSAGE, SEND_BULK_WIPE_PASS, HANDLE_BULK_WIPE_PASS, BULK_HISTORY_LOADING, SET_BULK_ACTION, SET_BULK_DATA, GET_BULK_MSGS, DELETE_BULK_MSG
 } from "../../constants/ActionTypes";
 import { message, Modal } from 'antd';
 
@@ -30,6 +30,7 @@ const initialState = {
     bulkMsg: '',
     bulkWipePassModal: false,
     wipePassMsg: '',
+    bulkMsgs: [],
     history_loading: false,
     bulkAction: '',
     bulkDealers: [],
@@ -123,6 +124,13 @@ export default (state = initialState, action) => {
                 return {
                     ...state,
                 }
+            }
+
+        case GET_BULK_MSGS:
+            // console.log("action.payload GET_BULK_MSGS, ", action.payload)
+            return {
+                ...state,
+                bulkMsgs: action.payload.data,
             }
 
 
@@ -577,6 +585,27 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 bulkMsg: action.payload.msg_txt
+            }
+        }
+
+        case DELETE_BULK_MSG: {
+            console.log("reducerv ", action.payload, action.delete_id)
+            let allMsgs = state.bulkMsgs;
+
+            if (action.payload.status) {
+                allMsgs = state.bulkMsgs.filter(msg => msg.id !== action.delete_id);
+                success({
+                    title: action.payload.msg,
+                });
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+
+            return {
+                ...state,
+                bulkMsgs: allMsgs
             }
         }
 
