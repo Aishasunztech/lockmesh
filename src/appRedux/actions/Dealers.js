@@ -15,6 +15,7 @@ import {
     CONNECT_UNDO_DEALER,
     CONNECT_SUSPEND_DEALER,
     CONNECT_ACTIVATE_DEALER,
+    CHANGE_TIMEZONE,
 
 } from "../../constants/ActionTypes"
 // import { message } from 'antd';
@@ -108,14 +109,14 @@ export function getUserDealers() {
     };
 }
 
-export function suspendDealer(id, actionType= null) {
+export function suspendDealer(id, actionType = null) {
     return (dispatch) => {
         RestService.suspendDealer(id).then((response) => {
 
             if (RestService.checkAuth(response.data)) {
                 // console.log('suspend response',response.data);
                 let action = SUSPEND_DEALERS
-                if(actionType){
+                if (actionType) {
                     action = CONNECT_SUSPEND_DEALER
                 }
                 dispatch({
@@ -139,13 +140,13 @@ export function suspendDealer(id, actionType= null) {
     };
 }
 
-export function activateDealer(id, actionType= null) {
+export function activateDealer(id, actionType = null) {
     return (dispatch) => {
         RestService.activateDealer(id).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 // console.log('active response',response.data);
                 let action = ACTIVATE_DEALER
-                if(actionType){
+                if (actionType) {
                     action = CONNECT_ACTIVATE_DEALER
                 }
                 if (response.data.status) {
@@ -222,13 +223,13 @@ export function addDealer(formData) {
     };
 }
 
-export function deleteDealer(id, actionType= null) {
+export function deleteDealer(id, actionType = null) {
     return (dispatch) => {
         RestService.unlinkDealer(id).then((response) => {
 
             if (RestService.checkAuth(response.data)) {
                 let action = DELETE_DEALERS
-                if(actionType){
+                if (actionType) {
                     action = CONNECT_DELETE_DEALER
                 }
                 dispatch({
@@ -250,13 +251,13 @@ export function deleteDealer(id, actionType= null) {
     };
 }
 
-export function undoDealer(id, actionType= null) {
+export function undoDealer(id, actionType = null) {
     return (dispatch) => {
         RestService.undoDealer(id).then((response) => {
 
             if (RestService.checkAuth(response.data)) {
                 let action = UNDO_DEALER
-                if(actionType){
+                if (actionType) {
                     action = CONNECT_UNDO_DEALER
                 }
                 dispatch({
@@ -281,7 +282,7 @@ export function undoDealer(id, actionType= null) {
 
 export function updatePassword(dealer) {
     return (dispatch) => {
-        
+
         RestService.updatePassword(dealer).then((response) => {
             if (RestService.checkAuth(response.data)) {
 
@@ -295,6 +296,25 @@ export function updatePassword(dealer) {
                 });
 
 
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        });
+    };
+}
+
+export function changeTimeZone(data) {
+    // console.log('at actionfile : ', data);
+    return (dispatch) => {
+        RestService.changeTimeZone(data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: CHANGE_TIMEZONE,
+                    response: response.data,
+                    data
+                });
             } else {
                 dispatch({
                     type: INVALID_TOKEN

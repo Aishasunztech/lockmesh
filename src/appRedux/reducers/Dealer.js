@@ -24,7 +24,7 @@ import {
 //     DEALER_TOKENS
 // } from '../../constants/DealerConstants';
 import { message, Modal } from 'antd';
-import { DEALER_LOADING } from "../../constants/ActionTypes";
+import { DEALER_LOADING, CHANGE_TIMEZONE } from "../../constants/ActionTypes";
 
 const success = Modal.success
 const error = Modal.error
@@ -87,6 +87,23 @@ export default (state = initialState, action) => {
                 parent_dealers: action.payload,
                 isloading: false,
                 spinloading: false,
+            }
+        }
+
+        case CHANGE_TIMEZONE: {
+
+            if (action.response.status) {
+                success({
+                    title: action.response.msg,
+                });
+            }
+            else {
+                error({
+                    title: action.response.msg,
+                });
+            }
+            return {
+                ...state
             }
         }
 

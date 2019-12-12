@@ -1,6 +1,9 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import Clock from 'react-live-clock';
+import { Tooltip, Button } from 'antd';
+import moment_timezone from "moment-timezone";
 
 import {
   onNavStyleChange,
@@ -15,6 +18,7 @@ import {
   THEME_TYPE_LITE
 } from "../../constants/ThemeSetting";
 import { APP_TITLE } from "../../constants/Application";
+import { TZData } from '../../routes/myProfile/components/timezone_array';
 
 class SidebarLogo extends Component {
   render() {
@@ -26,6 +30,10 @@ class SidebarLogo extends Component {
     if (width < TAB_SIZE && navStyle === NAV_STYLE_FIXED) {
       navStyle = NAV_STYLE_DRAWER;
     }
+
+    let tzIndex = TZData.findIndex(item => item.value == this.props.auth.timezone);
+    // console.log("tzIndex ", tzIndex, TZData[tzIndex]);
+
     return (
       <div className="gx-layout-sider-header">
         {navStyle === NAV_STYLE_FIXED || navStyle === NAV_STYLE_MINI_SIDEBAR ? (
@@ -51,7 +59,7 @@ class SidebarLogo extends Component {
           </div>
         ) : null}
 
-        <a href="/" className="gx-site-logo">
+        <a href="/" className="gx-site-logo" style={{ width: '100%' }}>
           {navStyle === NAV_STYLE_NO_HEADER_MINI_SIDEBAR &&
             width >= TAB_SIZE ? (
               <p className="mb-0" style={{ fontSize: 18 }}>
@@ -62,19 +70,36 @@ class SidebarLogo extends Component {
                 {APP_TITLE}
               </p>
             ) : (
-                <p className="mb-0" style={{ fontSize: 18 }}>
-                  {APP_TITLE}
-                </p>
+                <Fragment>
+                  <p className="mb-0" style={{ fontSize: 18, float: 'left' }}>
+                    {APP_TITLE}
+                  </p>
+                </Fragment>
               )}
         </a>
+        <Tooltip placement="bottomRight" title={`${TZData[tzIndex].key} (${this.props.auth.timezone})`}>
+          {/* <Button>Right</Button> */}
+
+          {/* <a href="javascript:void(0)" */}
+          {/* title={`${this.props.auth.timezone} ${TZData[tzIndex].key}`}> */}
+          <p className="mb-0" style={{ fontSize: 18, float: 'right' }}>
+            <Clock
+              timezone={this.props.auth.timezone}
+              format={'HH:mm:ss'}
+              ticking={true}
+            />
+          </p>
+          {/* </a> */}
+        </Tooltip>
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ settings }) => {
+const mapStateToProps = ({ settings, auth }) => {
+  // console.log("logo file auth.authUser ", auth.authUser)
   const { navStyle, themeType, width, navCollapsed } = settings;
-  return { navStyle, themeType, width, navCollapsed };
+  return { navStyle, themeType, width, navCollapsed, auth: auth.authUser };
 };
 
 export default connect(
