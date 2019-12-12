@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import Clock from 'react-live-clock';
+import moment_timezone from "moment-timezone";
 
 import {
   onNavStyleChange,
@@ -85,9 +86,10 @@ class SidebarLogo extends Component {
   }
 }
 
-const mapStateToProps = ({ settings }) => {
+const mapStateToProps = ({ settings, auth }) => {
+  console.log("logo file auth.authUser ", auth.authUser)
   const { navStyle, themeType, width, navCollapsed } = settings;
-  return { navStyle, themeType, width, navCollapsed };
+  return { navStyle, themeType, width, navCollapsed, auth: auth.authUser };
 };
 
 export default connect(
