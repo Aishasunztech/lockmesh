@@ -77,7 +77,7 @@ class SidebarLogo extends Component {
                 </Fragment>
               )}
         </a>
-        <Tooltip placement="bottomRight" title={`${TZData[tzIndex].key} (${this.props.auth.timezone})`}>
+        <Tooltip placement="bottomRight" title={`${TZData[tzIndex] ? TZData[tzIndex].key : ""} (${this.props.auth.timezone ? this.props.auth.timezone : "Timezone not set"})`}>
           {/* <Button>Right</Button> */}
 
           {/* <a href="javascript:void(0)" */}
