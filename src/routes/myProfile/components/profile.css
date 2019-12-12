@@ -4,7 +4,8 @@
     margin-bottom: 0;
 }
 
-.change_pass .ant-btn, .change_email .ant-btn {
+.change_pass .ant-btn,
+.change_email .ant-btn {
     padding: 0;
 }
 
@@ -99,6 +100,35 @@
     text-transform: uppercase;
     width: 115px;
     text-align: right;
+}
+
+.time_zone button.jsx-4179805763 {
+    background: #fff;
+    padding: 8px 12px;
+}
+
+.time_zone ul.jsx-4179805763 {
+    position: relative;
+    max-height: 250px;
+}
+
+.time_zone div.jsx-4179805763 {
+    display: inline-block;
+    font: 13px sans-serif;
+    position: relative;
+    width: 100%;
+}
+
+.time_zone ::-webkit-scrollbar {
+    width: 8px;
+    background-color: rgba(100, 100, 100, 0.1);
+    -webkit-border-radius: 0;
+}
+
+.time_zone ::-webkit-scrollbar:hover {
+    width: 8px;
+    background-color: rgba(100, 100, 100, 0.1);
+    -webkit-border-radius: 0;
 }
 
 @media (max-width: 768px) {
