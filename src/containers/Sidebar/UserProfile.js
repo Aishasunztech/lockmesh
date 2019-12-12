@@ -37,7 +37,7 @@ class UserProfile extends Component {
 }
 
 var mapStateToProps = ({ settings, devices, auth }) => {
-  console.log("auth.authUser ", auth.authUser);
+  // console.log("auth.authUser ", auth.authUser);
   return {
     devices: devices.newDevices,
     pathname: settings.pathname,

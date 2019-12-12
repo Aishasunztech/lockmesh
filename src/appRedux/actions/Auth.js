@@ -160,7 +160,6 @@ export const checkComponent = (componentUri) => {
 		RestService.checkComponent(componentUri).then((resp) => {
 			if (RestService.checkAuth(resp.data)) {
 				if (resp.data.status === true) {
-					console.log("checkComponent ",resp.data.user.timezone);
 					let payload = {
 						id: resp.data.user.id,
 						connected_dealer: resp.data.user.connected_dealer,
