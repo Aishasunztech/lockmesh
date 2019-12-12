@@ -41,7 +41,8 @@ import {
 
 import {
     Required_Fields,
-    DEVICE_ID, USER_ID,
+    DEVICE_ID, 
+    USER_ID,
     DEVICE_SIM_ID,
     DEVICE_Select_SIM_ID,
     DEVICE_CHAT_ID,
@@ -745,9 +746,18 @@ class EditDevice extends Component {
         }
     }
     handlePGPModal = () => {
-        let handleSubmit = () => { };
-        this.addPGPEmailModal.showModal(handleSubmit);
+        this.addPGPEmailModal.showModal();
     }
+
+    handleChatID = (e) => {
+        let payload= {
+            type: 'chat_id',
+            auto_generate: true,
+            product_data: {}
+        }
+        this.props.addProduct(payload)
+    }
+    
     render() {
         // 
         const { users_list } = this.props;
@@ -1071,7 +1081,7 @@ class EditDevice extends Component {
                                     className="add_user_btn"
                                     type="primary"
                                     style={{ width: "100%" }}
-                                    // onClick={() => this.handlePGPModal()}
+                                    onClick={this.handleChatID}
                                     style={{ width: "100%" }}
                                 >Generate Chat ID</Button>
                             </Col>

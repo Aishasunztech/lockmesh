@@ -9,18 +9,16 @@ class AddPGPEmailModal extends Component {
         super(props);
         this.state = {
             visible: false,
-            handleSubmit: null,
             pgpEmail: null,
             titleText: '',
             domainList: []
         }
     }
 
-    showModal = (handleSubmit, pgpEmail = null, titleText = convertToLang(this.props.translation[''], "Add PGP Email")) => {
+    showModal = ( pgpEmail = null, titleText = convertToLang(this.props.translation[''], "Add PGP Email")) => {
         // console.log(user);
         this.setState({
             visible: true,
-            handleSubmit: handleSubmit,
             pgpEmail: pgpEmail,
             titleText: titleText,
         });

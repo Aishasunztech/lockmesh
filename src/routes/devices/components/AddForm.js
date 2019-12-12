@@ -289,8 +289,16 @@ class AddDevice extends Component {
     }
 
     handlePGPModal = () => {
-        let handleSubmit = () => { };
-        this.addPGPEmailModal.showModal(handleSubmit);
+        this.addPGPEmailModal.showModal();
+    }
+    
+    handleChatID = (e) => {
+        let payload= {
+            type: 'chat_id',
+            auto_generate: true,
+            product_data: {}
+        }
+        this.props.addProduct(payload)
     }
 
     handleSimPermissionModal = () => {
@@ -1106,7 +1114,7 @@ class AddDevice extends Component {
                                                 className="add_user_btn"
                                                 type="primary"
                                                 style={{ width: "100%" }}
-                                                onClick={() => this.handlePGPModal()}
+                                                onClick={this.handleChatID}
                                                 style={{ width: "100%" }}
                                                 disabled={this.state.disableChat}
                                             >
