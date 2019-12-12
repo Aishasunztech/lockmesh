@@ -32,7 +32,7 @@ class SidebarLogo extends Component {
     }
 
     let tzIndex = TZData.findIndex(item => item.value == this.props.auth.timezone);
-    // console.log("tzIndex ", tzIndex, TZData[tzIndex]);
+    console.log("tzIndex ", tzIndex, TZData[tzIndex]);
 
     return (
       <div className="gx-layout-sider-header">
@@ -77,7 +77,7 @@ class SidebarLogo extends Component {
                 </Fragment>
               )}
         </a>
-        <Tooltip placement="bottomRight" title={`${TZData[tzIndex].key} (${this.props.auth.timezone})`}>
+        <Tooltip placement="bottomRight" title={`${TZData[tzIndex] ? TZData[tzIndex].key : ""} (${this.props.auth.timezone ? this.props.auth.timezone : "Timezone not set"})`}>
           {/* <Button>Right</Button> */}
 
           {/* <a href="javascript:void(0)" */}
