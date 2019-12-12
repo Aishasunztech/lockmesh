@@ -60,10 +60,10 @@ export default class ChangeTimeZone extends Component {
             this.confirm({
                 title: title,
                 content: '',
-                okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
-                cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
+                okText: convertToLang(_this.props.translation[Button_Ok], "Ok"),
+                cancelText: convertToLang(_this.props.translation[Button_Cancel], "Cancel"),
                 onOk: (() => {
-                    _this.props.changeTimeZone(this.state.selected_tz);
+                    _this.props.changeTimeZone(_this.state.selected_tz);
                     _this.handleCancel();
                 }),
                 onCancel() { },

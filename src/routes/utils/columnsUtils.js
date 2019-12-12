@@ -2404,10 +2404,9 @@ export function apkColumns(translation) {
             // className: ''
         },
         {
-            title: convertToLang(translation[APK], "APK"),
-            dataIndex: 'apk',
-            key: 'apk',
-            // className: ''
+            title: convertToLang(translation[""], "VERSION"),
+            dataIndex: 'version',
+            key: 'version',
         },
         {
             title: convertToLang(translation[APK_APP_NAME], "APP NAME"),
@@ -2443,9 +2442,10 @@ export function apkColumns(translation) {
             key: 'package_name',
         },
         {
-            title: convertToLang(translation[""], "VERSION"),
-            dataIndex: 'version',
-            key: 'version',
+            title: convertToLang(translation[APK], "APK"),
+            dataIndex: 'apk',
+            key: 'apk',
+            // className: ''
         },
 
         {
