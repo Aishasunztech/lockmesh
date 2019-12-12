@@ -1,30 +1,44 @@
+// Libraries
 import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import AddUser from '../../users/components/AddUser';
-import { convertToLang } from '../../utils/commonUtils';
-import Services from './Services'
-import Picky from 'react-picky';
-import AddSimPermission from './AddSimPermission'
+// import Picky from 'react-picky';
 import { Markup } from 'interweave';
 import { Modal, Button, Form, Input, Select, Radio, InputNumber, Popover, Icon, Row, Col, Spin, Table, Checkbox, Switch } from 'antd';
 import { withRouter, Redirect, Link } from 'react-router-dom';
+import moment from 'moment';
 
-import { getSimIDs, getChatIDs, getPGPEmails, getParentPackages, getProductPrices, getHardwaresPrices } from "../../../appRedux/actions/Devices";
-import { getPolicies } from "../../../appRedux/actions/ConnectDevice";
+// components
+import AddUser from '../../users/components/AddUser';
+import Services from './Services';
+import AddSimPermission from './AddSimPermission';
+import Invoice from './invoice';
+import AddPGPEmailModal from './AddPGPEmailModal';
+
+// helpers
+import { convertToLang } from '../../utils/commonUtils';
+import { inventorySales } from '../../utils/columnsUtils';
+
+// actions
 import {
+    getSimIDs,
+    getChatIDs,
+    getPGPEmails,
+    getParentPackages,
+    getProductPrices,
+    getHardwaresPrices,
     addUser,
     getUserList,
-    getInvoiceId
-} from "../../../appRedux/actions/Users";
+    getInvoiceId,
+    getPolicies
+} from "../../../appRedux/actions";
+
+// constants
 import { Button_Cancel, Button_submit, Button_Add_User, Button_Add_Device } from '../../../constants/ButtonConstants';
 import { LABEL_DATA_PGP_EMAIL, LABEL_DATA_SIM_ID, LABEL_DATA_CHAT_ID, DUMY_TRANS_ID } from '../../../constants/LabelConstants';
 import { SINGLE_DEVICE, DUPLICATE_DEVICES, Required_Fields, USER_ID, DEVICE_ID, USER_ID_IS_REQUIRED, SELECT_PGP_EMAILS, DEVICE_Select_CHAT_ID, SELECT_USER_ID, DEVICE_CLIENT_ID, DEVICE_Select_SIM_ID, DEVICE_MODE, DEVICE_MODEL, Device_Note, Device_Valid_For, Device_Valid_days_Required, DUPLICATE_DEVICES_REQUIRED, DEVICE_IMEI_1, DEVICE_SIM_1, DEVICE_IMEI_2, DEVICE_SIM_2, DUPLICATE_DEVICES_HELPING_TEXT } from '../../../constants/DeviceConstants';
 import { Not_valid_Email, POLICY, Start_Date, Expire_Date, Expire_Date_Require, SELECT_POLICY, ADMIN } from '../../../constants/Constants';
 import { DEALER_PIN } from '../../../constants/DealerConstants';
-import moment from 'moment';
-import Invoice from './invoice';
-import { inventorySales } from '../../utils/columnsUtils';
 
 const confirm = Modal.confirm;
 const success = Modal.success
@@ -272,6 +286,11 @@ class AddDevice extends Component {
         this.refs.add_user.showModal(handleSubmit);
     }
 
+    handlePGPModal = () => {
+        let handleSubmit = () => {};
+        this.addPGPEmailModal.showModal(handleSubmit);
+    }
+    
     handleSimPermissionModal = () => {
         let handleSubmit = this.props.addSimPermission;
         this.refs.add_sim_permission.showModal(handleSubmit);
@@ -693,6 +712,7 @@ class AddDevice extends Component {
         }
     }
 
+    
 
     render() {
         // console.log(this.props);
@@ -978,6 +998,67 @@ class AddDevice extends Component {
                     </Form.Item> */}
                             {(this.state.type == 0 && lastObject) ?
                                 <Fragment>
+                                    {/**
+                                     * @author Usman Hafeez
+                                     * @description added button
+                                     */}
+
+                                    <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                        <Form.Item
+                                            label={''}
+                                            labelCol={{ span: 12 }}
+                                            wrapperCol={{ span: 16 }}
+                                        >
+                                            <Button
+                                                className="add_user_btn"
+                                                type="primary"
+                                                style={{ width: "100%" }}
+                                                onClick={() => this.handlePGPModal()}
+                                                style={{ width: "100%" }}
+                                                disabled={this.state.disablePgp}
+                                            >
+                                                {convertToLang(this.props.translation[''], "Add PGP Email")}
+                                            </Button>
+                                        </Form.Item>
+                                    </Col>
+                                    {/* {(isloading ?
+                                        <div className="addUserSpin">
+                                            <Spin />
+                                        </div>
+                                        :
+                                        <Fragment>
+                                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                                <Form.Item
+                                                    label={convertToLang(this.props.translation[USER_ID], "USER ID")}
+                                                    labelCol={{ span: 8 }}
+                                                    wrapperCol={{ span: 16 }}
+                                                >
+                                                    {this.props.form.getFieldDecorator('user_id', {
+                                                        initialValue: this.props.new ? "" : this.state.addNewUserModal ? lastObject.user_id : addNewUserValue,
+                                                        rules: [{
+                                                            required: true, message: convertToLang(this.props.translation[USER_ID_IS_REQUIRED], 'User ID is Required !'),
+                                                        }]
+                                                    })(
+                                                        <Select
+                                                            className="pos_rel"
+                                                            setFieldsValue={this.state.addNewUserModal ? lastObject.user_id : addNewUserValue}
+                                                            showSearch
+                                                            placeholder={convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}
+                                                            optionFilterProp="children"
+                                                            onChange={this.handleUserChange}
+                                                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                                        >
+                                                            <Select.Option value="">{convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}</Select.Option>
+                                                            {users_list.map((item, index) => {
+                                                                return (<Select.Option key={index} value={item.user_id}>{item.user_id} ( {item.user_name} )</Select.Option>)
+                                                            })}
+                                                        </Select>
+                                                    )}
+
+                                                </Form.Item>
+                                            </Col>
+                                        </Fragment>
+                                    )} */}
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
                                             label={convertToLang(this.props.translation[LABEL_DATA_PGP_EMAIL], "PGP Email")}
@@ -1013,6 +1094,26 @@ class AddDevice extends Component {
                                             )}
                                         </Form.Item>
                                     </Col>
+
+                                    <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                        <Form.Item
+                                            label={''}
+                                            labelCol={{ span: 12 }}
+                                            wrapperCol={{ span: 16 }}
+                                        >
+                                            <Button
+                                                className="add_user_btn"
+                                                type="primary"
+                                                style={{ width: "100%" }}
+                                                onClick={() => this.handlePGPModal()}
+                                                style={{ width: "100%" }}
+                                                disabled={this.state.disableChat}
+                                            >
+                                                {convertToLang(this.props.translation[''], "Generate Chat ID")}
+                                            </Button>
+                                        </Form.Item>
+                                    </Col>
+
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
                                             label={convertToLang(this.props.translation[LABEL_DATA_CHAT_ID], "Chat ID")}
@@ -1280,7 +1381,22 @@ class AddDevice extends Component {
                         </Form.Item>
                     </Row>
                 </Form>
+
+                {/* AddUserModal */}
                 <AddUser ref="add_user" translation={this.props.translation} />
+
+                {/**
+                 * @author Usman Hafeez
+                 * @description from here pgp email will be generated
+                 */}
+
+                <AddPGPEmailModal
+                    ref="addPGPEmailModal"
+                    translation={this.props.translation}
+                    wrappedComponentRef={(form) => this.addPGPEmailModal = form}
+
+                />
+
                 {/* <AddSimPermission ref="add_sim_permission" /> */}
                 <Modal
                     width={750}
@@ -1306,6 +1422,7 @@ class AddDevice extends Component {
                         history={this.props.history}
                     />
                 </Modal>
+
                 <Modal
                     width={900}
                     visible={this.state.showConfirmCredit}
@@ -1359,6 +1476,8 @@ class AddDevice extends Component {
                         </div >
                     </Fragment>
                 </Modal>
+
+                {/* Invoices Modal */}
                 <Modal
                     width="850px"
                     visible={this.state.invoiceVisible}
