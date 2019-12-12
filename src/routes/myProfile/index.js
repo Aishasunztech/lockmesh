@@ -174,7 +174,7 @@ class Profile extends Component {
             {
                 key: 49,
                 name: <a>{convertToLang(this.props.translation[""], "TIMEZONE")}</a>,
-                value: `${TZData[tzIndex].key} (${this.props.profile.timezone})`,
+                value: `${TZData[tzIndex] ? TZData[tzIndex].key : ""} (${this.props.profile.timezone ? this.props.profile.timezone : "Timezone not set"})`,
             },
             {
                 key: 5,
