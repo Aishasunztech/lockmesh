@@ -65,13 +65,15 @@ class AddPGPEmailModal extends Component {
                 console.log("username:", values);
                 let payload= {
                     type: 'pgp_email',
+                    auto_generated: false,
                     product_data: {
-                        domain: values.domain
+                        domain: values.domain,
+                        username: ''
                     }
                 };
 
                 if (!values.username) {
-                    payload.auto_generate = true
+                    payload.auto_generated = true
                 } else {
                     payload.product_data.username = values.username
                 }

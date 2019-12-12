@@ -295,7 +295,7 @@ class AddDevice extends Component {
     handleChatID = (e) => {
         let payload= {
             type: 'chat_id',
-            auto_generate: true,
+            auto_generated: true,
             product_data: {}
         }
         this.props.addProduct(payload)
