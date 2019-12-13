@@ -44,8 +44,9 @@ import {
   clearApplications,
   clearState,
   clearResyncFlag,
+  changeSchatAccountStatus,
   resetDevice,
-  deviceNotFound
+  deviceNotFound, resetChatPin
 } from "../../appRedux/actions/ConnectDevice";
 
 import { getDevicesList, editDevice } from '../../appRedux/actions/Devices';
@@ -151,7 +152,7 @@ class ConnectDevice extends Component {
       // else if (this.props.pageName === MANAGE_PASSWORD) {
       //   this.setState({ dynamicBackButton: false })
       //   this.props.changePage(MAIN_MENU);
-      // } 
+      // }
 
       else {
         this.setState({ dynamicBackButton: false })
@@ -609,6 +610,8 @@ class ConnectDevice extends Component {
                 <Col className="gutter-row left_bar" xs={24} sm={24} md={24} lg={24} xl={8} span={8}>
                   <DeviceSidebar
                     device_details={this.props.device_details}
+                    resetChatPin={this.props.resetChatPin}
+                    changeSchatAccountStatus={this.props.changeSchatAccountStatus}
                     refreshDevice={this.refreshDevice}
                     startLoading={this.props.startLoading}
                     endLoading={this.props.endLoading}
@@ -799,7 +802,9 @@ function mapDispatchToProps(dispatch) {
     sendOnlineOfflineStatus: sendOnlineOfflineStatus,
     deviceSynced: deviceSynced,
     resetDevice: resetDevice,
-    deviceNotFound: deviceNotFound
+    deviceNotFound: deviceNotFound,
+    resetChatPin: resetChatPin,
+    changeSchatAccountStatus: changeSchatAccountStatus,
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, auth, socket, settings }, ownProps) => {
