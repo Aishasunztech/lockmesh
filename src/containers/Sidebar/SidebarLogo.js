@@ -18,7 +18,7 @@ import {
   THEME_TYPE_LITE
 } from "../../constants/ThemeSetting";
 import { APP_TITLE } from "../../constants/Application";
-import { TZData } from '../../routes/myProfile/components/timezone_array';
+import { getSelectedTZDetail } from "../../routes/utils/commonUtils";
 
 class SidebarLogo extends Component {
   render() {
@@ -30,10 +30,7 @@ class SidebarLogo extends Component {
     if (width < TAB_SIZE && navStyle === NAV_STYLE_FIXED) {
       navStyle = NAV_STYLE_DRAWER;
     }
-
-    let tzIndex = TZData.findIndex(item => item.value == this.props.auth.timezone);
-    console.log("tzIndex ", tzIndex, TZData[tzIndex]);
-
+    let selected_tz_detail = getSelectedTZDetail(this.props.auth.timezone);
     return (
       <div className="gx-layout-sider-header">
         {navStyle === NAV_STYLE_FIXED || navStyle === NAV_STYLE_MINI_SIDEBAR ? (
@@ -77,11 +74,7 @@ class SidebarLogo extends Component {
                 </Fragment>
               )}
         </a>
-        <Tooltip placement="bottomRight" title={`${TZData[tzIndex] ? TZData[tzIndex].key : ""} (${this.props.auth.timezone ? this.props.auth.timezone : "Timezone not set"})`}>
-          {/* <Button>Right</Button> */}
-
-          {/* <a href="javascript:void(0)" */}
-          {/* title={`${this.props.auth.timezone} ${TZData[tzIndex].key}`}> */}
+        <Tooltip placement="bottomLeft" title={selected_tz_detail}>
           <p className="mb-0" style={{ fontSize: 18, float: 'right' }}>
             <Clock
               timezone={this.props.auth.timezone}
@@ -89,7 +82,6 @@ class SidebarLogo extends Component {
               ticking={true}
             />
           </p>
-          {/* </a> */}
         </Tooltip>
       </div>
     );
@@ -97,7 +89,6 @@ class SidebarLogo extends Component {
 }
 
 const mapStateToProps = ({ settings, auth }) => {
-  // console.log("logo file auth.authUser ", auth.authUser)
   const { navStyle, themeType, width, navCollapsed } = settings;
   return { navStyle, themeType, width, navCollapsed, auth: auth.authUser };
 };
