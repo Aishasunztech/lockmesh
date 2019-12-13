@@ -8,6 +8,7 @@ import { ENTER_NEW_PASSWORD, ENTER_CURRENT_PASSWORD, CONFIRM_NEW_PASSWORD, CURRE
 import { CHANGE_PASSWORD } from '../../../constants/ActionTypes';
 // import { BASE_URL } from "../../../constants/Application";
 import { TZData } from './timezone_array';
+const confirm = Modal.confirm;
 
 export default class ChangeTimeZone extends Component {
 
@@ -19,7 +20,6 @@ export default class ChangeTimeZone extends Component {
             selected_tz: '',
             handleSubmitBtn: true
         }
-        this.confirm = Modal.confirm;
     }
 
     componentDidMount() {
@@ -55,19 +55,10 @@ export default class ChangeTimeZone extends Component {
         // console.log("handle submit", this.state.selected_tz);
         if (this.state.selected_tz) {
 
-            const title = convertToLang(this.props.translation[""], "Are you sure, you want to change the timezone ?");
-            let _this = this;
-            this.confirm({
-                title: title,
-                content: '',
-                okText: convertToLang(_this.props.translation[Button_Ok], "Ok"),
-                cancelText: convertToLang(_this.props.translation[Button_Cancel], "Cancel"),
-                onOk: (() => {
-                    _this.props.changeTimeZone(_this.state.selected_tz);
-                    _this.handleCancel();
-                }),
-                onCancel() { },
-            });
+            // const title = convertToLang(this.props.translation[""], "Are you sure, you want to change the timezone ?");
+            // let _this = this;
+            showConfirm(this);
+
         }
     }
 
@@ -112,4 +103,18 @@ export default class ChangeTimeZone extends Component {
             </div>
         )
     }
+}
+
+function showConfirm(_this) {
+    confirm({
+        title: convertToLang(_this.props.translation[""], "Are you sure, you want to change the timezone ?"),
+        content: '',
+        okText: convertToLang(_this.props.translation[Button_Ok], "Ok"),
+        cancelText: convertToLang(_this.props.translation[Button_Cancel], "Cancel"),
+        onOk: (() => {
+            _this.props.changeTimeZone(_this.state.selected_tz);
+            _this.handleCancel();
+        }),
+        onCancel() { },
+    });
 }
