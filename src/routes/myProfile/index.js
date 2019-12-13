@@ -13,14 +13,13 @@ import ChangeProfile from './components/change_profile';
 import BASE_URL from '../../constants/Application';
 import Customizer1 from './components/Customizer';
 import styles from './components/profile.css';
-import { componentSearch, getFormattedDate, convertToLang, checkValue } from '../utils/commonUtils';
+import { componentSearch, getFormattedDate, convertToLang, checkValue, getSelectedTZDetail } from '../utils/commonUtils';
 import {
     SDEALER, Login_Email, DEVICES, Name, Value, Profile_Info, Edit_Profile, Edit_Profile_02, Edit_Profile_03, Edit_Profile_01, Change_Password, Change_Email, Login_Email_Authentication, Date_Text, CREDITS, ADMIN
 } from "../../constants/Constants";
 import { DEALER_ID, DEALER_NAME, Parent_Dealer, DEALER_TOKENS, Login_History, DEALER_PIN } from '../../constants/DealerConstants';
 import { Button_Edit, Button_Cancel, Button_Open, Button_Ok, Button_On, Button_Off } from '../../constants/ButtonConstants';
 import { IP_ADDRESS } from '../../constants/DeviceConstants';
-import { TZData } from '../../routes/myProfile/components/timezone_array';
 
 // import {Link} from 'react-router-dom';
 
@@ -105,10 +104,8 @@ class Profile extends Component {
     }
 
 
-    
     render() {
-        let tzIndex = TZData.findIndex(item => item.value == this.props.profile.timezone);
-        // console.log(this.props.loginHistory);
+        let selected_tz_detail = getSelectedTZDetail(this.props.profile.timezone);
         let columnData = null
         let commonColumns = [
             {
@@ -174,7 +171,7 @@ class Profile extends Component {
             {
                 key: 49,
                 name: <a>{convertToLang(this.props.translation[""], "TIMEZONE")}</a>,
-                value: `${TZData[tzIndex] ? TZData[tzIndex].key : ""} (${this.props.profile.timezone ? this.props.profile.timezone : "Timezone not set"})`,
+                value: selected_tz_detail,
             },
             {
                 key: 5,

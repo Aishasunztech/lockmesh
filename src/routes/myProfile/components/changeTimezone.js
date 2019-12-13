@@ -3,11 +3,11 @@ import TimezonePicker from 'react-timezone';
 
 import { Modal, Button, Form, Input, message, Select } from 'antd';
 import { Button_submit, Button_Cancel, Button_Ok } from '../../../constants/ButtonConstants';
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, getTimezonesList } from '../../utils/commonUtils';
 import { ENTER_NEW_PASSWORD, ENTER_CURRENT_PASSWORD, CONFIRM_NEW_PASSWORD, CURRENT_PASSWORD, CONFIRM_PASSWORD, NEW_PASSWORD } from '../../../constants/Constants';
 import { CHANGE_PASSWORD } from '../../../constants/ActionTypes';
 // import { BASE_URL } from "../../../constants/Application";
-import { TZData } from './timezone_array';
+import moment from 'moment';
 const confirm = Modal.confirm;
 
 export default class ChangeTimeZone extends Component {
@@ -71,9 +71,8 @@ export default class ChangeTimeZone extends Component {
     }
 
     render() {
-
         const { visible } = this.state;
-
+        let tz_data = getTimezonesList();
         return (
             <div>
                 <Modal
@@ -90,14 +89,14 @@ export default class ChangeTimeZone extends Component {
                     ]}
                 >
                     <Select
-                        value={this.state.selected_tz}
+                        value={this.state.selected_tz ? this.state.selected_tz : moment.tz.guess()}
                         showSearch
                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                         style={{ width: '100%' }}
                         placeholder={convertToLang(this.props.translation[""], "Select Timezone...")}
                         onChange={this.handleTimezone}
                     >
-                        {TZData.map(item => <Select.Option key={item.value} value={item.value} >{`${item.key} (${item.value})`}</Select.Option>)}
+                        {tz_data.map(item => <Select.Option key={item.zoneName} value={item.zoneName} >{`${item.tzOffset} ${item.zoneName}`}</Select.Option>)}
                     </Select>
                 </Modal>
             </div>
