@@ -1061,5 +1061,15 @@ const RestService = {
     getOverdueDetails: () => {
         return axios.get(BASE_URL + 'users/get-overdue-details', RestService.getHeader());
     },
+
+    //genarete Random Usernanme
+    generateRandomUsername: () => {
+        return axios.get(BASE_URL + 'users/generate-random-username', RestService.getHeader());
+    },
+
+    //genarete Random Emails
+    checkUniquePgpEmail: (value) => {
+        return axios.post(BASE_URL + 'users/check-unique-pgp', { pgp_email: value }, RestService.getHeader());
+    },
 }
 export default RestService;

@@ -3,6 +3,9 @@ import { Modal, message, Form, Select, Input, Button, Icon, Divider } from 'antd
 
 import { convertToLang } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel, Button_Add_User } from '../../../constants/ButtonConstants';
+import Axios from 'axios';
+import { BASE_URL } from '../../../constants/Application';
+import RestService from '../../../appRedux/services/RestServices';
 
 class AddPGPEmailModal extends Component {
     constructor(props) {
@@ -11,11 +14,16 @@ class AddPGPEmailModal extends Component {
             visible: false,
             pgpEmail: null,
             titleText: '',
-            domainList: []
+            domainList: [],
+            previewMail: '',
+            randomUserNameLoading: false,
+            username: '',
+            domain: '',
+            randomUsername: ''
         }
     }
 
-    showModal = ( pgpEmail = null, titleText = convertToLang(this.props.translation[''], "Add PGP Email")) => {
+    showModal = (pgpEmail = null, titleText = convertToLang(this.props.translation[''], "Add PGP Email")) => {
         // console.log(user);
         this.setState({
             visible: true,
@@ -47,23 +55,44 @@ class AddPGPEmailModal extends Component {
 
     }
     checkUsername = (rule, value, callback) => {
-        if(!value || !value.length){
+        if (!value || !value.length) {
             callback();
         }
         if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value + '@gmail.com')) {
-        // if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value + '@gmail.com')) {
+            // if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value + '@gmail.com')) {
             callback();
+            let previewMail = value + '@' + this.state.domain
+            // console.log(previewMail);
+            this.setState({
+                username: value,
+                previewMail: previewMail
+            })
+            this.props.form.setFieldsValue({ 'username': value })
+            this.props.form.setFieldsValue({ 'pgp_email': previewMail })
         } else {
             callback('Please insert a valid Username.');
             // console.log(value);
         }
+    }
+
+    changeDomain = (value) => {
+
+        // console.log(value);
+
+        let previewMail = this.state.username + '@' + value
+        this.setState({
+            domain: value,
+            previewMail: previewMail
+        })
+        this.props.form.setFieldsValue({ 'domain': value })
+        this.props.form.setFieldsValue({ 'pgp_email': previewMail })
     }
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 console.log("username:", values);
-                let payload= {
+                let payload = {
                     type: 'pgp_email',
                     auto_generated: false,
                     product_data: {
@@ -78,9 +107,53 @@ class AddPGPEmailModal extends Component {
                     payload.product_data.username = values.username
                 }
                 this.props.addProduct(payload);
+                this.props.form.resetFields()
             }
         });
     }
+
+    generateRandomUsername() {
+        this.setState({
+            randomUserNameLoading: true
+        })
+        let _this = this
+        RestService.generateRandomUsername().then(function (response) {
+            if (response.data.status) {
+                let previewMail = response.data.username + '@' + _this.state.domain
+                _this.setState({
+                    randomUserNameLoading: false,
+                    username: response.data.username,
+                    previewMail: previewMail,
+                    randomUsername: response.data.username,
+                })
+                _this.props.form.setFieldsValue({ 'username': response.data.username })
+                _this.props.form.setFieldsValue({ 'pgp_email': previewMail })
+            } else {
+                _this.setState({
+                    randomUserNameLoading: false
+                })
+            }
+        })
+    }
+    checkUniquePgpEmail = (rule, value, callback) => {
+        console.log("Hello there");
+        // if (this.state.randomUsername !== this.state.username && this.state.domain) {
+        //     RestService.checkUniquePgpEmail(value).then(function (response) {
+        //         if (response.data.status) {
+        //             if (response.data.available) {
+        //                 callback()
+        //             } else {
+        //                 callback("ERROR: Username not available")
+        //             }
+        //         } else {
+        //             callback(response.data.msg)
+        //         }
+        //     })
+        // } else {
+        //     callback()
+        // }
+    }
+
     render() {
         const { visible, loading } = this.state;
         const formItemLayout = {
@@ -96,6 +169,7 @@ class AddPGPEmailModal extends Component {
                 visible={visible}
                 title={this.state.titleText}
                 maskClosable={false}
+                destroyOnClose={true}
                 onCancel={this.handleCancel}
                 footer={[
                     <Button
@@ -122,34 +196,17 @@ class AddPGPEmailModal extends Component {
                     ...formItemLayout
                     }
                 >
-                    <p>Note: Username will be auto generated if its is not provided</p>
-                    <Form.Item
-                        label="Select Domain"
-                        wrapperCol={{
-                            xs: { span: 24, offset: 0 },
-                            sm: { span: 16, offset: 8 },
-                        }}
-                    >
-                        {this.props.form.getFieldDecorator('domain', {
-                            rules: [{
-                                required: true,
-                                message: 'Please select a domain!' 
-                            }],
-                        })(
-                            <Select placeholder="Please select a domain">
-                                {this.renderDomainOptions()}
-                            </Select>,
-                        )}
-                    </Form.Item>
-
                     <Form.Item
                         label="Username"
-                        // validateStatus={usernameError ? 'error' : ''} 
-                        // help={usernameError || ''}
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 16 }}
+                    // validateStatus={usernameError ? 'error' : ''} 
+                    // help={usernameError || ''}
                     >
                         {this.props.form.getFieldDecorator('username', {
+                            initialValue: this.state.username,
                             rules: [{
-                                // required: true, message: ' ',
+                                required: true, message: 'Please enter a username.',
                             },
                             {
                                 validator: this.checkUsername,
@@ -157,9 +214,59 @@ class AddPGPEmailModal extends Component {
                             ],
                         })(
                             <Input
+                                style={{ width: '60%' }}
                                 prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                                 placeholder="Username"
                             />,
+                        )}
+
+                        <Button
+                            className="add_user_btn"
+                            type="primary"
+                            style={{ width: "35%", marginLeft: 10 }}
+                            onClick={() => this.generateRandomUsername()}
+                            loading={this.state.randomUserNameLoading}
+                        >
+                            {convertToLang(this.props.translation[""], "Random")}
+                        </Button>
+                    </Form.Item>
+                    <Form.Item
+                        label="Select Domain"
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 16 }}
+                    >
+                        {this.props.form.getFieldDecorator('domain', {
+                            initialValue: this.state.domain,
+                            rules: [{
+                                required: true,
+                                message: 'Please select a domain!'
+                            }],
+                        })(
+                            <Select placeholder="Please select a domain" onChange={this.changeDomain}>
+                                {this.renderDomainOptions()}
+                            </Select>,
+                        )}
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Preview"
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 16 }}
+                    >
+                        {this.props.form.getFieldDecorator('pgp_email', {
+                            initialValue: this.state.previewMail,
+                            rules: [
+                                {
+                                    type: 'email',
+                                    message: 'Please enter a valid email.'
+                                },
+                                // {
+                                //     validator: this.checkUniquePgpEmail
+                                // }
+                            ],
+                            // trigger: this.checkUniquePgpEmail
+                        })(
+                            <Input onChange={this.checkUniquePgpEmail} disabled />
                         )}
                     </Form.Item>
 
