@@ -104,7 +104,18 @@
 }
 
 .wipe_device .ant-modal-body {
-    padding: 0 45px 0;
+   padding: 0 45px 0;
+ }
+
+.reset_pin_modal .ant-modal-body {
+  padding: 0 45px 0;
+}
+
+.reset_pin_modal .ant-modal-content {
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .password_field {

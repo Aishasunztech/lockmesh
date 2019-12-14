@@ -440,6 +440,14 @@ const RestService = {
         return axios.get(BASE_URL + 'users/get-billing-history/' + device_id + "/" + dealer_id, RestService.getHeader());
     },
 
+    resetChatPin: (data) => {
+      return axios.post(BASE_URL + 'users/reset-chat-pin/', data, RestService.getHeader());
+    },
+
+  changeSchatPinStatus: (data) => {
+      return axios.post(BASE_URL + 'users/change-s-chat-pin-status/', data, RestService.getHeader());
+    },
+
     // for dealer reset password(admin dashboard)
     updatePassword: (dealer) => {
 

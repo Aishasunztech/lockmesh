@@ -97,6 +97,7 @@ import {
 import TransferHistory from './TransferModule/TransferHistory'
 import Services from './Services';
 import DeviceBillingHistory from './DeviceBillingHistory';
+import {generateGraceDaysReport} from "../../../appRedux/actions";
 
 const confirm = Modal.confirm;
 var coppyList = [];
@@ -833,7 +834,7 @@ class SideActions extends Component {
         }
 
         if (index === -1) {
-            states.disabledSearchButton=true;            
+            states.disabledSearchButton=true;
         } else {
             states.disabledSearchButton = false
         }
@@ -918,7 +919,7 @@ class SideActions extends Component {
                                     }
                                 />
                             </AutoComplete>
-                            
+
                         </Col>
                     </Row>
                 </Card>
