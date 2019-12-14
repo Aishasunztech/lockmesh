@@ -67,6 +67,7 @@ export const loginUser = (user) => {
 						postal_code: resp.data.user.postal_code,
 						tel_no: resp.data.user.tel_no,
 						website: resp.data.user.website,
+						timezone: resp.data.user.timezone,
 					}
 					RestService.authLogIn(resp.data)
 					dispatch({
@@ -110,6 +111,7 @@ export const verifyCode = (verifyForm) => {
 					postal_code: response.data.user.postal_code,
 					tel_no: response.data.user.tel_no,
 					website: response.data.user.website,
+					timezone: response.data.user.timezone,
 				}
 				RestService.authLogIn(response.data)
 				dispatch({
@@ -160,7 +162,6 @@ export const checkComponent = (componentUri) => {
 		RestService.checkComponent(componentUri).then((resp) => {
 			if (RestService.checkAuth(resp.data)) {
 				if (resp.data.status === true) {
-					console.log(resp.data);
 					let payload = {
 						id: resp.data.user.id,
 						connected_dealer: resp.data.user.connected_dealer,
@@ -187,6 +188,7 @@ export const checkComponent = (componentUri) => {
 						postal_code: resp.data.user.postal_code,
 						tel_no: resp.data.user.tel_no,
 						website: resp.data.user.website,
+						timezone: resp.data.user.timezone,
 					}
 					RestService.setUserData(resp.data);
 

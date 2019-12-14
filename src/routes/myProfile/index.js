@@ -4,15 +4,16 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import CustomScrollbars from "../../util/CustomScrollbars";
 import { Markup } from 'interweave';
-import { updatePassword } from "../../appRedux/actions/Dealers";
+import { updatePassword, changeTimeZone } from "../../appRedux/actions/Dealers";
 import { updateUserProfile, twoFactorAuth, getLoginHistory } from "../../appRedux/actions/Auth";
 import { Row, Col, Card, Table, Button, Divider, Icon, Modal, Switch, Input } from 'antd';
 import ChangePassword from './components/changePassword';
+import UpdateTimezone from './components/changeTimezone';
 import ChangeProfile from './components/change_profile';
 import BASE_URL from '../../constants/Application';
 import Customizer1 from './components/Customizer';
 import styles from './components/profile.css';
-import { componentSearch, getFormattedDate, convertToLang, checkValue } from '../utils/commonUtils';
+import { componentSearch, getFormattedDate, convertToLang, checkValue, getSelectedTZDetail } from '../utils/commonUtils';
 import {
     SDEALER, Login_Email, DEVICES, Name, Value, Profile_Info, Edit_Profile, Edit_Profile_02, Edit_Profile_03, Edit_Profile_01, Change_Password, Change_Email, Login_Email_Authentication, Date_Text, CREDITS, ADMIN
 } from "../../constants/Constants";
@@ -102,8 +103,9 @@ class Profile extends Component {
         return data;
     }
 
+
     render() {
-        // console.log(this.props.loginHistory);
+        let selected_tz_detail = getSelectedTZDetail(this.props.profile.timezone);
         let columnData = null
         let commonColumns = [
             {
@@ -165,6 +167,11 @@ class Profile extends Component {
                 key: 48,
                 name: <a>{convertToLang(this.props.translation[""], "WEBSITE")}</a>,
                 value: checkValue(this.props.profile.website),
+            },
+            {
+                key: 49,
+                name: <a>{convertToLang(this.props.translation[""], "TIMEZONE")}</a>,
+                value: selected_tz_detail,
             },
             {
                 key: 5,
@@ -265,6 +272,7 @@ class Profile extends Component {
                                                     <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[Edit_Profile_01], "Change password")}</h5>
                                                     <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[Edit_Profile_02], "Change Email")}</h5>
                                                     <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[Edit_Profile_03], "Enable Dual Authentication")}  </h5>
+                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[""], "Change Timezone")}  </h5>
                                                     {/* <h5 className="more_txt">and more...</h5> */}
                                                 </Col>
                                             </Row>
@@ -297,8 +305,12 @@ class Profile extends Component {
                                         <Button type="primary" size="small" style={{ width: "100%" }}
                                             onClick={() => this.refs.change_password.showModal()} icon="unlock">{convertToLang(this.props.translation[Change_Password], "Change Password")}</Button>
                                     </Col>
-                                    <Col span={6}></Col>
-                                    <Col span={6}></Col>
+                                    <Col span={12} style={{ padding: "0 16px 0" }} className="  ">
+                                        <Button type="primary" size="small" style={{ width: "100%" }}
+                                            onClick={() => this.refs.set_timezone.showModal()}
+                                            icon="unlock">{convertToLang(this.props.translation[""], "Change Timezone")}</Button>
+                                    </Col>
+
                                     <Col span={12} style={{ padding: "16px 16px 0 " }} className="change_email">
                                         <Button disabled size="small" type="primary" style={{ width: "100%" }} icon="mail">{convertToLang(this.props.translation[Change_Email], "Change Email")}</Button>
                                     </Col>
@@ -323,6 +335,12 @@ class Profile extends Component {
                     </Row>
                 </div>
                 <ChangePassword ref="change_password" profile={this.props.profile} func={this.props.updatePassword} translation={this.props.translation} />
+                <UpdateTimezone
+                    ref="set_timezone"
+                    changeTimeZone={this.props.changeTimeZone}
+                    profile={this.props.profile}
+                    translation={this.props.translation}
+                />
                 <ChangeProfile
                     ref="change_profile"
                     profile={this.props.profile}
@@ -415,7 +433,8 @@ var matchDispatchToProps = (dispatch) => {
     return bindActionCreators({
         twoFactorAuth: twoFactorAuth,
         updatePassword, updateUserProfile,
-        getLoginHistory: getLoginHistory
+        getLoginHistory: getLoginHistory,
+        changeTimeZone: changeTimeZone
     }, dispatch);
 }
 
