@@ -44,7 +44,7 @@ import {
   clearApplications,
   clearState,
   clearResyncFlag,
-  changeSchatAccountStatus,
+  changeSchatPinStatus,
   resetDevice,
   deviceNotFound, resetChatPin
 } from "../../appRedux/actions/ConnectDevice";
@@ -611,7 +611,7 @@ class ConnectDevice extends Component {
                   <DeviceSidebar
                     device_details={this.props.device_details}
                     resetChatPin={this.props.resetChatPin}
-                    changeSchatAccountStatus={this.props.changeSchatAccountStatus}
+                    changeSchatPinStatus={this.props.changeSchatPinStatus}
                     refreshDevice={this.refreshDevice}
                     startLoading={this.props.startLoading}
                     endLoading={this.props.endLoading}
@@ -804,7 +804,7 @@ function mapDispatchToProps(dispatch) {
     resetDevice: resetDevice,
     deviceNotFound: deviceNotFound,
     resetChatPin: resetChatPin,
-    changeSchatAccountStatus: changeSchatAccountStatus,
+    changeSchatPinStatus: changeSchatPinStatus,
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, auth, socket, settings }, ownProps) => {

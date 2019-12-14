@@ -119,21 +119,21 @@ export default class DeviceSidebar extends Component {
                   {titleCase(convertToLang(this.props.translation[''], 'RESET PIN'))}
                 </Button>
 
-                {/*<Button*/}
-                {/*  type="danger"*/}
-                {/*  size="small"*/}
-                {/*  className="ml-12"*/}
-                {/*  onClick={() => this.showConfirmSChatStatus(this, 'deactivate')}>*/}
-                {/*  {titleCase(convertToLang(this.props.translation[''], 'Deactivate Account'))}*/}
-                {/*</Button>*/}
+                <Button
+                  type="danger"
+                  size="small"
+                  className="ml-12"
+                  onClick={() => this.showConfirmSChatStatus(this,'disable', 'Do you want to disable pin verification?')}>
+                  {titleCase(convertToLang(this.props.translation[''], 'Disable Pin'))}
+                </Button>
 
-                {/*<Button*/}
-                {/*  type="success"*/}
-                {/*  size="small"*/}
-                {/*  className="ml-12"*/}
-                {/*  onClick={() => this.showConfirmSChatStatus(this, 'activate')}>*/}
-                {/*  {titleCase(convertToLang(this.props.translation[''], 'Activate Account'))}*/}
-                {/*</Button>*/}
+                <Button
+                  type="success"
+                  size="small"
+                  className="ml-12"
+                  onClick={() => this.showConfirmSChatStatus(this, 'enable', 'Do you want to enable pin verification?')}>
+                  {titleCase(convertToLang(this.props.translation[''], 'Enable Pin'))}
+                </Button>
               </Fragment>)
             },
             {
@@ -302,12 +302,12 @@ export default class DeviceSidebar extends Component {
     })
   };
 
-  showConfirmSChatStatus(_this, type) {
+  showConfirmSChatStatus(_this, type, msg) {
 
     confirm({
-      title: convertToLang(_this.props.translation[''], "Do you want to deactivate Schat ") + '(Chat ID ' + chatId +')',
+      title: convertToLang(_this.props.translation[''], msg),
       onOk() {
-        _this.props.changeSchatAccountStatus({
+        _this.props.changeSchatPinStatus({
           type: type,
           chat_id: chatId
         });

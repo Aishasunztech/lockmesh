@@ -1443,9 +1443,9 @@ export const resetChatPin = (data) => {
 };
 
 
-export const changeSchatAccountStatus = (data) => {
+export const changeSchatPinStatus = (data) => {
   return (dispatch) => {
-    RestService.changeSchatAccountStatus(data).then((response) => {
+    RestService.changeSchatPinStatus(data).then((response) => {
       if (RestService.checkAuth(response.data)) {
         dispatch({
           type: CHANGE_SCHAT_ACCOUNT_STATUS,

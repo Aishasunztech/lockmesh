@@ -441,8 +441,8 @@ const RestService = {
       return axios.post(BASE_URL + 'users/reset-chat-pin/', data, RestService.getHeader());
     },
 
-  changeSchatAccountStatus: (data) => {
-      return axios.post(BASE_URL + 'users/change-s-chat-account-status/', data, RestService.getHeader());
+  changeSchatPinStatus: (data) => {
+      return axios.post(BASE_URL + 'users/change-s-chat-pin-status/', data, RestService.getHeader());
     },
 
     // for dealer reset password(admin dashboard)
