@@ -750,6 +750,7 @@ class ProductInventory extends Component {
                 wrapperCol={{ span: 14 }}
               >
                 {this.props.form.getFieldDecorator('to', {
+                  initialValue: moment(),
                   rules: [
                     {
                       required: false,
