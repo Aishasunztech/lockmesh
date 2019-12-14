@@ -1,38 +1,17 @@
 export default [
   {
     'id': 0,
-    'handle': 'inbox',
-    'title': 'Inboxss',
-    'icon': 'inbox'
+    'handle': 'high',
+    'title': 'high'
   },
   {
     'id': 1,
-    'handle': 'sent',
-    'title': 'Sent',
-    'icon': 'sent'
+    'handle': 'low',
+    'title': 'low'
   },
   {
     'id': 2,
-    'handle': 'drafts',
-    'title': 'Drafts',
-    'icon': 'draft'
+    'handle': 'medium',
+    'title': 'medium'
   },
-  {
-    'id': 3,
-    'handle': 'spam',
-    'title': 'Spam',
-    'icon': 'spam'
-  },
-  {
-    'id': 4,
-    'handle': 'trash',
-    'title': 'Trash',
-    'icon': 'trash'
-  },
-  {
-    'id': 5,
-    'handle': 'trash',
-    'title': 'Trash',
-    'icon': 'trash'
-  }
 ];

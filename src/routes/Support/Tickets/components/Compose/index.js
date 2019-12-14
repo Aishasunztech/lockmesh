@@ -1,6 +1,7 @@
 import React from "react";
-import {Button, Input, message, Modal, Upload} from "antd";
+import {Button, DatePicker, Form, Input, message, Modal, Select, Upload} from "antd";
 import Moment from "moment";
+import {DEVICE_PRE_ACTIVATION} from "../../../../../constants/Constants";
 const {TextArea} = Input;
 
 const props = {
@@ -38,7 +39,7 @@ class ComposeMail extends React.Component {
     const {to, subject, message} = this.state;
     return (
       <Modal onCancel={onClose} visible={this.props.open}
-             title='kskfjsdkj'
+             title='Generate Ticket'
              closable={false}
              onOk={() => {
                if (to === '')
@@ -72,42 +73,114 @@ class ComposeMail extends React.Component {
 
              }}
              style={{zIndex: 2600}}>
-        <div className="gx-form-group">
-          <Input
-            placeholder="To*"
-            onChange={(event) => this.setState({to: event.target.value})}
-            defaultValue={to}
-            margin="normal"/>
-        </div>
-        <div className="gx-form-group">
-          <Input
-            placeholder="Subject"
-            onChange={(event) => this.setState({subject: event.target.value})}
-            value={subject}
-            margin="normal"
-          />
-        </div>
-        <div className="gx-form-group">
-          <TextArea
-            placeholder="Message"
-            onChange={(event) => this.setState({message: event.target.value})}
-            value={message}
-            autosize={{minRows: 2, maxRows: 6}}
-            margin="normal"/>
-        </div>
+        <Form onSubmit={this.handleSubmit} autoComplete="new-password">
 
-        <div className="gx-form-group">
+          <Form.Item
+            labelCol={{ span: 10 }}
+            wrapperCol={{ span: 14 }}
+          >
+          </Form.Item>
 
-          <Upload {...props}>
-            <Button type="primary">
-              <i className="icon icon-attachment"/> Attach File
-            </Button>
-          </Upload>
+          <Form.Item
+            label="Dealer/Sdealer"
+            labelCol={{ span: 10 }}
+            wrapperCol={{ span: 14 }}
+            width='100%'
+          >
+            {this.props.form.getFieldDecorator('dealer', {
+              initialValue: '',
+              rules: [
+                {
+                  required: false,
+                },
+              ],
+            })(
+              <Select
+                style={{ width: '100%' }}
+                onChange={(e) => this.handleDealerChange(e)}
+              >
+                <Select.Option value=''>ALL</Select.Option>
+                <Select.Option value={this.props.user.dealerId} key={this.props.user.dealerId}>My Report</Select.Option>
+                {this.props.dealerList.map((dealer, index) => {
+                  return (<Select.Option key={dealer.dealer_id} value={dealer.dealer_id}>{dealer.dealer_name} ({dealer.link_code})</Select.Option>)
+                })}
+              </Select>
+            )}
+          </Form.Item>
 
-        </div>
+          <Form.Item
+            label="Devices"
+            labelCol={{ span: 10 }}
+            wrapperCol={{ span: 14 }}
+            width='100%'
+          >
+            {this.props.form.getFieldDecorator('device', {
+              initialValue: '',
+              rules: [
+                {
+                  required: false,
+                },
+              ],
+            })(
+              <Select style={{ width: '100%' }}>
+                <Select.Option value=''>ALL</Select.Option>
+                <Select.Option value={DEVICE_PRE_ACTIVATION}>{DEVICE_PRE_ACTIVATION}</Select.Option>
+                {this.state.deviceList.map((device, index) => {
+                  return (<Select.Option key={device.device_id} value={device.device_id}>{device.device_id}</Select.Option>)
+                })}
+              </Select>
+            )}
+          </Form.Item>
+
+          <Form.Item
+            label="FROM (DATE) "
+            labelCol={{ span: 10 }}
+            wrapperCol={{ span: 14 }}
+          >
+            {this.props.form.getFieldDecorator('from', {
+              rules: [
+                {
+                  required: false
+                }],
+            })(
+              <DatePicker
+                format="DD-MM-YYYY"
+                disabledDate={this.disabledDate}
+              />
+            )}
+          </Form.Item>
+
+          <Form.Item
+            label="TO (DATE)"
+            labelCol={{ span: 10 }}
+            wrapperCol={{ span: 14 }}
+          >
+            {this.props.form.getFieldDecorator('to', {
+              rules: [
+                {
+                  required: false
+                }],
+            })(
+              <DatePicker
+                format="DD-MM-YYYY"
+                onChange={this.saveExpiryDate}
+                disabledDate={this.disabledDate}
+
+              />
+            )}
+          </Form.Item>
+          <Form.Item className="edit_ftr_btn"
+                     wrapperCol={{
+                       xs: { span: 24, offset: 0 },
+                     }}
+          >
+            <Button key="back" type="button" onClick={this.handleReset}>CANCEL</Button>
+            <Button type="primary" htmlType="submit" onClick={this.handleSubmit}>GENERATE</Button>
+          </Form.Item>
+        </Form>
       </Modal>
     );
   }
 }
-
+Form.create()(ComposeMail);
 export default ComposeMail;

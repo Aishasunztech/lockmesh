@@ -3,9 +3,9 @@ import {Button, Checkbox, Drawer, Dropdown, Menu, message} from "antd";
 import CustomScrollbars from "util/CustomScrollbars";
 
 import mails from "./data/mails";
-import folders from "./data/folders";
-import filters from "./data/filters";
-import labels from "./data/labels";
+import categories from "./data/categories";
+import statuses from "./data/statuses";
+import priorities from "./data/priorities";
 import MailList from "./components/MailList";
 import ComposeMail from "./components/Compose/index";
 import AppModuleHeader from "./components/AppModuleHeader/index";
@@ -39,20 +39,17 @@ class Mail extends PureComponent {
           </div>
 
           <ul className="gx-module-nav">
-            {/*{this.getNavFolders()}*/}
 
             <li className="gx-module-nav-label">
-              Filters
+              Statuses
             </li>
 
-            {this.getNavFilters()}
+            {this.getStatuses()}
 
             <li className="gx-module-nav-label">
               Categories
             </li>
-
-            {this.getNavLabels()}
-
+            {this.getCategories()}
           </ul>
         </CustomScrollbars>
       </div>
@@ -73,25 +70,22 @@ class Mail extends PureComponent {
     });
   };
 
-  getNavFolders = () => {
-    return folders.map((folder, index) =>
+  getCategories = () => {
+    return categories.map((category, index) =>
       <li key={index} onClick={() => {
-        const filterMails = this.state.allMail.filter(mail => mail.folder === folder.id);
+        const filterMails = this.state.allMail.filter(mail => mail.folder === category.id);
         this.setState({
-          selectedFolder: folder.id,
+          selectedFolder: category.id,
           noContentFoundMessage: 'No Mail found in selected folder',
           currentMail: null,
           loader: true,
           folderMails: filterMails
         });
-        setTimeout(() => {
-          this.setState({loader: false});
-        }, 1500);
+
       }
       }>
-        <span className={`${this.state.selectedFolder === folder.id ? 'active gx-link' : 'gx-link'}`}>
-          <i className={`icon icon-${folder.icon}`}/>
-          <span>{folder.title}</span>
+        <span className={`${this.state.selectedFolder === category.id ? 'active gx-link' : 'gx-link'}`}>
+          <span className='ml-16 text-capitalize'>{category.title}</span>
         </span>
       </li>
     )
@@ -144,13 +138,13 @@ class Mail extends PureComponent {
     });
   };
 
-  getNavFilters = () => {
-    return filters.map((filter, index) =>
+  getStatuses = () => {
+    return statuses.map((status, index) =>
       <li key={index} onClick={() => {
         const filterMails = this.state.allMail.filter(mail => {
-          if (filter.id === 0 && mail.starred && mail.folder === this.state.selectedFolder) {
+          if (status.id === 0 && mail.starred && mail.folder === this.state.selectedFolder) {
             return mail
-          } else if (filter.id === 1 && mail.important && mail.folder === this.state.selectedFolder) {
+          } else if (status.id === 1 && mail.important && mail.folder === this.state.selectedFolder) {
             return mail
           }
           return null;
@@ -160,40 +154,15 @@ class Mail extends PureComponent {
           loader: true,
           folderMails: filterMails
         });
-        setTimeout(() => {
-          this.setState({loader: false});
-        }, 1500);
       }
       }>
         <span className="gx-link">
-          <i className={`icon icon-${filter.icon}`}/>
-          <span>{filter.title}</span>
+          <span className='ml-16 text-capitalize'>{status.title}</span>
         </span>
       </li>
     )
   };
 
-  getNavLabels = () => {
-    return labels.map((label, index) =>
-      <li key={index} onClick={() => {
-        const filterMails = this.state.allMail.filter(mail => mail.labels.includes(label.id) && mail.folder === this.state.selectedFolder);
-        this.setState({
-          loader: true,
-          noContentFoundMessage: 'No Mail found in selected label',
-          folderMails: filterMails
-        });
-        setTimeout(() => {
-          this.setState({loader: false});
-        }, 1500);
-      }
-      }>
-        <span className="gx-link">
-          <i className=''/>
-          <span>{label.title}</span>
-        </span>
-      </li>
-    )
-  };
   searchMail = (searchText) => {
     if (searchText === '') {
       this.setState({folderMails: this.state.allMail.filter((mail) => !mail.deleted)});
@@ -205,6 +174,7 @@ class Mail extends PureComponent {
       });
     }
   };
+
   displayMail = (currentMail, folderMails, noContentFoundMessage) => {
     return (<div className="gx-module-box-column">
       {currentMail === null ?
@@ -220,6 +190,7 @@ class Mail extends PureComponent {
         <MailDetail mail={currentMail} onImportantSelect={this.onImportantSelect.bind(this)}/>}
     </div>)
   };
+
   getMailActions = () => {
     return <div className="gx-flex-row gx-align-items-center">
 
@@ -240,7 +211,7 @@ class Mail extends PureComponent {
   folderMenu = () => (
     <Menu id="folder-menu"
           onClick={this.onFolderMenuItemSelect.bind(this)}>
-      {folders.map(folder =>
+      {categories.map(folder =>
         <Menu.Item key={folder.id}>
           {folder.title}
         </Menu.Item>,
@@ -250,7 +221,7 @@ class Mail extends PureComponent {
   labelMenu = () => (
     <Menu id="label-menu"
           onClick={this.onLabelMenuItemSelect.bind(this)}>
-      {labels.map(label =>
+      {priorities.map(label =>
         <Menu.Item key={label.id}>
           {label.title}
         </Menu.Item>,

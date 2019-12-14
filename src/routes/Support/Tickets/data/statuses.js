@@ -1,12 +1,12 @@
 export default [
   {
     'id': 0,
-    'handle': 'starred',
-    'title': 'Open',
+    'handle': 'open',
+    'title': 'open',
   },
   {
     'id': 1,
-    'handle': 'important',
-    'title': 'Closed',
+    'handle': 'closed',
+    'title': 'closed',
   }
 ];

@@ -2,7 +2,7 @@ import React from "react";
 import {Avatar, Checkbox, Dropdown, Menu} from "antd";
 import CustomScrollbars from 'util/CustomScrollbars'
 
-import labels from "../../data/labels";
+import statuses from "../../data/statuses";
 
 class MailDetail extends React.Component {
 
@@ -25,7 +25,7 @@ class MailDetail extends React.Component {
                 </div>
 
                 <div className="gx-labels">
-                  {labels.map((label, index) => {
+                  {statuses.map((label, index) => {
                     return (mail.labels).includes(label.id) && <div key={index}
                                                                     className={`gx-badge gx-text-white gx-bg-${label.color}`}>{label.title}</div>
                   })}

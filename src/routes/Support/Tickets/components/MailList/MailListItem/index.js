@@ -1,7 +1,7 @@
 import React from "react";
 import {Avatar, Checkbox} from "antd";
 
-import labels from "../../../data/labels";
+import statuses from "../../../data/statuses";
 
 const MailListItem = ({mail, onMailSelect, onMailChecked, onStartSelect}) => {
   return (
@@ -45,7 +45,7 @@ const MailListItem = ({mail, onMailSelect, onMailChecked, onStartSelect}) => {
 
           </div>
           <div className="gx-labels">
-            {labels.map((label, index) => {
+            {statuses.map((label, index) => {
               return (mail.labels).includes(label.id) &&
                 <div key={index} className={`gx-badge gx-text-white gx-bg-${label.color}`}>{label.title}</div>
             })}
