@@ -283,7 +283,7 @@ class Invoice extends Component {
                   <Select style={{ width: '100%' }}>
                     <Select.Option value=''>ALL</Select.Option>
                     <Select.Option value='PAID'>PAID</Select.Option>
-                    <Select.Option value='PGP'>UNPAID</Select.Option>
+                    <Select.Option value='UNPAID'>UNPAID</Select.Option>
                   </Select>
                 )}
               </Form.Item>
@@ -312,6 +312,7 @@ class Invoice extends Component {
                 wrapperCol={{ span: 14 }}
               >
                 {this.props.form.getFieldDecorator('to', {
+                  initialValue: moment(),
                   rules: [
                     {
                       required: false
