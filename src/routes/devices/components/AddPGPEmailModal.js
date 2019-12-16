@@ -97,13 +97,15 @@ class AddPGPEmailModal extends Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
+                let domain_data = this.state.domainList.find((item) => item.name == values.domain)
                 console.log("username:", values);
                 let payload = {
                     type: 'pgp_email',
                     auto_generated: false,
                     product_data: {
                         domain: values.domain,
-                        username: ''
+                        username: '',
+                        domain_id: domain_data.id
                     }
                 };
 
@@ -114,6 +116,15 @@ class AddPGPEmailModal extends Component {
                 }
                 this.props.addProduct(payload);
                 this.props.form.resetFields()
+                this.setState({
+                    visible: false,
+                    titleText: '',
+                    previewMail: '',
+                    randomUserNameLoading: false,
+                    username: '',
+                    domain: '',
+                    randomUsername: ''
+                })
             }
         });
     }

@@ -198,6 +198,17 @@ class AddDevice extends Component {
                 tabselect: '0',
             })
         }
+        if (!this.state.disablePgp) {
+            this.setState({
+                pgp_email: nextProps.pgp_emails[0].pgp_email
+            })
+        }
+        if (!this.state.disableChat) {
+            this.setState({
+                chat_id: nextProps.chat_ids[0].chat_id
+            })
+        }
+
     }
 
     handleReset = () => {

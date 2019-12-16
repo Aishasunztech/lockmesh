@@ -604,25 +604,35 @@ export default (state = initialState, action) => {
             let pgp_emails = state.pgp_emails;
             let chat_ids = state.chat_ids;
 
-            if(action.payload.status){
-                if(action.payload.type === 'chat_id'){
-                    pgp_emails.unshift(action.payload.product);
-                } else if (action.payload.type === 'pgp_email') {
+            if (action.payload.status) {
+                if (action.payload.type === 'chat_id') {
                     chat_ids.unshift(action.payload.product);
-                } 
-                else if (action.payload.type === 'sim_id'){
-
+                    success({
+                        title: "Chat ID has been generated successfully."
+                    })
+                    // console.log(chat_ids);
+                } else if (action.payload.type === 'pgp_email') {
+                    pgp_emails.unshift(action.payload.product);
+                    // console.log(pgp_emails)
+                    success({
+                        title: "Pgp email has been generated successfully."
+                    })
+                }
+                else if (action.payload.type === 'sim_id') {
+                    success({
+                        title: "Sim ID has been generated successfully."
+                    })
                 }
 
             } else {
                 error({
-                    title: action.response.msg,
+                    title: action.payload.msg,
                 });
             }
             return {
                 ...state,
-                pgp_emails: pgp_emails,
-                chat_ids: chat_ids
+                pgp_emails: [...pgp_emails],
+                chat_ids: [...chat_ids]
             }
         }
 
