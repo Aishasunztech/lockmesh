@@ -12,7 +12,6 @@ class AddPGPEmailModal extends Component {
         super(props);
         this.state = {
             visible: false,
-            pgpEmail: null,
             titleText: '',
             domainList: [],
             previewMail: '',
@@ -23,11 +22,10 @@ class AddPGPEmailModal extends Component {
         }
     }
 
-    showModal = (pgpEmail = null, titleText = convertToLang(this.props.translation[''], "Add PGP Email")) => {
+    showModal = (titleText = convertToLang(this.props.translation[''], "Add PGP Email")) => {
         // console.log(user);
         this.setState({
             visible: true,
-            pgpEmail: pgpEmail,
             titleText: titleText,
         });
 
@@ -37,7 +35,15 @@ class AddPGPEmailModal extends Component {
 
     handleCancel = () => {
         this.props.form.resetFields()
-        this.setState({ visible: false });
+        this.setState({
+            // domainList: [],
+            previewMail: '',
+            randomUserNameLoading: false,
+            username: '',
+            domain: '',
+            randomUsername: '',
+            visible: false
+        });
     }
 
     componentWillReceiveProps(nextProps) {
