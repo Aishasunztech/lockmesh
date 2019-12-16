@@ -601,7 +601,29 @@ export default (state = initialState, action) => {
         }
 
         case ADD_PRODUCT: {
-            console.log("add product reducer");
+            let pgp_emails = state.pgp_emails;
+            let chat_ids = state.chat_ids;
+
+            if(action.payload.status){
+                if(action.payload.type === 'chat_id'){
+                    pgp_emails.unshift(action.payload.product);
+                } else if (action.payload.type === 'pgp_email') {
+                    chat_ids.unshift(action.payload.product);
+                } 
+                else if (action.payload.type === 'sim_id'){
+
+                }
+
+            } else {
+                error({
+                    title: action.response.msg,
+                });
+            }
+            return {
+                ...state,
+                pgp_emails: pgp_emails,
+                chat_ids: chat_ids
+            }
         }
 
         default:

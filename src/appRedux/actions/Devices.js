@@ -513,7 +513,10 @@ export const getProductPrices = () => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: ADD_PRODUCT,
-                    response: response.data
+                    payload: {
+                        type: payload.type,
+                        ...response.data
+                    }
                 })
             } else {
                 dispatch({
