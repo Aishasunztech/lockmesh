@@ -41,7 +41,7 @@ import {
 
 import {
     Required_Fields,
-    DEVICE_ID, 
+    DEVICE_ID,
     USER_ID,
     DEVICE_SIM_ID,
     DEVICE_Select_SIM_ID,
@@ -750,14 +750,14 @@ class EditDevice extends Component {
     }
 
     handleChatID = (e) => {
-        let payload= {
+        let payload = {
             type: 'chat_id',
             auto_generated: true,
             product_data: {}
         }
         this.props.addProduct(payload)
     }
-    
+
     render() {
         // 
         const { users_list } = this.props;
@@ -1040,11 +1040,6 @@ class EditDevice extends Component {
                                 >Add PGP Email</Button>
                             </Col>
 
-                            {/**
-                             * @author Usman Hafeez
-                             * @description added button of Chat ID
-                             */}
-
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
                                     label={convertToLang(this.props.translation[LABEL_DATA_PGP_EMAIL], "PGP Email ")}
@@ -1074,7 +1069,11 @@ class EditDevice extends Component {
                                     )}
                                 </Form.Item>
                             </Col>
-
+                            
+                            {/**
+                             * @author Usman Hafeez
+                             * @description added button of Chat ID
+                             */}
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Button
                                     disabled={this.state.disablePgp}
@@ -1112,6 +1111,21 @@ class EditDevice extends Component {
                                         </Select>
                                     )}
                                 </Form.Item>
+                            </Col>
+                            
+                            {/**
+                             * @author Usman Hafeez
+                             * @description added button of Chat ID
+                             */}
+                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                <Button
+                                    disabled={true}
+                                    className="add_user_btn"
+                                    type="primary"
+                                    style={{ width: "100%" }}
+                                    onClick={this.handleChatID}
+                                    style={{ width: "100%" }}
+                                >ADD SIM ID</Button>
                             </Col>
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item

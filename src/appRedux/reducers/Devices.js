@@ -29,7 +29,8 @@ import {
     TRANSFER_DEVICE,
     FLAG_DEVICE,
     GET_PARENT_HARDWARES,
-    ACCEPT_REQUEST
+    ACCEPT_REQUEST,
+    ADD_PRODUCT,
 } from "../../constants/ActionTypes";
 
 // import { convertToLang } from '../../routes/utils/commonUtils';
@@ -254,7 +255,7 @@ export default (state = initialState, action) => {
             }
         }
 
-        case NEW_DEVICES_LIST:
+        case NEW_DEVICES_LIST: {
             //
             return {
                 ...state,
@@ -264,8 +265,8 @@ export default (state = initialState, action) => {
                 // options: state.options,
                 newDevices: action.payload,
             }
-
-        case SUSPEND_DEVICE:
+        }
+        case SUSPEND_DEVICE: {
             if (action.response.status) {
                 //
                 let objIndex = state.devices.findIndex((obj => obj.device_id === action.response.data.device_id));
@@ -290,7 +291,7 @@ export default (state = initialState, action) => {
                 showMsg: true,
                 // options: state.options,
             }
-
+        }
 
         // case UNLINK_DEVICE:
         //     if (action.response.status) {
@@ -317,7 +318,7 @@ export default (state = initialState, action) => {
         //     }
 
 
-        case ACTIVATE_DEVICE:
+        case ACTIVATE_DEVICE: {
             if (action.response.status) {
                 let objIndex1 = state.devices.findIndex((obj => obj.device_id === action.response.data.device_id));
                 if (objIndex1 !== -1) {
@@ -340,6 +341,7 @@ export default (state = initialState, action) => {
                 showMsg: true,
                 // options: state.options,
             }
+        }
 
         case DELETE_UNLINK_DEVICE:
             let type = DEVICE_UNLINKED
@@ -386,8 +388,7 @@ export default (state = initialState, action) => {
                 success({
                     title: action.response.msg,
                 });
-            }
-            else {
+            } else {
                 error({
                     title: action.response.msg,
                 });
@@ -406,7 +407,7 @@ export default (state = initialState, action) => {
                 // devices: action.payload,
             }
 
-        case ADD_DEVICE:
+        case ADD_DEVICE: {
 
             var filteredNewDevices = state.newDevices;
             let devicess = JSON.parse(JSON.stringify(state.devices))
@@ -446,8 +447,7 @@ export default (state = initialState, action) => {
                 options: state.options,
                 // devices: action.payload,
             }
-
-            break;
+        }
 
         case PRE_ACTIVATE_DEVICE:
             let devices = [...state.devices]
@@ -459,8 +459,7 @@ export default (state = initialState, action) => {
                 });
                 devices = [...action.response.data.data, ...state.devices]
                 // message.success('done');
-            }
-            else {
+            } else {
                 error({
                     title: action.response.msg,
                 });
@@ -476,7 +475,6 @@ export default (state = initialState, action) => {
                 showMsg: "hello",
             }
 
-            break;
 
         case GET_DROPDOWN: {
             //
@@ -496,6 +494,7 @@ export default (state = initialState, action) => {
                 selectedOptions: action.payload
             }
         }
+
         case GET_PAGINATION: {
             //
             // console.log({
@@ -516,6 +515,7 @@ export default (state = initialState, action) => {
         case POST_PAGINATION: {
             return state
         }
+
         case GET_SIM_IDS: {
             //
             // console.log(
@@ -526,12 +526,14 @@ export default (state = initialState, action) => {
                 sim_ids: action.payload
             }
         }
+
         case GET_CHAT_IDS: {
             return {
                 ...state,
                 chat_ids: action.payload
             }
         }
+
         case GET_PGP_EMAILS: {
             // alert("hello");
             return {
@@ -539,6 +541,7 @@ export default (state = initialState, action) => {
                 pgp_emails: action.payload
             }
         }
+
         case REJECT_DEVICE: {
 
             let filteredDevices = state.devices;
@@ -565,34 +568,41 @@ export default (state = initialState, action) => {
             }
         }
 
-        case GET_PARENT_PACKAGES:
-
+        case GET_PARENT_PACKAGES: {
 
             return {
                 ...state,
                 parent_packages: action.response.data,
             }
+        }
 
-        case GET_PARENT_HARDWARES:
+        case GET_PARENT_HARDWARES: {
 
 
             return {
                 ...state,
                 parent_hardwares: action.response.data,
             }
-        case GET_PRODUCT_PRICES:
-            //
+        }
 
+        case GET_PRODUCT_PRICES: {
+            //
             return {
                 ...state,
                 product_prices: action.response.data,
             }
+        }
 
-        case DEVICES_LIST_FOR_REPORT:
+        case DEVICES_LIST_FOR_REPORT: {
             return {
                 ...state,
                 devicesForReport: action.payload.data,
             }
+        }
+
+        case ADD_PRODUCT: {
+            console.log("add product reducer");
+        }
 
         default:
             return state;

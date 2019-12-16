@@ -169,6 +169,7 @@ class AddDevice extends Component {
             }
         });
     }
+
     componentDidMount() {
         this.props.getUserList();
         if (this.props.user.type !== ADMIN) {
@@ -181,6 +182,7 @@ class AddDevice extends Component {
         this.props.getChatIDs();
         this.props.getPGPEmails();
     }
+
     componentWillReceiveProps(nextProps) {
         if (nextProps.isloading) {
             this.setState({ addNewUserModal: true })
@@ -536,7 +538,7 @@ class AddDevice extends Component {
 
 
     filterList = (type, list, listType) => {
-        let dumyPackages = [];
+        let dummyPackages = [];
         if (list.length) {
             list.filter(function (item) {
                 let packageTerm;
@@ -546,11 +548,11 @@ class AddDevice extends Component {
                     packageTerm = item.price_term
                 }
                 if (packageTerm == type) {
-                    dumyPackages.push(item);
+                    dummyPackages.push(item);
                 }
             });
         }
-        return dumyPackages;
+        return dummyPackages;
     }
 
 
@@ -721,8 +723,6 @@ class AddDevice extends Component {
         }
     }
 
-
-
     render() {
         // console.log(this.props);
         // console.log('id is', this.state.products, this.state.packages);
@@ -767,9 +767,14 @@ class AddDevice extends Component {
 
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
-                                    label={convertToLang(this.props.translation[""], `ADD USER`)}
-                                    labelCol={{ span: 8 }}
-                                    wrapperCol={{ span: 16 }}
+                                    // label={convertToLang(this.props.translation[""], `ADD USER`)}
+                                    // labelCol={{ span: 8 }}
+                                    // wrapperCol={{ span: 16 }}
+
+                                    // @author Usman Hafeez
+                                    // label={convertToLang(this.props.translation[""], `ADD USER`)}
+                                    labelCol={{ span: 0 }}
+                                    wrapperCol={{ span: 24 }}
                                 >
                                     <Button
                                         className="add_user_btn"
@@ -782,6 +787,10 @@ class AddDevice extends Component {
                                     </Button>
                                 </Form.Item>
                             </Col>
+
+                            {/**
+                             * @section User Selector
+                             */}
                             {(isloading ?
                                 <div className="addUserSpin">
                                     <Spin />
@@ -820,12 +829,20 @@ class AddDevice extends Component {
                                     </Col>
                                 </Fragment>
                             )}
+                            
+
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
-                                    label={convertToLang(this.props.translation[DUMY_TRANS_ID], "SERVICES")}
-                                    labelCol={{ span: 8 }}
-                                    wrapperCol={{ span: 16 }}
                                     className="l_h_20"
+
+                                    // label={convertToLang(this.props.translation[DUMY_TRANS_ID], "SERVICES")}
+                                    // labelCol={{ span: 8 }}
+                                    // wrapperCol={{ span: 16 }}
+                                    
+                                    // @author Usman Hafeez
+                                    // label={convertToLang(this.props.translation[DUMY_TRANS_ID], "SERVICES")}
+                                    labelCol={{ span: 0 }}
+                                    wrapperCol={{ span: 24 }}
                                 >
                                     {this.props.form.getFieldDecorator('service', {
                                         initialValue: '',
@@ -838,7 +855,7 @@ class AddDevice extends Component {
                                             >
                                                 {convertToLang(this.props.translation[DUMY_TRANS_ID], "SELECT SERVICES")}
                                             </Button>
-                                            <span style={this.state.checkServices}>You need to selet a service before submit form.</span>
+                                            <span style={this.state.checkServices}>You need to select a service before submit form.</span>
                                         </Fragment>
                                     )}
                                 </Form.Item>
@@ -994,29 +1011,31 @@ class AddDevice extends Component {
                         <Col xs={24} sm={24} md={12} lg={12} xl={12} className="p-0">
 
                             {/* <Form.Item
-                        label={convertToLang(this.props.translation[Start_Date], "Start Date")}
-                        labelCol={{ span: 8}}
-                        wrapperCol={{ span: 16 }}
-                    >
-                        {this.props.form.getFieldDecorator('start_date', {
-                            initialValue: this.props.new ? this.createdDate() : this.props.device.start_date,
-                        })(
+                                    label={convertToLang(this.props.translation[Start_Date], "Start Date")}
+                                    labelCol={{ span: 8}}
+                                    wrapperCol={{ span: 16 }}
+                                >
+                                    {this.props.form.getFieldDecorator('start_date', {
+                                        initialValue: this.props.new ? this.createdDate() : this.props.device.start_date,
+                                    })(
 
-                            <Input disabled />
-                        )}
-                    </Form.Item> */}
+                                        <Input disabled />
+                                    )}
+                                </Form.Item> 
+                            */}
+
                             {(this.state.type == 0 && lastObject) ?
                                 <Fragment>
                                     {/**
                                      * @author Usman Hafeez
-                                     * @description added button
+                                     * @description Add PGP Email button
                                      */}
 
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
-                                            label={''}
-                                            labelCol={{ span: 12 }}
-                                            wrapperCol={{ span: 16 }}
+                                        //    label={<span></span>}
+                                           labelCol={{ span: 0 }}
+                                           wrapperCol={{ span: 24 }}
                                         >
                                             <Button
                                                 className="add_user_btn"
@@ -1030,44 +1049,7 @@ class AddDevice extends Component {
                                             </Button>
                                         </Form.Item>
                                     </Col>
-                                    {/* {(isloading ?
-                                        <div className="addUserSpin">
-                                            <Spin />
-                                        </div>
-                                        :
-                                        <Fragment>
-                                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                                                <Form.Item
-                                                    label={convertToLang(this.props.translation[USER_ID], "USER ID")}
-                                                    labelCol={{ span: 8 }}
-                                                    wrapperCol={{ span: 16 }}
-                                                >
-                                                    {this.props.form.getFieldDecorator('user_id', {
-                                                        initialValue: this.props.new ? "" : this.state.addNewUserModal ? lastObject.user_id : addNewUserValue,
-                                                        rules: [{
-                                                            required: true, message: convertToLang(this.props.translation[USER_ID_IS_REQUIRED], 'User ID is Required !'),
-                                                        }]
-                                                    })(
-                                                        <Select
-                                                            className="pos_rel"
-                                                            setFieldsValue={this.state.addNewUserModal ? lastObject.user_id : addNewUserValue}
-                                                            showSearch
-                                                            placeholder={convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}
-                                                            optionFilterProp="children"
-                                                            onChange={this.handleUserChange}
-                                                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                                        >
-                                                            <Select.Option value="">{convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}</Select.Option>
-                                                            {users_list.map((item, index) => {
-                                                                return (<Select.Option key={index} value={item.user_id}>{item.user_id} ( {item.user_name} )</Select.Option>)
-                                                            })}
-                                                        </Select>
-                                                    )}
-
-                                                </Form.Item>
-                                            </Col>
-                                        </Fragment>
-                                    )} */}
+                                    
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
                                             label={convertToLang(this.props.translation[LABEL_DATA_PGP_EMAIL], "PGP Email")}
@@ -1103,12 +1085,16 @@ class AddDevice extends Component {
                                             )}
                                         </Form.Item>
                                     </Col>
-
+                                    
+                                    {/**
+                                     * @author Usman Hafeez
+                                     * @description Add Chat ID button
+                                     */}
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
-                                            label={''}
-                                            labelCol={{ span: 12 }}
-                                            wrapperCol={{ span: 16 }}
+                                            // label={''}
+                                            labelCol={{ span: 0 }}
+                                            wrapperCol={{ span: 24 }}
                                         >
                                             <Button
                                                 className="add_user_btn"
@@ -1150,6 +1136,30 @@ class AddDevice extends Component {
                                             )}
                                         </Form.Item>
                                     </Col>
+                                    
+                                    {/**
+                                     * @author Usman Hafeez
+                                     * @description Add SIM ID button
+                                     */}
+                                    <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                        <Form.Item
+                                            // label={''}
+                                            labelCol={{ span: 0 }}
+                                            wrapperCol={{ span: 24 }}
+                                        >
+                                            <Button
+                                                className="add_user_btn"
+                                                type="primary"
+                                                style={{ width: "100%" }}
+                                                onClick={this.handleChatID}
+                                                style={{ width: "100%" }}
+                                                disabled={true}
+                                            >
+                                                {convertToLang(this.props.translation[''], "ADD SIM ID")}
+                                            </Button>
+                                        </Form.Item>
+                                    </Col>
+
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
                                             label={convertToLang(this.props.translation[LABEL_DATA_SIM_ID], "Sim ID")}

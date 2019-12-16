@@ -20,7 +20,8 @@ import {
     ADD_DEVICE,
     DEVICES_LIST_FOR_REPORT,
     BULK_DEVICES_LIST,
-    GET_PARENT_HARDWARES
+    GET_PARENT_HARDWARES,
+    ADD_PRODUCT
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -81,6 +82,7 @@ export function getDevicesForReport() {
 
   };
 }
+
 export function editDevice(formData) {
     return (dispatch) => {
         //
@@ -107,6 +109,7 @@ export function editDevice(formData) {
         });
     }
 }
+
 export function extendServices(formData) {
     return (dispatch) => {
         //
@@ -385,7 +388,6 @@ export function getAllPGPEmails() {
     }
 }
 
-
 export function addDevice(device) {
     return (dispatch) => {
         // alert("hello");
@@ -509,10 +511,10 @@ export const getProductPrices = () => {
     return (dispatch) => {
         RestService.addProduct(payload).then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // dispatch({
-                //     type: GET_PRODUCT_PRICES,
-                //     response: response.data
-                // })
+                dispatch({
+                    type: ADD_PRODUCT,
+                    response: response.data
+                })
             } else {
                 dispatch({
                     type: INVALID_TOKEN
