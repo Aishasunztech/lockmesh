@@ -184,7 +184,7 @@ class AddPGPEmailModal extends Component {
                         type="primary"
                         onClick={this.handleSubmit}
                     >
-                        {convertToLang(this.props.translation[''], "Create or Generate Email")}
+                        {convertToLang(this.props.translation[''], "Create Email")}
                     </Button>,
                 ]}
                 className="edit_form"
