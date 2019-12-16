@@ -293,9 +293,9 @@ class AddDevice extends Component {
     handlePGPModal = () => {
         this.addPGPEmailModal.showModal();
     }
-    
+
     handleChatID = (e) => {
-        let payload= {
+        let payload = {
             type: 'chat_id',
             auto_generated: true,
             product_data: {}
@@ -829,7 +829,7 @@ class AddDevice extends Component {
                                     </Col>
                                 </Fragment>
                             )}
-                            
+
 
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
@@ -838,7 +838,7 @@ class AddDevice extends Component {
                                     // label={convertToLang(this.props.translation[DUMY_TRANS_ID], "SERVICES")}
                                     // labelCol={{ span: 8 }}
                                     // wrapperCol={{ span: 16 }}
-                                    
+
                                     // @author Usman Hafeez
                                     // label={convertToLang(this.props.translation[DUMY_TRANS_ID], "SERVICES")}
                                     labelCol={{ span: 0 }}
@@ -860,6 +860,8 @@ class AddDevice extends Component {
                                     )}
                                 </Form.Item>
                             </Col>
+
+                            {/* Hardware Selection */}
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
                                     // className="select_hardware"
@@ -892,6 +894,8 @@ class AddDevice extends Component {
                                     )}
                                 </Form.Item>
                             </Col>
+
+                            {/* Expiry Date Input */}
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
                                     label={convertToLang(this.props.translation[Expire_Date], "Expiry Date")}
@@ -906,6 +910,8 @@ class AddDevice extends Component {
                                     )}
                                 </Form.Item>
                             </Col>
+
+                            {/* Policy Selection */}
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
                                     label={convertToLang(this.props.translation[POLICY], "Policy")}
@@ -933,7 +939,10 @@ class AddDevice extends Component {
                                 </Form.Item>
                             </Col>
 
-                            {(this.props.preActive) ? null :
+                            {/* Device ID Input */}
+                            {(this.props.preActive) ?
+                                null
+                                :
                                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                     <Form.Item
                                         label={convertToLang(this.props.translation[DEVICE_ID], "Device ID")}
@@ -948,6 +957,8 @@ class AddDevice extends Component {
                                     </Form.Item>
                                 </Col>
                             }
+
+                            {/* Note Input */}
                             {(this.props.preActive) ?
                                 <Fragment>
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
@@ -969,9 +980,13 @@ class AddDevice extends Component {
                                             )}
                                         </Form.Item>
                                     </Col>
-                                </Fragment> : null}
+                                </Fragment>
+                                :
+                                null
+                            }
+
                             {(this.props.preActive === false) ?
-                                (<Fragment>
+                                <Fragment>
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
                                             label={convertToLang(this.props.translation[DEALER_PIN], "Dealer Pin")}
@@ -1004,9 +1019,9 @@ class AddDevice extends Component {
                                         </Form.Item>
                                     </Col>
                                 </Fragment>
-                                )
                                 :
-                                null}
+                                null
+                            }
                         </Col>
                         <Col xs={24} sm={24} md={12} lg={12} xl={12} className="p-0">
 
@@ -1026,16 +1041,16 @@ class AddDevice extends Component {
 
                             {(this.state.type == 0 && lastObject) ?
                                 <Fragment>
+
                                     {/**
                                      * @author Usman Hafeez
                                      * @description Add PGP Email button
                                      */}
-
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
-                                        //    label={<span></span>}
-                                           labelCol={{ span: 0 }}
-                                           wrapperCol={{ span: 24 }}
+                                            //    label={<span></span>}
+                                            labelCol={{ span: 0 }}
+                                            wrapperCol={{ span: 24 }}
                                         >
                                             <Button
                                                 className="add_user_btn"
@@ -1049,7 +1064,8 @@ class AddDevice extends Component {
                                             </Button>
                                         </Form.Item>
                                     </Col>
-                                    
+
+                                    {/* PGP Email Input */}
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
                                             label={convertToLang(this.props.translation[LABEL_DATA_PGP_EMAIL], "PGP Email")}
@@ -1085,7 +1101,7 @@ class AddDevice extends Component {
                                             )}
                                         </Form.Item>
                                     </Col>
-                                    
+
                                     {/**
                                      * @author Usman Hafeez
                                      * @description Add Chat ID button
@@ -1109,6 +1125,7 @@ class AddDevice extends Component {
                                         </Form.Item>
                                     </Col>
 
+                                    {/* Chat ID Input */}
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
                                             label={convertToLang(this.props.translation[LABEL_DATA_CHAT_ID], "Chat ID")}
@@ -1136,7 +1153,7 @@ class AddDevice extends Component {
                                             )}
                                         </Form.Item>
                                     </Col>
-                                    
+
                                     {/**
                                      * @author Usman Hafeez
                                      * @description Add SIM ID button
@@ -1160,6 +1177,7 @@ class AddDevice extends Component {
                                         </Form.Item>
                                     </Col>
 
+                                    {/* Sim ID Input */}
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
                                             label={convertToLang(this.props.translation[LABEL_DATA_SIM_ID], "Sim ID")}
@@ -1187,6 +1205,8 @@ class AddDevice extends Component {
                                             )}
                                         </Form.Item>
                                     </Col>
+
+                                    {/* Sim ID2 Input */}
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
                                             label={convertToLang(this.props.translation[DUMY_TRANS_ID], "Sim ID 2")}
@@ -1217,6 +1237,8 @@ class AddDevice extends Component {
                                             )}
                                         </Form.Item>
                                     </Col>
+
+                                    {/* VPN Input */}
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
                                             label={convertToLang(this.props.translation[DUMY_TRANS_ID], "VPN")}
@@ -1241,6 +1263,8 @@ class AddDevice extends Component {
                                             )}
                                         </Form.Item>
                                     </Col>
+
+                                    {/* Client ID Input */}
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
                                             label={convertToLang(this.props.translation[DUMY_TRANS_ID], "Client ID")}
@@ -1258,6 +1282,8 @@ class AddDevice extends Component {
                                             )}
                                         </Form.Item>
                                     </Col>
+
+                                    {/* Model Input */}
                                     {(this.props.preActive) ? null :
                                         <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                             <Form.Item
@@ -1273,33 +1299,38 @@ class AddDevice extends Component {
                                             </Form.Item>
                                         </Col>
                                     }
-                                </Fragment> : null}
-                            {(this.props.preActive) ?
-                                <Fragment>
-                                    <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                                        <Form.Item
-                                            label={convertToLang(this.props.translation[Device_Valid_For], "VALID FOR(DAYS)")}
-                                            labelCol={{ span: 12 }}
-                                            wrapperCol={{ span: 12 }}
-                                            className="val_days"
-                                        >
-                                            {this.props.form.getFieldDecorator('validity', {
-                                                initialValue: '',
-                                                rules: [{
-                                                    required: true, message: convertToLang(this.props.translation[Device_Valid_days_Required], "Valid days required"),
-                                                },
-                                                {
-                                                    validator: this.validateValidDays,
-                                                }
-                                                ],
-                                            })(
-                                                <InputNumber min={1} />
-                                            )}
-
-                                        </Form.Item>
-                                    </Col>
                                 </Fragment>
-                                : null}
+                                :
+                                null
+                            }
+
+                            {/* Valid For Input */}
+                            {(this.props.preActive) ?
+                                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                    <Form.Item
+                                        label={convertToLang(this.props.translation[Device_Valid_For], "VALID FOR(DAYS)")}
+                                        labelCol={{ span: 12 }}
+                                        wrapperCol={{ span: 12 }}
+                                        className="val_days"
+                                    >
+                                        {this.props.form.getFieldDecorator('validity', {
+                                            initialValue: '',
+                                            rules: [{
+                                                required: true, message: convertToLang(this.props.translation[Device_Valid_days_Required], "Valid days required"),
+                                            },
+                                            {
+                                                validator: this.validateValidDays,
+                                            }
+                                            ],
+                                        })(
+                                            <InputNumber min={1} />
+                                        )}
+
+                                    </Form.Item>
+                                </Col>
+                                :
+                                null
+                            }
 
                             {(this.state.type == 1) ?
                                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>
