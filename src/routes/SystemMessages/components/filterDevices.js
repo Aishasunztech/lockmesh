@@ -782,19 +782,8 @@ class FilterDevices extends Component {
               />
             </div>
           </Col>
-          {/* <Col className="gutter-row" sm={9} xs={9} md={9}>
-            <div className="gutter-box">
-              <Button
-                style={{ marginBottom: 16, float: 'right' }}
-                onClick={this.applyAction}
-                type="primary"
-              >Apply Action
-              </Button>
-            </div>
-          </Col> */}
 
         </Row>
-        {/* <span>(Only allow active & trial devices for your selected action)</span> */}
         <Row gutter={24} style={{ marginBottom: '24px' }}>
           {
             this.props.spinloading ? <CircularProgress /> :
@@ -904,50 +893,6 @@ class FilterDevices extends Component {
             selectedRowKeys={this.state.selectedRowKeys}
           />
         </Modal>
-
-        {/* <BulkSuspendDevices
-          ref="bulk_suspend"
-          suspendDevice={this.props.bulkSuspendDevice}
-          translation={this.props.translation}
-        />
-
-        <BulkActivateDevices
-          ref="bulk_activate"
-          bulkActivateDevice={this.props.bulkActivateDevice}
-          translation={this.props.translation}
-        />
-
-        <BulkUnlinkConfirmation
-          ref="bulk_unlink"
-          unlinkBulkDevices={this.props.unlinkBulkDevices}
-          translation={this.props.translation}
-        />
-
-        <BulkPushAppsConfirmation
-          ref="bulk_push_apps"
-          applyPushApps={this.props.applyPushApps}
-          selectedPushAppsList={this.props.selectedPushAppsList}
-          translation={this.props.translation}
-        />
-
-        <BulkPullAppsConfirmation
-          ref="bulk_pull_apps"
-          applyPullApps={this.props.applyPullApps}
-          selectedPullAppsList={this.props.selectedPullAppsList}
-          translation={this.props.translation}
-        />
-
-        <BulkWipeConfirmation
-          ref="bulk_wipe"
-          wipeBulkDevices={this.props.wipeBulkDevices}
-          translation={this.props.translation}
-        />
-
-        <BulkPolicyConfirmation
-          ref="bulk_policy"
-          bulkApplyPolicy={this.props.bulkApplyPolicy}
-          translation={this.props.translation}
-        /> */}
 
       </Fragment>
     )

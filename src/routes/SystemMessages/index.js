@@ -11,6 +11,7 @@ import { checkValue, titleCase, convertToLang, getColor, componentSearch } from 
 import { BASE_URL } from '../../constants/Application';
 import ListMsgs from './components/ListMsgs';
 import SendMsgForm from './components/SendMsgForm';
+import EditMsgForm from './components/EditMsgForm';
 
 import { getAllDealers } from "../../appRedux/actions/Dealers";
 import { getUserList } from "../../appRedux/actions/Users";
@@ -25,7 +26,7 @@ import {
 } from "../../appRedux/actions/BulkDevices";
 
 import { ACTION, Alert_Delete_APK, SEARCH, DEVICE_UNLINKED, DEVICE_PRE_ACTIVATION } from "../../constants/Constants";
-import { Button_Save, Button_Yes, Button_No } from "../../constants/ButtonConstants";
+import { Button_Save, Button_Yes, Button_No, Button_Ok } from "../../constants/ButtonConstants";
 import { systemMsgColumns } from "../utils/columnsUtils";
 import { Tab_Active, Tab_All, Tab_Disabled } from "../../constants/TabConstants";
 
@@ -51,6 +52,8 @@ class SystemMessages extends Component {
             columns: columns,
             visible: false,
             bulkResponseModal: false,
+            editRecord: '',
+            editModal: false
         }
         this.confirm = Modal.confirm;
     }
@@ -218,25 +221,25 @@ class SystemMessages extends Component {
     renderDevicesList(list) {
         // console.log('renderList ', list)
         return list.map((device, index) => {
-    
+
             var status = device.finalStatus;
             // console.log("status ", status)
-    
+
             let color = getColor(status);
             var style = { margin: '0', width: 'auto', textTransform: 'uppercase' }
             // var text = convertToLang(this.props.translation[Button_Edit], "EDIT");
-    
+
             // if ((status === DEVICE_PENDING_ACTIVATION) || (status === DEVICE_UNLINKED)) {
             //     style = { margin: '0 8px 0 0', width: 'auto', display: 'none', textTransform: 'uppercase' }
             //     text = "ACTIVATE";
             // }
-    
+
             return {
                 rowKey: index,
                 // key: device.device_id ? `${device.device_id}` : device.usr_device_id,
                 key: status == DEVICE_UNLINKED ? `${device.user_acc_id} ${device.created_at} ` : device.id,
                 counter: ++index,
-    
+
                 status: (<span style={color} > {status}</span>),
                 lastOnline: checkValue(device.lastOnline),
                 flagged: device.flagged,
@@ -277,6 +280,10 @@ class SystemMessages extends Component {
         });
     }
 
+
+    showEditModal = data => {
+        this.setState({ editModal: true, editRecord: data })
+    }
 
     render() {
         // console.log("this.state.dealerList:: render func ", this.state.bulkMsgs)
@@ -329,22 +336,20 @@ class SystemMessages extends Component {
                                 ref="list_msgs"
                                 translation={this.props.translation}
                                 renderDevicesList={this.renderDevicesList}
+                                showEditModal={this.showEditModal}
                             />
                         </div>
                 }
                 {/* Send Message modal */}
                 <Modal
                     title={convertToLang(this.props.translation[""], "Send Message to Selected Devcies")}
-                    width={"850px"}
+                    width={"600px"}
                     maskClosable={false}
                     style={{ top: 20 }}
                     visible={this.state.visible}
                     onOk={() => this.setState({ visible: false })}
                     onCancel={() => this.setState({ visible: false })}
-                    // className="load_policy_popup"
                     footer={false}
-                // okText={convertToLang(this.props.translation[Button_Ok], "SEND")}
-                // cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     <SendMsgForm
                         setSelectedBulkDevices={this.props.setSelectedBulkDevices}
@@ -356,6 +361,39 @@ class SystemMessages extends Component {
                         ref='send_msg_form'
                         translation={this.props.translation}
 
+                        users_list={this.props.users_list}
+                        dealerList={this.props.dealerList}
+                        devices={this.props.devices}
+                        selectedDevices={this.props.selectedDevices ? this.props.selectedDevices : []}
+                        getBulkDevicesList={this.props.getBulkDevicesList}
+                        getAllDealers={this.props.getAllDealers}
+                        getUserList={this.props.getUserList}
+                        renderList={this.renderDevicesList}
+                    />
+
+                </Modal>
+
+                {/* Edit Message modal */}
+                <Modal
+                    title={convertToLang(this.props.translation[""], "Edit Setting to send Message on devices")}
+                    width={"600px"}
+                    maskClosable={false}
+                    style={{ top: 20 }}
+                    visible={this.state.editModal}
+                    onOk={() => this.setState({ editModal: false })}
+                    onCancel={() => this.setState({ editModal: false })}
+                    footer={false}
+                >
+                    <EditMsgForm
+                        setSelectedBulkDevices={this.props.setSelectedBulkDevices}
+                        sendMsgOnDevices={this.props.sendBulkMsg}
+                        setBulkMsg={this.props.setBulkMsg}
+                        bulkMsg={this.props.bulkMsg}
+                        handleCancelSendMsg={this.handleSendMsgButton}
+                        user={this.state.user}
+                        ref='edit_msg_form'
+                        translation={this.props.translation}
+                        editRecord={this.state.editRecord}
                         users_list={this.props.users_list}
                         dealerList={this.props.dealerList}
                         devices={this.props.devices}
