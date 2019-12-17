@@ -61,6 +61,12 @@ class AddPGPEmailModal extends Component {
     }
     checkUsername = (rule, value, callback) => {
         if (!value || !value.length) {
+            let previewMail = ''
+            if (this.state.domain) {
+                previewMail = '@' + this.state.domain
+            }
+            this.props.form.setFieldsValue({ 'username': "" })
+            this.props.form.setFieldsValue({ 'pgp_email': previewMail })
             callback();
         }
         if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value + '@gmail.com')) {
@@ -96,8 +102,6 @@ class AddPGPEmailModal extends Component {
         e.preventDefault();
         let form = this.props.form
         this.props.form.validateFieldsAndScroll((err, values) => {
-            // console.log(callback);
-
             if (!err) {
                 let pgp_email = values.username + '@' + values.domain
                 let _this = this
