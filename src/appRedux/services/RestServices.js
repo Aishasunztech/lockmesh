@@ -140,7 +140,7 @@ const RestService = {
         // return this.response;
     },
 
-    // getuserType
+    // getUserType
     getUserType: () => {
 
     },
@@ -171,6 +171,9 @@ const RestService = {
         return axios.get(BASE_URL + 'users/getServicesHistory/' + usr_acc_id, RestService.getHeader());
     },
 
+    /**
+     * @section Devices
+     */
 
     // getDevices
     DeviceList: () => {
@@ -207,9 +210,11 @@ const RestService = {
             RestService.getHeader()
         )
     },
+
     getSimIDs: () => {
         return axios.get(BASE_URL + 'users/get_sim_ids', RestService.getHeader());
     },
+    
     getChatIDs: () => {
         return axios.get(BASE_URL + 'users/get_chat_ids', RestService.getHeader());
     },
@@ -236,6 +241,13 @@ const RestService = {
     getUsedChatIds: () => {
         return axios.get(BASE_URL + 'users/get_used_chat_ids', RestService.getHeader());
     },
+    addProduct: (payload) => {
+        return axios.post(`${BASE_URL}users/create-service-product`, payload, RestService.getHeader());
+    },
+
+    /**
+     * @section Dealers
+     */
 
     // Dealers
     DealerList: (dealer) => {
@@ -273,7 +285,10 @@ const RestService = {
             RestService.getHeader()
         )
     },
-    // Connect Dealer
+
+    /**
+     * @section Connect Dealer
+     */
     getDealerDetails: (dealerId) => {
         return axios.get(BASE_URL + 'users/connect-dealer/' + dealerId, RestService.getHeader());
     },
@@ -297,6 +312,7 @@ const RestService = {
     getDealerSalesHistory: (dealerId) => {
         return axios.get(BASE_URL + 'users/sales-history/' + dealerId, RestService.getHeader());
     },
+
     ApkList: () => {
         return axios.get(BASE_URL + 'users/apklist', RestService.getHeader());
     },
@@ -1070,6 +1086,16 @@ const RestService = {
     //get overdue details
     getOverdueDetails: () => {
         return axios.get(BASE_URL + 'users/get-overdue-details', RestService.getHeader());
+    },
+
+    //genarete Random Usernanme
+    generateRandomUsername: () => {
+        return axios.get(BASE_URL + 'users/generate-random-username', RestService.getHeader());
+    },
+
+    //genarete Random Emails
+    checkUniquePgpEmail: (value) => {
+        return axios.post(BASE_URL + 'users/check-unique-pgp', { pgp_email: value }, RestService.getHeader());
     },
 }
 export default RestService;

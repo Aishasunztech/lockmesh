@@ -1,30 +1,46 @@
+// Libraries
 import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import AddUser from '../../users/components/AddUser';
-import { convertToLang } from '../../utils/commonUtils';
-import Services from './Services'
-import Picky from 'react-picky';
-import AddSimPermission from './AddSimPermission'
+// import Picky from 'react-picky';
 import { Markup } from 'interweave';
 import { Modal, Button, Form, Input, Select, Radio, InputNumber, Popover, Icon, Row, Col, Spin, Table, Checkbox, Switch } from 'antd';
 import { withRouter, Redirect, Link } from 'react-router-dom';
+import moment from 'moment';
 
-import { getSimIDs, getChatIDs, getPGPEmails, getParentPackages, getProductPrices, getHardwaresPrices } from "../../../appRedux/actions/Devices";
-import { getPolicies } from "../../../appRedux/actions/ConnectDevice";
+// components
+import AddUser from '../../users/components/AddUser';
+import Services from './Services';
+import AddSimPermission from './AddSimPermission';
+import Invoice from './invoice';
+import AddPGPEmailModal from './AddPGPEmailModal';
+
+// helpers
+import { convertToLang } from '../../utils/commonUtils';
+import { inventorySales } from '../../utils/columnsUtils';
+
+// actions
 import {
+    getSimIDs,
+    getChatIDs,
+    getPGPEmails,
+    getParentPackages,
+    getProductPrices,
+    getHardwaresPrices,
     addUser,
     getUserList,
-    getInvoiceId
-} from "../../../appRedux/actions/Users";
+    getInvoiceId,
+    getPolicies,
+    getDomains,
+    addProduct
+} from "../../../appRedux/actions";
+
+// constants
 import { Button_Cancel, Button_submit, Button_Add_User, Button_Add_Device } from '../../../constants/ButtonConstants';
 import { LABEL_DATA_PGP_EMAIL, LABEL_DATA_SIM_ID, LABEL_DATA_CHAT_ID, DUMY_TRANS_ID } from '../../../constants/LabelConstants';
 import { SINGLE_DEVICE, DUPLICATE_DEVICES, Required_Fields, USER_ID, DEVICE_ID, USER_ID_IS_REQUIRED, SELECT_PGP_EMAILS, DEVICE_Select_CHAT_ID, SELECT_USER_ID, DEVICE_CLIENT_ID, DEVICE_Select_SIM_ID, DEVICE_MODE, DEVICE_MODEL, Device_Note, Device_Valid_For, Device_Valid_days_Required, DUPLICATE_DEVICES_REQUIRED, DEVICE_IMEI_1, DEVICE_SIM_1, DEVICE_IMEI_2, DEVICE_SIM_2, DUPLICATE_DEVICES_HELPING_TEXT } from '../../../constants/DeviceConstants';
 import { Not_valid_Email, POLICY, Start_Date, Expire_Date, Expire_Date_Require, SELECT_POLICY, ADMIN } from '../../../constants/Constants';
 import { DEALER_PIN } from '../../../constants/DealerConstants';
-import moment from 'moment';
-import Invoice from './invoice';
-import { inventorySales } from '../../utils/columnsUtils';
 
 const confirm = Modal.confirm;
 const success = Modal.success
@@ -153,6 +169,7 @@ class AddDevice extends Component {
             }
         });
     }
+
     componentDidMount() {
         this.props.getUserList();
         if (this.props.user.type !== ADMIN) {
@@ -165,6 +182,7 @@ class AddDevice extends Component {
         this.props.getChatIDs();
         this.props.getPGPEmails();
     }
+
     componentWillReceiveProps(nextProps) {
         if (nextProps.isloading) {
             this.setState({ addNewUserModal: true })
@@ -180,6 +198,17 @@ class AddDevice extends Component {
                 tabselect: '0',
             })
         }
+        if (!this.state.disablePgp) {
+            this.setState({
+                pgp_email: nextProps.pgp_emails[0].pgp_email
+            })
+        }
+        if (!this.state.disableChat) {
+            this.setState({
+                chat_id: nextProps.chat_ids[0].chat_id
+            })
+        }
+
     }
 
     handleReset = () => {
@@ -272,6 +301,19 @@ class AddDevice extends Component {
         this.refs.add_user.showModal(handleSubmit);
     }
 
+    handlePGPModal = () => {
+        this.addPGPEmailModal.showModal();
+    }
+
+    handleChatID = (e) => {
+        let payload = {
+            type: 'chat_id',
+            auto_generated: true,
+            product_data: {}
+        }
+        this.props.addProduct(payload)
+    }
+
     handleSimPermissionModal = () => {
         let handleSubmit = this.props.addSimPermission;
         this.refs.add_sim_permission.showModal(handleSubmit);
@@ -286,8 +328,7 @@ class AddDevice extends Component {
 
         let packagesData = []
         let productData = []
-        let total_price = 0
-        console.log("SERVICES SUBMIT", packages);
+        let total_price = 0;
         if (packages && packages.length) {
             packages.map((item) => {
                 let data = {
@@ -508,7 +549,7 @@ class AddDevice extends Component {
 
 
     filterList = (type, list, listType) => {
-        let dumyPackages = [];
+        let dummyPackages = [];
         if (list.length) {
             list.filter(function (item) {
                 let packageTerm;
@@ -518,11 +559,11 @@ class AddDevice extends Component {
                     packageTerm = item.price_term
                 }
                 if (packageTerm == type) {
-                    dumyPackages.push(item);
+                    dummyPackages.push(item);
                 }
             });
         }
-        return dumyPackages;
+        return dummyPackages;
     }
 
 
@@ -693,7 +734,6 @@ class AddDevice extends Component {
         }
     }
 
-
     render() {
         // console.log(this.props);
         // console.log('id is', this.state.products, this.state.packages);
@@ -738,9 +778,14 @@ class AddDevice extends Component {
 
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
-                                    label={convertToLang(this.props.translation[""], `ADD USER`)}
-                                    labelCol={{ span: 8 }}
-                                    wrapperCol={{ span: 16 }}
+                                    // label={convertToLang(this.props.translation[""], `ADD USER`)}
+                                    // labelCol={{ span: 8 }}
+                                    // wrapperCol={{ span: 16 }}
+
+                                    // @author Usman Hafeez
+                                    // label={convertToLang(this.props.translation[""], `ADD USER`)}
+                                    labelCol={{ span: 0 }}
+                                    wrapperCol={{ span: 24 }}
                                 >
                                     <Button
                                         className="add_user_btn"
@@ -753,6 +798,10 @@ class AddDevice extends Component {
                                     </Button>
                                 </Form.Item>
                             </Col>
+
+                            {/**
+                             * @section User Selector
+                             */}
                             {(isloading ?
                                 <div className="addUserSpin">
                                     <Spin />
@@ -791,12 +840,20 @@ class AddDevice extends Component {
                                     </Col>
                                 </Fragment>
                             )}
+
+
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
-                                    label={convertToLang(this.props.translation[DUMY_TRANS_ID], "SERVICES")}
-                                    labelCol={{ span: 8 }}
-                                    wrapperCol={{ span: 16 }}
                                     className="l_h_20"
+
+                                    // label={convertToLang(this.props.translation[DUMY_TRANS_ID], "SERVICES")}
+                                    // labelCol={{ span: 8 }}
+                                    // wrapperCol={{ span: 16 }}
+
+                                    // @author Usman Hafeez
+                                    // label={convertToLang(this.props.translation[DUMY_TRANS_ID], "SERVICES")}
+                                    labelCol={{ span: 0 }}
+                                    wrapperCol={{ span: 24 }}
                                 >
                                     {this.props.form.getFieldDecorator('service', {
                                         initialValue: '',
@@ -809,11 +866,13 @@ class AddDevice extends Component {
                                             >
                                                 {convertToLang(this.props.translation[DUMY_TRANS_ID], "SELECT SERVICES")}
                                             </Button>
-                                            <span style={this.state.checkServices}>You need to selet a service before submit form.</span>
+                                            <span style={this.state.checkServices}>You need to select a service before submit form.</span>
                                         </Fragment>
                                     )}
                                 </Form.Item>
                             </Col>
+
+                            {/* Hardware Selection */}
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
                                     // className="select_hardware"
@@ -846,6 +905,8 @@ class AddDevice extends Component {
                                     )}
                                 </Form.Item>
                             </Col>
+
+                            {/* Expiry Date Input */}
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
                                     label={convertToLang(this.props.translation[Expire_Date], "Expiry Date")}
@@ -860,6 +921,8 @@ class AddDevice extends Component {
                                     )}
                                 </Form.Item>
                             </Col>
+
+                            {/* Policy Selection */}
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
                                     label={convertToLang(this.props.translation[POLICY], "Policy")}
@@ -887,7 +950,10 @@ class AddDevice extends Component {
                                 </Form.Item>
                             </Col>
 
-                            {(this.props.preActive) ? null :
+                            {/* Device ID Input */}
+                            {(this.props.preActive) ?
+                                null
+                                :
                                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                     <Form.Item
                                         label={convertToLang(this.props.translation[DEVICE_ID], "Device ID")}
@@ -902,6 +968,8 @@ class AddDevice extends Component {
                                     </Form.Item>
                                 </Col>
                             }
+
+                            {/* Note Input */}
                             {(this.props.preActive) ?
                                 <Fragment>
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
@@ -923,9 +991,13 @@ class AddDevice extends Component {
                                             )}
                                         </Form.Item>
                                     </Col>
-                                </Fragment> : null}
+                                </Fragment>
+                                :
+                                null
+                            }
+
                             {(this.props.preActive === false) ?
-                                (<Fragment>
+                                <Fragment>
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
                                             label={convertToLang(this.props.translation[DEALER_PIN], "Dealer Pin")}
@@ -958,26 +1030,53 @@ class AddDevice extends Component {
                                         </Form.Item>
                                     </Col>
                                 </Fragment>
-                                )
                                 :
-                                null}
+                                null
+                            }
                         </Col>
                         <Col xs={24} sm={24} md={12} lg={12} xl={12} className="p-0">
 
                             {/* <Form.Item
-                        label={convertToLang(this.props.translation[Start_Date], "Start Date")}
-                        labelCol={{ span: 8}}
-                        wrapperCol={{ span: 16 }}
-                    >
-                        {this.props.form.getFieldDecorator('start_date', {
-                            initialValue: this.props.new ? this.createdDate() : this.props.device.start_date,
-                        })(
+                                    label={convertToLang(this.props.translation[Start_Date], "Start Date")}
+                                    labelCol={{ span: 8}}
+                                    wrapperCol={{ span: 16 }}
+                                >
+                                    {this.props.form.getFieldDecorator('start_date', {
+                                        initialValue: this.props.new ? this.createdDate() : this.props.device.start_date,
+                                    })(
 
-                            <Input disabled />
-                        )}
-                    </Form.Item> */}
+                                        <Input disabled />
+                                    )}
+                                </Form.Item> 
+                            */}
+
                             {(this.state.type == 0 && lastObject) ?
                                 <Fragment>
+
+                                    {/**
+                                     * @author Usman Hafeez
+                                     * @description Add PGP Email button
+                                     */}
+                                    <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                        <Form.Item
+                                            //    label={<span></span>}
+                                            labelCol={{ span: 0 }}
+                                            wrapperCol={{ span: 24 }}
+                                        >
+                                            <Button
+                                                className="add_user_btn"
+                                                type="primary"
+                                                style={{ width: "100%" }}
+                                                onClick={() => this.handlePGPModal()}
+                                                style={{ width: "100%" }}
+                                                disabled={this.state.disablePgp}
+                                            >
+                                                {convertToLang(this.props.translation[''], "Add PGP Email")}
+                                            </Button>
+                                        </Form.Item>
+                                    </Col>
+
+                                    {/* PGP Email Input */}
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
                                             label={convertToLang(this.props.translation[LABEL_DATA_PGP_EMAIL], "PGP Email")}
@@ -1013,6 +1112,31 @@ class AddDevice extends Component {
                                             )}
                                         </Form.Item>
                                     </Col>
+
+                                    {/**
+                                     * @author Usman Hafeez
+                                     * @description Add Chat ID button
+                                     */}
+                                    <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                        <Form.Item
+                                            // label={''}
+                                            labelCol={{ span: 0 }}
+                                            wrapperCol={{ span: 24 }}
+                                        >
+                                            <Button
+                                                className="add_user_btn"
+                                                type="primary"
+                                                style={{ width: "100%" }}
+                                                onClick={this.handleChatID}
+                                                style={{ width: "100%" }}
+                                                disabled={this.state.disableChat}
+                                            >
+                                                {convertToLang(this.props.translation[''], "Generate Chat ID")}
+                                            </Button>
+                                        </Form.Item>
+                                    </Col>
+
+                                    {/* Chat ID Input */}
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
                                             label={convertToLang(this.props.translation[LABEL_DATA_CHAT_ID], "Chat ID")}
@@ -1040,6 +1164,31 @@ class AddDevice extends Component {
                                             )}
                                         </Form.Item>
                                     </Col>
+
+                                    {/**
+                                     * @author Usman Hafeez
+                                     * @description Add SIM ID button
+                                     */}
+                                    <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                        <Form.Item
+                                            // label={''}
+                                            labelCol={{ span: 0 }}
+                                            wrapperCol={{ span: 24 }}
+                                        >
+                                            <Button
+                                                className="add_user_btn"
+                                                type="primary"
+                                                style={{ width: "100%" }}
+                                                onClick={this.handleChatID}
+                                                style={{ width: "100%" }}
+                                                disabled={true}
+                                            >
+                                                {convertToLang(this.props.translation[''], "ADD SIM ID")}
+                                            </Button>
+                                        </Form.Item>
+                                    </Col>
+
+                                    {/* Sim ID Input */}
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
                                             label={convertToLang(this.props.translation[LABEL_DATA_SIM_ID], "Sim ID")}
@@ -1067,6 +1216,8 @@ class AddDevice extends Component {
                                             )}
                                         </Form.Item>
                                     </Col>
+
+                                    {/* Sim ID2 Input */}
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
                                             label={convertToLang(this.props.translation[DUMY_TRANS_ID], "Sim ID 2")}
@@ -1097,6 +1248,8 @@ class AddDevice extends Component {
                                             )}
                                         </Form.Item>
                                     </Col>
+
+                                    {/* VPN Input */}
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
                                             label={convertToLang(this.props.translation[DUMY_TRANS_ID], "VPN")}
@@ -1121,6 +1274,8 @@ class AddDevice extends Component {
                                             )}
                                         </Form.Item>
                                     </Col>
+
+                                    {/* Client ID Input */}
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
                                             label={convertToLang(this.props.translation[DUMY_TRANS_ID], "Client ID")}
@@ -1138,6 +1293,8 @@ class AddDevice extends Component {
                                             )}
                                         </Form.Item>
                                     </Col>
+
+                                    {/* Model Input */}
                                     {(this.props.preActive) ? null :
                                         <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                             <Form.Item
@@ -1153,33 +1310,38 @@ class AddDevice extends Component {
                                             </Form.Item>
                                         </Col>
                                     }
-                                </Fragment> : null}
-                            {(this.props.preActive) ?
-                                <Fragment>
-                                    <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                                        <Form.Item
-                                            label={convertToLang(this.props.translation[Device_Valid_For], "VALID FOR(DAYS)")}
-                                            labelCol={{ span: 12 }}
-                                            wrapperCol={{ span: 12 }}
-                                            className="val_days"
-                                        >
-                                            {this.props.form.getFieldDecorator('validity', {
-                                                initialValue: '',
-                                                rules: [{
-                                                    required: true, message: convertToLang(this.props.translation[Device_Valid_days_Required], "Valid days required"),
-                                                },
-                                                {
-                                                    validator: this.validateValidDays,
-                                                }
-                                                ],
-                                            })(
-                                                <InputNumber min={1} />
-                                            )}
-
-                                        </Form.Item>
-                                    </Col>
                                 </Fragment>
-                                : null}
+                                :
+                                null
+                            }
+
+                            {/* Valid For Input */}
+                            {(this.props.preActive) ?
+                                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                    <Form.Item
+                                        label={convertToLang(this.props.translation[Device_Valid_For], "VALID FOR(DAYS)")}
+                                        labelCol={{ span: 12 }}
+                                        wrapperCol={{ span: 12 }}
+                                        className="val_days"
+                                    >
+                                        {this.props.form.getFieldDecorator('validity', {
+                                            initialValue: '',
+                                            rules: [{
+                                                required: true, message: convertToLang(this.props.translation[Device_Valid_days_Required], "Valid days required"),
+                                            },
+                                            {
+                                                validator: this.validateValidDays,
+                                            }
+                                            ],
+                                        })(
+                                            <InputNumber min={1} />
+                                        )}
+
+                                    </Form.Item>
+                                </Col>
+                                :
+                                null
+                            }
 
                             {(this.state.type == 1) ?
                                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>
@@ -1280,12 +1442,37 @@ class AddDevice extends Component {
                         </Form.Item>
                     </Row>
                 </Form>
-                <AddUser ref="add_user" translation={this.props.translation} />
+
+                {/* AddUserModal */}
+                <AddUser
+                    ref="add_user"
+                    translation={this.props.translation}
+                />
+
+                {/**
+                 * @author Usman Hafeez
+                 * @description from here pgp email will be generated
+                 */}
+
+                <AddPGPEmailModal
+                    ref="addPGPEmailModal"
+                    translation={this.props.translation}
+                    wrappedComponentRef={(form) => this.addPGPEmailModal = form}
+
+                    // actions
+                    getDomains={this.props.getDomains}
+                    addProduct={this.props.addProduct}
+
+                    // data
+                    domainList={this.props.domainList}
+
+                />
+
                 {/* <AddSimPermission ref="add_sim_permission" /> */}
                 <Modal
                     width={750}
                     visible={this.state.servicesModal}
-                    title={convertToLang(this.props.translation[DUMY_TRANS_ID], "SEVCIES")}
+                    title={convertToLang(this.props.translation[DUMY_TRANS_ID], "SERVICES")}
                     maskClosable={false}
                     onOk={this.handleOk}
                     closable={false}
@@ -1299,13 +1486,15 @@ class AddDevice extends Component {
                         parent_packages={this.state.parent_packages}
                         product_prices={this.state.product_prices}
                         tabselect={this.state.tabselect}
-                        handleChangetab={this.handleChangetab}
+                        handleChangeTab={this.handleChangetab}
                         translation={this.props.translation}
                         handleServicesSubmit={this.handleServicesSubmit}
                         user_credit={this.props.user_credit}
                         history={this.props.history}
                     />
                 </Modal>
+
+                {/* Confirmation Modal */}
                 <Modal
                     width={900}
                     visible={this.state.showConfirmCredit}
@@ -1359,6 +1548,8 @@ class AddDevice extends Component {
                         </div >
                     </Fragment>
                 </Modal>
+
+                {/* Invoices Modal */}
                 <Modal
                     width="850px"
                     visible={this.state.invoiceVisible}
@@ -1414,12 +1605,13 @@ function mapDispatchToProps(dispatch) {
         getParentPackages: getParentPackages,
         getProductPrices: getProductPrices,
         getHardwaresPrices: getHardwaresPrices,
-        addSimPermission: null
+        addSimPermission: null,
+        getDomains: getDomains,
+        addProduct: addProduct
     }, dispatch);
 }
-var mapStateToProps = ({ routing, devices, device_details, users, settings, sidebar, auth }) => {
-    // console.log("users.invoiceID at componente", users.invoiceID);
-    // console.log("devices.parent_packages ", devices.parent_packages);
+var mapStateToProps = ({ routing, devices, device_details, users, settings, sidebar, auth, account }) => {
+
     return {
         invoiceID: users.invoiceID,
         routing: routing,
@@ -1436,6 +1628,7 @@ var mapStateToProps = ({ routing, devices, device_details, users, settings, side
         user_credit: sidebar.user_credit,
         credits_limit: sidebar.credits_limit,
         user: auth.authUser,
+        domainList: account.domainList
     };
 }
 

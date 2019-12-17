@@ -1006,25 +1006,34 @@ class Devices extends Component {
                     this.props.isloading ? <CircularProgress /> :
                         <Fragment>
                             <AppFilter
+
+                                // provide page heading if you need
+                                pageHeading={convertToLang(this.props.translation[Sidebar_users_devices], "Users & Devices")}
+                                
+                                // column selection Dropdown props
                                 handleFilterOptions={this.handleFilterOptions}
                                 selectedOptions={this.props.selectedOptions}
-                                searchPlaceholder={convertToLang(this.props.translation[Appfilter_SearchDevices], "Search Devices")}
-                                defaultPagingValue={this.state.defaultPagingValue}
-                                addButtonText={convertToLang(this.props.translation[Button_Add_Device], "Add Device")}
                                 options={this.props.options}
-                                isAddButton={this.props.user.type !== ADMIN}
+                                handleCheckChange={this.handleCheckChange}
+
+                                // Searching
+                                searchPlaceholder={convertToLang(this.props.translation[Appfilter_SearchDevices], "Search Devices")}
+                                handleComponentSearch={this.handleComponentSearch}
+
+                                // Pagination
+                                defaultPagingValue={this.state.defaultPagingValue}
+                                handlePagination={this.handlePagination}
+
+                                // Add Button
                                 AddDeviceModal={true}
+                                addButtonText={convertToLang(this.props.translation[Button_Add_Device], "Add Device")}
+                                isAddButton={this.props.user.type !== ADMIN}
                                 disableAddButton={this.props.user.type === ADMIN}
                                 // toLink="add-device"
                                 handleDeviceModal={this.handleDeviceModal}
                                 handleUserModal={this.handleUserModal}
-                                handleCheckChange={this.handleCheckChange}
-                                handlePagination={this.handlePagination}
-                                handleComponentSearch={this.handleComponentSearch}
                                 locale={this.props.locale}
                                 translation={this.state.translation}
-                                // provide page heading if you need
-                                pageHeading={convertToLang(this.props.translation[Sidebar_users_devices], "Users & Devices")}
                             />
                             <DevicesList
                                 transferDeviceProfile={this.transferDeviceProfile}

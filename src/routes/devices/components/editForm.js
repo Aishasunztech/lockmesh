@@ -1,24 +1,48 @@
+// Libraries
 import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-
+import { Markup } from 'interweave';
+import moment from 'moment';
+import axios from 'axios';
 import { Button, Form, Input, Select, InputNumber, Spin, Modal, Table, Switch, DatePicker, Row, Col } from 'antd';
-import { checkValue, convertToLang } from '../../utils/commonUtils'
 
-import { getSimIDs, getChatIDs, getPGPEmails, getParentPackages, getProductPrices, extendServices } from "../../../appRedux/actions/Devices";
+// Components
+import AddUser from '../../users/components/AddUser';
+import AddPGPEmailModal from './AddPGPEmailModal';
+import Services from './Services';
+import Invoice from './invoice';
+
+// Helpers
+import { checkValue, convertToLang } from '../../utils/commonUtils'
+import RestService from '../../../appRedux/services/RestServices';
+import { inventorySales, refundServiceColumns } from '../../utils/columnsUtils';
+
+// actions
+import {
+    getSimIDs,
+    getChatIDs,
+    getPGPEmails,
+    getParentPackages,
+    getProductPrices,
+    extendServices,
+    addUser,
+    getUserList,
+    getInvoiceId,
+    getDomains,
+    addProduct
+} from "../../../appRedux/actions";
+
+// Constants
 import {
     DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, ADMIN, Model_text, Expire_Date, one_month, three_month, six_month, twelve_month, Days, Start_Date, Expire_Date_Require, Not_valid_Email, DEVICE_EXPIRED
 } from '../../../constants/Constants';
-import AddUser from '../../users/components/AddUser';
-import {
-    addUser,
-    getUserList,
-    getInvoiceId
-} from "../../../appRedux/actions/Users";
-import Services from './Services'
+
+
 import {
     Required_Fields,
-    DEVICE_ID, USER_ID,
+    DEVICE_ID,
+    USER_ID,
     DEVICE_SIM_ID,
     DEVICE_Select_SIM_ID,
     DEVICE_CHAT_ID,
@@ -31,16 +55,21 @@ import {
     SELECT_PGP_EMAILS,
     DEVICE_EDIT
 } from '../../../constants/DeviceConstants';
-import { Button_Add_User, Button_submit, Button_Cancel } from '../../../constants/ButtonConstants';
-import { LABEL_DATA_PGP_EMAIL, DUMY_TRANS_ID, LABEL_DATA_CHAT_ID, LABEL_DATA_SIM_ID, LABEL_APPLY_SERVICES } from '../../../constants/LabelConstants';
-import moment from 'moment';
-import axios from 'axios';
-import RestService from '../../../appRedux/services/RestServices';
-import { async } from 'q';
-import { inventorySales, refundServiceColumns } from '../../utils/columnsUtils';
-import Invoice from './invoice';
+import {
+    Button_Add_User,
+    Button_submit,
+    Button_Cancel
+} from '../../../constants/ButtonConstants';
+
+import {
+    LABEL_DATA_PGP_EMAIL,
+    DUMY_TRANS_ID,
+    LABEL_DATA_CHAT_ID,
+    LABEL_DATA_SIM_ID,
+    LABEL_APPLY_SERVICES
+} from '../../../constants/LabelConstants';
+
 import { PRE_ACTIVATE_DEVICE } from '../../../constants/ActionTypes';
-import { Markup } from 'interweave';
 
 const { TextArea } = Input;
 const confirm = Modal.confirm
@@ -206,8 +235,8 @@ class EditDevice extends Component {
             let disableSim2 = true
             let disableSim = true
             let disableVpn = true
-            let packgaes = JSON.parse(this.props.device.services.packages)
-            let pkg_features = packgaes[0].pkg_features
+            let packages = JSON.parse(this.props.device.services.packages)
+            let pkg_features = packages[0].pkg_features
             if (pkg_features) {
                 if (pkg_features.pgp_email) {
                     disablePgp = false
@@ -262,7 +291,7 @@ class EditDevice extends Component {
     handleServicesModal = async (e) => {
         if (this.props.device.extended_services) {
             this.setState({
-                changeServiceMsg: "You have Applied a Renewal or Extension for this device, please cancel service first before chosing new service.",
+                changeServiceMsg: "You have Applied a Renewal or Extension for this device, please cancel service first before choosing new service.",
                 checkServices: { color: "Red" },
             })
         }
@@ -413,7 +442,7 @@ class EditDevice extends Component {
     }
 
     filterList = (type, list, listType) => {
-        let dumyPackages = [];
+        let dummyPackages = [];
         if (list.length) {
             list.filter(function (item) {
                 let packageTerm;
@@ -423,11 +452,11 @@ class EditDevice extends Component {
                     packageTerm = item.price_term
                 }
                 if (packageTerm == type) {
-                    dumyPackages.push(item);
+                    dummyPackages.push(item);
                 }
             });
         }
-        return dumyPackages;
+        return dummyPackages;
     }
 
     handleCancel = () => {
@@ -441,7 +470,7 @@ class EditDevice extends Component {
     }
 
 
-    handleChangetab = (value) => {
+    handleChangeTab = (value) => {
         // 
         switch (value) {
             case '0':
@@ -659,6 +688,7 @@ class EditDevice extends Component {
             })
         }
     }
+
     handleRenewService = () => {
         if (this.props.device.finalStatus !== DEVICE_TRIAL) {
             let packagesData = this.props.device.services ? JSON.parse(this.props.device.services.packages) : []
@@ -714,6 +744,18 @@ class EditDevice extends Component {
         } else {
             callback();
         }
+    }
+    handlePGPModal = () => {
+        this.addPGPEmailModal.showModal();
+    }
+
+    handleChatID = (e) => {
+        let payload = {
+            type: 'chat_id',
+            auto_generated: true,
+            product_data: {}
+        }
+        this.props.addProduct(payload)
     }
 
     render() {
@@ -981,6 +1023,23 @@ class EditDevice extends Component {
                             </Col>
                         </Col>
                         <Col xs={24} sm={24} md={12} lg={12} xl={12} className="p-0">
+
+                            {/**
+                             * @author Usman Hafeez
+                             * @description added button of PGP Email
+                             */}
+
+                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                <Button
+                                    disabled={this.state.disablePgp}
+                                    className="add_user_btn"
+                                    type="primary"
+                                    style={{ width: "100%" }}
+                                    onClick={() => this.handlePGPModal()}
+                                    style={{ width: "100%" }}
+                                >Add PGP Email</Button>
+                            </Col>
+
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
                                     label={convertToLang(this.props.translation[LABEL_DATA_PGP_EMAIL], "PGP Email ")}
@@ -1010,6 +1069,22 @@ class EditDevice extends Component {
                                     )}
                                 </Form.Item>
                             </Col>
+
+                            {/**
+                             * @author Usman Hafeez
+                             * @description added button of Chat ID
+                             */}
+                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                <Button
+                                    disabled={this.state.disableChat}
+                                    className="add_user_btn"
+                                    type="primary"
+                                    style={{ width: "100%" }}
+                                    onClick={this.handleChatID}
+                                    style={{ width: "100%" }}
+                                >Generate Chat ID</Button>
+                            </Col>
+
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
                                     label={convertToLang(this.props.translation[LABEL_DATA_CHAT_ID], "Chat ID ")}
@@ -1036,6 +1111,21 @@ class EditDevice extends Component {
                                         </Select>
                                     )}
                                 </Form.Item>
+                            </Col>
+
+                            {/**
+                             * @author Usman Hafeez
+                             * @description added button of Chat ID
+                             */}
+                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                <Button
+                                    disabled={true}
+                                    className="add_user_btn"
+                                    type="primary"
+                                    style={{ width: "100%" }}
+                                    onClick={this.handleChatID}
+                                    style={{ width: "100%" }}
+                                >ADD SIM ID</Button>
                             </Col>
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
@@ -1179,7 +1269,34 @@ class EditDevice extends Component {
                         </Col>
                     </Row>
                 </Form>
+
+                {/**
+                 * @section AddUserModal
+                 */}
                 <AddUser ref="add_user" translation={this.props.translation} />
+
+                {/**
+                 * @author Usman Hafeez
+                 * @description from here pgp email will be generated
+                 */}
+
+                <AddPGPEmailModal
+                    ref="addPGPEmailModal"
+                    translation={this.props.translation}
+                    wrappedComponentRef={(form) => this.addPGPEmailModal = form}
+
+                    // actions
+                    getDomains={this.props.getDomains}
+                    addProduct={this.props.addProduct}
+                    // data
+                    domainList={this.props.domainList}
+
+                />
+
+                {/**
+                 * 
+                 * @section ServicesModal
+                 *  */}
                 <Modal
                     width={750}
                     visible={this.state.servicesModal}
@@ -1197,7 +1314,7 @@ class EditDevice extends Component {
                         parent_packages={this.state.parent_packages}
                         product_prices={this.state.product_prices}
                         tabselect={this.state.tabselect}
-                        handleChangetab={this.handleChangetab}
+                        handleChangeTab={this.handleChangeTab}
                         translation={this.props.translation}
                         handleServicesSubmit={this.handleServicesSubmit}
                         user_credit={this.props.user_credit}
@@ -1211,6 +1328,10 @@ class EditDevice extends Component {
                     />
                 </Modal>
 
+                {/**
+                 * 
+                 * @section ServicesDetailsModal
+                 *  */}
                 <Modal
                     width={900}
                     visible={this.state.showConfirmCredit}
@@ -1286,6 +1407,11 @@ class EditDevice extends Component {
                         </div >
                     </Fragment>
                 </Modal>
+
+                {/**
+                 * 
+                 * @section InvoiceModal
+                 *  */}
                 <Modal
                     width="850px"
                     visible={this.state.invoiceVisible}
@@ -1330,7 +1456,7 @@ class EditDevice extends Component {
     }
 }
 
-const WrappedEditDeviceForm = Form.create({ name: 'register' })(EditDevice);
+const WrappedEditDeviceForm = Form.create({ name: 'editDevice' })(EditDevice);
 // export default WrappedRegistrationForm;
 
 function mapDispatchToProps(dispatch) {
@@ -1345,10 +1471,13 @@ function mapDispatchToProps(dispatch) {
         getParentPackages: getParentPackages,
         getProductPrices: getProductPrices,
         getInvoiceId: getInvoiceId,
-        extendServices: extendServices
+        extendServices: extendServices,
+        getDomains: getDomains,
+        addProduct: addProduct
+
     }, dispatch);
 }
-var mapStateToProps = ({ routing, devices, users, auth, settings, sidebar }) => {
+var mapStateToProps = ({ routing, devices, users, auth, settings, sidebar, account }) => {
     // 
 
     return {
@@ -1365,6 +1494,8 @@ var mapStateToProps = ({ routing, devices, users, auth, settings, sidebar }) => 
         product_prices: devices.product_prices,
         user_credit: sidebar.user_credit,
         credits_limit: sidebar.credits_limit,
+        domainList: account.domainList,
+
     };
 }
 
