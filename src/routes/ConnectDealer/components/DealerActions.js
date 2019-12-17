@@ -250,7 +250,10 @@ export default class DealerAction extends Component {
                         {(this.props.authUser.type === ADMIN) ?
 
                             <Col className="gutter-row" justify="center" span={12} >
-                                <Button disabled style={{ width: "100%", marginBottom: 16, }}>
+                                <Button
+                                    style={{ width: "100%", marginBottom: 16, }}
+                                    onClick={() => { this.form2.showModal()}}
+                                >
                                     <h6 className="mb-0">DEMO</h6>
                                 </Button>
                             </Col>
