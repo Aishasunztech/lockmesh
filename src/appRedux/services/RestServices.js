@@ -39,7 +39,7 @@ const RestService = {
             verify_code: verifyForm.verify_code
         });
     },
-    
+
     // for logout
     authLogOut: () => {
         localStorage.removeItem('email');
@@ -53,6 +53,7 @@ const RestService = {
         localStorage.removeItem('connected_dealer');
         localStorage.removeItem('connected_devices');
         localStorage.removeItem('two_factor_auth');
+        localStorage.removeItem('timezone');
         // this.router.navigate(['/login']);
 
     },
@@ -69,6 +70,7 @@ const RestService = {
         localStorage.setItem('type', data.user.user_type);
         localStorage.setItem('dealer_pin', data.user.link_code);
         localStorage.setItem('two_factor_auth', data.user.two_factor_auth);
+        localStorage.setItem('timezone', data.user.timezone);
 
     },
     setUserData: (data) => {
@@ -84,6 +86,8 @@ const RestService = {
         localStorage.setItem('dealer_pin', data.user.link_code);
         localStorage.setItem('two_factor_auth', data.user.two_factor_auth);
         localStorage.setItem('account_balance_status', data.user.account_balance_status);
+        localStorage.setItem('timezone', data.user.timezone);
+        localStorage.setItem('account_balance_status_by', data.user.account_balance_status_by)
 
     },
     // checkAuth
@@ -136,7 +140,7 @@ const RestService = {
         // return this.response;
     },
 
-    // getuserType
+    // getUserType
     getUserType: () => {
 
     },
@@ -167,6 +171,9 @@ const RestService = {
         return axios.get(BASE_URL + 'users/getServicesHistory/' + usr_acc_id, RestService.getHeader());
     },
 
+    /**
+     * @section Devices
+     */
 
     // getDevices
     DeviceList: () => {
@@ -203,9 +210,11 @@ const RestService = {
             RestService.getHeader()
         )
     },
+
     getSimIDs: () => {
         return axios.get(BASE_URL + 'users/get_sim_ids', RestService.getHeader());
     },
+    
     getChatIDs: () => {
         return axios.get(BASE_URL + 'users/get_chat_ids', RestService.getHeader());
     },
@@ -232,6 +241,13 @@ const RestService = {
     getUsedChatIds: () => {
         return axios.get(BASE_URL + 'users/get_used_chat_ids', RestService.getHeader());
     },
+    addProduct: (payload) => {
+        return axios.post(`${BASE_URL}users/create-service-product`, payload, RestService.getHeader());
+    },
+
+    /**
+     * @section Dealers
+     */
 
     // Dealers
     DealerList: (dealer) => {
@@ -269,7 +285,10 @@ const RestService = {
             RestService.getHeader()
         )
     },
-    // Connect Dealer
+
+    /**
+     * @section Connect Dealer
+     */
     getDealerDetails: (dealerId) => {
         return axios.get(BASE_URL + 'users/connect-dealer/' + dealerId, RestService.getHeader());
     },
@@ -293,6 +312,7 @@ const RestService = {
     getDealerSalesHistory: (dealerId) => {
         return axios.get(BASE_URL + 'users/sales-history/' + dealerId, RestService.getHeader());
     },
+
     ApkList: () => {
         return axios.get(BASE_URL + 'users/apklist', RestService.getHeader());
     },
@@ -400,7 +420,7 @@ const RestService = {
         // console.log('rest ser')
         return axios.get(BASE_URL + "users/get_usr_acc_id/" + d, RestService.getHeader());
     },
-    
+
 
     //AUTHENTICATE UPDATE USER CREDENTIALS
     authenticateUpdateUser: (data) => {
@@ -436,11 +456,24 @@ const RestService = {
         return axios.get(BASE_URL + 'users/get-billing-history/' + device_id + "/" + dealer_id, RestService.getHeader());
     },
 
+    resetChatPin: (data) => {
+      return axios.post(BASE_URL + 'users/reset-chat-pin/', data, RestService.getHeader());
+    },
+
+  changeSchatPinStatus: (data) => {
+      return axios.post(BASE_URL + 'users/change-s-chat-pin-status/', data, RestService.getHeader());
+    },
+
     // for dealer reset password(admin dashboard)
     updatePassword: (dealer) => {
 
         return axios.post(BASE_URL + 'users/resetpwd', dealer, RestService.getHeader());
 
+    },
+
+    changeTimeZone: (data) => {
+        // console.log("at rest file ", data);
+        return axios.post(BASE_URL + 'users/set-timezone', { data }, RestService.getHeader());
     },
 
     // For Apk edit(admin dashboard)
@@ -965,6 +998,14 @@ const RestService = {
         return axios.post(BASE_URL + 'users/send_bulk_msg', data, RestService.getHeader());
     },
 
+    getBulkMsgsList: () => {
+        return axios.get(BASE_URL + 'users/get_bulk_msgs', RestService.getHeader());
+    },
+
+    deleteBulkMsg: (id) => {
+        return axios.get(BASE_URL + 'users/delete_bulk_msg/' + id, RestService.getHeader());
+    },
+
 
     // unlink bulk Devices
     unlinkBulkDevices: (data) => {
@@ -992,6 +1033,17 @@ const RestService = {
             dealers: dealers,
             action: action,
             statusAll: statusAll
+        },
+            RestService.getHeader()
+        );
+    },
+
+    connectDealerDomainPermission: (permissionIds, dealers, action, statusAll) => {
+        return axios.post(BASE_URL + 'users/dealer-domain-permissions', {
+            permissionIds,
+            dealers,
+            action,
+            statusAll
         },
             RestService.getHeader()
         );
@@ -1034,6 +1086,16 @@ const RestService = {
     //get overdue details
     getOverdueDetails: () => {
         return axios.get(BASE_URL + 'users/get-overdue-details', RestService.getHeader());
+    },
+
+    //genarete Random Usernanme
+    generateRandomUsername: () => {
+        return axios.get(BASE_URL + 'users/generate-random-username', RestService.getHeader());
+    },
+
+    //genarete Random Emails
+    checkUniquePgpEmail: (value) => {
+        return axios.post(BASE_URL + 'users/check-unique-pgp', { pgp_email: value }, RestService.getHeader());
     },
 }
 export default RestService;

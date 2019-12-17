@@ -1,21 +1,28 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col, Tag } from "antd";
-// import { BASE_URL } from '../../../constants/Application';
-// import styles from './app.css';
-// import CustomScrollbars from "../../../util/CustomScrollbars";
-// import { Link } from 'react-router-dom';
+import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col, Tag, Modal } from "antd";
+import { convertToLang, checkValue } from '../../utils/commonUtils';
+import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
+import moment from 'moment';
+import { userDevicesListColumns } from '../../utils/columnsUtils';
 
-// import {
-//     convertToLang
-// } from '../../utils/commonUtils'
-// import { Button_Edit, Button_Delete } from '../../../constants/ButtonConstants';
-// import { ADMIN } from '../../../constants/Constants';
-import Permissions from '../../utils/Components/Permissions';
-import { Tab_All } from '../../../constants/TabConstants';
-import { convertToLang } from '../../utils/commonUtils';
-// const TabPane = Tabs.TabPane;
+
 export default class ListMsgs extends Component {
-    state = { visible: false }
+
+    constructor(props) {
+        super(props);
+        let selectedDevicesColumns = userDevicesListColumns(props.translation, this.handleSearch);
+        this.state = {
+            selectedDevicesColumns: selectedDevicesColumns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
+            searchText: '',
+            columns: [],
+            pagination: this.props.pagination,
+            expandedRowKeys: [],
+            visible: false,
+
+        };
+        this.renderList = this.renderList.bind(this);
+        this.confirm = Modal.confirm;
+    }
 
     showModal = () => {
         this.setState({
@@ -35,17 +42,7 @@ export default class ListMsgs extends Component {
             visible: false,
         });
     }
-    constructor(props) {
-        super(props);
-        this.state = {
-            searchText: '',
-            columns: [],
-            pagination: this.props.pagination,
-            expandedRowKeys: [],
 
-        };
-        this.renderList = this.renderList.bind(this);
-    }
 
     handlePagination = (value) => {
 
@@ -71,52 +68,27 @@ export default class ListMsgs extends Component {
         }
     }
 
-    // handleCheckChange = (values) => {
+    deleteMsg = id => {
 
-    //     let dumydata = this.state.columns;
-    //     // console.log('values', values);
+        this.confirm({
+            title: "Do you want to delete this message ?",
+            content: '',
+            okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
+            cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
+            onOk: (() => {
+                this.props.deleteBulkMsg(id);
+            }),
+            onCancel() { },
+        });
 
-    //     if (values.length) {
-
-    //         this.state.columns.map((column, index) => {
-
-    //             if (dumydata[index].className !== 'row') {
-    //                 dumydata[index].className = 'hide';
-    //             }
-
-    //             values.map((value) => {
-    //                 if (column.title === value) {
-    //                     dumydata[index].className = '';
-    //                 }
-    //             });
-
-    //         });
-
-    //         this.setState({ columns: dumydata });
-
-    //     } else {
-    //         const newState = this.state.columns.map((column) => {
-    //             if (column.className === 'row') {
-    //                 return column;
-    //             } else {
-    //                 return ({ ...column, className: 'hide' })
-    //             }
-    //         });
-
-    //         this.setState({
-    //             columns: newState,
-    //         });
-    //     }
-
-    // }
+    }
 
     renderList(list) {
-        // console.log(this.props.user)
         // console.log("renderList: ", list);
-        let domainList = [];
+        let bulkMsgs = [];
         let data
         list.map((app) => {
-            // let parseDealers = JSON.parse(app.dealers);
+            // console.log("list ", app.sending_time ? "OKay" : "fail")
 
             data = {
                 rowKey: app.id,
@@ -124,29 +96,21 @@ export default class ListMsgs extends Component {
                 action: (
                     <div data-column="ACTION" style={{ display: "inline-flex" }}>
                         <Fragment>
-                            <Fragment><Button type="primary" size="small">EDIT</Button></Fragment>
-                            <Fragment><Button type="danger" size="small">DELETE</Button></Fragment>
-                            <Fragment><Button type="dashed" size="small">RESEND</Button></Fragment>
+                            <Fragment><Button type="primary" disabled size="small">EDIT</Button></Fragment>
+                            <Fragment><Button type="danger" size="small" onClick={() => this.deleteMsg(app.id)}>DELETE</Button></Fragment>
+                            {/* <Fragment><Button type="dashed" size="small">RESEND</Button></Fragment> */}
                         </Fragment>
                     </div>
                 ),
-                // permission: (
-                //     <div data-column="PERMISSION" style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
-                //         {/* {(app.dealers) ? (parseDealers.includes(this.props.user.id)) ? parseDealers.length - 1 : parseDealers.length : 0} */}
-                //         {(app.permission_count === "All" || this.props.totalDealers === app.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
-                //     </div>
-                // ),
-                send_to: "", //app.dealers ? JSON.parse(app.dealers) : [],
-                statusAll: app.statusAll,
-                msg: "akljbal", //app.name ? app.name : 'N/A',
-                // dealer_type: app.dealer_type,
-
-                // created_at: app.created_at,
-                // updated_at: app.updated_at
+                msg: checkValue(app.msg),
+                timer_status: app.timer_status ? app.timer_status : "N/A",
+                repeat: checkValue(app.repeat_duration),
+                sending_time: app.sending_time && app.sending_time !== "0000-00-00 00:00:00" ? moment(app.sending_time).format('YYYY-MM-DD HH:mm') : "N/A",
+                data: app,
             }
-            domainList.push(data)
+            bulkMsgs.push(data)
         });
-        return domainList
+        return bulkMsgs
     }
 
     onSelectChange = (selectedRowKeys) => {
@@ -187,47 +151,23 @@ export default class ListMsgs extends Component {
             <Fragment>
                 <Card>
                     <Table
-                        className="gx-table-responsive apklist_table"
+                        className="gx-table-responsive"
                         rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
                             // console.log("record ", record);
                             return (
                                 <Fragment>
-                                    {/* <Permissions
-                                        className="exp_row22"
-                                        record={record}
-                                        permissionType="domain"
-                                        savePermissionAction={this.props.savePermission}
-                                        translation={this.props.translation}
-
-                                    /> */}
-                                    <Row>
-                                        <Col span={8}>
-                                            <h3>Devices: </h3>
-                                        </Col>
-                                        <Col span={16}>
-                                            <Tag>ELAB797012</Tag><Tag>ELAB797012</Tag>
-                                            <Tag>ELAB797012</Tag><Tag>ELAB797012</Tag>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col span={8}>
-                                            <h3>Users: </h3>
-                                        </Col>
-                                        <Col span={16}>
-                                            <Tag>abc</Tag><Tag>abc</Tag><Tag>abc</Tag><Tag>abc</Tag>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col span={8}>
-                                            <h3>Dealers: </h3>
-                                        </Col>
-                                        <Col span={16}>
-                                            <Tag>xyz</Tag><Tag>xyz</Tag><Tag>xyz</Tag><Tag>xyz</Tag><Tag>xyz</Tag>
-                                            <Tag>xyz</Tag><Tag>xyz</Tag><Tag>xyz</Tag><Tag>xyz</Tag><Tag>xyz</Tag>
-                                        </Col>
-                                    </Row>
+                                    <Table
+                                        style={{ margin: 10 }}
+                                        size="middle"
+                                        bordered
+                                        columns={this.state.selectedDevicesColumns}
+                                        onChange={this.props.onChangeTableSorting}
+                                        dataSource={this.props.renderDevicesList(JSON.parse(record.data.data))}
+                                        pagination={false}
+                                        scroll={{ x: true }}
+                                    />
                                 </Fragment>
                             );
                         }}
@@ -237,7 +177,7 @@ export default class ListMsgs extends Component {
                         size="midddle"
                         bordered
                         columns={this.state.columns}
-                        dataSource={this.renderList(this.props.domainList ? this.props.domainList : [])}
+                        dataSource={this.renderList(this.props.bulkMsgs ? this.props.bulkMsgs : [])}
                         onChange={this.props.onChangeTableSorting}
                         pagination={false
                         }

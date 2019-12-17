@@ -85,7 +85,6 @@ class AppFilter extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.props.selectedOptions !== prevProps.selectedOptions) {
-            console.log(prevProps.selectedOptions, "componentDidUpdate selectedOptions", this.props.selectedOptions);
             this.setDropdowns(this.props.selectedOptions);
         }
     }
@@ -393,5 +392,10 @@ var mapStateToProps = ({ routing, auth }, otherProps) => {
     };
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AppFilter));
+/**
+ * @author Usman Hafeez
+ * commented withRouter function
+ */
+// export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AppFilter));
+export default connect(mapStateToProps, mapDispatchToProps)(AppFilter);
 

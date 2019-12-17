@@ -1,6 +1,7 @@
 // libraries
 import React, { Component, Fragment } from "react";
 import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Divider, Table, Select, AutoComplete, Input } from "antd";
+import { Markup } from "interweave";
 
 // Components
 import EditDealer from '../../dealers/components/editDealer';
@@ -33,7 +34,6 @@ import {
 } from '../../../constants/DealerConstants';
 import CreditsLimits from "./CreditLimits";
 import DemosLimit from "./DemosLimits";
-import { Markup } from "interweave";
 import RestrictDealerAccount from "./RestrictDealerAccount";
 import { ADMIN } from "../../../constants/Constants";
 
@@ -105,19 +105,17 @@ export default class DealerAction extends Component {
     }
 
     handleDealerSearch = (value) => {
-        console.log(this.props.dealerList)
+        
         let dealerList = [];
         let index = -1;
         let states = {}
 
-        console.log("searchedValue: ", value)
         if (value && this.props.dealerList && this.props.dealerList.length) {
             dealerList = componentSearch(this.props.dealerList, value)
 
             index = this.props.dealerList.findIndex((dealer) => (dealer.dealer_name.toLowerCase() === value.toLowerCase() || dealer.dealer_id.toString().toLowerCase() === value.toLowerCase() || dealer.dealer_email.toLowerCase() === value.toLowerCase() || dealer.link_code.toString().toLowerCase() === value.toLowerCase()));
         }
 
-        console.log(dealerList);
 
         states.dealerList = dealerList;
         states.searchedValue = value
@@ -158,7 +156,7 @@ export default class DealerAction extends Component {
         const dealer_status = (dealer.account_status === "suspended") ? "Suspended" : "Activated";
 
         const restrict_button_type = (dealer_status === "Activated") ? "danger" : "default";
-        const restrict_button_text = (dealer_status === 'Activated') ? 'Suspend/Restrict' : 'Activate';
+        const restrict_button_text = (dealer_status === 'Activated') ? 'Suspend' : 'Activate';
 
         const undo_button_type = (dealer.unlink_status === 0) ? 'danger' : "default";
         const undo_button_text = (dealer.unlink_status === 0) ? 'Delete' : 'Undelete';
@@ -351,6 +349,7 @@ export default class DealerAction extends Component {
                                         onClick={
                                             (e) => {
                                                 this.restrictDealerAction.showModal(dealer, this.props.changeDealerStatus)
+                                                // showConfirm(this, this.props.dealer, this.props.handleDealerChange, 'RESET PASSWORD', this.props.dealer.dealer_name)
                                             }
                                         }
 
@@ -422,9 +421,11 @@ export default class DealerAction extends Component {
                 <DealerDomains
                     ref='dealerDomains'
                     translation={this.props.translation}
-
+                    domainPermission={this.props.domainPermission}
                     domains={this.props.domains}
                     allDomainList={this.props.allDomainList}
+                    authUser={this.props.authUser}
+                    getDomains={this.props.getDomains}
                 // dealerDomains
                 />
 

@@ -16,7 +16,8 @@ import {
 	VERIFY_CODE,
 	CODE_VERIFIED,
 	GOTO_LOGIN,
-	LOGIN_HISTORY
+	LOGIN_HISTORY,
+	CHANGE_TIMEZONE
 } from "../../constants/ActionTypes";
 // import { stat } from "fs";
 import RestService from '../services/RestServices';
@@ -49,6 +50,7 @@ const INIT_STATE = {
 		two_factor_auth: localStorage.getItem('two_factor_auth') === null ? false : localStorage.getItem('two_factor_auth'),
 		verified: false,
 		account_balance_status: localStorage.getItem("account_balance_status"),
+		account_balance_status_by: localStorage.getItem('account_balance_status_by'),
 		company_name: null,
 		company_address: null,
 		city: null,
@@ -57,6 +59,7 @@ const INIT_STATE = {
 		postal_code: null,
 		tel_no: null,
 		website: null,
+		timezone: localStorage.getItem("timezone"),
 	},
 	loginHistory: []
 };
@@ -164,6 +167,7 @@ export default (state = INIT_STATE, action) => {
 		}
 
 		case UPDATE_PROFILE: {
+			// console.log("UPDATE_PROFILE action.response.data ", action.response.data)
 			if (action.response.status) {
 				state.authUser.name = action.response.data.name;
 				state.authUser.company_name = action.response.data.company_name;
@@ -174,6 +178,7 @@ export default (state = INIT_STATE, action) => {
 				state.authUser.postal_code = action.response.data.postal_code;
 				state.authUser.tel_no = action.response.data.tel_no;
 				state.authUser.website = action.response.data.website;
+				// state.authUser.timezone = action.response.data.timezone;
 				localStorage.setItem('name', action.response.data.name);
 				success({
 					title: action.response.msg,
@@ -220,6 +225,7 @@ export default (state = INIT_STATE, action) => {
 					postal_code: null,
 					tel_no: null,
 					website: null,
+					timezone: null
 				},
 				initURL: '/',
 				loader: false
@@ -254,6 +260,26 @@ export default (state = INIT_STATE, action) => {
 				loader: false
 			}
 		}
+
+		case CHANGE_TIMEZONE: {
+			// console.log("action.data red", action.data)
+
+			if (action.response.status) {
+				localStorage.setItem('timezone', action.data);
+				state.authUser.timezone = action.data;
+
+				return {
+					...state,
+					authUser: JSON.parse(JSON.stringify(state.authUser))
+				}
+			}
+			else {
+				return {
+					...state
+				}
+			}
+		}
+
 		case COMPONENT_ALLOWED: {
 			console.log(action.payload);
 			return {
@@ -275,6 +301,7 @@ export default (state = INIT_STATE, action) => {
 					two_factor_auth: action.payload.two_factor_auth,
 					verified: action.payload.verified,
 					account_balance_status: action.payload.account_balance_status,
+					account_balance_status_by: action.payload.account_balance_status_by,
 					demos: action.payload.demos,
 					remaining_demos: action.payload.remaining_demos,
 					company_name: action.payload.company_name,
@@ -285,6 +312,7 @@ export default (state = INIT_STATE, action) => {
 					postal_code: action.payload.postal_code,
 					tel_no: action.payload.tel_no,
 					website: action.payload.website,
+					timezone: action.payload.timezone,
 				}
 			}
 			break;
