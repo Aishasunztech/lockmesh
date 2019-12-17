@@ -207,9 +207,11 @@ const RestService = {
             RestService.getHeader()
         )
     },
+
     getSimIDs: () => {
         return axios.get(BASE_URL + 'users/get_sim_ids', RestService.getHeader());
     },
+    
     getChatIDs: () => {
         return axios.get(BASE_URL + 'users/get_chat_ids', RestService.getHeader());
     },

@@ -1069,14 +1069,14 @@ class EditDevice extends Component {
                                     )}
                                 </Form.Item>
                             </Col>
-                            
+
                             {/**
                              * @author Usman Hafeez
                              * @description added button of Chat ID
                              */}
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Button
-                                    disabled={this.state.disablePgp}
+                                    disabled={this.state.disableChat}
                                     className="add_user_btn"
                                     type="primary"
                                     style={{ width: "100%" }}
@@ -1112,7 +1112,7 @@ class EditDevice extends Component {
                                     )}
                                 </Form.Item>
                             </Col>
-                            
+
                             {/**
                              * @author Usman Hafeez
                              * @description added button of Chat ID
