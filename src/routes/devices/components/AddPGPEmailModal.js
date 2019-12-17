@@ -103,7 +103,6 @@ class AddPGPEmailModal extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 generatePgp(this, values);
-
             }
         });
     }
@@ -299,7 +298,7 @@ function generatePgp(_this, values) {
                 payload.product_data.username = values.username
                 // }
                 _this.props.addProduct(payload);
-                form.resetFields()
+                _this.props.form.resetFields()
                 _this.setState({
                     visible: false,
                     titleText: '',
