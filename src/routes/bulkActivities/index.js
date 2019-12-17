@@ -1061,7 +1061,7 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users, device_details, socket }, otherProps) => {
     // console.log(bulkDevices.usersOfDealers, 'usersOfDealers ,devices.bulkDevices ', bulkDevices.bulkDevices);
     // console.log("bulkDevices.selectedDevices", bulkDevices.selectedDevices, "bulkDevices.bulkSelectedPushApps ", bulkDevices.bulkSelectedPushApps, "bulkDevices.bulkSelectedPullApps ", bulkDevices.bulkSelectedPullApps);
-    console.log("bulkDevices.bulkAction:: ", bulkDevices.bulkAction)
+    // console.log("bulkDevices.selectedDevices:: ", bulkDevices.selectedDevices)
     return {
         socket: socket.socket,
         user: auth.authUser,

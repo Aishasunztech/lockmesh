@@ -5,7 +5,7 @@ import XLSX from 'xlsx';
 import axios from 'axios';
 import jsPDFautotable from 'jspdf-autotable';
 
-import {BASE_URL, TIME_ZONE} from '../../constants/Application';
+import { BASE_URL, TIME_ZONE } from '../../constants/Application';
 
 import {
   DEVICE_ACTIVATED,
@@ -385,6 +385,33 @@ export function getDefaultLanguage(transaction_id) {
 
 }
 
+export function getTimezonesList() {
+  let timeZones = moment.tz.names();
+  let offsetTmz = [];
+
+  for (let i in timeZones) {
+    offsetTmz.push({ zoneName: timeZones[i], tzOffset: `(GMT${moment.tz(timeZones[i]).format('Z')})` });
+  }
+
+  return offsetTmz.sort();
+}
+
+export function getSelectedTZDetail(zone_name) {
+  let detail = '';
+  let timeZones = moment.tz.names();
+  if (!zone_name) {
+    zone_name = moment.tz.guess(); // get local time zone value "Asia/Karachi"
+  }
+  let foundZoneIndex = timeZones.findIndex(item => item === zone_name);
+
+  if (foundZoneIndex !== -1) {
+    detail = `(GMT${moment.tz(timeZones[foundZoneIndex]).format('Z')}) ${timeZones[foundZoneIndex]}`
+  } else {
+    detail = 'Timezone not selected';
+  }
+  return detail;
+}
+
 export function handleMultipleSearch(e, copy_status, copyRequireSearchData, demoSearchValues, requireForSearch) {
   // handleMultipleSearch(e, this.state.copy_status, copyDevices, this.state.SearchValues, this.state.filteredDevices)
 
@@ -665,9 +692,9 @@ export function generatePDF(columns, rows, title, fileName, formData) {
   });
 
   var pdf = doc.output('blob');
-  var blobToBase64 = function(blob, cb) {
+  var blobToBase64 = function (blob, cb) {
     var reader = new FileReader();
-    reader.onload = function() {
+    reader.onload = function () {
       var dataUrl = reader.result;
       var base64 = dataUrl.split(',')[1];
       cb(base64);
@@ -675,12 +702,12 @@ export function generatePDF(columns, rows, title, fileName, formData) {
     reader.readAsDataURL(blob);
   };
 
-  var FileNameToOpen = fileName+'.pdf';
-  blobToBase64(pdf, function(base64){
-    var update = {'blob': base64, 'fileName': FileNameToOpen};
-    axios.post(BASE_URL+'users/show-pdf-file', update).then( res => {
-      if (res.status){
-        window.open(BASE_URL + 'users/getFileWithFolder/report/'+ FileNameToOpen, '_blank');
+  var FileNameToOpen = fileName + '.pdf';
+  blobToBase64(pdf, function (base64) {
+    var update = { 'blob': base64, 'fileName': FileNameToOpen };
+    axios.post(BASE_URL + 'users/show-pdf-file', update).then(res => {
+      if (res.status) {
+        window.open(BASE_URL + 'users/getFileWithFolder/report/' + FileNameToOpen, '_blank');
       }
     });
 

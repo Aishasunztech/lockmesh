@@ -53,6 +53,7 @@ const RestService = {
         localStorage.removeItem('connected_dealer');
         localStorage.removeItem('connected_devices');
         localStorage.removeItem('two_factor_auth');
+        localStorage.removeItem('timezone');
         // this.router.navigate(['/login']);
 
     },
@@ -69,6 +70,7 @@ const RestService = {
         localStorage.setItem('type', data.user.user_type);
         localStorage.setItem('dealer_pin', data.user.link_code);
         localStorage.setItem('two_factor_auth', data.user.two_factor_auth);
+        localStorage.setItem('timezone', data.user.timezone);
 
     },
     setUserData: (data) => {
@@ -84,6 +86,7 @@ const RestService = {
         localStorage.setItem('dealer_pin', data.user.link_code);
         localStorage.setItem('two_factor_auth', data.user.two_factor_auth);
         localStorage.setItem('account_balance_status', data.user.account_balance_status);
+        localStorage.setItem('timezone', data.user.timezone);
         localStorage.setItem('account_balance_status_by', data.user.account_balance_status_by)
 
     },
@@ -453,11 +456,24 @@ const RestService = {
         return axios.get(BASE_URL + 'users/get-billing-history/' + device_id + "/" + dealer_id, RestService.getHeader());
     },
 
+    resetChatPin: (data) => {
+      return axios.post(BASE_URL + 'users/reset-chat-pin/', data, RestService.getHeader());
+    },
+
+  changeSchatPinStatus: (data) => {
+      return axios.post(BASE_URL + 'users/change-s-chat-pin-status/', data, RestService.getHeader());
+    },
+
     // for dealer reset password(admin dashboard)
     updatePassword: (dealer) => {
 
         return axios.post(BASE_URL + 'users/resetpwd', dealer, RestService.getHeader());
 
+    },
+
+    changeTimeZone: (data) => {
+        // console.log("at rest file ", data);
+        return axios.post(BASE_URL + 'users/set-timezone', { data }, RestService.getHeader());
     },
 
     // For Apk edit(admin dashboard)
@@ -980,6 +996,14 @@ const RestService = {
 
     sendBulkMsg: (data) => {
         return axios.post(BASE_URL + 'users/send_bulk_msg', data, RestService.getHeader());
+    },
+
+    getBulkMsgsList: () => {
+        return axios.get(BASE_URL + 'users/get_bulk_msgs', RestService.getHeader());
+    },
+
+    deleteBulkMsg: (id) => {
+        return axios.get(BASE_URL + 'users/delete_bulk_msg/' + id, RestService.getHeader());
     },
 
 

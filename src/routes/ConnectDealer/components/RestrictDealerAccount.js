@@ -90,12 +90,12 @@ class RestrictDealerAccount extends Component {
         if (!this.state.dealer) {
             return null;
         }
-        // let dealer = props.dealer;
+        const {dealer} = this.state;
         return (
             <Fragment>
                 <Modal
                     visible={visible}
-                    title={`Restrict Account for Dealer ${this.state.dealer.dealer_name}`}
+                    title={`Restrict Account for Dealer ${dealer.dealer_name}`}
                     // title={`Restrict Account for Dealer ${dealer_name}`}
                     maskClosable={false}
                     onOk={this.handleOk}
@@ -127,13 +127,22 @@ class RestrictDealerAccount extends Component {
                             className="l_h_20"
                         >
                             {this.props.form.getFieldDecorator('dealerStatus', {
-                                initialValue: 'restricted',
+                                initialValue: (dealer.account_balance_status)? dealer.account_balance_status: 'active',
                             })(
                                 <Radio.Group
                                     onChange={this.onSelectOption}
                                     initialValue="restricted"
                                     className="restrict_level"
                                 >
+                                    <Row>
+                                        <Col xs={24} sm={24} md={16} lg={16} xl={16}>
+                                            <h4 className="mb-0">Activate Dealer Account Balance</h4>
+                                        </Col>
+                                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                                            <Radio value="active" className="green">Active</Radio>
+                                        </Col>
+                                    </Row>
+
                                     <Row>
                                         <Col xs={24} sm={24} md={16} lg={16} xl={16}>
                                             <h4 className="mb-0">Restrict ability to PAY LATER </h4>

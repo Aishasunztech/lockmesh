@@ -1,6 +1,9 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import Clock from 'react-live-clock';
+import { Tooltip, Button } from 'antd';
+import moment_timezone from "moment-timezone";
 
 import {
   onNavStyleChange,
@@ -15,6 +18,7 @@ import {
   THEME_TYPE_LITE
 } from "../../constants/ThemeSetting";
 import { APP_TITLE } from "../../constants/Application";
+import { getSelectedTZDetail } from "../../routes/utils/commonUtils";
 
 class SidebarLogo extends Component {
   render() {
@@ -26,6 +30,7 @@ class SidebarLogo extends Component {
     if (width < TAB_SIZE && navStyle === NAV_STYLE_FIXED) {
       navStyle = NAV_STYLE_DRAWER;
     }
+    let selected_tz_detail = getSelectedTZDetail(this.props.auth.timezone);
     return (
       <div className="gx-layout-sider-header">
         {navStyle === NAV_STYLE_FIXED || navStyle === NAV_STYLE_MINI_SIDEBAR ? (
@@ -51,7 +56,7 @@ class SidebarLogo extends Component {
           </div>
         ) : null}
 
-        <a href="/" className="gx-site-logo">
+        <a href="/" className="gx-site-logo" style={{ width: '100%' }}>
           {navStyle === NAV_STYLE_NO_HEADER_MINI_SIDEBAR &&
             width >= TAB_SIZE ? (
               <p className="mb-0" style={{ fontSize: 18 }}>
@@ -62,19 +67,30 @@ class SidebarLogo extends Component {
                 {APP_TITLE}
               </p>
             ) : (
-                <p className="mb-0" style={{ fontSize: 18 }}>
-                  {APP_TITLE}
-                </p>
+                <Fragment>
+                  <p className="mb-0" style={{ fontSize: 18, float: 'left' }}>
+                    {APP_TITLE}
+                  </p>
+                </Fragment>
               )}
         </a>
+        <Tooltip placement="bottomLeft" title={selected_tz_detail}>
+          <p className="mb-0" style={{ fontSize: 18, float: 'right' }}>
+            <Clock
+              timezone={this.props.auth.timezone}
+              format={'HH:mm:ss'}
+              ticking={true}
+            />
+          </p>
+        </Tooltip>
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ settings }) => {
+const mapStateToProps = ({ settings, auth }) => {
   const { navStyle, themeType, width, navCollapsed } = settings;
-  return { navStyle, themeType, width, navCollapsed };
+  return { navStyle, themeType, width, navCollapsed, auth: auth.authUser };
 };
 
 export default connect(

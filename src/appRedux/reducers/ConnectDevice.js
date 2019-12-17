@@ -21,6 +21,8 @@ import {
     ADMIN_PASSWORD,
     SHOW_SAVE_PROFILE_MODAL,
     // HANDLE_PROFILE_INPUT,
+    RESET_CHAT_PIN,
+    CHANGE_SCHAT_ACCOUNT_STATUS,
     POLICY,
     PROFILE,
     ACTIVATE_DEVICE2,
@@ -700,6 +702,38 @@ export default (state = initialState, action) => {
                 simloading: false
             }
         }
+
+        case RESET_CHAT_PIN: {
+
+          if (action.payload.status) {
+            success({
+              title: action.payload.msg,
+            });
+          } else {
+            error({
+              title: action.payload.msg,
+            });
+          }
+          return {
+            ...state,
+          }
+        }
+
+      case CHANGE_SCHAT_ACCOUNT_STATUS: {
+
+        if (action.payload.status) {
+          success({
+            title: action.payload.msg,
+          });
+        } else {
+          error({
+            title: action.payload.msg,
+          });
+        }
+        return {
+          ...state,
+        }
+      }
 
 
         // Common Reducer: to display the message from server

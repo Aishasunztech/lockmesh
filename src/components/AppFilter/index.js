@@ -85,7 +85,6 @@ class AppFilter extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.props.selectedOptions !== prevProps.selectedOptions) {
-            // console.log(prevProps.selectedOptions, "componentDidUpdate selectedOptions", this.props.selectedOptions);
             this.setDropdowns(this.props.selectedOptions);
         }
     }

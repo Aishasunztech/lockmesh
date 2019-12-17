@@ -7,7 +7,7 @@ import Highlighter from 'react-highlight-words';
 import CircularProgress from "components/CircularProgress";
 import { getDomains, domainPermission } from "../../appRedux/actions/Account";
 import AppFilter from "../../components/AppFilter";
-import { convertToLang } from '../utils/commonUtils'
+import { checkValue, titleCase, convertToLang, getColor, componentSearch } from '../utils/commonUtils'
 import { BASE_URL } from '../../constants/Application';
 import ListMsgs from './components/ListMsgs';
 import SendMsgForm from './components/SendMsgForm';
@@ -19,11 +19,12 @@ import {
     setSelectedBulkDevices,
     sendBulkMsg,
     closeResponseModal,
-    setBulkMsg
+    setBulkMsg,
+    getBulkMsgsList,
+    deleteBulkMsg
 } from "../../appRedux/actions/BulkDevices";
 
-import { componentSearch, titleCase } from "../utils/commonUtils";
-import { ACTION, Alert_Delete_APK, SEARCH } from "../../constants/Constants";
+import { ACTION, Alert_Delete_APK, SEARCH, DEVICE_UNLINKED, DEVICE_PRE_ACTIVATION } from "../../constants/Constants";
 import { Button_Save, Button_Yes, Button_No } from "../../constants/ButtonConstants";
 import { systemMsgColumns } from "../utils/columnsUtils";
 import { Tab_Active, Tab_All, Tab_Disabled } from "../../constants/TabConstants";
@@ -43,14 +44,13 @@ class SystemMessages extends Component {
             sorterKey: '',
             sortOrder: 'ascend',
             apk_list: [],
-            domainList: [],
+            bulkMsgs: [],
             uploadApkModal: false,
             showUploadModal: false,
             showUploadData: {},
             columns: columns,
             visible: false,
             bulkResponseModal: false,
-
         }
         this.confirm = Modal.confirm;
     }
@@ -108,9 +108,9 @@ class SystemMessages extends Component {
 
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.domainList !== nextProps.domainList) {
+        if (this.props.bulkMsgs !== nextProps.bulkMsgs) {
             this.setState({
-                domainList: nextProps.domainList,
+                bulkMsgs: nextProps.bulkMsgs,
             })
         }
     }
@@ -124,24 +124,24 @@ class SystemMessages extends Component {
             if (value.length) {
 
                 if (status) {
-                    coppyApks = this.state.domainList;
+                    coppyApks = this.state.bulkMsgs;
                     status = false;
                 }
                 let foundApks = componentSearch(coppyApks, value);
                 if (foundApks.length) {
                     this.setState({
-                        domainList: foundApks,
+                        bulkMsgs: foundApks,
                     })
                 } else {
                     this.setState({
-                        domainList: []
+                        bulkMsgs: []
                     })
                 }
             } else {
                 status = true;
 
                 this.setState({
-                    domainList: coppyApks,
+                    bulkMsgs: coppyApks,
                 })
             }
         } catch (error) {
@@ -165,7 +165,7 @@ class SystemMessages extends Component {
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
             this.setState({
-                domainList: this.props.domainList
+                bulkMsgs: this.props.bulkMsgs
             })
         }
         if (this.props.bulkResponseModal !== prevProps.bulkResponseModal) {
@@ -182,7 +182,8 @@ class SystemMessages extends Component {
         this.props.closeResponseModal();
     }
     componentDidMount() {
-        this.props.getDomains();
+        // this.props.getDomains();
+        this.props.getBulkMsgsList();
         // this.props.getAllDealers();
         // this.props.getUserList();
 
@@ -205,10 +206,80 @@ class SystemMessages extends Component {
         this.setState({ visible })
     }
 
+    renderResponseList(list) {
+        // console.log("list: ", list);
+        return list.map(item => {
+            return {
+                device_id: item
+            }
+        })
+    }
+
+    renderDevicesList(list) {
+        // console.log('renderList ', list)
+        return list.map((device, index) => {
+    
+            var status = device.finalStatus;
+            // console.log("status ", status)
+    
+            let color = getColor(status);
+            var style = { margin: '0', width: 'auto', textTransform: 'uppercase' }
+            // var text = convertToLang(this.props.translation[Button_Edit], "EDIT");
+    
+            // if ((status === DEVICE_PENDING_ACTIVATION) || (status === DEVICE_UNLINKED)) {
+            //     style = { margin: '0 8px 0 0', width: 'auto', display: 'none', textTransform: 'uppercase' }
+            //     text = "ACTIVATE";
+            // }
+    
+            return {
+                rowKey: index,
+                // key: device.device_id ? `${device.device_id}` : device.usr_device_id,
+                key: status == DEVICE_UNLINKED ? `${device.user_acc_id} ${device.created_at} ` : device.id,
+                counter: ++index,
+    
+                status: (<span style={color} > {status}</span>),
+                lastOnline: checkValue(device.lastOnline),
+                flagged: device.flagged,
+                type: checkValue(device.type),
+                version: checkValue(device.version),
+                device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
+                // device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
+                user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
+                validity: checkValue(device.validity),
+                transfered_to: checkValue((device.finalStatus == "Transfered") ? device.transfered_to : null),
+                name: checkValue(device.name),
+                activation_code: checkValue(device.activation_code),
+                account_email: checkValue(device.account_email),
+                pgp_email: checkValue(device.pgp_email),
+                chat_id: checkValue(device.chat_id),
+                client_id: checkValue(device.client_id),
+                dealer_id: checkValue(device.dealer_id),
+                dealer_pin: checkValue(device.link_code),
+                mac_address: checkValue(device.mac_address),
+                sim_id: checkValue(device.sim_id),
+                imei_1: checkValue(device.imei),
+                sim_1: checkValue(device.simno),
+                imei_2: checkValue(device.imei2),
+                sim_2: checkValue(device.simno2),
+                serial_number: checkValue(device.serial_number),
+                model: checkValue(device.model),
+                // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
+                // expiry_date: device.expiry_date ? `${new Date(device.expiry_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
+                dealer_name: <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a>,
+                // dealer_name: (this.props.user.type === ADMIN) ? <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a> : <a >{checkValue(device.dealer_name)}</a>,
+                online: device.online === 'online' ? (<span style={{ color: "green" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) : (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
+                s_dealer: checkValue(device.s_dealer),
+                s_dealer_name: checkValue(device.s_dealer_name),
+                remainTermDays: device.remainTermDays,
+                start_date: checkValue(device.start_date),
+                expiry_date: checkValue(device.expiry_date),
+            }
+        });
+    }
 
 
     render() {
-        // console.log("this.state.dealerList:: render func ", this.state.domainList)
+        // console.log("this.state.dealerList:: render func ", this.state.bulkMsgs)
         const {
             response_modal_action,
             failed_device_ids,
@@ -247,7 +318,8 @@ class SystemMessages extends Component {
                                 savePermission={this.props.domainPermission}
                                 onChangeTableSorting={this.handleTableChange}
                                 handleStatusChange={this.handleStatusChange}
-                                domainList={this.state.domainList}
+                                bulkMsgs={this.state.bulkMsgs}
+                                deleteBulkMsg={this.props.deleteBulkMsg}
                                 handleConfirmDelete={this.handleConfirmDelete}
                                 editApk={this.props.editApk}
                                 columns={this.state.columns}
@@ -256,6 +328,7 @@ class SystemMessages extends Component {
                                 user={this.props.user}
                                 ref="list_msgs"
                                 translation={this.props.translation}
+                                renderDevicesList={this.renderDevicesList}
                             />
                         </div>
                 }
@@ -290,6 +363,7 @@ class SystemMessages extends Component {
                         getBulkDevicesList={this.props.getBulkDevicesList}
                         getAllDealers={this.props.getAllDealers}
                         getUserList={this.props.getUserList}
+                        renderList={this.renderDevicesList}
                     />
 
                 </Modal>
@@ -377,7 +451,7 @@ class SystemMessages extends Component {
         let fieldValue = e.target.value;
 
         if (domainStatus) {
-            copyDomainList = this.props.domainList
+            copyDomainList = this.props.bulkMsgs
             domainStatus = false;
         }
 
@@ -385,7 +459,7 @@ class SystemMessages extends Component {
         let searchedData = this.searchField(copyDomainList, fieldName, fieldValue);
         // console.log("searchedData ", searchedData)
         this.setState({
-            domainList: searchedData
+            bulkMsgs: searchedData
         });
 
     }
@@ -438,14 +512,16 @@ function mapDispatchToProps(dispatch) {
         getDomains: getDomains,
         domainPermission: domainPermission,
         closeResponseModal: closeResponseModal,
+        getBulkMsgsList: getBulkMsgsList,
+        deleteBulkMsg: deleteBulkMsg
     }, dispatch);
 }
 
 const mapStateToProps = ({ account, auth, settings, dealers, bulkDevices }) => {
-    // console.log("account.domainList ", account.domainList);
+    console.log("bulkDevices.bulkMsgs ", bulkDevices.bulkMsgs);
     return {
         // dealerList: dealers.dealers,
-        domainList: account.domainList,
+        // bulkMsgs: account.bulkMsgs,
         isloading: account.isloading,
         user: auth.authUser,
 
@@ -461,6 +537,7 @@ const mapStateToProps = ({ account, auth, settings, dealers, bulkDevices }) => {
         pushed_device_ids: bulkDevices.pushed_device_ids,
         response_modal_action: bulkDevices.response_modal_action,
         expire_device_ids: bulkDevices.expire_device_ids,
+        bulkMsgs: bulkDevices.bulkMsgs
     };
 }
 

@@ -27,7 +27,7 @@ import { convertToLang } from '../utils/commonUtils';
 
 
 import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Table, Select, Divider } from "antd";
-import { BASE_URL } from "../../constants/Application";
+import { BASE_URL, HOST_NAME } from "../../constants/Application";
 import {
     MANAGE_DATA,
     BACKUP_DATABASE,
@@ -1290,7 +1290,7 @@ class Account extends Component {
                                 </Link>
                             </div>
                         </Col>
-                        {false ?
+                        {(HOST_NAME === 'localhost') ?
                             <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                                 <div>
                                     <Link to={"/system-messages"}>
