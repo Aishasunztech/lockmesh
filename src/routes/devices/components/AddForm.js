@@ -591,13 +591,11 @@ class AddDevice extends Component {
         this.state.serviceData.pay_now = pay_now;
 
         if (pay_now) {
-
-            if ((this.state.total_price + this.state.hardwarePrice) <= this.props.user_credit || !this.state.serviceData.pay_now) {
+            if ((this.state.total_price + this.state.hardwarePrice) <= this.props.user_credit || !this.state.serviceData.pay_now || this.state.serviceData.term == 0) {
                 this.setState({ invoiceVisible: true, invoiceType: "pay_now" })
             } else {
                 showCreditPurchase(this, "Your Credits are not enough to apply these services. Please select other services OR Purchase Credits.")
             }
-
         } else {
             let after_pay_credits = this.props.user_credit - (this.state.total_price + this.state.hardwarePrice)
             let credits_limit = this.props.credits_limit
