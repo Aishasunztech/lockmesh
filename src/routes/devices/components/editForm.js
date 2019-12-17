@@ -280,6 +280,16 @@ class EditDevice extends Component {
                 product_prices: this.props.device.finalStatus === DEVICE_PRE_ACTIVATION ? [] : this.filterList('1 month', nextProps.product_prices, 'product'),
             })
         }
+        // if (!this.state.disablePgp && nextProps.pgp_emails.length) {
+        //     this.setState({
+        //         pgp_email: nextProps.pgp_emails[0].pgp_email
+        //     })
+        // }
+        // if (!this.state.disableChat && nextProps.chat_ids.length) {
+        //     this.setState({
+        //         chat_id: nextProps.chat_ids[0].chat_id
+        //     })
+        // }
 
     }
 
