@@ -100,59 +100,9 @@ class AddPGPEmailModal extends Component {
     }
     handleSubmit = (e) => {
         e.preventDefault();
-        let form = this.props.form
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                let pgp_email = values.username + '@' + values.domain
-                let _this = this
-                RestService.checkUniquePgpEmail(pgp_email).then(function (response) {
-                    if (response.data.status) {
-                        if (response.data.available) {
-                            let domain_data = _this.state.domainList.find((item) => item.name == values.domain)
-                            let payload = {
-                                type: 'pgp_email',
-                                auto_generated: false,
-                                product_data: {
-                                    domain: values.domain,
-                                    username: '',
-                                    domain_id: domain_data.id
-                                }
-                            };
-
-                            // if (!values.username) {
-                            //     payload.auto_generated = true
-                            // } else {
-                            payload.product_data.username = values.username
-                            // }
-                            _this.props.addProduct(payload);
-                            form.resetFields()
-                            _this.setState({
-                                visible: false,
-                                titleText: '',
-                                previewMail: '',
-                                randomUserNameLoading: false,
-                                username: '',
-                                domain: '',
-                                randomUsername: ''
-                            })
-                        }
-                        else {
-                            form.setFields({
-                                pgp_email: {
-                                    value: values.pgp_email,
-                                    errors: [new Error('Pgp email not available.')],
-                                },
-                            });
-                        }
-                    } else {
-                        form.setFields({
-                            pgp_email: {
-                                value: values.pgp_email,
-                                errors: [new Error(response.data.msg)],
-                            },
-                        });
-                    }
-                })
+                generatePgp(this, values);
 
             }
         });
@@ -325,3 +275,56 @@ class AddPGPEmailModal extends Component {
 }
 
 export default Form.create({ name: 'addPGPEmail' })(AddPGPEmailModal);
+
+
+function generatePgp(_this, values) {
+    let pgp_email = values.username + '@' + values.domain
+    RestService.checkUniquePgpEmail(pgp_email).then(function (response) {
+        if (response.data.status) {
+            if (response.data.available) {
+                let domain_data = _this.state.domainList.find((item) => item.name == values.domain)
+                let payload = {
+                    type: 'pgp_email',
+                    auto_generated: false,
+                    product_data: {
+                        domain: values.domain,
+                        username: '',
+                        domain_id: domain_data.id
+                    }
+                };
+
+                // if (!values.username) {
+                //     payload.auto_generated = true
+                // } else {
+                payload.product_data.username = values.username
+                // }
+                _this.props.addProduct(payload);
+                form.resetFields()
+                _this.setState({
+                    visible: false,
+                    titleText: '',
+                    previewMail: '',
+                    randomUserNameLoading: false,
+                    username: '',
+                    domain: '',
+                    randomUsername: ''
+                })
+            }
+            else {
+                _this.props.form.setFields({
+                    pgp_email: {
+                        value: values.pgp_email,
+                        errors: [new Error('Pgp email not available.')],
+                    },
+                });
+            }
+        } else {
+            _this.props.form.setFields({
+                pgp_email: {
+                    value: values.pgp_email,
+                    errors: [new Error(response.data.msg)],
+                },
+            });
+        }
+    })
+}
