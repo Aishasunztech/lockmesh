@@ -59,28 +59,28 @@ export function getDevicesList() {
 
 export function getDevicesForReport() {
 
-  return (dispatch) => {
-    dispatch({
-      type: LOADING,
-      isloading: true
-    });
-    RestService.getDevicesForReport().then((response) => {
-
-      if (RestService.checkAuth(response.data)) {
-
+    return (dispatch) => {
         dispatch({
-          type: DEVICES_LIST_FOR_REPORT,
-          payload: response.data,
-
+            type: LOADING,
+            isloading: true
         });
-      } else {
-        dispatch({
-          type: INVALID_TOKEN
-        });
-      }
-    })
+        RestService.getDevicesForReport().then((response) => {
 
-  };
+            if (RestService.checkAuth(response.data)) {
+
+                dispatch({
+                    type: DEVICES_LIST_FOR_REPORT,
+                    payload: response.data,
+
+                });
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+
+    };
 }
 
 export function editDevice(formData) {
@@ -507,7 +507,7 @@ export const getProductPrices = () => {
  * @description action for creating pgp, chat and sim
  */
 
- export const addProduct = (payload) => {
+export const addProduct = (payload) => {
     return (dispatch) => {
         RestService.addProduct(payload).then((response) => {
             if (RestService.checkAuth(response.data)) {
@@ -526,7 +526,27 @@ export const getProductPrices = () => {
         });
 
     }
- }
+}
+
+export const activateICCID = (iccid) => {
+    return (dispatch) => {
+        RestService.activateICCID(iccid).then((response) => {
+            // if (RestService.checkAuth(response.data)) {
+            //     dispatch({
+            //         type: ADD_PRODUCT,
+            //         payload: {
+            //             type: payload.type,
+            //             ...response.data
+            //         }
+            //     })
+            // } else {
+            //     dispatch({
+            //         type: INVALID_TOKEN
+            //     })
+            // }
+        });
+    }
+}
 // export function getBulkDevicesList(data) {
 //     console.log('at action file ', data)
 

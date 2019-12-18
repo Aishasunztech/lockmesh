@@ -244,7 +244,9 @@ const RestService = {
     addProduct: (payload) => {
         return axios.post(`${BASE_URL}users/create-service-product`, payload, RestService.getHeader());
     },
-
+    activateICCID: (iccid) => {
+        return axios.post(`${BASE_URL}users/validate_sim_id`, {sim_id: iccid}, RestService.getHeader());
+    },
     /**
      * @section Dealers
      */
