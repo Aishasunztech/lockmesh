@@ -1,13 +1,22 @@
 import React from "react";
-import {Avatar, Checkbox, Dropdown, Menu} from "antd";
+import {Avatar, Checkbox, Dropdown, Button} from "antd";
+import SupportTicketReply from '../SupportTicketReply/index'
 import CustomScrollbars from 'util/CustomScrollbars'
 
 import statuses from "../../data/statuses";
+import ComposeMail from "../Compose";
 
-class MailDetail extends React.Component {
+class TicketDetail extends React.Component {
 
   state = {
-    showDetail: false
+    showDetail: false,
+    replyTicket: false
+  };
+
+  handleRequestClose = () => {
+    this.setState({
+      replyTicket: false,
+    });
   };
 
   render() {
@@ -34,8 +43,11 @@ class MailDetail extends React.Component {
               </div>
 
               <div className="gx-mail-header-actions">
-                <div>
-                   <i className="icon icon-reply gx-icon-btn"/>
+                <div onClick={() => {
+                  this.setState({replyTicket: true})
+                }}>
+                  <i className="icon icon-reply gx-icon-btn" />
+
                 </div>
                 <div onClick={() => {
                   onImportantSelect(mail);
@@ -120,9 +132,16 @@ class MailDetail extends React.Component {
           </div>
 
         </CustomScrollbars>
+
+        <SupportTicketReply open={this.state.replyTicket}
+                            user={this.props.user}
+                            supportTicketReply={this.props.supportTicketReply}
+                            onClose={this.handleRequestClose.bind(this)}
+        />
+
       </div>
     );
   }
 }
 
-export default MailDetail;
+export default TicketDetail;

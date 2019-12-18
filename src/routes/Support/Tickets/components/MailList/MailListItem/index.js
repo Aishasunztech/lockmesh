@@ -1,17 +1,21 @@
 import React from "react";
 import {Avatar, Checkbox} from "antd";
+import { getDateFromTimestamp } from "../../../../../utils/commonUtils";
 
 import statuses from "../../../data/statuses";
+import categories from "../../../data/categories";
+import priorities from "../../../data/priorities";
 
-const MailListItem = ({mail, onMailSelect, onMailChecked, onStartSelect}) => {
+const MailListItem = ({supportTicket, onMailSelect, onMailChecked, onStartSelect}) => {
+
   return (
     <div className="gx-module-list-item gx-mail-cell">
       <div className="gx-module-list-icon">
         <Checkbox color="primary" className="gx-icon-btn"
-                  checked={mail.selected}
+
                   onClick={(event) => {
                     event.stopPropagation();
-                    onMailChecked(mail)
+                    onMailChecked(supportTicket)
                   }}
                   value="SelectMail"
         />
@@ -19,35 +23,46 @@ const MailListItem = ({mail, onMailSelect, onMailChecked, onStartSelect}) => {
       </div>
 
       <div className="gx-mail-list-info" onClick={() => {
-        onMailSelect(mail);
+        onMailSelect(supportTicket);
       }}>
 
         <div className="gx-module-list-content">
           <div className="gx-mail-user-des">
 
-            <span className="gx-sender-name">{mail.from.name}</span>
+            <span className="gx-sender-name">{supportTicket.user_type}</span>
 
             <span className="gx-toolbar-separator">&nbsp;</span>
 
-            <span className="gx-d-inline-block gx-text-truncate gx-send-subject">{mail.subject}</span>
+            <span className="gx-d-inline-block gx-text-truncate gx-send-subject">{supportTicket.subject}</span>
 
-            {mail.hasAttachments &&
+            {supportTicket.hasAttachments &&
 
             <i className="icon icon-attachment"/>}
 
-            <div className="gx-time">{mail.time}</div>
+            <div className="gx-time">{getDateFromTimestamp(supportTicket.createdAt)}</div>
 
           </div>
 
 
           <div className="gx-message">
-            <p className="gx-text-truncate"> {mail.message}</p>
+            <p className="gx-text-truncate"> {supportTicket.description}</p>
 
           </div>
           <div className="gx-labels">
-            {statuses.map((label, index) => {
-              return (mail.labels).includes(label.id) &&
-                <div key={index} className={`gx-badge gx-text-white gx-bg-${label.color}`}>{label.title}</div>
+            {statuses.map((status, index) => {
+
+              return (supportTicket.status).includes(status.title) &&
+                <div key={index} className={`gx-badge gx-text-white gx-bg-${status.title === 'open' ?'green' : 'red'} text-capitalize`}>{status.title}</div>
+            })}
+
+            {categories.map((category, index) => {
+              return (supportTicket.category).includes(category.title) &&
+                <div key={index} className={`gx-badge gx-text-white gx-bg-blue text-capitalize`}>{category.title}</div>
+            })}
+
+            {priorities.map((priority, index) => {
+              return (supportTicket.priority).includes(priority.title) &&
+                <div key={index} className={`gx-badge gx-text-white gx-bg-purple text-capitalize`}>{priority.title}</div>
             })}
           </div>
         </div>

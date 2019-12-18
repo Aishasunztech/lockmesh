@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BASE_URL, SUPERADMIN_URL } from '../../constants/Application';
+import { BASE_URL, SUPERADMIN_URL, SUPPORT_URL } from '../../constants/Application';
 import io from "socket.io-client";
 
 const RestService = {
@@ -1057,6 +1057,23 @@ const RestService = {
     //get overdue details
     getOverdueDetails: () => {
         return axios.get(BASE_URL + 'users/get-overdue-details', RestService.getHeader());
+    },
+
+
+    //support tickets
+    //generate Support Ticket
+    generateSupportTicket: (data) => {
+      return axios.post(SUPPORT_URL + 'tickets/store', data, RestService.getHeader());
+    },
+
+    //generate Support Ticket
+    supportTicketReply: (data) => {
+      return axios.post(SUPPORT_URL + 'tickets/reply/store', data, RestService.getHeader());
+    },
+
+    //generate Support Ticket
+    getSupportTickets: () => {
+      return axios.get(SUPPORT_URL + 'tickets', RestService.getHeader());
     },
 }
 export default RestService;
