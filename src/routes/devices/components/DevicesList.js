@@ -7,7 +7,7 @@ import CustomScrollbars from "../../../util/CustomScrollbars";
 import { Link } from "react-router-dom";
 import SuspendDevice from './SuspendDevice';
 import ActivateDevcie from './ActivateDevice';
-import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, convertToLang, checkRemainTermDays, checkTimezoneValue } from '../../utils/commonUtils'
+import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, convertToLang, checkRemainTermDays, convertTimezoneValue } from '../../utils/commonUtils'
 import EditDevice from './editDevice';
 import AddDevice from './AddDevice';
 import { Tabs, Modal } from 'antd';
@@ -276,8 +276,8 @@ class DevicesList extends Component {
 
                 ),
                 status: (<span style={color} > {status}</span>),
-                lastOnline: checkTimezoneValue(this.props.user.timezone, device.lastOnline, TIMESTAMP_FORMAT),
-                // lastOnline: (device.lastOnline) ? moment(device.lastOnline).tz(checkTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
+                lastOnline: convertTimezoneValue(this.props.user.timezone, device.lastOnline, TIMESTAMP_FORMAT),
+                // lastOnline: (device.lastOnline) ? moment(device.lastOnline).tz(convertTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
                 // lastOnline: moment(device.lastOnline).format("MM/DD/YYYY HH:mm:ss"),
                 // lastOnline: device.lastOnline,
                 flagged: device.flagged,
@@ -313,10 +313,10 @@ class DevicesList extends Component {
                 s_dealer: checkValue(device.s_dealer),
                 s_dealer_name: checkValue(device.s_dealer_name),
                 remainTermDays: (Number(device.remainTermDays) > 0) ? device.remainTermDays : 0,
-                start_date: checkTimezoneValue(this.props.user.timezone, device.start_date, DATE_FORMAT),
-                expiry_date: checkTimezoneValue(this.props.user.timezone, device.expiry_date, DATE_FORMAT),
-                // start_date: (device.start_date) ? moment(device.start_date).tz(checkTimezoneValue(this.props.user.timezone)).format("YYYY/MM/DD") : 'N/A',
-                // expiry_date: (device.expiry_date) ? moment(device.expiry_date).tz(checkTimezoneValue(this.props.user.timezone)).format("YYYY/MM/DD") : 'N/A',
+                start_date: convertTimezoneValue(this.props.user.timezone, device.start_date, DATE_FORMAT),
+                expiry_date: convertTimezoneValue(this.props.user.timezone, device.expiry_date, DATE_FORMAT),
+                // start_date: (device.start_date) ? moment(device.start_date).tz(convertTimezoneValue(this.props.user.timezone)).format("YYYY/MM/DD") : 'N/A',
+                // expiry_date: (device.expiry_date) ? moment(device.expiry_date).tz(convertTimezoneValue(this.props.user.timezone)).format("YYYY/MM/DD") : 'N/A',
                 // start_date: checkValue(device.start_date),
                 // expiry_date: checkValue(device.expiry_date),
             }

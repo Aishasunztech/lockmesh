@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import styles from './AppList';
 import { Card, Table, Icon, Button, Modal } from "antd";
-import { getStatus, getColor, checkValue, titleCase, convertToLang, checkTimezoneValue } from '../../../routes/utils/commonUtils'
+import { getStatus, getColor, checkValue, titleCase, convertToLang, convertTimezoneValue } from '../../../routes/utils/commonUtils'
 import { Redirect, Link } from 'react-router-dom';
 import ResetPinModal from './ResetPinModal';
 import {
@@ -269,22 +269,22 @@ export default class DeviceSidebar extends Component {
             {
                 key: 27,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_START_DATE], "START DATE"))}:</a>),
-                value: checkTimezoneValue(this.props.auth.authUser.timezone, device_details.start_date, DATE_FORMAT),
-                // value: (device_details.start_date) ? moment(device_details.start_date).tz(checkTimezoneValue(this.props.auth.authUser.timezone)).format("YYYY/MM/DD") : 'N/A',
+                value: convertTimezoneValue(this.props.auth.authUser.timezone, device_details.start_date, DATE_FORMAT),
+                // value: (device_details.start_date) ? moment(device_details.start_date).tz(convertTimezoneValue(this.props.auth.authUser.timezone)).format("YYYY/MM/DD") : 'N/A',
                 // value: checkValue(device_details.start_date)
             },
             {
                 key: 28,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_EXPIRY_DATE], "EXPIRY DATE"))}:</a>),
-                value: checkTimezoneValue(this.props.auth.authUser.timezone, device_details.expiry_date, DATE_FORMAT),
-                // value: (device_details.expiry_date) ? moment(device_details.expiry_date).tz(checkTimezoneValue(this.props.auth.authUser.timezone)).format("YYYY/MM/DD") : 'N/A',
+                value: convertTimezoneValue(this.props.auth.authUser.timezone, device_details.expiry_date, DATE_FORMAT),
+                // value: (device_details.expiry_date) ? moment(device_details.expiry_date).tz(convertTimezoneValue(this.props.auth.authUser.timezone)).format("YYYY/MM/DD") : 'N/A',
                 // value: checkValue(device_details.expiry_date)
             },
             {
                 key: 29,
                 name: (<a>{titleCase(convertToLang(this.props.translation["Last Online"], "Last Online"))}:</a>),
-                value: checkTimezoneValue(this.props.auth.authUser.timezone, device_details.lastOnline, TIMESTAMP_FORMAT),
-                // value: (device_details.lastOnline) ? moment(device_details.lastOnline).tz(checkTimezoneValue(this.props.auth.authUser.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
+                value: convertTimezoneValue(this.props.auth.authUser.timezone, device_details.lastOnline, TIMESTAMP_FORMAT),
+                // value: (device_details.lastOnline) ? moment(device_details.lastOnline).tz(convertTimezoneValue(this.props.auth.authUser.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
                 // value: checkValue(device_details.lastOnline)
                 // value: moment(device_details.lastOnline).format("MM/DD/YYYY HH:mm:ss")
             },

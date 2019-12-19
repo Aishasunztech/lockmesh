@@ -6,7 +6,7 @@ import CustomScrollbars from "../../../util/CustomScrollbars";
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import {
-    convertToLang, checkTimezoneValue
+    convertToLang, convertTimezoneValue
 } from '../../utils/commonUtils'
 import EditApk from './EditApk';
 import UpdateFeatureApk from './UpdateFeatureApk';
@@ -201,10 +201,10 @@ export default class ListApk extends Component {
                     version: app.version,
                     used_by: <Fragment>{usedBy}</Fragment>,
                     policies: (app.policies === undefined || app.policies === null) ? [] : app.policies,
-                    created_at: checkTimezoneValue(this.props.user.timezone, app.created_at, TIMESTAMP_FORMAT),
-                    updated_at: checkTimezoneValue(this.props.user.timezone, app.updated_at, TIMESTAMP_FORMAT),
-                    // created_at: (app.created_at && app.created_at != "N/A") ? moment(app.created_at).tz(checkTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
-                    // updated_at: (app.updated_at && app.updated_at != "N/A") ? moment(app.updated_at).tz(checkTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
+                    created_at: convertTimezoneValue(this.props.user.timezone, app.created_at, TIMESTAMP_FORMAT),
+                    updated_at: convertTimezoneValue(this.props.user.timezone, app.updated_at, TIMESTAMP_FORMAT),
+                    // created_at: (app.created_at && app.created_at != "N/A") ? moment(app.created_at).tz(convertTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
+                    // updated_at: (app.updated_at && app.updated_at != "N/A") ? moment(app.updated_at).tz(convertTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
                     // created_at: app.created_at,
                     // updated_at: app.updated_at
                 }
@@ -270,7 +270,7 @@ export default class ListApk extends Component {
                     'apk_logo': (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
                     'apk_version': app.version,
                     'apk_size': app.size ? app.size : "N/A",
-                    'updated_at': checkTimezoneValue(this.props.user.timezone, app.updated_at, TIMESTAMP_FORMAT),
+                    'updated_at': convertTimezoneValue(this.props.user.timezone, app.updated_at, TIMESTAMP_FORMAT),
                     // 'updated_date': app.updated_at,
                     'package_name': app.package_name,
                     'policies': (app.policies === undefined || app.policies === null) ? [] : app.policies,

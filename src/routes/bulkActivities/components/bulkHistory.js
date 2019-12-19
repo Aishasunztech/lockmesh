@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Modal, message, Input, Table, Switch, Avatar } from 'antd';
-import { componentSearch, getFormattedDate, convertToLang, checkTimezoneValue } from '../../utils/commonUtils';
+import { componentSearch, getFormattedDate, convertToLang, convertTimezoneValue } from '../../utils/commonUtils';
 import Moment from 'react-moment';
 import { SECURE_SETTING, DATE, PROFILE_NAME } from '../../../constants/Constants';
 import { BASE_URL, TIMESTAMP_FORMAT } from '../../../constants/Application';
@@ -190,7 +190,7 @@ export default class Activity extends Component {
                 return {
                     key: index,
                     action: row.action.toUpperCase(),
-                    created_at: checkTimezoneValue(this.props.user.timezone, row.created_at, TIMESTAMP_FORMAT),
+                    created_at: convertTimezoneValue(this.props.user.timezone, row.created_at, TIMESTAMP_FORMAT),
                     // created_at: getFormattedDate(row.created_at),
                     data: row.data
                 }

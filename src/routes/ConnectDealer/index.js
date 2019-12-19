@@ -12,7 +12,7 @@ import CircularProgress from "components/CircularProgress/index";
 import moment from 'moment-timezone';
 // helpers and actions
 import RestService from "../../appRedux/services/RestServices";
-import { getColor, isBase64, convertToLang, checkValue, getSelectedTZDetail, checkTimezoneValue } from "../utils/commonUtils"
+import { getColor, isBase64, convertToLang, checkValue, getSelectedTZDetail, convertTimezoneValue } from "../utils/commonUtils"
 import {
     getDealerDetails,
     editDealer,
@@ -270,15 +270,15 @@ class ConnectDealer extends Component {
                 {
                     key: '10',
                     name: <a>Last Login</a>,
-                    value: checkTimezoneValue(this.props.authUser.timezone, dealer.last_login, TIMESTAMP_FORMAT),
-                    // value: (dealer.last_login) ? moment(dealer.last_login).tz(checkTimezoneValue(this.props.authUser.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
+                    value: convertTimezoneValue(this.props.authUser.timezone, dealer.last_login, TIMESTAMP_FORMAT),
+                    // value: (dealer.last_login) ? moment(dealer.last_login).tz(convertTimezoneValue(this.props.authUser.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
                     // value: (dealer.last_login) ? dealer.last_login : 'N/A',
                 },
                 {
                     key: '11',
                     name: <a>Start Date</a>,
-                    value: checkTimezoneValue(this.props.authUser.timezone, dealer.created, TIMESTAMP_FORMAT),
-                    // value: (dealer.created) ? moment(dealer.created).tz(checkTimezoneValue(this.props.authUser.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
+                    value: convertTimezoneValue(this.props.authUser.timezone, dealer.created, TIMESTAMP_FORMAT),
+                    // value: (dealer.created) ? moment(dealer.created).tz(convertTimezoneValue(this.props.authUser.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
                     // value: this.props.dealer.created,
                 },
 

@@ -9,7 +9,7 @@ import { ADMIN, DEALER } from '../../../constants/Constants';
 import scrollIntoView from 'scroll-into-view';
 
 import DealerDevicesList from '../../users/components/UserDeviceList';
-import { convertToLang, checkTimezoneValue } from '../../utils/commonUtils'
+import { convertToLang, convertTimezoneValue } from '../../utils/commonUtils'
 import { Redirect } from 'react-router-dom';
 import CustomScrollbars from "../../../util/CustomScrollbars";
 import {
@@ -110,7 +110,7 @@ class DealerList extends Component {
             dealer_id: '',
             scrollStatus: true
         };
-        
+
     }
 
     handleScroll = () => {
@@ -289,7 +289,7 @@ class DealerList extends Component {
                 connected_devices: dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
                 dealer_credits: dealer.dealer_credits ? dealer.dealer_credits : 0,
                 devicesList: dealer.devicesList,
-                last_login: checkTimezoneValue(this.props.user.timezone, dealer.last_login, TIMESTAMP_FORMAT),
+                last_login: convertTimezoneValue(this.props.user.timezone, dealer.last_login, TIMESTAMP_FORMAT),
                 // last_login: dealer.last_login ? dealer.last_login : 'N/A'
 
             })

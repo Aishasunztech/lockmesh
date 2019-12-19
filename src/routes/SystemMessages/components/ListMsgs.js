@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col, Tag, Modal } from "antd";
-import { convertToLang, checkValue, checkTimezoneValue } from '../../utils/commonUtils';
+import { convertToLang, checkValue, convertTimezoneValue } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 import moment from 'moment';
 import { userDevicesListColumns } from '../../utils/columnsUtils';
@@ -106,7 +106,7 @@ export default class ListMsgs extends Component {
                 msg: checkValue(app.msg),
                 timer_status: app.timer_status ? app.timer_status : "N/A",
                 repeat: checkValue(app.repeat_duration),
-                sending_time: checkTimezoneValue(this.props.user.timezone, app.sending_time, TIMESTAMP_FORMAT_NOT_Sec),
+                sending_time: convertTimezoneValue(this.props.user.timezone, app.sending_time, TIMESTAMP_FORMAT_NOT_Sec),
                 // sending_time: app.sending_time && app.sending_time !== "0000-00-00 00:00:00" ? moment(app.sending_time).format('YYYY-MM-DD HH:mm') : "N/A",
                 data: app,
             }

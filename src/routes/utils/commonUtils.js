@@ -411,7 +411,7 @@ export function getSelectedTZDetail(zone_name) {
   return detail;
 }
 
-export function checkTimezoneValue(dealerTimezone, data, dateFormat) { // dealerTimezone: timezone, data: date/time
+export function convertTimezoneValue(dealerTimezone, data, dateFormat) { // dealerTimezone: timezone, data: date/time
   let coverted_dateTime = "N/A";
 
   if (data && data !== "N/A" && data !== "n/a" && data !== "0000-00-00 00:00:00") {
@@ -423,7 +423,7 @@ export function checkTimezoneValue(dealerTimezone, data, dateFormat) { // dealer
     coverted_dateTime = moment.tz(data, SERVER_TIMEZONE).tz(dealerTimezone).format(dateFormat)
   }
 
-  // console.log("checkTimezoneValue ",data, SERVER_TIMEZONE,  dealerTimezone, coverted_dateTime)
+  // console.log("convertTimezoneValue ",data, SERVER_TIMEZONE,  dealerTimezone, coverted_dateTime)
   return coverted_dateTime;
 }
 

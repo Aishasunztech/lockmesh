@@ -7,7 +7,7 @@ import CustomScrollbars from "../../../util/CustomScrollbars";
 import PolicyInfo from './PolicyInfo';
 import { flagged } from '../../../appRedux/actions/ConnectDevice';
 import { ADMIN } from '../../../constants/Constants';
-import { convertToLang, getFormattedDate, checkTimezoneValue } from '../../utils/commonUtils';
+import { convertToLang, getFormattedDate, convertTimezoneValue } from '../../utils/commonUtils';
 import styles from './policy.css';
 import { Button_Save, Button_Yes, Button_No, Button_Edit, Button_Delete, Button_Save_Changes, Button_Cancel } from '../../../constants/ButtonConstants';
 import { POLICY } from '../../../constants/ActionTypes';
@@ -187,10 +187,10 @@ class PolicyList extends Component {
                     />
                 ),
                 created_by: policy.created_by,
-                created_date: checkTimezoneValue(this.props.user.timezone, policy.created_date, TIMESTAMP_FORMAT),
-                last_edited: checkTimezoneValue(this.props.user.timezone, policy.last_edited, TIMESTAMP_FORMAT),
-                // created_date: (policy.created_date && policy.created_date != "N/A") ? moment(policy.created_date).tz(checkTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
-                // last_edited: (policy.last_edited && policy.last_edited != "N/A") ? moment(policy.last_edited).tz(checkTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
+                created_date: convertTimezoneValue(this.props.user.timezone, policy.created_date, TIMESTAMP_FORMAT),
+                last_edited: convertTimezoneValue(this.props.user.timezone, policy.last_edited, TIMESTAMP_FORMAT),
+                // created_date: (policy.created_date && policy.created_date != "N/A") ? moment(policy.created_date).tz(convertTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
+                // last_edited: (policy.last_edited && policy.last_edited != "N/A") ? moment(policy.last_edited).tz(convertTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
                 // created_date: moment(policy.created_date).format("YYYY/MM/DD hh:mm:ss"),
                 // last_edited: policy.last_edited ? moment(policy.last_edited).format("YYYY/MM/DD hh:mm:ss") : "N/A",
             }

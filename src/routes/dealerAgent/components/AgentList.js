@@ -13,7 +13,7 @@ import {
     getSortOrder,
     // checkRemainDays, 
     convertToLang,
-    checkTimezoneValue
+    convertTimezoneValue
 } from '../../utils/commonUtils'
 import { Button_Yes, Button_No } from '../../../constants/ButtonConstants';
 import { DEALER, ADMIN } from '../../../constants/Constants';
@@ -84,7 +84,7 @@ export default class DevicesList extends Component {
                     />
                 ),
                 email: checkValue(agent.email),
-                created_at: checkTimezoneValue(this.props.user.timezone, agent.created_at, TIMESTAMP_FORMAT),
+                created_at: convertTimezoneValue(this.props.user.timezone, agent.created_at, TIMESTAMP_FORMAT),
                 // created_at: checkValue(agent.created_at),
             }
         });

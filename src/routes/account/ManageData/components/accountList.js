@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal } from "antd";
 // import { BASE_URL } from '../../../constants/Application';
 // import EditDealer from './editDealer';
-import { convertToLang, checkTimezoneValue } from '../../../utils/commonUtils';
+import { convertToLang, convertTimezoneValue } from '../../../utils/commonUtils';
 
 import { Tabs } from 'antd';
 import {
@@ -68,7 +68,7 @@ class AccountList extends Component {
                 'chat_id': item.chat_id ? item.chat_id : 'N/A',
                 'sim_id': item.sim_id ? item.sim_id : 'N/A',
                 'pgp_email': item.pgp_email ? item.pgp_email : 'N/A',
-                'created_at': checkTimezoneValue(this.props.user.timezone, item.created_at, TIMESTAMP_FORMAT),
+                'created_at': convertTimezoneValue(this.props.user.timezone, item.created_at, TIMESTAMP_FORMAT),
                 // 'created_at': item.created_at ? item.created_at : 'N/A',
                 // 'action': <Button >Realese</Button>
             })
