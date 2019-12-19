@@ -73,6 +73,9 @@ import { PRE_ACTIVATE_DEVICE } from '../../../constants/ActionTypes';
 
 const { TextArea } = Input;
 const confirm = Modal.confirm
+const success = Modal.success
+const error = Modal.error;
+
 class EditDevice extends Component {
 
     constructor(props) {
@@ -125,7 +128,9 @@ class EditDevice extends Component {
             invoiceID: 'PI00001',
             paidByUser: "PAID",
             applyServicesValue: null,
-            renewService: false
+            renewService: false,
+            valid_sim_id_1: true,
+            valid_sim_id_2: true
         }
     }
     handleUserChange = (e) => {
@@ -160,8 +165,7 @@ class EditDevice extends Component {
                         serviceData: values,
                         showConfirmCredit: true
                     })
-                }
-                else if (this.state.services) {
+                } else if (this.state.services) {
                     let product_prices = this.filterList(this.state.term + ' month', this.props.product_prices, 'product');
                     let sim_id_price = product_prices.filter((item) => {
                         if (item.price_for === 'sim_id') {
@@ -768,6 +772,77 @@ class EditDevice extends Component {
         this.props.addProduct(payload)
     }
 
+
+    validateICCID = (rule, value, callback, simField) => {
+        console.log(simField);
+        if ((value !== undefined) && value.length > 0) {
+
+            if (simField === 'sim_id') {
+                this.setState({
+                    valid_sim_id_1: false
+                })
+            } else if (simField === 'sim_id2') {
+                this.setState({
+                    valid_sim_id_2: false
+                })
+            }
+            console.log("validation: ", ((this.state.disableSim === false && this.state.valid_sim_id_1 === false) || (this.state.disableSim2 === false && this.state.valid_sim_id_2 === false)), this.state.valid_sim_id_1, this.state.valid_sim_id_2)
+            if (/^[0-9]+$/.test(value)) {
+                if (value.length != 20 && value.length != 19) {
+                    return callback(`${convertToLang(this.props.translation[''], "ICC ID should be 19 or 20 digits long")}  :(${value.length})`);
+                }
+
+            } else {
+                return callback(convertToLang(this.props.translation[''], "Please insert only numbers"));
+            }
+        } else {
+            if (simField === 'sim_id') {
+                this.setState({
+                    valid_sim_id_1: true
+                })
+            } else if (simField === 'sim_id2') {
+                this.setState({
+                    valid_sim_id_2: true
+                })
+            }
+        }
+
+
+
+        return callback();
+    }
+
+    activateICCID = (simField) => {
+        let value = this.props.form.getFieldValue(simField);
+        RestService.activateICCID(value).then((response) => {
+            if (response.data) {
+                if (response.data.valid) {
+                    if (simField === 'sim_id') {
+                        this.setState({
+                            valid_sim_id_1: true
+                        })
+                    } else if (simField === 'sim_id2') {
+                        this.setState({
+                            valid_sim_id_2: true
+                        })
+                    }
+                    success({
+                        title: response.data.msg
+                    })
+                } else {
+                    error({
+                        title: response.data.msg
+                    })
+                }
+            }
+            // should be logged out
+            else {
+
+            }
+
+        });
+    }
+
     render() {
         // 
         const { users_list } = this.props;
@@ -813,69 +888,71 @@ class EditDevice extends Component {
                                     )}
                                 </Form.Item>
                             </Col>
+
                             {/* {(isloading ?
 
-                        <div className="addUserSpin">
-                            <Spin />
-                        </div>
-                        :
-                        // (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? null :
-                        <Fragment> */}
-                            {/* <Form.Item
-                                label={convertToLang(this.props.translation[USER_ID], "USER ID")}
-                                 labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 16 }}
-                            >
+                                <div className="addUserSpin">
+                                    <Spin />
+                                </div>
+                                :
+                                // (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? null :
+                                <Fragment>
+                                    <Form.Item
+                                        label={convertToLang(this.props.translation[USER_ID], "USER ID")}
+                                        labelCol={{ span: 8 }}
+                                        wrapperCol={{ span: 16 }}
+                                    >
 
 
-                                {this.props.form.getFieldDecorator('user_id', {
-                                    initialValue: this.state.addNewUserModal ? lastObject.user_id : this.props.device.user_id,
+                                        {this.props.form.getFieldDecorator('user_id', {
+                                            initialValue: this.state.addNewUserModal ? lastObject.user_id : this.props.device.user_id,
 
-                                    // rules: [
-                                    //     (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? {} :
-                                    //         {
-                                    //             required: true, message: convertToLang(this.props.translation[USER_ID_IS_REQUIRED], "User ID is Required !"),
-                                    //         }
-                                    // ]
-                                })(
-                                    <Select
-                                        className="pos_rel"
-                                        setFieldsValue={this.state.addNewUserModal ? lastObject.user_id : addNewUserValue}
-                                        showSearch
-                                        disabled
-                                        // disabled={(this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? true : false}
-                                        placeholder={convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}
-                                        optionFilterProp="children"
-                                        onChange={this.handleUserChange}
-                                        filterOption={
-                                            (input, option) => {
-                                                // 
-                                                // return null;
-                                                return (option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0)
-                                            }
+                                            // rules: [
+                                            //     (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? {} :
+                                            //         {
+                                            //             required: true, message: convertToLang(this.props.translation[USER_ID_IS_REQUIRED], "User ID is Required !"),
+                                            //         }
+                                            // ]
+                                        })(
+                                            <Select
+                                                className="pos_rel"
+                                                setFieldsValue={this.state.addNewUserModal ? lastObject.user_id : addNewUserValue}
+                                                showSearch
+                                                disabled
+                                                // disabled={(this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? true : false}
+                                                placeholder={convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}
+                                                optionFilterProp="children"
+                                                onChange={this.handleUserChange}
+                                                filterOption={
+                                                    (input, option) => {
+                                                        // 
+                                                        // return null;
+                                                        return (option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0)
+                                                    }
+                                                }
+                                                disabled={true}
+                                            >
+                                                <Select.Option value="">{convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}</Select.Option>
+                                                {users_list.map((item, index) => {
+                                                    return (<Select.Option key={index} value={item.user_id}>{`${item.user_id} (${item.user_name})`}</Select.Option>)
+                                                })}
+                                            </Select>
+                                        )}
+                                        {(this.props.user.type === ADMIN || (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1')) ? null :
+                                            <Button
+                                                className="add_user_btn"
+                                                type="primary"
+                                                onClick={() => this.handleUserModal()}
+                                            >
+                                                {convertToLang(this.props.translation[Button_Add_User], "Add User")}
+                                            </Button>
                                         }
-                                        disabled={true}
-                                    >
-                                        <Select.Option value="">{convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}</Select.Option>
-                                        {users_list.map((item, index) => {
-                                            return (<Select.Option key={index} value={item.user_id}>{`${item.user_id} (${item.user_name})`}</Select.Option>)
-                                        })}
-                                    </Select>
-                                )}
-                                 {(this.props.user.type === ADMIN || (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1')) ? null :
-                                    <Button
-                                        className="add_user_btn"
-                                        type="primary"
-                                        onClick={() => this.handleUserModal()}
-                                    >
-                                        {convertToLang(this.props.translation[Button_Add_User], "Add User")}
-                                    </Button>
-                                } 
 
-                            </Form.Item> */}
+                                    </Form.Item>
 
-                            {/* </Fragment>
-                    )} */}
+                                </Fragment>
+                            )} */}
+
                             < Form.Item style={{ marginBottom: 0 }}
                             >
                                 {this.props.form.getFieldDecorator('dealer_id', {
@@ -1137,6 +1214,8 @@ class EditDevice extends Component {
                                     style={{ width: "100%" }}
                                 >ADD SIM ID</Button>
                             </Col>
+
+                            {/* Sim ID Input */}
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
                                     label={convertToLang(this.props.translation[LABEL_DATA_SIM_ID], "Sim ID ")}
@@ -1145,25 +1224,65 @@ class EditDevice extends Component {
                                 >
                                     {this.props.form.getFieldDecorator('sim_id', {
                                         initialValue: this.state.sim_id,
+                                        rules: [
+                                            // {
+                                            //     required: true, message: "SIM ID is required"
+                                            // },
+                                            {
+                                                validator: (rule, value, callback) => { this.validateICCID(rule, value, callback, 'sim_id') },
+                                            }
+                                        ]
                                     })(
-                                        <Select
-                                            // className="pos_rel"
-                                            showSearch
-                                            placeholder={convertToLang(this.props.translation[DEVICE_Select_SIM_ID], "Select Sim ID ")}
-                                            optionFilterProp="children"
-                                            onChange={(value) => this.setState({ sim_id: value })}
-                                            // onFocus={handleFocus}
-                                            // onBlur={handleBlur}
-                                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                        <Input
+                                            placeholder={convertToLang(this.props.translation[DUMY_TRANS_ID], "Enter Sim ID")}
                                             disabled={this.state.disableSim}
-                                        >
-                                            {this.props.sim_ids.map((sim_id, index) => {
-                                                return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
-                                            })}
-                                        </Select>,
+                                        // onChange={(value) => this.setState({ sim_id: value })}
+                                        />
+                                        // <Select
+                                        //     // className="pos_rel"
+                                        //     showSearch
+                                        //     placeholder={convertToLang(this.props.translation[DEVICE_Select_SIM_ID], "Select Sim ID ")}
+                                        //     optionFilterProp="children"
+                                        //     onChange={(value) => this.setState({ sim_id: value })}
+                                        //     // onFocus={handleFocus}
+                                        //     // onBlur={handleBlur}
+                                        //     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                        //     disabled={this.state.disableSim}
+                                        // >
+                                        //     {this.props.sim_ids.map((sim_id, index) => {
+                                        //         return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
+                                        //     })}
+                                        // </Select>
                                     )}
                                 </Form.Item>
                             </Col>
+
+                            {/**
+                             * @author Usman Hafeez
+                             * @description Add SIM ID button
+                             */}
+                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                <Form.Item
+                                    // label={''}
+                                    labelCol={{ span: 0 }}
+                                    wrapperCol={{ span: 24 }}
+                                >
+                                    <Button
+                                        className="add_user_btn"
+                                        type="primary"
+                                        style={{ width: "100%" }}
+                                        onClick={this.handleChatID}
+                                        style={{ width: "100%" }}
+                                        // disabled={this.state.disableSim || this.state.valid_sim_id_1}
+                                        disabled={this.state.disableSim}
+                                        onClick={(e) => { this.activateICCID('sim_id') }}
+                                    >
+                                        {convertToLang(this.props.translation[''], "Activate Sim ID")}
+                                    </Button>
+                                </Form.Item>
+                            </Col>
+
+                            {/* Sim ID 2 Input */}
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
                                     label={convertToLang(this.props.translation[DUMY_TRANS_ID], "Sim ID 2 ")}
@@ -1173,28 +1292,60 @@ class EditDevice extends Component {
                                     {this.props.form.getFieldDecorator('sim_id2', {
                                         initialValue: this.state.sim_id2,
                                     })(
-                                        <Select
-                                            // className="pos_rel"
-                                            showSearch
-                                            placeholder={convertToLang(this.props.translation[DUMY_TRANS_ID], "Select Sim ID 2")}
-                                            optionFilterProp="children"
-                                            onChange={(value) => this.setState({ sim_id2: value })}
-                                            // onFocus={handleFocus}
-                                            // onBlur={handleBlur}
-                                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                        <Input
+                                            placeholder={convertToLang(this.props.translation[''], "Enter Sim ID 2")}
                                             disabled={this.state.disableSim2}
-                                        >
-                                            <Select.Option value=""> {convertToLang(this.props.translation[DUMY_TRANS_ID], "Select Sim ID 2")}</Select.Option>
-                                            {this.props.sim_ids.map((sim_id, index) => {
-                                                if (index > 0) {
+                                            // onChange={(value) => this.setState({sim_id2: value})}
+                                        />
+                                        // <Select
+                                        //     // className="pos_rel"
+                                        //     showSearch
+                                        //     placeholder={convertToLang(this.props.translation[DUMY_TRANS_ID], "Select Sim ID 2")}
+                                        //     optionFilterProp="children"
+                                        //     onChange={(value) => this.setState({ sim_id2: value })}
+                                        //     // onFocus={handleFocus}
+                                        //     // onBlur={handleBlur}
+                                        //     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                        //     disabled={this.state.disableSim2}
+                                        // >
+                                        //     <Select.Option value=""> {convertToLang(this.props.translation[DUMY_TRANS_ID], "Select Sim ID 2")}</Select.Option>
+                                        //     {this.props.sim_ids.map((sim_id, index) => {
+                                        //         if (index > 0) {
 
-                                                    return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
-                                                }
-                                            })}
-                                        </Select>,
+                                        //             return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
+                                        //         }
+                                        //     })}
+                                        // </Select>
                                     )}
                                 </Form.Item>
                             </Col>
+
+                            {/**
+                             * @author Usman Hafeez
+                             * @description Add SIM ID 2 button
+                             */}
+                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                <Form.Item
+                                    // label={''}
+                                    labelCol={{ span: 0 }}
+                                    wrapperCol={{ span: 24 }}
+                                >
+                                    <Button
+                                        className="add_user_btn"
+                                        type="primary"
+                                        style={{ width: "100%" }}
+                                        onClick={this.handleChatID}
+                                        style={{ width: "100%" }}
+                                        disabled={this.state.disableSim2}
+                                        onClick={(e) => { this.activateICCID('sim_id2') }}
+
+                                    >
+                                        {convertToLang(this.props.translation[''], "Activate Sim ID 2")}
+                                    </Button>
+                                </Form.Item>
+                            </Col>
+
+                            {/* VPN Input */}
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
                                     label={convertToLang(this.props.translation[DUMY_TRANS_ID], "VPN")}
@@ -1219,6 +1370,8 @@ class EditDevice extends Component {
                                     )}
                                 </Form.Item>
                             </Col>
+
+                            {/* Client ID Input */}
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
                                     label={convertToLang(this.props.translation[DUMY_TRANS_ID], "Client ID ")}

@@ -760,21 +760,6 @@ class AddDevice extends Component {
         return callback();
     }
 
-    validateValidDays = (rule, value, callback) => {
-        // console.log(value);
-        if (value !== '') {
-            if (value % 1 !== 0) {
-                callback('Please Enter a Integer Value.');
-            }
-            else if (value > 30 || value < 1) {
-                callback('Range 1-30 Please Enter a valid input.');
-            } else {
-                callback();
-            }
-        } else {
-            callback();
-        }
-    }
     activateICCID = (simField) => {
         let value = this.props.form.getFieldValue(simField);
         RestService.activateICCID(value).then((response) => {
@@ -805,6 +790,23 @@ class AddDevice extends Component {
 
         });
     }
+
+    validateValidDays = (rule, value, callback) => {
+        // console.log(value);
+        if (value !== '') {
+            if (value % 1 !== 0) {
+                callback('Please Enter a Integer Value.');
+            }
+            else if (value > 30 || value < 1) {
+                callback('Range 1-30 Please Enter a valid input.');
+            } else {
+                callback();
+            }
+        } else {
+            callback();
+        }
+    }
+    
     render() {
         // console.log(this.props);
         // console.log('id is', this.state.products, this.state.packages);
@@ -1271,9 +1273,9 @@ class AddDevice extends Component {
                                                 ]
                                             })(
                                                 <Input
-                                                    placeholder={convertToLang(this.props.translation[DEVICE_Select_SIM_ID], "Enter Sim ID")}
+                                                    placeholder={convertToLang(this.props.translation[DUMY_TRANS_ID], "Enter Sim ID")}
                                                     disabled={this.state.disableSim}
-                                                // onChange={(value) => this.setState({ sim_id: value })}
+                                                    // onChange={(value) => this.setState({ sim_id: value })}
                                                 />
                                                 // <Select
                                                 //     // className="pos_rel"
@@ -1341,7 +1343,7 @@ class AddDevice extends Component {
                                                 <Input
                                                     placeholder={convertToLang(this.props.translation[''], "Enter Sim ID 2")}
                                                     disabled={this.state.disableSim2}
-
+                                                    // onChange={(value) => this.setState({sim_id2: value})}
                                                 />
                                                 // <Select
                                                 //     // className="pos_rel"
