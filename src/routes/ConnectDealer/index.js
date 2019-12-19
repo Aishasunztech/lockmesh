@@ -12,7 +12,7 @@ import CircularProgress from "components/CircularProgress/index";
 import moment from 'moment-timezone';
 // helpers and actions
 import RestService from "../../appRedux/services/RestServices";
-import { getColor, isBase64, convertToLang, checkValue, getSelectedTZDetail, convertTimezoneValue } from "../utils/commonUtils"
+import { getColor, isBase64, convertToLang, checkValue, checkTimezoneValue, convertTimezoneValue } from "../utils/commonUtils"
 import {
     getDealerDetails,
     editDealer,
@@ -165,8 +165,8 @@ class ConnectDealer extends Component {
     renderDealerInfo = () => {
         let dealer = this.props.dealer;
         // console.log("dealer ", dealer, this.props.authUser);
-        let selected_tz_detail = getSelectedTZDetail(dealer.timezone);
-        // console.log("selected_tz_detail ", selected_tz_detail)
+        let dealer_tz = checkTimezoneValue(dealer.timezone);
+        // console.log("dealer_tz ", dealer_tz)
         if (dealer) {
             const account_balance_status = (dealer.account_balance_status == 'restricted') ? "Restriction Level 1" : (dealer.account_balance_status === "suspended") ? "Restriction Level 2" : "Active";
             let account_balance_style = (dealer.account_balance_status == 'restricted') ? 'restrict1' : (dealer.account_balance_status === "suspended") ? 'restrict2' : 'active';
@@ -265,7 +265,7 @@ class ConnectDealer extends Component {
                 {
                     key: 49,
                     name: <a>{convertToLang(this.props.translation[""], "TIMEZONE")}</a>,
-                    value: selected_tz_detail,
+                    value: dealer_tz,
                 },
                 {
                     key: '10',

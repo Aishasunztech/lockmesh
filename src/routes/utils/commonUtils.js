@@ -411,6 +411,17 @@ export function getSelectedTZDetail(zone_name) {
   return detail;
 }
 
+export function checkTimezoneValue(zone_name) {
+  let detail = 'N/A'; // Timezone not selected
+  let timeZones = moment.tz.names();
+  let foundZoneIndex = timeZones.findIndex(item => item.toLowerCase() === zone_name.toLowerCase());
+
+  if (foundZoneIndex !== -1) {
+    detail = `(GMT${moment.tz(timeZones[foundZoneIndex]).format('Z')}) ${timeZones[foundZoneIndex]}`
+  }
+  return detail;
+}
+
 export function convertTimezoneValue(dealerTimezone, data, dateFormat) { // dealerTimezone: timezone, data: date/time
   let coverted_dateTime = "N/A";
 
