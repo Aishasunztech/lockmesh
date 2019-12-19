@@ -528,25 +528,6 @@ export const addProduct = (payload) => {
     }
 }
 
-export const activateICCID = (iccid) => {
-    return (dispatch) => {
-        RestService.activateICCID(iccid).then((response) => {
-            // if (RestService.checkAuth(response.data)) {
-            //     dispatch({
-            //         type: ADD_PRODUCT,
-            //         payload: {
-            //             type: payload.type,
-            //             ...response.data
-            //         }
-            //     })
-            // } else {
-            //     dispatch({
-            //         type: INVALID_TOKEN
-            //     })
-            // }
-        });
-    }
-}
 // export function getBulkDevicesList(data) {
 //     console.log('at action file ', data)
 

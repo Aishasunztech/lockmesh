@@ -18,6 +18,7 @@ import AddPGPEmailModal from './AddPGPEmailModal';
 // helpers
 import { convertToLang } from '../../utils/commonUtils';
 import { inventorySales } from '../../utils/columnsUtils';
+import RestService from '../../../appRedux/services/RestServices'
 
 // actions
 import {
@@ -33,7 +34,6 @@ import {
     getPolicies,
     getDomains,
     addProduct,
-    activateICCID
 } from "../../../appRedux/actions";
 
 // constants
@@ -45,6 +45,7 @@ import { DEALER_PIN } from '../../../constants/DealerConstants';
 
 const confirm = Modal.confirm;
 const success = Modal.success
+const error = Modal.error;
 
 const { TextArea } = Input;
 class AddDevice extends Component {
@@ -743,16 +744,17 @@ class AddDevice extends Component {
                 return callback(convertToLang(this.props.translation[''], "Please insert only numbers"));
             }
         } else {
+            if (simField === 'sim_id') {
+                this.setState({
+                    valid_sim_id_1: true
+                })
+            } else if (simField === 'sim_id2') {
+                this.setState({
+                    valid_sim_id_2: true
+                })
+            }
         }
-                if (simField === 'sim_id') {
-                    this.setState({
-                        valid_sim_id_1: true
-                    })
-                } else if (simField === 'sim_id2') {
-                    this.setState({
-                        valid_sim_id_2: true
-                    })
-                }
+
 
 
         return callback();
@@ -775,7 +777,33 @@ class AddDevice extends Component {
     }
     activateICCID = (simField) => {
         let value = this.props.form.getFieldValue(simField);
-        this.props.activateICCID(value);
+        RestService.activateICCID(value).then((response) => {
+            if (response.data) {
+                if (response.data.valid) {
+                    if (simField === 'sim_id') {
+                        this.setState({
+                            valid_sim_id_1: true
+                        })
+                    } else if (simField === 'sim_id2') {
+                        this.setState({
+                            valid_sim_id_2: true
+                        })
+                    }
+                    success({
+                        title: response.data.msg
+                    })
+                } else {
+                    error({
+                        title: response.data.msg
+                    })
+                }
+            }
+            // should be logged out
+            else {
+
+            }
+
+        });
     }
     render() {
         // console.log(this.props);
@@ -1282,6 +1310,7 @@ class AddDevice extends Component {
                                                 style={{ width: "100%" }}
                                                 onClick={this.handleChatID}
                                                 style={{ width: "100%" }}
+                                                // disabled={this.state.disableSim || this.state.valid_sim_id_1}
                                                 disabled={this.state.disableSim}
                                                 onClick={(e) => { this.activateICCID('sim_id') }}
                                             >
@@ -1746,7 +1775,6 @@ function mapDispatchToProps(dispatch) {
         addSimPermission: null,
         getDomains: getDomains,
         addProduct: addProduct,
-        activateICCID: activateICCID
     }, dispatch);
 }
 var mapStateToProps = ({ routing, devices, device_details, users, settings, sidebar, auth, account }) => {
