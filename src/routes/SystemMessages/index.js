@@ -347,7 +347,7 @@ class SystemMessages extends Component {
                 {/* Send Message modal */}
                 <Modal
                     title={convertToLang(this.props.translation[""], "Send Message to Selected Devcies")}
-                    width={"600px"}
+                    width={"700px"}
                     maskClosable={false}
                     style={{ top: 20 }}
                     visible={this.state.visible}
@@ -560,7 +560,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const mapStateToProps = ({ account, auth, settings, dealers, bulkDevices }) => {
-    console.log("bulkDevices.bulkMsgs ", bulkDevices.bulkMsgs);
+    // console.log("bulkDevices.bulkMsgs ", bulkDevices.bulkMsgs);
     return {
         // dealerList: dealers.dealers,
         // bulkMsgs: account.bulkMsgs,

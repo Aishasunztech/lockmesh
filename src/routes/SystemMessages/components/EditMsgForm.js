@@ -33,6 +33,16 @@ class EditMsgForm extends Component {
             { key: '12 MONTHs', value: "12 Months" },
         ];
 
+        this.weekDays = [
+            { key: 'Mon', value: "Monday" },
+            { key: 'Tue', value: "Tuesday" },
+            { key: 'Wed', value: "Wednesday" },
+            { key: 'Thu', value: "Thursday" },
+            { key: 'Fri', value: "Friday" },
+            { key: 'Sat', value: "Saturday" },
+            { key: 'Sun', value: "Sunday" },
+        ];
+
         this.state = {
             visible: false,
             filteredDevices: [],
@@ -55,53 +65,36 @@ class EditMsgForm extends Component {
         console.log("handle submit ", this.props.selectedDevices, this.state.selectedDealers, this.state.selectedUsers);
         this.props.form.validateFieldsAndScroll((err, values) => {
             console.log("handle submit 02 ", values)
-            // console.log(err,'form', values.name);
-            // if (values.name === '') {
-            //     this.setState({
-            //         validateStatus: 'error',
-            //         help: convertToLang(this.props.translation[User_Name_require], "Name is Required")
-            //     })
-            // }
+
             if (!err) {
 
-                // if (/[^A-Za-z \d]/.test(values.name)) {
-                //     this.setState({
-                //         validateStatus: 'error',
-                //         help: convertToLang(this.props.translation[User_Name_require], "Name is Required")
-                //     })
-                // } else {
-                // this.props.setBulkMsg(values);
-                // this.props.handleCancelSendMsg(false);
-                // this.handleReset();
+                let repeatVal = '';
+                let dateTimeVal = '';
 
-                // if (this.props.selectedDevices && this.props.selectedDevices.length) {
-                    let repeatVal = '';
-                    let dateTimeVal = '';
-
-                    if (this.state.timer === "NOW") {
-                        dateTimeVal = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
-                        repeatVal = "NONE";
-                    } else if (this.state.timer === "DATE/TIME") {
-                        dateTimeVal = this.state.selected_dateTime;
-                        repeatVal = "NONE";
-                    } else if (this.state.timer === "REPEAT") {
-                        dateTimeVal = this.state.selected_dateTime;
-                        repeatVal = this.state.repeat_duration;
-                    }
+                if (this.state.timer === "NOW") {
+                    dateTimeVal = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+                    repeatVal = "NONE";
+                } else if (this.state.timer === "DATE/TIME") {
+                    dateTimeVal = this.state.selected_dateTime;
+                    repeatVal = "NONE";
+                } else if (this.state.timer === "REPEAT") {
+                    dateTimeVal = this.state.selected_dateTime;
+                    repeatVal = this.state.repeat_duration;
+                }
 
 
-                    let data = {
-                        devices: this.props.selectedDevices,
-                        dealers: this.state.selectedDealers,
-                        users: this.state.selectedUsers,
-                        msg: values.msg_txt,
-                        repeat: repeatVal,
-                        selected_date: dateTimeVal,
-                        timer: values.timer,
-                    }
-                    console.log("data ", this.state.editRecord);
-                    // this.refs.bulk_msg.handleBulkSendMsg(data);
-                    // this.props.sendMsgOnDevices(data);
+                let data = {
+                    devices: this.props.selectedDevices,
+                    dealers: this.state.selectedDealers,
+                    users: this.state.selectedUsers,
+                    msg: values.msg_txt,
+                    repeat: repeatVal,
+                    selected_date: dateTimeVal,
+                    timer: values.timer,
+                }
+                console.log("data ", this.state.editRecord);
+                // this.refs.bulk_msg.handleBulkSendMsg(data);
+                // this.props.sendMsgOnDevices(data);
                 // } else {
                 //     error({
                 //         title: `Sorry, You have not any device to perform an action, to add devices please select dealers/users`,
@@ -139,59 +132,51 @@ class EditMsgForm extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-
         if (this.props.editRecord != nextProps.editRecord) {
-            // console.log('componentWillReceiveProps ', nextProps.devices)
             this.setState({
                 editRecord: nextProps.editRecord,
-                // dealerList: this.props.dealerList
             })
         }
     }
 
     componentDidMount() {
-
-        // this.props.getAllDealers();
-        // this.props.getUserList();
-
         this.setState({
             editRecord: this.props.editRecord,
-            // dealerList: this.props.dealerList,
         })
     }
 
-    handleMultipleSelect = () => {
-        // console.log('value is: ', e);
-        let data = {}
+    // handleMultipleSelect = () => {
+    //     // console.log('value is: ', e);
+    //     let data = {}
 
-        if (this.state.selectedDealers.length || this.state.selectedUsers.length) {
-            data = {
-                dealers: this.state.selectedDealers,
-                users: this.state.selectedUsers
-            }
+    //     if (this.state.selectedDealers.length || this.state.selectedUsers.length) {
+    //         data = {
+    //             dealers: this.state.selectedDealers,
+    //             users: this.state.selectedUsers
+    //         }
 
-            // console.log('handle change data is: ', data)
-            this.props.getBulkDevicesList(data);
-            this.props.getAllDealers();
+    //         // console.log('handle change data is: ', data)
+    //         this.props.getBulkDevicesList(data);
+    //         this.props.getAllDealers();
 
-        } else {
-            this.setState({ filteredDevices: [] });
-        }
-    }
+    //     } else {
+    //         this.setState({ filteredDevices: [] });
+    //     }
+    // }
 
-    handleDeselect = (e, dealerOrUser = '') => {
+    // handleDeselect = (e, dealerOrUser = '') => {
 
-        if (dealerOrUser == "dealers") {
-            let updateDealers = this.state.selectedDealers.filter(item => item.key != e.key);
-            this.state.selectedDealers = updateDealers;
-            this.state.checkAllSelectedDealers = false;
-        } else if (dealerOrUser == "users") {
-            let updateUsers = this.state.selectedUsers.filter(item => item.key != e.key);
-            this.state.selectedUsers = updateUsers;
-            this.state.checkAllSelectedUsers = false;
-        }
+    //     if (dealerOrUser == "dealers") {
+    //         let updateDealers = this.state.selectedDealers.filter(item => item.key != e.key);
+    //         this.state.selectedDealers = updateDealers;
+    //         this.state.checkAllSelectedDealers = false;
+    //     } else if (dealerOrUser == "users") {
+    //         let updateUsers = this.state.selectedUsers.filter(item => item.key != e.key);
+    //         this.state.selectedUsers = updateUsers;
+    //         this.state.checkAllSelectedUsers = false;
+    //     }
 
-    }
+    // }
     handleReset = () => {
         this.props.form.resetFields();
         this.state.editRecord.repeat_duration = 'NONE';
@@ -203,49 +188,51 @@ class EditMsgForm extends Component {
         this.handleReset();
         this.props.handleEditMsgModal(false);
     }
-    handleChange = (e) => {
-        this.setState({ type: e.target.value });
-    }
+    // handleChange = (e) => {
+    //     this.setState({ type: e.target.value });
+    // }
 
 
-    handleChangeAction = (e) => {
-        console.log("e value is: ", e)
+    // handleChangeAction = (e) => {
+    //     console.log("e value is: ", e)
 
-        this.setState({
-            selectedAction: e,
-            errorAction: ""
-        });
+    //     this.setState({
+    //         selectedAction: e,
+    //         errorAction: ""
+    //     });
 
-    }
+    // }
 
-    onPanelChange = (value, mode) => {
-        console.log("hi ", value, mode);
-    }
+    // onPanelChange = (value, mode) => {
+    //     console.log("hi ", value, mode);
+    // }
 
     dateTimeOnChange = (value, dateString) => {
-        console.log('Selected Time: ', value);
-        console.log('Formatted Selected Time: ', dateString, "current data: ", moment(new Date()).format('YYYY-MM-DD HH:mm:ss'));
-        // let todayVal = false;
-        // if (moment(dateString).format('YYYY-MM-DD HH:mm') === moment(new Date()).format('YYYY-MM-DD HH:mm')) {
-        //     this.props.form.setFieldsValue({ repeat: 'NONE' });
-        //     todayVal = true;
-        // }
+        // console.log('Selected Time: ', value);
+        // console.log('Formatted Selected Time: ', dateString, "current data: ", moment(new Date()).format('YYYY-MM-DD HH:mm:ss'));
+
         this.state.editRecord.sending_time = dateString;
         this.setState({ editRecord: this.state.editRecord });
         // this.setState({ selected_dateTime: dateString });
     }
 
-    repeatHandler = (e) => {
-        console.log("e is: ", e);
-        this.state.editRecord.repeat_duration = e;
-        this.setState({ editRecord: this.state.editRecord });
-    }
+    // repeatHandler = (e) => {
+    //     console.log("e is: ", e);
+    //     let record = this.state.editRecord;
+    //     record.repeat_duration = e;
+    //     this.setState({ editRecord: JSON.parse(JSON.stringify(record)) });
+    // }
 
-    handleTimer = (e) => {
-        console.log("e is: ", e);
-        this.state.editRecord.sending_time = e;
-        this.setState({ editRecord: this.state.editRecord });
-        // this.setState({ timer: e });
+    // handleTimer = (e) => {
+    //     let record = this.state.editRecord;
+    //     record.timer_status = e;
+    //     this.setState({ editRecord: record });
+    // }
+
+    handleEditMsgRecord = (e, fieldName) => {
+        let record = this.state.editRecord;
+        record[fieldName] = e;
+        this.setState({ editRecord: record });
     }
 
     range = (start, end) => {
@@ -324,7 +311,7 @@ class EditMsgForm extends Component {
                                         showSearch={false}
                                         style={{ width: '100%' }}
                                         placeholder={convertToLang(this.props.translation[""], "Select Message Timer")}
-                                        onChange={this.handleTimer}
+                                        onChange={(e) => this.handleEditMsgRecord(e, "timer_status")}
                                     >
                                         <Select.Option key={"NOW"} value={"NOW"}>{"NOW"}</Select.Option>
                                         <Select.Option key={"DATE/TIME"} value={"DATE/TIME"}>{"Date/Time"}</Select.Option>
@@ -344,7 +331,7 @@ class EditMsgForm extends Component {
                                     wrapperCol={{ span: 16 }}
                                 >
                                     {this.props.form.getFieldDecorator('date/time', {
-                                        initialValue: '',
+                                        initialValue: moment(editRecord.sending_time),
                                         rules: [
                                             {
                                                 required: true, message: convertToLang(this.props.translation[""], "Date/Time field is required"),
@@ -390,7 +377,8 @@ class EditMsgForm extends Component {
                                                 style={{ width: '100%' }}
                                                 // disabled={this.state.isNowSet}
                                                 placeholder={convertToLang(this.props.translation[""], "Select when to send Message")}
-                                                onChange={this.repeatHandler}
+                                                // onChange={this.repeatHandler}
+                                                onChange={(e) => this.handleEditMsgRecord(e, "repeat_duration")}
                                             >
                                                 {this.durationList.map((item) => <Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)}
                                             </Select>
@@ -398,18 +386,44 @@ class EditMsgForm extends Component {
                                     </Form.Item>
                                 </Col>
                             </Row>
-                            {/* : null} */}
 
-                            {/* {this.state.repeat_duration !== "NONE" && this.state.timer === "REPEAT" ? */}
                             <Row gutter={24} className="">
                                 <Col className="col-md-12 col-sm-12 col-xs-12">
                                     <Form.Item
-                                        label={convertToLang(this.props.translation[""], "Select any Time")}
+                                        label={convertToLang(this.props.translation[""], "Select Start Day")}
+                                        labelCol={{ span: 8 }}
+                                        wrapperCol={{ span: 16 }}
+                                    >
+                                        {this.props.form.getFieldDecorator('day', {
+                                            initialValue: editRecord.day ? editRecord.day : '',
+                                            rules: [
+                                                {
+                                                    required: true, message: convertToLang(this.props.translation[""], "Day Name is Required"),
+                                                }
+                                            ],
+                                        })(
+                                            <Select
+                                                showSearch={false}
+                                                style={{ width: '100%' }}
+                                                placeholder={convertToLang(this.props.translation[""], "Select Start Day")}
+                                                onChange={(e) => this.handleEditMsgRecord(e, "startDay")}
+                                            >
+                                                {this.weekDays.map((item) => <Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)}
+                                            </Select>
+                                        )}
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+
+                            <Row gutter={24} className="">
+                                <Col className="col-md-12 col-sm-12 col-xs-12">
+                                    <Form.Item
+                                        label={convertToLang(this.props.translation[""], "Select Time")}
                                         labelCol={{ span: 8 }}
                                         wrapperCol={{ span: 16 }}
                                     >
                                         {this.props.form.getFieldDecorator('time', {
-                                            initialValue: '',
+                                            initialValue: moment(editRecord.sending_time),
                                             rules: [
                                                 {
                                                     required: true, message: convertToLang(this.props.translation[""], "Time field is required"),
@@ -417,13 +431,10 @@ class EditMsgForm extends Component {
                                             ],
                                         })(
                                             <TimePicker
-                                                // defaultValue={editRecord.sending_time}
+                                                format={'HH:mm'}
                                                 onChange={this.dateTimeOnChange}
-                                                placeholder={"Select any time"}
-                                                // format="YYYY-MM-DD HH:mm:ss"
+                                                placeholder={"Select time"}
                                                 style={{ width: '100%' }}
-                                            // minuteStep={1}
-                                            // defaultValue= {moment('0000-00-00', 'HH:mm:ss')}
                                             />
                                         )}
                                     </Form.Item>

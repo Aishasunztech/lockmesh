@@ -38,6 +38,8 @@ export default class BulkSendMsg extends Component {
             repeat: data.repeat,
             date: data.selected_date,
             timer: data.timer,
+            start_day: data.start_day,
+            time: data.time
         }
 
         console.log("saveData ", saveData);
@@ -49,8 +51,8 @@ export default class BulkSendMsg extends Component {
             okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
             cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
             onOk: (() => {
-                this.props.sendMsgOnDevices(saveData);
-                this.props.handleCancel();
+                // this.props.sendMsgOnDevices(saveData);
+                // this.props.handleCancel();
             }),
             onCancel() { },
         });

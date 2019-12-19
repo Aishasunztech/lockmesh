@@ -33,6 +33,16 @@ class SendMsgForm extends Component {
             { key: '12 MONTHs', value: "12 Months" },
         ];
 
+        this.weekDays = [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday",
+        ];
+
         this.state = {
             visible: false,
             filteredDevices: [],
@@ -43,6 +53,7 @@ class SendMsgForm extends Component {
             allDealers: [],
             selectedAction: 'NONE',
             selected_dateTime: '',
+            selected_Time: '',
             isNowSet: false,
             repeat_duration: 'NONE',
             timer: ''
@@ -78,7 +89,7 @@ class SendMsgForm extends Component {
                     let dateTimeVal = '';
 
                     if (this.state.timer === "NOW") {
-                        dateTimeVal = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+                        dateTimeVal = '' //moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
                         repeatVal = "NONE";
                     } else if (this.state.timer === "DATE/TIME") {
                         dateTimeVal = this.state.selected_dateTime;
@@ -97,9 +108,11 @@ class SendMsgForm extends Component {
                         repeat: repeatVal,
                         selected_date: dateTimeVal,
                         timer: values.timer,
+                        start_day: values.start_day ? values.start_day : '',
+                        time: this.state.selected_Time
                     }
                     console.log("data ", data);
-                    // this.refs.bulk_msg.handleBulkSendMsg(data);
+                    this.refs.bulk_msg.handleBulkSendMsg(data);
                     // this.props.sendMsgOnDevices(data);
                 } else {
                     error({
@@ -147,7 +160,7 @@ class SendMsgForm extends Component {
             })
         }
 
-        console.log("nextProps.users_list && nextProps.dealerList ", nextProps.users_list, nextProps.dealerList)
+        // console.log("nextProps.users_list && nextProps.dealerList ", nextProps.users_list, nextProps.dealerList)
         if (nextProps.users_list && nextProps.dealerList) {
             let allDealers = nextProps.dealerList.map((item) => {
                 return ({ key: item.dealer_id, label: item.dealer_name })
@@ -305,14 +318,13 @@ class SendMsgForm extends Component {
     }
 
     dateTimeOnChange = (value, dateString) => {
-        console.log('Selected Time: ', value);
-        console.log('Formatted Selected Time: ', dateString, "current data: ", moment(new Date()).format('YYYY-MM-DD HH:mm:ss'));
-        // let todayVal = false;
-        // if (moment(dateString).format('YYYY-MM-DD HH:mm') === moment(new Date()).format('YYYY-MM-DD HH:mm')) {
-        //     this.props.form.setFieldsValue({ repeat: 'NONE' });
-        //     todayVal = true;
-        // }
+        // console.log('Selected Time: ', value);
+        // console.log('Formatted Selected Time: ', dateString, "current data: ", moment(new Date()).format('YYYY-MM-DD HH:mm:ss'));
         this.setState({ selected_dateTime: dateString });
+    }
+
+    timeOnChange = (value, dateString) => {
+        this.setState({ selected_Time: dateString });
     }
 
     repeatHandler = (e) => {
@@ -336,6 +348,7 @@ class SendMsgForm extends Component {
     }
 
     disabledDate = (current) => {
+        // console.log("current date: ", current);
         // Can not select days before today and today
         return current && current < moment().endOf('day');
     }
@@ -346,6 +359,13 @@ class SendMsgForm extends Component {
         //     disabledMinutes: () => this.range(30, 60),
         //     disabledSeconds: () => [55, 56],
         // };
+    }
+
+    validateRepeater = async (rule, value, callback) => {
+        // console.log("values: ", value)
+        if (value === 'NONE') {
+            callback("Timer Value should not be NONE.")
+        }
     }
 
     render() {
@@ -431,7 +451,7 @@ class SendMsgForm extends Component {
                                 wrapperCol={{ span: 16 }}
                             >
                                 {this.props.form.getFieldDecorator('msg_txt', {
-                                    initialValue: this.props.bulkMsg ? this.props.bulkMsg : '',
+                                    initialValue: '',
                                     rules: [
                                         {
                                             required: true, message: convertToLang(this.props.translation[""], "Message field is required"),
@@ -486,7 +506,7 @@ class SendMsgForm extends Component {
                                     wrapperCol={{ span: 16 }}
                                 >
                                     {this.props.form.getFieldDecorator('date/time', {
-                                        initialValue: '',
+                                        initialValue: "",
                                         rules: [
                                             {
                                                 required: true, message: convertToLang(this.props.translation[""], "Date/Time field is required"),
@@ -518,17 +538,19 @@ class SendMsgForm extends Component {
                                     wrapperCol={{ span: 16 }}
                                 >
                                     {this.props.form.getFieldDecorator('repeat', {
-                                        initialValue: '',
+                                        initialValue: 'NONE',
                                         rules: [
                                             {
                                                 required: true, message: convertToLang(this.props.translation[""], "Repeat Message field is required"),
-                                            }
+                                            },
+                                            {
+                                                validator: this.validateRepeater,
+                                            },
                                         ],
                                     })(
                                         <Select
                                             showSearch={false}
                                             style={{ width: '100%' }}
-                                            // disabled={this.state.isNowSet}
                                             placeholder={convertToLang(this.props.translation[""], "Select when to send Message")}
                                             onChange={this.repeatHandler}
                                         >
@@ -541,32 +563,62 @@ class SendMsgForm extends Component {
                         : null}
 
                     {this.state.repeat_duration !== "NONE" && this.state.timer === "REPEAT" ?
-                        <Row gutter={24} className="">
-                            <Col className="col-md-12 col-sm-12 col-xs-12">
-                                <Form.Item
-                                    label={convertToLang(this.props.translation[""], "Select any Time")}
-                                    labelCol={{ span: 8 }}
-                                    wrapperCol={{ span: 16 }}
-                                >
-                                    {this.props.form.getFieldDecorator('time', {
-                                        initialValue: '',
-                                        rules: [
-                                            {
-                                                required: true, message: convertToLang(this.props.translation[""], "Time field is required"),
-                                            }
-                                        ],
-                                    })(
-                                        <TimePicker
-                                            onChange={this.dateTimeOnChange}
-                                            placeholder={"Select any time"}
-                                            // format="YYYY-MM-DD HH:mm:ss"
-                                            style={{ width: '100%' }}
-                                        // defaultValue= {moment('00:00:00', '00:00:00')}
-                                        />
-                                    )}
-                                </Form.Item>
-                            </Col>
-                        </Row>
+                        <Fragment>
+                            <Row gutter={24} className="">
+                                <Col className="col-md-12 col-sm-12 col-xs-12">
+                                    <Form.Item
+                                        label={convertToLang(this.props.translation[""], "Select Start Day")}
+                                        labelCol={{ span: 8 }}
+                                        wrapperCol={{ span: 16 }}
+                                    >
+                                        {this.props.form.getFieldDecorator('start_day', {
+                                            initialValue: 'Monday',
+                                            rules: [
+                                                {
+                                                    required: true, message: convertToLang(this.props.translation[""], "Day Name is Required"),
+                                                }
+                                            ],
+                                        })(
+                                            <Select
+                                                showSearch={false}
+                                                style={{ width: '100%' }}
+                                                placeholder={convertToLang(this.props.translation[""], "Select Start Day")}
+                                            // onChange={this.handleStartDay}
+                                            >
+                                                {this.weekDays.map((item) => <Select.Option key={item} value={item}>{item}</Select.Option>)}
+                                            </Select>
+                                        )}
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+
+                            <Row gutter={24} className="">
+                                <Col className="col-md-12 col-sm-12 col-xs-12">
+                                    <Form.Item
+                                        label={convertToLang(this.props.translation[""], "Select Time")}
+                                        labelCol={{ span: 8 }}
+                                        wrapperCol={{ span: 16 }}
+                                    >
+                                        {this.props.form.getFieldDecorator('time', {
+                                            initialValue: moment('00:00', 'HH:mm'),
+                                            rules: [
+                                                {
+                                                    required: true, message: convertToLang(this.props.translation[""], "Time field is required"),
+                                                }
+                                            ],
+                                        })(
+                                            <TimePicker
+                                                onChange={this.timeOnChange}
+                                                placeholder={"Select time"}
+                                                format="HH:mm"
+                                                style={{ width: '100%' }}
+                                            // defaultValue={moment('00:00:00', 'HH:mm:ss')}
+                                            />
+                                        )}
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                        </Fragment>
                         : null}
 
                     <FilterDevices
