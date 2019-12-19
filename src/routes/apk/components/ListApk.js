@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col, Tag } from "antd";
-import { BASE_URL } from '../../../constants/Application';
+import { BASE_URL, DATE_FORMAT, TIMESTAMP_FORMAT } from '../../../constants/Application';
 import styles from './app.css';
 import CustomScrollbars from "../../../util/CustomScrollbars";
 import { Link } from 'react-router-dom';
-
+import moment from 'moment';
 import {
-    convertToLang
+    convertToLang, checkTimezoneValue
 } from '../../utils/commonUtils'
 import EditApk from './EditApk';
 import UpdateFeatureApk from './UpdateFeatureApk';
@@ -201,8 +201,12 @@ export default class ListApk extends Component {
                     version: app.version,
                     used_by: <Fragment>{usedBy}</Fragment>,
                     policies: (app.policies === undefined || app.policies === null) ? [] : app.policies,
-                    created_at: app.created_at,
-                    updated_at: app.updated_at
+                    created_at: checkTimezoneValue(this.props.user.timezone, app.created_at, TIMESTAMP_FORMAT),
+                    updated_at: checkTimezoneValue(this.props.user.timezone, app.updated_at, TIMESTAMP_FORMAT),
+                    // created_at: (app.created_at && app.created_at != "N/A") ? moment(app.created_at).tz(checkTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
+                    // updated_at: (app.updated_at && app.updated_at != "N/A") ? moment(app.updated_at).tz(checkTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
+                    // created_at: app.created_at,
+                    // updated_at: app.updated_at
                 }
                 apkList.push(data)
 
@@ -266,7 +270,8 @@ export default class ListApk extends Component {
                     'apk_logo': (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
                     'apk_version': app.version,
                     'apk_size': app.size ? app.size : "N/A",
-                    'updated_date': app.updated_at,
+                    'updated_at': checkTimezoneValue(this.props.user.timezone, app.updated_at, TIMESTAMP_FORMAT),
+                    // 'updated_date': app.updated_at,
                     'package_name': app.package_name,
                     'policies': (app.policies === undefined || app.policies === null) ? [] : app.policies,
                 }

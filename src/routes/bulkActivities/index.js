@@ -34,7 +34,7 @@ import {
 
 
 import { getUserList } from "../../appRedux/actions/Users";
-import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, componentSearch, titleCase, convertToLang, checkRemainTermDays } from '../utils/commonUtils'
+import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, componentSearch, titleCase, convertToLang, checkRemainTermDays, checkTimezoneValue } from '../utils/commonUtils'
 // import { ADMIN } from '../../constants/Constants';
 import { Button_Confirm, Button_Cancel, Button_Edit, Button_Ok } from '../../constants/ButtonConstants';
 import { devicesColumns, userDevicesListColumns } from '../utils/columnsUtils';
@@ -52,6 +52,7 @@ import {
     DEVICE_ACTIVATED
 } from '../../constants/Constants'
 import { DO_YOU_WANT_TO_APPLY } from '../../constants/DeviceConstants';
+import { TIMESTAMP_FORMAT } from '../../constants/Application';
 
 var copyDealerAgents = [];
 var status = true;
@@ -477,8 +478,10 @@ class BulkActivities extends Component {
                 s_dealer: checkValue(device.s_dealer),
                 s_dealer_name: checkValue(device.s_dealer_name),
                 remainTermDays: device.remainTermDays,
-                start_date: checkValue(device.start_date),
-                expiry_date: checkValue(device.expiry_date),
+                start_date: checkTimezoneValue(this.props.user.timezone, device.start_date, TIMESTAMP_FORMAT),
+                expiry_date: checkTimezoneValue(this.props.user.timezone, device.expiry_date, TIMESTAMP_FORMAT),
+                // start_date: checkValue(device.start_date),
+                // expiry_date: checkValue(device.expiry_date),
             }
         });
     }
@@ -873,6 +876,7 @@ class BulkActivities extends Component {
                     // onChangeTableSorting={this.handleTableChange}
                     translation={this.props.translation}
                     history_loading={this.props.history_loading}
+                    user={this.props.user}
                 />
 
                 {/* Push Apps responses handle through modal */}

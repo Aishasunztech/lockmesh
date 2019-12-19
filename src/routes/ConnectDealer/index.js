@@ -9,10 +9,10 @@ import AppFilter from '../../components/AppFilter';
 import DealerAction from "./components/DealerActions";
 import DealerNotFoundPage from '../InvalidPage/dealerNotFound';
 import CircularProgress from "components/CircularProgress/index";
-
+import moment from 'moment-timezone';
 // helpers and actions
 import RestService from "../../appRedux/services/RestServices";
-import { getColor, isBase64, convertToLang, checkValue } from "../utils/commonUtils"
+import { getColor, isBase64, convertToLang, checkValue, getSelectedTZDetail, checkTimezoneValue } from "../utils/commonUtils"
 import {
     getDealerDetails,
     editDealer,
@@ -33,6 +33,7 @@ import {
 } from '../../appRedux/actions'
 import image from '../../assets/images/warning.png'
 import styles from './connect_dealer.css'
+import { TIMESTAMP_FORMAT } from "../../constants/Application";
 
 class ConnectDealer extends Component {
     constructor(props) {
@@ -163,6 +164,9 @@ class ConnectDealer extends Component {
 
     renderDealerInfo = () => {
         let dealer = this.props.dealer;
+        // console.log("dealer ", dealer, this.props.authUser);
+        let selected_tz_detail = getSelectedTZDetail(dealer.timezone);
+        // console.log("selected_tz_detail ", selected_tz_detail)
         if (dealer) {
             const account_balance_status = (dealer.account_balance_status == 'restricted') ? "Restriction Level 1" : (dealer.account_balance_status === "suspended") ? "Restriction Level 2" : "Active";
             let account_balance_style = (dealer.account_balance_status == 'restricted') ? 'restrict1' : (dealer.account_balance_status === "suspended") ? 'restrict2' : 'active';
@@ -259,14 +263,23 @@ class ConnectDealer extends Component {
                     value: checkValue(dealer.website),
                 },
                 {
+                    key: 49,
+                    name: <a>{convertToLang(this.props.translation[""], "TIMEZONE")}</a>,
+                    value: selected_tz_detail,
+                },
+                {
                     key: '10',
                     name: <a>Last Login</a>,
-                    value: (dealer.last_login) ? dealer.last_login : 'N/A',
+                    value: checkTimezoneValue(this.props.authUser.timezone, dealer.last_login, TIMESTAMP_FORMAT),
+                    // value: (dealer.last_login) ? moment(dealer.last_login).tz(checkTimezoneValue(this.props.authUser.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
+                    // value: (dealer.last_login) ? dealer.last_login : 'N/A',
                 },
                 {
                     key: '11',
                     name: <a>Start Date</a>,
-                    value: this.props.dealer.created,
+                    value: checkTimezoneValue(this.props.authUser.timezone, dealer.created, TIMESTAMP_FORMAT),
+                    // value: (dealer.created) ? moment(dealer.created).tz(checkTimezoneValue(this.props.authUser.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
+                    // value: this.props.dealer.created,
                 },
 
             ]
@@ -344,7 +357,7 @@ class ConnectDealer extends Component {
                 {
                     key: '3',
                     name: 'USD equivalent:',
-                    value: (this.state.currency_price!==null) ? this.state.currency_price : dealer.credits,
+                    value: (this.state.currency_price !== null) ? this.state.currency_price : dealer.credits,
                 },
                 {
                     key: '4',
@@ -570,7 +583,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 var mapStateToProps = ({ dealer_details, dealers, settings, auth, account }) => {
-    // console.log("test: ", account);
+    console.log("test: ", account, "auth.authUser ", auth.authUser);
     return {
         translation: settings.translation,
         dealer: dealer_details.dealer,

@@ -1,14 +1,13 @@
 import packageJson from '../../package.json';
 
 
-let 
-hostName = window.location.hostname
+let hostName = window.location.hostname
 
 let URL = "http://localhost:3000/";
 let SUPERADMIN = "http://localhost:8042/";
 let TITLE = packageJson.name;
 let CHARSET = 'UTF-8';
-let TIMEZONE = 'Africa/Abidjan';
+let TIMEZONE = "Asia/Karachi";
 
 switch (hostName) {
     case "localhost":
@@ -21,8 +20,9 @@ switch (hostName) {
         URL = "https://devapi.lockmesh.com/"
         SUPERADMIN = 'https://devapi.meshguard.co/'
         TITLE = "LockMesh"
+        TIMEZONE = "Europe/Berlin"
         break;
-    
+
     // pre dev server for unfinished work
     case "predev.lockmesh.com":
     case "http://predev.lockmesh.com":
@@ -30,6 +30,7 @@ switch (hostName) {
         URL = "https://predevapi.lockmesh.com/"
         SUPERADMIN = 'https://devapi.meshguard.co/'
         TITLE = "LockMesh"
+        TIMEZONE = "Europe/Berlin"
         break;
 
     // for load testing = live LM
@@ -39,6 +40,7 @@ switch (hostName) {
         URL = "https://loadtesterapi.lockmesh.com/"
         SUPERADMIN = 'https://devapi.meshguard.co/'
         TITLE = "LockMesh"
+        TIMEZONE = "Europe/Berlin"
         break;
 
     // Live systems
@@ -49,6 +51,7 @@ switch (hostName) {
         URL = "https://api.lockmesh.com/"
         SUPERADMIN = 'https://api.meshguard.co/'
         TITLE = "LockMesh"
+        TIMEZONE = "Europe/Berlin"
         break;
 
     case "titansecureserver.com":
@@ -58,6 +61,7 @@ switch (hostName) {
         URL = "https://api.titansecureserver.com/"
         SUPERADMIN = 'https://api.meshguard.co/'
         TITLE = "TitanLocker"
+        TIMEZONE = "Europe/Berlin"
         break;
 
     case "cryptc.lockmesh.com":
@@ -66,6 +70,7 @@ switch (hostName) {
         URL = "https://cryptcapi.lockmesh.com/"
         SUPERADMIN = 'https://api.meshguard.co/'
         TITLE = "CryptPhoneC"
+        TIMEZONE = "Europe/Berlin"
         break;
 
     case "cryptk.lockmesh.com":
@@ -74,6 +79,7 @@ switch (hostName) {
         URL = "https://cryptkapi.lockmesh.com/"
         SUPERADMIN = 'https://api.meshguard.co/'
         TITLE = "CryptPhoneK"
+        TIMEZONE = "Europe/Berlin"
         break;
 
     default:
@@ -86,7 +92,14 @@ export const APP_TITLE = TITLE;
 export const SUPERADMIN_URL = `${SUPERADMIN}api/v1/`;
 
 export const CHAR_SET = CHARSET;
-export const TIME_ZONE = TIMEZONE;
+export const SERVER_TIMEZONE = TIMEZONE;
 
 // APP Constants
 export const VERSION = packageJson.version;
+
+
+// DATE TIME CONSTATNS
+export const TIMESTAMP_FORMAT = "YYYY-MM-DD HH:mm:ss";
+export const TIMESTAMP_FORMAT_NOT_Sec = "YYYY-MM-DD HH:mm";
+export const DATE_FORMAT = "YYYY-MM-DD";
+export const TIME_FORMAT = "HH:mm:ss";

@@ -209,6 +209,10 @@ class SystemMessages extends Component {
         this.setState({ visible })
     }
 
+    handleEditMsgModal = (visible) => {
+        this.setState({ editModal: visible })
+    }
+
     renderResponseList(list) {
         // console.log("list: ", list);
         return list.map(item => {
@@ -389,7 +393,7 @@ class SystemMessages extends Component {
                         sendMsgOnDevices={this.props.sendBulkMsg}
                         setBulkMsg={this.props.setBulkMsg}
                         bulkMsg={this.props.bulkMsg}
-                        handleCancelSendMsg={this.handleSendMsgButton}
+                        handleEditMsgModal={this.handleEditMsgModal}
                         user={this.state.user}
                         ref='edit_msg_form'
                         translation={this.props.translation}

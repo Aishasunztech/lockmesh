@@ -5,7 +5,7 @@ import scrollIntoView from 'scroll-into-view';
 import { Card, Row, Col, List, Button, message, Table, Icon, Switch, Modal } from "antd";
 
 import CustomScrollbars from "../../../util/CustomScrollbars";
-import { getFormattedDate, convertToLang, getDateTimeOfClientTimeZone } from '../../utils/commonUtils';
+import { getFormattedDate, convertToLang, getDateTimeOfClientTimeZone, checkTimezoneValue } from '../../utils/commonUtils';
 
 import UserDeviceList from './UserDeviceList'
 import AddUser from './AddUser';
@@ -14,11 +14,12 @@ import {
     Button_Edit,
     Button_Undo,
 } from '../../../constants/ButtonConstants';
-
+import moment from 'moment-timezone';
 import { EDIT_USER, DELETE_USER, DO_YOU_WANT_TO_DELETE_USER, UNDO, DO_YOU_WANT_TO_UNDO_USER } from '../../../constants/UserConstants';
 import { ADMIN } from '../../../constants/Constants';
 
 import styles from './user.css';
+import { TIMESTAMP_FORMAT } from '../../../constants/Application';
 // import styles1 from './users_fixheader.css';
 
 const confirm = Modal.confirm
@@ -103,7 +104,9 @@ class UserList extends Component {
                 user_name: user.user_name,
                 email: user.email,
                 tokens: 'N/A',
-                created_at: getFormattedDate(user.created_at)
+                created_at: checkTimezoneValue(this.props.user.timezone, user.created_at, TIMESTAMP_FORMAT),
+                // created_at: (user.created_at) ? moment(user.created_at).tz(checkTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
+                // created_at: getFormattedDate(user.created_at)
             }
         });
 

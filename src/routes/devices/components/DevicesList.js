@@ -7,11 +7,12 @@ import CustomScrollbars from "../../../util/CustomScrollbars";
 import { Link } from "react-router-dom";
 import SuspendDevice from './SuspendDevice';
 import ActivateDevcie from './ActivateDevice';
-import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, convertToLang, checkRemainTermDays } from '../../utils/commonUtils'
+import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, convertToLang, checkRemainTermDays, checkTimezoneValue } from '../../utils/commonUtils'
 import EditDevice from './editDevice';
 import AddDevice from './AddDevice';
 import { Tabs, Modal } from 'antd';
-import moment from 'moment';
+// import moment from 'moment';
+import moment from 'moment-timezone';
 import {
     DEVICE_ACTIVATED,
     DEVICE_EXPIRED,
@@ -66,6 +67,7 @@ import {
 import { isNull } from 'util';
 import { unlink } from 'fs';
 import { ARE_YOU_SURE_YOU_WANT_DELETE_THE_DEVICE, DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE, ARE_YOU_SURE_YOU_WANT_UNLINK_THE_DEVICE, DEVICE_ID, DEVICE_SERIAL_NUMBER, DEVICE_SIM_1, DEVICE_IMEI_1, DEVICE_SIM_2, DEVICE_IMEI_2 } from '../../../constants/DeviceConstants';
+import { TIMESTAMP_FORMAT, DATE_FORMAT } from '../../../constants/Application';
 
 const TabPane = Tabs.TabPane;
 class DevicesList extends Component {
@@ -192,7 +194,7 @@ class DevicesList extends Component {
 
     // renderList
     renderList(list) {
-        // console.log('list of dec', list)
+        // console.log('list of dec', this.props.user)
         return list.map((device, index) => {
             var status = device.finalStatus;
             const button_type = (status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ? "danger" : "dashed";
@@ -274,8 +276,10 @@ class DevicesList extends Component {
 
                 ),
                 status: (<span style={color} > {status}</span>),
+                lastOnline: checkTimezoneValue(this.props.user.timezone, device.lastOnline, TIMESTAMP_FORMAT),
+                // lastOnline: (device.lastOnline) ? moment(device.lastOnline).tz(checkTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
                 // lastOnline: moment(device.lastOnline).format("MM/DD/YYYY HH:mm:ss"),
-                lastOnline: checkValue(device.lastOnline),
+                // lastOnline: device.lastOnline,
                 flagged: device.flagged,
                 type: checkValue(device.type),
                 version: checkValue(device.version),
@@ -309,8 +313,12 @@ class DevicesList extends Component {
                 s_dealer: checkValue(device.s_dealer),
                 s_dealer_name: checkValue(device.s_dealer_name),
                 remainTermDays: (Number(device.remainTermDays) > 0) ? device.remainTermDays : 0,
-                start_date: checkValue(device.start_date),
-                expiry_date: checkValue(device.expiry_date),
+                start_date: checkTimezoneValue(this.props.user.timezone, device.start_date, DATE_FORMAT),
+                expiry_date: checkTimezoneValue(this.props.user.timezone, device.expiry_date, DATE_FORMAT),
+                // start_date: (device.start_date) ? moment(device.start_date).tz(checkTimezoneValue(this.props.user.timezone)).format("YYYY/MM/DD") : 'N/A',
+                // expiry_date: (device.expiry_date) ? moment(device.expiry_date).tz(checkTimezoneValue(this.props.user.timezone)).format("YYYY/MM/DD") : 'N/A',
+                // start_date: checkValue(device.start_date),
+                // expiry_date: checkValue(device.expiry_date),
             }
         });
     }
