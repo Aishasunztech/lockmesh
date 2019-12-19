@@ -1295,7 +1295,7 @@ class EditDevice extends Component {
                                         <Input
                                             placeholder={convertToLang(this.props.translation[''], "Enter Sim ID 2")}
                                             disabled={this.state.disableSim2}
-                                            // onChange={(value) => this.setState({sim_id2: value})}
+                                        // onChange={(value) => this.setState({sim_id2: value})}
                                         />
                                         // <Select
                                         //     // className="pos_rel"
@@ -1426,7 +1426,12 @@ class EditDevice extends Component {
                                     }}
                                 >
                                     <Button key="back" type="button" onClick={() => { this.props.handleCancel(); this.handleCancelForm() }} > {convertToLang(this.props.translation[Button_Cancel], "Cancel")}</Button>
-                                    <Button type="primary" htmlType="submit">{convertToLang(this.props.translation[Button_submit], "Submit")}</Button>
+                                    <Button
+                                        type="primary"
+                                        htmlType="submit"
+                                        disabled={((this.state.disableSim === false && this.state.valid_sim_id_1 === false) || (this.state.disableSim2 === false && this.state.valid_sim_id_2 === false)) ? true : false}
+
+                                    >{convertToLang(this.props.translation[Button_submit], "Submit")}</Button>
                                 </Form.Item>
                             </Col>
                         </Col>
