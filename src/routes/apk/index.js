@@ -113,7 +113,7 @@ class Apk extends Component {
 
         if ((appObject.policies && appObject.policies.length) || appObject.permission_count != 0) {
             Modal.error({
-                title: 'App Can not be deleted',
+                title: `This App Can't be deleted`,
                 content: (
                     <Fragment>
                         This app is used in <Fragment>{usedBy}</Fragment>
