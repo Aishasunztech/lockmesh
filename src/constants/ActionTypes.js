@@ -250,7 +250,7 @@ export const CREATE_BACKUP_DB = 'CREATE_BACKUP_DB';
 
 
 
-// Policy consts
+// Policy const
 export const GET_POLICIES = 'GET_POLICIES'
 export const DEFAULT_POLICY_CHANGE = 'DEFAULT_POLICY_CHANGE';
 export const ADD_APPS_TO_POLICIES = 'ADD_APPS_TO_POLICIES';
@@ -260,7 +260,7 @@ export const RESET_POLICY = 'RESET_POLICY';
 export const RESET_ADD_POLICY_FORM = 'RESET_ADD_POLICY_FORM';
 
 
-// Users consts
+// Users const
 export const SAVE_USERS = 'SAVE_USERS'
 export const EDIT_USERS = 'EDIT_USERS'
 export const LOAD_USER = 'LOAD_USER'
@@ -346,5 +346,13 @@ export const GRACE_DAYS_REPORT = 'GRACE_DAYS_REPORT';
 
 export const LATEST_PAYMENT_HISTORY = 'LATEST_PAYMENT_HISTORY';
 export const GET_OVERDUE_DETAILS = 'GET_OVERDUE_DETAILS';
+
+
+/**
+ * @author Usman Hafeez
+ * @description Manage data constants
+ */
+
+export const ADD_PRODUCT = 'ADD_PRODUCT';
 export const RESET_CHAT_PIN = 'RESET_CHAT_PIN';
 export const CHANGE_SCHAT_ACCOUNT_STATUS = 'CHANGE_SCHAT_ACCOUNT_STATUS';

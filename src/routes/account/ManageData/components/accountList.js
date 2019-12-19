@@ -123,7 +123,7 @@ export default class Tab extends Component {
         }
     }
     callback = (key) => {
-        this.props.handleChangetab(key);
+        this.props.handleChangeTab(key);
     }
 
     handlePagination = (value) => {

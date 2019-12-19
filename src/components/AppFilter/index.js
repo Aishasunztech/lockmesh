@@ -392,5 +392,10 @@ var mapStateToProps = ({ routing, auth }, otherProps) => {
     };
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AppFilter));
+/**
+ * @author Usman Hafeez
+ * commented withRouter function
+ */
+// export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AppFilter));
+export default connect(mapStateToProps, mapDispatchToProps)(AppFilter);
 

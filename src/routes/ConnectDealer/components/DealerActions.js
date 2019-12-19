@@ -105,19 +105,17 @@ export default class DealerAction extends Component {
     }
 
     handleDealerSearch = (value) => {
-        console.log(this.props.dealerList)
+        
         let dealerList = [];
         let index = -1;
         let states = {}
 
-        console.log("searchedValue: ", value)
         if (value && this.props.dealerList && this.props.dealerList.length) {
             dealerList = componentSearch(this.props.dealerList, value)
 
             index = this.props.dealerList.findIndex((dealer) => (dealer.dealer_name.toLowerCase() === value.toLowerCase() || dealer.dealer_id.toString().toLowerCase() === value.toLowerCase() || dealer.dealer_email.toLowerCase() === value.toLowerCase() || dealer.link_code.toString().toLowerCase() === value.toLowerCase()));
         }
 
-        console.log(dealerList);
 
         states.dealerList = dealerList;
         states.searchedValue = value
@@ -252,7 +250,10 @@ export default class DealerAction extends Component {
                         {(this.props.authUser.type === ADMIN) ?
 
                             <Col className="gutter-row" justify="center" span={12} >
-                                <Button disabled style={{ width: "100%", marginBottom: 16, }}>
+                                <Button
+                                    style={{ width: "100%", marginBottom: 16, }}
+                                    onClick={() => { this.form2.showModal()}}
+                                >
                                     <h6 className="mb-0">DEMO</h6>
                                 </Button>
                             </Col>
