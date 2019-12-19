@@ -5,8 +5,7 @@ import XLSX from 'xlsx';
 import axios from 'axios';
 import jsPDFautotable from 'jspdf-autotable';
 
-import { BASE_URL, TIME_ZONE } from '../../constants/Application';
-
+import { BASE_URL, TIME_ZONE, SERVER_TIMEZONE } from '../../constants/Application';
 import {
   DEVICE_ACTIVATED,
   DEVICE_EXPIRED,
@@ -402,7 +401,7 @@ export function getSelectedTZDetail(zone_name) {
   if (!zone_name) {
     zone_name = moment.tz.guess(); // get local time zone value "Asia/Karachi"
   }
-  let foundZoneIndex = timeZones.findIndex(item => item === zone_name);
+  let foundZoneIndex = timeZones.findIndex(item => item.toLowerCase() === zone_name.toLowerCase());
 
   if (foundZoneIndex !== -1) {
     detail = `(GMT${moment.tz(timeZones[foundZoneIndex]).format('Z')}) ${timeZones[foundZoneIndex]}`
@@ -410,6 +409,33 @@ export function getSelectedTZDetail(zone_name) {
     detail = 'Timezone not selected';
   }
   return detail;
+}
+
+export function checkTimezoneValue(zone_name) {
+  let detail = 'N/A'; // Timezone not selected
+  let timeZones = moment.tz.names();
+  let foundZoneIndex = timeZones.findIndex(item => item.toLowerCase() === zone_name.toLowerCase());
+
+  if (foundZoneIndex !== -1) {
+    detail = `(GMT${moment.tz(timeZones[foundZoneIndex]).format('Z')}) ${timeZones[foundZoneIndex]}`
+  }
+  return detail;
+}
+
+export function convertTimezoneValue(dealerTimezone, data, dateFormat) { // dealerTimezone: timezone, data: date/time
+  let coverted_dateTime = "N/A";
+
+  if (data && data !== "N/A" && data !== "n/a" && data !== "0000-00-00 00:00:00") {
+    let timeZones = moment.tz.names();
+    let foundZoneIndex = timeZones.findIndex(item => item.toLowerCase() === dealerTimezone.toLowerCase());
+    if (foundZoneIndex === -1) {
+      dealerTimezone = moment.tz.guess(); // get local time zone value e.g "Asia/Karachi"
+    }
+    coverted_dateTime = moment.tz(data, SERVER_TIMEZONE).tz(dealerTimezone).format(dateFormat)
+  }
+
+  // console.log("convertTimezoneValue ",data, SERVER_TIMEZONE,  dealerTimezone, coverted_dateTime)
+  return coverted_dateTime;
 }
 
 export function handleMultipleSearch(e, copy_status, copyRequireSearchData, demoSearchValues, requireForSearch) {

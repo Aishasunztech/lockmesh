@@ -25,7 +25,6 @@ class SendMsgForm extends Component {
 
         this.durationList = [
             { key: 'NONE', value: "NONE" },
-            // { key: 'NOW', value: "NOW" },
             { key: 'DAILY', value: "Daily" },
             { key: 'WEEKLY', value: "Weekly" },
             { key: 'MONTHLY', value: "Monthly" },
@@ -100,7 +99,7 @@ class SendMsgForm extends Component {
                         timer: values.timer,
                     }
                     console.log("data ", data);
-                    this.refs.bulk_msg.handleBulkSendMsg(data);
+                    // this.refs.bulk_msg.handleBulkSendMsg(data);
                     // this.props.sendMsgOnDevices(data);
                 } else {
                     error({
@@ -148,14 +147,17 @@ class SendMsgForm extends Component {
             })
         }
 
-        let allDealers = nextProps.dealerList.map((item) => {
-            return ({ key: item.dealer_id, label: item.dealer_name })
-        });
+        console.log("nextProps.users_list && nextProps.dealerList ", nextProps.users_list, nextProps.dealerList)
+        if (nextProps.users_list && nextProps.dealerList) {
+            let allDealers = nextProps.dealerList.map((item) => {
+                return ({ key: item.dealer_id, label: item.dealer_name })
+            });
 
-        let allUsers = nextProps.users_list.map((item) => {
-            return ({ key: item.user_id, label: item.user_name })
-        });
-        this.setState({ allUsers, allDealers })
+            let allUsers = nextProps.users_list.map((item) => {
+                return ({ key: item.user_id, label: item.user_name })
+            });
+            this.setState({ allUsers, allDealers })
+        }
     }
 
     componentDidMount() {
@@ -353,7 +355,7 @@ class SendMsgForm extends Component {
                     <p>(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")} </p>
 
                     <Row gutter={24} className="">
-                        <Col className="col-md-9 col-sm-9 col-xs-9">
+                        <Col className="col-md-12 col-sm-12 col-xs-12">
                             <Form.Item
                                 label={convertToLang(this.props.translation[""], "Select dealer/sdealers")}
                                 labelCol={{ span: 8 }}
@@ -387,7 +389,7 @@ class SendMsgForm extends Component {
                         <p>Dealers/S-Dealers Selected: <span className="font_26">{this.state.selectedDealers.map(item => <Tag>{item.label}</Tag>)}</span></p>
                         : null}
                     <Row gutter={24} className="">
-                        <Col className="col-md-9 col-sm-9 col-xs-9">
+                        <Col className="col-md-12 col-sm-12 col-xs-12">
                             <Form.Item
                                 label={convertToLang(this.props.translation[""], "Select Users")}
                                 labelCol={{ span: 8 }}
@@ -422,7 +424,7 @@ class SendMsgForm extends Component {
                         : null}
 
                     <Row gutter={24} className="">
-                        <Col className="col-md-9 col-sm-9 col-xs-9">
+                        <Col className="col-md-12 col-sm-12 col-xs-12">
                             <Form.Item
                                 label={convertToLang(this.props.translation[""], "Message")}
                                 labelCol={{ span: 8 }}
@@ -446,7 +448,7 @@ class SendMsgForm extends Component {
                     </Row>
                     <br />
                     <Row gutter={24} className="">
-                        <Col className="col-md-9 col-sm-9 col-xs-9">
+                        <Col className="col-md-12 col-sm-12 col-xs-12">
                             <Form.Item
                                 label={convertToLang(this.props.translation[""], "Select Message Timer")}
                                 labelCol={{ span: 8 }}
@@ -477,7 +479,7 @@ class SendMsgForm extends Component {
 
                     {this.state.timer === "DATE/TIME" ?
                         <Row gutter={24} className="">
-                            <Col className="col-md-9 col-sm-9 col-xs-9">
+                            <Col className="col-md-12 col-sm-12 col-xs-12">
                                 <Form.Item
                                     label={convertToLang(this.props.translation[""], "Choose Data/Time")}
                                     labelCol={{ span: 8 }}
@@ -509,7 +511,7 @@ class SendMsgForm extends Component {
                     <br />
                     {this.state.timer === "REPEAT" ?
                         <Row gutter={24} className="">
-                            <Col className="col-md-9 col-sm-9 col-xs-9">
+                            <Col className="col-md-12 col-sm-12 col-xs-12">
                                 <Form.Item
                                     label={convertToLang(this.props.translation[""], "Select when to send Message")}
                                     labelCol={{ span: 8 }}
@@ -540,7 +542,7 @@ class SendMsgForm extends Component {
 
                     {this.state.repeat_duration !== "NONE" && this.state.timer === "REPEAT" ?
                         <Row gutter={24} className="">
-                            <Col className="col-md-9 col-sm-9 col-xs-9">
+                            <Col className="col-md-12 col-sm-12 col-xs-12">
                                 <Form.Item
                                     label={convertToLang(this.props.translation[""], "Select any Time")}
                                     labelCol={{ span: 8 }}

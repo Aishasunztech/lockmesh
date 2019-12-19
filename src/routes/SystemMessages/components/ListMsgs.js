@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col, Tag, Modal } from "antd";
-import { convertToLang, checkValue } from '../../utils/commonUtils';
+import { convertToLang, checkValue, convertTimezoneValue } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 import moment from 'moment';
 import { userDevicesListColumns } from '../../utils/columnsUtils';
+import { TIMESTAMP_FORMAT_NOT_Sec } from '../../../constants/Application';
 
 
 export default class ListMsgs extends Component {
@@ -18,7 +19,7 @@ export default class ListMsgs extends Component {
             pagination: this.props.pagination,
             expandedRowKeys: [],
             visible: false,
-
+            
         };
         this.renderList = this.renderList.bind(this);
         this.confirm = Modal.confirm;
@@ -96,7 +97,7 @@ export default class ListMsgs extends Component {
                 action: (
                     <div data-column="ACTION" style={{ display: "inline-flex" }}>
                         <Fragment>
-                            <Fragment><Button type="primary" disabled size="small">EDIT</Button></Fragment>
+                            <Fragment><Button type="primary" size="small" onClick={() => this.props.showEditModal(app)}>EDIT</Button></Fragment>
                             <Fragment><Button type="danger" size="small" onClick={() => this.deleteMsg(app.id)}>DELETE</Button></Fragment>
                             {/* <Fragment><Button type="dashed" size="small">RESEND</Button></Fragment> */}
                         </Fragment>
@@ -105,7 +106,8 @@ export default class ListMsgs extends Component {
                 msg: checkValue(app.msg),
                 timer_status: app.timer_status ? app.timer_status : "N/A",
                 repeat: checkValue(app.repeat_duration),
-                sending_time: app.sending_time && app.sending_time !== "0000-00-00 00:00:00" ? moment(app.sending_time).format('YYYY-MM-DD HH:mm') : "N/A",
+                sending_time: convertTimezoneValue(this.props.user.timezone, app.sending_time, TIMESTAMP_FORMAT_NOT_Sec),
+                // sending_time: app.sending_time && app.sending_time !== "0000-00-00 00:00:00" ? moment(app.sending_time).format('YYYY-MM-DD HH:mm') : "N/A",
                 data: app,
             }
             bulkMsgs.push(data)

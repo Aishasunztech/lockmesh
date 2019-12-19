@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal } from "antd";
 // import { BASE_URL } from '../../../constants/Application';
 // import EditDealer from './editDealer';
-import { convertToLang } from '../../../utils/commonUtils';
+import { convertToLang, convertTimezoneValue } from '../../../utils/commonUtils';
 
 import { Tabs } from 'antd';
 import {
@@ -15,6 +15,7 @@ import {
     Tab_UNUSED,
 } from '../../../../constants/TabConstants';
 import { ADMIN } from '../../../../constants/Constants';
+import { TIMESTAMP_FORMAT } from '../../../../constants/Application';
 
 // import EditApk from './editDealer';
 const TabPane = Tabs.TabPane;
@@ -67,7 +68,8 @@ class AccountList extends Component {
                 'chat_id': item.chat_id ? item.chat_id : 'N/A',
                 'sim_id': item.sim_id ? item.sim_id : 'N/A',
                 'pgp_email': item.pgp_email ? item.pgp_email : 'N/A',
-                'created_at': item.created_at ? item.created_at : 'N/A',
+                'created_at': convertTimezoneValue(this.props.user.timezone, item.created_at, TIMESTAMP_FORMAT),
+                // 'created_at': item.created_at ? item.created_at : 'N/A',
                 // 'action': <Button >Realese</Button>
             })
         });
@@ -156,6 +158,7 @@ export default class Tab extends Component {
                     </Tabs>
                     : null}
                 <AccountList
+                    user={this.props.user}
                     dataList={this.state.dataList}
                     innerTabSelect={this.props.innerTabSelect}
                     tabselect={this.state.tabselect}

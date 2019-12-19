@@ -1,49 +1,51 @@
-import React, {Component, Fragment} from 'react'
+import React, { Component, Fragment } from 'react'
 import styles from './AppList';
-import {Card, Table, Icon, Button, Modal} from "antd";
-import { getStatus, getColor, checkValue, titleCase, convertToLang } from '../../../routes/utils/commonUtils'
+import { Card, Table, Icon, Button, Modal } from "antd";
+import { getStatus, getColor, checkValue, titleCase, convertToLang, convertTimezoneValue } from '../../../routes/utils/commonUtils'
 import { Redirect, Link } from 'react-router-dom';
 import ResetPinModal from './ResetPinModal';
 import {
-  DEVICE_ID,
-  DEVICE_REMAINING_DAYS,
-  DEVICE_FLAGGED,
-  DEVICE_STATUS,
-  DEVICE_MODE,
-  DEVICE_NAME,
-  DEVICE_ACTIVATION_CODE,
-  DEVICE_ACCOUNT_EMAIL,
-  DEVICE_PGP_EMAIL,
-  DEVICE_CHAT_ID,
-  DEVICE_CLIENT_ID,
-  DEVICE_DEALER_ID,
-  DEVICE_DEALER_PIN,
-  DEVICE_MAC_ADDRESS,
-  DEVICE_SIM_ID,
-  DEVICE_IMEI_1,
-  DEVICE_SIM_1,
-  DEVICE_IMEI_2,
-  DEVICE_SIM_2,
-  DEVICE_SERIAL_NUMBER,
-  DEVICE_MODEL,
-  DEVICE_START_DATE,
-  DEVICE_EXPIRY_DATE,
-  DEVICE_DEALER_NAME,
-  DEVICE_S_DEALER,
-  DEVICE_S_DEALER_NAME,
-  USER_ID,
-  IP_ADDRESS,
-  OFFLINE,
-  REMAINING_TERM_DAYS,
-  ONLINE,
-  DEVICE_TYPE,
-  DEVICE_VERSION,
-  DEVICE_FIRMWAREINFO, DO_YOU_WANT_TO_APPLY, POLICY_ON_DEVICE
+    DEVICE_ID,
+    DEVICE_REMAINING_DAYS,
+    DEVICE_FLAGGED,
+    DEVICE_STATUS,
+    DEVICE_MODE,
+    DEVICE_NAME,
+    DEVICE_ACTIVATION_CODE,
+    DEVICE_ACCOUNT_EMAIL,
+    DEVICE_PGP_EMAIL,
+    DEVICE_CHAT_ID,
+    DEVICE_CLIENT_ID,
+    DEVICE_DEALER_ID,
+    DEVICE_DEALER_PIN,
+    DEVICE_MAC_ADDRESS,
+    DEVICE_SIM_ID,
+    DEVICE_IMEI_1,
+    DEVICE_SIM_1,
+    DEVICE_IMEI_2,
+    DEVICE_SIM_2,
+    DEVICE_SERIAL_NUMBER,
+    DEVICE_MODEL,
+    DEVICE_START_DATE,
+    DEVICE_EXPIRY_DATE,
+    DEVICE_DEALER_NAME,
+    DEVICE_S_DEALER,
+    DEVICE_S_DEALER_NAME,
+    USER_ID,
+    IP_ADDRESS,
+    OFFLINE,
+    REMAINING_TERM_DAYS,
+    ONLINE,
+    DEVICE_TYPE,
+    DEVICE_VERSION,
+    DEVICE_FIRMWAREINFO, DO_YOU_WANT_TO_APPLY, POLICY_ON_DEVICE
 } from '../../../constants/DeviceConstants';
-import {Button_Cancel, Button_Ok, Button_Refresh} from '../../../constants/ButtonConstants';
+import { Button_Cancel, Button_Ok, Button_Refresh } from '../../../constants/ButtonConstants';
 import { ADMIN } from '../../../constants/Constants';
-import moment from 'moment';
+// import moment from 'moment';
+import moment from 'moment-timezone';
 import WipeDevice from "./wipeDevice";
+import { DATE_FORMAT, TIMESTAMP_FORMAT } from '../../../constants/Application';
 const confirm = Modal.confirm;
 let make_red = 'captilize';
 let chatId = '';
@@ -67,7 +69,7 @@ export default class DeviceSidebar extends Component {
     }
 
     renderDetailsData(device_details) {
-      chatId = checkValue(device_details.chat_id);
+        chatId = checkValue(device_details.chat_id);
         // console.log(device_details, 'device is')
 
         //  let status = getStatus(device_details.status, device_details.account_status, device_details.unlink_status, device_details.device_status, device_details.activation_status);
@@ -108,33 +110,33 @@ export default class DeviceSidebar extends Component {
                 value: device_details.online ? (device_details.online === "online") ? (<span style={{ color: "green" }}>{titleCase(convertToLang(this.props.translation[ONLINE], "Online"))}</span>) : (<span style={{ color: "red" }}>{titleCase(convertToLang(this.props.translation[OFFLINE], "Offline"))}</span>) : "N/A"
             },
             {
-              key: 10,
-              name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_CHAT_ID], "CHAT ID"))}:</a>),
-              value: (<Fragment> {checkValue(device_details.chat_id)}
-                <Button
-                  type="danger"
-                  size="small"
-                  className="ml-12"
-                         onClick={() => this.refs.resetPinModel.showModel()}>
-                  {titleCase(convertToLang(this.props.translation[''], 'RESET PIN'))}
-                </Button>
+                key: 10,
+                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_CHAT_ID], "CHAT ID"))}:</a>),
+                value: (<Fragment> {checkValue(device_details.chat_id)}
+                    <Button
+                        type="danger"
+                        size="small"
+                        className="ml-12"
+                        onClick={() => this.refs.resetPinModel.showModel()}>
+                        {titleCase(convertToLang(this.props.translation[''], 'RESET PIN'))}
+                    </Button>
 
-                <Button
-                  type="danger"
-                  size="small"
-                  className="ml-12"
-                  onClick={() => this.showConfirmSChatStatus(this,'disable', 'Do you want to disable pin verification?')}>
-                  {titleCase(convertToLang(this.props.translation[''], 'Disable Pin'))}
-                </Button>
+                    <Button
+                        type="danger"
+                        size="small"
+                        className="ml-12"
+                        onClick={() => this.showConfirmSChatStatus(this, 'disable', 'Do you want to disable pin verification?')}>
+                        {titleCase(convertToLang(this.props.translation[''], 'Disable Pin'))}
+                    </Button>
 
-                <Button
-                  type="success"
-                  size="small"
-                  className="ml-12"
-                  onClick={() => this.showConfirmSChatStatus(this, 'enable', 'Do you want to enable pin verification?')}>
-                  {titleCase(convertToLang(this.props.translation[''], 'Enable Pin'))}
-                </Button>
-              </Fragment>)
+                    <Button
+                        type="success"
+                        size="small"
+                        className="ml-12"
+                        onClick={() => this.showConfirmSChatStatus(this, 'enable', 'Do you want to enable pin verification?')}>
+                        {titleCase(convertToLang(this.props.translation[''], 'Enable Pin'))}
+                    </Button>
+                </Fragment>)
             },
             {
                 key: 8,
@@ -267,17 +269,23 @@ export default class DeviceSidebar extends Component {
             {
                 key: 27,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_START_DATE], "START DATE"))}:</a>),
-                value: checkValue(device_details.start_date)
+                value: convertTimezoneValue(this.props.auth.authUser.timezone, device_details.start_date, DATE_FORMAT),
+                // value: (device_details.start_date) ? moment(device_details.start_date).tz(convertTimezoneValue(this.props.auth.authUser.timezone)).format("YYYY/MM/DD") : 'N/A',
+                // value: checkValue(device_details.start_date)
             },
             {
                 key: 28,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_EXPIRY_DATE], "EXPIRY DATE"))}:</a>),
-                value: checkValue(device_details.expiry_date)
+                value: convertTimezoneValue(this.props.auth.authUser.timezone, device_details.expiry_date, DATE_FORMAT),
+                // value: (device_details.expiry_date) ? moment(device_details.expiry_date).tz(convertTimezoneValue(this.props.auth.authUser.timezone)).format("YYYY/MM/DD") : 'N/A',
+                // value: checkValue(device_details.expiry_date)
             },
             {
                 key: 29,
                 name: (<a>{titleCase(convertToLang(this.props.translation["Last Online"], "Last Online"))}:</a>),
-                value: checkValue(device_details.lastOnline)
+                value: convertTimezoneValue(this.props.auth.authUser.timezone, device_details.lastOnline, TIMESTAMP_FORMAT),
+                // value: (device_details.lastOnline) ? moment(device_details.lastOnline).tz(convertTimezoneValue(this.props.auth.authUser.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
+                // value: checkValue(device_details.lastOnline)
                 // value: moment(device_details.lastOnline).format("MM/DD/YYYY HH:mm:ss")
             },
             {
@@ -296,27 +304,27 @@ export default class DeviceSidebar extends Component {
         }
     };
 
-  handleResetPinModal = (visible) => {
-    this.setState({
-      servicesModal: visible,
-    })
-  };
+    handleResetPinModal = (visible) => {
+        this.setState({
+            servicesModal: visible,
+        })
+    };
 
-  showConfirmSChatStatus(_this, type, msg) {
+    showConfirmSChatStatus(_this, type, msg) {
 
-    confirm({
-      title: convertToLang(_this.props.translation[''], msg),
-      onOk() {
-        _this.props.changeSchatPinStatus({
-          type: type,
-          chat_id: chatId
+        confirm({
+            title: convertToLang(_this.props.translation[''], msg),
+            onOk() {
+                _this.props.changeSchatPinStatus({
+                    type: type,
+                    chat_id: chatId
+                });
+            },
+            okText: convertToLang(_this.props.translation[Button_Ok], "Ok"),
+            cancelText: convertToLang(_this.props.translation[Button_Cancel], "Cancel"),
+            onCancel() { },
         });
-      },
-      okText: convertToLang(_this.props.translation[Button_Ok], "Ok"),
-      cancelText: convertToLang(_this.props.translation[Button_Cancel], "Cancel"),
-      onCancel() {},
-    });
-  }
+    }
 
     goToDealer = (dealer) => {
         if (dealer.dealer_id !== 'null' && dealer.dealer_id !== null) {
@@ -403,12 +411,12 @@ export default class DeviceSidebar extends Component {
                     scroll={{ y: 551 }}
                     pagination={false}
                 />
-              <ResetPinModal
-                ref='resetPinModel'
-                chatId={chatId}
-                resetChatPin={this.props.resetChatPin}
-                translation={this.props.translation}
-              />
+                <ResetPinModal
+                    ref='resetPinModel'
+                    chatId={chatId}
+                    resetChatPin={this.props.resetChatPin}
+                    translation={this.props.translation}
+                />
             </Card>
         )
     }

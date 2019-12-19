@@ -2,14 +2,14 @@ import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal, Tabs } from "antd";
 import { Link } from "react-router-dom";
 
-import { BASE_URL } from '../../../constants/Application';
+import { BASE_URL, TIMESTAMP_FORMAT } from '../../../constants/Application';
 import EditDealer from './editDealer';
 // import EditApk from './editDealer';
 import { ADMIN, DEALER } from '../../../constants/Constants';
 import scrollIntoView from 'scroll-into-view';
 
 import DealerDevicesList from '../../users/components/UserDeviceList';
-import { convertToLang } from '../../utils/commonUtils'
+import { convertToLang, convertTimezoneValue } from '../../utils/commonUtils'
 import { Redirect } from 'react-router-dom';
 import CustomScrollbars from "../../../util/CustomScrollbars";
 import {
@@ -90,6 +90,7 @@ import {
     // Button_WipeDevice,
     // Button_Unlink,
 } from '../../../constants/ButtonConstants';
+import moment from 'moment';
 import { DO_YOU_WANT_TO, OF_THIS } from '../../../constants/DeviceConstants';
 
 const TabPane = Tabs.TabPane;
@@ -109,7 +110,7 @@ class DealerList extends Component {
             dealer_id: '',
             scrollStatus: true
         };
-        
+
     }
 
     handleScroll = () => {
@@ -223,8 +224,6 @@ class DealerList extends Component {
     renderList = (list) => {
         data = [];
         list.map((dealer, index) => {
-            // console.log('dealer list is: ', dealer.dealer_name)
-            // console.log('dealer.account_status is: ', dealer.account_status);
             const dealer_status = (dealer.account_status === "suspended") ? "Activate" : "Suspend";
             const button_type = (dealer_status === "Activate") ? "default" : "danger";
             const undo_button_type = (dealer.unlink_status === 0) ? 'danger' : "default";
@@ -253,14 +252,14 @@ class DealerList extends Component {
                         </Button>
 
                         {/* Edit Dealer Button */}
-                        <Button type="primary" style={{ margin: '0 8px 0 0', textTransform: "uppercase" }} size='small' onClick={() => this.refs.editDealer.showModal(dealer, this.props.editDealer)}>{convertToLang(this.props.translation[Button_Edit], "Edit")}</Button>
+                        <Button type="default" style={{ margin: '0 8px 0 0', textTransform: "uppercase" }} size='small' onClick={() => this.refs.editDealer.showModal(dealer, this.props.editDealer)}>{convertToLang(this.props.translation[Button_Edit], "Edit")}</Button>
 
                         {/* Delete Dealer Button*/}
-                        <Button type={undo_button_type} size='small' style={{ margin: '0', textTransform: "uppercase" }}
+                        {/* <Button type={undo_button_type} size='small' style={{ margin: '0', textTransform: "uppercase" }}
                             onClick={() => (dealer.unlink_status === 0) ? showConfirm(this, dealer.dealer_id, this.props.deleteDealer, 'DELETE') : showConfirm(this, dealer.dealer_id, this.props.undoDealer, 'UNDELETE')}
                         >
                             {(dealer.unlink_status === 0) ? <div>{convertToLang(this.props.translation[Button_Delete], 'DELETE')} </div> : <div> {convertToLang(this.props.translation[Button_Undo], "UNDELETE")} </div>}
-                        </Button>
+                        </Button> */}
 
                         {/* Reset Password Button */}
                         <Button
@@ -290,7 +289,8 @@ class DealerList extends Component {
                 connected_devices: dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
                 dealer_credits: dealer.dealer_credits ? dealer.dealer_credits : 0,
                 devicesList: dealer.devicesList,
-                last_login: dealer.last_login? dealer.last_login : 'N/A'
+                last_login: convertTimezoneValue(this.props.user.timezone, dealer.last_login, TIMESTAMP_FORMAT),
+                // last_login: dealer.last_login ? dealer.last_login : 'N/A'
 
             })
         });
@@ -323,6 +323,7 @@ class DealerList extends Component {
                         columns={this.state.columns}
                         rowKey='row_key'
                         align='center'
+                        scroll={{ x: true }}
                         rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.row_key) ? 'exp_row' : ''}
                         pagination={false}
                         dataSource={this.renderList(this.props.dealersList)}

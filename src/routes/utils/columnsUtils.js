@@ -136,6 +136,7 @@ export function devicesColumns(translation, handleSearch) {
             dataIndex: 'counter',
             align: 'center',
             className: 'row',
+            // fixed: 'left',
             render: (text, record, index) => ++index,
         },
         {
@@ -143,7 +144,8 @@ export function devicesColumns(translation, handleSearch) {
             dataIndex: 'action',
             align: 'center',
             className: 'row',
-            key: "action"
+            key: "action",
+            // fixed: 'left',
             // title: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>,
             // title: (this.state.tabselect === "5") ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>:'',
         },
