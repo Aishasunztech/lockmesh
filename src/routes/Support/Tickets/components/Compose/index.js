@@ -25,7 +25,7 @@ class ComposeTicket extends React.Component {
   };
 
   render() {
-    const {onMailSend, onClose, user} = this.props;
+    const { onClose, user} = this.props;
     return (
       <Modal onCancel={onClose} visible={this.props.open}
              title='Generate Ticket'
@@ -73,7 +73,7 @@ class ComposeTicket extends React.Component {
                 style={{ width: '100%' }}
               >
                 <Select.Option value=''>Select Category</Select.Option>
-                {categories.map((category, index) => {
+                {categories.filter(category => category.id !== 0).map((category, index) => {
                   return (<Select.Option key={category.id} value={category.handle}><span className='text-capitalize'>{category.title}</span></Select.Option>)
                 })}
               </Select>
@@ -97,7 +97,8 @@ class ComposeTicket extends React.Component {
             })(
               <Select style={{ width: '100%' }}>
                 <Select.Option value=''>Select Priority</Select.Option>
-                {priorities.map((priority, index) => {
+
+                {priorities.filter(priority => priority.id !== 0).map((priority, index) => {
                   return (<Select.Option key={priority.id} value={priority.handle}><span className='text-capitalize'>{priority.title}</span></Select.Option>)
                 })}
               </Select>

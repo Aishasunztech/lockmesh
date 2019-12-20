@@ -14,7 +14,8 @@ class ComposeTicket extends React.Component {
 
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err){
-        values.user = this.props.user;
+        values.user       = this.props.user;
+        values.ticket_id  = this.props.supportTicket._id;
 
         this.props.supportTicketReply(values);
         this.props.onClose();

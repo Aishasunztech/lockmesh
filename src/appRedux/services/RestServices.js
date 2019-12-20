@@ -1068,12 +1068,27 @@ const RestService = {
 
     //generate Support Ticket
     supportTicketReply: (data) => {
-      return axios.post(SUPPORT_URL + 'tickets/reply/store', data, RestService.getHeader());
+      return axios.post(SUPPORT_URL + 'tickets/replies/store', data, RestService.getHeader());
     },
 
     //generate Support Ticket
     getSupportTickets: () => {
       return axios.get(SUPPORT_URL + 'tickets', RestService.getHeader());
     },
-}
+
+    //generate Support Ticket
+    closeSupportTicket: (data) => {
+      return axios.get(SUPPORT_URL + 'tickets/close/'+data, RestService.getHeader());
+    },
+
+    //delete Support Ticket
+    deleteSupportTicket: (data) => {
+      return axios.put(SUPPORT_URL + 'tickets/delete', data, RestService.getHeader());
+    },
+
+    //get Support Ticket replies
+    getSupportTicketReplies: (data) => {
+      return axios.get(SUPPORT_URL + 'tickets/replies/'+data, RestService.getHeader());
+    },
+};
 export default RestService;

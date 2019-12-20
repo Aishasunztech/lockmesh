@@ -6,12 +6,12 @@ import statuses from "../../../data/statuses";
 import categories from "../../../data/categories";
 import priorities from "../../../data/priorities";
 
-const MailListItem = ({supportTicket, onMailSelect, onMailChecked, onStartSelect}) => {
+const MailListItem = ({supportTicket, onMailSelect, onMailChecked}) => {
 
   return (
     <div className="gx-module-list-item gx-mail-cell">
       <div className="gx-module-list-icon">
-        <Checkbox color="primary" className="gx-icon-btn"
+        <Checkbox color="primary" className="gx-icon-btn selectCheckBox"
 
                   onClick={(event) => {
                     event.stopPropagation();
@@ -29,15 +29,11 @@ const MailListItem = ({supportTicket, onMailSelect, onMailChecked, onStartSelect
         <div className="gx-module-list-content">
           <div className="gx-mail-user-des">
 
-            <span className="gx-sender-name">{supportTicket.user_type}</span>
+            <span className="gx-sender-name">{supportTicket.user.dealer_name} ({supportTicket.user.link_code})</span>
 
             <span className="gx-toolbar-separator">&nbsp;</span>
 
             <span className="gx-d-inline-block gx-text-truncate gx-send-subject">{supportTicket.subject}</span>
-
-            {supportTicket.hasAttachments &&
-
-            <i className="icon icon-attachment"/>}
 
             <div className="gx-time">{getDateFromTimestamp(supportTicket.createdAt)}</div>
 

@@ -14,10 +14,12 @@ import Auxiliary from "./util/Auxiliary";
 import {convertToLang} from "../../utils/commonUtils";
 import {bindActionCreators} from "redux";
 import {
-  generateSupportTicket, supportTicketReply, getSupportTickets, getAllDealers
+  generateSupportTicket, supportTicketReply, getSupportTickets, getAllDealers, closeSupportTicket, deleteSupportTicket, getSupportTicketReplies
 } from "../../../appRedux/actions";
 import {connect} from "react-redux";
-
+import {
+  ADMIN
+} from "../../../constants/Constants";
 
 class Mail extends PureComponent {
 
@@ -52,6 +54,12 @@ class Mail extends PureComponent {
             {this.getStatuses()}
 
             <li className="gx-module-nav-label">
+              Priorities
+            </li>
+
+            {this.getPriorities()}
+
+            <li className="gx-module-nav-label">
               Categories
             </li>
             {this.getCategories()}
@@ -62,27 +70,17 @@ class Mail extends PureComponent {
   };
 
   onDeleteMail = () => {
-    const mails = this.state.allMail.map(mail =>
-      mail.selected && (mail.folder === this.state.selectedFolder) ?
-        {...mail, folder: 4, selected: false,} : mail
-    );
-    this.setState({
-      alertMessage: 'Mail Deleted Successfully',
-      showMessage: true,
-      selectedMails: 0,
-      allMail: mails,
-      folderMails: mails.filter(mail => mail.folder === this.state.selectedFolder)
-    });
+    this.props.deleteSupportTicket(this.state.selectedMails)
   };
 
   getCategories = () => {
     return categories.map((category, index) =>
       <li key={index} onClick={() => {
 
-        const filterSupportTickets = this.props.supportTickets.filter(supportTickets => {
+        const filterSupportTickets = this.state.supportTickets.filter(supportTickets => {
           if (category.title === 'all'){
-            return this.props.supportTickets
-          }else if (category.title == supportTickets.category) {
+            return this.state.supportTickets
+          }else if (category.title === supportTickets.category) {
             return supportTickets
           }
         });
@@ -99,44 +97,29 @@ class Mail extends PureComponent {
     );
   };
 
+  getPriorities = () => {
 
-  onFolderMenuItemSelect = (e) => {
-    const id = +e.key;
-    const mails = this.state.allMail.map(mail =>
-      mail.selected && (mail.folder === this.state.selectedFolder) ?
-        {...mail, folder: id, selected: false,} : mail
-    );
-    this.setState({
-      selectedMails: 0,
-      allMail: mails,
-      noContentFoundMessage: 'No support ticket found in selected filter',
-      alertMessage: 'Mail has been moved successfully',
-      showMessage: true,
-      folderMails: mails.filter(mail => mail.folder === this.state.selectedFolder)
-    });
-  };
+    return priorities.map((priority, index) =>
+      <li key={index} onClick={() => {
 
-  onLabelMenuItemSelect = (e) => {
-    const id = +e.key;
-    const mails = this.state.allMail.map(mail => {
-        if (mail.selected && (mail.folder === this.state.selectedFolder)) {
-          if (mail.labels.includes(id)) {
-            return {...mail, labels: this.removeLabel(mail, id)};
-          } else {
-            return {...mail, labels: this.addLabel(mail, id)};
+        const filterSupportTickets = this.state.supportTickets.filter(supportTickets => {
+          if (priority.title === 'all'){
+            return this.state.supportTickets
+          }else if (priority.title === supportTickets.priority) {
+            return supportTickets
           }
-        } else {
-          return mail;
-        }
+        });
+        this.setState({
+          noContentFoundMessage: 'No support ticket found in selected filter',
+          supportTickets: filterSupportTickets
+        });
       }
+      }>
+        <span className="gx-link">
+          <span className='ml-16 text-capitalize'>{priority.title}</span>
+        </span>
+      </li>
     );
-    this.setState({
-      noContentFoundMessage: 'No Mail found in selected label',
-      alertMessage: 'Label Updated Successfully',
-      showMessage: true,
-      allMail: mails,
-      folderMails: mails.filter(mail => mail.folder === this.state.selectedFolder)
-    });
   };
 
   handleRequestClose = () => {
@@ -150,16 +133,17 @@ class Mail extends PureComponent {
     return statuses.map((status, index) =>
       <li key={index} onClick={() => {
 
-        const filterSupportTickets = this.props.supportTickets.filter(supportTickets => {
+        const filterSupportTickets = this.state.supportTickets.filter(supportTickets => {
+
           if (status.title === 'all'){
-            return this.props.supportTickets
-          }else if (status.title == supportTickets.status) {
-            return supportTickets
+            return true;
+          }else if (status.title === supportTickets.status) {
+            return true
           }
         });
         this.setState({
           noContentFoundMessage: 'No support ticket found in selected filter',
-          supportTickets: filterSupportTickets
+          filterSupportTickets: filterSupportTickets
         });
       }
       }>
@@ -172,7 +156,7 @@ class Mail extends PureComponent {
 
   searchTicket = (searchText) => {
     if (searchText === '') {
-      this.setState({folderMails: this.state.allMail.filter((mail) => !mail.deleted)});
+      this.setState({supportTickets: this.props.supportTickets});
     } else {
       const searchMails = this.props.supportTickets.filter((mail) =>
         mail.subject.toLowerCase().indexOf(searchText.toLowerCase()) > -1);
@@ -191,29 +175,24 @@ class Mail extends PureComponent {
           </div>
           :
           <MailList
-            supportTickets={this.state.supportTickets}
-            dealerList={this.props.dealerList}
+            supportTickets={this.state.filteredSupportTickets}
             onMailSelect={this.onMailSelect.bind(this)}
             onMailChecked={this.onMailChecked.bind(this)}
           />
         :
-        <MailDetail user={this.props.user}
-                    mail={currentMail}
-                    supportTicketReply={this.state.supportTicketReply}
-                    onImportantSelect={this.onImportantSelect.bind(this)}/>}
+        <MailDetail
+          user={this.props.user}
+          supportTicket={currentMail}
+          supportTicketReply={this.props.supportTicketReply}
+          onCloseTicket={this.onCloseTicket.bind(this)}
+          closeSupportTicketStatus={this.props.closeSupportTicketStatus}
+          ticketReply={this.props.ticketReply}
+        />}
     </div>)
   };
 
   getMailActions = () => {
     return <div className="gx-flex-row gx-align-items-center">
-
-      <Dropdown overlay={this.folderMenu()} placement="bottomRight" trigger={['click']}>
-        <i className="icon icon-folder gx-icon-btn"/>
-      </Dropdown>
-
-      <Dropdown overlay={this.labelMenu()} placement="bottomRight" trigger={['click']}>
-        <i className="icon icon-tag gx-icon-btn"/>
-      </Dropdown>
 
       <span onClick={this.onDeleteMail.bind(this)}>
         <i className="icon icon-trash gx-icon-btn"/></span>
@@ -221,44 +200,24 @@ class Mail extends PureComponent {
     </div>
   };
 
-  folderMenu = () => (
-    <Menu id="folder-menu"
-          onClick={this.onFolderMenuItemSelect.bind(this)}>
-      {categories.map(folder =>
-        <Menu.Item key={folder.id}>
-          {folder.title}
-        </Menu.Item>,
-      )}
-    </Menu>);
-
-  labelMenu = () => (
-    <Menu id="label-menu"
-          onClick={this.onLabelMenuItemSelect.bind(this)}>
-      {priorities.map(label =>
-        <Menu.Item key={label.id}>
-          {label.title}
-        </Menu.Item>,
-      )}
-    </Menu>
-  );
-
-
   constructor() {
     super();
     this.state = {
       searchTicket: '',
       noContentFoundMessage: 'No support ticket found in selected filter',
       alertMessage: '',
+      dealerList: [],
       showMessage: false,
       drawerState: false,
       optionName: 'None',
       anchorEl: null,
       allMail: mails,
       currentMail: null,
-      selectedMails: 0,
+      selectedMails: [],
       selectedFolder: 0,
       composeMail: false,
       folderMails: mails.filter(mail => mail.folder === 0),
+      filteredSupportTickets: [],
       supportTickets: []
     }
   }
@@ -266,82 +225,64 @@ class Mail extends PureComponent {
   componentDidMount() {
     this.setState({loader: false});
     this.props.getSupportTickets();
-    this.props.getDealerList();
+    if (this.props.user.type === ADMIN){
+      this.props.getDealerList();
+    }else{
+      let userData            = this.props.user;
+      userData.dealer_id      = this.props.user.id;
+      userData.dealer_name    = this.props.user.name;
+      userData.link_code      = this.props.user.dealer_pin;
+
+      this.setState({
+        dealerList : [userData],
+      })
+    }
+
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if(this.props.supportTickets.length != prevProps.supportTickets.length){
-      this.setState({
-        supportTickets : this.props.supportTickets
-      })
 
+    if (this.props.user.type === ADMIN){
+      this.setState({
+        dealerList : this.props.dealerList,
+      })
     }
+
+    if(this.state.supportTickets.length !== this.props.supportTickets.length){
+
+        let ticketsWithUser = [];
+        this.props.supportTickets.map((supportTicket, index) => {
+          let dealerData = this.state.dealerList.length > 0 && this.state.dealerList.find((dealer) => dealer.dealer_id === supportTicket.user_id);
+          supportTicket.user = dealerData;
+          ticketsWithUser.push(supportTicket)
+        });
+
+        this.setState({
+          supportTickets : ticketsWithUser,
+          filteredSupportTickets : ticketsWithUser,
+        })
+    }
+
+
   }
 
 
   onMailChecked(data) {
-    data.selected = !data.selected;
-    let selectedMail = 0;
-    const mails = this.state.folderMails.map(mail => {
-        if (mail.selected) {
-          selectedMail++;
-        }
-        if (mail.id === data.id) {
-          if (mail.selected) {
-            selectedMail++;
-          }
-          return data;
-        } else {
-          return mail;
-        }
-      }
-    );
+    let selectedMail = this.state.selectedMails;
+
+    if(selectedMail.includes(data._id)){
+      selectedMail = selectedMail.filter(selectedMail => selectedMail != data._id) ;
+    }else{
+      selectedMail.push(data._id)
+    }
+
     this.setState({
-      selectedMails: selectedMail,
-      folderMails: mails
+      selectedMails: [...selectedMail]
     });
   }
 
-  onAllMailSelect() {
-    const selectAll = this.state.selectedMails <= this.state.folderMails.length;
-    if (selectAll) {
-      this.getAllMail();
-    } else {
-      this.getUnselectedAllMail();
-    }
-  }
-
-  removeLabel(mail, label) {
-    mail.labels.splice(mail.labels.indexOf(label), 1);
-    if (this.state.currentMail !== null && mail.id === this.state.currentMail.id) {
-      this.setState({
-        currentMail: {...mail, labels: mail.labels}
-      })
-    }
-    return mail.labels;
-  }
-
-  onImportantSelect(data) {
-    data.important = !data.important;
-    this.setState({
-      alertMessage: data.important ? 'Mail Mark as Important' : 'Mail Remove as Important',
-      showMessage: true,
-      folderMails: this.state.folderMails.map(mail =>
-        mail.id === data.id ?
-          data : mail
-      )
-    });
-  }
-
-  onMailSend(data) {
-    this.setState(
-      {
-        alertMessage: 'Mail Sent Successfully',
-        showMessage: true,
-        folderMails: this.state.allMail.concat(data),
-        allMail: this.state.allMail.concat(data)
-      }
-    );
+  onCloseTicket(data) {
+    this.props.closeSupportTicket(data._id)
   }
 
   onMailSelect(mail) {
@@ -407,19 +348,7 @@ class Mail extends PureComponent {
 
               <div className="gx-module-box-content">
                 <div className="gx-module-box-topbar">
-                  {this.state.currentMail === null ?
-                    <div className="gx-flex-row gx-align-items-center">
-                      {this.state.folderMails.length > 0 ?
-                        <Auxiliary>
-                          <Checkbox color="primary" className="gx-icon-btn"
-                                    indeterminate={selectedMails > 0 && selectedMails < folderMails.length}
-                                    checked={selectedMails > 0}
-                                    onChange={this.onAllMailSelect.bind(this)}
-                                    value="SelectMail"/>
-                        </Auxiliary>
-                        : null}
-                    </div>
-                    :
+                  {this.state.currentMail === null ? '' :
                     <i className="icon icon-arrow-left gx-icon-btn" onClick={() => {
                       this.setState({currentMail: null})
                     }}/>
@@ -427,17 +356,18 @@ class Mail extends PureComponent {
 
                   <div classID="toolbar-separator"/>
 
-                  {(selectedMails > 0) && this.getMailActions()}
+                  {(selectedMails.length > 0) && this.getMailActions()}
 
                 </div>
 
                 {this.displayMail(currentMail, folderMails, noContentFoundMessage)}
 
-                <ComposeMail open={composeMail}
-                             user={this.props.user}
-                             generateSupportTicket={this.props.generateSupportTicket}
-                             onClose={this.handleRequestClose.bind(this)}
-                             onMailSend={this.onMailSend.bind(this)}/>
+                <ComposeMail
+                  open={composeMail}
+                  user={this.props.user}
+                  generateSupportTicket={this.props.generateSupportTicket}
+                  onClose={this.handleRequestClose.bind(this)}
+                />
 
               </div>
             </div>
@@ -456,7 +386,9 @@ var mapStateToProps = ({ auth , SupportTickets , dealers}) => {
   return {
     user: auth.authUser,
     supportTickets: SupportTickets.supportTickets,
-    dealerList: dealers.dealers
+    dealerList: dealers.dealers,
+    closeSupportTicketStatus: SupportTickets.closeSupportTicketStatus,
+    supportTicketReplies: SupportTickets.supportTicketReplies,
   };
 };
 
@@ -466,6 +398,9 @@ function mapDispatchToProps(dispatch) {
     supportTicketReply: supportTicketReply,
     getSupportTickets: getSupportTickets,
     getDealerList: getAllDealers,
+    closeSupportTicket: closeSupportTicket,
+    deleteSupportTicket: deleteSupportTicket,
+    getSupportTicketReplies: getSupportTicketReplies,
   }, dispatch);
 }
 

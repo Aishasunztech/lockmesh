@@ -1,7 +1,10 @@
 import {
   GENERATE_SUPPORT_TICKET,
   SUPPORT_TICKET_REPLY,
+  CLOSE_SUPPORT_TICKET,
   GET_SUPPORT_TICKET,
+  DELETE_SUPPORT_TICKET,
+  GET_SUPPORT_TICKET_REPLY,
   INVALID_TOKEN,
   SPIN_lOADING
 } from "../../constants/ActionTypes";
@@ -63,6 +66,72 @@ export function getSupportTickets(data) {
       if (RestService.checkAuth(response.data)) {
         dispatch({
           type: GET_SUPPORT_TICKET,
+          payload: response.data
+        });
+      } else {
+        dispatch({
+          type: INVALID_TOKEN
+        });
+      }
+    });
+  };
+}
+
+
+export function closeSupportTicket(data) {
+  return (dispatch) => {
+    dispatch({
+      type: SPIN_lOADING,
+    });
+
+    RestService.closeSupportTicket(data).then((response) => {
+      if (RestService.checkAuth(response.data)) {
+        dispatch({
+          type: CLOSE_SUPPORT_TICKET,
+          payload: response.data
+        });
+      } else {
+        dispatch({
+          type: INVALID_TOKEN
+        });
+      }
+    });
+  };
+}
+
+
+export function deleteSupportTicket(data) {
+  return (dispatch) => {
+    dispatch({
+      type: SPIN_lOADING,
+    });
+
+    RestService.deleteSupportTicket(data).then((response) => {
+      if (RestService.checkAuth(response.data)) {
+        dispatch({
+          type: DELETE_SUPPORT_TICKET,
+          payload: response.data
+        });
+      } else {
+        dispatch({
+          type: INVALID_TOKEN
+        });
+      }
+    });
+  };
+}
+
+
+export function getSupportTicketReplies(data) {
+  return (dispatch) => {
+    dispatch({
+      type: SPIN_lOADING,
+    });
+
+    RestService.getSupportTicketReplies(data).then((response) => {
+      if (RestService.checkAuth(response.data)) {
+        dispatch({
+          type: GET_SUPPORT_TICKET_REPLY,
           payload: response.data
         });
       } else {

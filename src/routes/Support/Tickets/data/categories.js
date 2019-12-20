@@ -1,27 +1,31 @@
 export default [
-
   {
     'id': 0,
+    'handle': 'all',
+    'title': 'all'
+  },
+  {
+    'id': 1,
     'handle': 'sales',
     'title': 'sales'
   },
   {
-    'id': 1,
-    'handle': 'account',
-    'title': 'account'
+    'id': 2,
+    'handle': 'accounts',
+    'title': 'accounts'
   },
   {
-    'id': 2,
+    'id': 3,
     'handle': 'technical',
     'title': 'technical'
   },
   {
-    'id': 3,
+    'id': 4,
     'handle': 'support',
     'title': 'support'
   },
   {
-    'id': 4,
+    'id': 5,
     'handle': 'other',
     'title': 'other'
   },
