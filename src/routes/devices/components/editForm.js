@@ -1389,6 +1389,7 @@ class EditDevice extends Component {
                                     )}
                                 </Form.Item>
                             </Col>
+
                             {(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ?
                                 <Fragment>
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
@@ -1415,9 +1416,10 @@ class EditDevice extends Component {
                                     </Col>
                                 </Fragment>
                                 :
-                                <Fragment>
-                                </Fragment>
+                                null
                             }
+
+                            {/* section 3 */}
                             <Col xs={24} sm={24} md={24} lg={24} xl={24} className="text-right">
                                 <Form.Item className="edit_ftr_btn11"
                                     wrapperCol={{
