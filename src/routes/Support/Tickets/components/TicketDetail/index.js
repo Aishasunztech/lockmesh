@@ -10,7 +10,7 @@ class TicketDetail extends React.Component {
 
   state = {
     replyTicket: false,
-    replies: this.props.supportTicket.replies,
+    supportTicketReplies: []
   };
 
   handleRequestClose = () => {
@@ -20,9 +20,9 @@ class TicketDetail extends React.Component {
   };
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if(this.props.ticketReply.length > 0 && (this.state.replies.length !== this.props.ticketReply.length)){
+    if(prevProps != this.props){
       this.setState({
-        replies : this.props.ticketReply,
+        supportTicketReplies : this.props.supportTicketReplies,
       })
     }
   }
@@ -92,10 +92,10 @@ class TicketDetail extends React.Component {
               {supportTicket.description}
             </p>
 
-            {(this.state.replies.length > 0) ?
+            {(this.state.supportTicketReplies.length > 0) ?
               <div>
-                <h2>Replies ({this.state.replies.length})</h2>
-                {this.state.replies.map((reply, index) => {
+                <h2>Replies ({this.state.supportTicketReplies.length})</h2>
+                {this.state.supportTicketReplies.map((reply, index) => {
                   return (<div className="gx-module-list-item gx-mail-cell" key={index}>
                     <div className="gx-mail-list-info">
                       <div className="gx-module-list-content">

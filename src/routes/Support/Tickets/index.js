@@ -186,7 +186,7 @@ class Mail extends PureComponent {
           supportTicketReply={this.props.supportTicketReply}
           onCloseTicket={this.onCloseTicket.bind(this)}
           closeSupportTicketStatus={this.props.closeSupportTicketStatus}
-          ticketReply={this.props.ticketReply}
+          supportTicketReplies={this.props.supportTicketReplies}
         />}
     </div>)
   };
@@ -250,17 +250,17 @@ class Mail extends PureComponent {
 
     if(this.state.supportTickets.length !== this.props.supportTickets.length){
 
-        let ticketsWithUser = [];
-        this.props.supportTickets.map((supportTicket, index) => {
-          let dealerData = this.state.dealerList.length > 0 && this.state.dealerList.find((dealer) => dealer.dealer_id === supportTicket.user_id);
-          supportTicket.user = dealerData;
-          ticketsWithUser.push(supportTicket)
-        });
+      let ticketsWithUser = [];
+      this.props.supportTickets.map((supportTicket, index) => {
+        let dealerData = this.state.dealerList.length > 0 && this.state.dealerList.find((dealer) => dealer.dealer_id === supportTicket.user_id);
+        supportTicket.user = dealerData;
+        ticketsWithUser.push(supportTicket)
+      });
 
-        this.setState({
-          supportTickets : ticketsWithUser,
-          filteredSupportTickets : ticketsWithUser,
-        })
+      this.setState({
+        supportTickets : ticketsWithUser,
+        filteredSupportTickets : ticketsWithUser,
+      })
     }
 
 
@@ -286,6 +286,7 @@ class Mail extends PureComponent {
   }
 
   onMailSelect(mail) {
+    this.props.getSupportTicketReplies(mail._id);
     this.setState({
       currentMail: mail,
     });

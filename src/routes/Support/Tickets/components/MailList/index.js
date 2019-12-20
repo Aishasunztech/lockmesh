@@ -9,8 +9,12 @@ const MailList = ({supportTickets,  onMailSelect, onMailChecked}) => {
     <div className="gx-module-list gx-mail-list">
       <CustomScrollbars className="gx-module-content-scroll">
         {supportTickets.map((supportTicket, index) => {
-            return (<MailListItem key={index} supportTicket={supportTicket} onMailSelect={onMailSelect} onMailChecked={onMailChecked}
-                                  />)
+            return (<MailListItem
+              key={index}
+              supportTicket={supportTicket}
+              onMailSelect={onMailSelect}
+              onMailChecked={onMailChecked}
+            />)
           }
         )}
 
