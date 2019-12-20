@@ -53,7 +53,7 @@ export default (state = initialState, action) => {
     }
 
     case SUPPORT_TICKET_REPLY:{
-      let replies = [];
+      let replies = state.supportTicketReplies;
       if (action.payload.status) {
         replies = action.payload.data;
         success({
@@ -68,7 +68,7 @@ export default (state = initialState, action) => {
 
       return {
         ...state,
-        ticketReply: [...replies],
+        supportTicketReplies: [...replies],
       };
     }
 

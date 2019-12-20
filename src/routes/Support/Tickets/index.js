@@ -289,6 +289,7 @@ class Mail extends PureComponent {
     this.props.getSupportTicketReplies(mail._id);
     this.setState({
       currentMail: mail,
+      selectedMails: []
     });
   }
 
