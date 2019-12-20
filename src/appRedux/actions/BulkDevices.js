@@ -228,7 +228,7 @@ export const setSelectedBulkDevices = (data) => {
 }
 
 export function unlinkBulkDevices(data) {
-    console.log('you are at action file of unlinkBulkDevices', data)
+    // console.log('you are at action file of unlinkBulkDevices', data)
     return (dispatch) => {
         RestService.unlinkBulkDevices(data).then((response) => {
             // console.log('response to unlink device', response);
@@ -293,7 +293,7 @@ export const applyBulkPolicy = (data) => {
 
 // Set Bulk Msg
 export const setBulkMsg = (data) => {
-    console.log("at action file")
+    // console.log("at action file")
     return (dispatch) => {
         dispatch({
             type: SET_BULK_MESSAGE,
@@ -335,7 +335,7 @@ export const sendBulkMsg = (data) => {
 
 // handle wipe passwoed for bulk
 export const handleWipePwdConfirmModal = (data) => {
-    console.log("at action file ", data);
+    // console.log("at action file ", data);
     return (dispatch) => {
         dispatch({
             type: HANDLE_BULK_WIPE_PASS,
@@ -345,12 +345,12 @@ export const handleWipePwdConfirmModal = (data) => {
 }
 
 export function getBulkMsgsList() {
-    console.log('at action file ')
+    // console.log('at action file ')
 
     return (dispatch) => {
         RestService.getBulkMsgsList().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                console.log('at action file on response', response)
+                // console.log('at action file on response', response)
                 if (response.data.status) {
                     dispatch({
                         type: GET_BULK_MSGS,

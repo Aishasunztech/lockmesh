@@ -3731,7 +3731,7 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                     <Popover placement="top" content={(<Markup content={convertToLang(translation[""],
                         `   <p>Press <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;">
                                     <i className="fa fa-caret-right" aria-hidden="true"></i> 
-                                    </a> to see deives list</p>`)} />)}>
+                                    </a> to view devices list</p>`)} />)}>
                         <span className="helping_txt"><Icon type="info-circle" /></span>
                     </Popover>
                 </span>),

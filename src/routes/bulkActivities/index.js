@@ -21,7 +21,7 @@ import {
     wipeBulkDevices,
     closeResponseModal,
     applyBulkPolicy,
-    setBulkMsg,
+    // setBulkMsg,
     setBulkData
 } from "../../appRedux/actions/BulkDevices";
 
@@ -41,7 +41,7 @@ import { devicesColumns, userDevicesListColumns } from '../utils/columnsUtils';
 
 import FilterDevices from './components/filterDevices';
 import PushPullApps from './components/pushPullApps';
-import SendMsgForm from './components/SendMsgForm';
+// import SendMsgForm from './components/SendMsgForm';
 
 import {
     DEVICE_PENDING_ACTIVATION,
@@ -117,7 +117,7 @@ class BulkActivities extends Component {
             checkAllSelectedDealers: false,
             checkAllSelectedUsers: false,
             selectedPolicy: '',
-            sendMsgModal: false,
+            // sendMsgModal: false,
             actionMsg: '',
             errorAction: '',
 
@@ -239,7 +239,7 @@ class BulkActivities extends Component {
                 dealerList: this.props.dealerList
             })
         }
-        console.log("componentWillReceiveProps ", this.props.bulkAction, nextProps.bulkAction, this.props.bulkDealers, nextProps.bulkDealers, this.props.bulkUsers, nextProps.bulkUsers, nextProps.errorAction)
+        // console.log("componentWillReceiveProps ", this.props.bulkAction, nextProps.bulkAction, this.props.bulkDealers, nextProps.bulkDealers, this.props.bulkUsers, nextProps.bulkUsers, nextProps.errorAction)
         if (this.props !== nextProps) {
             console.log("ok");
             this.setState({
@@ -627,9 +627,9 @@ class BulkActivities extends Component {
         else if (actionName === "PUSH POLICY") {
             this.setState({ pushPolicyModal: true });
         }
-        else if (actionName === "SEND MESSAGE") {
-            this.setState({ sendMsgModal: true });
-        }
+        // else if (actionName === "SEND MESSAGE") {
+        //     this.setState({ sendMsgModal: true });
+        // }
     }
 
     hanldeTags = (e) => {
@@ -653,9 +653,9 @@ class BulkActivities extends Component {
     }
 
 
-    handleCancelMsgModal = () => {
-        this.setState({ sendMsgModal: false })
-    }
+    // handleCancelMsgModal = () => {
+    //     this.setState({ sendMsgModal: false })
+    // }
 
     setstateValues = (key, value) => {
         this.setState({ [key]: value });
@@ -1001,7 +1001,7 @@ class BulkActivities extends Component {
                 </Modal>
 
                 {/* Send Message modal */}
-                <Modal
+                {/* <Modal
                     title={convertToLang(this.props.translation[""], "Send Message to Selected Devcies")}
                     maskClosable={false}
                     style={{ top: 20 }}
@@ -1022,7 +1022,7 @@ class BulkActivities extends Component {
                         translation={this.props.translation}
                     />
 
-                </Modal>
+                </Modal> */}
 
             </Fragment >
         )
@@ -1051,7 +1051,7 @@ const mapDispatchToProps = (dispatch) => {
         closeResponseModal: closeResponseModal,
         applyBulkPolicy: applyBulkPolicy,
         getPolicies: getPolicies,
-        setBulkMsg: setBulkMsg,
+        // setBulkMsg: setBulkMsg,
         setBulkData: setBulkData,
         handleCheckedAllPushApps: handleCheckedAllPushApps,
 
@@ -1088,7 +1088,7 @@ const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users,
         expire_device_ids: bulkDevices.expire_device_ids,
         selectedDevices: bulkDevices.selectedDevices,
         policies: device_details.policies,
-        bulkMsg: bulkDevices.bulkMsg,
+        // bulkMsg: bulkDevices.bulkMsg,
         guestAllPushApps: device_details.guestAllPushApps,
         enableAllPushApps: device_details.enableAllPushApps,
         encryptedAllPushApps: device_details.encryptedAllPushApps,

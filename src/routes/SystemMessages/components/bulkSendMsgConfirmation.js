@@ -31,14 +31,16 @@ export default class BulkSendMsg extends Component {
         });
 
         let saveData = {
-            selectedDevices,
+            devices: selectedDevices,
             dealer_ids,
             user_ids,
             msg: data.msg,
-            repeat: data.repeat,
-            date: data.selected_date,
             timer: data.timer,
-            start_day: data.start_day,
+            repeat: data.repeat,
+            dateTime: data.dateTime,
+            weekDay: data.weekDay,
+            monthDate: data.monthDate,
+            monthName: data.monthName, // 12 months
             time: data.time
         }
 

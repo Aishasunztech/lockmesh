@@ -5,7 +5,7 @@ import { Input, Icon, Modal, Select, Button, Tooltip, Popover, Avatar, Row, Col,
 import { Link } from 'react-router-dom';
 import Highlighter from 'react-highlight-words';
 import CircularProgress from "components/CircularProgress";
-import { getDomains, domainPermission } from "../../appRedux/actions/Account";
+// import { getDomains, domainPermission } from "../../appRedux/actions/Account";
 import AppFilter from "../../components/AppFilter";
 import { checkValue, titleCase, convertToLang, getColor, componentSearch } from '../utils/commonUtils'
 import { BASE_URL } from '../../constants/Application';
@@ -187,8 +187,8 @@ class SystemMessages extends Component {
     componentDidMount() {
         // this.props.getDomains();
         this.props.getBulkMsgsList();
-        // this.props.getAllDealers();
-        // this.props.getUserList();
+        this.props.getAllDealers();
+        this.props.getUserList();
 
     }
 
@@ -326,7 +326,7 @@ class SystemMessages extends Component {
 
                             <ListMsgs
                                 totalDealers={this.props.dealerList.length}
-                                savePermission={this.props.domainPermission}
+                                // savePermission={this.props.domainPermission}
                                 onChangeTableSorting={this.handleTableChange}
                                 handleStatusChange={this.handleStatusChange}
                                 bulkMsgs={this.state.bulkMsgs}
@@ -389,23 +389,23 @@ class SystemMessages extends Component {
                     footer={false}
                 >
                     <EditMsgForm
-                        setSelectedBulkDevices={this.props.setSelectedBulkDevices}
-                        sendMsgOnDevices={this.props.sendBulkMsg}
-                        setBulkMsg={this.props.setBulkMsg}
-                        bulkMsg={this.props.bulkMsg}
+                        // setSelectedBulkDevices={this.props.setSelectedBulkDevices}
+                        // sendMsgOnDevices={this.props.sendBulkMsg}
+                        // setBulkMsg={this.props.setBulkMsg}
+                        // bulkMsg={this.props.bulkMsg}
                         handleEditMsgModal={this.handleEditMsgModal}
                         user={this.state.user}
                         ref='edit_msg_form'
                         translation={this.props.translation}
                         editRecord={this.state.editRecord}
-                        users_list={this.props.users_list}
-                        dealerList={this.props.dealerList}
-                        devices={this.props.devices}
-                        selectedDevices={this.props.selectedDevices ? this.props.selectedDevices : []}
-                        getBulkDevicesList={this.props.getBulkDevicesList}
-                        getAllDealers={this.props.getAllDealers}
-                        getUserList={this.props.getUserList}
-                        renderList={this.renderDevicesList}
+                        // users_list={this.props.users_list}
+                        // dealerList={this.props.dealerList}
+                        // devices={this.props.devices}
+                        // selectedDevices={this.props.selectedDevices ? this.props.selectedDevices : []}
+                        // getBulkDevicesList={this.props.getBulkDevicesList}
+                        // getAllDealers={this.props.getAllDealers}
+                        // getUserList={this.props.getUserList}
+                        // renderList={this.renderDevicesList}
                     />
 
                 </Modal>
@@ -551,8 +551,8 @@ function mapDispatchToProps(dispatch) {
         getAllDealers: getAllDealers,
         getUserList: getUserList,
 
-        getDomains: getDomains,
-        domainPermission: domainPermission,
+        // getDomains: getDomains,
+        // domainPermission: domainPermission,
         closeResponseModal: closeResponseModal,
         getBulkMsgsList: getBulkMsgsList,
         deleteBulkMsg: deleteBulkMsg
