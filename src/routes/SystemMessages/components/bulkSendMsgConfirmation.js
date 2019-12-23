@@ -46,9 +46,9 @@ export default class BulkSendMsg extends Component {
 
         console.log("saveData ", saveData);
 
-        const title = `${convertToLang(this.props.translation[""], "Are you sure, you want to send message on these selected devices ")} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`;
+
         this.confirm({
-            title: title,
+            title: `${convertToLang(this.props.translation[""], "Are you sure, you want to send message on these selected devices ")} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`,
             content: '',
             okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
             cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),

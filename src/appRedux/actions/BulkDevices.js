@@ -1,4 +1,4 @@
-import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES, WIPE_BULK_DEVICES, UNLINK_BULK_DEVICES, CLOSE_RESPONSE_MODAL, APPLY_BULK_POLICY, SET_BULK_MESSAGE, SEND_BULK_MESSAGE, SEND_BULK_WIPE_PASS, HANDLE_BULK_WIPE_PASS, BULK_HISTORY_LOADING, SET_BULK_ACTION, SET_BULK_DATA, GET_BULK_MSGS, DELETE_BULK_MSG } from "../../constants/ActionTypes";
+import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES, WIPE_BULK_DEVICES, UNLINK_BULK_DEVICES, CLOSE_RESPONSE_MODAL, APPLY_BULK_POLICY, SET_BULK_MESSAGE, SEND_BULK_MESSAGE, SEND_BULK_WIPE_PASS, HANDLE_BULK_WIPE_PASS, BULK_HISTORY_LOADING, SET_BULK_ACTION, SET_BULK_DATA, GET_BULK_MSGS, DELETE_BULK_MSG, UPDATE_BULK_MESSAGE } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
 
@@ -334,6 +334,26 @@ export const sendBulkMsg = (data) => {
     }
 }
 
+// update msg
+export const updateBulkMsg = (data) => {
+    return (dispatch) => {
+        RestService.updateBulkMsg(data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                // console.log(response.data);
+                dispatch({
+                    type: UPDATE_BULK_MESSAGE,
+                    payload: response.data,
+                    data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+
 // handle wipe passwoed for bulk
 export const handleWipePwdConfirmModal = (data) => {
     // console.log("at action file ", data);
@@ -376,11 +396,11 @@ export const deleteBulkMsg = (data) => {
             if (RestService.checkAuth(response.data)) {
                 console.log('at action file on response', response)
                 // if (response.data.status) {
-                    dispatch({
-                        type: DELETE_BULK_MSG,
-                        payload: response.data,
-                        delete_id: data
-                    });
+                dispatch({
+                    type: DELETE_BULK_MSG,
+                    payload: response.data,
+                    delete_id: data
+                });
                 // }
             } else {
                 dispatch({

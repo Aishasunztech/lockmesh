@@ -8,7 +8,7 @@ import {
 import { Button_Cancel, Button_submit } from '../../../constants/ButtonConstants';
 import { Required_Fields } from '../../../constants/DeviceConstants';
 import FilterDevices from './filterDevices'
-import BulkSendMsgConfirmation from './bulkSendMsgConfirmation';
+import BulkUpdateMsgConfirmation from './bulkUpdateMsgConfirmation';
 // import RepeatMsgCalender from './repeateMsgCalender';
 import moment from 'moment';
 import DataNotFound from '../../InvalidPage/dataNotFound';
@@ -85,60 +85,48 @@ class EditMsgForm extends Component {
             console.log("handle submit 02 ", values)
 
             if (!err) {
+                let copyEditRecord = this.state.editRecord;
 
-                let repeatVal = '';
-                let dateTimeVal = '';
-
-                if (this.state.timer === "NOW") {
-                    dateTimeVal = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
-                    repeatVal = "NONE";
-                } else if (this.state.timer === "DATE/TIME") {
-                    dateTimeVal = this.state.selected_dateTime;
-                    repeatVal = "NONE";
-                } else if (this.state.timer === "REPEAT") {
-                    dateTimeVal = this.state.selected_dateTime;
-                    repeatVal = this.state.repeat_duration;
+                if (copyEditRecord.timer_status === "NOW") {
+                    copyEditRecord.date_time = '';
+                    copyEditRecord.repeat_duration = "NONE";
+                } else if (copyEditRecord.timer_status === "DATE/TIME") {
+                    copyEditRecord.date_time = copyEditRecord.date_time;
+                    copyEditRecord.repeat_duration = "NONE";
+                } else if (copyEditRecord.timer_status === "REPEAT") {
+                    copyEditRecord.date_time = copyEditRecord.date_time;
+                    copyEditRecord.repeat_duration = copyEditRecord.repeat_duration;
                 }
 
-
-                let data = {
-                    devices: this.props.selectedDevices,
-                    dealers: this.state.selectedDealers,
-                    users: this.state.selectedUsers,
-                    msg: values.msg_txt,
-                    repeat: repeatVal,
-                    selected_date: dateTimeVal,
-                    timer: values.timer,
-                }
-                console.log("data ", this.state.editRecord);
-                this.refs.update_bulk_msg.handleUpdateBulkMsg(data);
+                // console.log("copyEditRecord ", copyEditRecord);
+                this.refs.update_bulk_msg.handleBulkUpdateMsg(copyEditRecord);
 
             }
 
         });
     }
-    handleNameValidation = (event) => {
-        var fieldvalue = event.target.value;
+    // handleNameValidation = (event) => {
+    //     var fieldvalue = event.target.value;
 
-        if (fieldvalue === '') {
-            this.setState({
-                validateStatus: 'error',
-                help: convertToLang(this.props.translation[User_Name_require], "Name is Required")
-            })
-        }
-        if (/[^A-Za-z \d]/.test(fieldvalue)) {
-            this.setState({
-                validateStatus: 'error',
-                help: convertToLang(this.props.translation[Only_alpha_numeric], "Please insert only alphabets and numbers")
-            })
-        }
-        else {
-            this.setState({
-                validateStatus: 'success',
-                help: null,
-            })
-        }
-    }
+    //     if (fieldvalue === '') {
+    //         this.setState({
+    //             validateStatus: 'error',
+    //             help: convertToLang(this.props.translation[User_Name_require], "Name is Required")
+    //         })
+    //     }
+    //     if (/[^A-Za-z \d]/.test(fieldvalue)) {
+    //         this.setState({
+    //             validateStatus: 'error',
+    //             help: convertToLang(this.props.translation[Only_alpha_numeric], "Please insert only alphabets and numbers")
+    //         })
+    //     }
+    //     else {
+    //         this.setState({
+    //             validateStatus: 'success',
+    //             help: null,
+    //         })
+    //     }
+    // }
 
     componentWillReceiveProps(nextProps) {
         if (this.props.editRecord != nextProps.editRecord) {
@@ -157,7 +145,7 @@ class EditMsgForm extends Component {
     handleReset = () => {
         this.props.form.resetFields();
         this.state.editRecord.repeat_duration = 'NONE';
-        this.setState({ repeat_duration: 'NONE' })
+        this.setState({ editRecord: this.state.editRecord })
     }
 
 
@@ -185,7 +173,7 @@ class EditMsgForm extends Component {
     validateRepeater = async (rule, value, callback) => {
         // console.log("values: ", value)
         if (value === 'NONE') {
-            callback("Timer Value should not be NONE.")
+            callback("Timer value should not be NONE.")
         }
     }
 
@@ -467,9 +455,9 @@ class EditMsgForm extends Component {
                     </Form.Item>
 
                 </Form>
-                <BulkSendMsgConfirmation
+                <BulkUpdateMsgConfirmation
                     ref="update_bulk_msg"
-                    sendMsgOnDevices={this.props.sendMsgOnDevices}
+                    updateBulkMsgAction={this.props.updateBulkMsgAction}
                     handleCancel={this.handleCancel}
                     translation={this.props.translation}
                 />

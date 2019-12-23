@@ -19,6 +19,7 @@ import {
     getBulkDevicesList,
     setSelectedBulkDevices,
     sendBulkMsg,
+    updateBulkMsg,
     closeResponseModal,
     setBulkMsg,
     getBulkMsgsList,
@@ -384,6 +385,7 @@ class SystemMessages extends Component {
                         // setBulkMsg={this.props.setBulkMsg}
                         // bulkMsg={this.props.bulkMsg}
                         handleEditMsgModal={this.handleEditMsgModal}
+                        updateBulkMsgAction={this.props.updateBulkMsg}
                         user={this.state.user}
                         ref='edit_msg_form'
                         translation={this.props.translation}
@@ -538,6 +540,7 @@ function mapDispatchToProps(dispatch) {
         getBulkDevicesList: getBulkDevicesList,
         setSelectedBulkDevices: setSelectedBulkDevices,
         sendBulkMsg: sendBulkMsg,
+        updateBulkMsg: updateBulkMsg,
         getAllDealers: getAllDealers,
         getUserList: getUserList,
 
