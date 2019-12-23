@@ -423,9 +423,9 @@ export function checkTimezoneValue(zone_name) {
 }
 
 
-export function getWeekDay(id) {
+export function getWeekDay(key) {
 
-  switch (id) {
+  switch (key) {
     case 1:
       return "Monday";
     case 2:
@@ -446,9 +446,9 @@ export function getWeekDay(id) {
   }
 }
 
-export function getMonthName(id) {
+export function getMonthName(key) {
 
-  switch (id) {
+  switch (key) {
     case 1:
       return "January";
     case 2:

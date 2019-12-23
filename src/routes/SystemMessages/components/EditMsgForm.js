@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Button, Form, Input, Select, InputNumber, Row, Col, Tag, Calendar, DatePicker, TimePicker, Modal } from 'antd';
-import { checkValue, convertToLang } from '../../utils/commonUtils'
+import { checkValue, convertToLang, getMonthName } from '../../utils/commonUtils'
 
 import {
     DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, User_Name_require, Only_alpha_numeric, Not_valid_Email, Email, Name, Required_Email
@@ -11,6 +11,7 @@ import FilterDevices from './filterDevices'
 import BulkSendMsgConfirmation from './bulkSendMsgConfirmation';
 // import RepeatMsgCalender from './repeateMsgCalender';
 import moment from 'moment';
+import DataNotFound from '../../InvalidPage/dataNotFound';
 
 const confirm = Modal.confirm;
 const success = Modal.success
@@ -28,20 +29,37 @@ class EditMsgForm extends Component {
             { key: 'DAILY', value: "Daily" },
             { key: 'WEEKLY', value: "Weekly" },
             { key: 'MONTHLY', value: "Monthly" },
-            { key: '3 MONTHs', value: "3 Months" },
-            { key: '6 MONTHs', value: "6 Months" },
-            { key: '12 MONTHs', value: "12 Months" },
+            { key: '3 MONTHS', value: "3 Months" },
+            { key: '6 MONTHS', value: "6 Months" },
+            { key: '12 MONTHS', value: "12 Months" },
         ];
 
         this.weekDays = [
-            { key: 'Mon', value: "Monday" },
-            { key: 'Tue', value: "Tuesday" },
-            { key: 'Wed', value: "Wednesday" },
-            { key: 'Thu', value: "Thursday" },
-            { key: 'Fri', value: "Friday" },
-            { key: 'Sat', value: "Saturday" },
-            { key: 'Sun', value: "Sunday" },
+            { key: 1, value: "Monday" },
+            { key: 2, value: "Tuesday" },
+            { key: 3, value: "Wednesday" },
+            { key: 4, value: "Thursday" },
+            { key: 5, value: "Friday" },
+            { key: 6, value: "Saturday" },
+            { key: 7, value: "Sunday" },
         ];
+
+        this.monthNames = [
+            { key: 1, value: "January" },
+            { key: 2, value: "February" },
+            { key: 3, value: "March" },
+            { key: 4, value: "April" },
+            { key: 5, value: "May" },
+            { key: 6, value: "June" },
+            { key: 7, value: "July" },
+            { key: 8, value: "August" },
+            { key: 9, value: "September" },
+            { key: 10, value: "October" },
+            { key: 11, value: "November" },
+            { key: 12, value: "December" },
+        ];
+
+        this.monthDays = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
 
         this.state = {
             visible: false,
@@ -62,7 +80,7 @@ class EditMsgForm extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        console.log("handle submit ", this.props.selectedDevices, this.state.selectedDealers, this.state.selectedUsers);
+        // console.log("handle submit ", this.props.selectedDevices, this.state.selectedDealers, this.state.selectedUsers);
         this.props.form.validateFieldsAndScroll((err, values) => {
             console.log("handle submit 02 ", values)
 
@@ -93,23 +111,14 @@ class EditMsgForm extends Component {
                     timer: values.timer,
                 }
                 console.log("data ", this.state.editRecord);
-                // this.refs.bulk_msg.handleBulkSendMsg(data);
-                // this.props.sendMsgOnDevices(data);
-                // } else {
-                //     error({
-                //         title: `Sorry, You have not any device to perform an action, to add devices please select dealers/users`,
-                //     });
-                //     // this.setState({ errorTime: "" })
-                // }
+                this.refs.update_bulk_msg.handleUpdateBulkMsg(data);
+
             }
 
         });
     }
     handleNameValidation = (event) => {
         var fieldvalue = event.target.value;
-
-        // console.log('rest ', /[^A-Za-z \d]/.test(fieldvalue));
-        // console.log('vlaue', fieldvalue)
 
         if (fieldvalue === '') {
             this.setState({
@@ -145,38 +154,6 @@ class EditMsgForm extends Component {
         })
     }
 
-    // handleMultipleSelect = () => {
-    //     // console.log('value is: ', e);
-    //     let data = {}
-
-    //     if (this.state.selectedDealers.length || this.state.selectedUsers.length) {
-    //         data = {
-    //             dealers: this.state.selectedDealers,
-    //             users: this.state.selectedUsers
-    //         }
-
-    //         // console.log('handle change data is: ', data)
-    //         this.props.getBulkDevicesList(data);
-    //         this.props.getAllDealers();
-
-    //     } else {
-    //         this.setState({ filteredDevices: [] });
-    //     }
-    // }
-
-    // handleDeselect = (e, dealerOrUser = '') => {
-
-    //     if (dealerOrUser == "dealers") {
-    //         let updateDealers = this.state.selectedDealers.filter(item => item.key != e.key);
-    //         this.state.selectedDealers = updateDealers;
-    //         this.state.checkAllSelectedDealers = false;
-    //     } else if (dealerOrUser == "users") {
-    //         let updateUsers = this.state.selectedUsers.filter(item => item.key != e.key);
-    //         this.state.selectedUsers = updateUsers;
-    //         this.state.checkAllSelectedUsers = false;
-    //     }
-
-    // }
     handleReset = () => {
         this.props.form.resetFields();
         this.state.editRecord.repeat_duration = 'NONE';
@@ -188,51 +165,28 @@ class EditMsgForm extends Component {
         this.handleReset();
         this.props.handleEditMsgModal(false);
     }
-    // handleChange = (e) => {
-    //     this.setState({ type: e.target.value });
-    // }
-
-
-    // handleChangeAction = (e) => {
-    //     console.log("e value is: ", e)
-
-    //     this.setState({
-    //         selectedAction: e,
-    //         errorAction: ""
-    //     });
-
-    // }
-
-    // onPanelChange = (value, mode) => {
-    //     console.log("hi ", value, mode);
-    // }
 
     dateTimeOnChange = (value, dateString) => {
-        // console.log('Selected Time: ', value);
-        // console.log('Formatted Selected Time: ', dateString, "current data: ", moment(new Date()).format('YYYY-MM-DD HH:mm:ss'));
-
-        this.state.editRecord.sending_time = dateString;
+        this.state.editRecord.date_time = dateString;
         this.setState({ editRecord: this.state.editRecord });
-        // this.setState({ selected_dateTime: dateString });
     }
 
-    // repeatHandler = (e) => {
-    //     console.log("e is: ", e);
-    //     let record = this.state.editRecord;
-    //     record.repeat_duration = e;
-    //     this.setState({ editRecord: JSON.parse(JSON.stringify(record)) });
-    // }
-
-    // handleTimer = (e) => {
-    //     let record = this.state.editRecord;
-    //     record.timer_status = e;
-    //     this.setState({ editRecord: record });
-    // }
+    timeOnChange = (value, dateString) => {
+        this.state.editRecord.time = dateString;
+        this.setState({ editRecord: this.state.editRecord });
+    }
 
     handleEditMsgRecord = (e, fieldName) => {
         let record = this.state.editRecord;
         record[fieldName] = e;
         this.setState({ editRecord: record });
+    }
+
+    validateRepeater = async (rule, value, callback) => {
+        // console.log("values: ", value)
+        if (value === 'NONE') {
+            callback("Timer Value should not be NONE.")
+        }
     }
 
     range = (start, end) => {
@@ -261,14 +215,14 @@ class EditMsgForm extends Component {
         console.log("editRecord ", editRecord);
 
         if (!editRecord) {
-            return <h2>Data Not Found!</h2>
+            return <DataNotFound />
         }
         return (
             <div>
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
                     <p>(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")} </p>
 
-                    <Row gutter={24} className="">
+                    <Row gutter={24} className="mt-4">
                         <Col className="col-md-12 col-sm-12 col-xs-12">
                             <Form.Item
                                 label={convertToLang(this.props.translation[""], "Message")}
@@ -291,8 +245,7 @@ class EditMsgForm extends Component {
                         </Col>
 
                     </Row>
-                    <br />
-                    <Row gutter={24} className="">
+                    <Row gutter={24} className="mt-4">
                         <Col className="col-md-12 col-sm-12 col-xs-12">
                             <Form.Item
                                 label={convertToLang(this.props.translation[""], "Select Message Timer")}
@@ -311,7 +264,7 @@ class EditMsgForm extends Component {
                                         showSearch={false}
                                         style={{ width: '100%' }}
                                         placeholder={convertToLang(this.props.translation[""], "Select Message Timer")}
-                                        onChange={(e) => this.handleEditMsgRecord(e, "timer_status")}
+                                        onChange={(e) => this.handleEditMsgRecord(e, 'timer_status')}
                                     >
                                         <Select.Option key={"NOW"} value={"NOW"}>{"NOW"}</Select.Option>
                                         <Select.Option key={"DATE/TIME"} value={"DATE/TIME"}>{"Date/Time"}</Select.Option>
@@ -322,100 +275,130 @@ class EditMsgForm extends Component {
                         </Col>
                     </Row>
 
-                    {editRecord.timer_status === "DATE/TIME" ?
-                        <Row gutter={24} className="">
+                    {editRecord.timer_status === "REPEAT" ?
+                        <Row gutter={24} className="mt-4">
                             <Col className="col-md-12 col-sm-12 col-xs-12">
                                 <Form.Item
-                                    label={convertToLang(this.props.translation[""], "Choose Data/Time")}
+                                    label={convertToLang(this.props.translation[""], "Select when to send Message")}
                                     labelCol={{ span: 8 }}
                                     wrapperCol={{ span: 16 }}
                                 >
-                                    {this.props.form.getFieldDecorator('date/time', {
-                                        initialValue: moment(editRecord.sending_time),
+                                    {this.props.form.getFieldDecorator('repeat', {
+                                        initialValue: editRecord.repeat_duration ? editRecord.repeat_duration : '',
                                         rules: [
                                             {
-                                                required: true, message: convertToLang(this.props.translation[""], "Date/Time field is required"),
-                                            }
+                                                required: true, message: convertToLang(this.props.translation[""], "Repeat Message field is required"),
+                                            },
+                                            {
+                                                validator: this.validateRepeater,
+                                            },
                                         ],
                                     })(
-                                        <DatePicker
-                                            // defaultValue={editRecord.sending_time}
-                                            onChange={this.dateTimeOnChange}
-                                            placeholder="Choose data/time"
+                                        <Select
+                                            showSearch={false}
                                             style={{ width: '100%' }}
-                                            format="YYYY-MM-DD HH:mm:ss"
-                                            disabledDate={this.disabledDate}
-                                            disabledTime={this.disabledDateTime}
-                                            showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
-                                        />
+                                            placeholder={convertToLang(this.props.translation[""], "Select when to send Message")}
+                                            onChange={(e) => this.handleEditMsgRecord(e, 'repeat_duration')}
+                                        >
+                                            {this.durationList.map((item) => <Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)}
+                                        </Select>
                                     )}
                                 </Form.Item>
                             </Col>
                         </Row>
                         : null}
 
-                    <br />
-                    {editRecord.timer_status === "REPEAT" ?
+                    {editRecord.repeat_duration !== "NONE" && editRecord.timer_status === "REPEAT" ?
                         <Fragment>
-                            <Row gutter={24} className="">
-                                <Col className="col-md-12 col-sm-12 col-xs-12">
-                                    <Form.Item
-                                        label={convertToLang(this.props.translation[""], "Select when to send Message")}
-                                        labelCol={{ span: 8 }}
-                                        wrapperCol={{ span: 16 }}
-                                    >
-                                        {this.props.form.getFieldDecorator('repeat', {
-                                            initialValue: editRecord.repeat_duration,
-                                            rules: [
-                                                {
-                                                    required: true, message: convertToLang(this.props.translation[""], "Repeat Message field is required"),
-                                                }
-                                            ],
-                                        })(
-                                            <Select
-                                                showSearch={false}
-                                                style={{ width: '100%' }}
-                                                // disabled={this.state.isNowSet}
-                                                placeholder={convertToLang(this.props.translation[""], "Select when to send Message")}
-                                                // onChange={this.repeatHandler}
-                                                onChange={(e) => this.handleEditMsgRecord(e, "repeat_duration")}
-                                            >
-                                                {this.durationList.map((item) => <Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)}
-                                            </Select>
-                                        )}
-                                    </Form.Item>
-                                </Col>
-                            </Row>
+                            {editRecord.repeat_duration === "WEEKLY" ?
+                                <Row gutter={24} className="mt-4">
+                                    <Col className="col-md-12 col-sm-12 col-xs-12">
+                                        <Form.Item
+                                            label={convertToLang(this.props.translation[""], "Select Day")}
+                                            labelCol={{ span: 8 }}
+                                            wrapperCol={{ span: 16 }}
+                                        >
+                                            {this.props.form.getFieldDecorator('weekDay', {
+                                                initialValue: editRecord.week_day ? editRecord.week_day : '',
+                                                rules: [
+                                                    {
+                                                        required: true, message: convertToLang(this.props.translation[""], "Day is Required"),
+                                                    }
+                                                ],
+                                            })(
+                                                <Select
+                                                    style={{ width: '50%' }}
+                                                    showSearch={false}
+                                                    placeholder={convertToLang(this.props.translation[""], "Select Day")}
+                                                    onChange={(e) => this.handleEditMsgRecord(e, 'week_day')}
+                                                >
+                                                    {this.weekDays.map((item) => <Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)}
+                                                </Select>
+                                            )}
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+                                : null}
 
-                            <Row gutter={24} className="">
-                                <Col className="col-md-12 col-sm-12 col-xs-12">
-                                    <Form.Item
-                                        label={convertToLang(this.props.translation[""], "Select Start Day")}
-                                        labelCol={{ span: 8 }}
-                                        wrapperCol={{ span: 16 }}
-                                    >
-                                        {this.props.form.getFieldDecorator('day', {
-                                            initialValue: editRecord.day ? editRecord.day : '',
-                                            rules: [
-                                                {
-                                                    required: true, message: convertToLang(this.props.translation[""], "Day Name is Required"),
-                                                }
-                                            ],
-                                        })(
-                                            <Select
-                                                showSearch={false}
-                                                style={{ width: '100%' }}
-                                                placeholder={convertToLang(this.props.translation[""], "Select Start Day")}
-                                                onChange={(e) => this.handleEditMsgRecord(e, "startDay")}
-                                            >
-                                                {this.weekDays.map((item) => <Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)}
-                                            </Select>
-                                        )}
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-
-                            <Row gutter={24} className="">
+                            {editRecord.repeat_duration === "12 MONTHS" ?
+                                <Row gutter={24} className="mt-4">
+                                    <Col className="col-md-12 col-sm-12 col-xs-12">
+                                        <Form.Item
+                                            label={convertToLang(this.props.translation[""], "Select Month")}
+                                            labelCol={{ span: 8 }}
+                                            wrapperCol={{ span: 16 }}
+                                        >
+                                            {this.props.form.getFieldDecorator('monthName', {
+                                                initialValue: editRecord.month_name ? getMonthName(editRecord.month_name) : '',
+                                                rules: [
+                                                    {
+                                                        required: true, message: convertToLang(this.props.translation[""], "Month is Required"),
+                                                    }
+                                                ],
+                                            })(
+                                                <Select
+                                                    showSearch={false}
+                                                    style={{ width: '50%' }}
+                                                    placeholder={convertToLang(this.props.translation[""], "Select Month")}
+                                                    onChange={(e) => this.handleEditMsgRecord(e, 'month_name')}
+                                                >
+                                                    {this.monthNames.map((item) => <Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)}
+                                                </Select>
+                                            )}
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+                                : null}
+                            {editRecord.repeat_duration !== "DAILY" && editRecord.repeat_duration !== "WEEKLY" ?
+                                <Row gutter={24} className="mt-4">
+                                    <Col className="col-md-12 col-sm-12 col-xs-12">
+                                        <Form.Item
+                                            label={convertToLang(this.props.translation[""], "Select date")}
+                                            labelCol={{ span: 8 }}
+                                            wrapperCol={{ span: 16 }}
+                                        >
+                                            {this.props.form.getFieldDecorator('monthDate', {
+                                                initialValue: editRecord.month_date ? editRecord.month_date : '',
+                                                rules: [
+                                                    {
+                                                        required: true, message: convertToLang(this.props.translation[""], "Date is required"),
+                                                    }
+                                                ],
+                                            })(
+                                                <Select
+                                                    showSearch={false}
+                                                    style={{ width: '50%' }}
+                                                    placeholder={convertToLang(this.props.translation[""], "Select date")}
+                                                    onChange={(e) => this.handleEditMsgRecord(e, 'month_date')}
+                                                >
+                                                    {this.monthDays.map((item) => <Select.Option key={item} value={item}>{item}</Select.Option>)}
+                                                </Select>
+                                            )}
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+                                : null}
+                            <Row gutter={24} className="mt-4">
                                 <Col className="col-md-12 col-sm-12 col-xs-12">
                                     <Form.Item
                                         label={convertToLang(this.props.translation[""], "Select Time")}
@@ -423,7 +406,7 @@ class EditMsgForm extends Component {
                                         wrapperCol={{ span: 16 }}
                                     >
                                         {this.props.form.getFieldDecorator('time', {
-                                            initialValue: moment(editRecord.sending_time),
+                                            initialValue: editRecord.time ? moment(editRecord.time, 'HH:mm') : '',
                                             rules: [
                                                 {
                                                     required: true, message: convertToLang(this.props.translation[""], "Time field is required"),
@@ -431,16 +414,47 @@ class EditMsgForm extends Component {
                                             ],
                                         })(
                                             <TimePicker
-                                                format={'HH:mm'}
-                                                onChange={this.dateTimeOnChange}
+                                                onChange={this.timeOnChange}
                                                 placeholder={"Select time"}
-                                                style={{ width: '100%' }}
+                                                format="HH:mm"
+                                                style={{ width: '50%' }}
                                             />
                                         )}
                                     </Form.Item>
                                 </Col>
                             </Row>
                         </Fragment>
+                        : null}
+
+                    {editRecord.timer_status === "DATE/TIME" ?
+                        <Row gutter={24} className="mt-4">
+                            <Col className="col-md-12 col-sm-12 col-xs-12">
+                                <Form.Item
+                                    label={convertToLang(this.props.translation[""], "Choose Data/Time")}
+                                    labelCol={{ span: 8 }}
+                                    wrapperCol={{ span: 16 }}
+                                >
+                                    {this.props.form.getFieldDecorator('date/time', {
+                                        initialValue: editRecord.date_time ? moment(editRecord.date_time, 'YYYY-MM-DD HH:mm') : '',
+                                        rules: [
+                                            {
+                                                required: true, message: convertToLang(this.props.translation[""], "Date/Time field is required"),
+                                            }
+                                        ],
+                                    })(
+                                        <DatePicker
+                                            onChange={this.dateTimeOnChange}
+                                            placeholder="Choose data/time"
+                                            style={{ width: '100%' }}
+                                            format="YYYY-MM-DD HH:mm"
+                                            disabledDate={this.disabledDate}
+                                            disabledTime={this.disabledDateTime}
+                                            showTime={{ defaultValue: moment('00:00', 'HH:mm') }}
+                                        />
+                                    )}
+                                </Form.Item>
+                            </Col>
+                        </Row>
                         : null}
                     <Form.Item className="edit_ftr_btn"
                         wrapperCol={{
@@ -454,7 +468,7 @@ class EditMsgForm extends Component {
 
                 </Form>
                 <BulkSendMsgConfirmation
-                    ref="bulk_msg"
+                    ref="update_bulk_msg"
                     sendMsgOnDevices={this.props.sendMsgOnDevices}
                     handleCancel={this.handleCancel}
                     translation={this.props.translation}

@@ -567,7 +567,7 @@ class SendMsgForm extends Component {
                                             })(
                                                 <Select
                                                     showSearch={false}
-                                                    // style={{ width: '100%' }}
+                                                    style={{ width: '50%' }}
                                                     placeholder={convertToLang(this.props.translation[""], "Select Day")}
                                                 // onChange={this.handleStartDay}
                                                 >
