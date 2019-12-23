@@ -127,7 +127,7 @@ export default (state = initialState, action) => {
             }
 
         case GET_BULK_MSGS:
-            // console.log("action.payload GET_BULK_MSGS, ", action.payload)
+            // console.log("action.payload GET_BULK_MSGS, ", action.payload.data)
             return {
                 ...state,
                 bulkMsgs: action.payload.data,
@@ -298,7 +298,7 @@ export default (state = initialState, action) => {
                 pushed_device_ids: [...state.pushed_device_ids],
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "push",
-              
+
                 // bulkSelectedPushApps: []
                 selectedDevices: [],
                 bulkDevices: [],
@@ -344,7 +344,7 @@ export default (state = initialState, action) => {
                 pushed_device_ids: [...state.pushed_device_ids],
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "pull",
-               
+
                 // bulkSelectedPullApps: []
                 selectedDevices: [],
                 bulkDevices: [],
@@ -404,7 +404,7 @@ export default (state = initialState, action) => {
                 pushed_device_ids: [...state.pushed_device_ids],
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "unlink",
-                
+
                 selectedDevices: [],
                 bulkDevices: [],
                 bulkAction: '',
@@ -515,7 +515,7 @@ export default (state = initialState, action) => {
                 pushed_device_ids: [...state.pushed_device_ids],
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "policy",
-                
+
                 selectedDevices: [],
                 bulkDevices: [],
                 bulkAction: '',
@@ -555,13 +555,13 @@ export default (state = initialState, action) => {
                     ...state,
                     bulkUsers: action.payload
                 }
-            } 
+            }
             else if (action.dataType === 'errorAction') {
                 return {
                     ...state,
                     errorAction: action.payload
                 }
-            } 
+            }
             else {
                 return {
                     ...state,
@@ -610,11 +610,14 @@ export default (state = initialState, action) => {
         }
 
         case SEND_BULK_MESSAGE: {
-            console.log('SEND_BULK_MESSAGE reducer data:: ', action.payload);
+            let newMsg = { ...action.payload.lastMsg, data: action.payload.devices };
+            // console.log('SEND_BULK_MESSAGE reducer data:: ', newMsg);
 
             let showResponseModal = state.bulkResponseModal;
 
             if (action.payload.status) {
+                state.bulkMsgs.push(newMsg);
+
                 if (action.payload.online && !action.payload.offline && !action.payload.failed) {
                     success({
                         title: action.payload.msg,
@@ -644,7 +647,8 @@ export default (state = initialState, action) => {
                 pushed_device_ids: [...state.pushed_device_ids],
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "send_msg",
-                bulkMsg: ''
+                bulkMsg: '',
+                bulkMsgs: [...state.bulkMsgs]
             }
         }
 

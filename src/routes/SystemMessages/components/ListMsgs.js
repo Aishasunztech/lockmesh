@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col, Tag, Modal } from "antd";
-import { convertToLang, checkValue, convertTimezoneValue } from '../../utils/commonUtils';
+import { convertToLang, checkValue, convertTimezoneValue, getWeekDay, getMonthName } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 import moment from 'moment';
 import { userDevicesListColumns } from '../../utils/columnsUtils';
-import { TIMESTAMP_FORMAT_NOT_Sec } from '../../../constants/Application';
+import { TIMESTAMP_FORMAT_NOT_SEC, TIME_FORMAT_HM } from '../../../constants/Application';
 
 
 export default class ListMsgs extends Component {
@@ -19,7 +19,7 @@ export default class ListMsgs extends Component {
             pagination: this.props.pagination,
             expandedRowKeys: [],
             visible: false,
-            
+
         };
         this.renderList = this.renderList.bind(this);
         this.confirm = Modal.confirm;
@@ -89,7 +89,6 @@ export default class ListMsgs extends Component {
         let bulkMsgs = [];
         let data
         list.map((app) => {
-            // console.log("list ", app.sending_time ? "OKay" : "fail")
 
             data = {
                 rowKey: app.id,
@@ -99,15 +98,16 @@ export default class ListMsgs extends Component {
                         <Fragment>
                             <Fragment><Button type="primary" size="small" onClick={() => this.props.showEditModal(app)}>EDIT</Button></Fragment>
                             <Fragment><Button type="danger" size="small" onClick={() => this.deleteMsg(app.id)}>DELETE</Button></Fragment>
-                            {/* <Fragment><Button type="dashed" size="small">RESEND</Button></Fragment> */}
                         </Fragment>
                     </div>
                 ),
                 msg: checkValue(app.msg),
                 timer_status: app.timer_status ? app.timer_status : "N/A",
                 repeat: checkValue(app.repeat_duration),
-                sending_time: convertTimezoneValue(this.props.user.timezone, app.sending_time, TIMESTAMP_FORMAT_NOT_Sec),
-                // sending_time: app.sending_time && app.sending_time !== "0000-00-00 00:00:00" ? moment(app.sending_time).format('YYYY-MM-DD HH:mm') : "N/A",
+                sending_time: app.timer_status === "DATE/TIME" ? convertTimezoneValue(this.props.user.timezone, app.date_time, TIMESTAMP_FORMAT_NOT_SEC) : app.time ? app.time : "N/A",
+                week_day: getWeekDay(app.week_day),
+                month_date: app.month_date && app.month_date !== 0 ? checkValue(app.month_date) : "N/A",
+                month_name: getMonthName(app.month_name),
                 data: app,
             }
             bulkMsgs.push(data)

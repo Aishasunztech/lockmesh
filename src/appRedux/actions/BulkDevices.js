@@ -323,6 +323,7 @@ export const sendBulkMsg = (data) => {
                 dispatch({
                     type: SEND_BULK_MESSAGE,
                     payload: response.data,
+                    data
                 })
             } else {
                 dispatch({

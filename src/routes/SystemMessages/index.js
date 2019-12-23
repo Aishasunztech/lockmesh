@@ -228,22 +228,12 @@ class SystemMessages extends Component {
 
             var status = device.finalStatus;
             // console.log("status ", status)
-
             let color = getColor(status);
-            var style = { margin: '0', width: 'auto', textTransform: 'uppercase' }
-            // var text = convertToLang(this.props.translation[Button_Edit], "EDIT");
-
-            // if ((status === DEVICE_PENDING_ACTIVATION) || (status === DEVICE_UNLINKED)) {
-            //     style = { margin: '0 8px 0 0', width: 'auto', display: 'none', textTransform: 'uppercase' }
-            //     text = "ACTIVATE";
-            // }
 
             return {
-                rowKey: index,
+                rowKey: device.id,
                 // key: device.device_id ? `${device.device_id}` : device.usr_device_id,
                 key: status == DEVICE_UNLINKED ? `${device.user_acc_id} ${device.created_at} ` : device.id,
-                counter: ++index,
-
                 status: (<span style={color} > {status}</span>),
                 lastOnline: checkValue(device.lastOnline),
                 flagged: device.flagged,
@@ -299,9 +289,9 @@ class SystemMessages extends Component {
             pushed_device_ids,
         } = this.props;
 
-        let failedTitle = '';
-        let offlineTitle = '';
-        let onlineTitle = '';
+        let failedTitle = 'N/A';
+        let offlineTitle = 'N/A';
+        let onlineTitle = 'N/A';
 
         if (response_modal_action === "msg") {
             failedTitle = "Failed to Pull apps from these Devices";
@@ -398,14 +388,14 @@ class SystemMessages extends Component {
                         ref='edit_msg_form'
                         translation={this.props.translation}
                         editRecord={this.state.editRecord}
-                        // users_list={this.props.users_list}
-                        // dealerList={this.props.dealerList}
-                        // devices={this.props.devices}
-                        // selectedDevices={this.props.selectedDevices ? this.props.selectedDevices : []}
-                        // getBulkDevicesList={this.props.getBulkDevicesList}
-                        // getAllDealers={this.props.getAllDealers}
-                        // getUserList={this.props.getUserList}
-                        // renderList={this.renderDevicesList}
+                    // users_list={this.props.users_list}
+                    // dealerList={this.props.dealerList}
+                    // devices={this.props.devices}
+                    // selectedDevices={this.props.selectedDevices ? this.props.selectedDevices : []}
+                    // getBulkDevicesList={this.props.getBulkDevicesList}
+                    // getAllDealers={this.props.getAllDealers}
+                    // getUserList={this.props.getUserList}
+                    // renderList={this.renderDevicesList}
                     />
 
                 </Modal>

@@ -100,6 +100,7 @@ export const VERSION = packageJson.version;
 
 // DATE TIME CONSTATNS
 export const TIMESTAMP_FORMAT = "YYYY-MM-DD HH:mm:ss";
-export const TIMESTAMP_FORMAT_NOT_Sec = "YYYY-MM-DD HH:mm";
+export const TIMESTAMP_FORMAT_NOT_SEC = "YYYY-MM-DD HH:mm";
 export const DATE_FORMAT = "YYYY-MM-DD";
 export const TIME_FORMAT = "HH:mm:ss";
+export const TIME_FORMAT_HM = "HH:mm:ss";

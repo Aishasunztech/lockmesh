@@ -38,9 +38,9 @@ export default class BulkSendMsg extends Component {
             timer: data.timer,
             repeat: data.repeat,
             dateTime: data.dateTime,
-            weekDay: data.weekDay,
-            monthDate: data.monthDate,
-            monthName: data.monthName, // 12 months
+            weekDay: data.weekDay, // 1 - 7
+            monthDate: data.monthDate,// 1 - 31
+            monthName: data.monthName, // for 12 months
             time: data.time
         }
 
@@ -53,8 +53,8 @@ export default class BulkSendMsg extends Component {
             okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
             cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
             onOk: (() => {
-                // this.props.sendMsgOnDevices(saveData);
-                // this.props.handleCancel();
+                this.props.sendMsgOnDevices(saveData);
+                this.props.handleCancel();
             }),
             onCancel() { },
         });
