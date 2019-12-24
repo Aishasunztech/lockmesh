@@ -806,7 +806,14 @@ class AddDevice extends Component {
             callback();
         }
     }
-    
+
+    renderDataLimitOptions = () => {
+        for (let i = 1; i <= 5; i++) {
+            return (<Select.Option key={i} value={i}>{i}</Select.Option>)
+
+        }
+
+    }
     render() {
         // console.log(this.props);
         // console.log('id is', this.state.products, this.state.packages);
@@ -1275,7 +1282,7 @@ class AddDevice extends Component {
                                                 <Input
                                                     placeholder={convertToLang(this.props.translation[DUMY_TRANS_ID], "Enter Sim ID")}
                                                     disabled={this.state.disableSim}
-                                                    // onChange={(value) => this.setState({ sim_id: value })}
+                                                // onChange={(value) => this.setState({ sim_id: value })}
                                                 />
                                                 // <Select
                                                 //     // className="pos_rel"
@@ -1321,6 +1328,57 @@ class AddDevice extends Component {
                                         </Form.Item>
                                     </Col>
 
+                                    {/* <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+
+                                        <Form.Item
+                                            label={convertToLang(this.props.translation[''], "Data Limit")}
+                                            labelCol={{ span: 8 }}
+                                            wrapperCol={{ span: 16 }}
+                                        >
+                                            {this.props.form.getFieldDecorator('data_limit', {
+                                                initialValue: this.state.sim_id,
+                                                // rules: [
+                                                //     // {
+                                                //     //     required: true, message: "SIM ID is required"
+                                                //     // },
+                                                //     {
+                                                //         validator: (rule, value, callback) => { this.validateICCID(rule, value, callback, 'sim_id') },
+                                                //     }
+                                                // ]
+                                            })(
+                                                // <Select
+                                                //     addonAfter={(
+                                                //         <Select defaultValue=".com">
+                                                //             <Select.Option value=".com">.com</Select.Option>
+                                                //             <Select.Option value=".jp">.jp</Select.Option>
+                                                //             <Select.Option value=".cn">.cn</Select.Option>
+                                                //             <Select.Option value=".org">.org</Select.Option>
+                                                //         </Select>
+                                                //     )}
+
+                                                // // style={{ width: 80 }}
+                                                // >
+
+                                                //     {this.renderDataLimitOptions()}
+
+                                                // </Select>
+                                                <Input
+                                                    // addonAfter={this.renderDataLimitOptions}
+                                                    addonAfter={<Select style={{ width: 80 }}>
+                                                        <Select.Option value=".com">.com</Select.Option>
+                                                        <Select.Option value=".jp">.jp</Select.Option>
+                                                        <Select.Option value=".cn">.cn</Select.Option>
+                                                        <Select.Option value=".org">.org</Select.Option>
+                                                    </Select>}
+                                                // placeholder={convertToLang(this.props.translation[DUMY_TRANS_ID], "Enter Sim ID")}
+                                                // disabled={this.state.disableSim}
+                                                // onChange={(value) => this.setState({ sim_id: value })}
+                                                />
+
+                                            )}
+                                        </Form.Item>
+                                    </Col> */}
+                                    
                                     {/* Sim ID 2 Input */}
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
@@ -1343,7 +1401,7 @@ class AddDevice extends Component {
                                                 <Input
                                                     placeholder={convertToLang(this.props.translation[''], "Enter Sim ID 2")}
                                                     disabled={this.state.disableSim2}
-                                                    // onChange={(value) => this.setState({sim_id2: value})}
+                                                // onChange={(value) => this.setState({sim_id2: value})}
                                                 />
                                                 // <Select
                                                 //     // className="pos_rel"
