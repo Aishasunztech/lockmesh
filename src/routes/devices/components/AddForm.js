@@ -115,7 +115,7 @@ class AddDevice extends Component {
             // console.log('form', values);
             if (this.state.services) {
                 if (!err) {
-                    console.log(this.props.user);
+
                     if (this.state.term == 0 && this.props.user.remaining_demos <= 0) {
                         Modal.error({
                             title: "Your Demos Limit has been exceeded, you cannot use Trial Packages. Please Contact with you admin."
@@ -149,20 +149,50 @@ class AddDevice extends Component {
                         this.state.total_price = this.state.total_price - Number(sim_id_price[0].unit_price)
                         this.sim_id2_added = false
                     }
-                    // console.log("On form Submit packages : ", this.state.packages);
                     values.products = this.state.products;
                     values.packages = this.state.packages;
+
+                    console.log("data_limit_1", values.data_limit, values.data_limit_2, this.state.packages);
+
+                    let data_limit = null
+                    if (values.data_limit) {
+
+                        data_limit = this.state.parent_packages.find((packageItem) => packageItem.id = values.data_limit)
+                        if (data_limit) {
+                            values.packages.push(data_limit)
+                            this.setState(state => {
+                                const list = state.PkgSelectedRows.push(data_limit);
+                                return list;
+                            });
+                        }
+                    }
+
+                    let data_limit2 = null;
+                    if (values.data_limit2) {
+
+                        data_limit2 = this.state.parent_packages.find((packageItem) => packageItem.id = values.data_limit2)
+                        if (data_limit2) {
+                            values.packages.push(data_limit2)
+                            this.setState(state => {
+                                const list = state.PkgSelectedRows.push(data_limit2);
+                                return list;
+                            });
+                        }
+                    }
+
+                    // values.packages.push()
+                    // console.log("On form Submit packages : ", this.state.packages);
                     values.term = this.state.term;
                     values.total_price = this.state.total_price
                     values.hardwarePrice = this.state.duplicate > 0 ? this.state.hardwarePrice * this.state.duplicate : this.state.hardwarePrice
                     values.hardwares = this.state.hardwares
+
                     this.setState({
                         serviceData: values,
                         showConfirmCredit: true
                     })
                 }
-            }
-            else {
+            } else {
                 this.setState({
                     checkServices: {
                         display: 'inline',
@@ -722,7 +752,6 @@ class AddDevice extends Component {
     }
 
     validateICCID = (rule, value, callback, simField) => {
-        console.log(simField);
         if ((value !== undefined) && value.length > 0) {
 
             if (simField === 'sim_id') {
@@ -734,7 +763,6 @@ class AddDevice extends Component {
                     valid_sim_id_2: false
                 })
             }
-            console.log("validation: ", ((this.state.disableSim === false && this.state.valid_sim_id_1 === false) || (this.state.disableSim2 === false && this.state.valid_sim_id_2 === false)), this.state.valid_sim_id_1, this.state.valid_sim_id_2)
             if (/^[0-9]+$/.test(value)) {
                 if (value.length != 20 && value.length != 19) {
                     return callback(`${convertToLang(this.props.translation[''], "ICC ID should be 19 or 20 digits long")}  :(${value.length})`);
@@ -808,10 +836,15 @@ class AddDevice extends Component {
     }
 
     renderDataLimitOptions = () => {
-        for (let i = 1; i <= 5; i++) {
-            return (<Select.Option key={i} value={i}>{i}</Select.Option>)
+        // this.state.parent_packages
 
-        }
+        let packages = [];
+        return this.state.parent_packages.map((packageItem) => {
+            if (packageItem.package_type === 'data_plan') {
+                return <Select.Option key={packageItem.id} value={packageItem.id} >{packageItem.pkg_name}</Select.Option>
+            }
+        })
+        return packages;
 
     }
     render() {
@@ -1328,12 +1361,13 @@ class AddDevice extends Component {
                                         </Form.Item>
                                     </Col>
 
-                                    {/* <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                    <Col xs={24} sm={24} md={24} lg={24} xl={24}>
 
                                         <Form.Item
                                             label={convertToLang(this.props.translation[''], "Data Limit")}
                                             labelCol={{ span: 8 }}
                                             wrapperCol={{ span: 16 }}
+
                                         >
                                             {this.props.form.getFieldDecorator('data_limit', {
                                                 initialValue: this.state.sim_id,
@@ -1346,39 +1380,22 @@ class AddDevice extends Component {
                                                 //     }
                                                 // ]
                                             })(
-                                                // <Select
-                                                //     addonAfter={(
-                                                //         <Select defaultValue=".com">
-                                                //             <Select.Option value=".com">.com</Select.Option>
-                                                //             <Select.Option value=".jp">.jp</Select.Option>
-                                                //             <Select.Option value=".cn">.cn</Select.Option>
-                                                //             <Select.Option value=".org">.org</Select.Option>
-                                                //         </Select>
-                                                //     )}
 
-                                                // // style={{ width: 80 }}
-                                                // >
+                                                <Select
+                                                    placeholder="SELECT SIM DATA PLAN FOR SIM 1"
 
-                                                //     {this.renderDataLimitOptions()}
+                                                    disabled={this.state.disableSim}
+                                                >
 
-                                                // </Select>
-                                                <Input
-                                                    // addonAfter={this.renderDataLimitOptions}
-                                                    addonAfter={<Select style={{ width: 80 }}>
-                                                        <Select.Option value=".com">.com</Select.Option>
-                                                        <Select.Option value=".jp">.jp</Select.Option>
-                                                        <Select.Option value=".cn">.cn</Select.Option>
-                                                        <Select.Option value=".org">.org</Select.Option>
-                                                    </Select>}
-                                                // placeholder={convertToLang(this.props.translation[DUMY_TRANS_ID], "Enter Sim ID")}
-                                                // disabled={this.state.disableSim}
-                                                // onChange={(value) => this.setState({ sim_id: value })}
-                                                />
+                                                    {this.renderDataLimitOptions()}
+
+                                                </Select>
+
 
                                             )}
                                         </Form.Item>
-                                    </Col> */}
-                                    
+                                    </Col>
+
                                     {/* Sim ID 2 Input */}
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         <Form.Item
@@ -1447,6 +1464,40 @@ class AddDevice extends Component {
                                             >
                                                 {convertToLang(this.props.translation[''], "Activate Sim ID 2")}
                                             </Button>
+                                        </Form.Item>
+                                    </Col>
+
+                                    <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+
+                                        <Form.Item
+                                            label={convertToLang(this.props.translation[''], "Data Limit 2")}
+                                            labelCol={{ span: 8 }}
+                                            wrapperCol={{ span: 16 }}
+
+                                        >
+                                            {this.props.form.getFieldDecorator('data_limit_2', {
+                                                initialValue: this.state.sim_id,
+                                                // rules: [
+                                                //     // {
+                                                //     //     required: true, message: "SIM ID is required"
+                                                //     // },
+                                                //     {
+                                                //         validator: (rule, value, callback) => { this.validateICCID(rule, value, callback, 'sim_id') },
+                                                //     }
+                                                // ]
+                                            })(
+
+                                                <Select
+                                                    placeholder="SELECT SIM DATA PLAN FOR SIM 2"
+                                                    disabled={this.state.disableSim2}
+                                                >
+
+                                                    {this.renderDataLimitOptions()}
+
+                                                </Select>
+
+
+                                            )}
                                         </Form.Item>
                                     </Col>
 
