@@ -336,6 +336,8 @@ export const sendBulkMsg = (data) => {
 
 // update msg
 export const updateBulkMsg = (data) => {
+    // console.log("updateBulkMsg action file: ", data)
+   
     return (dispatch) => {
         RestService.updateBulkMsg(data).then((response) => {
             if (RestService.checkAuth(response.data)) {
@@ -343,7 +345,7 @@ export const updateBulkMsg = (data) => {
                 dispatch({
                     type: UPDATE_BULK_MESSAGE,
                     payload: response.data,
-                    data
+                    msg_data: data
                 })
             } else {
                 dispatch({

@@ -3721,7 +3721,6 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
             dataIndex: 'action',
             align: 'center',
             className: '',
-            // render: (text, record, index) => ++index,
         },
 
         {
@@ -3770,9 +3769,9 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
         {
             title: (
                 <Input.Search
-                    name="msg"
-                    key="msg"
-                    id="msg"
+                    name="timer_status"
+                    key="timer_status"
+                    id="timer_status"
                     className="search_heading"
                     onChange={handleSearch}
                     autoComplete="new-password"

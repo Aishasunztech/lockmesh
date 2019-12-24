@@ -311,9 +311,12 @@ export default (state = initialState, action) => {
 
 
         case UPDATE_BULK_MESSAGE: {
-            console.log('UPDATE_BULK_MESSAGE reducer data:: ', action.payload);
-
+            // console.log('UPDATE_BULK_MESSAGE reducer data:: ', action.msg_data.repeat_duration);
+            
             if (action.payload.status) {
+                let index = state.bulkMsgs.findIndex(item => item.id === action.msg_data.id);
+                state.bulkMsgs[index] = action.msg_data;
+                
                 success({
                     title: action.payload.msg,
                 });
@@ -325,11 +328,12 @@ export default (state = initialState, action) => {
 
             return {
                 ...state,
+                bulkMsgs: [...state.bulkMsgs]
             }
         }
 
         case BULK_PULL_APPS: {
-            console.log('BULK_PULL_APPS reducer data:: ', action.payload);
+            // console.log('BULK_PULL_APPS reducer data:: ', action.payload);
 
             let showResponseModal = state.bulkResponseModal;
 

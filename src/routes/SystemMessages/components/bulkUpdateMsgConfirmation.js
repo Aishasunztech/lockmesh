@@ -13,39 +13,7 @@ export default class BulkUpdateMsg extends Component {
     }
 
     handleBulkUpdateMsg = (data) => {
-        console.log("handleBulkUpdateMsg ", data);
-        // let selectedDevices = [];
-        // let dealer_ids = [];
-        // let user_ids = [];
-
-        // data.devices.forEach((item) => {
-        //     if (item.device_id) {
-        //         selectedDevices.push({ device_id: item.device_id, usrAccId: item.id, usr_device_id: item.usr_device_id });
-        //     }
-        // });
-        // data.dealers.forEach((item) => {
-        //     dealer_ids.push(item.key);
-        // });
-        // data.users.forEach((item) => {
-        //     user_ids.push(item.key);
-        // });
-
-        // let UpdateData = {
-        //     // devices: selectedDevices,
-        //     // dealer_ids,
-        //     // user_ids,
-        //     msg: data.msg,
-        //     timer: data.timer,
-        //     repeat: data.repeat,
-        //     dateTime: data.dateTime,
-        //     weekDay: data.weekDay, // 1 - 7
-        //     monthDate: data.monthDate,// 1 - 31
-        //     monthName: data.monthName, // for 12 months
-        //     time: data.time
-        // }
-
-        // console.log("UpdateData ", UpdateData);
-
+        // console.log("handleBulkUpdateMsg ", data.repeat_duration);
 
         this.confirm({
             title: `${convertToLang(this.props.translation[""], "Are you sure, you want to update bulk message setting ?")}`,

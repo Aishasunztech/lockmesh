@@ -5,6 +5,7 @@ import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 import moment from 'moment';
 import { userDevicesListColumns } from '../../utils/columnsUtils';
 import { TIMESTAMP_FORMAT_NOT_SEC, TIME_FORMAT_HM } from '../../../constants/Application';
+import EditMsgModal from './EditMsgForm';
 
 
 export default class ListMsgs extends Component {
@@ -16,10 +17,10 @@ export default class ListMsgs extends Component {
             selectedDevicesColumns: selectedDevicesColumns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
             searchText: '',
             columns: [],
-            pagination: this.props.pagination,
             expandedRowKeys: [],
             visible: false,
-
+            editRecord: null,
+            editModal: false
         };
         this.renderList = this.renderList.bind(this);
         this.confirm = Modal.confirm;
@@ -42,17 +43,6 @@ export default class ListMsgs extends Component {
         this.setState({
             visible: false,
         });
-    }
-
-
-    handlePagination = (value) => {
-
-        var x = Number(value)
-        // console.log(value)
-        this.setState({
-            pagination: x,
-        });
-
     }
 
     componentDidMount() {
@@ -84,31 +74,35 @@ export default class ListMsgs extends Component {
 
     }
 
+    handleEditModal = (data) => {
+        this.setState({ editModal: true, editRecord: data })
+    }
+
     renderList(list) {
         // console.log("renderList: ", list);
         let bulkMsgs = [];
         let data
-        list.map((app) => {
-
+        list.map((item) => {
+            // console.log(item);
             data = {
-                rowKey: app.id,
-                id: app.id,
+                rowKey: item.id,
+                id: item.id,
                 action: (
                     <div data-column="ACTION" style={{ display: "inline-flex" }}>
                         <Fragment>
-                            <Fragment><Button type="primary" size="small" onClick={() => this.props.showEditModal(app)}>EDIT</Button></Fragment>
-                            <Fragment><Button type="danger" size="small" onClick={() => this.deleteMsg(app.id)}>DELETE</Button></Fragment>
+                            <Fragment><Button type="primary" size="small" onClick={() => this.handleEditModal(JSON.parse(JSON.stringify(item)))}>EDIT</Button></Fragment>
+                            <Fragment><Button type="danger" size="small" onClick={() => this.deleteMsg(item.id)}>DELETE</Button></Fragment>
                         </Fragment>
                     </div>
                 ),
-                msg: checkValue(app.msg),
-                timer_status: app.timer_status ? app.timer_status : "N/A",
-                repeat: checkValue(app.repeat_duration),
-                sending_time: app.timer_status === "DATE/TIME" ? convertTimezoneValue(this.props.user.timezone, app.date_time, TIMESTAMP_FORMAT_NOT_SEC) : app.time ? app.time : "N/A",
-                week_day: getWeekDay(app.week_day),
-                month_date: app.month_date && app.month_date !== 0 ? checkValue(app.month_date) : "N/A",
-                month_name: getMonthName(app.month_name),
-                data: app,
+                msg: checkValue(item.msg),
+                timer_status: item.timer_status ? item.timer_status : "N/A",
+                repeat: checkValue(item.repeat_duration),
+                sending_time: item.timer_status === "DATE/TIME" ? convertTimezoneValue(this.props.user.timezone, item.date_time, TIMESTAMP_FORMAT_NOT_SEC) : (item.timer_status !== "NOW" && item.time) ? item.time : "N/A",
+                week_day: getWeekDay(item.week_day),
+                month_date: item.month_date && item.month_date !== 0 ? checkValue(item.month_date) : "N/A",
+                month_name: getMonthName(item.month_name),
+                devices: item,
             }
             bulkMsgs.push(data)
         });
@@ -147,6 +141,10 @@ export default class ListMsgs extends Component {
         }
     }
 
+    handleEditMsgModal = (visible) => {
+        this.setState({ editModal: visible })
+    }
+
     render() {
 
         return (
@@ -165,8 +163,8 @@ export default class ListMsgs extends Component {
                                         size="middle"
                                         bordered
                                         columns={this.state.selectedDevicesColumns}
-                                        onChange={this.props.onChangeTableSorting}
-                                        dataSource={this.props.renderDevicesList(JSON.parse(record.data.data))}
+                                        // onChange={this.props.onChangeTableSorting}
+                                        dataSource={this.props.renderDevicesList(JSON.parse(record.devices.data))}
                                         pagination={false}
                                         scroll={{ x: true }}
                                     />
@@ -180,14 +178,23 @@ export default class ListMsgs extends Component {
                         bordered
                         columns={this.state.columns}
                         dataSource={this.renderList(this.props.bulkMsgs ? this.props.bulkMsgs : [])}
-                        onChange={this.props.onChangeTableSorting}
+                        // onChange={this.props.onChangeTableSorting}
                         pagination={false
                         }
                         scroll={{ x: true }}
                         rowKey="domain_id"
                     />
-                    {/* <EditApk ref='editApk' getApkList={this.props.getApkList} /> */}
                 </Card>
+
+                <EditMsgModal
+                    editModal={this.state.editModal}
+                    handleEditMsgModal={this.handleEditMsgModal}
+                    updateBulkMsgAction={this.props.updateBulkMsgAction}
+                    user={this.props.user}
+                    editRecord={this.state.editRecord}
+                    // ref='edit_msg_form'
+                    translation={this.props.translation}
+                />
             </Fragment>
         )
     }

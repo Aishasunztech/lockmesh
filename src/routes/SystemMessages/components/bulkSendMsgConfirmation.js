@@ -13,7 +13,7 @@ export default class BulkSendMsg extends Component {
     }
 
     handleBulkSendMsg = (data) => {
-        console.log("handleBulkSendMsg ", data);
+        // console.log("handleBulkSendMsg ", data);
         let selectedDevices = [];
         let dealer_ids = [];
         let user_ids = [];
@@ -44,7 +44,7 @@ export default class BulkSendMsg extends Component {
             time: data.time
         }
 
-        console.log("saveData ", saveData);
+        // console.log("saveData ", saveData);
 
 
         this.confirm({

@@ -74,9 +74,7 @@ class SendMsgForm extends Component {
             isNowSet: false,
             repeat_duration: 'NONE',
             timer: '',
-
             monthDate: 0,
-
         }
     }
 
@@ -84,25 +82,8 @@ class SendMsgForm extends Component {
         e.preventDefault();
         // console.log("handle submit ", this.props.selectedDevices, this.state.selectedDealers, this.state.selectedUsers);
         this.props.form.validateFieldsAndScroll((err, values) => {
-            console.log("handle submit 02 ", values)
-            // console.log(err,'form', values.name);
-            // if (values.name === '') {
-            //     this.setState({
-            //         validateStatus: 'error',
-            //         help: convertToLang(this.props.translation[User_Name_require], "Name is Required")
-            //     })
-            // }
+           
             if (!err) {
-
-                // if (/[^A-Za-z \d]/.test(values.name)) {
-                //     this.setState({
-                //         validateStatus: 'error',
-                //         help: convertToLang(this.props.translation[User_Name_require], "Name is Required")
-                //     })
-                // } else {
-                // this.props.setBulkMsg(values);
-                // this.props.handleCancelSendMsg(false);
-                // this.handleReset();
 
                 if (this.props.selectedDevices && this.props.selectedDevices.length) {
                     let repeatVal = '';
@@ -135,42 +116,37 @@ class SendMsgForm extends Component {
                     }
                     // console.log("data ", data);
                     this.refs.bulk_msg.handleBulkSendMsg(data);
-                    // this.props.sendMsgOnDevices(data);
                 } else {
                     error({
                         title: `Sorry, You have not any device to perform an action, to add devices please select dealers/users`,
                     });
-                    // this.setState({ errorTime: "" })
                 }
             }
 
         });
     }
-    handleNameValidation = (event) => {
-        var fieldvalue = event.target.value;
+    // handleNameValidation = (event) => {
+    //     var fieldvalue = event.target.value;
 
-        // console.log('rest ', /[^A-Za-z \d]/.test(fieldvalue));
-        // console.log('vlaue', fieldvalue)
-
-        if (fieldvalue === '') {
-            this.setState({
-                validateStatus: 'error',
-                help: convertToLang(this.props.translation[User_Name_require], "Name is Required")
-            })
-        }
-        if (/[^A-Za-z \d]/.test(fieldvalue)) {
-            this.setState({
-                validateStatus: 'error',
-                help: convertToLang(this.props.translation[Only_alpha_numeric], "Please insert only alphabets and numbers")
-            })
-        }
-        else {
-            this.setState({
-                validateStatus: 'success',
-                help: null,
-            })
-        }
-    }
+    //     if (fieldvalue === '') {
+    //         this.setState({
+    //             validateStatus: 'error',
+    //             help: convertToLang(this.props.translation[User_Name_require], "Name is Required")
+    //         })
+    //     }
+    //     if (/[^A-Za-z \d]/.test(fieldvalue)) {
+    //         this.setState({
+    //             validateStatus: 'error',
+    //             help: convertToLang(this.props.translation[Only_alpha_numeric], "Please insert only alphabets and numbers")
+    //         })
+    //     }
+    //     else {
+    //         this.setState({
+    //             validateStatus: 'success',
+    //             help: null,
+    //         })
+    //     }
+    // }
 
     componentWillReceiveProps(nextProps) {
 
@@ -183,7 +159,7 @@ class SendMsgForm extends Component {
         }
 
         // console.log("nextProps.users_list && nextProps.dealerList ", nextProps.users_list, nextProps.dealerList)
-        // if (nextProps.users_list && nextProps.dealerList) {
+        if (nextProps.users_list && nextProps.dealerList) {
         let allDealers = nextProps.dealerList.map((item) => {
             return ({ key: item.dealer_id, label: item.dealer_name })
         });
@@ -192,7 +168,7 @@ class SendMsgForm extends Component {
             return ({ key: item.user_id, label: item.user_name })
         });
         this.setState({ allUsers, allDealers })
-        // }
+        }
     }
 
     componentDidMount() {
@@ -247,26 +223,26 @@ class SendMsgForm extends Component {
     handleCancel = () => {
         this.handleReset();
         this.props.handleCancelSendMsg(false);
+        this.setState({
+            selectedDealers: [],
+            selectedUsers: []
+        })
     }
     handleChange = (e) => {
         this.setState({ type: e.target.value });
     }
 
     handleChangeUser = (values) => {
-        console.log("values ", values);
-        // console.log("handleChangeUser values ", values, this.state.selectedUsers, this.props.users_list, this.state.allUsers);
         let checkAllUsers = this.state.checkAllSelectedUsers
-
         let selectAll = values.filter(e => e.key === "all");
         let selectedUsers = values.filter(e => e.key !== "all");
-
 
         if (selectAll.length > 0) {
             checkAllUsers = !this.state.checkAllSelectedUsers;
             if (this.state.checkAllSelectedUsers) {
                 selectedUsers = [];
             } else {
-                selectedUsers = this.state.allUsers; // [...this.state.allUsers, {key: "all", label: "Select All"}];
+                selectedUsers = this.state.allUsers;
             }
         }
         else if (values.length === this.props.users_list.length) {
@@ -287,7 +263,6 @@ class SendMsgForm extends Component {
     }
 
     handleChangeDealer = (values) => {
-        // console.log("handleChangeDealer values ", values, this.state.selectedDealers.length, this.state.dealerList.length);
         let checkAllDealers = this.state.checkAllSelectedDealers
         let selectAll = values.filter(e => e.key === "all");
         let selectedDealers = [];
@@ -297,7 +272,7 @@ class SendMsgForm extends Component {
             if (this.state.checkAllSelectedDealers) {
                 selectedDealers = [];
             } else {
-                selectedDealers = this.state.allDealers // [...this.state.allDealers, {key: "all", label: "Select All"}];
+                selectedDealers = this.state.allDealers
             }
         }
         else if (values.length === this.props.dealerList.length) {
@@ -310,7 +285,7 @@ class SendMsgForm extends Component {
 
 
         let data = {
-            dealers: selectedDealers, //.filter(e => e.key !== "all"),
+            dealers: selectedDealers,
             users: this.state.selectedUsers
         }
 
@@ -326,7 +301,7 @@ class SendMsgForm extends Component {
 
 
     handleChangeAction = (e) => {
-        console.log("e value is: ", e)
+        // console.log("e value is: ", e)
 
         this.setState({
             selectedAction: e,
@@ -336,12 +311,10 @@ class SendMsgForm extends Component {
     }
 
     onPanelChange = (value, mode) => {
-        console.log("hi ", value, mode);
+        // console.log("hi ", value, mode);
     }
 
     dateTimeOnChange = (value, dateString) => {
-        // console.log('Selected Time: ', value);
-        // console.log('Formatted Selected Time: ', dateString, "current data: ", moment(new Date()).format('YYYY-MM-DD HH:mm:ss'));
         this.setState({ selected_dateTime: dateString });
     }
 
@@ -384,14 +357,14 @@ class SendMsgForm extends Component {
     validateRepeater = async (rule, value, callback) => {
         // console.log("values: ", value)
         if (value === 'NONE') {
-            callback("Timer Value should not be NONE.")
+            callback("Timer value should not be NONE")
         }
     }
 
     render() {
         return (
             <div>
-                <Form onSubmit={this.handleSubmit} autoComplete="new-password">
+                <Form onSubmit={this.handleSubmit}>
                     <p>(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")} </p>
 
                     <Row gutter={24} className="mt-4">
@@ -425,7 +398,7 @@ class SendMsgForm extends Component {
                         </Col>
                     </Row>
                     {(this.state.selectedDealers && this.state.selectedDealers.length && !this.state.checkAllSelectedDealers) ?
-                        <p>Dealers/S-Dealers Selected: <span className="font_26">{this.state.selectedDealers.map(item => <Tag>{item.label}</Tag>)}</span></p>
+                        <p>Dealers/S-Dealers Selected: <span className="font_26">{this.state.selectedDealers.map((item, index) => <Tag key={index}>{item.label}</Tag>)}</span></p>
                         : null}
                     <Row gutter={24} className="mt-4">
                         <Col className="col-md-12 col-sm-12 col-xs-12">
@@ -713,7 +686,6 @@ class SendMsgForm extends Component {
                         selectedPullAppsList={this.props.selectedPullAppsList}
                         applyPushApps={this.props.applyPushApps}
                         applyPullApps={this.props.applyPullApps}
-                        renderList={this.renderList}
                         translation={this.props.translation}
                         onChangeTableSorting={this.handleTableChange}
                         selectedDevices={this.props.selectedDevices}
