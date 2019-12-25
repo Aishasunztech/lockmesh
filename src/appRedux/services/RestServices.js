@@ -998,6 +998,11 @@ const RestService = {
         return axios.post(BASE_URL + 'users/send_bulk_msg', data, RestService.getHeader());
     },
 
+    updateBulkMsg: (data) => {
+        delete data.data; // delete devices list
+        return axios.post(BASE_URL + 'users/update_bulk_msg', data, RestService.getHeader());
+    },
+
     getBulkMsgsList: () => {
         return axios.get(BASE_URL + 'users/get_bulk_msgs', RestService.getHeader());
     },

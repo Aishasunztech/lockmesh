@@ -1545,7 +1545,7 @@ export function dealerColumns(translation, handleSearch) {
             align: 'center',
             className: 'row',
             render: (text, record, index) => ++index,
-        }, 
+        },
         {
             title: '',
             dataIndex: 'accounts',
@@ -3721,7 +3721,6 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
             dataIndex: 'action',
             align: 'center',
             className: '',
-            // render: (text, record, index) => ++index,
         },
 
         {
@@ -3731,7 +3730,7 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                     <Popover placement="top" content={(<Markup content={convertToLang(translation[""],
                         `   <p>Press <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;">
                                     <i className="fa fa-caret-right" aria-hidden="true"></i> 
-                                    </a> to see deives list</p>`)} />)}>
+                                    </a> to view devices list</p>`)} />)}>
                         <span className="helping_txt"><Icon type="info-circle" /></span>
                     </Popover>
                 </span>),
@@ -3770,9 +3769,9 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
         {
             title: (
                 <Input.Search
-                    name="msg"
-                    key="msg"
-                    id="msg"
+                    name="timer_status"
+                    key="timer_status"
+                    id="timer_status"
                     className="search_heading"
                     onChange={handleSearch}
                     autoComplete="new-password"
@@ -3817,7 +3816,7 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
             ]
 
         },
-        {
+        { // date/time
             title: (
                 <Input.Search
                     name="sending_time"
@@ -3842,7 +3841,83 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
             ]
 
         },
+        { // 1 - 7
+            title: (
+                <Input.Search
+                    name="week_day"
+                    key="week_day"
+                    id="week_day"
+                    className="search_heading"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    placeholder="DAY"
+                />
+            ),
+            dataIndex: 'week_day',
+            className: '',
+            key: 'week_day',
+            children: [
+                {
+                    width: 130,
+                    title: convertToLang(translation[""], "DAY"),
+                    dataIndex: 'week_day',
+                    key: 'week_day',
+                }
+            ]
+
+        },
+        { // 1 - 31
+            title: (
+                <Input.Search
+                    name="month_date"
+                    key="month_date"
+                    id="month_date"
+                    className="search_heading"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    placeholder="DATE"
+                />
+            ),
+            dataIndex: 'month_date',
+            className: '',
+            key: 'month_date',
+            children: [
+                {
+                    width: 130,
+                    title: convertToLang(translation[""], "DATE"),
+                    dataIndex: 'month_date',
+                    key: 'month_date',
+                }
+            ]
+
+        },
+        { // for only 12 months
+            title: (
+                <Input.Search
+                    name="month_name"
+                    key="month_name"
+                    id="month_name"
+                    className="search_heading"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    placeholder="MONTH"
+                />
+            ),
+            dataIndex: 'month_name',
+            className: '',
+            key: 'month_name',
+            children: [
+                {
+                    width: 130,
+                    title: convertToLang(translation[""], "MONTH"),
+                    dataIndex: 'month_name',
+                    key: 'month_name',
+                }
+            ]
+
+        },
     ];
+
 
     if (isModal) {
         columns.splice(1, 1)

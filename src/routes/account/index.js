@@ -1290,7 +1290,7 @@ class Account extends Component {
                                 </Link>
                             </div>
                         </Col>
-                        {(HOST_NAME === 'localhost') ?
+                        {((HOST_NAME === 'localhost' || HOST_NAME === 'https://dev.lockmesh.com') && this.props.user.type === ADMIN) ?
                             <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                                 <div>
                                     <Link to={"/system-messages"}>

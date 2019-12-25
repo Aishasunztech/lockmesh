@@ -5,13 +5,13 @@ import { Input, Icon, Modal, Select, Button, Tooltip, Popover, Avatar, Row, Col,
 import { Link } from 'react-router-dom';
 import Highlighter from 'react-highlight-words';
 import CircularProgress from "components/CircularProgress";
-import { getDomains, domainPermission } from "../../appRedux/actions/Account";
+// import { getDomains, domainPermission } from "../../appRedux/actions/Account";
 import AppFilter from "../../components/AppFilter";
 import { checkValue, titleCase, convertToLang, getColor, componentSearch } from '../utils/commonUtils'
 import { BASE_URL } from '../../constants/Application';
 import ListMsgs from './components/ListMsgs';
 import SendMsgForm from './components/SendMsgForm';
-import EditMsgForm from './components/EditMsgForm';
+// import EditMsgForm from './components/EditMsgForm';
 
 import { getAllDealers } from "../../appRedux/actions/Dealers";
 import { getUserList } from "../../appRedux/actions/Users";
@@ -19,8 +19,9 @@ import {
     getBulkDevicesList,
     setSelectedBulkDevices,
     sendBulkMsg,
+    updateBulkMsg,
     closeResponseModal,
-    setBulkMsg,
+    // setBulkMsg,
     getBulkMsgsList,
     deleteBulkMsg
 } from "../../appRedux/actions/BulkDevices";
@@ -52,7 +53,7 @@ class SystemMessages extends Component {
             columns: columns,
             visible: false,
             bulkResponseModal: false,
-            editRecord: '',
+            editRecord: null,
             editModal: false
         }
         this.confirm = Modal.confirm;
@@ -104,22 +105,12 @@ class SystemMessages extends Component {
         });
     }
 
-    // toggleStatus
-    handleStatusChange = (checked, appId) => {
-        this.props.changeAppStatus(appId, checked);
-    }
-
-
     componentWillReceiveProps(nextProps) {
         if (this.props.bulkMsgs !== nextProps.bulkMsgs) {
             this.setState({
                 bulkMsgs: nextProps.bulkMsgs,
             })
         }
-    }
-
-    handlePagination = (value) => {
-        this.refs.list_msgs.handlePagination(value);
     }
 
     handleComponentSearch = (value) => {
@@ -187,8 +178,8 @@ class SystemMessages extends Component {
     componentDidMount() {
         // this.props.getDomains();
         this.props.getBulkMsgsList();
-        // this.props.getAllDealers();
-        // this.props.getUserList();
+        this.props.getAllDealers();
+        this.props.getUserList();
 
     }
 
@@ -209,88 +200,7 @@ class SystemMessages extends Component {
         this.setState({ visible })
     }
 
-    handleEditMsgModal = (visible) => {
-        this.setState({ editModal: visible })
-    }
-
-    renderResponseList(list) {
-        // console.log("list: ", list);
-        return list.map(item => {
-            return {
-                device_id: item
-            }
-        })
-    }
-
-    renderDevicesList(list) {
-        // console.log('renderList ', list)
-        return list.map((device, index) => {
-
-            var status = device.finalStatus;
-            // console.log("status ", status)
-
-            let color = getColor(status);
-            var style = { margin: '0', width: 'auto', textTransform: 'uppercase' }
-            // var text = convertToLang(this.props.translation[Button_Edit], "EDIT");
-
-            // if ((status === DEVICE_PENDING_ACTIVATION) || (status === DEVICE_UNLINKED)) {
-            //     style = { margin: '0 8px 0 0', width: 'auto', display: 'none', textTransform: 'uppercase' }
-            //     text = "ACTIVATE";
-            // }
-
-            return {
-                rowKey: index,
-                // key: device.device_id ? `${device.device_id}` : device.usr_device_id,
-                key: status == DEVICE_UNLINKED ? `${device.user_acc_id} ${device.created_at} ` : device.id,
-                counter: ++index,
-
-                status: (<span style={color} > {status}</span>),
-                lastOnline: checkValue(device.lastOnline),
-                flagged: device.flagged,
-                type: checkValue(device.type),
-                version: checkValue(device.version),
-                device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
-                // device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
-                user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
-                validity: checkValue(device.validity),
-                transfered_to: checkValue((device.finalStatus == "Transfered") ? device.transfered_to : null),
-                name: checkValue(device.name),
-                activation_code: checkValue(device.activation_code),
-                account_email: checkValue(device.account_email),
-                pgp_email: checkValue(device.pgp_email),
-                chat_id: checkValue(device.chat_id),
-                client_id: checkValue(device.client_id),
-                dealer_id: checkValue(device.dealer_id),
-                dealer_pin: checkValue(device.link_code),
-                mac_address: checkValue(device.mac_address),
-                sim_id: checkValue(device.sim_id),
-                imei_1: checkValue(device.imei),
-                sim_1: checkValue(device.simno),
-                imei_2: checkValue(device.imei2),
-                sim_2: checkValue(device.simno2),
-                serial_number: checkValue(device.serial_number),
-                model: checkValue(device.model),
-                // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
-                // expiry_date: device.expiry_date ? `${new Date(device.expiry_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
-                dealer_name: <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a>,
-                // dealer_name: (this.props.user.type === ADMIN) ? <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a> : <a >{checkValue(device.dealer_name)}</a>,
-                online: device.online === 'online' ? (<span style={{ color: "green" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) : (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
-                s_dealer: checkValue(device.s_dealer),
-                s_dealer_name: checkValue(device.s_dealer_name),
-                remainTermDays: device.remainTermDays,
-                start_date: checkValue(device.start_date),
-                expiry_date: checkValue(device.expiry_date),
-            }
-        });
-    }
-
-
-    showEditModal = data => {
-        this.setState({ editModal: true, editRecord: data })
-    }
-
     render() {
-        // console.log("this.state.dealerList:: render func ", this.state.bulkMsgs)
         const {
             response_modal_action,
             failed_device_ids,
@@ -299,9 +209,9 @@ class SystemMessages extends Component {
             pushed_device_ids,
         } = this.props;
 
-        let failedTitle = '';
-        let offlineTitle = '';
-        let onlineTitle = '';
+        let failedTitle = 'N/A';
+        let offlineTitle = 'N/A';
+        let onlineTitle = 'N/A';
 
         if (response_modal_action === "msg") {
             failedTitle = "Failed to Pull apps from these Devices";
@@ -315,8 +225,7 @@ class SystemMessages extends Component {
                         <div>
                             <AppFilter
                                 translation={this.props.translation}
-                                defaultPagingValue={this.props.DisplayPages}
-                                handlePagination={this.handlePagination}
+                                // defaultPagingValue={this.props.DisplayPages}
                                 isAddButton={true}
                                 handleSendMsgModal={true}
                                 handleSendMsgButton={this.handleSendMsgButton}
@@ -325,29 +234,26 @@ class SystemMessages extends Component {
                             />
 
                             <ListMsgs
-                                totalDealers={this.props.dealerList.length}
-                                savePermission={this.props.domainPermission}
-                                onChangeTableSorting={this.handleTableChange}
-                                handleStatusChange={this.handleStatusChange}
+                                // onChangeTableSorting={this.handleTableChange}
                                 bulkMsgs={this.state.bulkMsgs}
                                 deleteBulkMsg={this.props.deleteBulkMsg}
                                 handleConfirmDelete={this.handleConfirmDelete}
-                                editApk={this.props.editApk}
                                 columns={this.state.columns}
                                 getApkList={this.props.getApkList}
-                                pagination={this.props.DisplayPages}
                                 user={this.props.user}
                                 ref="list_msgs"
                                 translation={this.props.translation}
                                 renderDevicesList={this.renderDevicesList}
-                                showEditModal={this.showEditModal}
+                                // showEditModal={this.showEditModal}
+
+                                updateBulkMsgAction={this.props.updateBulkMsg}
                             />
                         </div>
                 }
                 {/* Send Message modal */}
                 <Modal
                     title={convertToLang(this.props.translation[""], "Send Message to Selected Devcies")}
-                    width={"600px"}
+                    width={"700px"}
                     maskClosable={false}
                     style={{ top: 20 }}
                     visible={this.state.visible}
@@ -358,13 +264,9 @@ class SystemMessages extends Component {
                     <SendMsgForm
                         setSelectedBulkDevices={this.props.setSelectedBulkDevices}
                         sendMsgOnDevices={this.props.sendBulkMsg}
-                        setBulkMsg={this.props.setBulkMsg}
-                        bulkMsg={this.props.bulkMsg}
                         handleCancelSendMsg={this.handleSendMsgButton}
-                        user={this.state.user}
+                        // user={this.state.user}
                         ref='send_msg_form'
-                        translation={this.props.translation}
-
                         users_list={this.props.users_list}
                         dealerList={this.props.dealerList}
                         devices={this.props.devices}
@@ -373,42 +275,11 @@ class SystemMessages extends Component {
                         getAllDealers={this.props.getAllDealers}
                         getUserList={this.props.getUserList}
                         renderList={this.renderDevicesList}
-                    />
-
-                </Modal>
-
-                {/* Edit Message modal */}
-                <Modal
-                    title={convertToLang(this.props.translation[""], "Edit Setting to send Message on devices")}
-                    width={"600px"}
-                    maskClosable={false}
-                    style={{ top: 20 }}
-                    visible={this.state.editModal}
-                    onOk={() => this.setState({ editModal: false })}
-                    onCancel={() => this.setState({ editModal: false })}
-                    footer={false}
-                >
-                    <EditMsgForm
-                        setSelectedBulkDevices={this.props.setSelectedBulkDevices}
-                        sendMsgOnDevices={this.props.sendBulkMsg}
-                        setBulkMsg={this.props.setBulkMsg}
-                        bulkMsg={this.props.bulkMsg}
-                        handleEditMsgModal={this.handleEditMsgModal}
-                        user={this.state.user}
-                        ref='edit_msg_form'
                         translation={this.props.translation}
-                        editRecord={this.state.editRecord}
-                        users_list={this.props.users_list}
-                        dealerList={this.props.dealerList}
-                        devices={this.props.devices}
-                        selectedDevices={this.props.selectedDevices ? this.props.selectedDevices : []}
-                        getBulkDevicesList={this.props.getBulkDevicesList}
-                        getAllDealers={this.props.getAllDealers}
-                        getUserList={this.props.getUserList}
-                        renderList={this.renderDevicesList}
                     />
 
                 </Modal>
+
 
                 {/* Responses handle through modal */}
                 <Modal
@@ -483,9 +354,84 @@ class SystemMessages extends Component {
                             />
                         </Fragment>
                         : null}
+
+                    {/* Display this table if no any device exist there */}
+                    {!failed_device_ids.length && !expire_device_ids.length && !queue_device_ids.length && !pushed_device_ids.length ?
+                        <Fragment>
+                            <h2>{"N/A"}</h2>
+                            <Table
+                                size="middle"
+                                pagination={false}
+                                bordered
+                                className="dup_table"
+                                columns={this.pushAppsModalColumns}
+                                dataSource={[]}
+                            />
+                        </Fragment>
+                        : null}
                 </Modal>
             </div>
         )
+    }
+
+    renderResponseList(list) {
+        return list.map(item => {
+            return {
+                device_id: item
+            }
+        })
+    }
+
+    renderDevicesList(list) {
+        // console.log('renderList ', list)
+        return list.map((device, index) => {
+
+            var status = device.finalStatus;
+            // console.log("status ", status)
+            let color = getColor(status);
+
+            return {
+                rowKey: device.id,
+                // key: device.device_id ? `${device.device_id}` : device.usr_device_id,
+                key: status == DEVICE_UNLINKED ? `${device.user_acc_id} ${device.created_at} ` : device.id,
+                status: (<span style={color} > {status}</span>),
+                lastOnline: checkValue(device.lastOnline),
+                flagged: device.flagged,
+                type: checkValue(device.type),
+                version: checkValue(device.version),
+                device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
+                // device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
+                user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
+                validity: checkValue(device.validity),
+                transfered_to: checkValue((device.finalStatus == "Transfered") ? device.transfered_to : null),
+                name: checkValue(device.name),
+                activation_code: checkValue(device.activation_code),
+                account_email: checkValue(device.account_email),
+                pgp_email: checkValue(device.pgp_email),
+                chat_id: checkValue(device.chat_id),
+                client_id: checkValue(device.client_id),
+                dealer_id: checkValue(device.dealer_id),
+                dealer_pin: checkValue(device.link_code),
+                mac_address: checkValue(device.mac_address),
+                sim_id: checkValue(device.sim_id),
+                imei_1: checkValue(device.imei),
+                sim_1: checkValue(device.simno),
+                imei_2: checkValue(device.imei2),
+                sim_2: checkValue(device.simno2),
+                serial_number: checkValue(device.serial_number),
+                model: checkValue(device.model),
+                // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
+                // expiry_date: device.expiry_date ? `${new Date(device.expiry_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
+                dealer_name: <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a>,
+                // dealer_name: (this.props.user.type === ADMIN) ? <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a> : <a >{checkValue(device.dealer_name)}</a>,
+                online: device.online === 'online' ? (<span style={{ color: "green" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) : (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
+                s_dealer: checkValue(device.s_dealer),
+                s_dealer_name: checkValue(device.s_dealer_name),
+                remainTermDays: device.remainTermDays,
+                start_date: checkValue(device.start_date),
+                expiry_date: checkValue(device.expiry_date),
+            }
+        });
     }
 
     handleSearch = (e) => {
@@ -536,10 +482,10 @@ class SystemMessages extends Component {
         }
     }
 
-    handleReset = (clearFilters) => {
-        clearFilters();
-        this.setState({ searchText: '' });
-    }
+    // handleReset = (clearFilters) => {
+    //     clearFilters();
+    //     this.setState({ searchText: '' });
+    // }
 }
 
 
@@ -548,11 +494,9 @@ function mapDispatchToProps(dispatch) {
         getBulkDevicesList: getBulkDevicesList,
         setSelectedBulkDevices: setSelectedBulkDevices,
         sendBulkMsg: sendBulkMsg,
+        updateBulkMsg: updateBulkMsg,
         getAllDealers: getAllDealers,
         getUserList: getUserList,
-
-        getDomains: getDomains,
-        domainPermission: domainPermission,
         closeResponseModal: closeResponseModal,
         getBulkMsgsList: getBulkMsgsList,
         deleteBulkMsg: deleteBulkMsg
@@ -560,18 +504,14 @@ function mapDispatchToProps(dispatch) {
 }
 
 const mapStateToProps = ({ account, auth, settings, dealers, bulkDevices }) => {
-    console.log("bulkDevices.bulkMsgs ", bulkDevices.bulkMsgs);
+    // console.log("bulkDevices.bulkMsgs ", bulkDevices.bulkMsgs);
     return {
-        // dealerList: dealers.dealers,
-        // bulkMsgs: account.bulkMsgs,
         isloading: account.isloading,
         user: auth.authUser,
-
         users_list: bulkDevices.usersOfDealers,
         dealerList: dealers.dealers,
         devices: bulkDevices.bulkDevices,
         selectedDevices: bulkDevices.selectedDevices,
-        // bulkMsg: bulkDevices.bulkMsg,
         translation: settings.translation,
         bulkResponseModal: bulkDevices.bulkResponseModal,
         failed_device_ids: bulkDevices.failed_device_ids,

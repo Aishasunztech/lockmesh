@@ -28,10 +28,37 @@ class SendMsgForm extends Component {
             { key: 'DAILY', value: "Daily" },
             { key: 'WEEKLY', value: "Weekly" },
             { key: 'MONTHLY', value: "Monthly" },
-            { key: '3 MONTHs', value: "3 Months" },
-            { key: '6 MONTHs', value: "6 Months" },
-            { key: '12 MONTHs', value: "12 Months" },
+            { key: '3 MONTHS', value: "3 Months" },
+            { key: '6 MONTHS', value: "6 Months" },
+            { key: '12 MONTHS', value: "12 Months" },
         ];
+
+        this.weekDays = [
+            { key: 1, value: "Monday" },
+            { key: 2, value: "Tuesday" },
+            { key: 3, value: "Wednesday" },
+            { key: 4, value: "Thursday" },
+            { key: 5, value: "Friday" },
+            { key: 6, value: "Saturday" },
+            { key: 7, value: "Sunday" },
+        ];
+
+        this.monthNames = [
+            { key: 1, value: "January" },
+            { key: 2, value: "February" },
+            { key: 3, value: "March" },
+            { key: 4, value: "April" },
+            { key: 5, value: "May" },
+            { key: 6, value: "June" },
+            { key: 7, value: "July" },
+            { key: 8, value: "August" },
+            { key: 9, value: "September" },
+            { key: 10, value: "October" },
+            { key: 11, value: "November" },
+            { key: 12, value: "December" },
+        ];
+
+        this.monthDays = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
 
         this.state = {
             visible: false,
@@ -42,43 +69,28 @@ class SendMsgForm extends Component {
             allUsers: [],
             allDealers: [],
             selectedAction: 'NONE',
-            selected_dateTime: '',
+            selected_dateTime: null,
+            selected_Time: '',
             isNowSet: false,
             repeat_duration: 'NONE',
-            timer: ''
+            timer: '',
+            monthDate: 0,
         }
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
-        console.log("handle submit ", this.props.selectedDevices, this.state.selectedDealers, this.state.selectedUsers);
+        // console.log("handle submit ", this.props.selectedDevices, this.state.selectedDealers, this.state.selectedUsers);
         this.props.form.validateFieldsAndScroll((err, values) => {
-            console.log("handle submit 02 ", values)
-            // console.log(err,'form', values.name);
-            // if (values.name === '') {
-            //     this.setState({
-            //         validateStatus: 'error',
-            //         help: convertToLang(this.props.translation[User_Name_require], "Name is Required")
-            //     })
-            // }
+           
             if (!err) {
-
-                // if (/[^A-Za-z \d]/.test(values.name)) {
-                //     this.setState({
-                //         validateStatus: 'error',
-                //         help: convertToLang(this.props.translation[User_Name_require], "Name is Required")
-                //     })
-                // } else {
-                // this.props.setBulkMsg(values);
-                // this.props.handleCancelSendMsg(false);
-                // this.handleReset();
 
                 if (this.props.selectedDevices && this.props.selectedDevices.length) {
                     let repeatVal = '';
                     let dateTimeVal = '';
 
                     if (this.state.timer === "NOW") {
-                        dateTimeVal = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+                        dateTimeVal = '' //moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
                         repeatVal = "NONE";
                     } else if (this.state.timer === "DATE/TIME") {
                         dateTimeVal = this.state.selected_dateTime;
@@ -94,48 +106,47 @@ class SendMsgForm extends Component {
                         dealers: this.state.selectedDealers,
                         users: this.state.selectedUsers,
                         msg: values.msg_txt,
-                        repeat: repeatVal,
-                        selected_date: dateTimeVal,
                         timer: values.timer,
+                        repeat: repeatVal,
+                        dateTime: dateTimeVal,
+                        weekDay: values.weekDay ? values.weekDay : 0,
+                        monthDate: values.monthDate ? values.monthDate : 0,
+                        monthName: values.monthName ? values.monthName : 0,
+                        time: this.state.selected_Time,
                     }
-                    console.log("data ", data);
-                    // this.refs.bulk_msg.handleBulkSendMsg(data);
-                    // this.props.sendMsgOnDevices(data);
+                    // console.log("data ", data);
+                    this.refs.bulk_msg.handleBulkSendMsg(data);
                 } else {
                     error({
                         title: `Sorry, You have not any device to perform an action, to add devices please select dealers/users`,
                     });
-                    // this.setState({ errorTime: "" })
                 }
             }
 
         });
     }
-    handleNameValidation = (event) => {
-        var fieldvalue = event.target.value;
+    // handleNameValidation = (event) => {
+    //     var fieldvalue = event.target.value;
 
-        // console.log('rest ', /[^A-Za-z \d]/.test(fieldvalue));
-        // console.log('vlaue', fieldvalue)
-
-        if (fieldvalue === '') {
-            this.setState({
-                validateStatus: 'error',
-                help: convertToLang(this.props.translation[User_Name_require], "Name is Required")
-            })
-        }
-        if (/[^A-Za-z \d]/.test(fieldvalue)) {
-            this.setState({
-                validateStatus: 'error',
-                help: convertToLang(this.props.translation[Only_alpha_numeric], "Please insert only alphabets and numbers")
-            })
-        }
-        else {
-            this.setState({
-                validateStatus: 'success',
-                help: null,
-            })
-        }
-    }
+    //     if (fieldvalue === '') {
+    //         this.setState({
+    //             validateStatus: 'error',
+    //             help: convertToLang(this.props.translation[User_Name_require], "Name is Required")
+    //         })
+    //     }
+    //     if (/[^A-Za-z \d]/.test(fieldvalue)) {
+    //         this.setState({
+    //             validateStatus: 'error',
+    //             help: convertToLang(this.props.translation[Only_alpha_numeric], "Please insert only alphabets and numbers")
+    //         })
+    //     }
+    //     else {
+    //         this.setState({
+    //             validateStatus: 'success',
+    //             help: null,
+    //         })
+    //     }
+    // }
 
     componentWillReceiveProps(nextProps) {
 
@@ -147,23 +158,23 @@ class SendMsgForm extends Component {
             })
         }
 
-        console.log("nextProps.users_list && nextProps.dealerList ", nextProps.users_list, nextProps.dealerList)
+        // console.log("nextProps.users_list && nextProps.dealerList ", nextProps.users_list, nextProps.dealerList)
         if (nextProps.users_list && nextProps.dealerList) {
-            let allDealers = nextProps.dealerList.map((item) => {
-                return ({ key: item.dealer_id, label: item.dealer_name })
-            });
+        let allDealers = nextProps.dealerList.map((item) => {
+            return ({ key: item.dealer_id, label: item.dealer_name })
+        });
 
-            let allUsers = nextProps.users_list.map((item) => {
-                return ({ key: item.user_id, label: item.user_name })
-            });
-            this.setState({ allUsers, allDealers })
+        let allUsers = nextProps.users_list.map((item) => {
+            return ({ key: item.user_id, label: item.user_name })
+        });
+        this.setState({ allUsers, allDealers })
         }
     }
 
     componentDidMount() {
 
-        this.props.getAllDealers();
-        this.props.getUserList();
+        // this.props.getAllDealers();
+        // this.props.getUserList();
 
         this.setState({
             filteredDevices: this.props.devices,
@@ -212,26 +223,26 @@ class SendMsgForm extends Component {
     handleCancel = () => {
         this.handleReset();
         this.props.handleCancelSendMsg(false);
+        this.setState({
+            selectedDealers: [],
+            selectedUsers: []
+        })
     }
     handleChange = (e) => {
         this.setState({ type: e.target.value });
     }
 
     handleChangeUser = (values) => {
-        console.log("values ", values);
-        // console.log("handleChangeUser values ", values, this.state.selectedUsers, this.props.users_list, this.state.allUsers);
         let checkAllUsers = this.state.checkAllSelectedUsers
-
         let selectAll = values.filter(e => e.key === "all");
         let selectedUsers = values.filter(e => e.key !== "all");
-
 
         if (selectAll.length > 0) {
             checkAllUsers = !this.state.checkAllSelectedUsers;
             if (this.state.checkAllSelectedUsers) {
                 selectedUsers = [];
             } else {
-                selectedUsers = this.state.allUsers; // [...this.state.allUsers, {key: "all", label: "Select All"}];
+                selectedUsers = this.state.allUsers;
             }
         }
         else if (values.length === this.props.users_list.length) {
@@ -252,7 +263,6 @@ class SendMsgForm extends Component {
     }
 
     handleChangeDealer = (values) => {
-        // console.log("handleChangeDealer values ", values, this.state.selectedDealers.length, this.state.dealerList.length);
         let checkAllDealers = this.state.checkAllSelectedDealers
         let selectAll = values.filter(e => e.key === "all");
         let selectedDealers = [];
@@ -262,7 +272,7 @@ class SendMsgForm extends Component {
             if (this.state.checkAllSelectedDealers) {
                 selectedDealers = [];
             } else {
-                selectedDealers = this.state.allDealers // [...this.state.allDealers, {key: "all", label: "Select All"}];
+                selectedDealers = this.state.allDealers
             }
         }
         else if (values.length === this.props.dealerList.length) {
@@ -275,7 +285,7 @@ class SendMsgForm extends Component {
 
 
         let data = {
-            dealers: selectedDealers, //.filter(e => e.key !== "all"),
+            dealers: selectedDealers,
             users: this.state.selectedUsers
         }
 
@@ -291,7 +301,7 @@ class SendMsgForm extends Component {
 
 
     handleChangeAction = (e) => {
-        console.log("e value is: ", e)
+        // console.log("e value is: ", e)
 
         this.setState({
             selectedAction: e,
@@ -301,29 +311,24 @@ class SendMsgForm extends Component {
     }
 
     onPanelChange = (value, mode) => {
-        console.log("hi ", value, mode);
+        // console.log("hi ", value, mode);
     }
 
     dateTimeOnChange = (value, dateString) => {
-        console.log('Selected Time: ', value);
-        console.log('Formatted Selected Time: ', dateString, "current data: ", moment(new Date()).format('YYYY-MM-DD HH:mm:ss'));
-        // let todayVal = false;
-        // if (moment(dateString).format('YYYY-MM-DD HH:mm') === moment(new Date()).format('YYYY-MM-DD HH:mm')) {
-        //     this.props.form.setFieldsValue({ repeat: 'NONE' });
-        //     todayVal = true;
-        // }
         this.setState({ selected_dateTime: dateString });
     }
 
-    repeatHandler = (e) => {
-        console.log("e is: ", e);
+    timeOnChange = (value, dateString) => {
+        this.setState({ selected_Time: dateString });
+    }
 
+    repeatHandler = (e) => {
+        // console.log("e is: ", e);
         this.setState({ repeat_duration: e });
     }
 
     handleTimer = (e) => {
-        console.log("e is: ", e);
-
+        // console.log("e is: ", e);
         this.setState({ timer: e });
     }
 
@@ -336,6 +341,7 @@ class SendMsgForm extends Component {
     }
 
     disabledDate = (current) => {
+        // console.log("current date: ", current);
         // Can not select days before today and today
         return current && current < moment().endOf('day');
     }
@@ -348,13 +354,20 @@ class SendMsgForm extends Component {
         // };
     }
 
+    validateRepeater = async (rule, value, callback) => {
+        // console.log("values: ", value)
+        if (value === 'NONE') {
+            callback("Timer value should not be NONE")
+        }
+    }
+
     render() {
         return (
             <div>
-                <Form onSubmit={this.handleSubmit} autoComplete="new-password">
+                <Form onSubmit={this.handleSubmit}>
                     <p>(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")} </p>
 
-                    <Row gutter={24} className="">
+                    <Row gutter={24} className="mt-4">
                         <Col className="col-md-12 col-sm-12 col-xs-12">
                             <Form.Item
                                 label={convertToLang(this.props.translation[""], "Select dealer/sdealers")}
@@ -384,11 +397,10 @@ class SendMsgForm extends Component {
                             </Form.Item>
                         </Col>
                     </Row>
-                    <br />
                     {(this.state.selectedDealers && this.state.selectedDealers.length && !this.state.checkAllSelectedDealers) ?
-                        <p>Dealers/S-Dealers Selected: <span className="font_26">{this.state.selectedDealers.map(item => <Tag>{item.label}</Tag>)}</span></p>
+                        <p>Dealers/S-Dealers Selected: <span className="font_26">{this.state.selectedDealers.map((item, index) => <Tag key={index}>{item.label}</Tag>)}</span></p>
                         : null}
-                    <Row gutter={24} className="">
+                    <Row gutter={24} className="mt-4">
                         <Col className="col-md-12 col-sm-12 col-xs-12">
                             <Form.Item
                                 label={convertToLang(this.props.translation[""], "Select Users")}
@@ -418,12 +430,11 @@ class SendMsgForm extends Component {
                             </Form.Item>
                         </Col>
                     </Row>
-                    <br />
                     {(this.state.selectedUsers && this.state.selectedUsers.length && !this.state.checkAllSelectedUsers) ?
                         <p>Users Selected: <span className="font_26">{this.state.selectedUsers.map(item => <Tag>{item.label}</Tag>)}</span></p>
                         : null}
 
-                    <Row gutter={24} className="">
+                    <Row gutter={24} className="mt-4">
                         <Col className="col-md-12 col-sm-12 col-xs-12">
                             <Form.Item
                                 label={convertToLang(this.props.translation[""], "Message")}
@@ -431,7 +442,7 @@ class SendMsgForm extends Component {
                                 wrapperCol={{ span: 16 }}
                             >
                                 {this.props.form.getFieldDecorator('msg_txt', {
-                                    initialValue: this.props.bulkMsg ? this.props.bulkMsg : '',
+                                    initialValue: '',
                                     rules: [
                                         {
                                             required: true, message: convertToLang(this.props.translation[""], "Message field is required"),
@@ -446,8 +457,7 @@ class SendMsgForm extends Component {
                         </Col>
 
                     </Row>
-                    <br />
-                    <Row gutter={24} className="">
+                    <Row gutter={24} className="mt-4">
                         <Col className="col-md-12 col-sm-12 col-xs-12">
                             <Form.Item
                                 label={convertToLang(this.props.translation[""], "Select Message Timer")}
@@ -477,40 +487,8 @@ class SendMsgForm extends Component {
                         </Col>
                     </Row>
 
-                    {this.state.timer === "DATE/TIME" ?
-                        <Row gutter={24} className="">
-                            <Col className="col-md-12 col-sm-12 col-xs-12">
-                                <Form.Item
-                                    label={convertToLang(this.props.translation[""], "Choose Data/Time")}
-                                    labelCol={{ span: 8 }}
-                                    wrapperCol={{ span: 16 }}
-                                >
-                                    {this.props.form.getFieldDecorator('date/time', {
-                                        initialValue: '',
-                                        rules: [
-                                            {
-                                                required: true, message: convertToLang(this.props.translation[""], "Date/Time field is required"),
-                                            }
-                                        ],
-                                    })(
-                                        <DatePicker
-                                            onChange={this.dateTimeOnChange}
-                                            placeholder="Choose data/time"
-                                            style={{ width: '100%' }}
-                                            format="YYYY-MM-DD HH:mm:ss"
-                                            disabledDate={this.disabledDate}
-                                            disabledTime={this.disabledDateTime}
-                                            showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
-                                        />
-                                    )}
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                        : null}
-
-                    <br />
                     {this.state.timer === "REPEAT" ?
-                        <Row gutter={24} className="">
+                        <Row gutter={24} className="mt-4">
                             <Col className="col-md-12 col-sm-12 col-xs-12">
                                 <Form.Item
                                     label={convertToLang(this.props.translation[""], "Select when to send Message")}
@@ -522,13 +500,15 @@ class SendMsgForm extends Component {
                                         rules: [
                                             {
                                                 required: true, message: convertToLang(this.props.translation[""], "Repeat Message field is required"),
-                                            }
+                                            },
+                                            {
+                                                validator: this.validateRepeater,
+                                            },
                                         ],
                                     })(
                                         <Select
                                             showSearch={false}
                                             style={{ width: '100%' }}
-                                            // disabled={this.state.isNowSet}
                                             placeholder={convertToLang(this.props.translation[""], "Select when to send Message")}
                                             onChange={this.repeatHandler}
                                         >
@@ -541,27 +521,153 @@ class SendMsgForm extends Component {
                         : null}
 
                     {this.state.repeat_duration !== "NONE" && this.state.timer === "REPEAT" ?
-                        <Row gutter={24} className="">
+                        <Fragment>
+                            {this.state.repeat_duration === "WEEKLY" ?
+                                <Row gutter={24} className="mt-4">
+                                    <Col className="col-md-12 col-sm-12 col-xs-12">
+                                        <Form.Item
+                                            label={convertToLang(this.props.translation[""], "Select Day")}
+                                            labelCol={{ span: 8 }}
+                                            wrapperCol={{ span: 16 }}
+                                        >
+                                            {this.props.form.getFieldDecorator('weekDay', {
+                                                initialValue: '',
+                                                rules: [
+                                                    {
+                                                        required: true, message: convertToLang(this.props.translation[""], "Day is Required"),
+                                                    }
+                                                ],
+                                            })(
+                                                <Select
+                                                    showSearch={false}
+                                                    style={{ width: '50%' }}
+                                                    placeholder={convertToLang(this.props.translation[""], "Select Day")}
+                                                // onChange={this.handleStartDay}
+                                                >
+                                                    {this.weekDays.map((item) => <Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)}
+                                                </Select>
+                                            )}
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+                                : null}
+
+                            {this.state.repeat_duration === "12 MONTHS" ?
+                                <Row gutter={24} className="mt-4">
+                                    <Col className="col-md-12 col-sm-12 col-xs-12">
+                                        <Form.Item
+                                            label={convertToLang(this.props.translation[""], "Select Month")}
+                                            labelCol={{ span: 8 }}
+                                            wrapperCol={{ span: 16 }}
+                                        >
+                                            {this.props.form.getFieldDecorator('monthName', {
+                                                initialValue: '',
+                                                rules: [
+                                                    {
+                                                        required: true, message: convertToLang(this.props.translation[""], "Month is Required"),
+                                                    }
+                                                ],
+                                            })(
+                                                <Select
+                                                    showSearch={false}
+                                                    style={{ width: '50%' }}
+                                                    placeholder={convertToLang(this.props.translation[""], "Select Month")}
+                                                // onChange={this.handleStartDay}
+                                                >
+                                                    {this.monthNames.map((item) => <Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)}
+                                                </Select>
+                                            )}
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+                                : null}
+                            {this.state.repeat_duration !== "DAILY" && this.state.repeat_duration !== "WEEKLY" ?
+                                <Row gutter={24} className="mt-4">
+                                    <Col className="col-md-12 col-sm-12 col-xs-12">
+                                        <Form.Item
+                                            label={convertToLang(this.props.translation[""], "Select date")}
+                                            labelCol={{ span: 8 }}
+                                            wrapperCol={{ span: 16 }}
+                                        >
+                                            {this.props.form.getFieldDecorator('monthDate', {
+                                                initialValue: "",
+                                                rules: [
+                                                    {
+                                                        required: true, message: convertToLang(this.props.translation[""], "Date is required"),
+                                                    }
+                                                ],
+                                            })(
+                                                <Select
+                                                    showSearch={false}
+                                                    style={{ width: '50%' }}
+                                                    placeholder={convertToLang(this.props.translation[""], "Select date")}
+                                                // onChange={this.handleStartDay}
+                                                >
+                                                    {this.monthDays.map((item) => <Select.Option key={item} value={item}>{item}</Select.Option>)}
+                                                </Select>
+                                            )}
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+                                : null}
+                            {/* {this.state.repeat_duration === "DAILY" || this.state.repeat_duration === "WEEKLY" ? */}
+                            <Row gutter={24} className="mt-4">
+                                <Col className="col-md-12 col-sm-12 col-xs-12">
+                                    <Form.Item
+                                        label={convertToLang(this.props.translation[""], "Select Time")}
+                                        labelCol={{ span: 8 }}
+                                        wrapperCol={{ span: 16 }}
+                                    >
+                                        {this.props.form.getFieldDecorator('time', {
+                                            initialValue: moment('00:00', 'HH:mm'),
+                                            rules: [
+                                                {
+                                                    required: true, message: convertToLang(this.props.translation[""], "Time field is required"),
+                                                }
+                                            ],
+                                        })(
+                                            <TimePicker
+                                                onChange={this.timeOnChange}
+                                                placeholder={"Select time"}
+                                                format="HH:mm"
+                                                style={{ width: '50%' }}
+                                            // defaultValue={moment('00:00:00', 'HH:mm:ss')}
+                                            />
+                                        )}
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                            {/* : null } */}
+                        </Fragment>
+                        : null}
+
+                    {this.state.timer === "DATE/TIME" ?
+                        <Row gutter={24} className="mt-4">
                             <Col className="col-md-12 col-sm-12 col-xs-12">
                                 <Form.Item
-                                    label={convertToLang(this.props.translation[""], "Select any Time")}
+                                    label={convertToLang(this.props.translation[""], "Choose Data/Time")}
                                     labelCol={{ span: 8 }}
                                     wrapperCol={{ span: 16 }}
                                 >
-                                    {this.props.form.getFieldDecorator('time', {
-                                        initialValue: '',
+                                    {this.props.form.getFieldDecorator('date/time', {
+                                        initialValue: '', // moment(new Date(), 'YYYY-MM-DD')
                                         rules: [
                                             {
-                                                required: true, message: convertToLang(this.props.translation[""], "Time field is required"),
+                                                required: true, message: convertToLang(this.props.translation[""], "Date/Time field is required"),
                                             }
                                         ],
                                     })(
-                                        <TimePicker
+                                        <DatePicker
+                                            // defaultValue={moment('2015/01/01', 'YYYY/MM/DD')}
+                                            // defaultValue={moment()}
+                                            // showToday={true}
                                             onChange={this.dateTimeOnChange}
-                                            placeholder={"Select any time"}
-                                            // format="YYYY-MM-DD HH:mm:ss"
+                                            placeholder="Choose data/time"
                                             style={{ width: '100%' }}
-                                        // defaultValue= {moment('00:00:00', '00:00:00')}
+                                            format="YYYY-MM-DD HH:mm"
+                                            disabledDate={this.disabledDate}
+                                            disabledTime={this.disabledDateTime}
+                                            showTime={{ defaultValue: moment('00:00:00', 'HH:mm') }}
                                         />
                                     )}
                                 </Form.Item>
@@ -580,7 +686,6 @@ class SendMsgForm extends Component {
                         selectedPullAppsList={this.props.selectedPullAppsList}
                         applyPushApps={this.props.applyPushApps}
                         applyPullApps={this.props.applyPullApps}
-                        renderList={this.renderList}
                         translation={this.props.translation}
                         onChangeTableSorting={this.handleTableChange}
                         selectedDevices={this.props.selectedDevices}
