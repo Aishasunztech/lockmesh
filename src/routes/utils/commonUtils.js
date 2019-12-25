@@ -1,3 +1,4 @@
+import React, { Component, Fragment } from 'react'
 import moment_timezone from "moment-timezone";
 import moment from 'moment';
 import jsPDF from 'jspdf';
@@ -13,7 +14,8 @@ import {
   DEVICE_PRE_ACTIVATION,
   DEVICE_SUSPENDED,
   DEVICE_UNLINKED,
-  DEVICE_TRIAL
+  DEVICE_TRIAL,
+  ADMIN
 } from '../../constants/Constants'
 
 import {
@@ -251,6 +253,55 @@ export function isBase64(str) {
   } catch (err) {
     return false;
   }
+}
+
+export function getDevicesListActionBtns(user, device, status, allButtons) {
+  let actionBtns = [];
+
+  if (status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) {
+    actionBtns.push(<Fragment><Fragment>{allButtons.SuspendBtn}</Fragment><Fragment>{allButtons.EditBtn}</Fragment><Fragment>{allButtons.ConnectBtn}</Fragment></Fragment>)
+  }
+  else if (status === DEVICE_PRE_ACTIVATION) {
+    if (user.type !== ADMIN) {
+      actionBtns.push(<Fragment>{allButtons.DeleteBtnPreActive}</Fragment>)
+    }
+    actionBtns.push(<Fragment>{allButtons.EditBtn}</Fragment>)
+  }
+  // else if (device.flagged !== 'Not flagged') {
+  //    // (<Fragment><Fragment>{allButtons.Unflagbtn}</Fragment><Fragment>{allButtons.ConnectBtn}</Fragment></Fragment>)
+  // }
+  else if (device.flagged !== 'Not flagged' && device.transfer_status === 0 && status === "Flagged") {
+    actionBtns.push(<Fragment><Fragment>{allButtons.Unflagbtn}</Fragment><Fragment>{allButtons.ConnectBtn}</Fragment></Fragment>)
+  }
+  else if (device.flagged !== 'Not flagged' && device.transfer_status === 1 && status === "Transfered") {
+    actionBtns.push(<Fragment><Fragment>{allButtons.Unflagbtn}</Fragment><Fragment>{allButtons.ConnectBtn}</Fragment></Fragment>)
+  }
+  else if (status === DEVICE_SUSPENDED) {
+    actionBtns.push(<Fragment><Fragment>{allButtons.ActiveBtn}</Fragment><Fragment>{allButtons.EditBtn}</Fragment><Fragment>{allButtons.ConnectBtn}</Fragment></Fragment>)
+  }
+  else if (status === DEVICE_EXPIRED) {
+    actionBtns.push(<Fragment><Fragment>{allButtons.EditBtn}</Fragment><Fragment>{allButtons.ConnectBtn}</Fragment></Fragment>)
+  }
+  else if (status === DEVICE_UNLINKED && user.type !== ADMIN) {
+    actionBtns.push(<Fragment>{allButtons.DeleteBtn}</Fragment>)
+  }
+  else if (status === DEVICE_PENDING_ACTIVATION && user.type !== ADMIN && device.link_code === user.dealer_pin) {
+    actionBtns.push(<Fragment> <Fragment>{allButtons.DeclineBtn}</Fragment><Fragment>{allButtons.AcceptBtn}</Fragment><Fragment>{allButtons.transferButton}</Fragment></Fragment>)
+  }
+  // else if (status === DEVICE_PRE_ACTIVATION) {
+  //     actionBtns = false
+  // }
+  // else if (status === DEVICE_EXPIRED) {
+  //     if (status === DEVICE_ACTIVATED) {
+  //         actionBtns = <Fragment>{allButtons.SuspendBtn}</Fragment>
+  //     } else {
+  //         actionBtns = <Fragment><Fragment> {ActiveBtn}</Fragment> <Fragment>{allButtons.ConnectBtn}</Fragment> <Fragment>{allButtons.EditBtn}</Fragment></Fragment >
+  //     }
+  // } else {
+  //     actionBtns = false
+  // }
+
+  return actionBtns;
 }
 
 

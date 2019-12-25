@@ -136,7 +136,6 @@ export function devicesColumns(translation, handleSearch) {
             dataIndex: 'counter',
             align: 'center',
             className: 'row',
-            // fixed: 'left',
             render: (text, record, index) => ++index,
         },
         {
@@ -145,9 +144,6 @@ export function devicesColumns(translation, handleSearch) {
             align: 'center',
             className: 'row',
             key: "action",
-            // fixed: 'left',
-            // title: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>,
-            // title: (this.state.tabselect === "5") ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>:'',
         },
         {
             title: (
@@ -160,7 +156,6 @@ export function devicesColumns(translation, handleSearch) {
                     onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_REMAINING_DAYS], "REMAINING DAYS")}
-                // onBlur={(e) => { console.log(e);; e.target.value = ''; }}
                 />
             ),
             dataIndex: 'validity',
@@ -185,7 +180,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="device_id"
                     className="search_heading device_id_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_ID], "DEVICE ID")}
                 />
@@ -200,9 +194,8 @@ export function devicesColumns(translation, handleSearch) {
                     key: "device_id",
                     sorter: (a, b) => {
                         let list = a.device_id.localeCompare(b.device_id);
-
                         return list
-                    }, //
+                    },
                     sortDirections: ['ascend', 'descend'],
                 }
             ],
@@ -214,10 +207,8 @@ export function devicesColumns(translation, handleSearch) {
                     id="user_id"
                     className="search_heading user_id_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[USER_ID], "USER ID")}
-                // onBlur={(e) => { e.target.value = '' }}
                 />
             ),
             dataIndex: 'user_id',
@@ -242,10 +233,8 @@ export function devicesColumns(translation, handleSearch) {
                     id="status"
                     className="search_heading status_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_STATUS], "STATUS")}
-                // onBlur={(e) => { e.target.value = '' }}
                 />
             ),
             dataIndex: 'status',
@@ -268,10 +257,8 @@ export function devicesColumns(translation, handleSearch) {
                     id="lastOnline"
                     className="search_heading status_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation["Last Online"], "Last Online")}
-                // onBlur={(e) => { e.target.value = '' }}
                 />
             ),
             dataIndex: 'lastOnline',
@@ -294,7 +281,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="online"
                     className="search_heading online_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_MODE], "MODE")}
                 />
@@ -319,7 +305,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="type"
                     className="search_heading"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_TYPE], "TYPE")}
                 />
@@ -344,7 +329,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="version"
                     className="search_heading"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_VERSION], "VERSION")}
                 />
@@ -369,7 +353,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="firmware_info"
                     className="search_heading"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_FIRMWAREINFO], "FIRMWARE INFO")}
                 />
@@ -394,7 +377,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="flagged"
                     className="search_heading flagged_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_FLAGGED], "FLAGGED")}
                 />
@@ -419,10 +401,8 @@ export function devicesColumns(translation, handleSearch) {
                     id="transfered_to"
                     className="search_heading"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder="TRANSFERED TO"
-                // onBlur={(e) => { e.target.value = '' }}
                 />
             ),
             dataIndex: 'transfered_to',
@@ -449,7 +429,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="name"
                     className="search_heading name_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_NAME], "NAME")}
                 />
@@ -464,11 +443,8 @@ export function devicesColumns(translation, handleSearch) {
                     sorter: (a, b) => { return a.name.localeCompare(b.name) },
                     sortDirections: ['ascend', 'descend'],
                     editable: true,
-
                 }
             ]
-
-
         },
         {
             title: (
@@ -478,7 +454,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="account_email"
                     className="search_heading account_email_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_ACCOUNT_EMAIL], "ACCOUNT EMAIL")}
                 />
@@ -503,7 +478,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="activation_code"
                     className="search_heading activation_code_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_ACTIVATION_CODE], "ACTIVATION CODE")}
                 />
@@ -528,7 +502,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="client_id"
                     className="search_heading client_id_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_CLIENT_ID], "CLIENT ID")}
                 />
@@ -553,7 +526,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="pgp_email"
                     className="search_heading pgp_email_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_PGP_EMAIL], "PGP EMAIL")}
                 />
@@ -577,7 +549,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="sim_id"
                     className="search_heading sim_id_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_SIM_ID], "SIM ID")}
                 />
@@ -626,7 +597,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="chat_id"
                     className="search_heading chat_id_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_CHAT_ID], "CHAT ID")}
                 />
@@ -652,7 +622,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="dealer_id"
                     className="search_heading dealer_id_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_DEALER_ID], "DEALER ID")}
                 />
@@ -677,7 +646,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="dealer_name"
                     className="search_heading dealer_name_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_DEALER_NAME], "DEALER NAME")}
                 />
@@ -704,7 +672,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="link_code"
                     className="search_heading dealer_pin_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_DEALER_PIN], "DEALER PIN")}
                 />
@@ -729,7 +696,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="mac_address"
                     className="search_heading mac_address_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_MAC_ADDRESS], "MAC ADDRESS")}
                 />
@@ -756,7 +722,6 @@ export function devicesColumns(translation, handleSearch) {
                     className="search_heading imei_1_w"
                     autoComplete="new-password"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     placeholder={convertToLang(translation[DEVICE_IMEI_1], "IMEI 1")}
                 />
             ),
@@ -780,7 +745,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="simno"
                     className="search_heading sim_1_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_SIM_1], "SIM 1")}
                 />
@@ -806,7 +770,6 @@ export function devicesColumns(translation, handleSearch) {
                     className="search_heading imei_2_w"
                     autoComplete="new-password"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     placeholder={convertToLang(translation[DEVICE_IMEI_2], "IMEI 2")}
                 />
             ),
@@ -830,7 +793,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="simno2"
                     className="search_heading sim_2_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_SIM_2], "SIM 2")}
                 />
@@ -855,7 +817,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="serial_number"
                     className="search_heading serial_number_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_SERIAL_NUMBER], "SERIAL NUMBER")}
                 />
@@ -881,7 +842,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="model"
                     className="search_heading model_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_MODEL], "MODEL")}
                 />
@@ -907,7 +867,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="s_dealer"
                     className="search_heading s_dealer_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_S_DEALER], "S DEALER")}
                 />
@@ -932,7 +891,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="s_dealer_name"
                     className="search_heading s_dealer_name_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_S_DEALER_NAME], "S DEALER NAME")}
                 />
@@ -981,7 +939,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="start_date"
                     className="search_heading start_date_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_START_DATE], "START DATE")}
                 />
@@ -1006,7 +963,6 @@ export function devicesColumns(translation, handleSearch) {
                     id="expiry_date"
                     className="search_heading expiry_date_w"
                     onChange={handleSearch}
-                    // onFocus={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_EXPIRY_DATE], "EXPIRY DATE")}
                 />
