@@ -102,7 +102,7 @@ export default class ListMsgs extends Component {
                 week_day: getWeekDay(item.week_day),
                 month_date: item.month_date && item.month_date !== 0 ? checkValue(item.month_date) : "N/A",
                 month_name: getMonthName(item.month_name),
-                devices: item,
+                devices: item.data ? item.data : '[]',
             }
             bulkMsgs.push(data)
         });
@@ -164,7 +164,7 @@ export default class ListMsgs extends Component {
                                         bordered
                                         columns={this.state.selectedDevicesColumns}
                                         // onChange={this.props.onChangeTableSorting}
-                                        dataSource={this.props.renderDevicesList(JSON.parse(record.devices.data))}
+                                        dataSource={this.props.renderDevicesList(JSON.parse(record.devices))}
                                         pagination={false}
                                         scroll={{ x: true }}
                                     />
