@@ -312,7 +312,7 @@ export default (state = initialState, action) => {
 
         case UPDATE_BULK_MESSAGE: {
             // console.log('UPDATE_BULK_MESSAGE reducer data:: ', action.msg_data.repeat_duration);
-            
+
             if (action.payload.status) {
                 let index = state.bulkMsgs.findIndex(item => item.id === action.msg_data.id);
                 state.bulkMsgs[index] = action.msg_data;
@@ -633,30 +633,16 @@ export default (state = initialState, action) => {
         }
 
         case SEND_BULK_MESSAGE: {
-            let newMsg = { ...action.payload.lastMsg, data: action.payload.devices };
-            // console.log('SEND_BULK_MESSAGE reducer data:: ', newMsg);
-
-            let showResponseModal = state.bulkResponseModal;
+            // console.log('SEND_BULK_MESSAGE reducer data:: ');
 
             if (action.payload.status) {
+
+                let newMsg = { ...action.payload.lastMsg, data: action.payload.devices };
                 state.bulkMsgs.push(newMsg);
 
-                if (action.payload.online && !action.payload.offline && !action.payload.failed) {
-                    success({
-                        title: action.payload.msg,
-                    });
-                } else if (!action.payload.online && action.payload.offline && !action.payload.failed) {
-                    warning({
-                        title: action.payload.msg,
-                        content: action.payload.content
-                    });
-                } else {
-                    state.failed_device_ids = action.payload.data.failed_device_ids;
-                    state.queue_device_ids = action.payload.data.queue_device_ids;
-                    state.pushed_device_ids = action.payload.data.pushed_device_ids;
-                    showResponseModal = true;
-                }
-
+                success({
+                    title: action.payload.msg,
+                });
             } else {
                 error({
                     title: action.payload.msg,
@@ -665,12 +651,6 @@ export default (state = initialState, action) => {
 
             return {
                 ...state,
-                failed_device_ids: [...state.failed_device_ids],
-                queue_device_ids: [...state.queue_device_ids],
-                pushed_device_ids: [...state.pushed_device_ids],
-                bulkResponseModal: showResponseModal,
-                response_modal_action: "send_msg",
-                bulkMsg: '',
                 bulkMsgs: [...state.bulkMsgs]
             }
         }

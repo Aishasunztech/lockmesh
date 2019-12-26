@@ -3756,7 +3756,7 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                     className="search_heading"
                     onChange={handleSearch}
                     autoComplete="new-password"
-                    placeholder="REPEAT"
+                    placeholder="INTERVAL"
                 />
             ),
             dataIndex: 'repeat',
@@ -3765,7 +3765,7 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
             children: [
                 {
                     width: 100,
-                    title: convertToLang(translation[""], "REPEAT"),
+                    title: convertToLang(translation[""], "INTERVAL"),
                     dataIndex: 'repeat',
                     key: 'repeat',
                 }
@@ -3800,78 +3800,103 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
         { // 1 - 7
             title: (
                 <Input.Search
-                    name="week_day"
-                    key="week_day"
-                    id="week_day"
+                    name="interval_description"
+                    key="interval_description"
+                    id="interval_description"
                     className="search_heading"
                     onChange={handleSearch}
                     autoComplete="new-password"
-                    placeholder="DAY"
+                    placeholder="INTERVAL DESCRIPTION"
                 />
             ),
-            dataIndex: 'week_day',
+            dataIndex: 'interval_description',
             className: '',
-            key: 'week_day',
+            key: 'interval_description',
             children: [
                 {
                     width: 130,
-                    title: convertToLang(translation[""], "DAY"),
-                    dataIndex: 'week_day',
-                    key: 'week_day',
+                    title: convertToLang(translation[""], "INTERVAL DESCRIPTION"),
+                    dataIndex: 'interval_description',
+                    key: 'interval_description',
                 }
             ]
 
         },
-        { // 1 - 31
-            title: (
-                <Input.Search
-                    name="month_date"
-                    key="month_date"
-                    id="month_date"
-                    className="search_heading"
-                    onChange={handleSearch}
-                    autoComplete="new-password"
-                    placeholder="DATE"
-                />
-            ),
-            dataIndex: 'month_date',
-            className: '',
-            key: 'month_date',
-            children: [
-                {
-                    width: 130,
-                    title: convertToLang(translation[""], "DATE"),
-                    dataIndex: 'month_date',
-                    key: 'month_date',
-                }
-            ]
+        // { // 1 - 7
+        //     title: (
+        //         <Input.Search
+        //             name="week_day"
+        //             key="week_day"
+        //             id="week_day"
+        //             className="search_heading"
+        //             onChange={handleSearch}
+        //             autoComplete="new-password"
+        //             placeholder="DAY"
+        //         />
+        //     ),
+        //     dataIndex: 'week_day',
+        //     className: '',
+        //     key: 'week_day',
+        //     children: [
+        //         {
+        //             width: 130,
+        //             title: convertToLang(translation[""], "DAY"),
+        //             dataIndex: 'week_day',
+        //             key: 'week_day',
+        //         }
+        //     ]
 
-        },
-        { // for only 12 months
-            title: (
-                <Input.Search
-                    name="month_name"
-                    key="month_name"
-                    id="month_name"
-                    className="search_heading"
-                    onChange={handleSearch}
-                    autoComplete="new-password"
-                    placeholder="MONTH"
-                />
-            ),
-            dataIndex: 'month_name',
-            className: '',
-            key: 'month_name',
-            children: [
-                {
-                    width: 130,
-                    title: convertToLang(translation[""], "MONTH"),
-                    dataIndex: 'month_name',
-                    key: 'month_name',
-                }
-            ]
+        // },
+        // { // 1 - 31
+        //     title: (
+        //         <Input.Search
+        //             name="month_date"
+        //             key="month_date"
+        //             id="month_date"
+        //             className="search_heading"
+        //             onChange={handleSearch}
+        //             autoComplete="new-password"
+        //             placeholder="DATE"
+        //         />
+        //     ),
+        //     dataIndex: 'month_date',
+        //     className: '',
+        //     key: 'month_date',
+        //     children: [
+        //         {
+        //             width: 130,
+        //             title: convertToLang(translation[""], "DATE"),
+        //             dataIndex: 'month_date',
+        //             key: 'month_date',
+        //         }
+        //     ]
 
-        },
+        // },
+        // { // for only 12 months
+        //     title: (
+        //         <Input.Search
+        //             name="month_name"
+        //             key="month_name"
+        //             id="month_name"
+        //             className="search_heading"
+        //             onChange={handleSearch}
+        //             autoComplete="new-password"
+        //             placeholder="MONTH"
+        //         />
+        //     ),
+        //     dataIndex: 'month_name',
+        //     className: '',
+        //     key: 'month_name',
+        //     children: [
+        //         {
+        //             width: 130,
+        //             title: convertToLang(translation[""], "MONTH"),
+        //             dataIndex: 'month_name',
+        //             key: 'month_name',
+        //         }
+        //     ]
+
+        // },
     ];
 
 
