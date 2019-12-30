@@ -1299,7 +1299,7 @@ class Account extends Component {
                                                 <Fragment>
                                                     <Row>
                                                         <div className="col-md-12 ac_card">
-                                                            <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[''], "System Messages")} </h2>
+                                                            <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[''], "Device Messages")} </h2>
                                                             <Divider className="mb-0" />
                                                             <Row style={{ padding: '12px 0 0px' }}>
                                                                 <Col span={8} className="" style={{ textAlign: "center" }}>

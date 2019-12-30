@@ -82,8 +82,30 @@ export default class ListMsgs extends Component {
         // console.log("renderList: ", list);
         let bulkMsgs = [];
         let data
+
+
+
+
+
+
+
         list.map((item) => {
+            let parseDevices = item.data ? JSON.parse(item.data) : [];
+            let duration = item.repeat_duration;
             // console.log(item);
+
+            if (duration === "WEEKLY") {
+                duration = getWeekDay(item.week_day)
+            }
+            else if (duration === "MONTHLY" || duration === "3 MONTHS" || duration === "6 MONTHS") {
+                duration = `Every month on ${checkValue(item.month_date)} date`
+            }
+            else if (duration === "12 MONTHS") {
+                duration = `Every ${getMonthName(item.month_name)} on ${checkValue(item.month_date)} date`
+            } else {
+                duration = "N/A"
+            }
+
             data = {
                 rowKey: item.id,
                 id: item.id,
@@ -95,14 +117,16 @@ export default class ListMsgs extends Component {
                         </Fragment>
                     </div>
                 ),
+                send_to: parseDevices.length,
                 msg: checkValue(item.msg),
                 timer_status: item.timer_status ? item.timer_status : "N/A",
-                repeat: checkValue(item.repeat_duration),
+                repeat: item.repeat_duration ? item.repeat_duration : "NONE",
                 sending_time: item.timer_status === "DATE/TIME" ? convertTimezoneValue(this.props.user.timezone, item.date_time, TIMESTAMP_FORMAT_NOT_SEC) : (item.timer_status !== "NOW" && item.time) ? item.time : "N/A",
-                week_day: getWeekDay(item.week_day),
-                month_date: item.month_date && item.month_date !== 0 ? checkValue(item.month_date) : "N/A",
-                month_name: getMonthName(item.month_name),
-                devices: item.data ? item.data : '[]',
+                interval_description: duration,
+                // week_day: getWeekDay(item.week_day),
+                // month_date: item.month_date && item.month_date !== 0 ? `On every ${checkValue(item.month_date)} date of month` : "N/A",
+                // month_name: getMonthName(item.month_name),
+                devices: parseDevices,
             }
             bulkMsgs.push(data)
         });
@@ -164,7 +188,7 @@ export default class ListMsgs extends Component {
                                         bordered
                                         columns={this.state.selectedDevicesColumns}
                                         // onChange={this.props.onChangeTableSorting}
-                                        dataSource={this.props.renderDevicesList(JSON.parse(record.devices))}
+                                        dataSource={this.props.renderDevicesList(record.devices)}
                                         pagination={false}
                                         scroll={{ x: true }}
                                     />

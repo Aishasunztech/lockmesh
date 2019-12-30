@@ -585,7 +585,7 @@ class SendMsgForm extends Component {
                                 <Row gutter={24} className="mt-4">
                                     <Col className="col-md-12 col-sm-12 col-xs-12">
                                         <Form.Item
-                                            label={convertToLang(this.props.translation[""], "Select date")}
+                                            label={convertToLang(this.props.translation[""], "Select date of month")}
                                             labelCol={{ span: 8 }}
                                             wrapperCol={{ span: 16 }}
                                         >
@@ -593,14 +593,14 @@ class SendMsgForm extends Component {
                                                 initialValue: "",
                                                 rules: [
                                                     {
-                                                        required: true, message: convertToLang(this.props.translation[""], "Date is required"),
+                                                        required: true, message: convertToLang(this.props.translation[""], "Date of month is required"),
                                                     }
                                                 ],
                                             })(
                                                 <Select
                                                     showSearch={false}
                                                     style={{ width: '50%' }}
-                                                    placeholder={convertToLang(this.props.translation[""], "Select date")}
+                                                    placeholder={convertToLang(this.props.translation[""], "Select date of month")}
                                                 // onChange={this.handleStartDay}
                                                 >
                                                     {this.monthDays.map((item) => <Select.Option key={item} value={item}>{item}</Select.Option>)}

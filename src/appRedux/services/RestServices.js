@@ -999,7 +999,7 @@ const RestService = {
     },
 
     updateBulkMsg: (data) => {
-        delete data.data; // delete devices list
+        // delete data.data; // delete devices list
         return axios.post(BASE_URL + 'users/update_bulk_msg', data, RestService.getHeader());
     },
 

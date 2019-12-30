@@ -478,19 +478,19 @@ export function getWeekDay(key) {
 
   switch (key) {
     case 1:
-      return "Monday";
+      return "Every Monday";
     case 2:
-      return "Tuesday";
+      return "Every Tuesday";
     case 3:
-      return "Wednesday";
+      return "Every Wednesday";
     case 4:
-      return "Thursday";
+      return "Every Thursday";
     case 5:
-      return "Friday";
+      return "Every Friday";
     case 6:
-      return "Saturday";
+      return "Every Saturday";
     case 7:
-      return "Sunday";
+      return "Every Sunday";
 
     default:
       return "N/A";

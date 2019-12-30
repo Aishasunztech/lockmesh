@@ -229,7 +229,7 @@ class SystemMessages extends Component {
                                 isAddButton={true}
                                 handleSendMsgModal={true}
                                 handleSendMsgButton={this.handleSendMsgButton}
-                                pageHeading={convertToLang(this.props.translation[""], "System Messages")}
+                                pageHeading={convertToLang(this.props.translation[""], "Send Message to Devices")}
                                 addButtonText={convertToLang(this.props.translation[""], "Send New Message")}
                             />
 
