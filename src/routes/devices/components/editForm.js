@@ -30,7 +30,8 @@ import {
     getUserList,
     getInvoiceId,
     getDomains,
-    addProduct
+    addProduct,
+    changeDataPlan
 } from "../../../appRedux/actions";
 
 // Constants
@@ -83,6 +84,8 @@ class EditDevice extends Component {
 
         const invoiceColumns = inventorySales(props.translation);
         const refundServicesColumns = refundServiceColumns(props.translation);
+        this.data_plan_1_added = false;
+        this.data_plan_2_added = false;
 
         this.state = {
             visible: false,
@@ -130,7 +133,12 @@ class EditDevice extends Component {
             applyServicesValue: null,
             renewService: false,
             valid_sim_id_1: true,
-            valid_sim_id_2: true
+            valid_sim_id_2: true,
+            data_limit_1: '',
+            data_limit_2: '',
+            disable_data_plan_sim1: true,
+            disable_data_plan_sim2: true,
+            change_data_plan: false
         }
     }
     handleUserChange = (e) => {
@@ -165,7 +173,8 @@ class EditDevice extends Component {
                         serviceData: values,
                         showConfirmCredit: true
                     })
-                } else if (this.state.services) {
+                }
+                else if (this.state.services) {
                     let product_prices = this.filterList(this.state.term + ' month', this.props.product_prices, 'product');
                     let sim_id_price = product_prices.filter((item) => {
                         if (item.price_for === 'sim_id') {
@@ -201,6 +210,49 @@ class EditDevice extends Component {
 
                     values.products = this.state.products;
                     values.packages = this.state.packages;
+
+                    if (this.state.data_limit_1 && !this.data_plan_1_added) {
+                        this.state.data_limit_1.sim_type = 'sim_id'
+                        values.packages.push(this.state.data_limit_1)
+                        // values.packages.push(this.state.data_limit_1)
+                        this.state.PkgSelectedRows = values.packages;
+                        this.state.total_price = this.state.total_price + Number(this.state.data_limit_1.pkg_price)
+                        this.data_plan_1_added = true
+                    } else if (this.state.data_limit_1 === '') {
+                        let index = values.packages.findIndex(item => item.sim_type === 'sim_id')
+                        if (index !== -1) {
+                            let data_plan_package = values.packages[index]
+                            values.packages.splice(index, 1)
+                            this.state.PkgSelectedRows = values.packages;
+                            this.state.total_price = this.state.total_price - Number(data_plan_package.pkg_price)
+                        }
+                    }
+
+                    if (this.state.data_limit_2 && !this.data_plan_2_added) {
+
+                        this.state.data_limit_1.sim_type = 'sim_id2'
+                        values.packages.push(this.state.data_limit_2)
+                        this.state.PkgSelectedRows = values.packages
+                        this.state.total_price = this.state.total_price + Number(this.state.data_limit_2.pkg_price)
+                        this.data_plan_2_added = true
+                    }
+                    else if (this.state.data_limit_2 === '') {
+                        let index = values.packages.findIndex(item => item.sim_type === 'sim_id2')
+                        if (index !== -1) {
+                            let data_plan_package = values.packages[index]
+                            values.packages.splice(index, 1)
+                            this.state.PkgSelectedRows = values.packages;
+                            this.state.total_price = this.state.total_price - Number(data_plan_package.pkg_price)
+                        }
+                    }
+                    let data_plans = {
+                        sim_id: this.state.data_limit_1 ? this.state.data_limit_1 : '',
+                        sim_id2: this.state.data_limit_2 ? this.state.data_limit_2 : '',
+                    }
+                    values.data_plans = data_plans
+
+
+
                     values.expiry_date = this.state.term;
                     values.total_price = priceToCharge
                     values.service = true
@@ -412,6 +464,7 @@ class EditDevice extends Component {
         });
         return [...packagesList, ...productList]
     }
+
     refundServiceRenderList(services, serviceRemainingDays, creditsToRefund, prevService_totalDays) {
         if (services) {
             let service_term = ''
@@ -667,7 +720,12 @@ class EditDevice extends Component {
         // 
         if (this.state.serviceData.total_price <= this.props.user_credit || !this.state.serviceData.pay_now) {
             this.state.serviceData.paid_by_user = this.state.paidByUser
-            if (this.state.renewService || this.state.applyServicesValue === 'extend') {
+            if (this.state.change_data_plan) {
+                delete this.state.serviceData.packages;
+                console.log(this.state.serviceData);
+                this.props.changeDataPlan(this.state.serviceData)
+            }
+            else if (this.state.renewService || this.state.applyServicesValue === 'extend') {
                 this.props.extendServices(this.state.serviceData)
             } else {
                 this.props.editDeviceFunc(this.state.serviceData)
@@ -678,7 +736,8 @@ class EditDevice extends Component {
                 serviceData: {},
                 showConfirmCredit: false,
                 invoiceVisible: false,
-                servicesModal: false
+                servicesModal: false,
+                change_data_plan: false,
             })
         } else {
             showCreditPurchase(this)
@@ -843,10 +902,62 @@ class EditDevice extends Component {
         });
     }
 
+    renderDataLimitOptions = () => {
+
+        let data_plan_term = this.state.term ? this.state.term : this.props.device.expiry_months
+
+        // console.log(this.props.device.expiry_months);
+        return this.props.parent_packages.map((packageItem) => {
+            // console.log(packageItem.pkg_term, this.state.term + ' month', packageItem.pkg_term == (this.state.term + ' month'))
+            if (packageItem.package_type === 'data_plan' && packageItem.pkg_term == (data_plan_term + ' month')) {
+                return <Select.Option key={packageItem.id} value={packageItem.id} >{packageItem.pkg_name}</Select.Option>
+            }
+        })
+    }
+
+    changeDataLimit = (type, value) => {
+        let data_plan = this.props.parent_packages.find(item => item.id == value)
+        if (type === 'data_limit_1') {
+            let disable_data_plan_sim1 = true
+            if (this.props.device.sim_id_data_plan === undefined) {
+                disable_data_plan_sim1 = false
+            }
+            else if (JSON.parse(this.props.device.sim_id_data_plan.data_plan_package).id !== value) {
+                disable_data_plan_sim1 = false
+            }
+            this.setState({
+                data_limit_1: data_plan ? data_plan : '',
+                disable_data_plan_sim1: disable_data_plan_sim1
+            })
+        } else if (type === 'data_limit_2') {
+            let disable_data_plan_sim2 = true
+            if (this.props.device.sim_id2_data_plan === undefined) {
+                disable_data_plan_sim2 = false
+            }
+            else if ((this.props.device.sim_id2_data_plan && JSON.parse(this.props.device.sim_id2_data_plan.data_plan_package).id !== value)) {
+                disable_data_plan_sim2 = false
+            }
+            this.setState({
+                data_limit_2: data_plan ? data_plan : '',
+                disable_data_plan_sim2: disable_data_plan_sim2
+            })
+        }
+    }
+
+
+    changeDataPlan(type) {
+        let data_plan = null
+        if (type == 'sim_id') {
+            data_plan = this.state.data_limit_1
+        } else if (type == 'sim_id2') {
+            data_plan = this.state.data_limit_2
+        }
+        confirmDataPlanChange(this, type, data_plan)
+    }
+
     render() {
         // 
-        const { users_list } = this.props;
-
+        const { users_list, device } = this.props;
         return (
             <div>
                 <Row>
@@ -1257,6 +1368,7 @@ class EditDevice extends Component {
                                 </Form.Item>
                             </Col>
 
+
                             {/**
                              * @author Usman Hafeez
                              * @description Add SIM ID button
@@ -1280,6 +1392,54 @@ class EditDevice extends Component {
                                         {convertToLang(this.props.translation[''], "Activate Sim ID")}
                                     </Button>
                                 </Form.Item>
+                            </Col>
+
+                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+
+                                <Form.Item
+                                    label={convertToLang(this.props.translation[''], "Data Limit (SIM ID 1)")}
+                                    labelCol={{ span: 8 }}
+                                    wrapperCol={{ span: 16 }}
+
+                                >
+                                    {this.props.form.getFieldDecorator('data_limit_1', {
+                                        initialValue: device.sim_id_data_plan ? JSON.parse(device.sim_id_data_plan.data_plan_package).pkg_name : '',
+                                        // rules: [
+                                        //     // {
+                                        //     //     required: true, message: "SIM ID is required"
+                                        //     // },
+                                        //     {
+                                        //         validator: (rule, value, callback) => { this.validateICCID(rule, value, callback, 'sim_id') },
+                                        //     }
+                                        // ]
+                                    })(
+
+                                        <Select
+                                            placeholder="SELECT SIM DATA PLAN FOR SIM ID 1"
+
+                                            disabled={this.state.disableSim}
+                                            onChange={(value) => {
+                                                this.changeDataLimit('data_limit_1', value)
+                                            }}
+                                        >
+                                            <Select.Option key={""} value="" >SELECT DATA PLAN</Select.Option>
+                                            {this.renderDataLimitOptions()}
+
+                                        </Select>
+                                    )}
+                                </Form.Item>
+                            </Col>
+                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                <Button
+                                    disabled={this.state.disable_data_plan_sim1}
+                                    className="add_user_btn"
+                                    type="primary"
+                                    style={{ width: "100%" }}
+                                    onClick={() => {
+                                        this.changeDataPlan('sim_id')
+                                    }}
+                                    style={{ width: "100%" }}
+                                >Change Data Plan SIM ID 1</Button>
                             </Col>
 
                             {/* Sim ID 2 Input */}
@@ -1343,6 +1503,53 @@ class EditDevice extends Component {
                                         {convertToLang(this.props.translation[''], "Activate Sim ID 2")}
                                     </Button>
                                 </Form.Item>
+                            </Col>
+                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+
+                                <Form.Item
+                                    label={convertToLang(this.props.translation[''], "Data Limit (SIM ID 2)")}
+                                    labelCol={{ span: 8 }}
+                                    wrapperCol={{ span: 16 }}
+
+                                >
+                                    {this.props.form.getFieldDecorator('data_limit_2', {
+                                        initialValue: device.sim_id2_data_plan ? JSON.parse(device.sim_id2_data_plan.data_plan_package).pkg_name : '',
+                                        // rules: [
+                                        //     // {
+                                        //     //     required: true, message: "SIM ID is required"
+                                        //     // },
+                                        //     {
+                                        //         validator: (rule, value, callback) => { this.validateICCID(rule, value, callback, 'sim_id') },
+                                        //     }
+                                        // ]
+                                    })(
+
+                                        <Select
+                                            placeholder="SELECT SIM DATA PLAN FOR SIM ID 2"
+
+                                            disabled={this.state.disableSim}
+                                            onChange={(value) => {
+                                                this.changeDataLimit('data_limit_2', value)
+                                            }}
+                                        >
+                                            <Select.Option key={""} value="" >SELECT DATA PLAN</Select.Option>
+                                            {this.renderDataLimitOptions()}
+
+                                        </Select>
+                                    )}
+                                </Form.Item>
+                            </Col>
+                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                <Button
+                                    disabled={this.state.disable_data_plan_sim2}
+                                    className="add_user_btn"
+                                    type="primary"
+                                    style={{ width: "100%" }}
+                                    onClick={() => {
+                                        this.changeDataPlan('sim_id2')
+                                    }}
+                                    style={{ width: "100%" }}
+                                >Change Data Plan SIM ID 2</Button>
                             </Col>
 
                             {/* VPN Input */}
@@ -1643,7 +1850,8 @@ function mapDispatchToProps(dispatch) {
         getInvoiceId: getInvoiceId,
         extendServices: extendServices,
         getDomains: getDomains,
-        addProduct: addProduct
+        addProduct: addProduct,
+        changeDataPlan: changeDataPlan
 
     }, dispatch);
 }
@@ -1665,7 +1873,6 @@ var mapStateToProps = ({ routing, devices, users, auth, settings, sidebar, accou
         user_credit: sidebar.user_credit,
         credits_limit: sidebar.credits_limit,
         domainList: account.domainList,
-
     };
 }
 
@@ -1697,3 +1904,34 @@ function showCancelServiceConfirm(_this, values) {
     })
 }
 
+function confirmDataPlanChange(_this, type, data_plan) {
+    let data_plan_id = data_plan.id
+    let sim_type = "sim id 1"
+    if (type === 'sim_id2') {
+        sim_type = "sim id 2"
+    }
+    confirm({
+        title: "Are you sure you want to change your data plan on " + sim_type,
+        okText: "PROCEED WITH CHANGE PLAN",
+        onOk() {
+            let values = {}
+            values.packages = [data_plan];
+            values.total_price = data_plan.pkg_price
+            values.renewService = true
+            values.usr_acc_id = _this.props.device.id
+            values.usr_device_id = _this.props.device.usr_device_id
+            values.user_id = _this.props.device.user_id
+            values.device_id = _this.props.device.device_id
+            values.data_plan_package_id = data_plan_id
+            values.sim_type = type
+            _this.setState({
+                serviceData: values,
+                showConfirmCredit: true,
+                renewService: true,
+                total_price: values.total_price,
+                PkgSelectedRows: [data_plan],
+                change_data_plan: true
+            })
+        }
+    })
+}

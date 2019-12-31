@@ -53,6 +53,8 @@ class AddDevice extends Component {
     constructor(props) {
         super(props);
         this.sim_id2_added = false;
+        this.data_plan_1_added = false;
+        this.data_plan_2_added = false;
         this.hardware_added = false;
         this.sim_id2_included = false;
         const invoiceColumns = inventorySales(props.translation);
@@ -105,7 +107,9 @@ class AddDevice extends Component {
             hardwares: [],
             paidByUser: "PAID",
             valid_sim_id_1: true,
-            valid_sim_id_2: true
+            valid_sim_id_2: true,
+            data_limit_1: '',
+            data_limit_2: ''
         }
     }
 
@@ -152,36 +156,66 @@ class AddDevice extends Component {
                     values.products = this.state.products;
                     values.packages = this.state.packages;
 
-                    console.log("data_limit_1", values.data_limit, values.data_limit_2, this.state.packages);
+                    // console.log("data_limit_1", this.state.data_limit_1, this.state.data_limit_2);
 
-                    let data_limit = null
-                    if (values.data_limit) {
-
-                        data_limit = this.state.parent_packages.find((packageItem) => packageItem.id = values.data_limit)
-                        if (data_limit) {
-                            values.packages.push(data_limit)
-                            this.setState(state => {
-                                const list = state.PkgSelectedRows.push(data_limit);
-                                return list;
-                            });
+                    if (this.state.data_limit_1 && !this.data_plan_1_added) {
+                        this.state.data_limit_1.sim_type = 'sim_id'
+                        values.packages.push(this.state.data_limit_1)
+                        // values.packages.push(this.state.data_limit_1)
+                        this.state.PkgSelectedRows = values.packages;
+                        this.state.total_price = this.state.total_price + Number(this.state.data_limit_1.pkg_price)
+                        this.data_plan_1_added = true
+                    } else if (this.state.data_limit_1 === '') {
+                        let index = values.packages.findIndex(item => item.sim_type === 'sim_id')
+                        if (index !== -1) {
+                            let data_plan_package = values.packages[index]
+                            values.packages.splice(index, 1)
+                            this.state.PkgSelectedRows = values.packages;
+                            this.state.total_price = this.state.total_price - Number(data_plan_package.pkg_price)
                         }
                     }
 
-                    let data_limit2 = null;
-                    if (values.data_limit2) {
+                    if (this.state.data_limit_2 && !this.data_plan_2_added) {
 
-                        data_limit2 = this.state.parent_packages.find((packageItem) => packageItem.id = values.data_limit2)
-                        if (data_limit2) {
-                            values.packages.push(data_limit2)
-                            this.setState(state => {
-                                const list = state.PkgSelectedRows.push(data_limit2);
-                                return list;
-                            });
+                        this.state.data_limit_1.sim_type = 'sim_id2'
+                        values.packages.push(this.state.data_limit_2)
+                        this.state.PkgSelectedRows = values.packages
+                        this.state.total_price = this.state.total_price + Number(this.state.data_limit_2.pkg_price)
+                        this.data_plan_2_added = true
+                    }
+                    else if (this.state.data_limit_2 === '') {
+                        let index = values.packages.findIndex(item => item.sim_type === 'sim_id2')
+                        if (index !== -1) {
+                            let data_plan_package = values.packages[index]
+                            values.packages.splice(index, 1)
+                            this.state.PkgSelectedRows = values.packages;
+                            this.state.total_price = this.state.total_price - Number(data_plan_package.pkg_price)
                         }
                     }
+                    // let data_limit2 = null;
+                    // // console.log(values.data_limit_2)
+                    // if (values.data_limit_2) {
+                    //     // console.log(this.props.parent_packages)
+                    //     data_limit2 = this.props.parent_packages.find((packageItem) => packageItem.id = values.data_limit_2)
+
+                    //     console.log(data_limit2, data_limit)
+                    //     if (data_limit2) {
+                    //         values.packages.push(data_limit2)
+                    //         this.setState(state => {
+                    //             const list = state.PkgSelectedRows.push(data_limit2);
+                    //             return list;
+                    //         });
+                    //         this.state.total_price = this.state.total_price + Number(data_limit.pkg_price)
+                    //     }
+                    // }
 
                     // values.packages.push()
                     // console.log("On form Submit packages : ", this.state.packages);
+                    let data_plans = {
+                        sim_id: this.state.data_limit_1 ? this.state.data_limit_1 : '',
+                        sim_id2: this.state.data_limit_2 ? this.state.data_limit_2 : '',
+                    }
+                    values.data_plans = data_plans
                     values.term = this.state.term;
                     values.total_price = this.state.total_price
                     values.hardwarePrice = this.state.duplicate > 0 ? this.state.hardwarePrice * this.state.duplicate : this.state.hardwarePrice
@@ -432,8 +466,8 @@ class AddDevice extends Component {
         this.setState({
             pgp_email: (this.props.pgp_emails.length && !disablePgp) ? this.props.pgp_emails[0].pgp_email : '',
             chat_id: (this.props.chat_ids.length && !disableChat) ? this.props.chat_ids[0].chat_id : '',
-            sim_id: (this.props.sim_ids.length && !disableSim) ? this.props.sim_ids[0].sim_id : '',
-            sim_id2: (!disableSim2) ? (this.props.sim_ids.length > 1) ? this.props.sim_ids[1].sim_id : undefined : undefined,
+            sim_id: '',
+            sim_id2: undefined,
             vpn: vpn,
             disableSim: disableSim,
             disableSim2: disableSim2,
@@ -837,16 +871,29 @@ class AddDevice extends Component {
 
     renderDataLimitOptions = () => {
         // this.state.parent_packages
-
-        let packages = [];
-        return this.state.parent_packages.map((packageItem) => {
-            if (packageItem.package_type === 'data_plan') {
+        return this.props.parent_packages.map((packageItem) => {
+            // console.log(packageItem.pkg_term, this.state.term + ' month', packageItem.pkg_term == (this.state.term + ' month'))
+            if (packageItem.package_type === 'data_plan' && packageItem.pkg_term == (this.state.term + ' month')) {
                 return <Select.Option key={packageItem.id} value={packageItem.id} >{packageItem.pkg_name}</Select.Option>
             }
         })
-        return packages;
-
     }
+
+
+    changeDataLimit = (type, value) => {
+        let data_plan = this.props.parent_packages.find(item => item.id == value)
+        // console.log(data_plan)
+        if (type === 'data_limit_1') {
+            this.data_plan_1_added = false
+        } else {
+            this.data_plan_2_added = false
+        }
+        this.setState({
+            [type]: data_plan ? data_plan : ''
+        })
+    }
+
+
     render() {
         // console.log(this.props);
         // console.log('id is', this.state.products, this.state.packages);
@@ -1369,8 +1416,8 @@ class AddDevice extends Component {
                                             wrapperCol={{ span: 16 }}
 
                                         >
-                                            {this.props.form.getFieldDecorator('data_limit', {
-                                                initialValue: this.state.sim_id,
+                                            {this.props.form.getFieldDecorator('data_limit_1', {
+                                                initialValue: "",
                                                 // rules: [
                                                 //     // {
                                                 //     //     required: true, message: "SIM ID is required"
@@ -1385,8 +1432,11 @@ class AddDevice extends Component {
                                                     placeholder="SELECT SIM DATA PLAN FOR SIM 1"
 
                                                     disabled={this.state.disableSim}
+                                                    onChange={(value) => {
+                                                        this.changeDataLimit('data_limit_1', value)
+                                                    }}
                                                 >
-
+                                                    <Select.Option key={""} value="" >SELECT DATA PLAN</Select.Option>
                                                     {this.renderDataLimitOptions()}
 
                                                 </Select>
@@ -1476,7 +1526,7 @@ class AddDevice extends Component {
 
                                         >
                                             {this.props.form.getFieldDecorator('data_limit_2', {
-                                                initialValue: this.state.sim_id,
+                                                initialValue: "",
                                                 // rules: [
                                                 //     // {
                                                 //     //     required: true, message: "SIM ID is required"
@@ -1490,8 +1540,11 @@ class AddDevice extends Component {
                                                 <Select
                                                     placeholder="SELECT SIM DATA PLAN FOR SIM 2"
                                                     disabled={this.state.disableSim2}
+                                                    onChange={(value) => {
+                                                        this.changeDataLimit('data_limit_2', value)
+                                                    }}
                                                 >
-
+                                                    <Select.Option key={""} value="" >SELECT DATA PLAN</Select.Option>
                                                     {this.renderDataLimitOptions()}
 
                                                 </Select>
@@ -1889,7 +1942,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ routing, devices, device_details, users, settings, sidebar, auth, account }) => {
-
+    // console.log(devices.parent_packages, "PARENT PACLKAGES")
     return {
         invoiceID: users.invoiceID,
         routing: routing,

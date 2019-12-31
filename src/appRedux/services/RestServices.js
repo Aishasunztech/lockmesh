@@ -214,7 +214,7 @@ const RestService = {
     getSimIDs: () => {
         return axios.get(BASE_URL + 'users/get_sim_ids', RestService.getHeader());
     },
-    
+
     getChatIDs: () => {
         return axios.get(BASE_URL + 'users/get_chat_ids', RestService.getHeader());
     },
@@ -245,7 +245,7 @@ const RestService = {
         return axios.post(`${BASE_URL}users/create-service-product`, payload, RestService.getHeader());
     },
     activateICCID: (iccid) => {
-        return axios.post(`${BASE_URL}users/validate_sim_id`, {sim_id: iccid}, RestService.getHeader());
+        return axios.post(`${BASE_URL}users/validate_sim_id`, { sim_id: iccid }, RestService.getHeader());
     },
     /**
      * @section Dealers
@@ -449,6 +449,10 @@ const RestService = {
         return axios.put(BASE_URL + 'users/edit-device/extendServices', formData, RestService.getHeader());
     },
 
+    changeDataPlan: (formData) => {
+        return axios.put(BASE_URL + 'users/change-data-plans', formData, RestService.getHeader());
+    },
+
 
     cancelExtendedServices: (service_data) => {
         return axios.put(BASE_URL + 'users/cancel-extended-services', service_data, RestService.getHeader());
@@ -459,11 +463,11 @@ const RestService = {
     },
 
     resetChatPin: (data) => {
-      return axios.post(BASE_URL + 'users/reset-chat-pin/', data, RestService.getHeader());
+        return axios.post(BASE_URL + 'users/reset-chat-pin/', data, RestService.getHeader());
     },
 
-  changeSchatPinStatus: (data) => {
-      return axios.post(BASE_URL + 'users/change-s-chat-pin-status/', data, RestService.getHeader());
+    changeSchatPinStatus: (data) => {
+        return axios.post(BASE_URL + 'users/change-s-chat-pin-status/', data, RestService.getHeader());
     },
 
     // for dealer reset password(admin dashboard)

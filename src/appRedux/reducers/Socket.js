@@ -180,7 +180,7 @@ export default (state = initialState, action) => {
                 is_policy_process: 0
             }
         }
-        
+
         default:
             return state;
     }
