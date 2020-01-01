@@ -124,6 +124,7 @@ export default class ListMsgs extends Component {
                 sending_time: item.timer_status === "DATE/TIME" ? item.date_time : (item.timer_status !== "NOW" && item.time) ? item.time : "N/A",
                 // sending_time: item.timer_status === "DATE/TIME" ? convertTimezoneValue(this.props.user.timezone, item.date_time, TIMESTAMP_FORMAT_NOT_SEC) : (item.timer_status !== "NOW" && item.time) ? item.time : "N/A",
                 interval_description: duration,
+                created_at: item.created_at,
                 // week_day: getWeekDay(item.week_day),
                 // month_date: item.month_date && item.month_date !== 0 ? `On every ${checkValue(item.month_date)} date of month` : "N/A",
                 // month_name: getMonthName(item.month_name),

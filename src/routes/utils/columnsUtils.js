@@ -3822,6 +3822,31 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
             ]
 
         },
+        {
+            title: (
+                <Input.Search
+                    name="created_at"
+                    key="created_at"
+                    id="created_at"
+                    className="search_heading"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    placeholder="CREATED DATE"
+                />
+            ),
+            dataIndex: 'created_at',
+            className: '',
+            key: 'created_at',
+            children: [
+                {
+                    width: 130,
+                    title: convertToLang(translation[""], "CREATED DATE"),
+                    dataIndex: 'created_at',
+                    key: 'created_at',
+                }
+            ]
+
+        },
         // { // 1 - 7
         //     title: (
         //         <Input.Search

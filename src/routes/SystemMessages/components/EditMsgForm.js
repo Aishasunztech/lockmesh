@@ -89,7 +89,7 @@ class EditMsgForm extends Component {
                 let copyEditRecord = this.state.editRecord;
 
                 if (copyEditRecord.timer_status === "NOW") {
-                    copyEditRecord.date_time = "";
+                    copyEditRecord.date_time = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
                     copyEditRecord.repeat_duration = "NONE";
                     copyEditRecord.week_day = "";
                     copyEditRecord.month_date = "";

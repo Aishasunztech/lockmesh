@@ -90,7 +90,8 @@ class SendMsgForm extends Component {
                     let dateTimeVal = '';
 
                     if (this.state.timer === "NOW") {
-                        dateTimeVal = '' //moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+                        // dateTimeVal = ''
+                        dateTimeVal = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
                         repeatVal = "NONE";
                     } else if (this.state.timer === "DATE/TIME") {
                         dateTimeVal = this.state.selected_dateTime;
