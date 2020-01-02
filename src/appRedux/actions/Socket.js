@@ -39,10 +39,13 @@ import RestService from '../services/RestServices'
 // socket should connect on login
 export const connectSocket = () => {
     return (dispatch) => {
-        let socket = RestService.connectSocket();
+        let socket              = RestService.connectSocket();
+        let SupportSystemSocket = RestService.connectSupportSystemSocket();
+        SupportSystemSocket.emit('ping' , {})
         dispatch({
             type: CONNECT_SOCKET,
-            payload: socket
+            payload: socket,
+            supportSystemSocket: SupportSystemSocket
         })
         // CONNECT_SOCKET
     }
@@ -326,6 +329,7 @@ export const closeConnectPageSocketEvents = (socket, deviceId) => {
 
             // test
             socket.off('hello_web');
+
             socket.disconnect();
         } else {
 

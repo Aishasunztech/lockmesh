@@ -1,21 +1,20 @@
 import {
-    DEALERS_LIST,
-    SUSPEND_DEALERS,
-    DELETE_DEALERS,
-    INVALID_TOKEN,
-    CHANGE_PASSWORD,
-    ACTIVATE_DEALER,
-    UNDO_DEALER,
-    EDIT_DEALER,
-    LOADING, ADD_DEALER,
-    // INIT_URL,
-    SPIN_lOADING,
-    DEALERS_LIST_IN_SDEALER,
-    CONNECT_DELETE_DEALER,
-    CONNECT_UNDO_DEALER,
-    CONNECT_SUSPEND_DEALER,
-    CONNECT_ACTIVATE_DEALER,
-    CHANGE_TIMEZONE,
+  DEALERS_LIST,
+  SUSPEND_DEALERS,
+  DELETE_DEALERS,
+  INVALID_TOKEN,
+  CHANGE_PASSWORD,
+  ACTIVATE_DEALER,
+  UNDO_DEALER,
+  EDIT_DEALER,
+  LOADING, ADD_DEALER,
+  // INIT_URL,
+  SPIN_lOADING,
+  DEALERS_LIST_IN_SDEALER,
+  CONNECT_DELETE_DEALER,
+  CONNECT_UNDO_DEALER,
+  CONNECT_SUSPEND_DEALER,
+  CONNECT_ACTIVATE_DEALER, ALL_TO_ALL_DEALERS,CHANGE_TIMEZONE
 
 } from "../../constants/ActionTypes"
 // import { message } from 'antd';
@@ -23,7 +22,7 @@ import {
 import RestService from '../services/RestServices';
 import { DEALER_LOADING } from "../../constants/ActionTypes";
 
-// action creaters 
+// action creaters
 
 export function getDealerList(d, is_loading_show = true) {
     // alert("test")
@@ -82,6 +81,31 @@ export function getAllDealers() {
         });
 
     };
+}
+
+export function getAllToAllDealers() {
+  return (dispatch) => {
+    dispatch({
+      type: SPIN_lOADING,
+      spinloading: true
+    });
+
+    RestService.getAllToAllDealers().then((response) => {
+
+      if (RestService.checkAuth(response.data)) {
+
+        dispatch({
+          type: ALL_TO_ALL_DEALERS,
+          payload: response.data
+        });
+      } else {
+        dispatch({
+          type: INVALID_TOKEN
+        });
+      }
+    });
+
+  };
 }
 
 export function getUserDealers() {

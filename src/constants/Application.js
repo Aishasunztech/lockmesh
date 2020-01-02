@@ -4,6 +4,7 @@ import packageJson from '../../package.json';
 let hostName = window.location.hostname
 
 let URL = "http://localhost:3000/";
+let SUPPORT = "http://localhost:3010/";
 let SUPERADMIN = "http://localhost:8042/";
 let TITLE = packageJson.name;
 let CHARSET = 'UTF-8';
@@ -18,6 +19,7 @@ switch (hostName) {
     case "http://dev.lockmesh.com":
     case "https://dev.lockmesh.com":
         URL = "https://devapi.lockmesh.com/"
+        SUPPORT = "https://devsupport.lockmesh.com/"
         SUPERADMIN = 'https://devapi.meshguard.co/'
         TITLE = "LockMesh"
         TIMEZONE = "Europe/Berlin"
@@ -29,6 +31,7 @@ switch (hostName) {
     case "https://predev.lockmesh.com":
         URL = "https://predevapi.lockmesh.com/"
         SUPERADMIN = 'https://devapi.meshguard.co/'
+        SUPPORT = "https://predevsupport.lockmesh.com/"
         TITLE = "LockMesh"
         TIMEZONE = "Europe/Berlin"
         break;
@@ -49,6 +52,7 @@ switch (hostName) {
     case "http://www.lockmesh.com":
     case "https://www.lockmesh.com":
         URL = "https://api.lockmesh.com/"
+        SUPPORT = "https://support.lockmesh.com/"
         SUPERADMIN = 'https://api.meshguard.co/'
         TITLE = "LockMesh"
         TIMEZONE = "Europe/Berlin"
@@ -88,6 +92,7 @@ switch (hostName) {
 
 export const HOST_NAME = hostName;
 export const BASE_URL = URL;
+export const SUPPORT_URL = SUPPORT;
 export const APP_TITLE = TITLE;
 export const SUPERADMIN_URL = `${SUPERADMIN}api/v1/`;
 

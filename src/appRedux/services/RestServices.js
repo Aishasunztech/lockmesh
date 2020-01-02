@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { BASE_URL, SUPERADMIN_URL } from '../../constants/Application';
+import { BASE_URL, SUPERADMIN_URL, SUPPORT_URL } from '../../constants/Application';
 import io from "socket.io-client";
+import SupportSystemSocketIO from "socket.io-client";
 
 const RestService = {
 
@@ -23,13 +24,28 @@ const RestService = {
             // forceNew:true
             secure: true
         });
-
         // console.log('check 1', socket.connected);
         // socket.on('connect', function() {
         //     console.log('check 2', socket.connected);
         // });
 
         return socket;
+    },
+
+    // Login
+
+
+  connectSupportSystemSocket: () => {
+      let token       = localStorage.getItem('token');
+      let id          = localStorage.getItem('id');
+      let type        = localStorage.getItem('type');
+      let makeToken   = "token=" + token + "&isWeb=true&user_id="+id+"&type="+type;
+      let socket      = SupportSystemSocketIO.connect(SUPPORT_URL, {
+        query: makeToken,
+        secure: true
+      });
+
+      return socket;
     },
     login: (user) => {
         return axios.post(BASE_URL + 'users/login', user);
@@ -255,6 +271,9 @@ const RestService = {
     },
     getAllDealers: () => {
         return axios.get(BASE_URL + 'users/dealers', RestService.getHeader());
+    },
+    getAllToAllDealers: () => {
+      return axios.get(BASE_URL + 'users/get-all-dealers', RestService.getHeader());
     },
     getUserDealers: () => {
         return axios.get(BASE_URL + 'users/user_dealers', RestService.getHeader());
@@ -1102,5 +1121,36 @@ const RestService = {
     checkUniquePgpEmail: (value) => {
         return axios.post(BASE_URL + 'users/check-unique-pgp', { pgp_email: value }, RestService.getHeader());
     },
-}
+
+    //support tickets
+    //generate Support Ticket
+    generateSupportTicket: (data) => {
+      return axios.post(SUPPORT_URL + 'tickets/store', data, RestService.getHeader());
+    },
+
+    //generate Support Ticket
+    supportTicketReply: (data) => {
+      return axios.post(SUPPORT_URL + 'tickets/replies/store', data, RestService.getHeader());
+    },
+
+    //generate Support Ticket
+    getSupportTickets: (data) => {
+      return axios.get(SUPPORT_URL + 'tickets/'+data.id+'/'+data.type, RestService.getHeader());
+    },
+
+    //generate Support Ticket
+    closeSupportTicket: (data) => {
+      return axios.get(SUPPORT_URL + 'tickets/close/'+data, RestService.getHeader());
+    },
+
+    //delete Support Ticket
+    deleteSupportTicket: (data) => {
+      return axios.put(SUPPORT_URL + 'tickets/delete', data, RestService.getHeader());
+    },
+
+    //get Support Ticket replies
+    getSupportTicketReplies: (data) => {
+      return axios.get(SUPPORT_URL + 'tickets/replies/'+data, RestService.getHeader());
+    },
+};
 export default RestService;
