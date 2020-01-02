@@ -118,7 +118,7 @@ class EditDevice extends Component {
                 values.finalStatus = this.props.device.finalStatus;
                 values.prevService = this.props.device.services
                 if (this.props.user.type === ADMIN) {
-                    values.expiry_date = values.expiry_date._d
+                    values.expiry_date = values.expiry_date._d.toDateString()
                 }
                 if (this.state.renewService) {
                     values.products = this.state.products;
@@ -713,6 +713,12 @@ class EditDevice extends Component {
             callback();
         }
     }
+
+
+    // onChangeAdjustExpiry = (value) => {
+    //     console.log(value);
+    //     console.log(value._d.toDateString());
+    // }
 
     render() {
         // 
