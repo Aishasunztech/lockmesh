@@ -177,7 +177,7 @@ class AddDevice extends Component {
 
                     if (this.state.data_limit_2 && !this.data_plan_2_added) {
 
-                        this.state.data_limit_1.sim_type = 'sim_id2'
+                        this.state.data_limit_2.sim_type = 'sim_id2'
                         values.packages.push(this.state.data_limit_2)
                         this.state.PkgSelectedRows = values.packages
                         this.state.total_price = this.state.total_price + Number(this.state.data_limit_2.pkg_price)

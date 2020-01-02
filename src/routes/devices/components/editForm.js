@@ -216,7 +216,9 @@ class EditDevice extends Component {
                         values.packages.push(this.state.data_limit_1)
                         // values.packages.push(this.state.data_limit_1)
                         this.state.PkgSelectedRows = values.packages;
-                        this.state.total_price = this.state.total_price + Number(this.state.data_limit_1.pkg_price)
+                        priceToCharge = priceToCharge + Number(this.state.data_limit_1.pkg_price)
+                        this.state.total_price += Number(this.state.data_limit_1.pkg_price)
+
                         this.data_plan_1_added = true
                     } else if (this.state.data_limit_1 === '') {
                         let index = values.packages.findIndex(item => item.sim_type === 'sim_id')
@@ -224,16 +226,19 @@ class EditDevice extends Component {
                             let data_plan_package = values.packages[index]
                             values.packages.splice(index, 1)
                             this.state.PkgSelectedRows = values.packages;
-                            this.state.total_price = this.state.total_price - Number(data_plan_package.pkg_price)
+                            priceToCharge = priceToCharge - Number(data_plan_package.pkg_price)
+                            this.state.total_price -= Number(data_plan_package.pkg_price)
+
                         }
                     }
 
                     if (this.state.data_limit_2 && !this.data_plan_2_added) {
 
-                        this.state.data_limit_1.sim_type = 'sim_id2'
+                        this.state.data_limit_2.sim_type = 'sim_id2'
                         values.packages.push(this.state.data_limit_2)
                         this.state.PkgSelectedRows = values.packages
-                        this.state.total_price = this.state.total_price + Number(this.state.data_limit_2.pkg_price)
+                        priceToCharge = priceToCharge + Number(this.state.data_limit_2.pkg_price)
+                        this.state.total_price += Number(this.state.data_limit_2.pkg_price)
                         this.data_plan_2_added = true
                     }
                     else if (this.state.data_limit_2 === '') {
@@ -242,7 +247,8 @@ class EditDevice extends Component {
                             let data_plan_package = values.packages[index]
                             values.packages.splice(index, 1)
                             this.state.PkgSelectedRows = values.packages;
-                            this.state.total_price = this.state.total_price - Number(data_plan_package.pkg_price)
+                            priceToCharge = priceToCharge - Number(data_plan_package.pkg_price)
+                            this.state.total_price -= Number(data_plan_package.pkg_price)
                         }
                     }
                     let data_plans = {
@@ -250,8 +256,6 @@ class EditDevice extends Component {
                         sim_id2: this.state.data_limit_2 ? this.state.data_limit_2 : '',
                     }
                     values.data_plans = data_plans
-
-
 
                     values.expiry_date = this.state.term;
                     values.total_price = priceToCharge
@@ -873,7 +877,8 @@ class EditDevice extends Component {
 
     activateICCID = (simField) => {
         let value = this.props.form.getFieldValue(simField);
-        RestService.activateICCID(value).then((response) => {
+
+        RestService.activateICCID(value, this.props.device.id).then((response) => {
             if (response.data) {
                 if (response.data.valid) {
                     if (simField === 'sim_id') {
@@ -922,25 +927,30 @@ class EditDevice extends Component {
             if (this.props.device.sim_id_data_plan === undefined) {
                 disable_data_plan_sim1 = false
             }
-            else if (JSON.parse(this.props.device.sim_id_data_plan.data_plan_package).id !== value) {
+            else if ((!this.state.disableSim && this.state.services)) {
+                disable_data_plan_sim1 = true
+            }
+            else if ((this.props.device.sim_id2_data_plan && JSON.parse(this.props.device.sim_id_data_plan.data_plan_package).id !== value)) {
                 disable_data_plan_sim1 = false
             }
             this.setState({
                 data_limit_1: data_plan ? data_plan : '',
                 disable_data_plan_sim1: disable_data_plan_sim1
             })
+            this.data_plan_1_added = false
         } else if (type === 'data_limit_2') {
             let disable_data_plan_sim2 = true
-            if (this.props.device.sim_id2_data_plan === undefined) {
+            if (!this.state.disableSim && this.props.device.sim_id2_data_plan === undefined) {
                 disable_data_plan_sim2 = false
             }
-            else if ((this.props.device.sim_id2_data_plan && JSON.parse(this.props.device.sim_id2_data_plan.data_plan_package).id !== value)) {
+            else if ((!this.state.disableSim2 && this.state.services) || ((this.props.device.sim_id2_data_plan && JSON.parse(this.props.device.sim_id2_data_plan.data_plan_package).id !== value))) {
                 disable_data_plan_sim2 = false
             }
             this.setState({
                 data_limit_2: data_plan ? data_plan : '',
                 disable_data_plan_sim2: disable_data_plan_sim2
             })
+            this.data_plan_2_added = false
         }
     }
 
@@ -1403,7 +1413,7 @@ class EditDevice extends Component {
 
                                 >
                                     {this.props.form.getFieldDecorator('data_limit_1', {
-                                        initialValue: device.sim_id_data_plan ? JSON.parse(device.sim_id_data_plan.data_plan_package).pkg_name : '',
+                                        initialValue: this.state.services ? "" : device.sim_id_data_plan ? JSON.parse(device.sim_id_data_plan.data_plan_package).pkg_name : '',
                                         // rules: [
                                         //     // {
                                         //     //     required: true, message: "SIM ID is required"
@@ -1422,25 +1432,30 @@ class EditDevice extends Component {
                                                 this.changeDataLimit('data_limit_1', value)
                                             }}
                                         >
-                                            <Select.Option key={""} value="" >SELECT DATA PLAN</Select.Option>
+                                            {(this.state.services) ?
+                                                <Select.Option key={""} value="" >BASIC DATA PLAN (2 GB)</Select.Option>
+                                                : null}
                                             {this.renderDataLimitOptions()}
 
                                         </Select>
                                     )}
                                 </Form.Item>
                             </Col>
-                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                                <Button
-                                    disabled={this.state.disable_data_plan_sim1}
-                                    className="add_user_btn"
-                                    type="primary"
-                                    style={{ width: "100%" }}
-                                    onClick={() => {
-                                        this.changeDataPlan('sim_id')
-                                    }}
-                                    style={{ width: "100%" }}
-                                >Change Data Plan SIM ID 1</Button>
-                            </Col>
+                            {((!this.state.services && !this.state.disable_data_plan_sim1)) ?
+                                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                    <Button
+                                        disabled={this.state.disable_data_plan_sim1}
+                                        className="add_user_btn"
+                                        type="primary"
+                                        style={{ width: "100%" }}
+                                        onClick={() => {
+                                            this.changeDataPlan('sim_id')
+                                        }}
+                                        style={{ width: "100%" }}
+                                    >Change Data Plan SIM ID 1</Button>
+                                </Col>
+                                : null
+                            }
 
                             {/* Sim ID 2 Input */}
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
@@ -1513,7 +1528,7 @@ class EditDevice extends Component {
 
                                 >
                                     {this.props.form.getFieldDecorator('data_limit_2', {
-                                        initialValue: device.sim_id2_data_plan ? JSON.parse(device.sim_id2_data_plan.data_plan_package).pkg_name : '',
+                                        initialValue: this.state.services ? "" : device.sim_id2_data_plan ? JSON.parse(device.sim_id2_data_plan.data_plan_package).pkg_name : '',
                                         // rules: [
                                         //     // {
                                         //     //     required: true, message: "SIM ID is required"
@@ -1527,31 +1542,35 @@ class EditDevice extends Component {
                                         <Select
                                             placeholder="SELECT SIM DATA PLAN FOR SIM ID 2"
 
-                                            disabled={this.state.disableSim}
+                                            disabled={this.state.disableSim2}
                                             onChange={(value) => {
                                                 this.changeDataLimit('data_limit_2', value)
                                             }}
                                         >
-                                            <Select.Option key={""} value="" >SELECT DATA PLAN</Select.Option>
+                                            {(this.state.services) ?
+                                                <Select.Option key={""} value="" >BASIC DATA PLAN (2 GB)</Select.Option>
+                                                : null}
                                             {this.renderDataLimitOptions()}
 
                                         </Select>
                                     )}
                                 </Form.Item>
                             </Col>
-                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                                <Button
-                                    disabled={this.state.disable_data_plan_sim2}
-                                    className="add_user_btn"
-                                    type="primary"
-                                    style={{ width: "100%" }}
-                                    onClick={() => {
-                                        this.changeDataPlan('sim_id2')
-                                    }}
-                                    style={{ width: "100%" }}
-                                >Change Data Plan SIM ID 2</Button>
-                            </Col>
-
+                            {((!this.state.services && !this.state.disable_data_plan_sim2)) ?
+                                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                    <Button
+                                        disabled={this.state.disable_data_plan_sim2}
+                                        className="add_user_btn"
+                                        type="primary"
+                                        style={{ width: "100%" }}
+                                        onClick={() => {
+                                            this.changeDataPlan('sim_id2')
+                                        }}
+                                        style={{ width: "100%" }}
+                                    >Change Data Plan SIM ID 2</Button>
+                                </Col>
+                                : null
+                            }
                             {/* VPN Input */}
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
