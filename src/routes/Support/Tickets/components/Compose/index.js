@@ -3,6 +3,7 @@ import {Button, DatePicker, Form, Input, message, Modal, Select, Upload} from "a
 import Moment from "moment";
 import categories from "../../data/categories";
 import priorities from "../../data/priorities";
+import {ADMIN_ID, SDEALER} from "../../../../../constants/Constants";
 const {TextArea} = Input;
 
 class ComposeTicket extends React.Component {
@@ -51,6 +52,29 @@ class ComposeTicket extends React.Component {
               <Input
                 placeholder='Enter Subject'
               />
+            )}
+          </Form.Item>
+
+          <Form.Item
+            label="Send To"
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 18 }}
+            width='100%'
+          >
+            {this.props.form.getFieldDecorator('receiver_id', {
+              initialValue: ADMIN_ID,
+              rules: [
+                {
+                  required: true,
+                },
+              ],
+            })(
+              <Select style={{ width: '100%' }}>
+                <Select.Option key='1' value={ADMIN_ID}><span className='text-capitalize'>Admin</span></Select.Option>
+                {user.type === SDEALER ?
+                  <Select.Option key='2' value={user.connected_dealer}><span className='text-capitalize'>Dealer</span></Select.Option>
+                  : '' }
+              </Select>
             )}
           </Form.Item>
 

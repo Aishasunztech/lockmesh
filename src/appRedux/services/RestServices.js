@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { BASE_URL, SUPERADMIN_URL, SUPPORT_URL } from '../../constants/Application';
 import io from "socket.io-client";
+import SupportSystemSocketIO from "socket.io-client";
 
 const RestService = {
     // Login
@@ -14,13 +15,28 @@ const RestService = {
             // forceNew:true
             secure: true
         });
-
         // console.log('check 1', socket.connected);
         // socket.on('connect', function() {
         //     console.log('check 2', socket.connected);
         // });
 
         return socket;
+    },
+
+    // Login
+
+
+  connectSupportSystemSocket: () => {
+      let token       = localStorage.getItem('token');
+      let id          = localStorage.getItem('id');
+      let type        = localStorage.getItem('type');
+      let makeToken   = "token=" + token + "&isWeb=true&user_id="+id+"&type="+type;
+      let socket      = SupportSystemSocketIO.connect(SUPPORT_URL, {
+        query: makeToken,
+        secure: true
+      });
+
+      return socket;
     },
     login: (user) => {
         return axios.post(BASE_URL + 'users/login', user);
@@ -236,6 +252,9 @@ const RestService = {
     },
     getAllDealers: () => {
         return axios.get(BASE_URL + 'users/dealers', RestService.getHeader());
+    },
+    getAllToAllDealers: () => {
+      return axios.get(BASE_URL + 'users/get-all-dealers', RestService.getHeader());
     },
     getUserDealers: () => {
         return axios.get(BASE_URL + 'users/user_dealers', RestService.getHeader());
@@ -1072,8 +1091,8 @@ const RestService = {
     },
 
     //generate Support Ticket
-    getSupportTickets: () => {
-      return axios.get(SUPPORT_URL + 'tickets', RestService.getHeader());
+    getSupportTickets: (data) => {
+      return axios.get(SUPPORT_URL + 'tickets/'+data.id+'/'+data.type, RestService.getHeader());
     },
 
     //generate Support Ticket

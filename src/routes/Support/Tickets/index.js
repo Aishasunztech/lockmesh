@@ -1,5 +1,5 @@
 import React, {PureComponent} from "react";
-import {Button, Checkbox, Drawer, Dropdown, Menu, message} from "antd";
+import {Button, Checkbox, Drawer, Dropdown, Menu, message, Modal} from "antd";
 import CustomScrollbars from "util/CustomScrollbars";
 
 import mails from "./data/mails";
@@ -10,16 +10,23 @@ import MailList from "./components/MailList";
 import ComposeMail from "./components/Compose/index";
 import AppModuleHeader from "./components/AppModuleHeader/index";
 import MailDetail from "./components/TicketDetail/index";
-import Auxiliary from "./util/Auxiliary";
-import {convertToLang} from "../../utils/commonUtils";
 import {bindActionCreators} from "redux";
 import {
-  generateSupportTicket, supportTicketReply, getSupportTickets, getAllDealers, closeSupportTicket, deleteSupportTicket, getSupportTicketReplies
+  generateSupportTicket,
+  supportTicketReply,
+  getSupportTickets,
+  getAllDealers,
+  closeSupportTicket,
+  deleteSupportTicket,
+  getSupportTicketReplies,
+  getAllToAllDealers
 } from "../../../appRedux/actions";
 import {connect} from "react-redux";
 import {
-  ADMIN
+  ADMIN, DEALER, SDEALER
 } from "../../../constants/Constants";
+
+const confirm = Modal.confirm;
 
 class Mail extends PureComponent {
 
@@ -35,16 +42,17 @@ class Mail extends PureComponent {
 
       <div className="gx-module-side-content">
         <CustomScrollbars className="gx-module-side-scroll">
-          <div className="gx-module-add-task">
-            <Button type="primary" className="gx-btn-block"
-                    onClick={() => {
-                      this.setState({composeMail: true})
-                    }}>
-              <i className="icon icon-edit gx-mr-2"/>
-              Generate Ticket
-            </Button>
-          </div>
-
+          {this.props.user.type !== ADMIN ?
+            <div className="gx-module-add-task">
+              <Button type="primary" className="gx-btn-block"
+                      onClick={() => {
+                        this.setState({composeMail: true})
+                      }}>
+                <i className="icon icon-edit gx-mr-2"/>
+                Generate Ticket
+              </Button>
+            </div>
+            : ''}
           <ul className="gx-module-nav">
 
             <li className="gx-module-nav-label">
@@ -70,23 +78,37 @@ class Mail extends PureComponent {
   };
 
   onDeleteMail = () => {
-    this.props.deleteSupportTicket(this.state.selectedMails)
+    let _this = this;
+
+    confirm({
+      title: 'Do you want to delete the selected ticket?',
+      okText: "Confirm",
+      onOk() {
+        _this.props.deleteSupportTicket(_this.state.selectedMails);
+        _this.setState({
+          selectedMails: []
+        });
+      },
+      onCancel() {},
+    });
+
   };
 
   getCategories = () => {
+
     return categories.map((category, index) =>
       <li key={index} onClick={() => {
 
         const filterSupportTickets = this.state.supportTickets.filter(supportTickets => {
           if (category.title === 'all'){
-            return this.state.supportTickets
+            return true
           }else if (category.title === supportTickets.category) {
             return supportTickets
           }
         });
         this.setState({
           noContentFoundMessage: 'No support ticket found in selected filter',
-          supportTickets: filterSupportTickets
+          filteredSupportTickets: filterSupportTickets
         });
       }
       }>
@@ -104,14 +126,14 @@ class Mail extends PureComponent {
 
         const filterSupportTickets = this.state.supportTickets.filter(supportTickets => {
           if (priority.title === 'all'){
-            return this.state.supportTickets
+            return true;
           }else if (priority.title === supportTickets.priority) {
             return supportTickets
           }
         });
         this.setState({
           noContentFoundMessage: 'No support ticket found in selected filter',
-          supportTickets: filterSupportTickets
+          filteredSupportTickets: filterSupportTickets
         });
       }
       }>
@@ -132,18 +154,19 @@ class Mail extends PureComponent {
   getStatuses = () => {
     return statuses.map((status, index) =>
       <li key={index} onClick={() => {
-
-        const filterSupportTickets = this.state.supportTickets.filter(supportTickets => {
+        let filterSupportTickets  = [];
+        filterSupportTickets      = this.state.supportTickets.filter(supportTickets => {
 
           if (status.title === 'all'){
             return true;
           }else if (status.title === supportTickets.status) {
-            return true
+            return supportTickets
           }
         });
+
         this.setState({
           noContentFoundMessage: 'No support ticket found in selected filter',
-          filterSupportTickets: filterSupportTickets
+          filteredSupportTickets: filterSupportTickets
         });
       }
       }>
@@ -156,20 +179,21 @@ class Mail extends PureComponent {
 
   searchTicket = (searchText) => {
     if (searchText === '') {
-      this.setState({supportTickets: this.props.supportTickets});
+      this.setState({filteredSupportTickets: this.state.supportTickets});
     } else {
-      const searchMails = this.props.supportTickets.filter((mail) =>
+      const searchMails = this.state.supportTickets.filter((mail) =>
         mail.subject.toLowerCase().indexOf(searchText.toLowerCase()) > -1);
       this.setState({
-        supportTickets: searchMails
+        filteredSupportTickets: searchMails
       });
     }
   };
 
   displayMail = (currentMail, folderMails, noContentFoundMessage) => {
+
     return (<div className="gx-module-box-column">
       {currentMail === null ?
-        folderMails.length === 0 ?
+        this.state.filteredSupportTickets.length === 0 ?
           <div className="gx-no-content-found gx-text-light gx-d-flex gx-align-items-center gx-justify-content-center">
             {noContentFoundMessage}
           </div>
@@ -178,6 +202,7 @@ class Mail extends PureComponent {
             supportTickets={this.state.filteredSupportTickets}
             onMailSelect={this.onMailSelect.bind(this)}
             onMailChecked={this.onMailChecked.bind(this)}
+            user={this.props.user}
           />
         :
         <MailDetail
@@ -186,7 +211,7 @@ class Mail extends PureComponent {
           supportTicketReply={this.props.supportTicketReply}
           onCloseTicket={this.onCloseTicket.bind(this)}
           closeSupportTicketStatus={this.props.closeSupportTicketStatus}
-          supportTicketReplies={this.props.supportTicketReplies}
+          supportTicketReplies={this.state.supportTicketReplies}
         />}
     </div>)
   };
@@ -204,7 +229,7 @@ class Mail extends PureComponent {
     super();
     this.state = {
       searchTicket: '',
-      noContentFoundMessage: 'No support ticket found in selected filter',
+      noContentFoundMessage: 'No support ticket found',
       alertMessage: '',
       dealerList: [],
       showMessage: false,
@@ -218,41 +243,28 @@ class Mail extends PureComponent {
       composeMail: false,
       folderMails: mails.filter(mail => mail.folder === 0),
       filteredSupportTickets: [],
-      supportTickets: []
+      supportTickets: [],
+      supportTicketReplies: [],
     }
   }
 
   componentDidMount() {
-    this.setState({loader: false});
-    this.props.getSupportTickets();
-    if (this.props.user.type === ADMIN){
-      this.props.getDealerList();
-    }else{
-      let userData            = this.props.user;
-      userData.dealer_id      = this.props.user.id;
-      userData.dealer_name    = this.props.user.name;
-      userData.link_code      = this.props.user.dealer_pin;
 
-      this.setState({
-        dealerList : [userData],
-      })
-    }
-
+    this.props.getDealerList();
+    this.props.getSupportTickets(this.props.user);
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
 
-    if (this.props.user.type === ADMIN){
-      this.setState({
-        dealerList : this.props.dealerList,
-      })
-    }
+    let ticketsWithUser = [];
+    let dealerData;
 
-    if(this.state.supportTickets.length !== this.props.supportTickets.length){
+    if(this.state.supportTickets.length !== this.props.supportTickets.length && this.props.dealerList.length > 0){
 
-      let ticketsWithUser = [];
       this.props.supportTickets.map((supportTicket, index) => {
-        let dealerData = this.state.dealerList.length > 0 && this.state.dealerList.find((dealer) => dealer.dealer_id === supportTicket.user_id);
+
+        dealerData = this.props.dealerList.length > 0 && this.props.dealerList.find((dealer) => dealer.dealer_id === supportTicket.user_id);
+
         supportTicket.user = dealerData;
         ticketsWithUser.push(supportTicket)
       });
@@ -263,6 +275,24 @@ class Mail extends PureComponent {
       })
     }
 
+
+
+    if (this.props.supportTicketReplies.length > 0 && prevProps !== this.props){
+
+      let repliesWithUser = [];
+      this.props.supportTicketReplies.map((reply, index) => {
+        dealerData = this.props.dealerList.find((dealer) => dealer.dealer_id === reply.user_id);
+        reply.user = dealerData;
+        repliesWithUser.push(reply)
+      });
+      this.setState({
+        supportTicketReplies : repliesWithUser,
+      })
+    }else if (this.props.supportTicketReplies.length === 0 && prevProps !== this.props){
+      this.setState({
+        supportTicketReplies : [],
+      })
+    }
 
   }
 
@@ -282,7 +312,16 @@ class Mail extends PureComponent {
   }
 
   onCloseTicket(data) {
-    this.props.closeSupportTicket(data._id)
+    let _this = this;
+    confirm({
+      title: 'Do you want to change the ticket status to close?',
+      okText: "Confirm",
+      onOk() {
+        _this.props.closeSupportTicket(data._id);
+      },
+      onCancel() {},
+    });
+
   }
 
   onMailSelect(mail) {
@@ -316,7 +355,7 @@ class Mail extends PureComponent {
   }
 
   render() {
-    const {selectedMails, loader, currentMail, drawerState, folderMails, composeMail, alertMessage, showMessage, noContentFoundMessage} = this.state;
+    const {selectedMails, currentMail, drawerState, folderMails, composeMail, alertMessage, showMessage, noContentFoundMessage} = this.state;
     return (
       <div>
         <div className="gx-main-content">
@@ -388,7 +427,7 @@ var mapStateToProps = ({ auth , SupportTickets , dealers}) => {
   return {
     user: auth.authUser,
     supportTickets: SupportTickets.supportTickets,
-    dealerList: dealers.dealers,
+    dealerList: dealers.allDealers,
     closeSupportTicketStatus: SupportTickets.closeSupportTicketStatus,
     supportTicketReplies: SupportTickets.supportTicketReplies,
   };
@@ -399,7 +438,7 @@ function mapDispatchToProps(dispatch) {
     generateSupportTicket: generateSupportTicket,
     supportTicketReply: supportTicketReply,
     getSupportTickets: getSupportTickets,
-    getDealerList: getAllDealers,
+    getDealerList: getAllToAllDealers,
     closeSupportTicket: closeSupportTicket,
     deleteSupportTicket: deleteSupportTicket,
     getSupportTicketReplies: getSupportTicketReplies,

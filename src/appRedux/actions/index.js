@@ -23,3 +23,4 @@ export * from './Reports';
 export * from './RightSidebar';
 
 export * from './SupportTickets';
+export * from './SupportTicketsSocket';

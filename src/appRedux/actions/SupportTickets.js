@@ -62,7 +62,7 @@ export function getSupportTickets(data) {
       type: SPIN_lOADING,
     });
 
-    RestService.getSupportTickets().then((response) => {
+    RestService.getSupportTickets(data).then((response) => {
       if (RestService.checkAuth(response.data)) {
         dispatch({
           type: GET_SUPPORT_TICKET,
@@ -142,3 +142,4 @@ export function getSupportTicketReplies(data) {
     });
   };
 }
+

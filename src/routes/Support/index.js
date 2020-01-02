@@ -1,16 +1,18 @@
-import React, {Component} from 'react'
-import {Card, Form, Tabs} from "antd";
+import React, {Component} from 'react';
+import {Card, Tabs, Form} from "antd";
 import AppFilter from "../../components/AppFilter";
 import Ticket from "./Tickets";
+import {bindActionCreators} from "redux";
+import { generateSupportTicket } from "../../appRedux/actions";
+import {connect} from "react-redux";
 
 
 const TabPane = Tabs.TabPane;
-class ProductInventory extends Component {
+class Support extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      tabselect: 'all',
       innerTabSelect: '2'
     };
   }
@@ -51,12 +53,12 @@ class ProductInventory extends Component {
         />
         <Card>
           <Tabs defaultActiveKey="1" activeKey={this.state.innerTabSelect} type="card" className="" onChange={this.handleChangeCardTabs}>
-            <TabPane tab="SYSTEM MESSAGES" key="1" forceRender={true}>
+            <TabPane tab="SYSTEM MESSAGES" key="1" forceRender={false}>
             </TabPane>
-            <TabPane tab="TICKETS" key="2" forceRender={true}>
+            <TabPane tab="TICKETS" key="2" forceRender={false}>
               <Ticket />
             </TabPane>
-            <TabPane tab="LIVE CHAT" key="3" forceRender={true}>
+            <TabPane tab="LIVE CHAT" key="3" forceRender={false}>
             </TabPane>
           </Tabs>
         </Card>
@@ -66,5 +68,5 @@ class ProductInventory extends Component {
   }
 }
 
-const WrappedAddDeviceForm = Form.create()(ProductInventory);
+const WrappedAddDeviceForm = Form.create()(Support);
 export default WrappedAddDeviceForm;

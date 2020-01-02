@@ -1,7 +1,7 @@
 import React from "react";
 import SupportTicketReply from '../SupportTicketReply/index'
 import CustomScrollbars from 'util/CustomScrollbars'
-
+import { getDateFromTimestamp } from "../../../../utils/commonUtils";
 import statuses from "../../data/statuses";
 import categories from "../../data/categories";
 import priorities from "../../data/priorities";
@@ -9,8 +9,7 @@ import priorities from "../../data/priorities";
 class TicketDetail extends React.Component {
 
   state = {
-    replyTicket: false,
-    supportTicketReplies: []
+    replyTicket: false
   };
 
   handleRequestClose = () => {
@@ -20,11 +19,7 @@ class TicketDetail extends React.Component {
   };
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if(prevProps != this.props){
-      this.setState({
-        supportTicketReplies : this.props.supportTicketReplies,
-      })
-    }
+
   }
 
   render() {
@@ -92,16 +87,16 @@ class TicketDetail extends React.Component {
               {supportTicket.description}
             </p>
 
-            {(this.state.supportTicketReplies.length > 0) ?
+            {(this.props.supportTicketReplies.length > 0) ?
               <div>
-                <h2>Replies ({this.state.supportTicketReplies.length})</h2>
-                {this.state.supportTicketReplies.map((reply, index) => {
+                <h2>Replies ({this.props.supportTicketReplies.length})</h2>
+                {this.props.supportTicketReplies.map((reply, index) => {
                   return (<div className="gx-module-list-item gx-mail-cell" key={index}>
                     <div className="gx-mail-list-info">
                       <div className="gx-module-list-content">
                         <div className="gx-mail-user-des">
-                          <span className="gx-sender-name">{(reply.user_type === 'admin') ? 'Admin' : supportTicket.user.dealer_name +' ('+supportTicket.user.link_code+')' }</span>
-                          <div className="gx-time">24 Dec</div>
+                          <span className="gx-sender-name">{(reply.user_type === 'admin') ? 'Admin' : reply.user.dealer_name +' ('+reply.user.link_code+')' }</span>
+                          <div className="gx-time">{getDateFromTimestamp(reply.createdAt)}</div>
                         </div>
                         <div className="gx-message">
                           <p>{reply.description}</p>

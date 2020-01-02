@@ -5,7 +5,7 @@ import {
   GET_SUPPORT_TICKET,
   CLOSE_SUPPORT_TICKET,
   DELETE_SUPPORT_TICKET,
-  LOADING,
+  LOADING, GENERATE_SUPPORT_TICKET_SOCKET,
 } from "../../constants/ActionTypes";
 
 import { message, Modal } from 'antd';
@@ -32,6 +32,27 @@ export default (state = initialState, action) => {
       };
 
     case GENERATE_SUPPORT_TICKET:{
+      let tickets = state.supportTickets;
+
+      if (action.payload.status) {
+        tickets.unshift(action.payload.data);
+        success({
+          title: action.payload.msg,
+        });
+      }
+      else {
+        error({
+          title: action.payload.msg,
+        });
+      }
+
+      return {
+        ...state,
+        supportTickets: [...tickets],
+      };
+    }
+
+    case GENERATE_SUPPORT_TICKET_SOCKET:{
       let tickets = state.supportTickets;
 
       if (action.payload.status) {
