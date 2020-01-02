@@ -57,19 +57,24 @@ class Invoice extends Component {
         let discount = Math.ceil(Number(this.props.subTotal) * 0.03);
         let balanceDue = this.props.subTotal;
         let paid = 0;
-
-
+        let expiry_date;
+        // console.log(this.props.serviceData, renewService, applyServicesValue);
         if (deviceAction === "Edit") {
             total = this.props.total;
             paid = total;
             if (this.props.invoiceType === "pay_now") {
                 paid = balanceDue = total = total - discount;
             } else {
-                if (!renewService || applyServicesValue !== 'extend') {
+                if (!renewService && applyServicesValue !== 'extend') {
                     balanceDue = this.props.subTotal - this.props.creditsToRefund
                     total = this.props.subTotal - this.props.creditsToRefund
                 }
             }
+            // if (applyServicesValue == 'change') {
+            //     expiry_date = 
+            // } else {
+
+            // }
         } else {
             if (this.props.invoiceType === "pay_now") {
                 total = this.props.subTotal - discount;
