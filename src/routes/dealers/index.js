@@ -546,7 +546,7 @@ class Dealers extends Component {
             })
         }
 
-        console.log("testing: ", this.props.selectedOptions);
+        // console.log("testing: ", this.props.selectedOptions);
         if (this.props.selectedOptions !== prevProps.selectedOptions) {
             this.handleCheckChange(this.props.selectedOptions, false)
         }
@@ -703,7 +703,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const mapStateToProps = (state) => {
-    console.log("selected options:", state.dealers.selectedOptions)
+    // console.log("selected options:", state.dealers.selectedOptions)
     return {
         isloading: state.dealers.isloading,
         dealers: state.dealers.dealers,
