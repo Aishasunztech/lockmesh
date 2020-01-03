@@ -1,12 +1,28 @@
-
+// libraries
 import React, { Component } from "react";
 import { connect } from "react-redux";
-// import { bindActionCreators } from "redux";
+import { bindActionCreators } from "redux";
 import { Input, Modal, Select, Button } from "antd";
+import { isArray } from "util";
+
+// helpers
 import { componentSearch, getDealerStatus, titleCase, convertToLang, handleMultipleSearch, filterData_RelatedToMultipleSearch } from '../utils/commonUtils';
-import { getDealerList, suspendDealer, deleteDealer, activateDealer, undoDealer, updatePassword, editDealer } from "../../appRedux/actions/Dealers";
-import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
-import { resetUploadForm } from "../../appRedux/actions/Apk";
+
+// actions
+import {
+    getDealerList,
+    suspendDealer,
+    deleteDealer,
+    activateDealer,
+    undoDealer,
+    updatePassword,
+    editDealer,
+    getDropdown,
+    postDropdown,
+    postPagination,
+    getPagination
+} from "../../appRedux/actions";
+
 // import {getDevicesList} from '../../appRedux/actions/Devices';
 import AppFilter from '../../components/AppFilter';
 import AddDealer from '../addDealer/index';
@@ -15,7 +31,7 @@ import CircularProgress from "components/CircularProgress/index";
 import DealerList from "./components/dealerList";
 import styles from './dealers.css'
 
-
+// constants
 import {
     Appfilter_SearchDealer, Appfilter_ShowDealer, DEALER_PAGE_HEADING, S_Dealer_PAGE_HEADING
 } from '../../constants/AppFilterConstants';
@@ -50,7 +66,6 @@ import {
 } from '../../constants/DealerConstants';
 
 
-import { isArray } from "util";
 import { Tab_All, Tab_Active, Tab_Suspended, Tab_Archived } from "../../constants/TabConstants";
 // import { ADMIN, DEALER } from "../../constants/Constants";
 import { dealerColumns, sDealerColumns } from '../utils/columnsUtils';
@@ -86,17 +101,8 @@ class Dealers extends Component {
             filteredDealers: [],
             globalSearchedValue: "",
         };
-        this.handleChange = this.handleChange.bind(this);
-    }
 
-    // handleTableChange = (pagination, query, sorter) => {
-    //     // console.log('check sorter func: ', sorter)
-    //     const sortOrder = sorter.order || "ascend";
-    //     this.setState({
-    //         sortOrder,
-    //         columns: dealerColumns(sortOrder, this.props.translation, this.handleSearch)
-    //     })
-    // };
+    }
 
     handleTableChange = (pagination, query, sorter) => {
         // console.log('check sorter func: ', sorter)
@@ -132,17 +138,10 @@ class Dealers extends Component {
 
     };
 
-    handleOk = () => {
-        this.setState({ loading_DealerModal: true });
-        setTimeout(() => {
-            this.setState({ loading_DealerModal: false, visible_DealerModal: false });
-        }, 3000);
-    };
 
     handleCancel = (e) => {
         this.setState({ visible_DealerModal: false });
 
-        // this.props.resetUploadForm(true)
     };
 
     showModal = () => {
@@ -153,22 +152,19 @@ class Dealers extends Component {
 
 
     filterList = (type, dealers) => {
-        let dumyDealers = [];
+        let dummyDealers = [];
         if (dealers && dealers.length) {
             dealers.filter(function (dealer) {
                 let dealerStatus = getDealerStatus(dealer.unlink_status, dealer.account_status);
                 if (dealerStatus === type) {
-                    dumyDealers.push(dealer);
+                    dummyDealers.push(dealer);
                 }
             });
         }
-        return dumyDealers;
+        return dummyDealers;
     }
 
-    handleChange(value) {
-        // alert('value');
-        // alert(value);
-        // let type = value.toLowerCase();
+    handleChange = (value) => {
         let dealers = [];
         switch (value) {
             case 'active':
@@ -228,9 +224,10 @@ class Dealers extends Component {
 
     }
 
-    handleCheckChange = (values) => {
+    handleCheckChange = (values, isUpdated = true) => {
 
-        let dumydata = this.state.columns;
+        // const dealer_type = window.location.pathname.split("/").pop();
+        let dummyData = this.state.columns;
         //  console.log('values', values)
         if (values.length) {
             this.state.columns.map((column, index) => {
@@ -238,10 +235,10 @@ class Dealers extends Component {
                 // console.log("index", index);
 
 
-                if (dumydata[index].className !== 'row') {
-                    dumydata[index].className = 'hide';
-                    dumydata[index].children[0].className = 'hide';
-                    // dumydata[]
+                if (dummyData[index].className !== 'row') {
+                    dummyData[index].className = 'hide';
+                    dummyData[index].children[0].className = 'hide';
+                    // dummyData[]
                 }
 
                 values.map((value) => {
@@ -249,16 +246,16 @@ class Dealers extends Component {
                     // console.log("column", column)
                     if (column.className !== 'row') {
                         if (column.dataIndex === value.key) {
-                            dumydata[index].className = '';
-                            dumydata[index].children[0].className = '';
+                            dummyData[index].className = '';
+                            dummyData[index].children[0].className = '';
                         }
                     }
 
                 });
             });
-            // console.log("dumy data again", dumydata);
+            // console.log("dumy data again", dummyData);
 
-            this.setState({ columns: dumydata });
+            this.setState({ columns: dummyData });
         } else {
 
             const newState = this.state.columns.map((column) => {
@@ -272,18 +269,20 @@ class Dealers extends Component {
 
             this.setState({ columns: newState });
         }
-        // console.log('this.state.dealer_type is: ', this.state.dealer_type);
 
-        this.props.postDropdown(values, this.state.dealer_type);
+        /**
+         * @author Usman
+         */
+        if (isUpdated) {
+            this.props.postDropdown(values, this.state.dealer_type);
+        }
     }
 
     handleFilterOptions = () => {
         return (
             <Select
                 showSearch
-                placeholder={convertToLang(this.props.translation[Appfilter_ShowDealer], "Show Dealer")
-                    // <IntlMessages id="appfilter.ShowDealer" />
-                }
+                placeholder={convertToLang(this.props.translation[Appfilter_ShowDealer], "Show Dealer")}
                 optionFilterProp="children"
                 style={{ width: '100%' }}
                 filterOption={(input, option) => {
@@ -299,62 +298,6 @@ class Dealers extends Component {
         );
     }
 
-
-
-    componentWillMount() {
-        //  alert('will mount ');
-
-    }
-
-
-    componentDidMount() {
-        const dealer_type = window.location.pathname.split("/").pop();
-        // console.log('device type', dealer_type);
-        this.props.getDealerList(dealer_type);
-        // this.props.getDevicesList();
-        this.props.getDropdown(dealer_type);
-        this.props.getPagination(dealer_type);
-
-        this.setState({
-            expandedRowsKeys: (this.props.location.state) ? [this.props.location.state.id] : []
-        })
-
-        // this.setState({
-        //     //  devices: this.props.devices,
-        //     dealer_type: dealer_type
-        // })
-        //    console.log('did mount',this.props.getDropdown(dealer_type));
-
-    }
-
-    testfunc = () => {
-        // alert('testing');
-        // console.log('testing');
-    }
-
-    componentWillReceiveProps(nextProps) {
-        // alert("componentWillReceiveProps");
-        const dealer_type = nextProps.match.params.dealer_type;
-        //    console.log('device type recieved', dealer_type);
-
-        if (this.props !== nextProps) {
-            this.setState({
-                expandedRowsKeys: (this.props.location.state) ? [this.props.location.state.id] : []
-            })
-        }
-
-        if (this.state.dealer_type !== dealer_type) {
-            this.props.getDealerList(dealer_type);
-            // this.props.getDevicesList();
-            this.setState({
-                dealer_type: dealer_type,
-                dealers: this.props.dealers,
-            })
-            this.props.getDropdown(dealer_type);
-            this.handleCheckChange(this.props.selectedOptions)
-
-        }
-    }
 
     handleGlobalSearch(dealers) {
         // console.log("HANDLE GLOBAL SEARCH");
@@ -399,11 +342,11 @@ class Dealers extends Component {
                 //     copyDealers = this.state.filteredDealers;
                 //     status = false;
                 // }
-                let founddealers = componentSearch(copyDealers, value);
-                // console.log("found dealers", founddealers);
-                if (founddealers.length) {
+                let foundDealers = componentSearch(copyDealers, value);
+                // console.log("found dealers", foundDealers);
+                if (foundDealers.length) {
                     this.setState({
-                        dealers: founddealers,
+                        dealers: foundDealers,
                         globalSearchedValue: value
                     })
                 } else {
@@ -424,77 +367,6 @@ class Dealers extends Component {
             // alert(error);
         }
     }
-
-
-    componentDidUpdate(prevProps) {
-        // console.log('updated', this.state.columns);
-
-        if ((window.location.pathname.split("/").pop() === 'sdealer') && (this.state.columns !== undefined) && (this.state.options !== undefined) && (this.state.columns !== null) && (this.state.columns.length <= 9)) {
-            //  alert('if sdealer')
-            status = true;
-            let sDealerCols = sDealerColumns(this.props.translation, this.handleSearch);
-            this.state.columns.push(...sDealerCols);
-            // this.state.columns = this.state.columns
-        }
-        if ((window.location.pathname.split("/").pop() === 'sdealer') && (this.state.options.length <= 7)) {
-            // alert('if sdealer')
-            status = true;
-            this.state.options.push(convertToLang(this.props.translation[Parent_Dealer], "PARENT DEALER"), convertToLang(this.props.translation[Parent_Dealer_ID], "PARENT DEALER ID"));
-        }
-        else if ((window.location.pathname.split("/").pop() === 'dealer') && ((this.state.columns.length > 9) || (this.state.options.length > 7))) {
-            // alert('if dealer')
-            status = true;
-            this.state.columns = this.state.columns.filter(lst => lst.title !== convertToLang(this.props.translation[Parent_Dealer_ID], "PARENT DEALER ID"));
-            this.state.columns = this.state.columns.filter(lst => lst.title !== convertToLang(this.props.translation[Parent_Dealer], "PARENT DEALER"));
-            this.state.options = this.state.options.slice(0, 7);
-        }
-
-
-        if (this.props.dealers !== prevProps.dealers) {
-            this.setState({
-                dealers: this.props.dealers
-            })
-        }
-        if (this.props !== prevProps) {
-            let dealerList = []
-            switch (this.state.tabselect) {
-                case '2':
-                    dealerList = this.filterList('active', this.props.dealers);
-                    break;
-                case '3':
-                    dealerList = this.filterList('unlinked', this.props.dealers);
-                    break;
-                case '4':
-                    dealerList = this.filterList('suspended', this.props.dealers);
-                    break;
-                default:
-                    dealerList = this.filterList('active', this.props.dealers);
-                    break;
-            }
-            this.setState({
-                dealers: dealerList,
-                allDealers: this.props.dealers,
-                activeDealers: this.filterList('active', this.props.dealers),
-                suspendDealers: this.filterList('suspended', this.props.dealers),
-                unlinkedDealers: this.filterList('unlinked', this.props.dealers),
-            })
-            this.handleChangetab(this.state.tabselect);
-        }
-        if (this.props.translation !== prevProps.translation) {
-            this.setState({
-                columns: dealerColumns(this.props.translation, this.handleSearch)
-            })
-        }
-
-        if (this.props.selectedOptions !== prevProps.selectedOptions) {
-            this.handleCheckChange(this.props.selectedOptions)
-        }
-
-
-    }
-
-
-
 
     handlePagination = (value) => {
         this.refs.dealerList.handlePagination(value);
@@ -565,16 +437,158 @@ class Dealers extends Component {
 
     }
 
+    handleSearch = (e) => {
+
+        // console.log("dealer handleSearch key: ", e.target.name, "value: ", e.target.value);
+
+        this.state.SearchValues[e.target.name] = { key: e.target.name, value: e.target.value };
+        // console.log("data ; ", this.state.filteredDealers);
+        let response = handleMultipleSearch(e, status, copyDealers, this.state.SearchValues, this.state.filteredDealers)
+
+        // console.log(response.SearchValues, "response is: ===========> ", response)
+        this.setState({
+            dealers: response.demoData,
+            SearchValues: response.SearchValues
+        });
+        status = response.copy_status;
+        copyDealers = response.copyRequireSearchData;
+
+    }
+
+
+    handleSearchOnTabChange = (dealers) => {
+        let response = filterData_RelatedToMultipleSearch(dealers, this.state.SearchValues);
+        return response;
+
+    }
+
+    componentDidMount() {
+        const dealer_type = window.location.pathname.split("/").pop();
+        // console.log('device type', dealer_type);
+        this.props.getDealerList(dealer_type);
+        // this.props.getDevicesList();
+        this.props.getDropdown(dealer_type);
+        this.props.getPagination(dealer_type);
+
+        this.setState({
+            expandedRowsKeys: (this.props.location.state) ? [this.props.location.state.id] : []
+        })
+
+    }
+
+    componentDidUpdate(prevProps) {
+
+        if (
+            (window.location.pathname.split("/").pop() === 'sdealer') 
+            && (this.state.columns !== undefined)
+            && (this.state.options !== undefined)
+            && (this.state.columns !== null)
+            && (this.state.columns.length <= 9)
+        ) {
+            //  alert('if sdealer')
+            status = true;
+            let sDealerCols = sDealerColumns(this.props.translation, this.handleSearch);
+            this.state.columns.push(...sDealerCols);
+            // this.state.columns = this.state.columns
+        }
+
+        if ((window.location.pathname.split("/").pop() === 'sdealer') && (this.state.options.length <= 7)) {
+            // alert('if sdealer')
+            status = true;
+            this.state.options.push(convertToLang(this.props.translation[Parent_Dealer], "PARENT DEALER"), convertToLang(this.props.translation[Parent_Dealer_ID], "PARENT DEALER ID"));
+        } else if ((window.location.pathname.split("/").pop() === 'dealer') && ((this.state.columns.length > 9) || (this.state.options.length > 7))) {
+            // alert('if dealer')
+            status = true;
+            this.state.columns = this.state.columns.filter(lst => lst.title !== convertToLang(this.props.translation[Parent_Dealer_ID], "PARENT DEALER ID"));
+            this.state.columns = this.state.columns.filter(lst => lst.title !== convertToLang(this.props.translation[Parent_Dealer], "PARENT DEALER"));
+            this.state.options = this.state.options.slice(0, 7);
+        }
+
+
+        if (this.props.dealers !== prevProps.dealers) {
+            this.setState({
+                dealers: this.props.dealers
+            })
+        }
+
+        if (this.props !== prevProps) {
+            let dealerList = []
+            switch (this.state.tabselect) {
+                case '2':
+                    dealerList = this.filterList('active', this.props.dealers);
+                    break;
+                case '3':
+                    dealerList = this.filterList('unlinked', this.props.dealers);
+                    break;
+                case '4':
+                    dealerList = this.filterList('suspended', this.props.dealers);
+                    break;
+                default:
+                    dealerList = this.filterList('active', this.props.dealers);
+                    break;
+            }
+            this.setState({
+                dealers: dealerList,
+                allDealers: this.props.dealers,
+                activeDealers: this.filterList('active', this.props.dealers),
+                suspendDealers: this.filterList('suspended', this.props.dealers),
+                unlinkedDealers: this.filterList('unlinked', this.props.dealers),
+            })
+            this.handleChangetab(this.state.tabselect);
+        }
+
+        /**
+         * @section translation columns updating
+         */
+        if (this.props.translation !== prevProps.translation) {
+            this.setState({
+                columns: dealerColumns(this.props.translation, this.handleSearch)
+            })
+        }
+
+        // console.log("testing: ", this.props.selectedOptions);
+        if (this.props.selectedOptions !== prevProps.selectedOptions) {
+            this.handleCheckChange(this.props.selectedOptions, false)
+        }
+
+
+    }
+
+    componentWillReceiveProps(nextProps) {
+
+        const dealer_type = nextProps.match.params.dealer_type;
+        //    console.log('device type received', dealer_type);
+
+        if (this.props !== nextProps) {
+            this.setState({
+                expandedRowsKeys: (this.props.location.state) ? [this.props.location.state.id] : []
+            })
+        }
+
+        if (this.state.dealer_type !== dealer_type) {
+            this.props.getDealerList(dealer_type);
+            // this.props.getDevicesList();
+            this.props.getDropdown(dealer_type);
+            this.setState({
+                dealer_type: dealer_type,
+                dealers: this.props.dealers,
+            })
+            /**
+             * commented cause it will update from componentDidUpdate
+             */
+            // this.handleCheckChange(this.props.selectedOptions, false)
+
+        }
+
+    }
+
 
     render() {
-        // console.log('copy dealers: ', copyDealers);
-        // ADMIN,DEALER,SDEALER
-        // console.log(this.props.location, 'location is the ')
-        let dealerType;
-        let dealerHeadingType;
+
+        let dealerType = '';
+        let dealerHeadingType = '';
         const type = this.state.dealer_type;
-        // if (type === ADMIN) {
-        // dealerType = convertToLang(this.props.translation[Button_Add_Admin], Button_Add_Admin)}
+
         if (type === DEALER) {
             dealerType = convertToLang(this.props.translation[Button_Add_Dealer], "Add Dealer")
             dealerHeadingType = convertToLang(this.props.translation[Sidebar_dealers], "Dealers")
@@ -582,34 +596,15 @@ class Dealers extends Component {
             dealerType = convertToLang(this.props.translation[Button_Add_S_dealer], "Add S-dealer")
             dealerHeadingType = convertToLang(this.props.translation[Sidebar_sdealers], "S-Dealers")
         }
+
         return (
 
             <div>
                 {
-                    this.props.isloading ? <CircularProgress /> :
-
+                    this.props.isloading ?
+                        <CircularProgress />
+                        :
                         <div>
-                            {/* <AddDealer ref='addDealer'  /> */}
-                            <Modal
-                                visible={this.state.visible_DealerModal}
-                                title={dealerType}
-                                onOk={this.handleOk}
-                                onCancel={this.handleCancel}
-                                footer={null}
-                                maskClosable={false}
-                                destroyOnClose={true}
-                                okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
-                                cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
-                            >
-                                <AddDealer
-                                    handleCancel={this.handleCancel}
-                                    dealersList={this.state.dealers}
-                                    dealer_type={this.state.dealer_type}
-                                    dealerTypeText={dealerType}
-                                    translation={this.props.translation}
-                                />
-
-                            </Modal>
 
                             <AppFilter
                                 handleFilterOptions={this.handleFilterOptions}
@@ -629,7 +624,7 @@ class Dealers extends Component {
                                 handleCheckChange={this.handleCheckChange}
                                 handlePagination={this.handlePagination}
                                 handleComponentSearch={this.handleComponentSearch}
-                                testfunc={this.testfunc}
+
                                 addDealer={this.showAddDealer}
                                 translation={this.props.translation}
                                 //  toLink={"/create-dealer/" + this.state.dealer_type}
@@ -661,159 +656,54 @@ class Dealers extends Component {
                                 translation={this.props.translation}
                             />
 
+                            {/* <AddDealer ref='addDealer'  /> */}
+                            <Modal
+                                visible={this.state.visible_DealerModal}
+                                title={dealerType}
+                                onCancel={this.handleCancel}
+                                footer={null}
+                                maskClosable={false}
+                                destroyOnClose={true}
+                            // okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
+                            // cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
+                            >
+                                <AddDealer
+                                    handleCancel={this.handleCancel}
+                                    dealersList={this.state.dealers}
+                                    dealer_type={this.state.dealer_type}
+                                    dealerTypeText={dealerType}
+                                    translation={this.props.translation}
+                                />
+
+                            </Modal>
                         </div>
                 }
             </div>
         );
     }
 
-    handleSearch = (e) => {
 
-        // console.log("dealer handleSearch key: ", e.target.name, "value: ", e.target.value);
-
-        this.state.SearchValues[e.target.name] = { key: e.target.name, value: e.target.value };
-        // console.log("data ; ", this.state.filteredDealers);
-        let response = handleMultipleSearch(e, status, copyDealers, this.state.SearchValues, this.state.filteredDealers)
-
-        // console.log(response.SearchValues, "response is: ===========> ", response)
-        this.setState({
-            dealers: response.demoData,
-            SearchValues: response.SearchValues
-        });
-        status = response.copy_status;
-        copyDealers = response.copyRequireSearchData;
-
-
-        // let demoDealers = [];
-        // let demoSearchValues = this.state.SearchValues;
-        // if (status) {
-        //     copyDealers = this.state.dealers;
-        //     status = false;
-        // }
-        // console.log("coppydealers ", copyDealers);
-
-        // let targetName = e.target.name;
-        // let targetValue = e.target.value;
-
-        // // if (e.target.value.length) {
-        // if (targetValue.length || Object.keys(demoSearchValues).length) {
-        //     demoSearchValues[targetName] = { key: targetName, value: targetValue };
-        //     this.state.SearchValues[targetName] = { key: targetName, value: targetValue };
-
-        //     // console.log("keyname", e.target.name);
-        //     // console.log("value", e.target.value);
-        //     // console.log(this.state.dealers);
-        //     copyDealers.forEach((dealer) => {
-        //         // console.log("device", dealer);
-        //         // console.log('dealer amount is', dealer[e.target.name])
-
-        //         let searchColsAre = Object.keys(demoSearchValues).length;
-        //         let searchDealers = 0;
-
-        //         if (searchColsAre > 0) {
-        //             Object.values(demoSearchValues).forEach((data) => {
-
-        //                 if (data.value == "") {
-        //                     searchDealers++;
-        //                 }
-        //                 else if ((typeof dealer[data.key]) === 'string') {
-        //                     if (dealer[data.key].toUpperCase().includes(data.value.toUpperCase())) {
-        //                         searchDealers++;
-        //                     }
-        //                 } else if (dealer[data.key] !== null) {
-        //                     if (isArray(dealer[data.key])) {
-        //                         // console.log('is it working', data.key)
-        //                         if (dealer[data.key][0]['total'].toString().toUpperCase().includes(data.value.toUpperCase())) {
-        //                             // demoDealers.push(dealer);
-        //                             searchDealers++;
-        //                         }
-        //                     } else if (dealer[data.key].toString().toUpperCase().includes(data.value.toUpperCase())) {
-        //                         searchDealers++;
-        //                     }
-
-        //                 } else {
-        //                     // demoDevices.push(device);
-        //                 }
-
-        //             })
-
-        //             if (searchColsAre === searchDealers) {
-        //                 demoDealers.push(dealer);
-        //             }
-
-        //         } else {
-        //             if (dealer[targetName].toUpperCase().includes(targetValue.toUpperCase())) {
-        //                 demoDealers.push(dealer);
-        //             }
-        //         }
-
-        //     });
-        //     // console.log("searched value", demoDealers);
-        //     this.setState({
-        //         dealers: demoDealers,
-        //         SearchValues: demoSearchValues
-        //     })
-        // } else {
-        //     this.setState({
-        //         dealers: copyDealers,
-        //         SearchValues: demoSearchValues
-        //     })
-        // }
-    }
-
-
-    handleSearchOnTabChange = (dealers) => {
-        // console.log('check 2nd search data:: ', dealers);
-
-        let response = filterData_RelatedToMultipleSearch(dealers, this.state.SearchValues);
-        return response;
-
-        // let searchedDealers = [];
-        // let searchData = Object.values(this.state.SearchValues);
-        // let searchColsAre = Object.keys(this.state.SearchValues).length;
-
-        // if (searchColsAre) {
-        //     Dealers.forEach((device) => {
-        //         let searchDealers = 0;
-
-        //         for (let search of searchData) {
-        //             // console.log('search is: ', search)
-        //             // console.log('search key is: ', search.key)
-        //             if (search.value == "") {
-        //                 searchDealers++;
-        //             } else if (isArray(device[search.key])) {
-        //                 // console.log('is it working', data.key)
-        //                 if (device[search.key].toString().toUpperCase().includes(search.value.toUpperCase())) {
-        //                     searchDealers++;
-        //                 }
-        //             } else if (device[search.key].toString().toUpperCase().includes(search.value.toUpperCase())) {
-        //                 searchDealers++;
-        //             }
-
-        //         }
-        //         if (searchColsAre === searchDealers) {
-        //             searchedDealers.push(device);
-        //         }
-
-        //     });
-        //     return searchedDealers;
-        // } else {
-        //     return Dealers;
-        // }
-    }
-
-    handleSubmit = (e) => {
-        e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-                // console.log('Received values of form: ', values);
-            }
-        });
-    }
 }
 
 
-var mapStateToProps = (state) => {
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        getDealerList: getDealerList,
+        suspendDealer: suspendDealer,
+        deleteDealer: deleteDealer,
+        activateDealer: activateDealer,
+        undoDealer: undoDealer,
+        updatePassword: updatePassword,
+        editDealer: editDealer,
+        getDropdown: getDropdown,
+        postDropdown: postDropdown,
+        postPagination: postPagination,
+        getPagination: getPagination
+    }, dispatch);
+}
+
+const mapStateToProps = (state) => {
+    // console.log("selected options:", state.dealers.selectedOptions)
     return {
         isloading: state.dealers.isloading,
         dealers: state.dealers.dealers,
@@ -828,6 +718,4 @@ var mapStateToProps = (state) => {
     };
 }
 
-
-
-export default connect(mapStateToProps, { getDealerList, suspendDealer, deleteDealer, activateDealer, undoDealer, updatePassword, editDealer, getDropdown, postDropdown, postPagination, getPagination, resetUploadForm })(Dealers)
+export default connect(mapStateToProps, mapDispatchToProps)(Dealers)
