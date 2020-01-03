@@ -33,7 +33,7 @@ import {
 } from '../../../constants/DeviceConstants';
 import { Button_Add_User, Button_submit, Button_Cancel } from '../../../constants/ButtonConstants';
 import { LABEL_DATA_PGP_EMAIL, DUMY_TRANS_ID, LABEL_DATA_CHAT_ID, LABEL_DATA_SIM_ID, LABEL_APPLY_SERVICES } from '../../../constants/LabelConstants';
-import moment from 'moment';
+// import moment from 'moment';
 import axios from 'axios';
 import RestService from '../../../appRedux/services/RestServices';
 import { async } from 'q';
@@ -41,6 +41,9 @@ import { inventorySales, refundServiceColumns } from '../../utils/columnsUtils';
 import Invoice from './invoice';
 import { PRE_ACTIVATE_DEVICE } from '../../../constants/ActionTypes';
 import { Markup } from 'interweave';
+import moment from 'moment-timezone';
+
+moment.tz.setDefault("Europe/Berlin");;
 
 const { TextArea } = Input;
 const confirm = Modal.confirm
@@ -118,7 +121,8 @@ class EditDevice extends Component {
                 values.finalStatus = this.props.device.finalStatus;
                 values.prevService = this.props.device.services
                 if (this.props.user.type === ADMIN) {
-                    values.expiry_date = values.expiry_date._d.toDateString()
+                    values.expiry_date = moment(values.expiry_date._d.toString()).format('YYYY/MM/DD')
+                    console.log(values.expiry_date);
                 }
                 if (this.state.renewService) {
                     values.products = this.state.products;
@@ -715,10 +719,14 @@ class EditDevice extends Component {
     }
 
 
-    // onChangeAdjustExpiry = (value) => {
-    //     console.log(value);
-    //     console.log(value._d.toDateString());
-    // }
+    onChangeAdjustExpiry = (value, dateString) => {
+        console.log(dateString);
+
+        console.log(value);
+        console.log(moment(value._d.toString()).format('YYYY/MM/DD'));
+        // console.log(moment.tz(value._d, "America/Toronto").format());
+        // console.log(moment(moment.tz(value._d, "America/Toronto").format()).format("YYYY/MM/DD"));
+    }
 
     render() {
         // 
@@ -938,12 +946,12 @@ class EditDevice extends Component {
                                         className="apply_services"
                                     >
                                         {this.props.form.getFieldDecorator('expiry_date', {
-                                            initialValue: moment(this.state.expiry_date, 'YYYY/MM/DD'),
+                                            initialValue: moment(this.state.expiry_date, 'YYYY/MM/DD hh:mm:ss'),
                                             // rules: [{
                                             //     required: true, message: convertToLang(this.props.translation[Expire_Date_Require], "Expiry Date is Required ! "),
                                             // }],
                                         })(
-                                            <DatePicker style={{ width: '100%' }} disabledDate={this.disabledDate} format={'YYYY/MM/DD'} disabled={(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION)} />
+                                            <DatePicker onChange={this.onChangeAdjustExpiry} style={{ width: '100%' }} disabledDate={this.disabledDate} format={'YYYY/MM/DD'} disabled={(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION)} />
                                         )}
 
                                     </Form.Item>
