@@ -226,7 +226,7 @@ class Dealers extends Component {
 
     }
 
-    handleCheckChange = (values) => {
+    handleCheckChange = (values, isUpdated = true) => {
 
         let dumydata = this.state.columns;
         //  console.log('values', values)
@@ -272,7 +272,10 @@ class Dealers extends Component {
         }
         // console.log('this.state.dealer_type is: ', this.state.dealer_type);
 
-        this.props.postDropdown(values, this.state.dealer_type);
+        if (isUpdated) {
+            this.props.postDropdown(values, this.state.dealer_type);
+        }
+
     }
 
     handleFilterOptions = () => {
@@ -349,7 +352,7 @@ class Dealers extends Component {
                 dealers: this.props.dealers,
             })
             this.props.getDropdown(dealer_type);
-            this.handleCheckChange(this.props.selectedOptions)
+            // this.handleCheckChange(this.props.selectedOptions)
 
         }
     }
@@ -485,7 +488,7 @@ class Dealers extends Component {
         }
 
         if (this.props.selectedOptions !== prevProps.selectedOptions) {
-            this.handleCheckChange(this.props.selectedOptions)
+            this.handleCheckChange(this.props.selectedOptions, false)
         }
 
 

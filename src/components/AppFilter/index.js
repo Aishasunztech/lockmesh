@@ -72,7 +72,7 @@ class AppFilter extends Component {
             // console.log("Will Recieve Props", nextProps.defaultPagingValue, this.props.defaultPagingValue);
             this.setPagination(nextProps.defaultPagingValue)
         }
-        if (this.props.selectedOptions !== nextProps.selectedOptions) {
+        // if (this.props.selectedOptions !== nextProps.selectedOptions) {
             // console.log(nextProps.selectedOptions, "componentWillReceiveProps selectedOptions", this.props.selectedOptions);
             // console.log("componentWillReceiveProps", this.state.selectedDisplayValues);
             // alert('recive props', nextProps.selectedOptions);
@@ -80,12 +80,12 @@ class AppFilter extends Component {
             // this.setDropdowns(nextProps.selectedOptions);
 
             //  this.props.handleCheckChange();
-        }
+        // }
     }
 
     componentDidUpdate(prevProps) {
         if (this.props.selectedOptions !== prevProps.selectedOptions) {
-            console.log(prevProps.selectedOptions, "componentDidUpdate selectedOptions", this.props.selectedOptions);
+            // console.log(prevProps.selectedOptions, "componentDidUpdate selectedOptions", this.props.selectedOptions);
             this.setDropdowns(this.props.selectedOptions);
         }
     }
@@ -172,6 +172,8 @@ class AppFilter extends Component {
                                         labelKey="value"
                                         value={this.state.selectedDisplayValues}
                                         placeholder={convertToLang(translation[Appfilter_Display], "Display")}
+                                        manySelectedPlaceholder = {allSelectedOpt ? "All Selected" : `${this.state.selectedDisplayValues.length} selected`}
+                                        allSelectedPlaceholder={allSelectedOpt ? "All Selected" : ""}
                                         className="display_"
                                         multiple={true}
                                         numberDisplayed={true}
