@@ -8,7 +8,7 @@ import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Div
 // Helpers
 import { convertToLang, formatMoney, removeColumns } from '../../utils/commonUtils'
 
-export default class DealerPaymentHistory extends Component {
+export default class DealerOverDuePayments extends Component {
 
     constructor(props) {
         super(props);
@@ -32,19 +32,18 @@ export default class DealerPaymentHistory extends Component {
                 },
 
                 {
-                    title: convertToLang(props.translation[''], "PAYMENT METHOD"),
+                    title: convertToLang(props.translation[''], "DUE CREDITS (USD)"),
                     align: "center",
-                    dataIndex: 'payment_method',
-                    key: 'payment_method',
+                    dataIndex: 'due_credits',
+                    key: 'due_credits',
                 },
 
                 {
-                    title: convertToLang(props.translation[''], "AMOUNT (USD)"),
+                    title: convertToLang(props.translation[''], "PAID CREDITS"),
                     align: "center",
-                    dataIndex: 'amount',
-                    key: 'amount',
+                    dataIndex: 'paid_credits',
+                    key: 'paid_credits',
                 },
-
                 {
                     title: convertToLang(props.translation[''], "TOTAL CREDITS"),
                     align: "center",
@@ -57,32 +56,22 @@ export default class DealerPaymentHistory extends Component {
 
     }
 
-    showModal = (dealer, callback, status = '') => {
+    showModal = (dealer, paymentHistory) => {
         let { paymentHistoryColumns } = this.state;
 
-        if (status) {
-            paymentHistoryColumns = removeColumns(paymentHistoryColumns, ['payment_method']);
-        }
 
         this.setState({
             visible: true,
             dealer_id: dealer.dealer_id,
-            paymentHistoryColumns: paymentHistoryColumns
+            // paymentHistoryColumns: paymentHistoryColumns,
+            paymentHistory: paymentHistory
         });
-        
-        callback(dealer.dealer_id, status)
     }
 
     handleCancel = () => {
         this.setState({ visible: false });
     }
-    componentWillReceiveProps(nextProps) {
-        if (this.props.paymentHistory.length !== nextProps.paymentHistory.length) {
-            this.setState({
-                paymentHistory: nextProps.paymentHistory
-            })
-        }
-    }
+
     renderPaymentHistoryList = (list) => {
 
         if (list) {
@@ -93,8 +82,9 @@ export default class DealerPaymentHistory extends Component {
                     transaction_no: item.id,
                     created_at: item.created_at,
                     payment_method: item.transection_type,
-                    amount: "$ " + formatMoney(item.credits),
-                    total_credits: item.credits,
+                    due_credits: "$ " + formatMoney(item.due_credits),
+                    paid_credits: "$ " + formatMoney(item.paid_credits),
+                    total_credits: "$ " + formatMoney(item.credits),
                 }
             })
         }
@@ -115,15 +105,8 @@ export default class DealerPaymentHistory extends Component {
                             onClick={this.handleCancel}
                         >
                             Close
-                            {/* {convertToLang(this.props.translation[Button_Cancel], "Cancel")} */}
                         </Button>,
-                        // <Button
-                        //     key="submit"
-                        //     type="primary"
-                        //     onClick={this.handleSubmit}
-                        // >
-                        //     {convertToLang(this.props.translation[Button_submit], "Submit")}
-                        // </Button>,
+
                     ]}
                 >
                     <Table

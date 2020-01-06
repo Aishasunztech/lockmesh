@@ -281,7 +281,7 @@ export default (state = INIT_STATE, action) => {
 		}
 
 		case COMPONENT_ALLOWED: {
-			console.log(action.payload);
+			
 			return {
 				...state,
 				isAllowed: action.payload.ComponentAllowed,

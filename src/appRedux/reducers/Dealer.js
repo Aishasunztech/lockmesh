@@ -235,7 +235,7 @@ export default (state = initialState, action) => {
             }
 
 
-        case EDIT_DEALER:
+        case EDIT_DEALER: {
 
             if (action.response.status) {
 
@@ -246,6 +246,7 @@ export default (state = initialState, action) => {
                         state.dealers[objIndex4].dealer_email = action.payload.formData.email;
                     }
                 }
+
                 if (action.response.alreadyAvailable === false) {
                     success({
                         title: action.response.msg,
@@ -255,8 +256,7 @@ export default (state = initialState, action) => {
                         title: action.response.msg, // "Given email is already in use. Please choose different Email",
                     });
                 }
-            }
-            else {
+            } else {
                 error({
                     title: action.response.msg,
                 });
@@ -270,8 +270,8 @@ export default (state = initialState, action) => {
                 action: action.payload,
             }
 
-
-        case ADD_DEALER:
+        }
+        case ADD_DEALER: {
             // console.log('item added is:',action.response.item_added[0])
 
             if (action.response.status) {
@@ -302,13 +302,9 @@ export default (state = initialState, action) => {
                 // options: [...state.options],
 
             }
-            break;
+        }
+
         case GET_DROPDOWN: {
-            // console.log(GET_DROPDOWN);
-            // console.log({
-            //     ...state,
-            //     selectedOptions: action.payload
-            // });
             return {
                 ...state,
                 selectedOptions: action.payload
@@ -316,11 +312,7 @@ export default (state = initialState, action) => {
         }
 
         case GET_PAGINATION: {
-            // console.log(GET_DROPDOWN);
-            // console.log({
-            //     ...state,
-            //     selectedOptions: action.payload
-            // });
+            
             return {
                 ...state,
                 DisplayPages: action.payload
@@ -328,10 +320,16 @@ export default (state = initialState, action) => {
         }
 
         case POST_DROPDOWN: {
-            return {
-                ...state
+            if(action.payload.status){
+                return {
+                    ...state,
+                    // selectedOptions: JSON.parse(action.payload.data)
+                }
+            } else {
+                return state;
             }
         }
+
         default:
             return state;
 

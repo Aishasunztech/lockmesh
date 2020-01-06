@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Button, Form, Input, Select, InputNumber, Row, Col, Tag, Calendar, DatePicker, TimePicker, Modal } from 'antd';
-import { checkValue, convertToLang } from '../../utils/commonUtils'
+import { checkValue, convertToLang, checkTimezoneValue, convertTimezoneValue } from '../../utils/commonUtils'
 
 import {
     DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, User_Name_require, Only_alpha_numeric, Not_valid_Email, Email, Name, Required_Email
@@ -11,6 +11,7 @@ import FilterDevices from './filterDevices'
 import BulkSendMsgConfirmation from './bulkSendMsgConfirmation';
 // import RepeatMsgCalender from './repeateMsgCalender';
 import moment from 'moment';
+import { TIMESTAMP_FORMAT } from '../../../constants/Application';
 
 const confirm = Modal.confirm;
 const success = Modal.success
@@ -82,7 +83,7 @@ class SendMsgForm extends Component {
         e.preventDefault();
         // console.log("handle submit ", this.props.selectedDevices, this.state.selectedDealers, this.state.selectedUsers);
         this.props.form.validateFieldsAndScroll((err, values) => {
-           
+
             if (!err) {
 
                 if (this.props.selectedDevices && this.props.selectedDevices.length) {
@@ -90,7 +91,7 @@ class SendMsgForm extends Component {
                     let dateTimeVal = '';
 
                     if (this.state.timer === "NOW") {
-                        dateTimeVal = '' //moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+                        dateTimeVal = '' //moment().format('YYYY-MM-DD HH:mm:ss');
                         repeatVal = "NONE";
                     } else if (this.state.timer === "DATE/TIME") {
                         dateTimeVal = this.state.selected_dateTime;
@@ -100,6 +101,11 @@ class SendMsgForm extends Component {
                         repeatVal = this.state.repeat_duration;
                     }
 
+                    // covert time to dateTime value
+                    if (this.state.selected_Time) {
+                        let dealerTZ = checkTimezoneValue(this.props.user.timezone, false);
+                        dateTimeVal = moment().tz(dealerTZ).set(this.state.selected_Time, 'HH:mm').format('YYYY-MM-DD HH:mm:ss');
+                    }
 
                     let data = {
                         devices: this.props.selectedDevices,
@@ -108,7 +114,7 @@ class SendMsgForm extends Component {
                         msg: values.msg_txt,
                         timer: values.timer,
                         repeat: repeatVal,
-                        dateTime: dateTimeVal,
+                        dateTime: convertTimezoneValue(this.props.user.timezone, dateTimeVal, TIMESTAMP_FORMAT, true),
                         weekDay: values.weekDay ? values.weekDay : 0,
                         monthDate: values.monthDate ? values.monthDate : 0,
                         monthName: values.monthName ? values.monthName : 0,
@@ -160,14 +166,14 @@ class SendMsgForm extends Component {
 
         // console.log("nextProps.users_list && nextProps.dealerList ", nextProps.users_list, nextProps.dealerList)
         if (nextProps.users_list && nextProps.dealerList) {
-        let allDealers = nextProps.dealerList.map((item) => {
-            return ({ key: item.dealer_id, label: item.dealer_name })
-        });
+            let allDealers = nextProps.dealerList.map((item) => {
+                return ({ key: item.dealer_id, label: item.dealer_name })
+            });
 
-        let allUsers = nextProps.users_list.map((item) => {
-            return ({ key: item.user_id, label: item.user_name })
-        });
-        this.setState({ allUsers, allDealers })
+            let allUsers = nextProps.users_list.map((item) => {
+                return ({ key: item.user_id, label: item.user_name })
+            });
+            this.setState({ allUsers, allDealers })
         }
     }
 

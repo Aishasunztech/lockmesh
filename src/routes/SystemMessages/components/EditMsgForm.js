@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Button, Form, Input, Select, InputNumber, Row, Col, Tag, Calendar, DatePicker, TimePicker, Modal } from 'antd';
-import { checkValue, convertToLang, getMonthName } from '../../utils/commonUtils'
+import { checkValue, convertToLang, getMonthName, checkTimezoneValue } from '../../utils/commonUtils'
 
 import {
     DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, User_Name_require, Only_alpha_numeric, Not_valid_Email, Email, Name, Required_Email
@@ -116,6 +116,12 @@ class EditMsgForm extends Component {
                         copyEditRecord.week_day = "";
                     }
 
+                }
+
+                // covert time to dateTime value
+                if (this.state.selected_Time) {
+                    let dealerTZ = checkTimezoneValue(this.props.user.timezone, false);
+                    copyEditRecord.date_time = moment().tz(dealerTZ).set(copyEditRecord.time, 'HH:mm').format('YYYY-MM-DD HH:mm:ss');
                 }
 
                 copyEditRecord.msg = values.msg_txt

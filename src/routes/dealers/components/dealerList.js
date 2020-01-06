@@ -323,7 +323,7 @@ class DealerList extends Component {
                         columns={this.state.columns}
                         rowKey='row_key'
                         align='center'
-                        scroll={{ x: true }}
+                        // scroll={{ x: true }}
                         rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.row_key) ? 'exp_row' : ''}
                         pagination={false}
                         dataSource={this.renderList(this.props.dealersList)}
