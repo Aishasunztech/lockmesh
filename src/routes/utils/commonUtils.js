@@ -462,13 +462,19 @@ export function getSelectedTZDetail(zone_name) {
   return detail;
 }
 
-export function checkTimezoneValue(zone_name) {
+export function checkTimezoneValue(zone_name, withGMT = true) {
   let detail = 'N/A'; // Timezone not selected
   let timeZones = moment.tz.names();
   let foundZoneIndex = timeZones.findIndex(item => item.toLowerCase() === zone_name.toLowerCase());
 
   if (foundZoneIndex !== -1) {
-    detail = `(GMT${moment.tz(timeZones[foundZoneIndex]).format('Z')}) ${timeZones[foundZoneIndex]}`
+    if (withGMT) {
+      detail = `(GMT${moment.tz(timeZones[foundZoneIndex]).format('Z')}) ${timeZones[foundZoneIndex]}`
+    } else {
+      detail = timeZones[foundZoneIndex];
+    }
+  } else {
+    if (!withGMT) detail = '';
   }
   return detail;
 }
@@ -529,7 +535,7 @@ export function getMonthName(key) {
       return "N/A";
   }
 }
-export function convertTimezoneValue(dealerTimezone, data, dateFormat) { // dealerTimezone: timezone, data: date/time
+export function convertTimezoneValue(dealerTimezone, data, dateFormat, clientToServerTZ = false) { // dealerTimezone: timezone, data: date/time
   let coverted_dateTime = "N/A";
 
   if (data && data !== "N/A" && data !== "n/a" && data !== "0000-00-00 00:00:00") {
@@ -538,7 +544,11 @@ export function convertTimezoneValue(dealerTimezone, data, dateFormat) { // deal
     if (foundZoneIndex === -1) {
       dealerTimezone = moment.tz.guess(); // get local time zone value e.g "Asia/Karachi"
     }
-    coverted_dateTime = moment.tz(data, SERVER_TIMEZONE).tz(dealerTimezone).format(dateFormat)
+    if (clientToServerTZ) {
+      coverted_dateTime = moment.tz(data, dealerTimezone).tz(SERVER_TIMEZONE).format(dateFormat);
+    } else {
+      coverted_dateTime = moment.tz(data, SERVER_TIMEZONE).tz(dealerTimezone).format(dateFormat);
+    }
   }
 
   // console.log("convertTimezoneValue ",data, SERVER_TIMEZONE,  dealerTimezone, coverted_dateTime)

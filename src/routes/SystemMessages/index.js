@@ -265,7 +265,7 @@ class SystemMessages extends Component {
                         setSelectedBulkDevices={this.props.setSelectedBulkDevices}
                         sendMsgOnDevices={this.props.sendBulkMsg}
                         handleCancelSendMsg={this.handleSendMsgButton}
-                        // user={this.state.user}
+                        user={this.props.user}
                         ref='send_msg_form'
                         users_list={this.props.users_list}
                         dealerList={this.props.dealerList}
