@@ -2330,7 +2330,7 @@ export function apkColumns(translation) {
                     {convertToLang(translation[APK_PERMISSION], "PERMISSION")}
                     <Popover placement="top" content={(<Markup content={convertToLang(translation[APK_PERMISSION_HELPING_TEXT],
                         `   <p>Press <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;">
-                            <i className="fa fa-caret-right" aria-hidden="true"></i> 
+                            <i className="fa fa-caret-right" aria-hidden="true"></i>
                             </a> to Add, remove or View
                             <br/> the Dealers who have permission
                             <br/>to use this App</p>`)} />)}>
@@ -2426,7 +2426,7 @@ export function featureApkColumns(translation) {
                     {convertToLang(translation[APK_PERMISSION], "PERMISSION")}
                     <Popover placement="top" content={(<Markup content={convertToLang(translation[APK_PERMISSION_HELPING_TEXT],
                         `   <p>Press <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;">
-                            <i className="fa fa-caret-right" aria-hidden="true"></i> 
+                            <i className="fa fa-caret-right" aria-hidden="true"></i>
                             </a> to Add, remove or View
                             <br/> the Dealers who have permission
                             <br/>to use this App</p>`)} />)}>
@@ -3407,7 +3407,6 @@ export function refundServiceColumns(translation) {
             {
                 title: convertToLang(translation[DUMY_TRANS_ID], "DESCRPTION"),
                 dataIndex: 'description',
-                className: '',
                 align: "center",
                 className: '',
                 key: 'description',
@@ -3421,14 +3420,12 @@ export function refundServiceColumns(translation) {
                 dataIndex: 'term',
                 className: '',
                 align: "center",
-                className: '',
                 key: 'term',
             },
 
             {
                 title: convertToLang(translation[DUMY_TRANS_ID], "CREDIT TERM (DAYS)"),
                 dataIndex: 'remaining_term',
-                className: '',
                 align: "center",
                 className: '',
                 key: 'remaining_term',
@@ -3437,7 +3434,6 @@ export function refundServiceColumns(translation) {
             {
                 title: convertToLang(translation[DUMY_TRANS_ID], "UNIT PRICE (CREDITS)"),
                 dataIndex: 'unit_price',
-                className: '',
                 align: "center",
                 className: '',
                 key: 'unit_price',
@@ -3450,7 +3446,6 @@ export function refundServiceColumns(translation) {
                 dataIndex: 'line_total',
                 className: '',
                 align: "center",
-                className: '',
                 key: 'line_total',
                 // ...this.getColumnSearchProps('status'),
                 // sorter: (a, b) => { return a.line_total - b.line_total },
@@ -3564,7 +3559,7 @@ export function domainColumns(translation, handleSearch, isModal = false) {
                     {convertToLang(translation[APK_PERMISSION], "PERMISSION")}
                     <Popover placement="top" content={(<Markup content={convertToLang(translation[""],
                         `   <p>Press <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;">
-                                    <i className="fa fa-caret-right" aria-hidden="true"></i> 
+                                    <i className="fa fa-caret-right" aria-hidden="true"></i>
                                     </a> to Add, remove or View
                                     <br/> the Dealers who have permission
                                     <br/>to use this Domain</p>`)} />)}>
@@ -3685,7 +3680,7 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                     {convertToLang(translation[""], "DEVICES")}
                     <Popover placement="top" content={(<Markup content={convertToLang(translation[""],
                         `   <p>Press <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;">
-                                    <i className="fa fa-caret-right" aria-hidden="true"></i> 
+                                    <i className="fa fa-caret-right" aria-hidden="true"></i>
                                     </a> to view devices list</p>`)} />)}>
                         <span className="helping_txt"><Icon type="info-circle" /></span>
                     </Popover>
@@ -3734,7 +3729,6 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                     placeholder="TIMER STATUS"
                 />
             ),
-            key: 'timer_status',
             dataIndex: 'timer_status',
             key: 'timer_status',
             className: '',
@@ -3905,4 +3899,106 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
     }
 
     return columns;
+}
+
+export function supportSystemMessage(translation, handleSearch, isModal = false) {
+  let columns = [
+    {
+      title: "#",
+      dataIndex: 'counter',
+      align: 'center',
+      className: 'row',
+      width: 50,
+      render: (text, record, index) => ++index,
+    },
+
+    {
+      title: (
+        <Input.Search
+          name="receiver"
+          key="receiver"
+          id="receiver"
+          className="search_heading"
+          onChange={handleSearch}
+          autoComplete="new-password"
+          placeholder="RECEIVER"
+        />
+      ),
+      dataIndex: 'receiver',
+      className: '',
+      key: 'receiver',
+      children: [
+        {
+          width: 200,
+          title: convertToLang(translation[""], "RECEIVER"),
+          dataIndex: 'receiver',
+          key: 'receiver',
+        }
+      ]
+    },
+
+    {
+      title: (
+        <Input.Search
+          name="subject"
+          key="subject"
+          id="subject"
+          className="search_heading"
+          onChange={handleSearch}
+          autoComplete="new-password"
+          placeholder="SUBJECT"
+        />
+      ),
+      dataIndex: 'subject',
+      className: '',
+      key: 'subject',
+      children: [
+        {
+          title: convertToLang(translation[""], "SUBJECT"),
+          dataIndex: 'subject',
+          key: 'subject',
+        }
+      ]
+    },
+
+    {
+      title: (
+        <Input.Search
+          name="date"
+          key="date"
+          id="date"
+          className="search_heading"
+          onChange={handleSearch}
+          autoComplete="new-password"
+          placeholder="DATE"
+        />
+      ),
+      dataIndex: 'date',
+      className: '',
+      key: 'date',
+      children: [
+        {
+          width: 200,
+          title: convertToLang(translation[""], "DATE"),
+          dataIndex: 'date',
+          key: 'date',
+        }
+      ]
+    },
+
+    {
+      title: "ACTION",
+      dataIndex: 'action',
+      align: 'center',
+      width: 150,
+      className: '',
+    },
+  ];
+
+
+  if (isModal) {
+    columns.splice(1, 1)
+  }
+
+  return columns;
 }

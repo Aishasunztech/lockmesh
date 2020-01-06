@@ -24,7 +24,7 @@ import {
 //     DEALER_TOKENS
 // } from '../../constants/DealerConstants';
 import { message, Modal } from 'antd';
-import { DEALER_LOADING, CHANGE_TIMEZONE } from "../../constants/ActionTypes";
+import { DEALER_LOADING,ALL_TO_ALL_DEALERS, CHANGE_TIMEZONE } from "../../constants/ActionTypes";
 
 const success = Modal.success
 const error = Modal.error
@@ -38,6 +38,16 @@ const initialState = {
     action: '',
     msg: 'no message',
     selectedOptions: [],
+    allDealers: [],
+    // options: [
+    //     DEALER_ID,
+    //     DEALER_NAME,
+    //     DEALER_EMAIL,
+    //     DEALER_PIN,
+    //     DEALER_DEVICES,
+    //     DEALER_TOKENS
+    // ],
+    // options: ["DEALER ID", "DEALER NAME", "DEALER EMAIL", "DEALER PIN", "DEVICES", "TOKENS"],
 
 };
 
@@ -71,6 +81,14 @@ export default (state = initialState, action) => {
                 dealers: action.payload,
                 // options: state.options
             }
+
+        case ALL_TO_ALL_DEALERS:
+          return {
+            ...state,
+            isloading: false,
+            spinloading: false,
+            allDealers: action.payload,
+          };
 
         case DEALERS_LIST_IN_SDEALER: {
             return {
