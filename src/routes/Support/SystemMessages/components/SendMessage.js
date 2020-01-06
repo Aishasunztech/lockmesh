@@ -11,7 +11,7 @@ const error   = Modal.error;
 const { TextArea } = Input;
 
 
-class SendMsgForm extends Component {
+class SendMessage extends Component {
 
   constructor(props) {
     super(props);
@@ -51,15 +51,12 @@ class SendMsgForm extends Component {
     }
 
 
-    if (nextProps.users_list && nextProps.dealerList) {
+    if (nextProps.dealerList) {
       let allDealers = nextProps.dealerList.map((item) => {
         return ({ key: item.dealer_id, label: item.dealer_name })
       });
 
-      let allUsers = nextProps.users_list.map((item) => {
-        return ({ key: item.user_id, label: item.user_name })
-      });
-      this.setState({ allUsers, allDealers })
+      this.setState({ allDealers })
     }
   }
 
@@ -135,10 +132,7 @@ class SendMsgForm extends Component {
         selectedUsers = this.state.allUsers;
       }
     }
-    else if (values.length === this.props.users_list.length) {
-      selectedUsers = this.state.allUsers
-      checkAllUsers = true;
-    }
+
     else {
       selectedUsers = values.filter(e => e.key !== "all");
     }
@@ -214,6 +208,7 @@ class SendMsgForm extends Component {
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
               >
+
                 <Select
                   value={this.state.selectedDealers}
                   mode="multiple"
@@ -227,6 +222,7 @@ class SendMsgForm extends Component {
                   placeholder={convertToLang(this.props.translation[""], "Select dealer/sdealers")}
                   onChange={this.handleChangeDealer}
                   onDeselect={(e) => this.handleDeselect(e, "dealers")}
+
                 >
                   {(this.state.allDealers && this.state.allDealers.length > 0) ?
                     <Select.Option key="allDealers" value="all">Select All</Select.Option>
@@ -244,6 +240,30 @@ class SendMsgForm extends Component {
           <Row gutter={24} className="mt-4">
             <Col className="col-md-12 col-sm-12 col-xs-12">
               <Form.Item
+                label={convertToLang(this.props.translation[""], "Subject")}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 16 }}
+              >
+                {this.props.form.getFieldDecorator('subject', {
+                  initialValue: '',
+                  rules: [
+                    {
+                      required: true, message: convertToLang(this.props.translation[""], "Subject is required"),
+                    }
+                  ],
+                })(
+                  <Input
+                  placeholder="Subject"
+                  />
+                )}
+              </Form.Item>
+            </Col>
+
+          </Row>
+
+          <Row gutter={24} className="mt-4">
+            <Col className="col-md-12 col-sm-12 col-xs-12">
+              <Form.Item
                 label={convertToLang(this.props.translation[""], "Message")}
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
@@ -252,7 +272,7 @@ class SendMsgForm extends Component {
                   initialValue: '',
                   rules: [
                     {
-                      required: true, message: convertToLang(this.props.translation[""], "Message field is required"),
+                      required: true, message: convertToLang(this.props.translation[""], "Message is required"),
                     }
                   ],
                 })(
@@ -262,7 +282,6 @@ class SendMsgForm extends Component {
                 )}
               </Form.Item>
             </Col>
-
           </Row>
 
 
@@ -283,5 +302,5 @@ class SendMsgForm extends Component {
   }
 }
 
-const WrappedAddDeviceForm = Form.create()(SendMsgForm);
+const WrappedAddDeviceForm = Form.create()(SendMessage);
 export default WrappedAddDeviceForm;

@@ -33,7 +33,6 @@ import SetPrice from './account/PricesPakages/index'
 import Domains from "./domains/index";
 import Reporting from './account/Reporting/index'
 import Support from './Support/index'
-import Tickets from './Support/Tickets/index'
 import SystemMessages from './SystemMessages/index'
 import DealerAgent from './dealerAgent/index'
 import BulkActivities from './bulkActivities/index'
@@ -103,13 +102,6 @@ const App = ({ match }) => {
           path={`${match.url}support`}
           component={Support}
         />
-
-        <Route
-          exact
-          path={`${match.url}support/tickets`}
-          component={Tickets}
-        />
-
 
         <Route
           exact

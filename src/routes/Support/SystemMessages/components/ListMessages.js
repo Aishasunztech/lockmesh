@@ -5,7 +5,7 @@ import { Button_Ok, Button_Cancel } from '../../../../constants/ButtonConstants'
 import { userDevicesListColumns } from '../../../utils/columnsUtils';
 
 
-export default class ListMsgs extends Component {
+export default class ListMessages extends Component {
 
   constructor(props) {
     super(props);

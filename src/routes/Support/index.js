@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Card, Tabs, Form} from "antd";
 import AppFilter from "../../components/AppFilter";
 import Ticket from "./Tickets";
+import SystemMessages from "./SystemMessages";
 import {bindActionCreators} from "redux";
 import { generateSupportTicket } from "../../appRedux/actions";
 import {connect} from "react-redux";
@@ -13,7 +14,7 @@ class Support extends Component {
     super(props);
 
     this.state = {
-      innerTabSelect: '2'
+      innerTabSelect: '1'
     };
   }
 
@@ -54,6 +55,7 @@ class Support extends Component {
         <Card>
           <Tabs defaultActiveKey="1" activeKey={this.state.innerTabSelect} type="card" className="" onChange={this.handleChangeCardTabs}>
             <TabPane tab="SYSTEM MESSAGES" key="1" forceRender={false}>
+              <SystemMessages />
             </TabPane>
             <TabPane tab="TICKETS" key="2" forceRender={false}>
               <Ticket />
