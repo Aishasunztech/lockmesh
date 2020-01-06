@@ -3,13 +3,15 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Divider, Table, Select, Avatar } from "antd";
+import moment from 'moment-timezone';
 
 // methods, constants and components
 import AppFilter from '../../components/AppFilter';
 import DealerAction from "./components/DealerActions";
 import DealerNotFoundPage from '../InvalidPage/dealerNotFound';
 import CircularProgress from "components/CircularProgress/index";
-import moment from 'moment-timezone';
+import DealerPaymentHistory from './components/DealerPaymentHistory';
+
 // helpers and actions
 import RestService from "../../appRedux/services/RestServices";
 import { getColor, isBase64, convertToLang, checkValue, checkTimezoneValue, convertTimezoneValue } from "../utils/commonUtils"
@@ -42,8 +44,9 @@ class ConnectDealer extends Component {
             dealer_id: isBase64(props.match.params.dealer_id),
             currency: 'USD',
             currency_sign: '$',
-            currency_price: null
+            currency_price: null,
         }
+
         this.dealerInfoColumns1 = [
             {
                 dataIndex: 'name',
@@ -55,7 +58,8 @@ class ConnectDealer extends Component {
                 key: 'value',
                 className: 'ac_pro_val',
             },
-        ]
+        ];
+
         this.dealerInfoColumns = [
             {
                 dataIndex: 'name',
@@ -71,6 +75,7 @@ class ConnectDealer extends Component {
 
             },
         ]
+
         this.overDueColumns = [
             {
                 title: 'A',
@@ -84,18 +89,6 @@ class ConnectDealer extends Component {
                 key: 'b',
                 className: '',
             },
-            // {
-            //     title: 'C',
-            //     dataIndex: 'c',
-            //     key: 'c',
-            //     className: '',
-            // },
-            // {
-            //     title: 'D',
-            //     dataIndex: 'd',
-            //     key: 'd',
-            //     className: '',
-            // },
         ]
 
         this.a_s_columns = [
@@ -291,6 +284,7 @@ class ConnectDealer extends Component {
     ac_st_title = () => {
         return <h4 className="credit_modal_heading weight_600">{convertToLang(this.props.translation[""], "ACCOUNT STATUS")}</h4>
     };
+
     renderAccountStatus = () => {
         let statusBGC, statusDays;
         let account_status_paragraph = '';
@@ -421,8 +415,6 @@ class ConnectDealer extends Component {
             account_status_message2 = (dealer.account_balance_status === 'restricted' ? "(Pay Later feature disabled)" : "(You may not add new devices)")
 
         }
-
-        console.log("dealer_status ", dealer_status)
         this.dealerInfoColumns[1].title = dealer_status.toUpperCase();
         return (
 
@@ -494,7 +486,13 @@ class ConnectDealer extends Component {
                                                 className="ac_pro_table"
                                             />
 
-                                            <div>
+                                            <div
+                                                style={{
+                                                    position: 'relative',
+                                                    height: "35px",
+                                                    width: "100%"
+                                                }}
+                                            >
 
                                                 <h4
                                                     className="mt-13 border_bottom"
@@ -507,8 +505,14 @@ class ConnectDealer extends Component {
                                                     type="default"
                                                     size="small"
                                                     className="full_list_btn"
-                                                    onClick={() => this.handleCancel()}
-                                                >Full List</Button>
+                                                    style={{
+                                                        float: 'right',
+                                                        marginTop: '10px'
+                                                    }}
+                                                    onClick={() => this.refs.dealerPaymentHistory.showModal(this.props.dealer, this.props.getDealerPaymentHistory, 'pending')}
+                                                >
+                                                    Full List
+                                                </Button>
                                                 {/* </Link> */}
                                             </div>
 
@@ -561,6 +565,11 @@ class ConnectDealer extends Component {
                                 />
                             </Col>
                         </Row>
+                        <DealerPaymentHistory
+                            ref='dealerPaymentHistory'
+                            translation={this.props.translation}
+                            paymentHistory={this.props.paymentHistory}
+                        />
                     </Fragment>
                     : <DealerNotFoundPage />
                 }
@@ -591,7 +600,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 var mapStateToProps = ({ dealer_details, dealers, settings, auth, account }) => {
-    console.log("test: ", account, "auth.authUser ", auth.authUser);
     return {
         translation: settings.translation,
         dealer: dealer_details.dealer,
