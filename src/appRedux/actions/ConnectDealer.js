@@ -39,12 +39,11 @@ export function getDealerDetails(dealerId) {
     };
 }
 
-export function getDealerPaymentHistory(dealerId) {
+export function getDealerPaymentHistory(dealerId, status='') {
     return (dispatch) => {
-        RestService.getDealerPaymentHistory(dealerId).then((response) => {
+        RestService.getDealerPaymentHistory(dealerId, status).then((response) => {
 
             if (RestService.checkAuth(response.data)) {
-                console.log(response.data)
                 dispatch({
                     type: DEALER_PAYMENT_HISTORY,
                     payload: response.data
