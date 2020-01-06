@@ -3,13 +3,16 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Divider, Table, Select, Avatar } from "antd";
+import moment from 'moment-timezone';
 
 // methods, constants and components
 import AppFilter from '../../components/AppFilter';
 import DealerAction from "./components/DealerActions";
 import DealerNotFoundPage from '../InvalidPage/dealerNotFound';
 import CircularProgress from "components/CircularProgress/index";
-import moment from 'moment-timezone';
+import DealerPaymentHistory from './components/DealerPaymentHistory';
+import DealerOverDuePayments from './components/DealerOverDuePayments';
+
 // helpers and actions
 import RestService from "../../appRedux/services/RestServices";
 import { getColor, isBase64, convertToLang, checkValue, checkTimezoneValue, convertTimezoneValue } from "../utils/commonUtils"
@@ -42,9 +45,10 @@ class ConnectDealer extends Component {
             dealer_id: isBase64(props.match.params.dealer_id),
             currency: 'USD',
             currency_sign: '$',
-            currency_price: null
+            currency_price: null,
         }
-        this.dealerInfoColumns1 = [
+
+        this.dealerAccountInfoColumns = [
             {
                 dataIndex: 'name',
                 key: 'name',
@@ -55,7 +59,8 @@ class ConnectDealer extends Component {
                 key: 'value',
                 className: 'ac_pro_val',
             },
-        ]
+        ];
+
         this.dealerInfoColumns = [
             {
                 dataIndex: 'name',
@@ -71,6 +76,7 @@ class ConnectDealer extends Component {
 
             },
         ]
+
         this.overDueColumns = [
             {
                 title: 'A',
@@ -84,18 +90,6 @@ class ConnectDealer extends Component {
                 key: 'b',
                 className: '',
             },
-            // {
-            //     title: 'C',
-            //     dataIndex: 'c',
-            //     key: 'c',
-            //     className: '',
-            // },
-            // {
-            //     title: 'D',
-            //     dataIndex: 'd',
-            //     key: 'd',
-            //     className: '',
-            // },
         ]
 
         this.a_s_columns = [
@@ -291,6 +285,7 @@ class ConnectDealer extends Component {
     ac_st_title = () => {
         return <h4 className="credit_modal_heading weight_600">{convertToLang(this.props.translation[""], "ACCOUNT STATUS")}</h4>
     };
+
     renderAccountStatus = () => {
         let statusBGC, statusDays;
         let account_status_paragraph = '';
@@ -388,17 +383,39 @@ class ConnectDealer extends Component {
             return [
                 {
                     key: '1',
-                    a: <div><span className="overdue_txt">0-21:</span> <span className="overdue_values">{dealer._0to21_dues}</span></div>,
-                    b: <div><span className="overdue_txt">21+:</span> <span className="overdue_values">{dealer._21to30_dues}</span></div>,
-                    // c: <div><span className="overdue_txt">30+:</span> <span className="overdue_values">{dealer._30to60_dues}</span></div>,
-                    // d: <div><span className="overdue_txt">60+:</span> <span className="overdue_values">{dealer._60toOnward_dues}</span></div>,
+                    a:
+                        <div
+                            onClick={() => this.refs.dealerOverDuePayments.showModal(this.props.dealer, dealer._0to21_dues_history)}
+                        >
+                            <span className="overdue_txt">0-21:</span>
+                            <span className="overdue_values">{dealer._0to21_dues}</span>
+                        </div>,
+                    b:
+                        <div
+                            onClick={() => this.refs.dealerOverDuePayments.showModal(this.props.dealer, dealer._21to30_dues_history)}
+                        >
+                            <span className="overdue_txt">21+:</span>
+                            <span className="overdue_values">{dealer._21to30_dues}</span>
+                        </div>,
                 },
                 {
                     key: '2',
                     // a: <div><span className="overdue_txt">0-21:</span> <span className="overdue_values">{dealer._0to21_dues}</span></div>,
                     // b: <div><span className="overdue_txt">21+:</span> <span className="overdue_values">{dealer._21to30_dues}</span></div>,
-                    a: <div><span className="overdue_txt">30+:</span> <span className="overdue_values">{dealer._30to60_dues}</span></div>,
-                    b: <div><span className="overdue_txt">60+:</span> <span className="overdue_values">{dealer._60toOnward_dues}</span></div>,
+                    a:
+                        <div
+                            onClick={() => this.refs.dealerOverDuePayments.showModal(this.props.dealer, dealer._30to60_dues_history)}
+                        >
+                            <span className="overdue_txt">30+:</span>
+                            <span className="overdue_values">{dealer._30to60_dues}</span>
+                        </div>,
+                    b:
+                        <div
+                            onClick={() => this.refs.dealerOverDuePayments.showModal(this.props.dealer, dealer._60toOnward_history)}
+                        >
+                            <span className="overdue_txt">60+:</span>
+                            <span className="overdue_values">{dealer._60toOnward_dues}</span>
+                        </div>,
                 }
             ]
         } else {
@@ -413,25 +430,27 @@ class ConnectDealer extends Component {
         let restricted_level = ''
         let account_status_message1 = ''
         let account_status_message2 = ''
+
         if (dealer) {
             dealer_status = (dealer.unlink_status == 1) ? "Archived" : (dealer.account_status === "suspended") ? "Suspend" : "Active";
             restricted_by = dealer.account_balance_status_by === 'admin' ? 'Admin' : "Due Credits"
             restricted_level = dealer.account_balance_status === 'restricted' ? 'Restriction Level 1' : 'Restriction Level 2'
             account_status_message1 = "Account " + restricted_level + " by " + restricted_by
             account_status_message2 = (dealer.account_balance_status === 'restricted' ? "(Pay Later feature disabled)" : "(You may not add new devices)")
-
         }
 
-        console.log("dealer_status ", dealer_status)
         this.dealerInfoColumns[1].title = dealer_status.toUpperCase();
         return (
 
             <Fragment>
                 {this.props.isLoading ? <CircularProgress /> : this.props.dealer ?
                     <Fragment>
+
+                        {/* Dealer Info Page */}
                         <AppFilter
                             pageHeading="Dealer Profile Page"
                         />
+
                         {/* {this.props.dealer ? */}
                         <Row gutter={16} type="flex" align="top">
 
@@ -457,23 +476,28 @@ class ConnectDealer extends Component {
                                 <Card className="" style={{ borderRadius: 12 }}>
                                     <h2 style={{ textAlign: "center" }}>Account Profile</h2>
                                     <Divider className="mb-0" />
-                                    {dealer.account_balance_status !== 'active' ?
-                                        <Row style={{ marginTop: 10 }}>
-                                            <Col span={20}>
-                                                <div style={{ textAlign: 'center' }}>
-                                                    <h4>{account_status_message1} <br /> {account_status_message2}</h4>
-                                                </div>
+                                    {
+                                        dealer.account_balance_status !== 'active' ?
+                                            <Row style={{ marginTop: 10 }}>
+                                                <Col span={20}>
+                                                    <div style={{ textAlign: 'center' }}>
+                                                        <h4>{account_status_message1} <br /> {account_status_message2}</h4>
+                                                    </div>
 
-                                            </Col>
-                                            <Col span={4}>
-                                                <Avatar className="gx-size-30"
-                                                    alt={""}
-                                                    src={image} />
-                                            </Col>
+                                                </Col>
+                                                <Col span={4}>
+                                                    <Avatar className="gx-size-30"
+                                                        alt={""}
+                                                        src={image} />
+                                                </Col>
 
-                                        </Row>
-                                        : null}
+                                            </Row>
+                                            :
+                                            null
+                                    }
+
                                     <Row>
+                                        {/* Dealer Avatar */}
                                         <Col span={24} className="text-center">
                                             <div className="text-left">
                                                 <img src={require("assets/images/profile-image.png")} className="prof_pic" width="85px" />
@@ -483,27 +507,51 @@ class ConnectDealer extends Component {
                                                 </div>
                                             </div>
                                         </Col>
+
                                         <Col span={24}>
 
-                                            {/* <Table
-                                                className="ac_status_table"
-                                                dataSource={this.renderAccountStatus()}
-                                                columns={this.a_s_columns}
-                                                pagination={false}
-                                                title={this.ac_st_title}
-                                                bordered
-                                                showHeader={false}
-                                            />
-                                            <br /> */}
+                                            {/* Account Data Information */}
                                             <Table
-                                                columns={this.dealerInfoColumns1}
+                                                columns={this.dealerAccountInfoColumns}
                                                 bordered
                                                 showHeader={false}
                                                 dataSource={this.renderAccountData()}
                                                 pagination={false}
                                                 className="ac_pro_table"
                                             />
-                                            <h4 className="mt-13 border_bottom">Overdue</h4>
+
+                                            {/* <Divider className="mb-0" /> */}
+
+                                            {/* OverDue Information */}
+                                            <div
+                                                style={{
+                                                    // position: 'relative',
+                                                    height: "45px",
+                                                    width: "100%"
+                                                }}
+                                            >
+
+                                                <h4
+                                                    className="mt-13 border_bottom"
+                                                    // style={{
+                                                    //     float: 'left'
+                                                    // }}
+                                                >Overdue </h4>
+                                                <p>(click on overdue period to check pending payments)</p>
+                                                {/* <Button
+                                                    type="default"
+                                                    size="small"
+                                                    className="full_list_btn"
+                                                    style={{
+                                                        float: 'right',
+                                                        marginTop: '10px'
+                                                    }}
+                                                    onClick={() => this.refs.dealerPaymentHistory.showModal(this.props.dealer, this.props.getDealerPaymentHistory, 'pending')}
+                                                >
+                                                    Full List
+                                                </Button> */}
+                                            </div>
+
                                             <Table
                                                 columns={this.overDueColumns}
                                                 bordered
@@ -553,6 +601,18 @@ class ConnectDealer extends Component {
                                 />
                             </Col>
                         </Row>
+
+                        {/* Dealer Payment History for overDues */}
+                        <DealerPaymentHistory
+                            ref='dealerPaymentHistory'
+                            translation={this.props.translation}
+                            paymentHistory={this.props.paymentHistory}
+                        />
+
+                        <DealerOverDuePayments
+                            ref="dealerOverDuePayments"
+                            translation={this.props.translation}
+                        />
                     </Fragment>
                     : <DealerNotFoundPage />
                 }
@@ -583,7 +643,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 var mapStateToProps = ({ dealer_details, dealers, settings, auth, account }) => {
-    console.log("test: ", account, "auth.authUser ", auth.authUser);
     return {
         translation: settings.translation,
         dealer: dealer_details.dealer,
