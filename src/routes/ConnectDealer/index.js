@@ -485,16 +485,6 @@ class ConnectDealer extends Component {
                                         </Col>
                                         <Col span={24}>
 
-                                            {/* <Table
-                                                className="ac_status_table"
-                                                dataSource={this.renderAccountStatus()}
-                                                columns={this.a_s_columns}
-                                                pagination={false}
-                                                title={this.ac_st_title}
-                                                bordered
-                                                showHeader={false}
-                                            />
-                                            <br /> */}
                                             <Table
                                                 columns={this.dealerInfoColumns1}
                                                 bordered
@@ -503,7 +493,25 @@ class ConnectDealer extends Component {
                                                 pagination={false}
                                                 className="ac_pro_table"
                                             />
-                                            <h4 className="mt-13 border_bottom">Overdue</h4>
+
+                                            <div>
+
+                                                <h4
+                                                    className="mt-13 border_bottom"
+                                                    style={{
+                                                        float: 'left'
+                                                    }}
+                                                >Overdue</h4>
+                                                {/* <Link to={'/account/payment-overdue-history'}> */}
+                                                <Button
+                                                    type="default"
+                                                    size="small"
+                                                    className="full_list_btn"
+                                                    onClick={() => this.handleCancel()}
+                                                >Full List</Button>
+                                                {/* </Link> */}
+                                            </div>
+
                                             <Table
                                                 columns={this.overDueColumns}
                                                 bordered
