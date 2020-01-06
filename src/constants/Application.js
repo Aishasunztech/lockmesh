@@ -7,7 +7,9 @@ let URL = "http://localhost:3000/";
 let SUPERADMIN = "http://localhost:8042/";
 let TITLE = packageJson.name;
 let CHARSET = 'UTF-8';
-let TIMEZONE = "Asia/Karachi";
+
+// set default timezone for local test
+let TIMEZONE = "Europe/Berlin" // "Asia/Karachi";
 
 switch (hostName) {
     case "localhost":
