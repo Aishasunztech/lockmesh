@@ -449,8 +449,8 @@ const RestService = {
         return axios.put(BASE_URL + 'users/edit-device/extendServices', formData, RestService.getHeader());
     },
 
-    changeDataPlan: (formData) => {
-        return axios.put(BASE_URL + 'users/change-data-plans', formData, RestService.getHeader());
+    addDataPlan: (formData) => {
+        return axios.put(BASE_URL + 'users/add-data-plans', formData, RestService.getHeader());
     },
 
 

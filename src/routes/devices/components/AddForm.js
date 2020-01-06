@@ -874,7 +874,7 @@ class AddDevice extends Component {
         return this.props.parent_packages.map((packageItem) => {
             // console.log(packageItem.pkg_term, this.state.term + ' month', packageItem.pkg_term == (this.state.term + ' month'))
             if (packageItem.package_type === 'data_plan' && packageItem.pkg_term == (this.state.term + ' month')) {
-                return <Select.Option key={packageItem.id} value={packageItem.id} >{packageItem.pkg_name}</Select.Option>
+                return <Select.Option key={packageItem.id} value={packageItem.id} >{packageItem.pkg_name + " (" + packageItem.pkg_price + " Credits)"}</Select.Option>
             }
         })
     }
@@ -1409,9 +1409,11 @@ class AddDevice extends Component {
                                     </Col>
 
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-
+                                        {(this.state.disableSim) ? null :
+                                            <div style={{ color: 'red', textAlign: "center" }}>Basic Data Limit for SIM ID is 2 GB</div>
+                                        }
                                         <Form.Item
-                                            label={convertToLang(this.props.translation[''], "Data Limit")}
+                                            label={convertToLang(this.props.translation[''], "Add more data (Sim ID 1)")}
                                             labelCol={{ span: 8 }}
                                             wrapperCol={{ span: 16 }}
 
@@ -1435,6 +1437,11 @@ class AddDevice extends Component {
                                                     onChange={(value) => {
                                                         this.changeDataLimit('data_limit_1', value)
                                                     }}
+                                                // dropdownStyle={
+                                                //     {
+                                                //         whiteSpace: 'nowrap',
+                                                //     }
+                                                // }
                                                 >
                                                     <Select.Option key={""} value="" >SELECT DATA PLAN</Select.Option>
                                                     {this.renderDataLimitOptions()}
@@ -1518,9 +1525,11 @@ class AddDevice extends Component {
                                     </Col>
 
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-
+                                        {(this.state.disableSim2) ? null :
+                                            <div style={{ color: 'red', textAlign: "center" }}>Basic Data Limit for SIM ID 2 is 2 GB</div>
+                                        }
                                         <Form.Item
-                                            label={convertToLang(this.props.translation[''], "Data Limit 2")}
+                                            label={convertToLang(this.props.translation[''], "Add more data (Sim ID 2)")}
                                             labelCol={{ span: 8 }}
                                             wrapperCol={{ span: 16 }}
 

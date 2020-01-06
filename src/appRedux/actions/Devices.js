@@ -21,7 +21,8 @@ import {
     DEVICES_LIST_FOR_REPORT,
     BULK_DEVICES_LIST,
     GET_PARENT_HARDWARES,
-    ADD_PRODUCT
+    ADD_PRODUCT,
+    ADD_DATA_PLAN
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -137,13 +138,13 @@ export function extendServices(formData) {
     }
 }
 
-export function changeDataPlan(formData) {
+export function addDataPlan(formData) {
     return (dispatch) => {
         //
-        RestService.changeDataPlan(formData).then((response) => {
+        RestService.addDataPlan(formData).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
-                    type: EDIT_DEVICE,
+                    type: ADD_DATA_PLAN,
                     response: response.data,
                     payload: {
                         formData: formData,

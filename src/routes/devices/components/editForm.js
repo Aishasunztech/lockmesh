@@ -31,7 +31,7 @@ import {
     getInvoiceId,
     getDomains,
     addProduct,
-    changeDataPlan
+    addDataPlan
 } from "../../../appRedux/actions";
 
 // Constants
@@ -252,8 +252,8 @@ class EditDevice extends Component {
                         }
                     }
                     let data_plans = {
-                        sim_id: this.state.data_limit_1 ? this.state.data_limit_1 : '',
-                        sim_id2: this.state.data_limit_2 ? this.state.data_limit_2 : '',
+                        sim_id: this.state.data_limit_1 ? this.state.data_limit_1 : "",
+                        sim_id2: this.state.data_limit_2 ? this.state.data_limit_2 : "",
                     }
                     values.data_plans = data_plans
 
@@ -275,8 +275,6 @@ class EditDevice extends Component {
                         this.handleReset();
                     }
                 }
-
-
             }
         });
 
@@ -727,7 +725,7 @@ class EditDevice extends Component {
             if (this.state.change_data_plan) {
                 delete this.state.serviceData.packages;
                 console.log(this.state.serviceData);
-                this.props.changeDataPlan(this.state.serviceData)
+                this.props.addDataPlan(this.state.serviceData)
             }
             else if (this.state.renewService || this.state.applyServicesValue === 'extend') {
                 this.props.extendServices(this.state.serviceData)
@@ -923,28 +921,22 @@ class EditDevice extends Component {
     changeDataLimit = (type, value) => {
         let data_plan = this.props.parent_packages.find(item => item.id == value)
         if (type === 'data_limit_1') {
-            let disable_data_plan_sim1 = true
-            if (this.props.device.sim_id_data_plan === undefined) {
-                disable_data_plan_sim1 = false
-            }
-            else if ((!this.state.disableSim && this.state.services)) {
+            let disable_data_plan_sim1 = false
+            if ((!this.state.disableSim && this.state.services)) {
                 disable_data_plan_sim1 = true
             }
-            else if ((this.props.device.sim_id2_data_plan && JSON.parse(this.props.device.sim_id_data_plan.data_plan_package).id !== value)) {
-                disable_data_plan_sim1 = false
-            }
+            // else if ((this.props.device.sim_id2_data_plan && JSON.parse(this.props.device.sim_id_data_plan.data_plan_package).id !== value)) {
+            //     disable_data_plan_sim1 = false
+            // }
             this.setState({
                 data_limit_1: data_plan ? data_plan : '',
                 disable_data_plan_sim1: disable_data_plan_sim1
             })
             this.data_plan_1_added = false
         } else if (type === 'data_limit_2') {
-            let disable_data_plan_sim2 = true
-            if (!this.state.disableSim && this.props.device.sim_id2_data_plan === undefined) {
-                disable_data_plan_sim2 = false
-            }
-            else if ((!this.state.disableSim2 && this.state.services) || ((this.props.device.sim_id2_data_plan && JSON.parse(this.props.device.sim_id2_data_plan.data_plan_package).id !== value))) {
-                disable_data_plan_sim2 = false
+            let disable_data_plan_sim2 = false
+            if ((!this.state.disableSim2 && this.state.services)) {
+                disable_data_plan_sim2 = true
             }
             this.setState({
                 data_limit_2: data_plan ? data_plan : '',
@@ -955,7 +947,7 @@ class EditDevice extends Component {
     }
 
 
-    changeDataPlan(type) {
+    addDataPlan(type) {
         let data_plan = null
         if (type == 'sim_id') {
             data_plan = this.state.data_limit_1
@@ -968,6 +960,7 @@ class EditDevice extends Component {
     render() {
         // 
         const { users_list, device } = this.props;
+        // console.log(device);
         return (
             <div>
                 <Row>
@@ -1405,41 +1398,51 @@ class EditDevice extends Component {
                             </Col>
 
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                {(!this.state.disableSim) ?
+                                    (this.state.services) ?
+                                        <div style={{ color: 'red', textAlign: "center" }}>Basic Data Limit for SIM ID is 2 GB</div>
+                                        :
+                                        (device.sim_id_data_plan) ?
+                                            <div style={{ color: 'red', textAlign: "center" }}>Current Data Limit for SIM ID is {device.sim_id_data_plan.total_data / 1000} GB</div>
+                                            : null
+                                    : null
+                                }
+                                {(this.props.user.type == ADMIN) ? null :
+                                    <Form.Item
+                                        label={convertToLang(this.props.translation[''], "Data Limit (SIM ID 1)")}
+                                        labelCol={{ span: 8 }}
+                                        wrapperCol={{ span: 16 }}
 
-                                <Form.Item
-                                    label={convertToLang(this.props.translation[''], "Data Limit (SIM ID 1)")}
-                                    labelCol={{ span: 8 }}
-                                    wrapperCol={{ span: 16 }}
+                                    >
+                                        {this.props.form.getFieldDecorator('data_limit_1', {
+                                            initialValue: '',
+                                            // rules: [
+                                            //     // {
+                                            //     //     required: true, message: "SIM ID is required"
+                                            //     // },
+                                            //     {
+                                            //         validator: (rule, value, callback) => { this.validateICCID(rule, value, callback, 'sim_id') },
+                                            //     }
+                                            // ]
+                                        })(
 
-                                >
-                                    {this.props.form.getFieldDecorator('data_limit_1', {
-                                        initialValue: this.state.services ? "" : device.sim_id_data_plan ? JSON.parse(device.sim_id_data_plan.data_plan_package).pkg_name : '',
-                                        // rules: [
-                                        //     // {
-                                        //     //     required: true, message: "SIM ID is required"
-                                        //     // },
-                                        //     {
-                                        //         validator: (rule, value, callback) => { this.validateICCID(rule, value, callback, 'sim_id') },
-                                        //     }
-                                        // ]
-                                    })(
+                                            <Select
+                                                placeholder="SELECT SIM DATA PLAN FOR SIM ID 1"
 
-                                        <Select
-                                            placeholder="SELECT SIM DATA PLAN FOR SIM ID 1"
-
-                                            disabled={this.state.disableSim}
-                                            onChange={(value) => {
-                                                this.changeDataLimit('data_limit_1', value)
-                                            }}
-                                        >
-                                            {(this.state.services) ?
+                                                disabled={this.state.disableSim}
+                                                onChange={(value) => {
+                                                    this.changeDataLimit('data_limit_1', value)
+                                                }}
+                                            >
+                                                {/* {(this.state.services) ?
                                                 <Select.Option key={""} value="" >BASIC DATA PLAN (2 GB)</Select.Option>
-                                                : null}
-                                            {this.renderDataLimitOptions()}
+                                                : null} */}
+                                                {this.renderDataLimitOptions()}
 
-                                        </Select>
-                                    )}
-                                </Form.Item>
+                                            </Select>
+                                        )}
+                                    </Form.Item>
+                                }
                             </Col>
                             {((!this.state.services && !this.state.disable_data_plan_sim1)) ?
                                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>
@@ -1449,10 +1452,10 @@ class EditDevice extends Component {
                                         type="primary"
                                         style={{ width: "100%" }}
                                         onClick={() => {
-                                            this.changeDataPlan('sim_id')
+                                            this.addDataPlan('sim_id')
                                         }}
                                         style={{ width: "100%" }}
-                                    >Change Data Plan SIM ID 1</Button>
+                                    >Add Data Plan SIM ID 1</Button>
                                 </Col>
                                 : null
                             }
@@ -1520,41 +1523,51 @@ class EditDevice extends Component {
                                 </Form.Item>
                             </Col>
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                {(!this.state.disableSim2) ?
+                                    (this.state.services) ?
+                                        <div style={{ color: 'red', textAlign: "center" }}>Basic Data Limit for SIM ID 2 is 2 GB</div>
+                                        :
+                                        (device.sim_id2_data_plan) ?
+                                            <div style={{ color: 'red', textAlign: "center" }}>Current Data Limit for SIM ID 2 is {device.sim_id2_data_plan.total_data / 1000} GB</div>
+                                            : null
+                                    : null
+                                }
+                                {(this.props.user.type == ADMIN) ? null :
+                                    <Form.Item
+                                        label={convertToLang(this.props.translation[''], "Data Limit (SIM ID 2)")}
+                                        labelCol={{ span: 8 }}
+                                        wrapperCol={{ span: 16 }}
 
-                                <Form.Item
-                                    label={convertToLang(this.props.translation[''], "Data Limit (SIM ID 2)")}
-                                    labelCol={{ span: 8 }}
-                                    wrapperCol={{ span: 16 }}
+                                    >
+                                        {this.props.form.getFieldDecorator('data_limit_2', {
+                                            initialValue: '',
+                                            // rules: [
+                                            //     // {
+                                            //     //     required: true, message: "SIM ID is required"
+                                            //     // },
+                                            //     {
+                                            //         validator: (rule, value, callback) => { this.validateICCID(rule, value, callback, 'sim_id') },
+                                            //     }
+                                            // ]
+                                        })(
 
-                                >
-                                    {this.props.form.getFieldDecorator('data_limit_2', {
-                                        initialValue: this.state.services ? "" : device.sim_id2_data_plan ? JSON.parse(device.sim_id2_data_plan.data_plan_package).pkg_name : '',
-                                        // rules: [
-                                        //     // {
-                                        //     //     required: true, message: "SIM ID is required"
-                                        //     // },
-                                        //     {
-                                        //         validator: (rule, value, callback) => { this.validateICCID(rule, value, callback, 'sim_id') },
-                                        //     }
-                                        // ]
-                                    })(
+                                            <Select
+                                                placeholder="SELECT SIM DATA PLAN FOR SIM ID 2"
 
-                                        <Select
-                                            placeholder="SELECT SIM DATA PLAN FOR SIM ID 2"
+                                                disabled={this.state.disableSim2}
+                                                onChange={(value) => {
+                                                    this.changeDataLimit('data_limit_2', value)
+                                                }}
+                                            >
+                                                {/* {(this.state.services) ?
+                                                    <Select.Option key={""} value="" >BASIC DATA PLAN (2 GB)</Select.Option>
+                                                    : null} */}
+                                                {this.renderDataLimitOptions()}
 
-                                            disabled={this.state.disableSim2}
-                                            onChange={(value) => {
-                                                this.changeDataLimit('data_limit_2', value)
-                                            }}
-                                        >
-                                            {(this.state.services) ?
-                                                <Select.Option key={""} value="" >BASIC DATA PLAN (2 GB)</Select.Option>
-                                                : null}
-                                            {this.renderDataLimitOptions()}
-
-                                        </Select>
-                                    )}
-                                </Form.Item>
+                                            </Select>
+                                        )}
+                                    </Form.Item>
+                                }
                             </Col>
                             {((!this.state.services && !this.state.disable_data_plan_sim2)) ?
                                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>
@@ -1564,10 +1577,10 @@ class EditDevice extends Component {
                                         type="primary"
                                         style={{ width: "100%" }}
                                         onClick={() => {
-                                            this.changeDataPlan('sim_id2')
+                                            this.addDataPlan('sim_id2')
                                         }}
                                         style={{ width: "100%" }}
-                                    >Change Data Plan SIM ID 2</Button>
+                                    >Add Data Plan SIM ID 2</Button>
                                 </Col>
                                 : null
                             }
@@ -1870,7 +1883,7 @@ function mapDispatchToProps(dispatch) {
         extendServices: extendServices,
         getDomains: getDomains,
         addProduct: addProduct,
-        changeDataPlan: changeDataPlan
+        addDataPlan: addDataPlan
 
     }, dispatch);
 }
@@ -1930,8 +1943,8 @@ function confirmDataPlanChange(_this, type, data_plan) {
         sim_type = "sim id 2"
     }
     confirm({
-        title: "Are you sure you want to change your data plan on " + sim_type,
-        okText: "PROCEED WITH CHANGE PLAN",
+        title: "Are you sure you want to add data plan on " + sim_type + " ?",
+        okText: "PROCEED WITH ADD DATA PLAN",
         onOk() {
             let values = {}
             values.packages = [data_plan];
