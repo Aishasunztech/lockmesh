@@ -140,7 +140,7 @@ class AppFilter extends Component {
             fullScreenClass3 = "col-md-2";
         }
 
-        console.log('render props selectedOptions ...', this.props.selectedOptions, this.props.options);
+        // console.log('render props selectedOptions ...', this.props.selectedOptions, this.props.options);
         //  console.log('allSelected val this.props.selectedOptions are: ', this.props.selectedOptions)
         // console.log('render state selectedDisplayValues ...', this.state.selectedDisplayValues);
         let allSelectedOpt;
@@ -171,6 +171,7 @@ class AppFilter extends Component {
                                         labelKey="value"
                                         value={this.state.selectedDisplayValues}
                                         placeholder={convertToLang(translation[Appfilter_Display], "Display")}
+                                        manySelectedPlaceholder = {allSelectedOpt ? "All Selected" : `${this.state.selectedDisplayValues.length} selected`}
                                         allSelectedPlaceholder={allSelectedOpt ? "All Selected" : ""}
                                         className="display_"
                                         multiple={true}
