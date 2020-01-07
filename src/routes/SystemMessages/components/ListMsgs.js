@@ -109,6 +109,12 @@ export default class ListMsgs extends Component {
                 duration = "N/A"
             }
 
+            // set dateTime format
+            let dateTimeFormat = TIMESTAMP_FORMAT_NOT_SEC;
+            if (item.timer_status === "REPEAT") {
+                dateTimeFormat = TIME_FORMAT_HM; // Display only hours and minutes
+            }
+
             data = {
                 rowKey: item.id,
                 id: item.id,
@@ -125,7 +131,7 @@ export default class ListMsgs extends Component {
                 timer_status: item.timer_status ? item.timer_status : "N/A",
                 repeat: item.repeat_duration ? item.repeat_duration : "NONE",
                 // sending_time: item.date_time ? item.date_time : "N/A",
-                sending_time: item.date_time ? convertTimezoneValue(this.props.user.timezone, item.date_time, TIMESTAMP_FORMAT_NOT_SEC) : "N/A",
+                sending_time: item.date_time ? convertTimezoneValue(this.props.user.timezone, item.date_time, dateTimeFormat) : "N/A",
                 // sending_time: item.timer_status === "DATE/TIME" ? convertTimezoneValue(this.props.user.timezone, item.date_time, TIMESTAMP_FORMAT_NOT_SEC) : (item.timer_status !== "NOW" && item.time) ? item.time : "N/A",
                 interval_description: duration,
                 // week_day: getWeekDay(item.week_day),
