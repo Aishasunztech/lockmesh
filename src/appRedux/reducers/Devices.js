@@ -414,7 +414,7 @@ export default (state = initialState, action) => {
                 let objIndex4 = state.devices.findIndex((obj => obj.id === action.payload.formData.usr_acc_id));
                 state.devices[objIndex4] = action.response.data;
                 var device_id = action.payload.formData.device_id;
-                filteredDevices = alldevices.filter(device => device.device_id !== device_id);
+                // filteredDevices = alldevices.filter(device => device.device_id !== device_id);
 
                 success({
                     title: action.response.msg,
