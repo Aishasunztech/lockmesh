@@ -91,10 +91,13 @@ export default class ListMsgs extends Component {
 
         list.map((item) => {
             let parseDevices = item.data ? JSON.parse(item.data) : [];
-            let duration = item.repeat_duration;
+            let duration = item.repeat_duration ? item.repeat_duration : "NONE";
             // console.log(item);
 
-            if (duration === "WEEKLY") {
+            if (duration === "DAILY") {
+                duration = `Everyday`
+            }
+            else if (duration === "WEEKLY") {
                 duration = getWeekDay(item.week_day)
             }
             else if (duration === "MONTHLY" || duration === "3 MONTHS" || duration === "6 MONTHS") {

@@ -3741,31 +3741,31 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                 }
             ]
         },
-        {
-            title: (
-                <Input.Search
-                    name="repeat"
-                    key="repeat"
-                    id="repeat"
-                    className="search_heading"
-                    onChange={handleSearch}
-                    autoComplete="new-password"
-                    placeholder="INTERVAL"
-                />
-            ),
-            dataIndex: 'repeat',
-            className: '',
-            key: 'repeat',
-            children: [
-                {
-                    width: 100,
-                    title: convertToLang(translation[""], "INTERVAL"),
-                    dataIndex: 'repeat',
-                    key: 'repeat',
-                }
-            ]
+        // {
+        //     title: (
+        //         <Input.Search
+        //             name="repeat"
+        //             key="repeat"
+        //             id="repeat"
+        //             className="search_heading"
+        //             onChange={handleSearch}
+        //             autoComplete="new-password"
+        //             placeholder="INTERVAL"
+        //         />
+        //     ),
+        //     dataIndex: 'repeat',
+        //     className: '',
+        //     key: 'repeat',
+        //     children: [
+        //         {
+        //             width: 100,
+        //             title: convertToLang(translation[""], "INTERVAL"),
+        //             dataIndex: 'repeat',
+        //             key: 'repeat',
+        //         }
+        //     ]
 
-        },
+        // },
         { // date/time
             title: (
                 <Input.Search
@@ -3808,7 +3808,7 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
             key: 'interval_description',
             children: [
                 {
-                    width: 130,
+                    // width: 130,
                     title: convertToLang(translation[""], "INTERVAL DESCRIPTION"),
                     dataIndex: 'interval_description',
                     key: 'interval_description',
