@@ -144,7 +144,7 @@ class SystemMessages extends Component {
     this.props.closeResponseModal();
   };
   componentDidMount() {
-    this.props.getBulkMsgsList();
+    // this.props.getBulkMsgsList();
     this.props.getAllDealers();
 
   }

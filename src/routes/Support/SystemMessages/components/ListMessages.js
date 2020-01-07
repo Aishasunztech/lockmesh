@@ -178,7 +178,8 @@ export default class ListMessages extends Component {
                     bordered
                     columns={this.state.selectedDevicesColumns}
                     // onChange={this.props.onChangeTableSorting}
-                    dataSource={this.props.renderDevicesList(record.devices)}
+                    // dataSource={this.props.renderDevicesList(record.devices)}
+                    dataSource={this.props.renderDevicesList([])}
                     pagination={false}
                     scroll={{ x: true }}
                   />
@@ -191,7 +192,8 @@ export default class ListMessages extends Component {
             size="midddle"
             bordered
             columns={this.state.columns}
-            dataSource={this.renderList(this.props.bulkMsgs ? this.props.bulkMsgs : [])}
+            // dataSource={this.renderList(this.props.bulkMsgs ? this.props.bulkMsgs : [])}
+            dataSource={this.renderList( [])}
             // onChange={this.props.onChangeTableSorting}
             pagination={false
             }

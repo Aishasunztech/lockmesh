@@ -174,7 +174,7 @@ class SendMessage extends Component {
     }
 
     // console.log('handle change data is: ', data)
-    this.props.getBulkDevicesList(data);
+    // this.props.getBulkDevicesList(data);
     this.setState({
       selectedDealers,
       selectedUsers: [],
