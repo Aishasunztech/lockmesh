@@ -536,7 +536,7 @@ export function getMonthName(key) {
 	}
 }
 export function convertTimezoneValue(dealerTimezone, data, dateFormat, clientToServerTZ = false) { // dealerTimezone: timezone, data: date/time
-  let coverted_dateTime = "N/A";
+  let coverted_dateTime = "";
 
   if (data && data !== "N/A" && data !== "n/a" && data !== "0000-00-00 00:00:00") {
     let timeZones = moment.tz.names();
@@ -547,6 +547,7 @@ export function convertTimezoneValue(dealerTimezone, data, dateFormat, clientToS
     if (clientToServerTZ) {
       coverted_dateTime = moment.tz(data, dealerTimezone).tz(SERVER_TIMEZONE).format(dateFormat);
     } else {
+      // convert server time to client time
       coverted_dateTime = moment.tz(data, SERVER_TIMEZONE).tz(dealerTimezone).format(dateFormat);
     }
   }

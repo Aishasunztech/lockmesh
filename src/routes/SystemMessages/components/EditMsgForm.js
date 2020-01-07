@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Button, Form, Input, Select, InputNumber, Row, Col, Tag, Calendar, DatePicker, TimePicker, Modal } from 'antd';
-import { checkValue, convertToLang, getMonthName, checkTimezoneValue } from '../../utils/commonUtils'
+import { checkValue, convertToLang, getMonthName, checkTimezoneValue, convertTimezoneValue } from '../../utils/commonUtils'
 
 import {
     DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, User_Name_require, Only_alpha_numeric, Not_valid_Email, Email, Name, Required_Email
@@ -12,6 +12,7 @@ import BulkUpdateMsgConfirmation from './bulkUpdateMsgConfirmation';
 // import RepeatMsgCalender from './repeateMsgCalender';
 import moment from 'moment';
 import DataNotFound from '../../InvalidPage/dataNotFound';
+import { TIMESTAMP_FORMAT } from '../../../constants/Application';
 
 const confirm = Modal.confirm;
 const success = Modal.success
@@ -118,15 +119,19 @@ class EditMsgForm extends Component {
 
                 }
 
-                // covert time to dateTime value
-                if (this.state.selected_Time) {
-                    let dealerTZ = checkTimezoneValue(this.props.user.timezone, false);
-                    copyEditRecord.date_time = moment().tz(dealerTZ).set(copyEditRecord.time, 'HH:mm').format('YYYY-MM-DD HH:mm:ss');
-                }
+                // // covert time to dateTime value
+                // if (copyEditRecord.time) {
+                //     console.log("set time to dateTime ");
+                //     // let dealerTZ = checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
+                //     let updateDateTime = moment().set(copyEditRecord.time, 'HH:mm').format('YYYY-MM-DD HH:mm:ss');
+                //     let convetTime = convertTimezoneValue(this.props.user.timezone, updateDateTime, TIMESTAMP_FORMAT, true);
+                //     console.log("check date time: ", copyEditRecord.time, updateDateTime, "convetTime ", convetTime);
+                //     copyEditRecord.date_time = convetTime;
+                // }
 
                 copyEditRecord.msg = values.msg_txt
 
-                // console.log("copyEditRecord ", copyEditRecord.repeat_duration);
+                // console.log("copyEditRecord ", copyEditRecord);
                 this.refs.update_bulk_msg.handleBulkUpdateMsg(copyEditRecord);
 
             }
@@ -190,7 +195,13 @@ class EditMsgForm extends Component {
     }
 
     timeOnChange = (value, dateString) => {
-        this.state.editRecord.time = dateString;
+        const [hours, minutes] = dateString.split(':');
+
+        let dealerTZ = checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
+        let dateTimeVal = moment.tz(dealerTZ).set({ hours, minutes }).format('YYYY-MM-DD HH:mm:ss');
+        this.state.editRecord.date_time = dateTimeVal;
+
+        // console.log("u dateTimeVal:: ", dealerTZ, dateString, dateTimeVal);
         this.setState({ editRecord: this.state.editRecord });
     }
 
@@ -231,11 +242,13 @@ class EditMsgForm extends Component {
 
     render() {
         var { editRecord } = this.props;
-        // console.log("editRecord ", editRecord);
 
         if (!editRecord) {
             return null // <DataNotFound />
         }
+        // console.log("moment().set(copyEditRecord.time, 'HH:mm').format('YYYY-MM-DD HH:mm:ss') ",this.state.editRecord,  moment(new Date()).set("12:22", 'HH:mm').format('YYYY-MM-DD HH:mm:ss'))
+        // console.log("editRecord ", editRecord, convertTimezoneValue(this.props.user.timezone, editRecord.date_time, "HH:mm"));
+        let checkTime = convertTimezoneValue(this.props.user.timezone, editRecord.date_time, "HH:mm");
         return (
             <div>
                 <Modal
@@ -436,7 +449,7 @@ class EditMsgForm extends Component {
                                             wrapperCol={{ span: 16 }}
                                         >
                                             {this.props.form.getFieldDecorator('time', {
-                                                initialValue: editRecord.time ? moment(editRecord.time, 'HH:mm') : '',
+                                                initialValue: checkTime ? moment(checkTime, 'HH:mm') : '',
                                                 rules: [
                                                     {
                                                         required: true, message: convertToLang(this.props.translation[""], "Time field is required"),

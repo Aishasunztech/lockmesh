@@ -103,8 +103,10 @@ class SendMsgForm extends Component {
 
                     // covert time to dateTime value
                     if (this.state.selected_Time) {
-                        let dealerTZ = checkTimezoneValue(this.props.user.timezone, false);
-                        dateTimeVal = moment().tz(dealerTZ).set(this.state.selected_Time, 'HH:mm').format('YYYY-MM-DD HH:mm:ss');
+                        let dealerTZ = checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
+
+                        const [hours, minutes] = this.state.selected_Time.split(':');
+                        dateTimeVal = moment().tz(dealerTZ).set({ hours, minutes }).format('YYYY-MM-DD HH:mm:ss');
                     }
 
                     let data = {
