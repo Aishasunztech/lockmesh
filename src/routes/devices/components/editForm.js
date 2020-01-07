@@ -908,7 +908,7 @@ class EditDevice extends Component {
     renderDataLimitOptions = () => {
 
         let data_plan_term = this.state.term ? this.state.term : this.props.device.expiry_months
-
+        console.log(this.props.device.expiry_months);
         // console.log(this.props.device.expiry_months);
         return this.props.parent_packages.map((packageItem) => {
             // console.log(packageItem.pkg_term, this.state.term + ' month', packageItem.pkg_term == (this.state.term + ' month'))
@@ -1106,7 +1106,7 @@ class EditDevice extends Component {
                             {(this.props.user.type === ADMIN) ? null :
                                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                     <Form.Item
-                                        label={<Markup content={convertToLang(this.props.translation[LABEL_APPLY_SERVICES], "APPLY <br />SERVICES")} />}
+                                        label={<Markup content={convertToLang(this.props.translation[''], "APPLY <br />SERVICES")} />}
                                         labelCol={{ span: 8 }}
                                         wrapperCol={{ span: 16 }}
                                         className="apply_services"
@@ -1318,7 +1318,7 @@ class EditDevice extends Component {
                              * @author Usman Hafeez
                              * @description added button of Chat ID
                              */}
-                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                            {/* <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Button
                                     disabled={true}
                                     className="add_user_btn"
@@ -1327,7 +1327,7 @@ class EditDevice extends Component {
                                     onClick={this.handleChatID}
                                     style={{ width: "100%" }}
                                 >ADD SIM ID</Button>
-                            </Col>
+                            </Col> */}
 
                             {/* Sim ID Input */}
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
@@ -1409,10 +1409,10 @@ class EditDevice extends Component {
                                 }
                                 {(this.props.user.type == ADMIN) ? null :
                                     <Form.Item
-                                        label={convertToLang(this.props.translation[''], "Data Limit (SIM ID 1)")}
+                                        label={<Markup content={convertToLang(this.props.translation[''], "ADD DATA <br />(SIM ID 1)")} />}
                                         labelCol={{ span: 8 }}
                                         wrapperCol={{ span: 16 }}
-
+                                        className="apply_services"
                                     >
                                         {this.props.form.getFieldDecorator('data_limit_1', {
                                             initialValue: '',
@@ -1534,9 +1534,10 @@ class EditDevice extends Component {
                                 }
                                 {(this.props.user.type == ADMIN) ? null :
                                     <Form.Item
-                                        label={convertToLang(this.props.translation[''], "Data Limit (SIM ID 2)")}
+                                        label={<Markup content={convertToLang(this.props.translation[''], "ADD DATA <br />(SIM ID 2)")} />}
                                         labelCol={{ span: 8 }}
                                         wrapperCol={{ span: 16 }}
+                                        className="apply_services"
 
                                     >
                                         {this.props.form.getFieldDecorator('data_limit_2', {

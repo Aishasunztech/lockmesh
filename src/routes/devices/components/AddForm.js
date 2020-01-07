@@ -1413,10 +1413,10 @@ class AddDevice extends Component {
                                             <div style={{ color: 'red', textAlign: "center" }}>Basic Data Limit for SIM ID is 2 GB</div>
                                         }
                                         <Form.Item
-                                            label={convertToLang(this.props.translation[''], "Add more data (Sim ID 1)")}
+                                            label={<Markup content={convertToLang(this.props.translation[''], "ADD DATA <br /> (Sim ID 1)")} />}
                                             labelCol={{ span: 8 }}
                                             wrapperCol={{ span: 16 }}
-
+                                            className="apply_services"
                                         >
                                             {this.props.form.getFieldDecorator('data_limit_1', {
                                                 initialValue: "",
@@ -1529,9 +1529,10 @@ class AddDevice extends Component {
                                             <div style={{ color: 'red', textAlign: "center" }}>Basic Data Limit for SIM ID 2 is 2 GB</div>
                                         }
                                         <Form.Item
-                                            label={convertToLang(this.props.translation[''], "Add more data (Sim ID 2)")}
+                                            label={<Markup content={convertToLang(this.props.translation[''], "ADD DATA <br /> (Sim ID 2)")} />}
                                             labelCol={{ span: 8 }}
                                             wrapperCol={{ span: 16 }}
+                                            className="apply_services"
 
                                         >
                                             {this.props.form.getFieldDecorator('data_limit_2', {
