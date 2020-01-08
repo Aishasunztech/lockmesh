@@ -536,7 +536,7 @@ export function getMonthName(key) {
 	}
 }
 export function convertTimezoneValue(dealerTimezone, data, dateFormat, clientToServerTZ = false) { // dealerTimezone: timezone, data: date/time
-  let coverted_dateTime = "";
+  let coverted_dateTime = "N/A";
 
   if (data && data !== "N/A" && data !== "n/a" && data !== "0000-00-00 00:00:00") {
     let timeZones = moment.tz.names();

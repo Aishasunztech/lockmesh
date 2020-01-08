@@ -12,7 +12,7 @@ export default class BulkUpdateMsg extends Component {
         this.confirm = Modal.confirm;
     }
 
-    handleBulkUpdateMsg = (data) => {
+    handleBulkUpdateMsg = (data, devices) => {
         // console.log("handleBulkUpdateMsg ", data.repeat_duration);
 
         this.confirm({
@@ -21,7 +21,7 @@ export default class BulkUpdateMsg extends Component {
             okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
             cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
             onOk: (() => {
-                this.props.updateBulkMsgAction(data);
+                this.props.updateBulkMsgAction(data, devices);
                 this.props.handleCancel();
             }),
             onCancel() { },

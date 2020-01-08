@@ -335,17 +335,18 @@ export const sendBulkMsg = (data) => {
 }
 
 // update msg
-export const updateBulkMsg = (data) => {
-    // console.log("updateBulkMsg action file: ", data)
-   
+export const updateBulkMsg = (record, devices) => {
+    // console.log("updateBulkMsg action file: ", record)
+
     return (dispatch) => {
-        RestService.updateBulkMsg(data).then((response) => {
+        RestService.updateBulkMsg(record).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 // console.log(response.data);
                 dispatch({
                     type: UPDATE_BULK_MESSAGE,
                     payload: response.data,
-                    msg_data: data
+                    msg_data: { ...record, data: devices },
+                    // devices
                 })
             } else {
                 dispatch({

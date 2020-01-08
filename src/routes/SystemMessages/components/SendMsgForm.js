@@ -87,26 +87,27 @@ class SendMsgForm extends Component {
             if (!err) {
 
                 if (this.props.selectedDevices && this.props.selectedDevices.length) {
-                    let repeatVal = '';
+                    let repeatVal = 'NONE';
                     let dateTimeVal = '';
 
                     if (this.state.timer === "NOW") {
-                        dateTimeVal = '' //moment().format('YYYY-MM-DD HH:mm:ss');
-                        repeatVal = "NONE";
+                        // dateTimeVal = '' //moment().format('YYYY-MM-DD HH:mm:ss');
+                        // repeatVal = "NONE";
                     } else if (this.state.timer === "DATE/TIME") {
                         dateTimeVal = this.state.selected_dateTime;
-                        repeatVal = "NONE";
+                        // repeatVal = "NONE";
                     } else if (this.state.timer === "REPEAT") {
-                        dateTimeVal = this.state.selected_dateTime;
+                        // dateTimeVal = this.state.selected_dateTime;
                         repeatVal = this.state.repeat_duration;
-                    }
 
-                    // covert time to dateTime value
-                    if (this.state.selected_Time) {
-                        let dealerTZ = checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
 
-                        const [hours, minutes] = this.state.selected_Time.split(':');
-                        dateTimeVal = moment().tz(dealerTZ).set({ hours, minutes }).format('YYYY-MM-DD HH:mm:ss');
+                        // covert time to dateTime value
+                        if (this.state.selected_Time) {
+                            let dealerTZ = checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
+
+                            const [hours, minutes] = this.state.selected_Time.split(':');
+                            dateTimeVal = moment().tz(dealerTZ).set({ hours, minutes }).format('YYYY-MM-DD HH:mm:ss');
+                        }
                     }
 
                     let data = {
