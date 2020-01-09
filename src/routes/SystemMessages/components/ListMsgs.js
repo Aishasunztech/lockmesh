@@ -100,8 +100,14 @@ export default class ListMsgs extends Component {
             else if (duration === "WEEKLY") {
                 duration = getWeekDay(item.week_day)
             }
-            else if (duration === "MONTHLY" || duration === "3 MONTHS" || duration === "6 MONTHS") {
+            else if (duration === "MONTHLY") {
                 duration = `Every month on ${checkValue(item.month_date)} date`
+            }
+            else if (duration === "3 MONTHS") {
+                duration = `Every 3 months later on ${checkValue(item.month_date)} date`
+            }
+            else if (duration === "6 MONTHS") {
+                duration = `Every 6 months later on ${checkValue(item.month_date)} date`
             }
             else if (duration === "12 MONTHS") {
                 duration = `Every ${getMonthName(item.month_name)} on ${checkValue(item.month_date)} date`
