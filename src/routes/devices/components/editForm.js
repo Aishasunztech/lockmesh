@@ -1469,6 +1469,11 @@ class EditDevice extends Component {
                                 >
                                     {this.props.form.getFieldDecorator('sim_id2', {
                                         initialValue: this.state.sim_id2,
+                                        rules: [
+                                            {
+                                                validator: (rule, value, callback) => { this.validateICCID(rule, value, callback, 'sim_id2') },
+                                            }
+                                        ]
                                     })(
                                         <Input
                                             placeholder={convertToLang(this.props.translation[''], "Enter Sim ID 2")}
