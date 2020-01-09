@@ -94,32 +94,40 @@ export default class ListMsgs extends Component {
             let duration = item.repeat_duration ? item.repeat_duration : "NONE";
             // console.log(item);
 
-            if (duration === "DAILY") {
-                duration = `Everyday`
+            // set default dateTime format
+            let dateTimeFormat = TIMESTAMP_FORMAT_NOT_SEC;
+
+            if (item.timer_status === "NOW" || item.timer_status === "DATE/TIME") {
+                duration = `One Time`
             }
-            else if (duration === "WEEKLY") {
-                duration = getWeekDay(item.week_day)
-            }
-            else if (duration === "MONTHLY") {
-                duration = `Every month on ${checkValue(item.month_date)} date`
-            }
-            else if (duration === "3 MONTHS") {
-                duration = `Every 3 months later on ${checkValue(item.month_date)} date`
-            }
-            else if (duration === "6 MONTHS") {
-                duration = `Every 6 months later on ${checkValue(item.month_date)} date`
-            }
-            else if (duration === "12 MONTHS") {
-                duration = `Every ${getMonthName(item.month_name)} on ${checkValue(item.month_date)} date`
+            else if (item.timer_status === "REPEAT") {
+                // set dateTime format
+                dateTimeFormat = TIME_FORMAT_HM; // Display only hours and minutes
+
+                if (duration === "DAILY") {
+                    duration = `Everyday`
+                }
+                else if (duration === "WEEKLY") {
+                    duration = getWeekDay(item.week_day)
+                }
+                else if (duration === "MONTHLY") {
+                    duration = `Every month on ${checkValue(item.month_date)} date`
+                }
+                else if (duration === "3 MONTHS") {
+                    duration = `Every 3 months later on ${checkValue(item.month_date)} date`
+                }
+                else if (duration === "6 MONTHS") {
+                    duration = `Every 6 months later on ${checkValue(item.month_date)} date`
+                }
+                else if (duration === "12 MONTHS") {
+                    duration = `Every ${getMonthName(item.month_name)} on ${checkValue(item.month_date)} date`
+                } else {
+                    duration = "N/A"
+                }
             } else {
                 duration = "N/A"
             }
 
-            // set dateTime format
-            let dateTimeFormat = TIMESTAMP_FORMAT_NOT_SEC;
-            if (item.timer_status === "REPEAT") {
-                dateTimeFormat = TIME_FORMAT_HM; // Display only hours and minutes
-            }
 
             data = {
                 rowKey: item.id,
