@@ -124,7 +124,8 @@ class SendMsgForm extends Component {
                         time: this.state.selected_Time,
                     }
                     // console.log("data ", data);
-                    this.refs.bulk_msg.handleBulkSendMsg(data);
+                    let dealerTZ = checkTimezoneValue(this.props.user.timezone, false);
+                    this.refs.bulk_msg.handleBulkSendMsg(data, dealerTZ);
                 } else {
                     error({
                         title: `Sorry, You have not any device to perform an action, to add devices please select dealers/users`,

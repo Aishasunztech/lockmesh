@@ -3769,24 +3769,24 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
         { // date/time
             title: (
                 <Input.Search
-                    name="sending_time"
-                    key="sending_time"
-                    id="sending_time"
+                    name="date_time"
+                    key="date_time"
+                    id="date_time"
                     className="search_heading"
                     onChange={handleSearch}
                     autoComplete="new-password"
-                    placeholder="SENDING TIME"
+                    placeholder="DATE/TIME"
                 />
             ),
-            dataIndex: 'sending_time',
+            dataIndex: 'date_time',
             className: '',
-            key: 'sending_time',
+            key: 'date_time',
             children: [
                 {
                     width: 130,
-                    title: convertToLang(translation[""], "SENDING TIME"),
-                    dataIndex: 'sending_time',
-                    key: 'sending_time',
+                    title: convertToLang(translation[""], "DATE/TIME"),
+                    dataIndex: 'date_time',
+                    key: 'date_time',
                 }
             ]
 

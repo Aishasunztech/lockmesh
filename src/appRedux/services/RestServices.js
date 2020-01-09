@@ -35,17 +35,17 @@ const RestService = {
     // Login
 
 
-  connectSupportSystemSocket: () => {
-      let token       = localStorage.getItem('token');
-      let id          = localStorage.getItem('id');
-      let type        = localStorage.getItem('type');
-      let makeToken   = "token=" + token + "&isWeb=true&user_id="+id+"&type="+type;
-      let socket      = SupportSystemSocketIO.connect(SUPPORT_URL, {
-        query: makeToken,
-        secure: true
-      });
+    connectSupportSystemSocket: () => {
+        let token = localStorage.getItem('token');
+        let id = localStorage.getItem('id');
+        let type = localStorage.getItem('type');
+        let makeToken = "token=" + token + "&isWeb=true&user_id=" + id + "&type=" + type;
+        let socket = SupportSystemSocketIO.connect(SUPPORT_URL, {
+            query: makeToken,
+            secure: true
+        });
 
-      return socket;
+        return socket;
     },
     login: (user) => {
         return axios.post(BASE_URL + 'users/login', user);
@@ -230,7 +230,7 @@ const RestService = {
     getSimIDs: () => {
         return axios.get(BASE_URL + 'users/get_sim_ids', RestService.getHeader());
     },
-    
+
     getChatIDs: () => {
         return axios.get(BASE_URL + 'users/get_chat_ids', RestService.getHeader());
     },
@@ -273,7 +273,7 @@ const RestService = {
         return axios.get(BASE_URL + 'users/dealers', RestService.getHeader());
     },
     getAllToAllDealers: () => {
-      return axios.get(BASE_URL + 'users/get-all-dealers', RestService.getHeader());
+        return axios.get(BASE_URL + 'users/get-all-dealers', RestService.getHeader());
     },
     getUserDealers: () => {
         return axios.get(BASE_URL + 'users/user_dealers', RestService.getHeader());
@@ -314,7 +314,7 @@ const RestService = {
     getDealerDomains: (dealerId) => {
         return axios.get(BASE_URL + 'users/dealer-domains/' + dealerId, RestService.getHeader());
     },
-    getDealerPaymentHistory: (dealerId, status='') => {
+    getDealerPaymentHistory: (dealerId, status = '') => {
         return axios.post(BASE_URL + 'users/payment-history/' + dealerId, {
             status: status
         }, RestService.getHeader());
@@ -478,11 +478,11 @@ const RestService = {
     },
 
     resetChatPin: (data) => {
-      return axios.post(BASE_URL + 'users/reset-chat-pin/', data, RestService.getHeader());
+        return axios.post(BASE_URL + 'users/reset-chat-pin/', data, RestService.getHeader());
     },
 
-  changeSchatPinStatus: (data) => {
-      return axios.post(BASE_URL + 'users/change-s-chat-pin-status/', data, RestService.getHeader());
+    changeSchatPinStatus: (data) => {
+        return axios.post(BASE_URL + 'users/change-s-chat-pin-status/', data, RestService.getHeader());
     },
 
     // for dealer reset password(admin dashboard)
@@ -1015,8 +1015,8 @@ const RestService = {
         return axios.post(BASE_URL + 'users/apply_bulk_policy', data, RestService.getHeader());
     },
 
-    sendBulkMsg: (data) => {
-        return axios.post(BASE_URL + 'users/send_bulk_msg', data, RestService.getHeader());
+    sendBulkMsg: (data, timezone) => {
+        return axios.post(BASE_URL + 'users/send_bulk_msg', { data, timezone }, RestService.getHeader());
     },
 
     updateBulkMsg: (data) => {
@@ -1024,8 +1024,8 @@ const RestService = {
         return axios.post(BASE_URL + 'users/update_bulk_msg', data, RestService.getHeader());
     },
 
-    getBulkMsgsList: () => {
-        return axios.get(BASE_URL + 'users/get_bulk_msgs', RestService.getHeader());
+    getBulkMsgsList: (timezone) => {
+        return axios.post(BASE_URL + 'users/get_bulk_msgs', { timezone }, RestService.getHeader());
     },
 
     deleteBulkMsg: (id) => {
@@ -1127,32 +1127,32 @@ const RestService = {
     //support tickets
     //generate Support Ticket
     generateSupportTicket: (data) => {
-      return axios.post(SUPPORT_URL + 'tickets/store', data, RestService.getHeader());
+        return axios.post(SUPPORT_URL + 'tickets/store', data, RestService.getHeader());
     },
 
     //generate Support Ticket
     supportTicketReply: (data) => {
-      return axios.post(SUPPORT_URL + 'tickets/replies/store', data, RestService.getHeader());
+        return axios.post(SUPPORT_URL + 'tickets/replies/store', data, RestService.getHeader());
     },
 
     //generate Support Ticket
     getSupportTickets: (data) => {
-      return axios.get(SUPPORT_URL + 'tickets/'+data.id+'/'+data.type, RestService.getHeader());
+        return axios.get(SUPPORT_URL + 'tickets/' + data.id + '/' + data.type, RestService.getHeader());
     },
 
     //generate Support Ticket
     closeSupportTicket: (data) => {
-      return axios.get(SUPPORT_URL + 'tickets/close/'+data, RestService.getHeader());
+        return axios.get(SUPPORT_URL + 'tickets/close/' + data, RestService.getHeader());
     },
 
     //delete Support Ticket
     deleteSupportTicket: (data) => {
-      return axios.put(SUPPORT_URL + 'tickets/delete', data, RestService.getHeader());
+        return axios.put(SUPPORT_URL + 'tickets/delete', data, RestService.getHeader());
     },
 
     //get Support Ticket replies
     getSupportTicketReplies: (data) => {
-      return axios.get(SUPPORT_URL + 'tickets/replies/'+data, RestService.getHeader());
+        return axios.get(SUPPORT_URL + 'tickets/replies/' + data, RestService.getHeader());
     },
 };
 export default RestService;

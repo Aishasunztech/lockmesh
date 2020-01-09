@@ -315,9 +315,9 @@ export const setBulkData = (data, dataType) => {
 }
 
 // send msg
-export const sendBulkMsg = (data) => {
+export const sendBulkMsg = (data, dealerTZ) => {
     return (dispatch) => {
-        RestService.sendBulkMsg(data).then((response) => {
+        RestService.sendBulkMsg(data, dealerTZ).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 // console.log(response.data);
                 dispatch({
@@ -345,8 +345,7 @@ export const updateBulkMsg = (record, devices) => {
                 dispatch({
                     type: UPDATE_BULK_MESSAGE,
                     payload: response.data,
-                    msg_data: { ...record, data: devices },
-                    // devices
+                    msg_data: { ...record, devices }
                 })
             } else {
                 dispatch({
@@ -368,11 +367,11 @@ export const handleWipePwdConfirmModal = (data) => {
     }
 }
 
-export function getBulkMsgsList() {
+export function getBulkMsgsList(timezone) {
     // console.log('at action file ')
 
     return (dispatch) => {
-        RestService.getBulkMsgsList().then((response) => {
+        RestService.getBulkMsgsList(timezone).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 // console.log('at action file on response', response)
                 if (response.data.status) {

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Button, Form, Input, Select, InputNumber, Row, Col, Tag, Calendar, DatePicker, TimePicker, Modal } from 'antd';
-import { checkValue, convertToLang, getMonthName, checkTimezoneValue, convertTimezoneValue } from '../../utils/commonUtils'
+import { checkValue, convertToLang, getMonthName, checkTimezoneValue, convertTimezoneValue, getWeekDay } from '../../utils/commonUtils'
 
 import {
     DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, User_Name_require, Only_alpha_numeric, Not_valid_Email, Email, Name, Required_Email
@@ -145,6 +145,44 @@ class EditMsgForm extends Component {
                 }
 
 
+                
+                //********************* update interval description text w.r.t timer status */ 
+                let duration = repeatVal ? repeatVal : "NONE";
+                // set default dateTime format
+                // let dateTimeFormat = TIMESTAMP_FORMAT_NOT_SEC;
+
+                if (values.timer === "NOW" || values.timer === "DATE/TIME") {
+                    duration = `One Time`
+                }
+                else if (values.timer === "REPEAT") {
+                    // set dateTime format
+                    // dateTimeFormat = TIME_FORMAT_HM; // Display only hours and minutes
+
+                    if (duration === "DAILY") {
+                        duration = `Everyday`
+                    }
+                    else if (duration === "WEEKLY") {
+                        duration = getWeekDay(weekDay)
+                    }
+                    else if (duration === "MONTHLY") {
+                        duration = `Every month on ${checkValue(monthDate)} date`
+                    }
+                    else if (duration === "3 MONTHS") {
+                        duration = `Every 3 months later on ${checkValue(monthDate)} date`
+                    }
+                    else if (duration === "6 MONTHS") {
+                        duration = `Every 6 months later on ${checkValue(monthDate)} date`
+                    }
+                    else if (duration === "12 MONTHS") {
+                        duration = `Every ${getMonthName(monthName)} on ${checkValue(monthDate)} date`
+                    } else {
+                        duration = "N/A"
+                    }
+                } else {
+                    duration = "N/A"
+                }
+
+
                 let data = {
                     id: this.props.editRecord.id,
                     msg: values.msg_txt,
@@ -155,6 +193,7 @@ class EditMsgForm extends Component {
                     month_date: monthDate,
                     month_name: monthName,
                     time: this.state.selected_Time,
+                    interval_description: duration
                 }
 
                 // // covert time to dateTime value
@@ -170,7 +209,7 @@ class EditMsgForm extends Component {
                 // copyEditRecord.msg = values.msg_txt
 
                 console.log("copyEditRecord data ", data);
-                this.refs.update_bulk_msg.handleBulkUpdateMsg(data, this.props.editRecord.data);
+                this.refs.update_bulk_msg.handleBulkUpdateMsg(data, this.props.editRecord.devices);
 
             }
 

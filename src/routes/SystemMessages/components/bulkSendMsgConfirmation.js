@@ -12,7 +12,7 @@ export default class BulkSendMsg extends Component {
         this.confirm = Modal.confirm;
     }
 
-    handleBulkSendMsg = (data) => {
+    handleBulkSendMsg = (data, dealerTZ) => {
         // console.log("handleBulkSendMsg ", data);
         let selectedDevices = [];
         let dealer_ids = [];
@@ -53,7 +53,7 @@ export default class BulkSendMsg extends Component {
             okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
             cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
             onOk: (() => {
-                this.props.sendMsgOnDevices(saveData);
+                this.props.sendMsgOnDevices(saveData, dealerTZ);
                 this.props.handleCancel();
             }),
             onCancel() { },
