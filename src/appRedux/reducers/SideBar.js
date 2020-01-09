@@ -5,7 +5,8 @@ import {
     USER_CREDITS,
     GET_CANCEL_REQUEST,
     ACCEPT_SERVICE_REQUEST,
-    REJECT_SERVICES_REQUEST
+    REJECT_SERVICES_REQUEST,
+    NEW_NOTIFICATION_LIST
 } from "../../constants/ActionTypes";
 import { Modal } from 'antd';
 
@@ -18,7 +19,8 @@ const initialSidebar = {
     user_credit: 0,
     due_credit: 0,
     credits_limit: 0,
-    cancel_service_requests: []
+    cancel_service_requests: [],
+    ticketNotifications: []
 };
 
 export default (state = initialSidebar, action) => {
@@ -95,6 +97,13 @@ export default (state = initialSidebar, action) => {
                 cancel_service_requests: action.response.data,
             }
         }
+        case NEW_NOTIFICATION_LIST: {
+
+            return {
+                ...state,
+                ticketNotifications: action.payload.status ? action.payload.tickets : [],
+            }
+        }
 
         case ACCEPT_SERVICE_REQUEST: {
             var newRequests = state.cancel_service_requests;
@@ -138,7 +147,6 @@ export default (state = initialSidebar, action) => {
                 cancel_service_requests: filteredRequests,
             }
         }
-
         default:
             return state;
     }

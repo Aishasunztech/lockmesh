@@ -36,11 +36,20 @@ export default class NewDevices extends Component {
             { title: convertToLang(props.translation[""], "SERVICE REMAINING DAYS"), dataIndex: 'service_remaining_days', key: 'service_remaining_days', align: "center" },
             { title: convertToLang(props.translation[""], "CREDITS TO REFUND"), dataIndex: 'credits_to_refund', key: 'credits_to_refund', align: "center" },
         ];
+        const ticketNotificationColumns = [
+            { title: convertToLang(props.translation[ACTION], "Action"), dataIndex: 'action', key: 'action', align: "center" },
+            { title: convertToLang(props.translation[DEVICE_ID], "DEVICE ID"), dataIndex: 'device_id', key: 'device_id', align: "center" },
+            { title: convertToLang(props.translation[DEALER_PIN], "DEALER PIN"), dataIndex: 'dealer_pin', key: 'dealer_pin', align: "center" },
+            { title: convertToLang(props.translation[""], "SERVICE TERM"), dataIndex: 'service_term', key: 'service_term', align: "center" },
+            { title: convertToLang(props.translation[""], "SERVICE REMAINING DAYS"), dataIndex: 'service_remaining_days', key: 'service_remaining_days', align: "center" },
+            { title: convertToLang(props.translation[""], "CREDITS TO REFUND"), dataIndex: 'credits_to_refund', key: 'credits_to_refund', align: "center" },
+        ];
 
         this.state = {
             columns: columns,
             columns1: columns1,
             cancelServiceColumns: cancelServiceColumns,
+            ticketNotificationColumns: ticketNotificationColumns,
             visible: false,
             NewDevices: [],
             NewRequests: [],
@@ -148,7 +157,6 @@ export default class NewDevices extends Component {
         return dumyDevices;
     }
 
-
     renderList1(list) {
         return list.map((request) => {
             return {
@@ -169,6 +177,21 @@ export default class NewDevices extends Component {
         });
 
     }
+
+    renderTicketNotifications(list) {
+        // console.log(list);
+        return list.map((notification) => {
+            return {
+                id: notification.id,
+                key: notification.id,
+                dealer_name: "N/A",
+                label: "N/A",
+                credits: "N/A",
+            }
+        });
+
+    }
+
     renderServiceRequestList(list) {
         if (list) {
             return list.map((request) => {
@@ -202,6 +225,7 @@ export default class NewDevices extends Component {
         }
 
     }
+
     renderList(list, flagged = false) {
         return list.map((device) => {
 
@@ -271,6 +295,7 @@ export default class NewDevices extends Component {
 
     render() {
         let flaggedDevices = this.filterList(this.props.allDevices)
+        // console.log(this.props);
         // console.log('check flaggedDevices ', flaggedDevices, 'requests', this.props.requests, 'NewDevices', this.props.devices)
         return (
             <div>
@@ -310,6 +335,17 @@ export default class NewDevices extends Component {
                             />
                         </Fragment>
                         : null}
+                    <Fragment>
+                        <h1>{convertToLang(this.props.translation[""], "Ticket Notifications")}</h1>
+                        <Table
+                            bordered
+                            columns={this.state.ticketNotificationColumns}
+                            style={{ marginTop: 20 }}
+                            dataSource={this.renderTicketNotifications(this.props.ticketNotifications)}
+                            pagination={false}
+
+                        />
+                    </Fragment>
                 </Modal>
                 <AddDeviceModal ref='add_device_modal' translation={this.props.translation} />
 
