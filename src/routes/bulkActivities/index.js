@@ -21,7 +21,7 @@ import {
     wipeBulkDevices,
     closeResponseModal,
     applyBulkPolicy,
-    setBulkMsg,
+    // setBulkMsg,
     setBulkData
 } from "../../appRedux/actions/BulkDevices";
 
@@ -34,14 +34,14 @@ import {
 
 
 import { getUserList } from "../../appRedux/actions/Users";
-import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, componentSearch, titleCase, convertToLang, checkRemainTermDays } from '../utils/commonUtils'
+import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, componentSearch, titleCase, convertToLang, checkRemainTermDays, convertTimezoneValue } from '../utils/commonUtils'
 // import { ADMIN } from '../../constants/Constants';
 import { Button_Confirm, Button_Cancel, Button_Edit, Button_Ok } from '../../constants/ButtonConstants';
 import { devicesColumns, userDevicesListColumns } from '../utils/columnsUtils';
 
 import FilterDevices from './components/filterDevices';
 import PushPullApps from './components/pushPullApps';
-import SendMsgForm from './components/SendMsgForm';
+// import SendMsgForm from './components/SendMsgForm';
 
 import {
     DEVICE_PENDING_ACTIVATION,
@@ -52,6 +52,7 @@ import {
     DEVICE_ACTIVATED
 } from '../../constants/Constants'
 import { DO_YOU_WANT_TO_APPLY } from '../../constants/DeviceConstants';
+import { TIMESTAMP_FORMAT } from '../../constants/Application';
 
 var copyDealerAgents = [];
 var status = true;
@@ -116,7 +117,7 @@ class BulkActivities extends Component {
             checkAllSelectedDealers: false,
             checkAllSelectedUsers: false,
             selectedPolicy: '',
-            sendMsgModal: false,
+            // sendMsgModal: false,
             actionMsg: '',
             errorAction: '',
 
@@ -238,7 +239,7 @@ class BulkActivities extends Component {
                 dealerList: this.props.dealerList
             })
         }
-        console.log("componentWillReceiveProps ", this.props.bulkAction, nextProps.bulkAction, this.props.bulkDealers, nextProps.bulkDealers, this.props.bulkUsers, nextProps.bulkUsers, nextProps.errorAction)
+        // console.log("componentWillReceiveProps ", this.props.bulkAction, nextProps.bulkAction, this.props.bulkDealers, nextProps.bulkDealers, this.props.bulkUsers, nextProps.bulkUsers, nextProps.errorAction)
         if (this.props !== nextProps) {
             console.log("ok");
             this.setState({
@@ -477,8 +478,10 @@ class BulkActivities extends Component {
                 s_dealer: checkValue(device.s_dealer),
                 s_dealer_name: checkValue(device.s_dealer_name),
                 remainTermDays: device.remainTermDays,
-                start_date: checkValue(device.start_date),
-                expiry_date: checkValue(device.expiry_date),
+                start_date: convertTimezoneValue(this.props.user.timezone, device.start_date, TIMESTAMP_FORMAT),
+                expiry_date: convertTimezoneValue(this.props.user.timezone, device.expiry_date, TIMESTAMP_FORMAT),
+                // start_date: checkValue(device.start_date),
+                // expiry_date: checkValue(device.expiry_date),
             }
         });
     }
@@ -624,9 +627,9 @@ class BulkActivities extends Component {
         else if (actionName === "PUSH POLICY") {
             this.setState({ pushPolicyModal: true });
         }
-        else if (actionName === "SEND MESSAGE") {
-            this.setState({ sendMsgModal: true });
-        }
+        // else if (actionName === "SEND MESSAGE") {
+        //     this.setState({ sendMsgModal: true });
+        // }
     }
 
     hanldeTags = (e) => {
@@ -650,9 +653,9 @@ class BulkActivities extends Component {
     }
 
 
-    handleCancelMsgModal = () => {
-        this.setState({ sendMsgModal: false })
-    }
+    // handleCancelMsgModal = () => {
+    //     this.setState({ sendMsgModal: false })
+    // }
 
     setstateValues = (key, value) => {
         this.setState({ [key]: value });
@@ -873,6 +876,7 @@ class BulkActivities extends Component {
                     // onChangeTableSorting={this.handleTableChange}
                     translation={this.props.translation}
                     history_loading={this.props.history_loading}
+                    user={this.props.user}
                 />
 
                 {/* Push Apps responses handle through modal */}
@@ -997,7 +1001,7 @@ class BulkActivities extends Component {
                 </Modal>
 
                 {/* Send Message modal */}
-                <Modal
+                {/* <Modal
                     title={convertToLang(this.props.translation[""], "Send Message to Selected Devcies")}
                     maskClosable={false}
                     style={{ top: 20 }}
@@ -1018,7 +1022,7 @@ class BulkActivities extends Component {
                         translation={this.props.translation}
                     />
 
-                </Modal>
+                </Modal> */}
 
             </Fragment >
         )
@@ -1047,7 +1051,7 @@ const mapDispatchToProps = (dispatch) => {
         closeResponseModal: closeResponseModal,
         applyBulkPolicy: applyBulkPolicy,
         getPolicies: getPolicies,
-        setBulkMsg: setBulkMsg,
+        // setBulkMsg: setBulkMsg,
         setBulkData: setBulkData,
         handleCheckedAllPushApps: handleCheckedAllPushApps,
 
@@ -1084,7 +1088,7 @@ const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users,
         expire_device_ids: bulkDevices.expire_device_ids,
         selectedDevices: bulkDevices.selectedDevices,
         policies: device_details.policies,
-        bulkMsg: bulkDevices.bulkMsg,
+        // bulkMsg: bulkDevices.bulkMsg,
         guestAllPushApps: device_details.guestAllPushApps,
         enableAllPushApps: device_details.enableAllPushApps,
         encryptedAllPushApps: device_details.encryptedAllPushApps,

@@ -13,7 +13,7 @@ export default class BulkSendMsg extends Component {
     }
 
     handleBulkSendMsg = (data) => {
-        console.log("handleBulkSendMsg ", data);
+        // console.log("handleBulkSendMsg ", data);
         let selectedDevices = [];
         let dealer_ids = [];
         let user_ids = [];
@@ -31,20 +31,24 @@ export default class BulkSendMsg extends Component {
         });
 
         let saveData = {
-            selectedDevices,
+            devices: selectedDevices,
             dealer_ids,
             user_ids,
             msg: data.msg,
-            repeat: data.repeat,
-            date: data.selected_date,
             timer: data.timer,
+            repeat: data.repeat,
+            dateTime: data.dateTime,
+            weekDay: data.weekDay, // 1 - 7
+            monthDate: data.monthDate,// 1 - 31
+            monthName: data.monthName, // for 12 months
+            time: data.time
         }
 
-        console.log("saveData ", saveData);
+        // console.log("saveData ", saveData);
 
-        const title = `${convertToLang(this.props.translation[""], "Are you sure, you want to send message on these selected devices ")} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`;
+
         this.confirm({
-            title: title,
+            title: `${convertToLang(this.props.translation[""], "Are you sure, you want to send message on these selected devices ")} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`,
             content: '',
             okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
             cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),

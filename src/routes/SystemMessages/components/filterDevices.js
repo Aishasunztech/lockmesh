@@ -37,6 +37,11 @@ const confirm = Modal.confirm;
 const success = Modal.success
 const error = Modal.error
 
+var addAllBtn = false;
+var removeAllBtn = false;
+var addBtn = false;
+var updateDealers = true;
+
 var copyDevices = [];
 var status = true;
 
@@ -724,49 +729,54 @@ class FilterDevices extends Component {
     return updateSelectedDevices;
   }
 
- 
+
 
   render() {
 
     // console.log('selected devices are: ', this.state.selectedDevices);
+
+    // if (this.state.checkChanges) {
+    //   if (this.state.dealerList.length == this.props.record.permissions.length) {
+    //     addAllBtn = true; // disable 
+    //     addBtn = true;
+    //   } else {
+    //     addAllBtn = false; // visible
+    //     addBtn = false;
+    //   }
+    //   this.state.checkChanges = false;
+    //   // this.setState({ checkChanges: false })
+    // } else {
+    //   if (this.state.dealerList.length == this.props.record.permissions.length) {
+    //     addBtn = true; // disable 
+    //   } else {
+    //     addBtn = false; // visible
+    //   }
+
+    // }
     return (
       <Fragment>
         <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
-          <Col className="gutter-row" sm={5} xs={5} md={5}>
-            <div className="gutter-box text-left">
-              <h2>{convertToLang(this.props.translation["Select Devices:"], "Select Devices:")}</h2>
-            </div>
-          </Col>
-          <Col className="gutter-row" sm={2} xs={2} md={2}>
-            <div className="gutter-box">
-              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
-                onClick={() => { this.showDealersModal(true) }}>{convertToLang(this.props.translation[Button_Add], "Add")}</Button>
-            </div>
-          </Col>
-          <Col className="gutter-row" sm={4} xs={4} md={4}>
-            <div className="gutter-box">
-              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
-                onClick={() => { this.addSelectedDealersModal(true) }}>{convertToLang(this.props.translation[Button_AddExceptSelected], "Add Except Selected")}</Button>
-            </div>
-          </Col>
-          <Col className="gutter-row" sm={2} xs={2} md={2}>
-            <div className="gutter-box">
-              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
-                onClick={() => { this.saveAllDealersConfirm() }}>{convertToLang(this.props.translation[Button_AddAll], "Add All")}</Button>
-            </div>
-          </Col>
-          <Col className="gutter-row" sm={3} xs={3} md={3}>
-            <div className="gutter-box">
-              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger"
-                onClick={() => { this.removeAllDealersConfirm() }}>{convertToLang(this.props.translation[Button_RemoveAll], "Remove All")}</Button>
-            </div>
-          </Col>
-          <Col className="gutter-row" sm={3} xs={3} md={3}>
-            <div className="gutter-box">
-              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger"
-                onClick={() => { this.showPermissionedDealersModal(true) }}>{convertToLang(this.props.translation[Button_RemoveExcept], "Remove Except")}</Button>
-            </div>
-          </Col>
+          <h2 className="mr-24 ml-8">{convertToLang(this.props.translation["Select Devices:"], "Select Devices:")}</h2>
+          <div className="mr-16">
+            <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
+              onClick={() => { this.showDealersModal(true) }}>{convertToLang(this.props.translation[Button_Add], "Add")}</Button>
+          </div>
+          <div className="mr-16">
+            <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
+              onClick={() => { this.addSelectedDealersModal(true) }}>{convertToLang(this.props.translation[Button_AddExceptSelected], "Add Except Selected")}</Button>
+          </div>
+          <div className="mr-16">
+            <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
+              onClick={() => { this.saveAllDealersConfirm() }}>{convertToLang(this.props.translation[Button_AddAll], "Add All")}</Button>
+          </div>
+          <div className="mr-16">
+            <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger"
+              onClick={() => { this.removeAllDealersConfirm() }}>{convertToLang(this.props.translation[Button_RemoveAll], "Remove All")}</Button>
+          </div>
+          <div className="mr-16">
+            <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger"
+              onClick={() => { this.showPermissionedDealersModal(true) }}>{convertToLang(this.props.translation[Button_RemoveExcept], "Remove Except")}</Button>
+          </div>
 
           <Col className="gutter-row" sm={15} xs={15} md={15}>
             <div className="gutter-box search_heading">
@@ -782,19 +792,8 @@ class FilterDevices extends Component {
               />
             </div>
           </Col>
-          {/* <Col className="gutter-row" sm={9} xs={9} md={9}>
-            <div className="gutter-box">
-              <Button
-                style={{ marginBottom: 16, float: 'right' }}
-                onClick={this.applyAction}
-                type="primary"
-              >Apply Action
-              </Button>
-            </div>
-          </Col> */}
 
         </Row>
-        {/* <span>(Only allow active & trial devices for your selected action)</span> */}
         <Row gutter={24} style={{ marginBottom: '24px' }}>
           {
             this.props.spinloading ? <CircularProgress /> :
@@ -904,50 +903,6 @@ class FilterDevices extends Component {
             selectedRowKeys={this.state.selectedRowKeys}
           />
         </Modal>
-
-        {/* <BulkSuspendDevices
-          ref="bulk_suspend"
-          suspendDevice={this.props.bulkSuspendDevice}
-          translation={this.props.translation}
-        />
-
-        <BulkActivateDevices
-          ref="bulk_activate"
-          bulkActivateDevice={this.props.bulkActivateDevice}
-          translation={this.props.translation}
-        />
-
-        <BulkUnlinkConfirmation
-          ref="bulk_unlink"
-          unlinkBulkDevices={this.props.unlinkBulkDevices}
-          translation={this.props.translation}
-        />
-
-        <BulkPushAppsConfirmation
-          ref="bulk_push_apps"
-          applyPushApps={this.props.applyPushApps}
-          selectedPushAppsList={this.props.selectedPushAppsList}
-          translation={this.props.translation}
-        />
-
-        <BulkPullAppsConfirmation
-          ref="bulk_pull_apps"
-          applyPullApps={this.props.applyPullApps}
-          selectedPullAppsList={this.props.selectedPullAppsList}
-          translation={this.props.translation}
-        />
-
-        <BulkWipeConfirmation
-          ref="bulk_wipe"
-          wipeBulkDevices={this.props.wipeBulkDevices}
-          translation={this.props.translation}
-        />
-
-        <BulkPolicyConfirmation
-          ref="bulk_policy"
-          bulkApplyPolicy={this.props.bulkApplyPolicy}
-          translation={this.props.translation}
-        /> */}
 
       </Fragment>
     )

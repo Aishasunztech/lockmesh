@@ -84,7 +84,7 @@ export const verifyCode = (verifyForm) => {
 	return (dispatch) => {
 		RestService.verifyCode(verifyForm).then((response) => {
 			if (response.data.status) {
-				console.log('aaaaaaaaaaaaaaaaaaa', response.data.user)
+				
 				let payload = {
 					id: response.data.user.id,
 					connected_dealer: response.data.user.connected_dealer,

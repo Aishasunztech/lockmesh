@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { Modal, message, Input, Table, Switch, Avatar } from 'antd';
-import { componentSearch, getFormattedDate, convertToLang } from '../../utils/commonUtils';
+import { componentSearch, getFormattedDate, convertToLang, convertTimezoneValue } from '../../utils/commonUtils';
 import Moment from 'react-moment';
 import { SECURE_SETTING, DATE, PROFILE_NAME } from '../../../constants/Constants';
-import { BASE_URL } from '../../../constants/Application';
+import { BASE_URL, TIMESTAMP_FORMAT } from '../../../constants/Application';
 import CircularProgress from "components/CircularProgress";
 // import styles from './Applist.css';
 import { POLICY_APP_NAME, POLICY_NAME, ACTIVITY } from '../../../constants/PolicyConstants';
@@ -190,7 +190,8 @@ export default class Activity extends Component {
                 return {
                     key: index,
                     action: row.action.toUpperCase(),
-                    created_at: getFormattedDate(row.created_at),
+                    created_at: convertTimezoneValue(this.props.user.timezone, row.created_at, TIMESTAMP_FORMAT),
+                    // created_at: getFormattedDate(row.created_at),
                     data: row.data
                 }
             })

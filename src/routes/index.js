@@ -32,6 +32,7 @@ import ManageData from './account/ManageData/index'
 import SetPrice from './account/PricesPakages/index'
 import Domains from "./domains/index";
 import Reporting from './account/Reporting/index'
+import Support from './Support/index'
 import SystemMessages from './SystemMessages/index'
 import DealerAgent from './dealerAgent/index'
 import BulkActivities from './bulkActivities/index'
@@ -96,7 +97,11 @@ const App = ({ match }) => {
           component={PaymentHistory}
         />
 
-
+        <Route
+          exact
+          path={`${match.url}support`}
+          component={Support}
+        />
 
         <Route
           exact

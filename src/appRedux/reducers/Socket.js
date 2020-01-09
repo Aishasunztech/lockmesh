@@ -20,6 +20,7 @@ const initialState = {
     is_policy_process: 0,
     is_policy_finish: false,
     socket: null,
+    supportSystemSocket: null,
 };
 
 export default (state = initialState, action) => {
@@ -29,7 +30,8 @@ export default (state = initialState, action) => {
             console.log("socket connected");
             return {
                 ...state,
-                socket: action.payload
+                socket: action.payload,
+                supportSystemSocket: action.supportSystemSocket,
             }
         }
         case DISCONNECT_SOCKET: {
@@ -37,7 +39,8 @@ export default (state = initialState, action) => {
 
             return {
                 ...state,
-                socket: action.payload
+                socket: action.payload,
+                supportSystemSocket: action.supportSystemSocket,
             }
         }
 
