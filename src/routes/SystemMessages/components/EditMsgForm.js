@@ -105,9 +105,13 @@ class EditMsgForm extends Component {
                 let monthDate = this.state.month_date;
                 let monthName = this.state.month_name;
 
+                let dealerTZ = checkTimezoneValue(this.props.user.timezone, false);
                 if (this.state.timer === "NOW") {
                     // this.state.selected_dateTime = "";
-                    dateTimeVal = moment().tz(SERVER_TIMEZONE).format("YYYY-MM-DD HH:mm:ss");
+
+                    // dateTimeVal = dealerTZ ? moment().tz(dealerTZ).tz(SERVER_TIMEZONE).format(TIMESTAMP_FORMAT) : '';
+
+                    dateTimeVal = moment().tz(dealerTZ).format(TIMESTAMP_FORMAT);
                     weekDay = "";
                     monthDate = "";
                     monthName = "";
@@ -145,7 +149,7 @@ class EditMsgForm extends Component {
                 }
 
 
-                
+
                 //********************* update interval description text w.r.t timer status */ 
                 let duration = repeatVal ? repeatVal : "NONE";
                 // set default dateTime format
@@ -188,7 +192,7 @@ class EditMsgForm extends Component {
                     msg: values.msg_txt,
                     timer_status: values.timer,
                     repeat_duration: repeatVal,
-                    date_time: convertTimezoneValue(this.props.user.timezone, dateTimeVal, TIMESTAMP_FORMAT, true),
+                    date_time: dateTimeVal, // convertTimezoneValue(this.props.user.timezone, dateTimeVal, TIMESTAMP_FORMAT, true), // convert time from client timezone to server timezone
                     week_day: weekDay,
                     month_date: monthDate,
                     month_name: monthName,
@@ -209,7 +213,7 @@ class EditMsgForm extends Component {
                 // copyEditRecord.msg = values.msg_txt
 
                 console.log("copyEditRecord data ", data);
-                this.refs.update_bulk_msg.handleBulkUpdateMsg(data, this.props.editRecord.devices);
+                this.refs.update_bulk_msg.handleBulkUpdateMsg(data, this.props.editRecord.devices, dealerTZ);
 
             }
 

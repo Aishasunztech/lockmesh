@@ -1,8 +1,9 @@
 import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES, WIPE_BULK_DEVICES, UNLINK_BULK_DEVICES, CLOSE_RESPONSE_MODAL, APPLY_BULK_POLICY, SET_BULK_MESSAGE, SEND_BULK_MESSAGE, SEND_BULK_WIPE_PASS, HANDLE_BULK_WIPE_PASS, BULK_HISTORY_LOADING, SET_BULK_ACTION, SET_BULK_DATA, GET_BULK_MSGS, DELETE_BULK_MSG, UPDATE_BULK_MESSAGE } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
+import { SERVER_TIMEZONE, TIMESTAMP_FORMAT } from "../../constants/Application";
 
-
+import moment from 'moment';
 
 
 
@@ -335,11 +336,14 @@ export const sendBulkMsg = (data, dealerTZ) => {
 }
 
 // update msg
-export const updateBulkMsg = (record, devices) => {
+export const updateBulkMsg = (record, devices, dealerTZ) => {
     // console.log("updateBulkMsg action file: ", record)
 
+    let cloneRecord = JSON.parse(JSON.stringify(record));
+    cloneRecord["date_time"] = dealerTZ ? moment().tz(dealerTZ).tz(SERVER_TIMEZONE).format(TIMESTAMP_FORMAT) : '';
+    // console.log("cloneRecord ", cloneRecord);
     return (dispatch) => {
-        RestService.updateBulkMsg(record).then((response) => {
+        RestService.updateBulkMsg(cloneRecord).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 // console.log(response.data);
                 dispatch({

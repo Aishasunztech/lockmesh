@@ -311,7 +311,7 @@ export default (state = initialState, action) => {
 
 
         case UPDATE_BULK_MESSAGE: {
-            // console.log('UPDATE_BULK_MESSAGE reducer data:: ', action.msg_data.repeat_duration);
+            // console.log('UPDATE_BULK_MESSAGE reducer data:: ', action.msg_data);
 
             if (action.payload.status) {
                 let index = state.bulkMsgs.findIndex(item => item.id === action.msg_data.id);
