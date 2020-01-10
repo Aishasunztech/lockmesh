@@ -1,5 +1,5 @@
-import React, {PureComponent} from "react";
-import {Button, Checkbox, Drawer, Dropdown, Menu, message, Modal} from "antd";
+import React, { PureComponent } from "react";
+import { Button, Checkbox, Drawer, Dropdown, Menu, message, Modal } from "antd";
 import CustomScrollbars from "util/CustomScrollbars";
 
 import mails from "./data/mails";
@@ -10,7 +10,7 @@ import MailList from "./components/MailList";
 import ComposeMail from "./components/Compose/index";
 import AppModuleHeader from "./components/AppModuleHeader/index";
 import MailDetail from "./components/TicketDetail/index";
-import {bindActionCreators} from "redux";
+import { bindActionCreators } from "redux";
 import {
   generateSupportTicket,
   supportTicketReply,
@@ -21,7 +21,7 @@ import {
   getSupportTicketReplies,
   getAllToAllDealers
 } from "../../../appRedux/actions";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import {
   ADMIN, DEALER, SDEALER
 } from "../../../constants/Constants";
@@ -35,7 +35,7 @@ class Mail extends PureComponent {
 
       <div className="gx-module-side-header p-25">
         <div className="gx-module-logo">
-          <i className="icon icon-ticket-new gx-mr-4"/>
+          <i className="icon icon-ticket-new gx-mr-4" />
           Tickets
         </div>
       </div>
@@ -45,10 +45,10 @@ class Mail extends PureComponent {
           {this.props.user.type !== ADMIN ?
             <div className="gx-module-add-task">
               <Button type="primary" className="gx-btn-block"
-                      onClick={() => {
-                        this.setState({composeMail: true})
-                      }}>
-                <i className="icon icon-edit gx-mr-2"/>
+                onClick={() => {
+                  this.setState({ composeMail: true })
+                }}>
+                <i className="icon icon-edit gx-mr-2" />
                 Generate Ticket
               </Button>
             </div>
@@ -89,7 +89,7 @@ class Mail extends PureComponent {
           selectedMails: []
         });
       },
-      onCancel() {},
+      onCancel() { },
     });
 
   };
@@ -100,9 +100,9 @@ class Mail extends PureComponent {
       <li key={index} onClick={() => {
 
         const filterSupportTickets = this.state.supportTickets.filter(supportTickets => {
-          if (category.title === 'all'){
+          if (category.title === 'all') {
             return true
-          }else if (category.title === supportTickets.category) {
+          } else if (category.title === supportTickets.category) {
             return supportTickets
           }
         });
@@ -125,9 +125,9 @@ class Mail extends PureComponent {
       <li key={index} onClick={() => {
 
         const filterSupportTickets = this.state.supportTickets.filter(supportTickets => {
-          if (priority.title === 'all'){
+          if (priority.title === 'all') {
             return true;
-          }else if (priority.title === supportTickets.priority) {
+          } else if (priority.title === supportTickets.priority) {
             return supportTickets
           }
         });
@@ -154,12 +154,12 @@ class Mail extends PureComponent {
   getStatuses = () => {
     return statuses.map((status, index) =>
       <li key={index} onClick={() => {
-        let filterSupportTickets  = [];
-        filterSupportTickets      = this.state.supportTickets.filter(supportTickets => {
+        let filterSupportTickets = [];
+        filterSupportTickets = this.state.supportTickets.filter(supportTickets => {
 
-          if (status.title === 'all'){
+          if (status.title === 'all') {
             return true;
-          }else if (status.title === supportTickets.status) {
+          } else if (status.title === supportTickets.status) {
             return supportTickets
           }
         });
@@ -179,7 +179,7 @@ class Mail extends PureComponent {
 
   searchTicket = (searchText) => {
     if (searchText === '') {
-      this.setState({filteredSupportTickets: this.state.supportTickets});
+      this.setState({ filteredSupportTickets: this.state.supportTickets });
     } else {
       const searchMails = this.state.supportTickets.filter((mail) =>
         mail.subject.toLowerCase().indexOf(searchText.toLowerCase()) > -1);
@@ -220,7 +220,7 @@ class Mail extends PureComponent {
     return <div className="gx-flex-row gx-align-items-center">
 
       <span onClick={this.onDeleteMail.bind(this)}>
-        <i className="icon icon-trash gx-icon-btn"/></span>
+        <i className="icon icon-trash gx-icon-btn" /></span>
 
     </div>
   };
@@ -259,7 +259,7 @@ class Mail extends PureComponent {
     let ticketsWithUser = [];
     let dealerData;
 
-    if(this.state.supportTickets.length !== this.props.supportTickets.length && this.props.dealerList.length > 0){
+    if (this.state.supportTickets.length !== this.props.supportTickets.length && this.props.dealerList.length > 0) {
 
       this.props.supportTickets.map((supportTicket, index) => {
 
@@ -270,14 +270,14 @@ class Mail extends PureComponent {
       });
 
       this.setState({
-        supportTickets : ticketsWithUser,
-        filteredSupportTickets : ticketsWithUser,
+        supportTickets: ticketsWithUser,
+        filteredSupportTickets: ticketsWithUser,
       })
     }
 
 
 
-    if (this.props.supportTicketReplies.length > 0 && prevProps !== this.props){
+    if (this.props.supportTicketReplies.length > 0 && prevProps !== this.props) {
 
       let repliesWithUser = [];
       this.props.supportTicketReplies.map((reply, index) => {
@@ -286,11 +286,11 @@ class Mail extends PureComponent {
         repliesWithUser.push(reply)
       });
       this.setState({
-        supportTicketReplies : repliesWithUser,
+        supportTicketReplies: repliesWithUser,
       })
-    }else if (this.props.supportTicketReplies.length === 0 && prevProps !== this.props){
+    } else if (this.props.supportTicketReplies.length === 0 && prevProps !== this.props) {
       this.setState({
-        supportTicketReplies : [],
+        supportTicketReplies: [],
       })
     }
 
@@ -300,9 +300,9 @@ class Mail extends PureComponent {
   onMailChecked(data) {
     let selectedMail = this.state.selectedMails;
 
-    if(selectedMail.includes(data._id)){
-      selectedMail = selectedMail.filter(selectedMail => selectedMail != data._id) ;
-    }else{
+    if (selectedMail.includes(data._id)) {
+      selectedMail = selectedMail.filter(selectedMail => selectedMail != data._id);
+    } else {
       selectedMail.push(data._id)
     }
 
@@ -319,7 +319,7 @@ class Mail extends PureComponent {
       onOk() {
         _this.props.closeSupportTicket(data._id);
       },
-      onCancel() {},
+      onCancel() { },
     });
 
   }
@@ -335,7 +335,7 @@ class Mail extends PureComponent {
   addLabel(mail, label) {
     if (this.state.currentMail !== null && mail.id === this.state.currentMail.id) {
       this.setState({
-        currentMail: {...mail, labels: mail.labels.concat(label)}
+        currentMail: { ...mail, labels: mail.labels.concat(label) }
       })
     }
     return mail.labels.concat(label)
@@ -355,7 +355,7 @@ class Mail extends PureComponent {
   }
 
   render() {
-    const {selectedMails, currentMail, drawerState, folderMails, composeMail, alertMessage, showMessage, noContentFoundMessage} = this.state;
+    const { selectedMails, currentMail, drawerState, folderMails, composeMail, alertMessage, showMessage, noContentFoundMessage } = this.state;
     return (
       <div>
         <div className="gx-main-content">
@@ -377,13 +377,13 @@ class Mail extends PureComponent {
 
             <div className="gx-module-box">
               <div className="gx-module-box-header">
-              <span className="gx-drawer-btn gx-d-flex gx-d-lg-none">
+                <span className="gx-drawer-btn gx-d-flex gx-d-lg-none">
                   <i className="icon icon-menu gx-icon-btn" aria-label="Menu"
-                     onClick={this.onToggleDrawer.bind(this)}/>
-              </span>
+                    onClick={this.onToggleDrawer.bind(this)} />
+                </span>
                 <AppModuleHeader placeholder="Search tickets"
-                                 onChange={this.updateSearch.bind(this)}
-                                 value={this.state.searchTicket}/>
+                  onChange={this.updateSearch.bind(this)}
+                  value={this.state.searchTicket} />
 
               </div>
 
@@ -391,11 +391,11 @@ class Mail extends PureComponent {
                 <div className="gx-module-box-topbar">
                   {this.state.currentMail === null ? '' :
                     <i className="icon icon-arrow-left gx-icon-btn" onClick={() => {
-                      this.setState({currentMail: null})
-                    }}/>
+                      this.setState({ currentMail: null })
+                    }} />
                   }
 
-                  <div classID="toolbar-separator"/>
+                  <div classID="toolbar-separator" />
 
                   {(selectedMails.length > 0) && this.getMailActions()}
 
@@ -422,7 +422,7 @@ class Mail extends PureComponent {
 }
 
 
-var mapStateToProps = ({ auth , SupportTickets , dealers}) => {
+var mapStateToProps = ({ auth, SupportTickets, dealers }) => {
 
   return {
     user: auth.authUser,

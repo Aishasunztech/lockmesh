@@ -8,7 +8,7 @@ import UserProfile from "./UserProfile";
 import NewDevice from '../../components/NewDevices';
 import CreditsModal from '../../components/CreditsModal';
 
-import { getNewDevicesList } from "../../appRedux/actions/Common";
+import { getNewDevicesList, } from "../../appRedux/actions/Common";
 import {
   getNewCashRequests,
   getUserCredit,
@@ -16,10 +16,11 @@ import {
   acceptRequest,
   rejectServiceRequest,
   acceptServiceRequest,
-  getCancelServiceRequests
+  getCancelServiceRequests,
+  getTicketsNotifications,
 } from "../../appRedux/actions/SideBar";
 import {
-  getLatestPaymentHistory, getOverdueDetails
+  getLatestPaymentHistory, getOverdueDetails,
 } from "../../appRedux/actions/Account";
 
 import { transferDeviceProfile } from "../../appRedux/actions/ConnectDevice";
@@ -51,6 +52,7 @@ import { logout } from "appRedux/actions/Auth";
 import { rejectDevice, addDevice, getDevicesList, } from '../../appRedux/actions/Devices';
 
 import { switchLanguage, getLanguage, getAll_Languages, toggleCollapsedSideNav } from "../../appRedux/actions/Setting";
+import { getAllToAllDealers } from "../../appRedux/actions/Dealers";
 
 import { ADMIN, DEALER, SDEALER, AUTO_UPDATE_ADMIN } from "../../constants/Constants";
 import { Button_Yes, Button_No } from "../../constants/ButtonConstants";
@@ -105,7 +107,7 @@ class SidebarContent extends Component {
       this.props.getCancelServiceRequests()
       this.refs.new_device.showModal();
     }
-
+    this.props.getTicketsNotifications()
     // alert('its working');
   }
   showCreditsModal = () => {
@@ -127,6 +129,10 @@ class SidebarContent extends Component {
     })
     this.props.getNewDevicesList();
     this.props.getNewCashRequests();
+    this.props.getTicketsNotifications()
+    this.props.getAllToAllDealers()
+
+    console.log("asdsad");
     this.props.getUserCredit();
     if (this.props.allDevices.length === 0) {
       this.props.getDevicesList();
@@ -214,7 +220,7 @@ class SidebarContent extends Component {
 
     const selectedKeys = pathname.substr(1);
     const defaultOpenKeys = selectedKeys.split('/')[1];
-    // console.log(this.props.user_credit);
+    // console.log(this.props.ticketNotifications);
     return (
       <Auxiliary>
         <SidebarLogo />
@@ -246,6 +252,8 @@ class SidebarContent extends Component {
               cancel_service_requests={this.props.cancel_service_requests}
               rejectServiceRequest={this.props.rejectServiceRequest}
               acceptServiceRequest={this.props.acceptServiceRequest}
+              ticketNotifications={this.props.ticketNotifications}
+              allDealers={this.props.allDealers}
 
             />
             <span className="font_14">
@@ -273,7 +281,7 @@ class SidebarContent extends Component {
               {/* Notifications */}
               <li>
                 <a className="head-example">
-                  <Badge count={(localStorage.getItem('type') !== ADMIN) ? this.props.devices.length + this.props.requests.length : this.props.cancel_service_requests.length}>
+                  <Badge count={(localStorage.getItem('type') !== ADMIN) ? this.props.devices.length + this.props.requests.length + this.props.ticketNotifications.length : this.props.cancel_service_requests.length + this.props.ticketNotifications.length}>
                     <i className="icon icon-notification notification_icn" onClick={() => this.showNotification()} />
                   </Badge>
                 </a>
@@ -404,8 +412,9 @@ class SidebarContent extends Component {
 
 // SidebarContent.propTypes = {};
 
-const mapStateToProps = ({ settings, devices, sidebar, account, auth }) => {
+const mapStateToProps = ({ settings, devices, sidebar, account, auth, dealers }) => {
   const { navStyle, themeType, locale, pathname, languages, translation, isSwitched } = settings;
+  // console.log(sidebar.ticketNotifications);
   return {
     navStyle,
     themeType,
@@ -416,6 +425,7 @@ const mapStateToProps = ({ settings, devices, sidebar, account, auth }) => {
     requests: sidebar.newRequests,
     user_credit: sidebar.user_credit,
     cancel_service_requests: sidebar.cancel_service_requests,
+    ticketNotifications: sidebar.ticketNotifications,
     due_credit: sidebar.due_credit,
     latestPaymentTransaction: account.paymentHistory,
     overdueDetails: account.overdueDetails,
@@ -424,7 +434,9 @@ const mapStateToProps = ({ settings, devices, sidebar, account, auth }) => {
     lng_id: translation["lng_id"],
     isSwitched: isSwitched,
     account_balance_status: auth.authUser.account_balance_status,
-    account_balance_status_by: auth.authUser.account_balance_status_by
+    account_balance_status_by: auth.authUser.account_balance_status_by,
+    allDealers: dealers.allDealers,
+
   }
 };
 export default connect(mapStateToProps,
@@ -447,7 +459,10 @@ export default connect(mapStateToProps,
     transferDeviceProfile,
     getCancelServiceRequests,
     acceptServiceRequest,
-    rejectServiceRequest
+    rejectServiceRequest,
+    getTicketsNotifications,
+    getAllToAllDealers
+
   }
 )(SidebarContent);
 
