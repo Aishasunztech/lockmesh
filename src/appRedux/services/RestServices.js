@@ -230,7 +230,7 @@ const RestService = {
     getSimIDs: () => {
         return axios.get(BASE_URL + 'users/get_sim_ids', RestService.getHeader());
     },
-    
+
     getChatIDs: () => {
         return axios.get(BASE_URL + 'users/get_chat_ids', RestService.getHeader());
     },
@@ -1153,6 +1153,12 @@ const RestService = {
     //get Support Ticket replies
     getSupportTicketReplies: (data) => {
       return axios.get(SUPPORT_URL + 'tickets/replies/'+data, RestService.getHeader());
+    },
+
+    //Support System Messages
+    //generate Support System Messages
+    generateSupportSystemMessages: (data) => {
+      return axios.post(SUPPORT_URL + 'system-messages/store', data, RestService.getHeader());
     },
 };
 export default RestService;

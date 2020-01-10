@@ -4,10 +4,6 @@ import { checkValue, convertToLang } from '../../../utils/commonUtils'
 import { Button_Cancel, Button_submit } from '../../../../constants/ButtonConstants';
 import { Required_Fields } from '../../../../constants/DeviceConstants';
 import moment from 'moment';
-
-const confirm = Modal.confirm;
-const success = Modal.success;
-const error   = Modal.error;
 const { TextArea } = Input;
 
 
@@ -18,11 +14,8 @@ class SendMessage extends Component {
 
     this.state = {
       visible: false,
-      filteredDevices: [],
       selectedDealers: [],
-      selectedUsers: [],
       dealerList: [],
-      allUsers: [],
       allDealers: [],
       selectedAction: 'NONE',
       selected_dateTime: null,
@@ -37,55 +30,41 @@ class SendMessage extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-
+      if (!err){
+        values.receiver_ids = this.state.selectedDealers;
+        this.props.generateSupportSystemMessages(values);
+        this.handleCancel();
+      }
     });
   };
 
-  componentWillReceiveProps(nextProps) {
 
-    if (this.props.devices != nextProps.devices || this.props.dealerList != nextProps.dealerList) {
+  componentDidMount() {
+
+    if (this.props.dealerList.length > 0) {
+      let allDealers = this.props.dealerList.map((item) => {
+        return ({ key: item.dealer_id, id: item.dealer_id, label: item.dealer_name, email: item.email  })
+      });
+
       this.setState({
-        filteredDevices: nextProps.devices,
-        dealerList: this.props.dealerList
+        dealerList: this.props.dealerList,
+        allDealers: allDealers,
       })
     }
 
 
-    if (nextProps.dealerList) {
-      let allDealers = nextProps.dealerList.map((item) => {
-        return ({ key: item.dealer_id, label: item.dealer_name })
-      });
-
-      this.setState({ allDealers })
-    }
-  }
-
-  componentDidMount() {
-
-    this.setState({
-      filteredDevices: this.props.devices,
-      dealerList: this.props.dealerList,
-    })
   }
 
   handleMultipleSelect = () => {
-    // console.log('value is: ', e);
     let data = {}
 
-    if (this.state.selectedDealers.length || this.state.selectedUsers.length) {
+    if (this.state.selectedDealers.length) {
       data = {
-        dealers: this.state.selectedDealers,
-        users: this.state.selectedUsers
-      }
-
-      // console.log('handle change data is: ', data)
-      this.props.getBulkDevicesList(data);
+        dealers: this.state.selectedDealers
+      };
       this.props.getAllDealers();
-
-    } else {
-      this.setState({ filteredDevices: [] });
     }
-  }
+  };
 
   handleDeselect = (e, dealerOrUser = '') => {
 
@@ -93,25 +72,20 @@ class SendMessage extends Component {
       let updateDealers = this.state.selectedDealers.filter(item => item.key != e.key);
       this.state.selectedDealers = updateDealers;
       this.state.checkAllSelectedDealers = false;
-    } else if (dealerOrUser == "users") {
-      let updateUsers = this.state.selectedUsers.filter(item => item.key != e.key);
-      this.state.selectedUsers = updateUsers;
-      this.state.checkAllSelectedUsers = false;
     }
+  };
 
-  }
   handleReset = () => {
     this.props.form.resetFields();
     this.setState({ repeat_duration: 'NONE' })
-  }
+  };
 
 
   handleCancel = () => {
     this.handleReset();
     this.props.handleCancelSendMsg(false);
     this.setState({
-      selectedDealers: [],
-      selectedUsers: []
+      selectedDealers: []
     })
   };
 
@@ -119,35 +93,9 @@ class SendMessage extends Component {
     this.setState({ type: e.target.value });
   };
 
-  handleChangeUser = (values) => {
-    let checkAllUsers = this.state.checkAllSelectedUsers
-    let selectAll = values.filter(e => e.key === "all");
-    let selectedUsers = values.filter(e => e.key !== "all");
-
-    if (selectAll.length > 0) {
-      checkAllUsers = !this.state.checkAllSelectedUsers;
-      if (this.state.checkAllSelectedUsers) {
-        selectedUsers = [];
-      } else {
-        selectedUsers = this.state.allUsers;
-      }
-    }
-
-    else {
-      selectedUsers = values.filter(e => e.key !== "all");
-    }
-
-    let data = {
-      dealers: this.state.selectedDealers,
-      users: selectedUsers
-    }
-    // console.log("users data is: ", data)
-    this.props.getBulkDevicesList(data);
-    this.setState({ selectedUsers, checkAllSelectedUsers: checkAllUsers })
-  }
-
-  handleChangeDealer = (values) => {
-    let checkAllDealers = this.state.checkAllSelectedDealers
+  handleChangeDealer = (values, option) => {
+    
+    let checkAllDealers = this.state.checkAllSelectedDealers;
     let selectAll = values.filter(e => e.key === "all");
     let selectedDealers = [];
 
@@ -160,7 +108,7 @@ class SendMessage extends Component {
       }
     }
     else if (values.length === this.props.dealerList.length) {
-      selectedDealers = this.state.allDealers
+      selectedDealers = this.state.allDealers;
       checkAllDealers = true;
     }
     else {
@@ -169,15 +117,12 @@ class SendMessage extends Component {
 
 
     let data = {
-      dealers: selectedDealers,
-      users: this.state.selectedUsers
-    }
+      dealers: selectedDealers
+    };
 
-    // console.log('handle change data is: ', data)
-    // this.props.getBulkDevicesList(data);
+
     this.setState({
       selectedDealers,
-      selectedUsers: [],
       checkAllSelectedDealers: checkAllDealers,
     });
 
@@ -228,13 +173,13 @@ class SendMessage extends Component {
                     <Select.Option key="allDealers" value="all">Select All</Select.Option>
                     : <Select.Option key="" value="">Data Not Found</Select.Option>
                   }
-                  {this.state.allDealers.map(item => <Select.Option key={item.key} value={item.key}>{item.label}</Select.Option>)}
+                  {this.state.allDealers.map(item => <Select.Option key={item.key} value={item.key} data-object={item}>{item.label}</Select.Option>)}
                 </Select>
               </Form.Item>
             </Col>
           </Row>
           {(this.state.selectedDealers && this.state.selectedDealers.length && !this.state.checkAllSelectedDealers) ?
-            <p>Dealers/S-Dealers Selected: <span className="font_26">{this.state.selectedDealers.map((item, index) => <Tag key={index}>{item.label}</Tag>)}</span></p>
+            <div><h5>Dealers/S-Dealers Selected: <span className="font_26">{this.state.selectedDealers.map((item, index) => <Tag key={index}>{item.label}</Tag>)}</span></h5></div>
             : null}
 
           <Row gutter={24} className="mt-4">
@@ -253,7 +198,7 @@ class SendMessage extends Component {
                   ],
                 })(
                   <Input
-                  placeholder="Subject"
+                    placeholder="Subject"
                   />
                 )}
               </Form.Item>
@@ -268,7 +213,7 @@ class SendMessage extends Component {
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
               >
-                {this.props.form.getFieldDecorator('msg_txt', {
+                {this.props.form.getFieldDecorator('message', {
                   initialValue: '',
                   rules: [
                     {
@@ -292,7 +237,7 @@ class SendMessage extends Component {
                      }}
           >
             <Button type="button" onClick={this.handleCancel}> {convertToLang(this.props.translation[Button_Cancel], "Cancel")} </Button>
-            <Button type="primary" htmlType="submit"> {convertToLang(this.props.translation[""], "SEND")} </Button>
+            <Button type="primary" htmlType="submit"> {convertToLang(this.props.translation[""], "Send")} </Button>
           </Form.Item>
 
         </Form>
