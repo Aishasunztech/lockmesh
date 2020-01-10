@@ -18,6 +18,7 @@ const RestService = {
         let token = localStorage.getItem('token');
         let makeToken = "token=" + token + "&isWeb=true";
         let socket = io.connect(BASE_URL, {
+            transports: ['websocket'],
             query: makeToken,
             // reconnectionDelay:1000,
             // reconnection:true,
@@ -41,6 +42,7 @@ const RestService = {
         let type = localStorage.getItem('type');
         let makeToken = "token=" + token + "&isWeb=true&user_id=" + id + "&type=" + type;
         let socket = SupportSystemSocketIO.connect(SUPPORT_URL, {
+            transports: ['websocket'],
             query: makeToken,
             secure: true
         });
@@ -478,11 +480,11 @@ const RestService = {
     },
 
     resetChatPin: (data) => {
-      return axios.post(BASE_URL + 'users/reset-chat-pin/', data, RestService.getHeader());
+        return axios.post(BASE_URL + 'users/reset-chat-pin/', data, RestService.getHeader());
     },
 
-  changeSchatPinStatus: (data) => {
-      return axios.post(BASE_URL + 'users/change-s-chat-pin-status/', data, RestService.getHeader());
+    changeSchatPinStatus: (data) => {
+        return axios.post(BASE_URL + 'users/change-s-chat-pin-status/', data, RestService.getHeader());
     },
 
     // for dealer reset password(admin dashboard)

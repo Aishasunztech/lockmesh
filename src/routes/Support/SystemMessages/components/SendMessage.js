@@ -94,7 +94,7 @@ class SendMessage extends Component {
   };
 
   handleChangeDealer = (values, option) => {
-    
+
     let checkAllDealers = this.state.checkAllSelectedDealers;
     let selectAll = values.filter(e => e.key === "all");
     let selectedDealers = [];
