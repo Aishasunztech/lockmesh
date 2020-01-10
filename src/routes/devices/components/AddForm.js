@@ -924,7 +924,7 @@ class AddDevice extends Component {
                     {(this.props.preActive) ?
                         <Radio.Group className="width_100 text-center" onChange={this.handleChange} ref='option' defaultValue="0" buttonStyle="solid">
                             <Radio.Button className="dev_radio_btn" value="0">{convertToLang(this.props.translation[SINGLE_DEVICE], "Single Device")}</Radio.Button>
-                            <Radio.Button className="dev_radio_btn" value="1">
+                            <Radio.Button className="dev_radio_btn" value="1" disabled>
                                 <a>{convertToLang(this.props.translation[DUPLICATE_DEVICES], "Multiple Devices")}</a>
                                 <Popover placement="bottomRight" content={(
                                     <Markup content={convertToLang(this.props.translation[DUPLICATE_DEVICES_HELPING_TEXT],
