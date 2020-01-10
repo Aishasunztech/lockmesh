@@ -919,30 +919,44 @@ class EditDevice extends Component {
     }
 
     changeDataLimit = (type, value) => {
-        let data_plan = this.props.parent_packages.find(item => item.id == value)
-        if (type === 'data_limit_1') {
-            let disable_data_plan_sim1 = false
-            if ((!this.state.disableSim && this.state.services)) {
-                disable_data_plan_sim1 = true
+        if (value) {
+            let data_plan = this.props.parent_packages.find(item => item.id == value)
+            if (type === 'data_limit_1') {
+                let disable_data_plan_sim1 = false
+                if ((!this.state.disableSim && this.state.services)) {
+                    disable_data_plan_sim1 = true
+                }
+                // else if ((this.props.device.sim_id2_data_plan && JSON.parse(this.props.device.sim_id_data_plan.data_plan_package).id !== value)) {
+                //     disable_data_plan_sim1 = false
+                // }
+                this.setState({
+                    data_limit_1: data_plan ? data_plan : '',
+                    disable_data_plan_sim1: disable_data_plan_sim1
+                })
+                this.data_plan_1_added = false
+            } else if (type === 'data_limit_2') {
+                let disable_data_plan_sim2 = false
+                if ((!this.state.disableSim2 && this.state.services)) {
+                    disable_data_plan_sim2 = true
+                }
+                this.setState({
+                    data_limit_2: data_plan ? data_plan : '',
+                    disable_data_plan_sim2: disable_data_plan_sim2
+                })
+                this.data_plan_2_added = false
             }
-            // else if ((this.props.device.sim_id2_data_plan && JSON.parse(this.props.device.sim_id_data_plan.data_plan_package).id !== value)) {
-            //     disable_data_plan_sim1 = false
-            // }
-            this.setState({
-                data_limit_1: data_plan ? data_plan : '',
-                disable_data_plan_sim1: disable_data_plan_sim1
-            })
-            this.data_plan_1_added = false
-        } else if (type === 'data_limit_2') {
-            let disable_data_plan_sim2 = false
-            if ((!this.state.disableSim2 && this.state.services)) {
-                disable_data_plan_sim2 = true
+        } else {
+            if (type === 'data_limit_1') {
+                this.setState({
+                    data_limit_1: '',
+                    disable_data_plan_sim1: true
+                })
+            } else if (type === 'data_limit_2') {
+                this.setState({
+                    data_limit_2: '',
+                    disable_data_plan_sim2: true
+                })
             }
-            this.setState({
-                data_limit_2: data_plan ? data_plan : '',
-                disable_data_plan_sim2: disable_data_plan_sim2
-            })
-            this.data_plan_2_added = false
         }
     }
 
@@ -1434,9 +1448,7 @@ class EditDevice extends Component {
                                                     this.changeDataLimit('data_limit_1', value)
                                                 }}
                                             >
-                                                {/* {(this.state.services) ?
-                                                <Select.Option key={""} value="" >BASIC DATA PLAN (2 GB)</Select.Option>
-                                                : null} */}
+                                                <Select.Option key={""} value="" >SELECT DATA PLAN</Select.Option>
                                                 {this.renderDataLimitOptions()}
 
                                             </Select>
@@ -1565,9 +1577,7 @@ class EditDevice extends Component {
                                                     this.changeDataLimit('data_limit_2', value)
                                                 }}
                                             >
-                                                {/* {(this.state.services) ?
-                                                    <Select.Option key={""} value="" >BASIC DATA PLAN (2 GB)</Select.Option>
-                                                    : null} */}
+                                                <Select.Option key={""} value="" >SELECT DATA PLAN</Select.Option>
                                                 {this.renderDataLimitOptions()}
 
                                             </Select>
