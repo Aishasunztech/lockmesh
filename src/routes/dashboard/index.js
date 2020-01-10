@@ -124,6 +124,7 @@ class Dashboard extends Component {
                     rejectServiceRequest={this.props.rejectServiceRequest}
                     acceptServiceRequest={this.props.acceptServiceRequest}
                     ticketNotifications={this.props.ticketNotifications}
+                    allDealers={this.props.allDealers}
                 />
 
                 <Auxiliary>
@@ -400,7 +401,7 @@ function mapDispatchToProps(dispatch) {
         getTicketsNotifications,
     }, dispatch);
 }
-var mapStateToProps = ({ dashboard, auth, devices, sidebar, settings }) => {
+var mapStateToProps = ({ dashboard, auth, devices, sidebar, settings , dealers}) => {
 
     return {
         items: dashboard.dashboard_items,
@@ -412,6 +413,7 @@ var mapStateToProps = ({ dashboard, auth, devices, sidebar, settings }) => {
         translation: settings.translation,
         cancel_service_requests: sidebar.cancel_service_requests,
         ticketNotifications: sidebar.ticketNotifications,
+        allDealers: dealers.allDealers,
     };
 }
 

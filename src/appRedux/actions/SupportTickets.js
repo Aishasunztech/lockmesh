@@ -5,6 +5,7 @@ import {
   GET_SUPPORT_TICKET,
   DELETE_SUPPORT_TICKET,
   GET_SUPPORT_TICKET_REPLY,
+  UPDATE_NOTIFICATION_STATUS,
   INVALID_TOKEN,
   SPIN_lOADING
 } from "../../constants/ActionTypes";
@@ -133,6 +134,11 @@ export function getSupportTicketReplies(data) {
         dispatch({
           type: GET_SUPPORT_TICKET_REPLY,
           payload: response.data
+        });
+
+        dispatch({
+          type: UPDATE_NOTIFICATION_STATUS,
+          payload: data
         });
       } else {
         dispatch({
