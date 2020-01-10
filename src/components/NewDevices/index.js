@@ -37,12 +37,13 @@ export default class NewDevices extends Component {
             { title: convertToLang(props.translation[""], "CREDITS TO REFUND"), dataIndex: 'credits_to_refund', key: 'credits_to_refund', align: "center" },
         ];
         const ticketNotificationColumns = [
-            { title: convertToLang(props.translation[ACTION], "Action"), dataIndex: 'action', key: 'action', align: "center" },
-            { title: convertToLang(props.translation[DEVICE_ID], "DEVICE ID"), dataIndex: 'device_id', key: 'device_id', align: "center" },
-            { title: convertToLang(props.translation[DEALER_PIN], "DEALER PIN"), dataIndex: 'dealer_pin', key: 'dealer_pin', align: "center" },
-            { title: convertToLang(props.translation[""], "SERVICE TERM"), dataIndex: 'service_term', key: 'service_term', align: "center" },
-            { title: convertToLang(props.translation[""], "SERVICE REMAINING DAYS"), dataIndex: 'service_remaining_days', key: 'service_remaining_days', align: "center" },
-            { title: convertToLang(props.translation[""], "CREDITS TO REFUND"), dataIndex: 'credits_to_refund', key: 'credits_to_refund', align: "center" },
+            { title: convertToLang(props.translation[""], "DEALER NAME"), dataIndex: 'dealer_name', key: 'dealer_name', align: "center" },
+            { title: convertToLang(props.translation[""], "DEALER PIN"), dataIndex: 'dealer_pin', key: 'dealer_pin', align: "center" },
+            { title: convertToLang(props.translation[""], "TYPE"), dataIndex: 'type', key: 'type', align: "center" },
+            { title: convertToLang(props.translation[""], "TICKET SUBJECT"), dataIndex: 'subject', key: 'ticket_subject', align: "center" },
+            { title: convertToLang(props.translation[""], "TICKET PRIORITY"), dataIndex: 'priority', key: 'priority', align: "center" },
+            { title: convertToLang(props.translation[""], "TICKET CATEGORY"), dataIndex: 'category', key: 'category', align: "center" },
+            { title: convertToLang(props.translation[""], "CREATED AT"), dataIndex: 'created_at', key: 'created_at', align: "center" },
         ];
 
         this.state = {
@@ -87,7 +88,6 @@ export default class NewDevices extends Component {
         this.setState({
             NewDevices: this.props.devices,
             NewRequests: this.props.requests
-
         })
     }
     componentWillReceiveProps(nextProps) {
@@ -181,12 +181,17 @@ export default class NewDevices extends Component {
     renderTicketNotifications(list) {
         // console.log(list);
         return list.map((notification) => {
+            let dealer = this.props.allDealers.find(dealer => dealer.dealer_id == notification.user_id)
             return {
                 id: notification.id,
                 key: notification.id,
-                dealer_name: "N/A",
-                label: "N/A",
-                credits: "N/A",
+                dealer_name: dealer ? dealer.dealer_name : 'N/A',
+                dealer_pin: dealer ? dealer.dealer_type != 1 ? dealer.link_code : 'N/A' : 'N/A',
+                type: notification.type,
+                subject: notification.ticket.subject,
+                category: notification.ticket.category,
+                priority: notification.ticket.priority,
+                created_at: moment(notification.createdAt).format('YYYY/MM/DD hh:mm:ss'),
             }
         });
 

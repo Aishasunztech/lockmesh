@@ -6,9 +6,10 @@ import {
     GET_CANCEL_REQUEST,
     ACCEPT_SERVICE_REQUEST,
     REJECT_SERVICES_REQUEST,
-    NEW_NOTIFICATION_LIST
+    NEW_NOTIFICATION_LIST,
+    UPDATE_NOTIFICATION_STATUS
 } from "../../constants/ActionTypes";
-import { Modal } from 'antd';
+import { Modal, notification } from 'antd';
 
 const success = Modal.success
 const error = Modal.error
@@ -145,6 +146,16 @@ export default (state = initialSidebar, action) => {
             return {
                 ...state,
                 cancel_service_requests: filteredRequests,
+            }
+        }
+
+        case UPDATE_NOTIFICATION_STATUS: {
+
+            let notifications = state.ticketNotifications
+            let updateNotifications = notifications.filter(notification => notification.ticket._id != action.payload)
+            return {
+                ...state,
+                ticketNotifications: updateNotifications,
             }
         }
         default:

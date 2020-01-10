@@ -8,7 +8,7 @@ import UserProfile from "./UserProfile";
 import NewDevice from '../../components/NewDevices';
 import CreditsModal from '../../components/CreditsModal';
 
-import { getNewDevicesList } from "../../appRedux/actions/Common";
+import { getNewDevicesList, } from "../../appRedux/actions/Common";
 import {
   getNewCashRequests,
   getUserCredit,
@@ -17,10 +17,10 @@ import {
   rejectServiceRequest,
   acceptServiceRequest,
   getCancelServiceRequests,
-  getTicketsNotifications
+  getTicketsNotifications,
 } from "../../appRedux/actions/SideBar";
 import {
-  getLatestPaymentHistory, getOverdueDetails
+  getLatestPaymentHistory, getOverdueDetails,
 } from "../../appRedux/actions/Account";
 
 import { transferDeviceProfile } from "../../appRedux/actions/ConnectDevice";
@@ -52,6 +52,7 @@ import { logout } from "appRedux/actions/Auth";
 import { rejectDevice, addDevice, getDevicesList, } from '../../appRedux/actions/Devices';
 
 import { switchLanguage, getLanguage, getAll_Languages, toggleCollapsedSideNav } from "../../appRedux/actions/Setting";
+import { getAllToAllDealers } from "../../appRedux/actions/Dealers";
 
 import { ADMIN, DEALER, SDEALER, AUTO_UPDATE_ADMIN } from "../../constants/Constants";
 import { Button_Yes, Button_No } from "../../constants/ButtonConstants";
@@ -129,6 +130,8 @@ class SidebarContent extends Component {
     this.props.getNewDevicesList();
     this.props.getNewCashRequests();
     this.props.getTicketsNotifications()
+    this.props.getAllToAllDealers()
+
     console.log("asdsad");
     this.props.getUserCredit();
     if (this.props.allDevices.length === 0) {
@@ -250,6 +253,7 @@ class SidebarContent extends Component {
               rejectServiceRequest={this.props.rejectServiceRequest}
               acceptServiceRequest={this.props.acceptServiceRequest}
               ticketNotifications={this.props.ticketNotifications}
+              allDealers={this.props.allDealers}
 
             />
             <span className="font_14">
@@ -408,7 +412,7 @@ class SidebarContent extends Component {
 
 // SidebarContent.propTypes = {};
 
-const mapStateToProps = ({ settings, devices, sidebar, account, auth }) => {
+const mapStateToProps = ({ settings, devices, sidebar, account, auth, dealers }) => {
   const { navStyle, themeType, locale, pathname, languages, translation, isSwitched } = settings;
   // console.log(sidebar.ticketNotifications);
   return {
@@ -431,6 +435,7 @@ const mapStateToProps = ({ settings, devices, sidebar, account, auth }) => {
     isSwitched: isSwitched,
     account_balance_status: auth.authUser.account_balance_status,
     account_balance_status_by: auth.authUser.account_balance_status_by,
+    allDealers: dealers.allDealers,
 
   }
 };
@@ -456,6 +461,8 @@ export default connect(mapStateToProps,
     acceptServiceRequest,
     rejectServiceRequest,
     getTicketsNotifications,
+    getAllToAllDealers
+
   }
 )(SidebarContent);
 
