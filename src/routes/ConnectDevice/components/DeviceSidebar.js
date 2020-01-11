@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import styles from './AppList';
-import { Card, Table, Icon, Button, Modal } from "antd";
+import { Card, Table, Icon, Button, Modal, Row, Col } from "antd";
 import { getStatus, getColor, checkValue, titleCase, convertToLang, convertTimezoneValue } from '../../../routes/utils/commonUtils'
 import { Redirect, Link } from 'react-router-dom';
 import ResetPinModal from './ResetPinModal';
@@ -112,31 +112,43 @@ export default class DeviceSidebar extends Component {
             {
                 key: 10,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_CHAT_ID], "CHAT ID"))}:</a>),
-                value: (<Fragment> {checkValue(device_details.chat_id)}
-                    <Button
-                        type="danger"
-                        size="small"
-                        className="ml-12"
-                        onClick={() => this.refs.resetPinModel.showModel()}>
-                        {titleCase(convertToLang(this.props.translation[''], 'RESET PIN'))}
-                    </Button>
-
-                    <Button
-                        type="danger"
-                        size="small"
-                        className="ml-12"
-                        onClick={() => this.showConfirmSChatStatus(this, 'disable', 'Do you want to disable pin verification?')}>
-                        {titleCase(convertToLang(this.props.translation[''], 'Disable Pin'))}
-                    </Button>
-
-                    <Button
-                        type="success"
-                        size="small"
-                        className="ml-12"
-                        onClick={() => this.showConfirmSChatStatus(this, 'enable', 'Do you want to enable pin verification?')}>
-                        {titleCase(convertToLang(this.props.translation[''], 'Enable Pin'))}
-                    </Button>
-                </Fragment>)
+                value: (chatId && chatId !== "N/A" ? <Fragment>
+                    <Row gutter={24} className="mb-4">
+                        <Col className="gutter-row" span={12}><div className="gutter-box">{chatId}</div></Col>
+                        <Col className="gutter-row" span={12}>
+                            <Button
+                                type="danger"
+                                size="small"
+                                style={{ width: '100%' }}
+                                // className="ml-12"
+                                onClick={() => this.refs.resetPinModel.showModel()}>
+                                {titleCase(convertToLang(this.props.translation[''], 'RESET PIN'))}
+                            </Button>
+                        </Col>
+                    </Row>
+                    <Row gutter={24}>
+                        <Col span={12}>
+                            <Button
+                                type="danger"
+                                size="small"
+                                style={{ width: '100%' }}
+                                // className="ml-12"
+                                onClick={() => this.showConfirmSChatStatus(this, 'disable', 'Do you want to disable pin verification?')}>
+                                {titleCase(convertToLang(this.props.translation[''], 'Disable Pin'))}
+                            </Button>
+                        </Col>
+                        <Col span={12}>
+                            <Button
+                                type="success"
+                                size="small"
+                                style={{ width: '100%' }}
+                                // className="ml-12"
+                                onClick={() => this.showConfirmSChatStatus(this, 'enable', 'Do you want to enable pin verification?')}>
+                                {titleCase(convertToLang(this.props.translation[''], 'Enable Pin'))}
+                            </Button>
+                        </Col>
+                    </Row>
+                </Fragment> : "N/A")
             },
             {
                 key: 8,

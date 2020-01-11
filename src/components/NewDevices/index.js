@@ -180,20 +180,24 @@ export default class NewDevices extends Component {
 
     renderTicketNotifications(list) {
         // console.log(list);
-        return list.map((notification) => {
-            let dealer = this.props.allDealers.find(dealer => dealer.dealer_id == notification.user_id)
-            return {
-                id: notification.id,
-                key: notification.id,
-                dealer_name: dealer ? dealer.dealer_name : 'N/A',
-                dealer_pin: dealer ? dealer.dealer_type != 1 ? dealer.link_code : 'N/A' : 'N/A',
-                type: notification.type,
-                subject: notification.ticket.subject,
-                category: notification.ticket.category,
-                priority: notification.ticket.priority,
-                created_at: moment(notification.createdAt).format('YYYY/MM/DD hh:mm:ss'),
-            }
-        });
+        if (list) {
+            return list.map((notification) => {
+                let dealer = this.props.allDealers.find(dealer => dealer.dealer_id == notification.user_id)
+                return {
+                    id: notification.id,
+                    key: notification.id,
+                    dealer_name: dealer ? dealer.dealer_name : 'N/A',
+                    dealer_pin: dealer ? dealer.dealer_type != 1 ? dealer.link_code : 'N/A' : 'N/A',
+                    type: notification.type,
+                    subject: notification.ticket.subject,
+                    category: notification.ticket.category,
+                    priority: notification.ticket.priority,
+                    created_at: moment(notification.createdAt).format('YYYY/MM/DD hh:mm:ss'),
+                }
+            });
+        }else {
+            return [];
+        }
 
     }
 
