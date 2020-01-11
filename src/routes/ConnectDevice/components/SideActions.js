@@ -97,7 +97,7 @@ import {
 import TransferHistory from './TransferModule/TransferHistory'
 import Services from './Services';
 import DeviceBillingHistory from './DeviceBillingHistory';
-import {generateGraceDaysReport} from "../../../appRedux/actions";
+import { generateGraceDaysReport } from "../../../appRedux/actions";
 
 const confirm = Modal.confirm;
 var coppyList = [];
@@ -194,6 +194,7 @@ const PushAppsModal = (props) => {
                     selectedApps={props.selectedPushApps}
                     selectedAppKeys={props.selectedPushAppKeys}
                     handleChecked={props.handleChecked}
+                    // handleComponentSearch={props.handleComponentSearch}
                     translation={props.translation}
                 // disabledSwitch = {false}
                 />
@@ -399,9 +400,10 @@ class SideActions extends Component {
             changedCtrls: [],
             guestAllPushApps: props.guestAllPushApps,
             enableAllPushApps: props.enableAllPushApps,
-            encryptedAllPushApps: props.encryptedAllPushApps
+            encryptedAllPushApps: props.encryptedAllPushApps,
             // DEVICE_TRANSFERED_DONE: 'not transfer',
 
+            pushApkSeachText: ''
         }
         this.otpModalRef = React.createRef();
     }
@@ -604,9 +606,10 @@ class SideActions extends Component {
         })
     }
 
-    handleComponentSearch = (value, label) => {
+    handleComponentSearch = (value, label, preDataSearch = false) => {
         try {
 
+            let updatedApkList = this.state.apk_list;
             if (value.length) {
                 // console.log(value, 'value')
                 if (status) {
@@ -614,25 +617,34 @@ class SideActions extends Component {
                     coppyList = this.state.apk_list;
                     status = false;
                 }
-                // console.log(this.state.apk_list, 'coppy de', coppyList)
-                let foundList = componentSearch(coppyList, value);
+                if (preDataSearch) {
+                    updatedApkList = coppyList
+                }
+                // console.log(updatedApkList, 'coppy de', coppyList)
+                let foundList = componentSearch(updatedApkList, value);
                 // console.log('found devics', foundList)
                 if (foundList.length) {
-                    this.setState({
-                        apk_list: foundList,
-                    })
+                    updatedApkList = foundList;
+                    // this.setState({
+                    //     apk_list: foundList,
+                    // })
                 } else {
-                    this.setState({
-                        apk_list: []
-                    })
+                    updatedApkList = [];
+                    //     this.setState({
+                    //         apk_list: []
+                    //     })
                 }
             } else {
                 status = true;
-
-                this.setState({
-                    apk_list: coppyList,
-                })
+                updatedApkList = coppyList;
+                // this.setState({
+                //     apk_list: coppyList,
+                // })
             }
+            this.setState({
+                apk_list: updatedApkList,
+                pushApkSeachText: value
+            })
         } catch (error) {
         }
     }
@@ -834,7 +846,7 @@ class SideActions extends Component {
         }
 
         if (index === -1) {
-            states.disabledSearchButton=true;
+            states.disabledSearchButton = true;
         } else {
             states.disabledSearchButton = false
         }
@@ -844,6 +856,11 @@ class SideActions extends Component {
         });
     }
 
+    handleCheckedFunction = (value, switchVal, apkId) => {
+        console.log("handleCheckedFunction ", value, switchVal, apkId, this.state.pushApkSeachText);
+        this.props.handleChecked(value, switchVal, apkId);
+        this.handleComponentSearch(this.state.pushApkSeachText, 'push_apps', true);
+    }
     showPushAppsModal_ = (visible) => {
         this.props.showPushAppsModal(visible);
         // this.props.resetPushApps();
@@ -1346,7 +1363,7 @@ class SideActions extends Component {
                     showSelectedPushAppsModal={this.showSelectedPushAppsModal}
                     resetSelectedRows={this.resetSelectedRows}
                     selectedPushApps={this.state.selectedPushApps}
-                    handleChecked={this.props.handleChecked}
+                    handleChecked={this.handleCheckedFunction}
                     device={this.props.device}
                     translation={this.props.translation}
                     resetPushApps={this.props.resetPushApps}
