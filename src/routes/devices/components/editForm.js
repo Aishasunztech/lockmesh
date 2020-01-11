@@ -134,6 +134,8 @@ class EditDevice extends Component {
             renewService: false,
             valid_sim_id_1: true,
             valid_sim_id_2: true,
+            valid_toActivate_sim_id_1: false,
+            valid_toActivate_sim_id_2: false,
             data_limit_1: '',
             data_limit_2: '',
             disable_data_plan_sim1: true,
@@ -835,16 +837,17 @@ class EditDevice extends Component {
 
 
     validateICCID = (rule, value, callback, simField) => {
-        console.log(simField);
+        // console.log(simField);
         if ((value !== undefined) && value.length > 0) {
-
             if (simField === 'sim_id') {
                 this.setState({
-                    valid_sim_id_1: false
+                    valid_sim_id_1: false,
+                    valid_toActivate_sim_id_1: false
                 })
             } else if (simField === 'sim_id2') {
                 this.setState({
-                    valid_sim_id_2: false
+                    valid_sim_id_2: false,
+                    valid_toActivate_sim_id_2: false
                 })
             }
             console.log("validation: ", ((this.state.disableSim === false && this.state.valid_sim_id_1 === false) || (this.state.disableSim2 === false && this.state.valid_sim_id_2 === false)), this.state.valid_sim_id_1, this.state.valid_sim_id_2)
@@ -852,7 +855,17 @@ class EditDevice extends Component {
                 if (value.length != 20 && value.length != 19) {
                     return callback(`${convertToLang(this.props.translation[''], "ICC ID should be 19 or 20 digits long")}  :(${value.length})`);
                 }
-
+                else {
+                    if (simField === 'sim_id') {
+                        this.setState({
+                            valid_toActivate_sim_id_1: true
+                        })
+                    } else if (simField === 'sim_id2') {
+                        this.setState({
+                            valid_toActivate_sim_id_2: true
+                        })
+                    }
+                }
             } else {
                 return callback(convertToLang(this.props.translation[''], "Please insert only numbers"));
             }
@@ -875,34 +888,40 @@ class EditDevice extends Component {
 
     activateICCID = (simField) => {
         let value = this.props.form.getFieldValue(simField);
-
-        RestService.activateICCID(value, this.props.device.id).then((response) => {
-            if (response.data) {
-                if (response.data.valid) {
-                    if (simField === 'sim_id') {
-                        this.setState({
-                            valid_sim_id_1: true
+        if (value) {
+            RestService.activateICCID(value, this.props.device.id).then((response) => {
+                if (response.data) {
+                    if (response.data.valid) {
+                        if (simField === 'sim_id') {
+                            this.setState({
+                                valid_sim_id_1: true
+                            })
+                        } else if (simField === 'sim_id2') {
+                            this.setState({
+                                valid_sim_id_2: true
+                            })
+                        }
+                        success({
+                            title: response.data.msg
                         })
-                    } else if (simField === 'sim_id2') {
-                        this.setState({
-                            valid_sim_id_2: true
+                    } else {
+                        error({
+                            title: response.data.msg
                         })
                     }
-                    success({
-                        title: response.data.msg
-                    })
-                } else {
-                    error({
-                        title: response.data.msg
-                    })
                 }
-            }
-            // should be logged out
-            else {
+                // should be logged out
+                else {
 
-            }
-
-        });
+                }
+            });
+        } else {
+            this.props.form.setFields({
+                [simField]: {
+                    errors: [new Error('Please enter sim id to activate.')],
+                },
+            });
+        }
     }
 
     renderDataLimitOptions = () => {
@@ -1390,26 +1409,31 @@ class EditDevice extends Component {
                              * @author Usman Hafeez
                              * @description Add SIM ID button
                              */}
-                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                                <Form.Item
-                                    // label={''}
-                                    labelCol={{ span: 0 }}
-                                    wrapperCol={{ span: 24 }}
-                                >
-                                    <Button
-                                        className="add_user_btn"
-                                        type="primary"
-                                        style={{ width: "100%" }}
-                                        onClick={this.handleChatID}
-                                        style={{ width: "100%" }}
-                                        // disabled={this.state.disableSim || this.state.valid_sim_id_1}
-                                        disabled={this.state.disableSim}
-                                        onClick={(e) => { this.activateICCID('sim_id') }}
+                            {(this.state.valid_toActivate_sim_id_1)
+                                ?
+
+                                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                    <Form.Item
+                                        // label={''}
+                                        labelCol={{ span: 0 }}
+                                        wrapperCol={{ span: 24 }}
                                     >
-                                        {convertToLang(this.props.translation[''], "Activate Sim ID")}
-                                    </Button>
-                                </Form.Item>
-                            </Col>
+                                        <Button
+                                            className="add_user_btn"
+                                            type="primary"
+                                            style={{ width: "100%" }}
+                                            onClick={this.handleChatID}
+                                            style={{ width: "100%" }}
+                                            // disabled={this.state.disableSim || this.state.valid_sim_id_1}
+                                            disabled={this.state.disableSim}
+                                            onClick={(e) => { this.activateICCID('sim_id') }}
+                                        >
+                                            {convertToLang(this.props.translation[''], "Activate Sim ID")}
+                                        </Button>
+                                    </Form.Item>
+                                </Col>
+                                : null
+                            }
 
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 {(!this.state.disableSim) ?
@@ -1519,26 +1543,30 @@ class EditDevice extends Component {
                              * @author Usman Hafeez
                              * @description Add SIM ID 2 button
                              */}
-                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                                <Form.Item
-                                    // label={''}
-                                    labelCol={{ span: 0 }}
-                                    wrapperCol={{ span: 24 }}
-                                >
-                                    <Button
-                                        className="add_user_btn"
-                                        type="primary"
-                                        style={{ width: "100%" }}
-                                        onClick={this.handleChatID}
-                                        style={{ width: "100%" }}
-                                        disabled={this.state.disableSim2}
-                                        onClick={(e) => { this.activateICCID('sim_id2') }}
-
+                            {(this.state.valid_toActivate_sim_id_2)
+                                ?
+                                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                    <Form.Item
+                                        // label={''}
+                                        labelCol={{ span: 0 }}
+                                        wrapperCol={{ span: 24 }}
                                     >
-                                        {convertToLang(this.props.translation[''], "Activate Sim ID 2")}
-                                    </Button>
-                                </Form.Item>
-                            </Col>
+                                        <Button
+                                            className="add_user_btn"
+                                            type="primary"
+                                            style={{ width: "100%" }}
+                                            onClick={this.handleChatID}
+                                            style={{ width: "100%" }}
+                                            disabled={this.state.disableSim2}
+                                            onClick={(e) => { this.activateICCID('sim_id2') }}
+
+                                        >
+                                            {convertToLang(this.props.translation[''], "Activate Sim ID 2")}
+                                        </Button>
+                                    </Form.Item>
+                                </Col>
+                                : null
+                            }
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 {(!this.state.disableSim2) ?
                                     (this.state.services) ?

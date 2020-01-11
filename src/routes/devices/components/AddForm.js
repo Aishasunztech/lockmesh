@@ -108,6 +108,8 @@ class AddDevice extends Component {
             paidByUser: "PAID",
             valid_sim_id_1: true,
             valid_sim_id_2: true,
+            valid_toActivate_sim_id_1: false,
+            valid_toActivate_sim_id_2: false,
             data_limit_1: '',
             data_limit_2: ''
         }
@@ -790,18 +792,30 @@ class AddDevice extends Component {
 
             if (simField === 'sim_id') {
                 this.setState({
-                    valid_sim_id_1: false
+                    valid_sim_id_1: false,
+                    valid_toActivate_sim_id_1: false
                 })
             } else if (simField === 'sim_id2') {
                 this.setState({
-                    valid_sim_id_2: false
+                    valid_sim_id_2: false,
+                    valid_toActivate_sim_id_2: false
                 })
             }
             if (/^[0-9]+$/.test(value)) {
                 if (value.length != 20 && value.length != 19) {
                     return callback(`${convertToLang(this.props.translation[''], "ICC ID should be 19 or 20 digits long")}  :(${value.length})`);
                 }
-
+                else {
+                    if (simField === 'sim_id') {
+                        this.setState({
+                            valid_toActivate_sim_id_1: true
+                        })
+                    } else if (simField === 'sim_id2') {
+                        this.setState({
+                            valid_toActivate_sim_id_2: true
+                        })
+                    }
+                }
             } else {
                 return callback(convertToLang(this.props.translation[''], "Please insert only numbers"));
             }
@@ -1387,27 +1401,30 @@ class AddDevice extends Component {
                                      * @author Usman Hafeez
                                      * @description Add SIM ID button
                                      */}
-                                    <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                                        <Form.Item
-                                            // label={''}
-                                            labelCol={{ span: 0 }}
-                                            wrapperCol={{ span: 24 }}
-                                        >
-                                            <Button
-                                                className="add_user_btn"
-                                                type="primary"
-                                                style={{ width: "100%" }}
-                                                onClick={this.handleChatID}
-                                                style={{ width: "100%" }}
-                                                // disabled={this.state.disableSim || this.state.valid_sim_id_1}
-                                                disabled={this.state.disableSim}
-                                                onClick={(e) => { this.activateICCID('sim_id') }}
+                                    {(this.state.valid_toActivate_sim_id_1)
+                                        ?
+                                        <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                            <Form.Item
+                                                // label={''}
+                                                labelCol={{ span: 0 }}
+                                                wrapperCol={{ span: 24 }}
                                             >
-                                                {convertToLang(this.props.translation[''], "Activate Sim ID")}
-                                            </Button>
-                                        </Form.Item>
-                                    </Col>
-
+                                                <Button
+                                                    className="add_user_btn"
+                                                    type="primary"
+                                                    style={{ width: "100%" }}
+                                                    onClick={this.handleChatID}
+                                                    style={{ width: "100%" }}
+                                                    // disabled={this.state.disableSim || this.state.valid_sim_id_1}
+                                                    disabled={this.state.disableSim}
+                                                    onClick={(e) => { this.activateICCID('sim_id') }}
+                                                >
+                                                    {convertToLang(this.props.translation[''], "Activate Sim ID")}
+                                                </Button>
+                                            </Form.Item>
+                                        </Col>
+                                        : null
+                                    }
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         {(this.state.disableSim) ? null :
                                             <div style={{ color: 'red', textAlign: "center" }}>Basic Data Limit for SIM ID is 2 GB</div>
@@ -1503,27 +1520,30 @@ class AddDevice extends Component {
                                      * @author Usman Hafeez
                                      * @description Add SIM ID 2 button
                                      */}
-                                    <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                                        <Form.Item
-                                            // label={''}
-                                            labelCol={{ span: 0 }}
-                                            wrapperCol={{ span: 24 }}
-                                        >
-                                            <Button
-                                                className="add_user_btn"
-                                                type="primary"
-                                                style={{ width: "100%" }}
-                                                onClick={this.handleChatID}
-                                                style={{ width: "100%" }}
-                                                disabled={this.state.disableSim2}
-                                                onClick={(e) => { this.activateICCID('sim_id2') }}
-
+                                    {(this.state.valid_toActivate_sim_id_2)
+                                        ?
+                                        <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                            <Form.Item
+                                                // label={''}
+                                                labelCol={{ span: 0 }}
+                                                wrapperCol={{ span: 24 }}
                                             >
-                                                {convertToLang(this.props.translation[''], "Activate Sim ID 2")}
-                                            </Button>
-                                        </Form.Item>
-                                    </Col>
+                                                <Button
+                                                    className="add_user_btn"
+                                                    type="primary"
+                                                    style={{ width: "100%" }}
+                                                    onClick={this.handleChatID}
+                                                    style={{ width: "100%" }}
+                                                    disabled={this.state.disableSim2}
+                                                    onClick={(e) => { this.activateICCID('sim_id2') }}
 
+                                                >
+                                                    {convertToLang(this.props.translation[''], "Activate Sim ID 2")}
+                                                </Button>
+                                            </Form.Item>
+                                        </Col>
+                                        : null
+                                    }
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                         {(this.state.disableSim2) ? null :
                                             <div style={{ color: 'red', textAlign: "center" }}>Basic Data Limit for SIM ID 2 is 2 GB</div>
