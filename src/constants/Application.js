@@ -21,7 +21,7 @@ switch (hostName) {
     case "http://dev.lockmesh.com":
     case "https://dev.lockmesh.com":
         URL = "https://devapi.lockmesh.com/"
-        SUPPORT = "https://devsupport.lockmesh.com/"
+        SUPPORT = "https://devsupportapi.lockmesh.com/"
         SUPERADMIN = 'https://devapi.meshguard.co/'
         TITLE = "LockMesh"
         TIMEZONE = "Europe/Berlin"

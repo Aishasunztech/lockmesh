@@ -18,6 +18,7 @@ const RestService = {
         let token = localStorage.getItem('token');
         let makeToken = "token=" + token + "&isWeb=true";
         let socket = io.connect(BASE_URL, {
+            transports: ['websocket'],
             query: makeToken,
             // reconnectionDelay:1000,
             // reconnection:true,
@@ -41,6 +42,7 @@ const RestService = {
         let type = localStorage.getItem('type');
         let makeToken = "token=" + token + "&isWeb=true&user_id=" + id + "&type=" + type;
         let socket = SupportSystemSocketIO.connect(SUPPORT_URL, {
+            transports: ['websocket'],
             query: makeToken,
             secure: true
         });
@@ -880,6 +882,11 @@ const RestService = {
             RestService.getHeader()
         )
     },
+    getTicketsNotifications: () => {
+        return axios.get(SUPPORT_URL + 'tickets/notifications',
+            RestService.getHeader()
+        )
+    },
     getUserCredit: () => {
         return axios.get(BASE_URL + 'users/get_user_credits',
             RestService.getHeader()
@@ -1153,6 +1160,12 @@ const RestService = {
     //get Support Ticket replies
     getSupportTicketReplies: (data) => {
         return axios.get(SUPPORT_URL + 'tickets/replies/' + data, RestService.getHeader());
+    },
+
+    //Support System Messages
+    //generate Support System Messages
+    generateSupportSystemMessages: (data) => {
+      return axios.post(SUPPORT_URL + 'system-messages/store', data, RestService.getHeader());
     },
 };
 export default RestService;
