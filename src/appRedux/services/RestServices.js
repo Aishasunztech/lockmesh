@@ -17,7 +17,7 @@ const RestService = {
     connectSocket: () => {
         let token = localStorage.getItem('token');
         let makeToken = "token=" + token + "&isWeb=true";
-        let socket = io.connect(SOCKET_BASE_URL, {
+        let socket = io.connect(BASE_URL, {
             transports: ['websocket'],
             query: makeToken,
             // reconnectionDelay:1000,
