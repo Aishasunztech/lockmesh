@@ -24,7 +24,12 @@ import {
     getNewCashRequests,
     getUserCredit,
     rejectRequest,
-    acceptRequest
+    acceptRequest,
+    getCancelServiceRequests,
+    acceptServiceRequest,
+    rejectServiceRequest,
+    getTicketsNotifications,
+
 } from "../../appRedux/actions/SideBar";
 import { getNewDevicesList } from "../../appRedux/actions/Common";
 
@@ -115,6 +120,11 @@ class Dashboard extends Component {
                     translation={this.props.translation}
                     allDevices={this.props.allDevices}
                     transferDeviceProfile={this.transferDeviceProfile}
+                    cancel_service_requests={this.props.cancel_service_requests}
+                    rejectServiceRequest={this.props.rejectServiceRequest}
+                    acceptServiceRequest={this.props.acceptServiceRequest}
+                    ticketNotifications={this.props.ticketNotifications}
+                    allDealers={this.props.allDealers}
                 />
 
                 <Auxiliary>
@@ -384,10 +394,14 @@ function mapDispatchToProps(dispatch) {
         getNewCashRequests: getNewCashRequests,
         getUserCredit: getUserCredit,
         getDevicesList: getDevicesList,
-        getNewDevicesList: getNewDevicesList
+        getNewDevicesList: getNewDevicesList,
+        getCancelServiceRequests,
+        acceptServiceRequest,
+        rejectServiceRequest,
+        getTicketsNotifications,
     }, dispatch);
 }
-var mapStateToProps = ({ dashboard, auth, devices, sidebar, settings }) => {
+var mapStateToProps = ({ dashboard, auth, devices, sidebar, settings , dealers}) => {
 
     return {
         items: dashboard.dashboard_items,
@@ -397,6 +411,9 @@ var mapStateToProps = ({ dashboard, auth, devices, sidebar, settings }) => {
         devices: devices.newDevices,
         requests: sidebar.newRequests,
         translation: settings.translation,
+        cancel_service_requests: sidebar.cancel_service_requests,
+        ticketNotifications: sidebar.ticketNotifications,
+        allDealers: dealers.allDealers,
     };
 }
 

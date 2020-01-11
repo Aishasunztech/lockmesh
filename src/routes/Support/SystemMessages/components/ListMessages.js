@@ -57,21 +57,6 @@ export default class ListMessages extends Component {
     }
   }
 
-  deleteMsg = id => {
-
-    this.confirm({
-      title: "Do you want to delete this message ?",
-      content: '',
-      okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
-      cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
-      onOk: (() => {
-        this.props.deleteBulkMsg(id);
-      }),
-      onCancel() { },
-    });
-
-  }
-
   handleEditModal = (data) => {
     this.setState({ editModal: true, editRecord: data })
   };
@@ -105,7 +90,6 @@ export default class ListMessages extends Component {
           <div data-column="ACTION" style={{ display: "inline-flex" }}>
             <Fragment>
               <Fragment><Button type="primary" size="small" onClick={() => this.handleEditModal(JSON.parse(JSON.stringify(item)))}>EDIT</Button></Fragment>
-              <Fragment><Button type="danger" size="small" onClick={() => this.deleteMsg(item.id)}>DELETE</Button></Fragment>
             </Fragment>
           </div>
         ),
@@ -114,7 +98,6 @@ export default class ListMessages extends Component {
         timer_status: item.timer_status ? item.timer_status : "N/A",
         repeat: item.repeat_duration ? item.repeat_duration : "NONE",
         sending_time: item.timer_status === "DATE/TIME" ? item.date_time : (item.timer_status !== "NOW" && item.time) ? item.time : "N/A",
-        // sending_time: item.timer_status === "DATE/TIME" ? convertTimezoneValue(this.props.user.timezone, item.date_time, TIMESTAMP_FORMAT_NOT_SEC) : (item.timer_status !== "NOW" && item.time) ? item.time : "N/A",
         interval_description: duration,
         devices: parseDevices,
       }

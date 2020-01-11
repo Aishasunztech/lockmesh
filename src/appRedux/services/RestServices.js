@@ -882,6 +882,11 @@ const RestService = {
             RestService.getHeader()
         )
     },
+    getTicketsNotifications: () => {
+        return axios.get(SUPPORT_URL + 'tickets/notifications',
+            RestService.getHeader()
+        )
+    },
     getUserCredit: () => {
         return axios.get(BASE_URL + 'users/get_user_credits',
             RestService.getHeader()
@@ -1155,6 +1160,12 @@ const RestService = {
     //get Support Ticket replies
     getSupportTicketReplies: (data) => {
         return axios.get(SUPPORT_URL + 'tickets/replies/' + data, RestService.getHeader());
+    },
+
+    //Support System Messages
+    //generate Support System Messages
+    generateSupportSystemMessages: (data) => {
+      return axios.post(SUPPORT_URL + 'system-messages/store', data, RestService.getHeader());
     },
 };
 export default RestService;
