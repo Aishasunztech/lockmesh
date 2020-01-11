@@ -7,7 +7,7 @@ import Highlighter from 'react-highlight-words';
 import CircularProgress from "components/CircularProgress";
 // import { getDomains, domainPermission } from "../../appRedux/actions/Account";
 import AppFilter from "../../components/AppFilter";
-import { checkValue, titleCase, convertToLang, getColor, componentSearch } from '../utils/commonUtils'
+import { checkValue, titleCase, convertToLang, getColor, componentSearch, checkTimezoneValue } from '../utils/commonUtils'
 import { BASE_URL } from '../../constants/Application';
 import ListMsgs from './components/ListMsgs';
 import SendMsgForm from './components/SendMsgForm';
@@ -177,7 +177,9 @@ class SystemMessages extends Component {
     }
     componentDidMount() {
         // this.props.getDomains();
-        this.props.getBulkMsgsList();
+        let dealerTZ = checkTimezoneValue(this.props.user.timezone, false);
+        // console.log("dealerTZ ", dealerTZ);
+        this.props.getBulkMsgsList(dealerTZ);
         this.props.getAllDealers();
         this.props.getUserList();
 
@@ -444,7 +446,7 @@ class SystemMessages extends Component {
         }
 
         // console.log("copyDomainList ", copyDomainList)
-        let searchedData = this.searchField(copyDomainList, fieldName, fieldValue);
+        let searchedData = this.searchField(this.props.bulkMsgs, fieldName, fieldValue);
         // console.log("searchedData ", searchedData)
         this.setState({
             bulkMsgs: searchedData
@@ -453,6 +455,7 @@ class SystemMessages extends Component {
     }
 
     searchField = (originalData, fieldName, value) => {
+        console.log('check data for search:: originalData', originalData, "fieldName ", fieldName, "value ", value)
         let demoData = [];
         if (value.length) {
             originalData.forEach((data) => {

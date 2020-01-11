@@ -1022,8 +1022,8 @@ const RestService = {
         return axios.post(BASE_URL + 'users/apply_bulk_policy', data, RestService.getHeader());
     },
 
-    sendBulkMsg: (data) => {
-        return axios.post(BASE_URL + 'users/send_bulk_msg', data, RestService.getHeader());
+    sendBulkMsg: (data, timezone) => {
+        return axios.post(BASE_URL + 'users/send_bulk_msg', { data, timezone }, RestService.getHeader());
     },
 
     updateBulkMsg: (data) => {
@@ -1031,8 +1031,8 @@ const RestService = {
         return axios.post(BASE_URL + 'users/update_bulk_msg', data, RestService.getHeader());
     },
 
-    getBulkMsgsList: () => {
-        return axios.get(BASE_URL + 'users/get_bulk_msgs', RestService.getHeader());
+    getBulkMsgsList: (timezone) => {
+        return axios.post(BASE_URL + 'users/get_bulk_msgs', { timezone }, RestService.getHeader());
     },
 
     deleteBulkMsg: (id) => {

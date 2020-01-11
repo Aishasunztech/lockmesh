@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col, Tag, Modal } from "antd";
-import { convertToLang, checkValue, convertTimezoneValue, getWeekDay, getMonthName } from '../../utils/commonUtils';
+import { convertToLang, checkValue, convertTimezoneValue, getWeekDay, getMonthName, checkTimezoneValue } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 import moment from 'moment';
 import { userDevicesListColumns } from '../../utils/columnsUtils';
-import { TIMESTAMP_FORMAT_NOT_SEC, TIME_FORMAT_HM } from '../../../constants/Application';
+import { TIMESTAMP_FORMAT_NOT_SEC, TIME_FORMAT_HM, SERVER_TIMEZONE } from '../../../constants/Application';
 import EditMsgModal from './EditMsgForm';
 
 
@@ -81,32 +81,52 @@ export default class ListMsgs extends Component {
     renderList(list) {
         // console.log("renderList: ", list);
         let bulkMsgs = [];
-        let data
-
-
-
-
-
-
 
         list.map((item) => {
-            let parseDevices = item.data ? JSON.parse(item.data) : [];
-            let duration = item.repeat_duration;
+            let parseDevices = item.devices ? JSON.parse(item.devices) : [];
+            // let duration = item.repeat_duration ? item.repeat_duration : "NONE";
             // console.log(item);
 
-            if (duration === "WEEKLY") {
-                duration = getWeekDay(item.week_day)
-            }
-            else if (duration === "MONTHLY" || duration === "3 MONTHS" || duration === "6 MONTHS") {
-                duration = `Every month on ${checkValue(item.month_date)} date`
-            }
-            else if (duration === "12 MONTHS") {
-                duration = `Every ${getMonthName(item.month_name)} on ${checkValue(item.month_date)} date`
-            } else {
-                duration = "N/A"
+            // set default dateTime format
+            let dateTimeFormat = TIMESTAMP_FORMAT_NOT_SEC;
+
+            // if (item.timer_status === "NOW" || item.timer_status === "DATE/TIME") {
+            //     duration = `One Time`
+            // }
+            // else if (item.timer_status === "REPEAT") {
+            //     // set dateTime format
+            //     dateTimeFormat = TIME_FORMAT_HM; // Display only hours and minutes
+
+            //     if (duration === "DAILY") {
+            //         duration = `Everyday`
+            //     }
+            //     else if (duration === "WEEKLY") {
+            //         duration = getWeekDay(item.week_day)
+            //     }
+            //     else if (duration === "MONTHLY") {
+            //         duration = `Every month on ${checkValue(item.month_date)} date`
+            //     }
+            //     else if (duration === "3 MONTHS") {
+            //         duration = `Every 3 months later on ${checkValue(item.month_date)} date`
+            //     }
+            //     else if (duration === "6 MONTHS") {
+            //         duration = `Every 6 months later on ${checkValue(item.month_date)} date`
+            //     }
+            //     else if (duration === "12 MONTHS") {
+            //         duration = `Every ${getMonthName(item.month_name)} on ${checkValue(item.month_date)} date`
+            //     } else {
+            //         duration = "N/A"
+            //     }
+            // } else {
+            //     duration = "N/A"
+            // }
+
+            if (item.timer_status === "REPEAT") {
+                // set dateTime format
+                dateTimeFormat = TIME_FORMAT_HM; // Display only hours and minutes
             }
 
-            data = {
+            let data = {
                 rowKey: item.id,
                 id: item.id,
                 action: (
@@ -121,10 +141,10 @@ export default class ListMsgs extends Component {
                 msg: checkValue(item.msg),
                 timer_status: item.timer_status ? item.timer_status : "N/A",
                 repeat: item.repeat_duration ? item.repeat_duration : "NONE",
-                // sending_time: item.date_time ? item.date_time : "N/A",
-                sending_time: item.date_time ? convertTimezoneValue(this.props.user.timezone, item.date_time, TIMESTAMP_FORMAT_NOT_SEC) : "N/A",
-                // sending_time: item.timer_status === "DATE/TIME" ? convertTimezoneValue(this.props.user.timezone, item.date_time, TIMESTAMP_FORMAT_NOT_SEC) : (item.timer_status !== "NOW" && item.time) ? item.time : "N/A",
-                interval_description: duration,
+                // date_time: item.date_time ? item.date_time : "N/A",
+                date_time: moment(item.date_time).format(dateTimeFormat), // ? convertTimezoneValue(this.props.user.timezone, item.date_time, dateTimeFormat) : "N/A",
+                // date_time: item.timer_status === "DATE/TIME" ? convertTimezoneValue(this.props.user.timezone, item.date_time, TIMESTAMP_FORMAT_NOT_SEC) : (item.timer_status !== "NOW" && item.time) ? item.time : "N/A",
+                interval_description: item.interval_description,
                 // week_day: getWeekDay(item.week_day),
                 // month_date: item.month_date && item.month_date !== 0 ? `On every ${checkValue(item.month_date)} date of month` : "N/A",
                 // month_name: getMonthName(item.month_name),
@@ -172,7 +192,10 @@ export default class ListMsgs extends Component {
     }
 
     render() {
+        // let dealerTZ = checkTimezoneValue(this.props.user.timezone, false);
+        // let convertDateTime = dealerTZ ? moment.tz(dealerTZ).tz(SERVER_TIMEZONE).format("YYYY-MM-DD HH:mm:ss") : "N/A";
 
+        // console.log("convertDateTime ", convertDateTime, "dealerTZ ", dealerTZ, "server timezone: ", SERVER_TIMEZONE);
         return (
             <Fragment>
                 <Card>

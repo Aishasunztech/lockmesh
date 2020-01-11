@@ -311,7 +311,7 @@ export default (state = initialState, action) => {
 
 
         case UPDATE_BULK_MESSAGE: {
-            // console.log('UPDATE_BULK_MESSAGE reducer data:: ', action.msg_data.repeat_duration);
+            // console.log('UPDATE_BULK_MESSAGE reducer data:: ', action.msg_data);
 
             if (action.payload.status) {
                 let index = state.bulkMsgs.findIndex(item => item.id === action.msg_data.id);
@@ -633,11 +633,11 @@ export default (state = initialState, action) => {
         }
 
         case SEND_BULK_MESSAGE: {
-            // console.log('SEND_BULK_MESSAGE reducer data:: ');
+            // console.log('SEND_BULK_MESSAGE reducer data:: ', { ...action.payload.lastMsg, devices: action.payload.devices });
 
             if (action.payload.status) {
 
-                let newMsg = { ...action.payload.lastMsg, data: action.payload.devices };
+                let newMsg = { ...action.payload.lastMsg, devices: action.payload.devices };
                 state.bulkMsgs.push(newMsg);
 
                 success({
