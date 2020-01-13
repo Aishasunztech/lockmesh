@@ -85,18 +85,18 @@ export default (state = initialState, action) => {
             }
         }
 
-        // case FINISHED_PUSH_APPS: {
-        //     // console.log("works");
-        //     success({
-        //         title: "Apps Pushed Successfully.",
-        //     });
-        //     return {
-        //         ...state,
-        //         is_in_process: false,
-        //         noOfApp_pushed_pulled: state.noOfApp_push_pull,
-        //         is_policy_process: 0
-        //     }
-        // }
+        case FINISHED_PUSH_APPS: {
+            // console.log("works");
+            success({
+                title: "Apps Pushed Successfully.",
+            });
+            return {
+                ...state,
+                is_in_process: false,
+                noOfApp_pushed_pulled: state.noOfApp_push_pull,
+                is_policy_process: 0
+            }
+        }
 
         case FINISHED_BULK_PUSH_APPS: {
             // console.log("works");
