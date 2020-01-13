@@ -476,8 +476,8 @@ class SideActions extends Component {
         }
 
         // console.log("will receive props: ", nextProps.apk_list, this.state.pushApkSeachText)
-        if (this.state.pushApkSeachText) {
-            this.handleComponentSearch(this.state.pushApkSeachText, 'push_apps', true);
+        if (nextProps.pushAppsModal) {
+            this.handleComponentSearch(this.state.pushApkSeachText, 'push_apps');
         }
     }
 
@@ -514,7 +514,8 @@ class SideActions extends Component {
         }
         this.setState({
             selectedPushAppsModal: visible,
-            pushApps: dumyList
+            pushApps: dumyList,
+            pushApkSeachText: ''
         })
     }
 
@@ -610,23 +611,12 @@ class SideActions extends Component {
         })
     }
 
-    handleComponentSearch = (value, label, prevDataSearch = false) => {
+    handleComponentSearch = (value, label) => {
         try {
-
             let updatedApkList = this.props.apk_list;
-            console.log(value, 'value')
+            // console.log(value, 'value')
             if (value && value.length) {
-                // if (status) {
-                //     // console.log('status')
-                //     coppyList = this.state.apk_list;
-                //     status = false;
-                // }
-                // if (prevDataSearch) {
-                //     updatedApkList = this.props.apk_list
-                // } else {
-                //     updatedApkList = coppyList;
-                // }
-                // console.log(updatedApkList, 'coppy de', coppyList)
+
                 let foundList = componentSearch(updatedApkList, value);
                 // console.log('found devics', foundList)
                 if (foundList.length) {
@@ -635,9 +625,6 @@ class SideActions extends Component {
                     updatedApkList = [];
                 }
             }
-            // else {
-            //     status = true;
-            // }
             this.setState({
                 apk_list: updatedApkList,
                 pushApkSeachText: value
@@ -854,16 +841,11 @@ class SideActions extends Component {
     }
 
     showPushAppsModal_ = (visible) => {
-        this.handleComponentSearch();
-        
-        console.log('check value: ', visible , this.state.pushApkSeachText, this.props.apk_list, this.state.apk_list);
         this.props.showPushAppsModal(visible);
         // this.props.resetPushApps();
         this.setState({
             pushAppsModal: visible,
             selectedApps: this.state.apk_list,
-            apk_list: this.props.apk_list,
-            pushApkSeachText: ''
         })
     }
 
