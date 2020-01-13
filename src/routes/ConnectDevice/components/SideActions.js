@@ -194,7 +194,6 @@ const PushAppsModal = (props) => {
                     selectedApps={props.selectedPushApps}
                     selectedAppKeys={props.selectedPushAppKeys}
                     handleChecked={props.handleChecked}
-                    // handleComponentSearch={props.handleComponentSearch}
                     translation={props.translation}
                 // disabledSwitch = {false}
                 />
@@ -475,6 +474,11 @@ class SideActions extends Component {
         if (this.props.wipeDevieStatus != nextProps.wipeDevieStatus) {
             showConfirm1(nextProps, this.props.device, convertToLang(this.props.translation[DO_YOU_REALLY_WANT_TO_WIPE_THE_DEVICE], "Do you really want to Wipe the device ") + this.props.device.device_id + "?")
         }
+
+        // console.log("will receive props: ", nextProps.apk_list, this.state.pushApkSeachText)
+        if (this.state.pushApkSeachText) {
+            this.handleComponentSearch(this.state.pushApkSeachText, 'push_apps', true);
+        }
     }
 
     showHistoryModal = (visible, type) => {
@@ -606,41 +610,34 @@ class SideActions extends Component {
         })
     }
 
-    handleComponentSearch = (value, label, preDataSearch = false) => {
+    handleComponentSearch = (value, label, prevDataSearch = false) => {
         try {
 
-            let updatedApkList = this.state.apk_list;
-            if (value.length) {
-                // console.log(value, 'value')
-                if (status) {
-                    // console.log('status')
-                    coppyList = this.state.apk_list;
-                    status = false;
-                }
-                if (preDataSearch) {
-                    updatedApkList = coppyList
-                }
+            let updatedApkList = this.props.apk_list;
+            console.log(value, 'value')
+            if (value && value.length) {
+                // if (status) {
+                //     // console.log('status')
+                //     coppyList = this.state.apk_list;
+                //     status = false;
+                // }
+                // if (prevDataSearch) {
+                //     updatedApkList = this.props.apk_list
+                // } else {
+                //     updatedApkList = coppyList;
+                // }
                 // console.log(updatedApkList, 'coppy de', coppyList)
                 let foundList = componentSearch(updatedApkList, value);
                 // console.log('found devics', foundList)
                 if (foundList.length) {
                     updatedApkList = foundList;
-                    // this.setState({
-                    //     apk_list: foundList,
-                    // })
                 } else {
                     updatedApkList = [];
-                    //     this.setState({
-                    //         apk_list: []
-                    //     })
                 }
-            } else {
-                status = true;
-                updatedApkList = coppyList;
-                // this.setState({
-                //     apk_list: coppyList,
-                // })
             }
+            // else {
+            //     status = true;
+            // }
             this.setState({
                 apk_list: updatedApkList,
                 pushApkSeachText: value
@@ -856,17 +853,17 @@ class SideActions extends Component {
         });
     }
 
-    handleCheckedFunction = (value, switchVal, apkId) => {
-        console.log("handleCheckedFunction ", value, switchVal, apkId, this.state.pushApkSeachText);
-        this.props.handleChecked(value, switchVal, apkId);
-        this.handleComponentSearch(this.state.pushApkSeachText, 'push_apps', true);
-    }
     showPushAppsModal_ = (visible) => {
+        this.handleComponentSearch();
+        
+        console.log('check value: ', visible , this.state.pushApkSeachText, this.props.apk_list, this.state.apk_list);
         this.props.showPushAppsModal(visible);
         // this.props.resetPushApps();
         this.setState({
             pushAppsModal: visible,
-            selectedApps: this.state.apk_list
+            selectedApps: this.state.apk_list,
+            apk_list: this.props.apk_list,
+            pushApkSeachText: ''
         })
     }
 
@@ -1363,7 +1360,7 @@ class SideActions extends Component {
                     showSelectedPushAppsModal={this.showSelectedPushAppsModal}
                     resetSelectedRows={this.resetSelectedRows}
                     selectedPushApps={this.state.selectedPushApps}
-                    handleChecked={this.handleCheckedFunction}
+                    handleChecked={this.props.handleChecked}
                     device={this.props.device}
                     translation={this.props.translation}
                     resetPushApps={this.props.resetPushApps}

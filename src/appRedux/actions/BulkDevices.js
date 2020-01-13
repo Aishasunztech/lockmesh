@@ -340,7 +340,7 @@ export const updateBulkMsg = (record, devices, dealerTZ) => {
     // console.log("updateBulkMsg action file: ", record)
 
     let cloneRecord = JSON.parse(JSON.stringify(record));
-    cloneRecord["date_time"] = dealerTZ ? moment().tz(dealerTZ).tz(SERVER_TIMEZONE).format(TIMESTAMP_FORMAT) : '';
+    cloneRecord["date_time"] = dealerTZ ? moment(cloneRecord.date_time).tz(dealerTZ).tz(SERVER_TIMEZONE).format(TIMESTAMP_FORMAT) : '';
     // console.log("cloneRecord ", cloneRecord);
     return (dispatch) => {
         RestService.updateBulkMsg(cloneRecord).then((response) => {
