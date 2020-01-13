@@ -55,27 +55,41 @@ export default class PackagesInfo extends Component {
     }
 
 
-    renderFeatures = (data) => {
+    renderFeatures = () => {
+        let packageData = this.props.package;
+        console.log("package expanding:", packageData);
+
+
+        let data =this.props.package.pkg_features;
         let features = [];
-        if (Object.keys(data).length !== 0 && data.constructor === Object) {
-
-            for (var key in data) {
-                if (data.hasOwnProperty(key)) {
-                    // console.log(key + " -> " + data[key]);
-                    let name = key;
-                    name = name.charAt(0).toUpperCase() + name.slice(1);
-                    let dump = {
-                        key: key.id,
-                        name: name.replace(/_/g, ' '),
-                        f_value: data[key] ? "yes" : 'No',
-                        rowKey: key
+        if(packageData.package_type==='services'){
+            if (Object.keys(data).length !== 0 && data.constructor === Object) {
+    
+                for (var key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        // console.log(key + " -> " + data[key]);
+                        let name = key;
+                        name = name.charAt(0).toUpperCase() + name.slice(1);
+                        let dump = {
+                            key: key.id,
+                            name: name.replace(/_/g, ' '),
+                            f_value: data[key] ? "yes" : 'No',
+                            rowKey: key
+                        }
+    
+                        features.push(dump)
                     }
-
-                    features.push(dump)
                 }
             }
+        } else if (packageData.package_type ==='data_plan') {
+            let dump = {
+                name: 'Data Limit',
+                f_value: packageData.data_limit,
+                rowKey: 1
+            }
+
+            features.push(dump)
         }
-        // console.log(features, 'featues arte')
         return features
     }
 
@@ -89,7 +103,7 @@ export default class PackagesInfo extends Component {
                             columns={[
                                 { title: convertToLang(this.props.translation[PACKAGE_SERVICE_NAME], "SERVICE NAME"), dataIndex: 'name', key: 'name', align: 'center' },
                                 { title: convertToLang(this.props.translation[PACKAGE_INCLUDED], "INCLUDED"), key: 'f_value', dataIndex: 'f_value', align: 'center' }]}
-                            dataSource={this.renderFeatures(this.props.package.pkg_features)}
+                            dataSource={this.renderFeatures()}
                             pagination={false}
                         />
                     </Tabs.TabPane>
