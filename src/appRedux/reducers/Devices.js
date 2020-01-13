@@ -31,6 +31,8 @@ import {
     GET_PARENT_HARDWARES,
     ACCEPT_REQUEST,
     ADD_PRODUCT,
+    VALIDATE_ICCID,
+    ADD_DATA_PLAN
 } from "../../constants/ActionTypes";
 
 // import { convertToLang } from '../../routes/utils/commonUtils';
@@ -405,6 +407,27 @@ export default (state = initialState, action) => {
                 showMsg: "hello",
                 options: state.options,
                 // devices: action.payload,
+            }
+
+        case ADD_DATA_PLAN:
+            if (action.response.status) {
+                let objIndex4 = state.devices.findIndex((obj => obj.id === action.payload.formData.usr_acc_id));
+                state.devices[objIndex4] = action.response.data;
+                var device_id = action.payload.formData.device_id;
+                // filteredDevices = alldevices.filter(device => device.device_id !== device_id);
+
+                success({
+                    title: action.response.msg,
+                });
+            } else {
+                error({
+                    title: action.response.msg,
+                });
+            }
+
+            return {
+                ...state,
+                devices: [...state.devices],
             }
 
         case ADD_DEVICE: {

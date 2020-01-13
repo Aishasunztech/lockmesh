@@ -120,8 +120,8 @@ class RestrictedRoute extends Component {
   componentDidMount() {
 
   }
-  
-  componentWillReceiveProps(nextProps, prevProps){
+
+  componentWillReceiveProps(nextProps, prevProps) {
 
   }
 
@@ -135,7 +135,7 @@ class RestrictedRoute extends Component {
     }
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
 
   }
 
@@ -163,21 +163,7 @@ class RestrictedRoute extends Component {
               } else {
 
                 return (
-                  <Layout className="gx-app-layout">
-                    {this.getSidebar(navStyle, width)}
-                    <Layout>
-                      {this.getNavStyles(navStyle)}
-                      <Content className={`gx-layout-content ${this.getContainerClass(navStyle)} `}>
-                        <CircularProgress />
-                        <Footer>
-                          <div className="gx-layout-footer-content">
-                            {footerText}
-                          </div>
-                        </Footer>
-                      </Content>
-                    </Layout>
-                    {/* <Customizer/> */}
-                  </Layout>
+                  <CircularProgress />
                 )
               }
 
