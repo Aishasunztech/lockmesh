@@ -262,7 +262,9 @@ const RestService = {
     addProduct: (payload) => {
         return axios.post(`${BASE_URL}users/create-service-product`, payload, RestService.getHeader());
     },
-
+    activateICCID: (iccid, user_acc_id) => {
+        return axios.post(`${BASE_URL}users/validate_sim_id`, { sim_id: iccid, user_acc_id }, RestService.getHeader());
+    },
     /**
      * @section Dealers
      */
@@ -468,6 +470,10 @@ const RestService = {
 
     extendServices: (formData) => {
         return axios.put(BASE_URL + 'users/edit-device/extendServices', formData, RestService.getHeader());
+    },
+
+    addDataPlan: (formData) => {
+        return axios.put(BASE_URL + 'users/add-data-plans', formData, RestService.getHeader());
     },
 
 
