@@ -7,18 +7,21 @@
     }
 
     .@{class-prefix}-container-wrap & {
-        padding-left: 0;
+        padding-left : 0;
         padding-right: 0;
     }
 }
 
 .@{class-prefix}-layout-footer-content {
     .@{class-prefix}-container-wrap & {
-        width: 94vw;
-        margin-left: auto;
-        margin-right: auto;
-        padding-left: 16px;
+        width        : 94vw;
+        margin-left  : auto;
+        margin-right : auto;
+        padding-left : 16px;
         padding-right: 16px;
+        position     : absolute;
+        bottom       : 0;
+        width        : 100%;
 
         @media screen and (min-width: @screen-md-min) {
             width: (@screen-md-min - 48); //720
@@ -43,18 +46,24 @@
 }
 
 .ant-layout-footer {
-    padding: 3px 0;
+    padding   : 3px 0;
     text-align: center;
-    font-size: 14px;
+    font-size : 14px;
+    position  : absolute;
+    bottom    : 0;
+    width     : 100%;
+    background: #fff;
+    padding   : 4px;
+    border-top: 1px solid #e8e8e8;
 }
 
 .fix_card .ant-table-bordered .ant-table-thead>tr>th {
     background-color: #fff !important;
-    border: 1px solid #e8e8e8;
-    border-top: 0 !important;
-    position: sticky;
-    top: -1px;
-    z-index: 1;
+    border          : 1px solid #e8e8e8;
+    border-top      : 0 !important;
+    position        : sticky;
+    top             : -1px;
+    z-index         : 1;
 }
 
 .fix_card_sm .ant-table-bordered .ant-table-thead>tr>th {
@@ -63,8 +72,8 @@
 
 .fix_card .ant-table-thead>tr>th.ant-table-column-has-actions.ant-table-column-has-sorters {
     position: sticky !important;
-    top: 40px;
-    z-index: 1;
+    top     : 40px;
+    z-index : 1;
 }
 
 .feat_apk_fix_card_admin .ant-table-thead>tr>th.ant-table-column-has-actions.ant-table-column-has-sorters,
@@ -95,11 +104,11 @@
 
 .position_absolute {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: 0 auto;
+    top     : 0;
+    left    : 0;
+    right   : 0;
+    bottom  : 0;
+    margin  : 0 auto;
 }
 
 .position_relative {
@@ -107,7 +116,7 @@
 }
 
 .vertical_center {
-    display: flex;
+    display    : flex;
     align-items: center;
 }
 
@@ -139,48 +148,48 @@
 
 .fix_header_border {
     border-bottom: 1px solid #e8e8e8;
-    position: relative;
-    z-index: 0;
-    top: 56px;
-    padding: 0;
-    margin: 0;
-    width: 100%;
+    position     : relative;
+    z-index      : 0;
+    top          : 56px;
+    padding      : 0;
+    margin       : 0;
+    width        : 100%;
 }
 
 .fix_header_border_login_history {
     border-bottom: 1px solid #e8e8e8;
-    position: sticky;
-    z-index: 0;
-    top: 33px;
-    padding: 0;
-    margin: 0;
+    position     : sticky;
+    z-index      : 0;
+    top          : 33px;
+    padding      : 0;
+    margin       : 0;
 }
 
 .fix_card {
     position: absolute;
-    top: 142px;
-    bottom: 25px;
-    left: 16px;
-    right: 16px;
+    top     : 142px;
+    bottom  : 25px;
+    left    : 16px;
+    right   : 16px;
 }
 
 .fix_card_sm {
-    position: relative;
-    top: 50px;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 412px;
+    position     : relative;
+    top          : 50px;
+    bottom       : 0;
+    left         : 0;
+    right        : 0;
+    height       : 412px;
     margin-bottom: 50px !important;
 }
 
 .fix_card_bulk_act {
-    position: relative;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 400px;
+    position     : relative;
+    top          : 0;
+    bottom       : 0;
+    left         : 0;
+    right        : 0;
+    height       : 400px;
     margin-bottom: 0 !IMPORTANT;
 }
 
@@ -199,7 +208,7 @@
 }
 
 .m_d_fix_table {
-    top: 143px;
+    top     : 143px;
     overflow: scroll;
 }
 
@@ -221,14 +230,14 @@
 }
 
 // .gx-popover-scroll div:first-child {
-//     margin-right: 0px !important;
+//     margin-right : 0px !important;
 //     margin-bottom: 0px !important;
 // }
 
 .Zindex_100+div {
     z-index: 100;
-    width: 8px !important;
-    right: 0px !important;
+    width  : 8px !important;
+    right  : 0px !important;
 }
 
 .m_auto {
@@ -236,15 +245,15 @@
 }
 
 .disp_flx {
-    display: flex;
+    display        : flex;
     justify-content: center;
-    align-items: center;
+    align-items    : center;
 }
 
 .disp_flx_end {
-    display: flex;
+    display        : flex;
     justify-content: flex-end;
-    align-items: flex-end;
+    align-items    : flex-end;
 }
 
 .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-ink-bar {
@@ -260,7 +269,7 @@
 }
 
 .overflow_table {
-    height: 500px;
+    height  : 500px;
     overflow: overlay;
 }
 
@@ -301,10 +310,10 @@
 }
 
 .ant-table-expanded-row .ant-table {
-    margin: 0px 16px 16px;
+    margin            : 0px 16px 16px;
     -webkit-box-shadow: 0px 0px 10px 3px rgba(0, 51, 102, 0.3);
-    -moz-box-shadow: 0px 0px 10px 3px rgba(0, 51, 102, 0.3);
-    box-shadow: 0px 0px 10px 3px rgba(0, 51, 102, 0.3);
+    -moz-box-shadow   : 0px 0px 10px 3px rgba(0, 51, 102, 0.3);
+    box-shadow        : 0px 0px 10px 3px rgba(0, 51, 102, 0.3);
 }
 
 .hidden-md {
@@ -312,17 +321,17 @@
 }
 
 .gx-icon-btn {
-    color: #262626;
-    width: 50px !important;
+    color : #262626;
+    width : 50px !important;
     height: 50px !important;
 }
 
 .gx-no-header-horizontal .gx-linebar {
-    z-index: 1000;
-    background: #fff;
+    z-index           : 1000;
+    background        : #fff;
     -webkit-box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.08);
-    -moz-box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.08);
-    box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.08);
+    -moz-box-shadow   : 0 0 4px 4px rgba(0, 0, 0, 0.08);
+    box-shadow        : 0 0 4px 4px rgba(0, 0, 0, 0.08);
 }
 
 @media (max-width: 992px) {
@@ -417,11 +426,11 @@
 
 @media screen and (max-width: 575px) {
     .gx-no-header-horizontal {
-        padding: 0;
+        padding           : 0;
         -webkit-box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.08);
-        -moz-box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.08);
-        box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.08);
-        z-index: 1000;
+        -moz-box-shadow   : 0 0 4px 4px rgba(0, 0, 0, 0.08);
+        box-shadow        : 0 0 4px 4px rgba(0, 0, 0, 0.08);
+        z-index           : 1000;
     }
 }
 
@@ -464,9 +473,9 @@
 
 .credit_popup .weight_400 {
     font-weight: 400;
-    margin: 0;
-    color: #000;
-    font-size: 14px;
+    margin     : 0;
+    color      : #000;
+    font-size  : 14px;
 }
 
 .ac_status_table .ant-table-tbody>tr:last-child {
@@ -485,8 +494,8 @@
 
 .border_bottom {
     border-bottom: 2px solid #535353;
-    width: fit-content;
-    line-height: 13px;
+    width        : fit-content;
+    line-height  : 13px;
 }
 
 .p-0 {
@@ -658,8 +667,9 @@
 }
 
 .ml-12 {
-  margin-left: 12px;
+    margin-left: 12px;
 }
+
 .ml-16 {
     margin-left: 16px;
 }

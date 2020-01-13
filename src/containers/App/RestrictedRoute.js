@@ -153,22 +153,18 @@ class RestrictedRoute extends Component {
               return <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
             } else {
               if (isRequested) {
-
-                if (isAllowed || location.pathname === "/invalid_page") {
+                if (isAllowed || (location && location.pathname === "/invalid_page")) {
                   return <Component re_render={this.props.re_render} {...props} />;
                 } else {
                   return <Redirect to={{ pathname: '/invalid_page', state: { from: props.location } }} />
                 }
-
               } else {
-
                 return (
                   <CircularProgress />
                 )
               }
 
             }
-
           }
         } />
     )

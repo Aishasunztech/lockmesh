@@ -207,7 +207,7 @@ class App extends Component {
     if (location.pathname === '/') {
       if (!authUser.id || !authUser.email || !authUser.token || !authUser.type) {
         return (<Redirect to={'/login'} />);
-      } else if ((initURL === '' || initURL === '/' || initURL === '/login' || initURL === '/session_timeout')) {
+      } else if ((initURL === '' || initURL === '/' || initURL === '/login' || initURL === '/session_timeout' || initURL === '/verify-auth')) {
         return (<Redirect to={'/dashboard'} />);
       } else {
         // this condition will not match anymore #usman
@@ -232,8 +232,8 @@ class App extends Component {
           <Route exact path='/login' component={Login} />
           <Route exact path="/verify-auth" component={VerifyAuthCode} />
           <Route exact path="/session_timeout" component={SessionTimeOut} />
-          {(location.pathname != '/login' && location.pathname != '/verify-auth' && location.pathname != '/session_timeout')
-            ?
+          {/* {(location.pathname != '/login' && location.pathname != '/verify-auth' && location.pathname != '/session_timeout')
+            ? */}
             <Layout className="gx-app-layout">
               {/* sidebar */}
               {this.getSidebar(navStyle, width)}
@@ -262,7 +262,7 @@ class App extends Component {
               <Customizer />
 
             </Layout>
-            : null
+            {/* : null */}
           }
 
         </Switch>
