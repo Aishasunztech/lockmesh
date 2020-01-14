@@ -335,6 +335,108 @@ class Prices extends Component {
                 ]
             }
         ];
+        this.standaloneColumns = [
+            {
+                title: "#",
+                dataIndex: 'sr',
+                key: 'sr',
+                align: "center",
+                render: (text, record, index) => ++index,
+            },
+            {
+                title: "ACTION",
+                dataIndex: 'action',
+                align: 'center',
+                className: 'row',
+                // width: 800,
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="pkg_name"
+                        key="pkg_name"
+                        id="pkg_name"
+                        className="search_heading"
+                        onKeyUp={this.handleHDWSearch}
+                        autoComplete="new-password"
+                        placeholder='NAME'
+                    />
+                ),
+                dataIndex: 'pkg_name',
+                className: '',
+                children: [
+                    {
+                        title: 'NAME',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'pkg_name',
+                        key: 'pkg_name',
+                        sorter: (a, b) => { return a.name.localeCompare(b.name) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+
+            {
+                title: (
+                    <Input.Search
+                        name="pkg_price"
+                        key="pkg_price"
+                        id="pkg_price"
+                        className="search_heading"
+                        onKeyUp={this.handleHDWSearch}
+                        autoComplete="new-password"
+                        placeholder='PRICE (CREDITS)'
+                    />
+                ),
+                dataIndex: 'pkg_price',
+                className: '',
+                children: [
+                    {
+                        title: 'PRICE (CREDITS)',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'pkg_price',
+                        key: 'pkg_price',
+                        // ...this.getColumnSearchProps('status'),
+                        // sorter: (a, b) => { return a.price - b.price },
+                        sorter: (a, b) => { return a.price.localeCompare(b.price) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="pkg_term"
+                        key="pkg_term"
+                        id="pkg_term"
+                        className="search_heading"
+                        onKeyUp={this.handleHDWSearch}
+                        autoComplete="new-password"
+                        placeholder='TERM'
+                    />
+                ),
+                dataIndex: 'pkg_term',
+                className: '',
+                children: [
+                    {
+                        title: 'TERM',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'pkg_term',
+                        key: 'pkg_term',
+                        // ...this.getColumnSearchProps('status'),
+                        // sorter: (a, b) => { return a.price - b.price },
+                        sorter: (a, b) => { return a.price.localeCompare(b.price) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            }
+        ];
 
         this.state = {
             pricing_modal: false,
@@ -532,7 +634,10 @@ class Prices extends Component {
                 let i = 0
 
                 let packages_type = 'services';
-                if (this.state.packageListTab === '1') {
+                if (this.state.outerTab === '4') {
+                    packages_type = 'standalone_sim';
+                }
+                else if (this.state.packageListTab === '1') {
                     packages_type = 'services';
                 } else if (this.state.packageListTab === '2') {
                     packages_type = 'data_plan';
@@ -560,7 +665,7 @@ class Prices extends Component {
                         rowKey: index,
                         statusAll: item.statusAll,
                         package_type: item.package_type,
-                        data_limit: (item.data_limit)? item.data_limit: 'N/A',
+                        data_limit: (item.data_limit) ? item.data_limit : 'N/A',
                         action: (item.dealer_type === "super_admin" && (this.props.auth.type === ADMIN || this.props.auth.type === DEALER || this.props.auth.type === SDEALER)) ?
                             (<Fragment>{ModifyBtn}</Fragment>) :
                             (item.dealer_type === "admin" && this.props.auth.type === DEALER || this.props.auth.type === SDEALER) ?
@@ -847,6 +952,15 @@ class Prices extends Component {
                                     className="devices"
                                     columns={this.hardwareColumns}
                                     dataSource={this.renderList("hardware")}
+                                    bordered
+                                    pagination={false}
+                                />
+                            </Tabs.TabPane>
+                            <Tabs.TabPane tab="Stand Alone Sims" key="4">
+                                <Table
+                                    className="devices"
+                                    columns={this.standaloneColumns}
+                                    dataSource={this.renderList("packages")}
                                     bordered
                                     pagination={false}
                                 />

@@ -105,7 +105,7 @@ export default class Prices extends Component {
                     key: item.id,
                     sr: ++index,
                     pkg_name: item.pkg_name,
-                    pkg_price: "$" + item.pkg_price,
+                    pkg_price: item.pkg_price,
                     pkg_term: item.pkg_term,
                     pkg_expiry: item.pkg_expiry
                 }
