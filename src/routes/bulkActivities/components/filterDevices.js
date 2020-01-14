@@ -656,12 +656,15 @@ class FilterDevices extends Component {
   }
 
   applyAction = () => {
-    console.log(this.props.selectedDealers, this.props.selectedUsers, 'action apply', this.props.handleActionValue);
-
     let action = this.props.handleActionValue;
     let devices = this.state.selectedDevices;
     let dealers = this.props.selectedDealers;
     let users = this.props.selectedUsers;
+
+    // console.log("action :: ", action);d
+    // console.log("devices :: ", devices);
+    // console.log("dealers :: ", dealers);
+    // console.log("users :: ", users);
 
     if (action) {
       if (devices.length) {
@@ -732,6 +735,12 @@ class FilterDevices extends Component {
   render() {
     // console.log("actionMsg ", this.props.actionMsg);
     // console.log('selected devices are: ', this.state.selectedDevices);
+
+    if (!this.props.devices || !this.props.devices.length){
+      return "Note: *To performe an action please select dealers or users to get their devices ";
+    }
+
+
     return (
       <Fragment>
         <Row gutter={16}>

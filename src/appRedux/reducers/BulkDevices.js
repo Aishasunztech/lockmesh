@@ -563,7 +563,8 @@ export default (state = initialState, action) => {
             if (action.dataType === 'action') {
                 return {
                     ...state,
-                    bulkAction: action.payload
+                    bulkAction: action.payload,
+                    errorAction: ''
                 }
             }
             else if (action.dataType === 'dealers') {
