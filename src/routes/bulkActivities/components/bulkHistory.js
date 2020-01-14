@@ -180,7 +180,7 @@ export default class Activity extends Component {
     }
 
 
-    renderList = () => {
+    renderHistoryList = () => {
         // let data = this.props.history;
         let data = this.state.activities;
         // console.log("history is: ", data)
@@ -262,7 +262,7 @@ export default class Activity extends Component {
                                 this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''
                             }
                             onExpand={this.onExpandRow}
-                            dataSource={this.renderList()}
+                            dataSource={this.renderHistoryList}
                             expandedRowRender={record => {
                                 // console.log('recored', record)
 
@@ -273,7 +273,7 @@ export default class Activity extends Component {
                                         bordered={false}
                                         columns={this.state.columns}
                                         align='center'
-                                        dataSource={this.props.renderList(JSON.parse(record.data))}
+                                        dataSource={this.props.renderList(JSON.parse(record.data), this.props.user.timezone)}
                                         pagination={false}
                                         scroll={{ x: true }}
                                     />

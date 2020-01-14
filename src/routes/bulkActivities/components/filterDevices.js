@@ -656,12 +656,15 @@ class FilterDevices extends Component {
   }
 
   applyAction = () => {
-    console.log(this.props.selectedDealers, this.props.selectedUsers, 'action apply', this.props.handleActionValue);
-
     let action = this.props.handleActionValue;
     let devices = this.state.selectedDevices;
     let dealers = this.props.selectedDealers;
     let users = this.props.selectedUsers;
+
+    // console.log("action :: ", action);d
+    // console.log("devices :: ", devices);
+    // console.log("dealers :: ", dealers);
+    // console.log("users :: ", users);
 
     if (action) {
       if (devices.length) {
@@ -732,6 +735,12 @@ class FilterDevices extends Component {
   render() {
     // console.log("actionMsg ", this.props.actionMsg);
     // console.log('selected devices are: ', this.state.selectedDevices);
+
+    if (!this.props.devices || !this.props.devices.length){
+      return "Note: *To performe an action please select dealers or users to get their devices ";
+    }
+
+
     return (
       <Fragment>
         <Row gutter={16}>
@@ -814,7 +823,7 @@ class FilterDevices extends Component {
                       bordered
                       columns={this.state.selectedDevicesColumns}
                       onChange={this.props.onChangeTableSorting}
-                      dataSource={this.props.renderList(this.actionRelatedDevice(this.state.selectedDevices))}
+                      dataSource={this.props.renderList(this.actionRelatedDevice(this.state.selectedDevices), this.props.user.timezone)}
                       pagination={false}
                     // scroll={{ x: true }}
                     />
@@ -838,7 +847,7 @@ class FilterDevices extends Component {
           }}
         >
           <FilterDevicesList
-            devices={this.props.renderList(this.getUnSelectedDevices(this.state.allBulkDevices))}
+            devices={this.props.renderList(this.getUnSelectedDevices(this.state.allBulkDevices), this.props.user.timezone)}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
@@ -869,7 +878,7 @@ class FilterDevices extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            devices={this.props.renderList(this.state.searchRemoveModal)}
+            devices={this.props.renderList(this.state.searchRemoveModal, this.props.user.timezone)}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
@@ -900,7 +909,7 @@ class FilterDevices extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            devices={this.props.renderList(this.getUnSelectedDevices(this.state.allBulkDevices))}
+            devices={this.props.renderList(this.getUnSelectedDevices(this.state.allBulkDevices), this.props.user.timezone)}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
