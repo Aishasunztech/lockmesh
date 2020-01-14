@@ -104,7 +104,18 @@
 }
 
 .wipe_device .ant-modal-body {
-    padding: 0 45px 0;
+   padding: 0 45px 0;
+ }
+
+.reset_pin_modal .ant-modal-body {
+  padding: 0 45px 0;
+}
+
+.reset_pin_modal .ant-modal-content {
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .password_field {
@@ -362,7 +373,7 @@
 }
 
 .credit_popup .ant-modal-body {
-    padding: 8%;
+    padding: 25px 50px;
 }
 
 .ac_status_table .ant-table-title {
@@ -401,7 +412,7 @@
 
 .overdue_table,
 .pay_history {
-    margin-top: 50px;
+    margin-top: 24px;
 }
 
 .overdue_table .ant-table-small>.ant-table-content .ant-table-row:last-child td {
@@ -458,11 +469,7 @@
     padding-right: 0;
 }
 
-.credit_modal_heading {
-    background: #ddebf7;
-    padding: 2px 2px;
-    margin-bottom: 0;
-}
+
 
 .buy_credit_main_div {
     height: 100%;

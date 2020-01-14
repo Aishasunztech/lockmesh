@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col, Tag } from "antd";
-import { BASE_URL } from '../../../constants/Application';
+import { BASE_URL, DATE_FORMAT, TIMESTAMP_FORMAT } from '../../../constants/Application';
 import styles from './app.css';
 import CustomScrollbars from "../../../util/CustomScrollbars";
 import { Link } from 'react-router-dom';
-
+import moment from 'moment';
 import {
-    convertToLang
+    convertToLang, convertTimezoneValue
 } from '../../utils/commonUtils'
 import EditApk from './EditApk';
 import UpdateFeatureApk from './UpdateFeatureApk';
@@ -126,7 +126,7 @@ export default class ListApk extends Component {
                         Policies
                     </Tag>)
                 }
-                
+
                 if (app.permission_count != 0) {
                     usedBy.push(<Tag color="green" key="Permissions">Permissions</Tag>)
                 }
@@ -151,18 +151,18 @@ export default class ListApk extends Component {
 
                                 {/* DELETE APK BUTTON */}
                                 {/* {((!app.policies || app.policies.length === 0) && app.permission_count == 0) ? */}
-                                    <Button
-                                        type="danger"
-                                        className="mob_m_t"
-                                        size="small"
-                                        style={{ textTransform: "uppercase" }}
-                                        onClick={(e) => {
-                                            this.props.handleConfirmDelete(app.apk_id, app, usedBy);
-                                        }}
-                                    >
-                                        {convertToLang(this.props.translation[Button_Delete], "DELETE")}
-                                    </Button>
-                                 {/* : null} */}
+                                <Button
+                                    type="danger"
+                                    className="mob_m_t"
+                                    size="small"
+                                    style={{ textTransform: "uppercase" }}
+                                    onClick={(e) => {
+                                        this.props.handleConfirmDelete(app.apk_id, app, usedBy);
+                                    }}
+                                >
+                                    {convertToLang(this.props.translation[Button_Delete], "DELETE")}
+                                </Button>
+                                {/* : null} */}
 
                             </Fragment>
                         </div>
@@ -170,7 +170,7 @@ export default class ListApk extends Component {
                     permission: (
                         <div data-column="PERMISSION" style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
                             {/* {app.permission_count} */}
-                            {(app.permission_count === "All" || this.props.totalDealers === app.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
+                            {(app.permission_count === "All" || (this.props.totalDealers === app.permission_count && app.permission_count !== 0)) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
                         </div>
                     ),
                     permissions: app.permissions,
@@ -201,8 +201,12 @@ export default class ListApk extends Component {
                     version: app.version,
                     used_by: <Fragment>{usedBy}</Fragment>,
                     policies: (app.policies === undefined || app.policies === null) ? [] : app.policies,
-                    created_at: app.created_at,
-                    updated_at: app.updated_at
+                    created_at: convertTimezoneValue(this.props.user.timezone, app.created_at, TIMESTAMP_FORMAT),
+                    updated_at: convertTimezoneValue(this.props.user.timezone, app.updated_at, TIMESTAMP_FORMAT),
+                    // created_at: (app.created_at && app.created_at != "N/A") ? moment(app.created_at).tz(convertTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
+                    // updated_at: (app.updated_at && app.updated_at != "N/A") ? moment(app.updated_at).tz(convertTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
+                    // created_at: app.created_at,
+                    // updated_at: app.updated_at
                 }
                 apkList.push(data)
 
@@ -266,7 +270,8 @@ export default class ListApk extends Component {
                     'apk_logo': (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
                     'apk_version': app.version,
                     'apk_size': app.size ? app.size : "N/A",
-                    'updated_date': app.updated_at,
+                    'updated_at': convertTimezoneValue(this.props.user.timezone, app.updated_at, TIMESTAMP_FORMAT),
+                    // 'updated_date': app.updated_at,
                     'package_name': app.package_name,
                     'policies': (app.policies === undefined || app.policies === null) ? [] : app.policies,
                 }
@@ -534,7 +539,7 @@ export default class ListApk extends Component {
                         </Card>
                     </div> :
                     <Card className={`fix_card ${styleType}`}>
-                        {/* <hr className="fix_header_border" style={{ top: "63px" }} /> */}
+                        <hr className="fix_header_border" style={{ top: "63px" }} />
                         <CustomScrollbars className="gx-popover-scroll ">
                             <Table
                                 className="gx-table-responsive apklist_table"

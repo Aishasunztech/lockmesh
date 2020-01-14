@@ -1,7 +1,7 @@
 .deviceImg {
     width: 311px;
     margin: 0 auto;
-    height: 587px;
+    height: 592px;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: top center;
@@ -41,14 +41,12 @@
 
 .offline_st {
     border: 1px solid #ccc;
-    border-top: 0;
     background: #e5e5e5;
 }
 
 .active_st {
     border: 1px solid #ccc;
     border-right: 0;
-    border-top: 0;
     background: #e5e5e5;
 }
 
@@ -289,6 +287,10 @@ th.device_info {
 
 .right_bar .ant-card-body {
     padding: 16px 16px 0 !important;
+}
+
+.right_bar .anticon {
+    margin-right: 8px;
 }
 
 .right_bar .search_dev_id .ant-card-body {

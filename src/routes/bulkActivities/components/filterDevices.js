@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Button, Modal, Row, Col, Spin, Input } from "antd";
+import { Table, Button, Modal, Row, Col, Spin, Input, Card } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import styles from './devices.css'
+// import styles from './devices.css'
 import { getAllDealers } from "../../../appRedux/actions/Dealers";
 // import { savePermission } from "../../../appRedux/actions/Apk";
 import FilterDevicesList from "./filterDevicesList";
@@ -33,6 +33,8 @@ import {
 } from '../../../constants/Constants'
 
 import { Button_Remove, Button_Add, Button_AddAll, Button_AddExceptSelected, Button_RemoveAll, Button_RemoveExcept, Button_Save, Button_Cancel, Button_DeleteExceptSelected, Button_Yes, Button_No, Button_Edit } from '../../../constants/ButtonConstants';
+import { handleWipePwdConfirmModal } from '../../../appRedux/actions/BulkDevices';
+import CustomScrollbars from '../../../util/CustomScrollbars';
 const confirm = Modal.confirm;
 const success = Modal.success
 const error = Modal.error
@@ -654,14 +656,17 @@ class FilterDevices extends Component {
   }
 
   applyAction = () => {
-    console.log(this.props.selectedDealers, this.props.selectedUsers, 'action apply', this.props.handleActionValue);
-
     let action = this.props.handleActionValue;
     let devices = this.state.selectedDevices;
     let dealers = this.props.selectedDealers;
     let users = this.props.selectedUsers;
 
-    if (action !== "NOT SELECTED") {
+    // console.log("action :: ", action);d
+    // console.log("devices :: ", devices);
+    // console.log("dealers :: ", dealers);
+    // console.log("users :: ", users);
+
+    if (action) {
       if (devices.length) {
         if (action === "SUSPEND DEVICES") {
           this.refs.bulk_suspend.handleSuspendDevice(devices, dealers, users);
@@ -696,10 +701,12 @@ class FilterDevices extends Component {
           title: `Sorry, You have not any device to perform an action`,
         });
       }
+
     } else {
-      error({
-        title: `Sorry, You have not selected any action`,
-      });
+      this.props.setBulkData("Please select an action", "errorAction")
+      // error({
+      //   title: `Sorry, You have not selected any action`,
+      // });
     }
   }
 
@@ -717,7 +724,8 @@ class FilterDevices extends Component {
       updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED || device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED || device.finalStatus == DEVICE_EXPIRED)
     }
     else if (action === "WIPE DEVICES") {
-      updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED || device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED || device.finalStatus == DEVICE_EXPIRED || device.finalStatus == DEVICE_UNLINKED || device.finalStatus == DEVICE_TRANSFERED)
+      // updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED || device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED || device.finalStatus == DEVICE_EXPIRED || device.finalStatus == DEVICE_UNLINKED || device.finalStatus == DEVICE_TRANSFERED)
+      updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED || device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED || device.finalStatus == DEVICE_EXPIRED || device.finalStatus == DEVICE_TRANSFERED)
     }
 
     this.state.selectedDevices = updateSelectedDevices
@@ -725,11 +733,17 @@ class FilterDevices extends Component {
   }
 
   render() {
-
+    // console.log("actionMsg ", this.props.actionMsg);
     // console.log('selected devices are: ', this.state.selectedDevices);
+
+    if (!this.props.devices || !this.props.devices.length){
+      return "Note: *To performe an action please select dealers or users to get their devices ";
+    }
+
+
     return (
       <Fragment>
-        <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
+        <Row gutter={16}>
           <Col className="gutter-row" sm={4} xs={4} md={4}>
             <div className="gutter-box text-left">
               <h2>{convertToLang(this.props.translation["Select Devices:"], "Select Devices:")}</h2>
@@ -792,23 +806,29 @@ class FilterDevices extends Component {
           </Col>
 
         </Row>
-        {/* <span>(Only allow active & trial devices for your selected action)</span> */}
+        {/* <span style={{ color: 'red' }}>{this.props.actionMsg ? (this.state.selectedDevices && this.state.selectedDevices.length) ? `${this.props.actionMsg}` : "Not selected any device to perform an action" : "Not selected any action"}</span> */}
+        <span style={{ color: 'red' }}>{this.props.actionMsg ? `${this.props.actionMsg}` : ""}</span>
         <Row gutter={24} style={{ marginBottom: '24px' }}>
           {
             this.props.spinloading ? <CircularProgress /> :
               <Col className="gutter-row" span={24}>
-                <Table
-                  id='scrolltablelist'
-                  ref='tablelist'
-                  className={"devices "}
-                  size="middle"
-                  bordered
-                  columns={this.state.selectedDevicesColumns}
-                  onChange={this.props.onChangeTableSorting}
-                  dataSource={this.props.renderList(this.actionRelatedDevice(this.state.selectedDevices))}
-                  pagination={false}
-                  scroll={{ x: true }}
-                />
+                <Card className='fix_card fix_card_bulk_act'>
+                  <hr className="fix_header_border" style={{ top: "56px" }} />
+                  <CustomScrollbars className="gx-popover-scroll ">
+                    <Table
+                      id='scrolltablelist'
+                      ref='tablelist'
+                      className={"devices "}
+                      size="small"
+                      bordered
+                      columns={this.state.selectedDevicesColumns}
+                      onChange={this.props.onChangeTableSorting}
+                      dataSource={this.props.renderList(this.actionRelatedDevice(this.state.selectedDevices), this.props.user.timezone)}
+                      pagination={false}
+                    // scroll={{ x: true }}
+                    />
+                  </CustomScrollbars>
+                </Card>
               </Col>
           }
         </Row>
@@ -825,10 +845,9 @@ class FilterDevices extends Component {
           onCancel={() => {
             this.showDealersModal(false)
           }}
-          bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            devices={this.props.renderList(this.getUnSelectedDevices(this.state.allBulkDevices))}
+            devices={this.props.renderList(this.getUnSelectedDevices(this.state.allBulkDevices), this.props.user.timezone)}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
@@ -859,7 +878,7 @@ class FilterDevices extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            devices={this.props.renderList(this.state.searchRemoveModal)}
+            devices={this.props.renderList(this.state.searchRemoveModal, this.props.user.timezone)}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
@@ -890,7 +909,7 @@ class FilterDevices extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            devices={this.props.renderList(this.getUnSelectedDevices(this.state.allBulkDevices))}
+            devices={this.props.renderList(this.getUnSelectedDevices(this.state.allBulkDevices), this.props.user.timezone)}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
@@ -938,6 +957,9 @@ class FilterDevices extends Component {
         <BulkWipeConfirmation
           ref="bulk_wipe"
           wipeBulkDevices={this.props.wipeBulkDevices}
+          handleWipePwdConfirmModal={this.props.handleWipePwdConfirmModal}
+          bulkWipePassModal={this.props.bulkWipePassModal}
+          wipePassMsg={this.props.wipePassMsg}
           translation={this.props.translation}
         />
 
@@ -955,19 +977,22 @@ class FilterDevices extends Component {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     getAllDealers: getAllDealers,
+    handleWipePwdConfirmModal: handleWipePwdConfirmModal
     // savePermission: savePermission
   }, dispatch);
 }
 
 
-const mapStateToProps = ({ dealers, settings, devices, auth }, props) => {
+const mapStateToProps = ({ dealers, settings, devices, auth, bulkDevices }, props) => {
 
   return {
     user: auth.authUser,
     dealerList: dealers.dealers,
     record: props.record,
     spinloading: dealers.spinloading,
-    translation: settings.translation
+    translation: settings.translation,
+    bulkWipePassModal: bulkDevices.bulkWipePassModal,
+    wipePassMsg: bulkDevices.wipePassMsg
   };
 }
 

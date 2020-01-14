@@ -3,7 +3,8 @@ import { Button, Drawer, Form, Tag, Tabs, Collapse, } from "antd";
 import { connect } from "react-redux";
 import Auxiliary from "../../util/Auxiliary";
 import CustomScrollbars from "../../util/CustomScrollbars";
-import { getSocketProcesses, getNotification } from '../../appRedux/actions';
+import {getSocketProcesses, getNotification, connectSocket} from '../../appRedux/actions';
+import { generateSupportTicketEvent } from "../../appRedux/actions";
 import styles from './rightSidebar.css'
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
@@ -66,13 +67,20 @@ class RightSidebar extends Component {
             onChange={() => this.callback()}
           // style={{ height: 400 }}
           >
-            {this.renderList(this.props.tasks, 'pending')}
-            {/* <div style={{ height: 50 }}></div> */}
+            {this.props.tasks && this.props.tasks.length ?
+              this.renderList(this.props.tasks, 'pending')
+              :
+              <div style={{ height: 50 }}>You don't have any queue job yet</div>
+            }
           </Collapse>
 
         </CustomScrollbars>
         <br />
-        <Button type="primary" style={{ width: "100%" }} onClick={this.queueOnload}>Load More</Button>
+        {/* {this.props.tasks && this.props.tasks.length > 10
+          ? */}
+        <Button disabled={this.props.tasks && this.props.tasks.length > 10 ? false : true} type="primary" style={{ width: "100%" }} onClick={this.queueOnload}>Load More</Button>
+        {/* : null
+        } */}
       </div>
 
     )
@@ -81,6 +89,9 @@ class RightSidebar extends Component {
 
 
   toggleRightSidebar = () => {
+    if (!this.state.isRightSidebarOpened) {
+      this.props.getSocketProcesses();
+    }
     this.setState(previousState => (
       {
         isRightSidebarOpened: !previousState.isRightSidebarOpened
@@ -131,12 +142,15 @@ class RightSidebar extends Component {
   }
 
   componentDidMount() {
-    this.props.getSocketProcesses();
+    // this.props.getSocketProcesses();
   }
   componentWillReceiveProps(nextProps) {
-    // console.log("rightSidebar componentWillReceiveProps: ", nextProps.socket.connected);
     if (nextProps.socket && nextProps.socket.connected) {
       nextProps.getNotification(nextProps.socket)
+    }
+
+    if (nextProps.supportSystemSocket) {
+      this.props.generateSupportTicketEvent(nextProps.supportSystemSocket);
     }
   }
   render() {
@@ -174,6 +188,7 @@ const mapStateToProps = ({ rightSidebar, auth, socket }) => {
   // console.log("rightSidebar.tasks ", rightSidebar.tasks)
   return {
     tasks: rightSidebar.tasks,
+    supportSystemSocket: socket.supportSystemSocket,
     socket: socket.socket
 
   }
@@ -181,4 +196,4 @@ const mapStateToProps = ({ rightSidebar, auth, socket }) => {
 
 RightSidebar = Form.create()(RightSidebar);
 
-export default connect(mapStateToProps, { getSocketProcesses, getNotification })(RightSidebar);
+export default connect(mapStateToProps, { getSocketProcesses, getNotification, generateSupportTicketEvent })(RightSidebar);

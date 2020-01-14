@@ -13,6 +13,7 @@ import {
     SHOW_MESSAGE,
     LOAD_PROFILE,
     UNLINK_DEVICE,
+    CHANGE_SCHAT_ACCOUNT_STATUS,
     CHANGE_PAGE,
     SHOW_HISTORY_MODAL,
     SHOW_SAVE_PROFILE_MODAL,
@@ -69,7 +70,9 @@ import {
     CANCEL_EXTENDED_SERVICE,
     USER_CREDITS,
     GET_DEVICE_LIST,
-    GET_DEVICE_BILLING_HISTORY
+    GET_DEVICE_BILLING_HISTORY,
+    DEVICE_NOT_FOUND,
+    RESET_CHAT_PIN
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -80,7 +83,7 @@ import RestService from '../services/RestServices';
 // const success = Modal.success;
 // const error = Modal.error;
 
-// action creaters 
+// action creaters
 
 export function changePage(pageName) {
     return {
@@ -101,13 +104,10 @@ export function getDeviceDetails(deviceId) {
             // console.log("slkdflaskdfjlasf", response.data);
             if (RestService.checkAuth(response.data)) {
                 // console.log("slkdflaskdfjlasf", response.data);
-                if (response.data) {
-                    dispatch({
-                        type: GET_DEVICE_DETAILS,
-                        payload: response.data.data
-                    })
-                }
-
+                dispatch({
+                    type: GET_DEVICE_DETAILS,
+                    payload: response.data.data
+                })
             } else {
                 dispatch({
                     type: INVALID_TOKEN
@@ -115,6 +115,14 @@ export function getDeviceDetails(deviceId) {
             }
         });
 
+    };
+}
+export function deviceNotFound() {
+    //console.log('object is callse')
+    return (dispatch) => {
+        dispatch({
+            type: DEVICE_NOT_FOUND
+        })
     };
 }
 export function getDeviceListConnectDevice(deviceId) {
@@ -553,7 +561,7 @@ export function showMessage(show, message, type) {
 
     // dispatch({
     //     type:SHOW_MESSAGE,
-    //     payload:{ 
+    //     payload:{
     //         showMessage: show,
     //         messageType: message,
     //         messageText: type
@@ -1415,6 +1423,41 @@ export const getDeviceBillingHistory = (device_id, dealer_id) => {
 
         })
     }
+}
+
+export const resetChatPin = (data) => {
+  return (dispatch) => {
+    RestService.resetChatPin(data).then((response) => {
+      if (RestService.checkAuth(response.data)) {
+        dispatch({
+          type: RESET_CHAT_PIN,
+          payload: response.data
+        })
+      } else {
+        dispatch({
+          type: INVALID_TOKEN
+        })
+      }
+    })
+  }
+};
+
+
+export const changeSchatPinStatus = (data) => {
+  return (dispatch) => {
+    RestService.changeSchatPinStatus(data).then((response) => {
+      if (RestService.checkAuth(response.data)) {
+        dispatch({
+          type: CHANGE_SCHAT_ACCOUNT_STATUS,
+          payload: response.data
+        })
+      } else {
+        dispatch({
+          type: INVALID_TOKEN
+        })
+      }
+    })
+  }
 }
 
 

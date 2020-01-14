@@ -81,7 +81,7 @@ export function postDropdown(selectedItems, pageName) {
                 // if(response.data.status === true)
                 dispatch({
                     type: POST_DROPDOWN,
-                    payload: response.data.data
+                    payload: response.data
                 })
             } else {
                 dispatch({

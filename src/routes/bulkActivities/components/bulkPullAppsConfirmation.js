@@ -37,19 +37,29 @@ export default class BulkPullApps extends Component {
             dealer_ids,
             user_ids
         }
+        // console.log("this.props.selectedPullAppsList ", this.props.selectedPullAppsList);
 
-        const title = `${convertToLang(this.props.translation[""], "Are you sure, you want to pull selected apps from these devices ")} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`;
-        this.confirm({
-            title: title,
-            content: '',
-            okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
-            cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
-            onOk: (() => {
-                this.props.applyPullApps(data);
-            }),
-            onCancel() { },
-        });
+        if (this.props.selectedPullAppsList && this.props.selectedPullAppsList.length) {
 
+            const title = `${convertToLang(this.props.translation[""], `Are you sure, you want to pull (${this.props.selectedPullAppsList.map(item => ` ${item.apk_name}`)}) apps from these devices: `)} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`;
+            this.confirm({
+                title: title,
+                content: '',
+                okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
+                cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
+                onOk: (() => {
+                    this.props.applyPullApps(data);
+                }),
+                onCancel() { },
+            });
+        } else {
+
+            Modal.error({
+                title: 'Apps not selected to pull on your selected devices. Please select apps to performe an action.',
+                // content: 'some messages...some messages...',
+            });
+
+        }
     }
 
     render() {

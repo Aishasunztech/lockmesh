@@ -511,7 +511,7 @@ class Permissions extends Component {
             this.savePermission()
           }}
           okText={convertToLang(this.props.translation[Button_Save], Button_Save)}
-          cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+          cancelText={convertToLang(this.props.translation[Button_Cancel], "CANCEL")}
 
           onCancel={() => {
             this.showDealersModal(false)
@@ -541,7 +541,7 @@ class Permissions extends Component {
             this.removeSelectedDealers()
           }}
           okText={convertToLang(this.props.translation[Button_DeleteExceptSelected], Button_DeleteExceptSelected)}
-          cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+          cancelText={convertToLang(this.props.translation[Button_Cancel], "CANCEL")}
           onCancel={() => {
             this.removeSelectedDealersModal(false)
           }}
@@ -569,7 +569,7 @@ class Permissions extends Component {
             this.addSelectedDealers()
           }}
           okText={convertToLang(this.props.translation[Button_AddExceptSelected], Button_AddExceptSelected)}
-          cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+          cancelText={convertToLang(this.props.translation[Button_Cancel], "CANCEL")}
 
           onCancel={() => {
             this.addSelectedDealersModal(false)

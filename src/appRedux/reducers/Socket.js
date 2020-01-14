@@ -20,6 +20,7 @@ const initialState = {
     is_policy_process: 0,
     is_policy_finish: false,
     socket: null,
+    supportSystemSocket: null,
 };
 
 export default (state = initialState, action) => {
@@ -29,7 +30,8 @@ export default (state = initialState, action) => {
             console.log("socket connected");
             return {
                 ...state,
-                socket: action.payload
+                socket: action.payload,
+                supportSystemSocket: action.supportSystemSocket,
             }
         }
         case DISCONNECT_SOCKET: {
@@ -37,7 +39,8 @@ export default (state = initialState, action) => {
 
             return {
                 ...state,
-                socket: action.payload
+                socket: action.payload,
+                supportSystemSocket: action.supportSystemSocket,
             }
         }
 
@@ -82,18 +85,18 @@ export default (state = initialState, action) => {
             }
         }
 
-        // case FINISHED_PUSH_APPS: {
-        //     // console.log("works");
-        //     success({
-        //         title: "Apps Pushed Successfully.",
-        //     });
-        //     return {
-        //         ...state,
-        //         is_in_process: false,
-        //         noOfApp_pushed_pulled: state.noOfApp_push_pull,
-        //         is_policy_process: 0
-        //     }
-        // }
+        case FINISHED_PUSH_APPS: {
+            // console.log("works");
+            success({
+                title: "Apps Pushed Successfully.",
+            });
+            return {
+                ...state,
+                is_in_process: false,
+                noOfApp_pushed_pulled: state.noOfApp_push_pull,
+                is_policy_process: 0
+            }
+        }
 
         case FINISHED_BULK_PUSH_APPS: {
             // console.log("works");
@@ -180,7 +183,7 @@ export default (state = initialState, action) => {
                 is_policy_process: 0
             }
         }
-        
+
         default:
             return state;
     }

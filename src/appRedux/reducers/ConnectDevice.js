@@ -21,6 +21,8 @@ import {
     ADMIN_PASSWORD,
     SHOW_SAVE_PROFILE_MODAL,
     // HANDLE_PROFILE_INPUT,
+    RESET_CHAT_PIN,
+    CHANGE_SCHAT_ACCOUNT_STATUS,
     POLICY,
     PROFILE,
     ACTIVATE_DEVICE2,
@@ -79,7 +81,8 @@ import {
     SERVICES_HISTORY,
     CANCEL_EXTENDED_SERVICE,
     GET_DEVICE_LIST,
-    GET_DEVICE_BILLING_HISTORY
+    GET_DEVICE_BILLING_HISTORY,
+    DEVICE_NOT_FOUND
 } from "../../constants/ActionTypes";
 
 import {
@@ -196,7 +199,7 @@ const initialState = {
     guestSimAll: 1,
     encryptSimAll: 1,
     unrGuest: 0,
-    unrEncrypt: 0,
+    unrEncrypt: 1,
     simUpdated: false,
     simDeleted: false,
     simHistoryList: [],
@@ -238,6 +241,13 @@ export default (state = initialState, action) => {
                 is_policy_process: 0,
                 noOfApp_push_pull: 0,
                 noOfApp_pushed_pulled: 0,
+            }
+        }
+        case DEVICE_NOT_FOUND: {
+            // console.log("CLEAR STATE FUNCTION");
+            return {
+                ...state,
+                device_found: false,
             }
         }
         case GET_DEVICE_DETAILS: {
@@ -692,6 +702,38 @@ export default (state = initialState, action) => {
                 simloading: false
             }
         }
+
+        case RESET_CHAT_PIN: {
+
+          if (action.payload.status) {
+            success({
+              title: action.payload.msg,
+            });
+          } else {
+            error({
+              title: action.payload.msg,
+            });
+          }
+          return {
+            ...state,
+          }
+        }
+
+      case CHANGE_SCHAT_ACCOUNT_STATUS: {
+
+        if (action.payload.status) {
+          success({
+            title: action.payload.msg,
+          });
+        } else {
+          error({
+            title: action.payload.msg,
+          });
+        }
+        return {
+          ...state,
+        }
+      }
 
 
         // Common Reducer: to display the message from server
@@ -1898,25 +1940,7 @@ function handleApplyBtn(pageName, undoControls, redoControls, undoExtensions, re
         clearBtn: false,
     }
 
-    if (pageName === MAIN_MENU) {
-        console.log("changes: ", undoControls, undoExtensions, undoApps);
-        if (undoControls.length > 1 || undoExtensions.length > 1 || undoApps.length > 1) {
-            buttons = {
-                applyBtn: true,
-                undoBtn: false,
-                redoBtn: false,
-                clearBtn: true
-            }
-        } else {
-            buttons = {
-                undoBtn: false,
-                redoBtn: false,
-                clearBtn: false,
-                applyBtn: false
-            }
-        }
-    }
-    else if (pageName === APPS) {
+    if (pageName === APPS) {
         // console.log("undoApps.length ", undoApps.length, "redoApps.length ", redoApps.length)
 
         if ((undoApps.length === 0 || undoApps.length === 1) && redoApps.length === 0) {
@@ -2030,6 +2054,25 @@ function handleApplyBtn(pageName, undoControls, redoControls, undoExtensions, re
                 applyBtn: true,
                 redoBtn: true,
                 clearBtn: true,
+            }
+        }
+
+    }
+    else {
+        // console.log("changes: ", undoControls, undoExtensions, undoApps);
+        if (undoControls.length > 1 || undoExtensions.length > 1 || undoApps.length > 1) {
+            buttons = {
+                applyBtn: true,
+                undoBtn: false,
+                redoBtn: false,
+                clearBtn: true
+            }
+        } else {
+            buttons = {
+                undoBtn: false,
+                redoBtn: false,
+                clearBtn: false,
+                applyBtn: false
             }
         }
 

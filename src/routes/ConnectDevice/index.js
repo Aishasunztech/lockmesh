@@ -5,6 +5,7 @@ import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs } fr
 import CircularProgress from "components/CircularProgress/index";
 import DeviceSettings from './components/DeviceSettings';
 import { convertToLang } from '../../routes/utils/commonUtils';
+import DeviceNotFound from '../InvalidPage/deviceNotFound';
 import BackBtn from './back';
 import {
   getDeviceDetails,
@@ -43,7 +44,9 @@ import {
   clearApplications,
   clearState,
   clearResyncFlag,
-  resetDevice
+  changeSchatPinStatus,
+  resetDevice,
+  deviceNotFound, resetChatPin
 } from "../../appRedux/actions/ConnectDevice";
 
 import { getDevicesList, editDevice } from '../../appRedux/actions/Devices';
@@ -66,7 +69,8 @@ import {
   ackUninstalledApps,
   ackSettingApplied,
   sendOnlineOfflineStatus,
-  deviceSynced
+  deviceSynced,
+
 } from "../../appRedux/actions/Socket";
 
 import imgUrl from '../../assets/images/mobile.png';
@@ -148,7 +152,7 @@ class ConnectDevice extends Component {
       // else if (this.props.pageName === MANAGE_PASSWORD) {
       //   this.setState({ dynamicBackButton: false })
       //   this.props.changePage(MAIN_MENU);
-      // } 
+      // }
 
       else {
         this.setState({ dynamicBackButton: false })
@@ -160,7 +164,7 @@ class ConnectDevice extends Component {
   componentDidMount() {
 
     const device_id = isBase64(this.props.match.params.device_id);
-
+    // console.log(device_id);
     if (device_id && device_id !== '') {
 
       // this.setState({
@@ -184,7 +188,10 @@ class ConnectDevice extends Component {
       this.props.getImeiHistory(device_id);
       this.props.getDealerApps();
       this.props.getActivities(device_id)
+    } else {
+      this.props.deviceNotFound();
     }
+
 
     // this.props.endLoading();
     setTimeout(() => {
@@ -224,7 +231,7 @@ class ConnectDevice extends Component {
 
   componentWillReceiveProps(nextProps) {
     const device_id = isBase64(nextProps.match.params.device_id);
-
+    // console.log(device_id);
     if (device_id) {
       if (this.props.translation != nextProps.translation) {
         this.mainMenu = mobileMainMenu(nextProps.translation);
@@ -236,6 +243,8 @@ class ConnectDevice extends Component {
           apk_list: nextProps.apk_list
         })
       }
+
+
       // there is no use of pathname under device id section
       // if(this.props.history.location.pathname !== nextProps.history.location.pathname){
       // if(this.props.pathName !== nextProps.pathName){
@@ -262,8 +271,9 @@ class ConnectDevice extends Component {
         }
       }
       // }
+    } else {
+      this.props.deviceNotFound();
     }
-
     if (this.props !== nextProps) {
       // console.log('object, ', nextProps.showMessage)
       if (nextProps.reSync) {
@@ -600,11 +610,14 @@ class ConnectDevice extends Component {
                 <Col className="gutter-row left_bar" xs={24} sm={24} md={24} lg={24} xl={8} span={8}>
                   <DeviceSidebar
                     device_details={this.props.device_details}
+                    resetChatPin={this.props.resetChatPin}
+                    changeSchatPinStatus={this.props.changeSchatPinStatus}
                     refreshDevice={this.refreshDevice}
                     startLoading={this.props.startLoading}
                     endLoading={this.props.endLoading}
                     auth={this.props.auth}
                     translation={this.props.translation}
+                    history={this.props.history}
                   />
                 </Col>
                 <Col className="gutter-row action_group" span={8} xs={24} sm={24} md={24} lg={24} xl={8}>
@@ -723,7 +736,10 @@ class ConnectDevice extends Component {
                 : null : null}
 
 
-        </div> : <h1>{convertToLang(this.props.translation[DEVICE_NOT_FOUND], "Device Not Found")} </h1>
+        </div>
+        :
+        // <h1>{convertToLang(this.props.translation[DEVICE_NOT_FOUND], "Device Not Found")} </h1>
+        <DeviceNotFound />
     )
   }
 }
@@ -785,7 +801,10 @@ function mapDispatchToProps(dispatch) {
     ackSettingApplied: ackSettingApplied,
     sendOnlineOfflineStatus: sendOnlineOfflineStatus,
     deviceSynced: deviceSynced,
-    resetDevice: resetDevice
+    resetDevice: resetDevice,
+    deviceNotFound: deviceNotFound,
+    resetChatPin: resetChatPin,
+    changeSchatPinStatus: changeSchatPinStatus,
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, auth, socket, settings }, ownProps) => {

@@ -72,20 +72,19 @@ class AppFilter extends Component {
             // console.log("Will Recieve Props", nextProps.defaultPagingValue, this.props.defaultPagingValue);
             this.setPagination(nextProps.defaultPagingValue)
         }
-        if (this.props.selectedOptions !== nextProps.selectedOptions) {
-            // console.log(nextProps.selectedOptions, "componentWillReceiveProps selectedOptions", this.props.selectedOptions);
-            // console.log("componentWillReceiveProps", this.state.selectedDisplayValues);
-            // alert('recive props', nextProps.selectedOptions);
-            // console.log(' recive props set dropdwon', nextProps);
-            // this.setDropdowns(nextProps.selectedOptions);
+        // if (this.props.selectedOptions !== nextProps.selectedOptions) {
+        // console.log(nextProps.selectedOptions, "componentWillReceiveProps selectedOptions", this.props.selectedOptions);
+        // console.log("componentWillReceiveProps", this.state.selectedDisplayValues);
+        // alert('recive props', nextProps.selectedOptions);
+        // console.log(' recive props set dropdwon', nextProps);
+        // this.setDropdowns(nextProps.selectedOptions);
 
-            //  this.props.handleCheckChange();
-        }
+        //  this.props.handleCheckChange();
+        // }
     }
 
     componentDidUpdate(prevProps) {
         if (this.props.selectedOptions !== prevProps.selectedOptions) {
-            console.log(prevProps.selectedOptions, "componentDidUpdate selectedOptions", this.props.selectedOptions);
             this.setDropdowns(this.props.selectedOptions);
         }
     }
@@ -141,7 +140,7 @@ class AppFilter extends Component {
             fullScreenClass3 = "col-md-2";
         }
 
-        //  console.log('render props selectedOptions ...', this.props.selectedOptions);
+        // console.log('render props selectedOptions ...', this.props.selectedOptions, this.props.options);
         //  console.log('allSelected val this.props.selectedOptions are: ', this.props.selectedOptions)
         // console.log('render state selectedDisplayValues ...', this.state.selectedDisplayValues);
         let allSelectedOpt;
@@ -172,6 +171,8 @@ class AppFilter extends Component {
                                         labelKey="value"
                                         value={this.state.selectedDisplayValues}
                                         placeholder={convertToLang(translation[Appfilter_Display], "Display")}
+                                        manySelectedPlaceholder = {allSelectedOpt ? "All Selected" : `${this.state.selectedDisplayValues.length} selected`}
+                                        allSelectedPlaceholder={allSelectedOpt ? "All Selected" : ""}
                                         className="display_"
                                         multiple={true}
                                         numberDisplayed={true}
@@ -324,14 +325,24 @@ class AppFilter extends Component {
                                                                 >
                                                                     {this.props.addButtonText}
                                                                 </Button> :
-                                                                <Button
-                                                                    type="primary"
-                                                                    disabled={(this.props.disableAddButton === true) ? true : false}
-                                                                    style={{ width: '100%' }}
-                                                                    onClick={() => this.props.handleAppFilterAddButton(true)}
-                                                                >
-                                                                    {this.props.addButtonText}
-                                                                </Button>
+                                                                (this.props.handleSendMsgModal) ?
+                                                                    <Button
+                                                                        type="primary"
+                                                                        // disabled={(this.props.disableAddButton === true) ? true : false}
+                                                                        style={{ width: '100%' }}
+                                                                        onClick={() => this.props.handleSendMsgButton(true)}
+                                                                    >
+                                                                        {this.props.addButtonText}
+                                                                    </Button>
+                                                                    :
+                                                                    <Button
+                                                                        type="primary"
+                                                                        disabled={(this.props.disableAddButton === true) ? true : false}
+                                                                        style={{ width: '100%' }}
+                                                                        onClick={() => this.props.handleAppFilterAddButton(true)}
+                                                                    >
+                                                                        {this.props.addButtonText}
+                                                                    </Button>
 
                                     : null
                             }
@@ -383,5 +394,10 @@ var mapStateToProps = ({ routing, auth }, otherProps) => {
     };
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AppFilter));
+/**
+ * @author Usman Hafeez
+ * commented withRouter function
+ */
+// export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AppFilter));
+export default connect(mapStateToProps, mapDispatchToProps)(AppFilter);
 

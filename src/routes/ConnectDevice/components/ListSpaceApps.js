@@ -211,6 +211,7 @@ class ListSpaceApps extends Component {
                     onCancel={this.onCancel}
                     onOk={this.onCancel}
                     className="perm_pop"
+                    cancelButtonProps={{ style: { display: 'none' } }}
                 >
                     <AppList
                         type={this.props.type}

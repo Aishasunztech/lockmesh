@@ -1,6 +1,7 @@
 // libraries
 import React, { Component, Fragment } from "react";
-import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Divider, Table, Select, Form } from "antd";
+import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Divider, Table, Select, AutoComplete, Input } from "antd";
+import { Markup } from "interweave";
 
 // Components
 import EditDealer from '../../dealers/components/editDealer';
@@ -9,7 +10,7 @@ import DealerSalesHistory from "./DealerSalesHistory";
 import DealerDomains from './DealerDomains';
 
 // Helpers
-import { convertToLang } from '../../utils/commonUtils'
+import { convertToLang, componentSearch } from '../../utils/commonUtils'
 // import { getColor, isBase64, convertToLang } from "../utils/commonUtils"
 // import { getDealerDetails, editDealer } from '../../appRedux/actions'
 // import RestService from "../../appRedux/services/RestServices";
@@ -32,6 +33,9 @@ import {
     DEALER_TEXT
 } from '../../../constants/DealerConstants';
 import CreditsLimits from "./CreditLimits";
+import DemosLimit from "./DemosLimits";
+import RestrictDealerAccount from "./RestrictDealerAccount";
+import { ADMIN } from "../../../constants/Constants";
 
 
 // user defined
@@ -39,6 +43,7 @@ const confirm = Modal.confirm;
 
 
 function showConfirm(_this, dealer, action, btn_title, name = "") {
+    console.log("dealer ", dealer)
     let title_Action = '';
     if (btn_title == 'SUSPEND') {
         title_Action = convertToLang(_this.props.translation[Button_Suspend], "SUSPEND ");
@@ -53,7 +58,14 @@ function showConfirm(_this, dealer, action, btn_title, name = "") {
     }
 
     confirm({
-        title: `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[OF_THIS], " of this ")} Dealer ${name ? `(${name})` : ""} ?`,
+        title: <Markup content={(btn_title === 'DELETE') ?
+            convertToLang(_this.props.translation[''], `Do you wish to Permanently Delete Dealer ${name}?<br/> This action cannot be reversed!`)
+            :
+            (btn_title === 'RESET PASSWORD') ?
+                `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[OF_THIS], " of this dealer")} ${name ? `(${name})` : ""} ?`
+                :
+                `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[""], " this dealer ")} ${name ? `(${name})` : ""} ?`
+        } />,
         onOk() {
             return new Promise((resolve, reject) => {
                 setTimeout(Math.random() > 0.5 ? resolve : reject);
@@ -78,7 +90,9 @@ export default class DealerAction extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            dealerList: []
+            dealerList: [],
+            searchedValue: '',
+            disabledSearchButton: true
         }
     }
 
@@ -89,35 +103,101 @@ export default class DealerAction extends Component {
         //     })
         // }
     }
-    onChangeDealer = (dealer_id) => {
-        let path = `${btoa(dealer_id)}`.trim()
-        this.props.history.push(path)
+
+    handleDealerSearch = (value) => {
+        
+        let dealerList = [];
+        let index = -1;
+        let states = {}
+
+        if (value && this.props.dealerList && this.props.dealerList.length) {
+            dealerList = componentSearch(this.props.dealerList, value)
+
+            index = this.props.dealerList.findIndex((dealer) => (dealer.dealer_name.toLowerCase() === value.toLowerCase() || dealer.dealer_id.toString().toLowerCase() === value.toLowerCase() || dealer.dealer_email.toLowerCase() === value.toLowerCase() || dealer.link_code.toString().toLowerCase() === value.toLowerCase()));
+        }
+
+
+        states.dealerList = dealerList;
+        states.searchedValue = value
+
+        if (index === -1) {
+            states.disabledSearchButton = true;
+        } else {
+            states.disabledSearchButton = false
+        }
+        console.log("states:", states)
+        this.setState({
+            ...states
+        });
     }
-    renderDealerList = () => {
-        let dealerList = this.props.dealerList
-        return dealerList.map((dealer, index) => {
-            return (<Select.Option key={index} value={dealer.dealer_id}>{dealer.dealer_name}</Select.Option>)
-        })
+
+    handleDealerChange = (e) => {
+        if (e) {
+            let path = `${btoa(e)}`.trim()
+            this.props.history.push(path)
+        }
     }
+
+    handleDealerButtonClick = (e) => {
+        if (this.state.searchedValue) {
+            let path = `${btoa(this.state.searchedValue)}`.trim()
+            this.props.history.push(path)
+        }
+    }
+
     render() {
         if (!this.props.dealer) {
             return null;
         }
         let dealer = this.props.dealer;
+
+        const { dealerList } = this.state;
+
         const dealer_status = (dealer.account_status === "suspended") ? "Suspended" : "Activated";
 
         const restrict_button_type = (dealer_status === "Activated") ? "danger" : "default";
-        const restrict_button_text = (dealer_status === 'Activated') ? 'Suspend/Restrict' : 'Activate';
+        const restrict_button_text = (dealer_status === 'Activated') ? 'Suspend' : 'Activate';
 
         const undo_button_type = (dealer.unlink_status === 0) ? 'danger' : "default";
-        const undo_button_text = (dealer.unlink_status === 0) ? 'Delete' : 'Undelete'
+        const undo_button_text = (dealer.unlink_status === 0) ? 'Delete' : 'Undelete';
+
         return (
             <Fragment>
-                <Card className="search_dev_id">
+
+                {/* Dealer Search */}
+                <Card className="search_dev_id" style={{ borderRadius: 12 }}>
                     <Row gutter={16} type="flex" justify="center" align="top">
                         <Col span={24} className="gutter-row" justify="center" >
-                            <h4 className="mb-6">Search Dealer ID</h4>
-                            <Select
+                            <h4 className="mb-6">Search Dealer</h4>
+                            <AutoComplete
+                                className="global-search"
+                                size="large"
+                                style={{ width: '100%' }}
+                                dataSource={dealerList.map((item, index) => {
+                                    return (<Select.Option key={index} value={item.dealer_id.toString()}>{item.dealer_name}</Select.Option>)
+                                })}
+                                onSelect={this.handleDealerChange}
+                                onSearch={this.handleDealerSearch}
+                                placeholder={convertToLang(this.props.translation[""], "Search Dealer")}
+                                optionLabelProp="text"
+                            >
+                                <Input
+                                    suffix={
+                                        <Button
+                                            className="search-btn"
+                                            style={{ marginRight: -12 }}
+                                            size="large"
+                                            type="primary"
+                                            onClick={this.handleDealerButtonClick}
+                                            disabled={this.state.disabledSearchButton}
+
+                                        >
+                                            <Icon type="search" />
+                                        </Button>
+                                    }
+                                />
+                            </AutoComplete>
+                            {/* <Select
                                 showSearch={true}
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                 style={{ width: '100%' }}
@@ -125,42 +205,63 @@ export default class DealerAction extends Component {
                                 onChange={this.onChangeDealer}
                             >
                                 {this.renderDealerList()}
-                            </Select>
+                            </Select> */}
                         </Col>
                     </Row>
                 </Card>
 
+                {/* Dealer Action */}
                 <Card style={{ borderRadius: 12 }}>
                     <Row gutter={16} type="flex" justify="center" align="top">
+
+                        {/* Activities Button */}
                         <Col span={12} className="gutter-row" justify="center" >
                             <Button disabled style={{ width: "100%", marginBottom: 16, }} >
                                 <h6 className="mb-0">Activity</h6>
                             </Button>
                         </Col>
+
+                        {/* Domains Button */}
                         <Col
                             span={12}
                             className="gutter-row"
-                            justify="center"
-                        >
+                            justify="center">
                             <Button
-                                onClick={() => this.refs.dealerDomains.showModal(this.props.dealer, this.props.getDealerDomains)}
-                                style={{ width: "100%", marginBottom: 16, }}
-                            >
+                                onClick={() => this.refs.dealerDomains.showModal(this.props.dealer, this.props.getDomains, this.props.getDealerDomains)}
+                                style={{ width: "100%", marginBottom: 16, }}>
                                 <h6 className="mb-0">Domains</h6>
                             </Button>
                         </Col>
-                        <Col className="gutter-row" justify="center" span={12} >
-                            <Button style={{ width: "100%", marginBottom: 16, }}
-                                onClick={() => { this.form1.showModal() }}
-                            >
-                                <h6 className="mb-0">Credit Limit</h6>
-                            </Button>
-                        </Col>
-                        <Col className="gutter-row" justify="center" span={12} >
-                            <Button disabled style={{ width: "100%", marginBottom: 16, }}>
-                                <h6 className="mb-0">DEMO</h6>
-                            </Button>
-                        </Col>
+
+                        {/* Credit Limit Button */}
+                        {(this.props.authUser.type === ADMIN) ?
+                            <Col className="gutter-row" justify="center" span={12} >
+                                <Button style={{ width: "100%", marginBottom: 16, }}
+                                    onClick={() => { this.form1.showModal() }}
+                                >
+                                    <h6 className="mb-0">Credit Limit</h6>
+                                </Button>
+                            </Col>
+                            :
+                            null
+                        }
+
+                        {/* Demo Button */}
+                        {(this.props.authUser.type === ADMIN) ?
+
+                            <Col className="gutter-row" justify="center" span={12} >
+                                <Button
+                                    style={{ width: "100%", marginBottom: 16, }}
+                                    onClick={() => { this.form2.showModal()}}
+                                >
+                                    <h6 className="mb-0">DEMO</h6>
+                                </Button>
+                            </Col>
+                            :
+                            null
+                        }
+
+                        {/* Payment History Button */}
                         <Col
                             className="gutter-row"
                             justify="center"
@@ -168,11 +269,12 @@ export default class DealerAction extends Component {
                         >
                             <Button
                                 style={{ width: "100%", marginBottom: 16, }}
-                                onClick={() => this.refs.dealerPaymentHistory.showModal(this.props.dealer, this.props.getDealerPaymentHistory)}
-                            >
+                                onClick={() => this.refs.dealerPaymentHistory.showModal(this.props.dealer, this.props.getDealerPaymentHistory)}>
                                 <h6 className="mb-0">Payment History</h6>
                             </Button>
                         </Col>
+
+                        {/* Sales History Button */}
                         <Col
                             className="gutter-row"
                             justify="center"
@@ -188,6 +290,7 @@ export default class DealerAction extends Component {
                         </Col>
                     </Row>
                 </Card>
+
                 <Card style={{ borderRadius: 12 }}>
                     <Row
                         gutter={16}
@@ -195,14 +298,17 @@ export default class DealerAction extends Component {
                         justify="center"
                         align="top"
                     >
+                        {/* Password Button */}
                         <Col span={12} className="gutter-row" justify="center" >
                             <Button
                                 style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }}
                                 onClick={() => showConfirm(this, this.props.dealer, this.props.updatePassword, 'RESET PASSWORD', this.props.dealer.dealer_name)}
                             >
                                 Pass Reset
-                        </Button>
+                            </Button>
                         </Col>
+
+                        {/* Edit Button */}
                         <Col className="gutter-row" justify="center" span={12} >
                             <Button
                                 // disabled
@@ -211,21 +317,51 @@ export default class DealerAction extends Component {
                             >
                                 <Icon type='edit' />
                                 Edit
-                        </Button>
+                            </Button>
                         </Col>
+
+                        {/* Suspend Button */}
                         <Col className="gutter-row" justify="center" span={12} >
                             <Button
                                 type={restrict_button_type}
                                 style={{ width: "100%", marginBottom: 16, }}
                                 onClick={
                                     () => (!dealer.account_status) ?
-                                        showConfirm(this, dealer.dealer_id, this.props.suspendDealer, 'SUSPEND') :
-                                        showConfirm(this, dealer.dealer_id, this.props.activateDealer, 'ACTIVATE')
+                                        showConfirm(this, dealer.dealer_id, this.props.suspendDealer, 'SUSPEND', this.props.dealer.dealer_name) :
+                                        showConfirm(this, dealer.dealer_id, this.props.activateDealer, 'ACTIVATE', this.props.dealer.dealer_name)
                                 }
                             >
                                 {restrict_button_text}
                             </Button>
                         </Col>
+
+                        {/* Account Limit Button */}
+                        {
+                            (this.props.authUser.type === ADMIN) ?
+                                <Col span={12} className="gutter-row" justify="center" >
+                                    <Button
+                                        className="btn_break_line"
+                                        style={{
+                                            width: "100%", marginBottom: 16,
+                                            backgroundColor: 'yellow'
+                                            // backgroundColor: '#f31517', color: '#fff'
+                                        }}
+                                        onClick={
+                                            (e) => {
+                                                this.restrictDealerAction.showModal(dealer, this.props.changeDealerStatus)
+                                                // showConfirm(this, this.props.dealer, this.props.handleDealerChange, 'RESET PASSWORD', this.props.dealer.dealer_name)
+                                            }
+                                        }
+
+                                    >
+                                        {/* <Icon type="lock" className="lock_icon" /> */}
+                                        Restrict
+                                    </Button>
+                                </Col>
+                                : null
+                        }
+
+                        {/* Delete Button */}
                         <Col span={12} className="gutter-row" justify="center" >
                             <Button
                                 type={undo_button_type}
@@ -236,10 +372,9 @@ export default class DealerAction extends Component {
                                 }}
                                 onClick={
                                     () => (dealer.unlink_status === 0) ?
-                                        showConfirm(this, dealer.dealer_id, this.props.deleteDealer, 'DELETE') :
+                                        showConfirm(this, dealer.dealer_id, this.props.deleteDealer, 'DELETE', this.props.dealer.dealer_name) :
                                         showConfirm(this, dealer.dealer_id, this.props.undoDealer, 'UNDELETE')
                                 }
-
                             >
                                 <Icon type="lock" className="lock_icon" />
                                 {undo_button_text}
@@ -268,6 +403,14 @@ export default class DealerAction extends Component {
                     credits_limit={this.props.dealer.credits_limit}
                     setCreditLimit={this.props.setCreditLimit}
                 />
+                <DemosLimit
+                    ref='demosLimit'
+                    translation={this.props.translation}
+                    wrappedComponentRef={(form) => this.form2 = form}
+                    dealer={this.props.dealer}
+                    demos={this.props.dealer.demos}
+                    setDemosLimit={this.props.setDemosLimit}
+                />
 
                 <DealerSalesHistory
                     ref='dealerSalesHistory'
@@ -276,10 +419,21 @@ export default class DealerAction extends Component {
                 />
 
                 <DealerDomains
-                    ref="dealerDomains"
+                    ref='dealerDomains'
                     translation={this.props.translation}
+                    domainPermission={this.props.domainPermission}
                     domains={this.props.domains}
+                    allDomainList={this.props.allDomainList}
+                    authUser={this.props.authUser}
+                    getDomains={this.props.getDomains}
                 // dealerDomains
+                />
+
+                <RestrictDealerAccount
+                    ref='restrictDealerAction'
+                    dealer={this.props.dealer}
+                    wrappedComponentRef={(form) => this.restrictDealerAction = form}
+                    translation={this.props.translation}
                 />
 
             </Fragment >

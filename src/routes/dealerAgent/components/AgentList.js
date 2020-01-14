@@ -12,10 +12,12 @@ import {
     checkValue,
     getSortOrder,
     // checkRemainDays, 
-    convertToLang
+    convertToLang,
+    convertTimezoneValue
 } from '../../utils/commonUtils'
 import { Button_Yes, Button_No } from '../../../constants/ButtonConstants';
 import { DEALER, ADMIN } from '../../../constants/Constants';
+import { TIMESTAMP_FORMAT } from '../../../constants/Application';
 
 
 
@@ -68,7 +70,7 @@ export default class DevicesList extends Component {
                         type="ghost"
                         onClick={(e) => this.props.handleResetPwd(agent.id)}
                     >
-                        {convertToLang(this.props.translation['PASSWORD RESET'], "PASSWORD RESET")}
+                        {convertToLang(this.props.translation['PASS RESET'], "PASS RESET")}
                     </Button>
                 </Fragment>),
                 name: checkValue(agent.name),
@@ -82,7 +84,8 @@ export default class DevicesList extends Component {
                     />
                 ),
                 email: checkValue(agent.email),
-                created_at: checkValue(agent.created_at),
+                created_at: convertTimezoneValue(this.props.user.timezone, agent.created_at, TIMESTAMP_FORMAT),
+                // created_at: checkValue(agent.created_at),
             }
         });
     }

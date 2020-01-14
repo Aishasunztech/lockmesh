@@ -2,15 +2,20 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Divider, Table, Select } from "antd";
+import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Divider, Table, Select, Avatar } from "antd";
+import moment from 'moment-timezone';
 
 // methods, constants and components
 import AppFilter from '../../components/AppFilter';
 import DealerAction from "./components/DealerActions";
+import DealerNotFoundPage from '../InvalidPage/dealerNotFound';
+import CircularProgress from "components/CircularProgress/index";
+import DealerPaymentHistory from './components/DealerPaymentHistory';
+import DealerOverDuePayments from './components/DealerOverDuePayments';
 
 // helpers and actions
 import RestService from "../../appRedux/services/RestServices";
-import { getColor, isBase64, convertToLang } from "../utils/commonUtils"
+import { getColor, isBase64, convertToLang, checkValue, checkTimezoneValue, convertTimezoneValue } from "../utils/commonUtils"
 import {
     getDealerDetails,
     editDealer,
@@ -23,9 +28,15 @@ import {
     setCreditLimit,
     getDealerSalesHistory,
     getDealerDomains,
-    getDealerList
+    getAllDealers,
+    setDemosLimit,
+    changeDealerStatus,
+    getDomains,
+    connectDealerDomainPermission
 } from '../../appRedux/actions'
+import image from '../../assets/images/warning.png'
 import styles from './connect_dealer.css'
+import { TIMESTAMP_FORMAT } from "../../constants/Application";
 
 class ConnectDealer extends Component {
     constructor(props) {
@@ -34,9 +45,10 @@ class ConnectDealer extends Component {
             dealer_id: isBase64(props.match.params.dealer_id),
             currency: 'USD',
             currency_sign: '$',
-            currency_unit_price: 1
+            currency_price: null,
         }
-        this.dealerInfoColumns1 = [
+
+        this.dealerAccountInfoColumns = [
             {
                 dataIndex: 'name',
                 key: 'name',
@@ -47,19 +59,24 @@ class ConnectDealer extends Component {
                 key: 'value',
                 className: 'ac_pro_val',
             },
-        ]
+        ];
+
         this.dealerInfoColumns = [
             {
                 dataIndex: 'name',
                 key: 'name',
                 className: 'dealer_info',
+                title: 'Status',
             },
             {
                 dataIndex: 'value',
                 key: 'value',
-                className: '',
+                className: 'dealer_values',
+                title: '',
+
             },
         ]
+
         this.overDueColumns = [
             {
                 title: 'A',
@@ -73,26 +90,27 @@ class ConnectDealer extends Component {
                 key: 'b',
                 className: '',
             },
-            {
-                title: 'C',
-                dataIndex: 'c',
-                key: 'c',
-                className: '',
-            },
-            {
-                title: 'D',
-                dataIndex: 'd',
-                key: 'd',
-                className: '',
-            },
         ]
+
+        this.a_s_columns = [
+            {
+                title: 'RESTRICTED',
+                dataIndex: 'name',
+                key: 'name',
+            },
+            {
+                title: '21+ days Overdue',
+                dataIndex: 'value',
+                key: 'value',
+            },
+        ];
     }
 
     componentDidMount() {
         const dealer_id = isBase64(this.props.match.params.dealer_id);
         if (dealer_id) {
             this.props.getDealerDetails(dealer_id);
-            this.props.getDealerList('dealer', false);
+            this.props.getAllDealers();
         }
     }
 
@@ -115,23 +133,24 @@ class ConnectDealer extends Component {
             this.setState({
                 currency: 'usd',
                 currency_price: null,
-                currency_unit_price: 1,
             })
         } else {
+            let _this = this;
             RestService.exchangeCurrency(e).then((response) => {
                 if (response.data.status) {
-                    if (this.props.dealer.credits > 0) {
-                        this.setState({
-                            currency: e,
-                            currency_unit_price: response.data.currency_unit,
-                            currency_price: this.props.dealer.credits * response.data.currency_unit
-                        })
-                    } else {
-                        this.setState({
-                            currency: e,
-                            currency_unit_price: response.data.currency_unit,
-                        })
-                    }
+                    console.log(this.props.dealer.credits * response.data.currency_unit)
+                    _this.setState({
+                        currency: e,
+                        currency_price: (this.props.dealer.credits * response.data.currency_unit),
+                    })
+                    // if (this.props.dealer.credits > 0) {
+                    //     this.setState({
+                    //         currency: e,
+                    //         currency_price: this.props.dealer.credits * response.data.currency_unit
+                    //     })
+                    // } else {
+
+                    // }
                 }
             })
         }
@@ -139,9 +158,19 @@ class ConnectDealer extends Component {
 
     renderDealerInfo = () => {
         let dealer = this.props.dealer;
+        // console.log("dealer ", dealer, this.props.authUser);
+        let dealer_tz = checkTimezoneValue(dealer.timezone);
+        // console.log("dealer_tz ", dealer_tz)
         if (dealer) {
-            const dealer_status = (dealer.unlink_status == 1) ? "Archived" : (dealer.account_status === "suspended") ? "Suspended" : "Activated";
+            const account_balance_status = (dealer.account_balance_status == 'restricted') ? "Restriction Level 1" : (dealer.account_balance_status === "suspended") ? "Restriction Level 2" : "Active";
+            let account_balance_style = (dealer.account_balance_status == 'restricted') ? 'restrict1' : (dealer.account_balance_status === "suspended") ? 'restrict2' : 'active';
             return [
+                {
+                    key: '8',
+                    name: <a className="break_text">Account Balance Status</a>,
+                    value: <span className='text_center_td'>{account_balance_status.toUpperCase()}</span>,
+                    className: account_balance_style
+                },
                 {
                     key: '1',
                     name: <a>Dealer Name</a>,
@@ -160,7 +189,7 @@ class ConnectDealer extends Component {
                 {
                     key: '4',
                     name: <a>Dealer Email</a>,
-                    value: (dealer.dealer_email) ? dealer.dealer_email : 'N/A',
+                    value: <div className="break_text">{(dealer.dealer_email) ? dealer.dealer_email : 'N/A'}</div>,
                 },
                 {
                     key: '5',
@@ -170,33 +199,132 @@ class ConnectDealer extends Component {
                 {
                     key: '6',
                     name: <a>Demos</a>,
-                    value: 'N/A',
+                    value: dealer.demos,
                 },
                 {
                     key: '7',
-                    name: <a>Status</a>,
-                    value: dealer_status,
+                    name: <a>Remaining Demos</a>,
+                    value: dealer.remaining_demos,
                 },
+                // {
+                //     key: '8',
+                //     name: <a>Status</a>,
+                //     value: dealer_status,
+                // },
                 {
-                    key: '8',
+                    key: '9',
                     name: <a>Parent Dealer</a>,
                     value: (dealer.parent_dealer) ? dealer.parent_dealer : 'N/A',
                 },
                 {
-                    key: '9',
-                    name: <a>Last Login</a>,
-                    value: (dealer.last_login) ? dealer.last_login : 'N/A',
+                    key: 41,
+                    name: <a>{convertToLang(this.props.translation[""], "COMPANY NAME")}</a>,
+                    value: checkValue(dealer.company_name),
+                },
+                {
+                    key: 42,
+                    name: <a>{convertToLang(this.props.translation[""], "COMPANY ADDRESS")}</a>,
+                    value: <span className="company_address">{checkValue(dealer.company_address)}</span>,
+                },
+                {
+                    key: 43,
+                    name: <a>{convertToLang(this.props.translation[""], "CITY")}</a>,
+                    value: checkValue(dealer.city),
+                },
+                {
+                    key: 44,
+                    name: <a>{convertToLang(this.props.translation[""], "STATE/PROVINCE")}</a>,
+                    value: checkValue(dealer.state),
+                },
+                {
+                    key: 45,
+                    name: <a>{convertToLang(this.props.translation[""], "COUNTRY")}</a>,
+                    value: checkValue(dealer.country),
+                },
+                {
+                    key: 46,
+                    name: <a>{convertToLang(this.props.translation[""], "POSTAL CODE")}</a>,
+                    value: checkValue(dealer.postal_code),
+                },
+                {
+                    key: 47,
+                    name: <a>{convertToLang(this.props.translation[""], "TEL #")}</a>,
+                    value: checkValue(dealer.tel_no),
+                },
+                {
+                    key: 48,
+                    name: <a>{convertToLang(this.props.translation[""], "WEBSITE")}</a>,
+                    value: checkValue(dealer.website),
+                },
+                {
+                    key: 49,
+                    name: <a>{convertToLang(this.props.translation[""], "TIMEZONE")}</a>,
+                    value: dealer_tz,
                 },
                 {
                     key: '10',
-                    name: <a>Start Date</a>,
-                    value: this.props.dealer.created,
+                    name: <a>Last Login</a>,
+                    value: convertTimezoneValue(this.props.authUser.timezone, dealer.last_login, TIMESTAMP_FORMAT),
+                    // value: (dealer.last_login) ? moment(dealer.last_login).tz(convertTimezoneValue(this.props.authUser.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
+                    // value: (dealer.last_login) ? dealer.last_login : 'N/A',
                 },
+                {
+                    key: '11',
+                    name: <a>Start Date</a>,
+                    value: convertTimezoneValue(this.props.authUser.timezone, dealer.created, TIMESTAMP_FORMAT),
+                    // value: (dealer.created) ? moment(dealer.created).tz(convertTimezoneValue(this.props.authUser.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
+                    // value: this.props.dealer.created,
+                },
+
             ]
         } else {
             return []
         }
     }
+
+    ac_st_title = () => {
+        return <h4 className="credit_modal_heading weight_600">{convertToLang(this.props.translation[""], "ACCOUNT STATUS")}</h4>
+    };
+
+    renderAccountStatus = () => {
+        let statusBGC, statusDays;
+        let account_status_paragraph = '';
+        if (this.props.dealer.account_balance_status_by === 'due_credits') {
+            if (this.props.dealer.account_balance_status === 'restricted' && this.props.overdueDetails._30to60 > 0) {
+                statusBGC = 'bg_yellow';
+                statusDays = '31+ days Overdue';
+                account_status_paragraph = "Please clear payment over 31+ days to activate \"PAY LATER\" feature";
+            } else if (this.props.dealer.account_balance_status === 'restricted') {
+                statusBGC = 'bg_yellow';
+                statusDays = '21+ days Overdue';
+                account_status_paragraph = "Please clear payment over 21+ days to activate \"PAY LATER\" feature";
+            } else if (this.props.dealer.account_balance_status === 'suspended') {
+                statusBGC = 'bg_red';
+                statusDays = '60+ days Overdue';
+                account_status_paragraph = "Please clear 60+ days payment to allow new device activation";
+            } else {
+                statusBGC = 'bg_green';
+                statusDays = 'No Overdue';
+            }
+        } else if (this.props.dealer.account_balance_status_by === 'admin') {
+            statusBGC = 'bg_red';
+            statusDays = 'admin';
+        } else {
+            statusBGC = 'bg_green';
+            statusDays = 'No Overdue';
+        }
+
+        return [
+            {
+                name: <h5 className={'weight_600 p-5 text-uppercase ' + statusBGC} >Restricted By</h5>,
+                value: statusDays
+            },
+            {
+                name: <h5 className={'weight_600 p-5 text-uppercase ' + statusBGC} >{this.props.dealer.account_balance_status}</h5>,
+                value: <h5 className="weight_600 bg_brown p-5">{statusDays} </h5>,
+            }
+        ];
+    };
 
     renderAccountData = () => {
         let dealer = this.props.dealer;
@@ -224,12 +352,12 @@ class ConnectDealer extends Component {
                 {
                     key: '3',
                     name: 'USD equivalent:',
-                    value: (this.state.currency_price) ? this.state.currency_price : dealer.credits,
+                    value: (this.state.currency_price !== null) ? this.state.currency_price : dealer.credits,
                 },
                 {
                     key: '4',
                     name: 'Credit Limit (Credits):',
-                    value: dealer.credits_limit,
+                    value: Math.abs(dealer.credits_limit),
                 }
             ]
         } else {
@@ -255,10 +383,39 @@ class ConnectDealer extends Component {
             return [
                 {
                     key: '1',
-                    a: <div><span className="overdue_txt">0-21:</span> <span className="overdue_values">{dealer._0to21_dues}</span></div>,
-                    b: <div><span className="overdue_txt">21+:</span> <span className="overdue_values">{dealer._21to30_dues}</span></div>,
-                    c: <div><span className="overdue_txt">30+:</span> <span className="overdue_values">{dealer._30to60_dues}</span></div>,
-                    d: <div><span className="overdue_txt">60+:</span> <span className="overdue_values">{dealer._60toOnward_dues}</span></div>,
+                    a:
+                        <div
+                            onClick={() => this.refs.dealerOverDuePayments.showModal(this.props.dealer, dealer._0to21_dues_history)}
+                        >
+                            <span className="overdue_txt">0-21:</span>
+                            <span className="overdue_values">{dealer._0to21_dues}</span>
+                        </div>,
+                    b:
+                        <div
+                            onClick={() => this.refs.dealerOverDuePayments.showModal(this.props.dealer, dealer._21to30_dues_history)}
+                        >
+                            <span className="overdue_txt">21+:</span>
+                            <span className="overdue_values">{dealer._21to30_dues}</span>
+                        </div>,
+                },
+                {
+                    key: '2',
+                    // a: <div><span className="overdue_txt">0-21:</span> <span className="overdue_values">{dealer._0to21_dues}</span></div>,
+                    // b: <div><span className="overdue_txt">21+:</span> <span className="overdue_values">{dealer._21to30_dues}</span></div>,
+                    a:
+                        <div
+                            onClick={() => this.refs.dealerOverDuePayments.showModal(this.props.dealer, dealer._30to60_dues_history)}
+                        >
+                            <span className="overdue_txt">30+:</span>
+                            <span className="overdue_values">{dealer._30to60_dues}</span>
+                        </div>,
+                    b:
+                        <div
+                            onClick={() => this.refs.dealerOverDuePayments.showModal(this.props.dealer, dealer._60toOnward_history)}
+                        >
+                            <span className="overdue_txt">60+:</span>
+                            <span className="overdue_values">{dealer._60toOnward_dues}</span>
+                        </div>,
                 }
             ]
         } else {
@@ -267,96 +424,199 @@ class ConnectDealer extends Component {
     }
 
     render() {
+        let dealer = this.props.dealer;
+        let dealer_status = '';
+        let restricted_by = ''
+        let restricted_level = ''
+        let account_status_message1 = ''
+        let account_status_message2 = ''
 
+        if (dealer) {
+            dealer_status = (dealer.unlink_status == 1) ? "Archived" : (dealer.account_status === "suspended") ? "Suspend" : "Active";
+            restricted_by = dealer.account_balance_status_by === 'admin' ? 'Admin' : "Due Credits"
+            restricted_level = dealer.account_balance_status === 'restricted' ? 'Restriction Level 1' : 'Restriction Level 2'
+            account_status_message1 = "Account " + restricted_level + " by " + restricted_by
+            account_status_message2 = (dealer.account_balance_status === 'restricted' ? "(Pay Later feature disabled)" : "(You may not add new devices)")
+        }
+
+        this.dealerInfoColumns[1].title = dealer_status.toUpperCase();
         return (
+
             <Fragment>
-                <AppFilter
-                    pageHeading="Dealer Profile Page"
-                />
-                <Row gutter={16} type="flex" align="top">
+                {this.props.isLoading ? <CircularProgress /> : this.props.dealer ?
+                    <Fragment>
 
-                    {/* Dealer Information */}
-                    <Col className="" xs={24} sm={24} md={8} lg={8} xl={8}>
-                        <Card style={{ borderRadius: 12 }}>
-                            <h2 style={{ textAlign: "center" }}>Dealer Info</h2>
-                            <Divider className="mb-0" />
-                            <Table
-                                columns={this.dealerInfoColumns}
-                                bordered
-                                showHeader={false}
-                                dataSource={this.renderDealerInfo()}
-                                pagination={false}
-                                className="ac_pro_table profile_table"
-                            />
-                        </Card>
-                    </Col>
-
-                    {/* Dealer Account Information */}
-                    <Col className="" xs={24} sm={24} md={8} lg={8} xl={8}>
-                        <Card className="" style={{ borderRadius: 12 }}>
-                            <h2 style={{ textAlign: "center" }}>Account Profile</h2>
-                            <Divider className="mb-0" />
-                            <Row>
-                                <Col span={8} className="text-center ">
-                                    <img src={require("assets/images/profile-image.png")} className="mb-8 mt-16"></img>
-                                    <h1 className="mb-0" style={{ fontSize: '3vh', textTransform: 'capitalize' }}>{(this.props.dealer) ? this.props.dealer.dealer_name : 'N/A'}</h1>
-                                    <p style={{ textTransform: 'capitalize', marginBottom: '0' }}>({(this.props.dealer) ? this.props.dealer.dealer_type : 'N/A'})</p>
-                                </Col>
-                                <Col span={16} style={{ padding: '0px 15px 0 0', }}>
-                                    <Table
-                                        columns={this.dealerInfoColumns1}
-                                        bordered
-                                        showHeader={false}
-                                        dataSource={this.renderAccountData()}
-                                        pagination={false}
-                                        className="ac_pro_table"
-                                    />
-                                    <h4 className="mt-8 border_bottom">Overdue</h4>
-                                    <Table
-                                        columns={this.overDueColumns}
-                                        bordered
-                                        showHeader={false}
-                                        dataSource={this.renderOverDue()}
-                                        pagination={false}
-                                        className="ovd_table"
-                                    />
-                                </Col>
-                            </Row>
-                        </Card>
-                    </Col>
-
-                    {/* Dealer Action Buttons */}
-                    <Col className="side_action right_bar" xs={24} sm={24} md={8} lg={8} xl={8} >
-                        <DealerAction
-                            // translation
-                            translation={this.props.translation}
-
-                            // dealer information
-                            dealerList={this.props.dealerList}
-                            dealer={this.props.dealer}
-                            paymentHistory={this.props.paymentHistory}
-                            salesHistory={this.props.salesHistory}
-                            domains={this.props.domains}
-                            history={this.props.history}
-
-                            // dealer actions
-                            updatePassword={this.props.updatePassword}
-                            editDealer={this.props.editDealer}
-
-                            suspendDealer={this.props.suspendDealer}
-                            activateDealer={this.props.activateDealer}
-                            deleteDealer={this.props.deleteDealer}
-                            undoDealer={this.props.undoDealer}
-
-                            getDealerDomains={this.props.getDealerDomains}
-                            getDealerPaymentHistory={this.props.getDealerPaymentHistory}
-                            setCreditLimit={this.props.setCreditLimit}
-                            getDealerSalesHistory={this.props.getDealerSalesHistory}
+                        {/* Dealer Info Page */}
+                        <AppFilter
+                            pageHeading="Dealer Profile Page"
                         />
 
-                    </Col>
-                </Row>
-            </Fragment>
+                        {/* {this.props.dealer ? */}
+                        <Row gutter={16} type="flex" align="top">
+
+                            {/* Dealer Information */}
+                            <Col className="" xs={24} sm={24} md={8} lg={8} xl={8}>
+                                <Card style={{ borderRadius: 12 }} className="height_auto">
+                                    <h2 style={{ textAlign: "center" }}>Dealer Info</h2>
+                                    <Divider className="mb-0" />
+                                    <Table
+                                        columns={this.dealerInfoColumns}
+                                        bordered
+                                        // showHeader={false}
+                                        dataSource={this.renderDealerInfo()}
+                                        rowClassName={(record) => (record.className) ? record.className : ''}
+                                        pagination={false}
+                                        className="ac_pro_table profile_table"
+                                    />
+                                </Card>
+                            </Col>
+
+                            {/* Dealer Account Information */}
+                            <Col className="" xs={24} sm={24} md={8} lg={8} xl={8}>
+                                <Card className="" style={{ borderRadius: 12 }}>
+                                    <h2 style={{ textAlign: "center" }}>Account Profile</h2>
+                                    <Divider className="mb-0" />
+                                    {
+                                        dealer.account_balance_status !== 'active' ?
+                                            <Row style={{ marginTop: 10 }}>
+                                                <Col span={20}>
+                                                    <div style={{ textAlign: 'center' }}>
+                                                        <h4>{account_status_message1} <br /> {account_status_message2}</h4>
+                                                    </div>
+
+                                                </Col>
+                                                <Col span={4}>
+                                                    <Avatar className="gx-size-30"
+                                                        alt={""}
+                                                        src={image} />
+                                                </Col>
+
+                                            </Row>
+                                            :
+                                            null
+                                    }
+
+                                    <Row>
+                                        {/* Dealer Avatar */}
+                                        <Col span={24} className="text-center">
+                                            <div className="text-left">
+                                                <img src={require("assets/images/profile-image.png")} className="prof_pic" width="85px" />
+                                                <div className="name_type">
+                                                    <h1 className="mb-0 d_n_vh_vw">{(this.props.dealer) ? this.props.dealer.dealer_name : 'N/A'}</h1>
+                                                    <p style={{ textTransform: 'capitalize', }}>({(this.props.dealer) ? this.props.dealer.dealer_type : 'N/A'})</p>
+                                                </div>
+                                            </div>
+                                        </Col>
+
+                                        <Col span={24}>
+
+                                            {/* Account Data Information */}
+                                            <Table
+                                                columns={this.dealerAccountInfoColumns}
+                                                bordered
+                                                showHeader={false}
+                                                dataSource={this.renderAccountData()}
+                                                pagination={false}
+                                                className="ac_pro_table"
+                                            />
+
+                                            {/* <Divider className="mb-0" /> */}
+
+                                            {/* OverDue Information */}
+                                            <div
+                                                style={{
+                                                    // position: 'relative',
+                                                    height: "45px",
+                                                    width: "100%"
+                                                }}
+                                            >
+
+                                                <h4
+                                                    className="mt-13 border_bottom"
+                                                    // style={{
+                                                    //     float: 'left'
+                                                    // }}
+                                                >Overdue </h4>
+                                                <p>(click on overdue period to check pending payments)</p>
+                                                {/* <Button
+                                                    type="default"
+                                                    size="small"
+                                                    className="full_list_btn"
+                                                    style={{
+                                                        float: 'right',
+                                                        marginTop: '10px'
+                                                    }}
+                                                    onClick={() => this.refs.dealerPaymentHistory.showModal(this.props.dealer, this.props.getDealerPaymentHistory, 'pending')}
+                                                >
+                                                    Full List
+                                                </Button> */}
+                                            </div>
+
+                                            <Table
+                                                columns={this.overDueColumns}
+                                                bordered
+                                                showHeader={false}
+                                                dataSource={this.renderOverDue()}
+                                                pagination={false}
+                                                className="ovd_table"
+                                            />
+                                        </Col>
+
+
+                                    </Row>
+                                </Card>
+                            </Col>
+                            {/* Dealer Action Buttons */}
+                            <Col className="side_action right_bar" xs={24} sm={24} md={8} lg={8} xl={8} >
+                                <DealerAction
+                                    // translation
+                                    translation={this.props.translation}
+
+                                    // dealer information
+                                    dealerList={this.props.dealerList}
+                                    dealer={this.props.dealer}
+                                    paymentHistory={this.props.paymentHistory}
+                                    salesHistory={this.props.salesHistory}
+                                    domains={this.props.domains}
+                                    history={this.props.history}
+                                    authUser={this.props.authUser}
+                                    allDomainList={this.props.allDomainList}
+                                    // dealer actions
+                                    updatePassword={this.props.updatePassword}
+                                    editDealer={this.props.editDealer}
+
+                                    suspendDealer={this.props.suspendDealer}
+                                    activateDealer={this.props.activateDealer}
+                                    deleteDealer={this.props.deleteDealer}
+                                    undoDealer={this.props.undoDealer}
+
+                                    getDomains={this.props.getDomains}
+                                    getDealerDomains={this.props.getDealerDomains}
+                                    getDealerPaymentHistory={this.props.getDealerPaymentHistory}
+                                    setCreditLimit={this.props.setCreditLimit}
+                                    setDemosLimit={this.props.setDemosLimit}
+                                    getDealerSalesHistory={this.props.getDealerSalesHistory}
+                                    changeDealerStatus={this.props.changeDealerStatus}
+                                    domainPermission={this.props.domainPermission}
+                                />
+                            </Col>
+                        </Row>
+
+                        {/* Dealer Payment History for overDues */}
+                        <DealerPaymentHistory
+                            ref='dealerPaymentHistory'
+                            translation={this.props.translation}
+                            paymentHistory={this.props.paymentHistory}
+                        />
+
+                        <DealerOverDuePayments
+                            ref="dealerOverDuePayments"
+                            translation={this.props.translation}
+                        />
+                    </Fragment>
+                    : <DealerNotFoundPage />
+                }
+            </Fragment >
         )
     }
 }
@@ -372,21 +632,27 @@ function mapDispatchToProps(dispatch) {
         undoDealer: undoDealer,
         getDealerPaymentHistory: getDealerPaymentHistory,
         setCreditLimit: setCreditLimit,
+        setDemosLimit: setDemosLimit,
         getDealerSalesHistory: getDealerSalesHistory,
         getDealerDomains: getDealerDomains,
-        getDealerList: getDealerList
+        getAllDealers: getAllDealers,
+        changeDealerStatus: changeDealerStatus,
+        getDomains: getDomains,
+        domainPermission: connectDealerDomainPermission
     }, dispatch);
 }
 
-var mapStateToProps = ({ dealer_details, dealers, settings }) => {
-    // console.log(dealers.parent_dealers);
+var mapStateToProps = ({ dealer_details, dealers, settings, auth, account }) => {
     return {
         translation: settings.translation,
         dealer: dealer_details.dealer,
-        dealerList: dealers.parent_dealers,
+        dealerList: dealers.dealers, // dealers.parent_dealers,
         domains: dealer_details.domains,
+        allDomainList: account.domainList,
         paymentHistory: dealer_details.paymentHistory,
         salesHistory: dealer_details.salesHistory,
+        isLoading: dealer_details.connectDealerLoading,
+        authUser: auth.authUser,
         // dealers: dealers.textTransform
     };
 }

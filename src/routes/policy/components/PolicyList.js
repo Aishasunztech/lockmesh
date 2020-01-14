@@ -7,14 +7,16 @@ import CustomScrollbars from "../../../util/CustomScrollbars";
 import PolicyInfo from './PolicyInfo';
 import { flagged } from '../../../appRedux/actions/ConnectDevice';
 import { ADMIN } from '../../../constants/Constants';
-import { convertToLang, getFormattedDate } from '../../utils/commonUtils';
+import { convertToLang, getFormattedDate, convertTimezoneValue } from '../../utils/commonUtils';
 import styles from './policy.css';
 import { Button_Save, Button_Yes, Button_No, Button_Edit, Button_Delete, Button_Save_Changes, Button_Cancel } from '../../../constants/ButtonConstants';
 import { POLICY } from '../../../constants/ActionTypes';
 import { POLICY_SAVE_CONFIRMATION, POLICY_DELETE_CONFIRMATION, POLICY_CHANGE_DEFAULT_CONFIRMATION, EXPAND, POLICY_EXPAND } from '../../../constants/PolicyConstants';
 import { Tab_All } from '../../../constants/TabConstants';
-import moment from 'moment';
+// import moment from 'moment';
+import moment from 'moment-timezone';
 import scrollIntoView from 'scroll-into-view';
+import { TIMESTAMP_FORMAT } from '../../../constants/Application';
 
 const confirm = Modal.confirm;
 
@@ -157,7 +159,7 @@ class PolicyList extends Component {
                 ,
                 permission: <span style={{ fontSize: 15, fontWeight: 400 }}>
                     {/* {(policy.permission_count == 'All') ? convertToLang(this.props.translation[Tab_All], "All") : policy.permission_count} */}
-                    {(policy.permission_count === "All" || this.props.totalDealers === policy.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : policy.permission_count}
+                    {(policy.permission_count === "All" || (this.props.totalDealers === policy.permission_count && policy.permission_count !== 0)) ? convertToLang(this.props.translation[Tab_All], "All") : policy.permission_count}
                 </span>,
                 permissions: (policy.dealer_permission !== undefined || policy.dealer_permission !== null) ? policy.dealer_permission : [],
                 policy_status: (
@@ -185,8 +187,12 @@ class PolicyList extends Component {
                     />
                 ),
                 created_by: policy.created_by,
-                created_date: moment(policy.created_date).format("YYYY/MM/DD hh:mm:ss"),
-                last_edited: policy.last_edited ? moment(policy.last_edited).format("YYYY/MM/DD hh:mm:ss") : "N/A",
+                created_date: convertTimezoneValue(this.props.user.timezone, policy.created_date, TIMESTAMP_FORMAT),
+                last_edited: convertTimezoneValue(this.props.user.timezone, policy.last_edited, TIMESTAMP_FORMAT),
+                // created_date: (policy.created_date && policy.created_date != "N/A") ? moment(policy.created_date).tz(convertTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
+                // last_edited: (policy.last_edited && policy.last_edited != "N/A") ? moment(policy.last_edited).tz(convertTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
+                // created_date: moment(policy.created_date).format("YYYY/MM/DD hh:mm:ss"),
+                // last_edited: policy.last_edited ? moment(policy.last_edited).format("YYYY/MM/DD hh:mm:ss") : "N/A",
             }
         });
 

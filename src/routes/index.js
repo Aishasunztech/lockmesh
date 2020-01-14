@@ -25,12 +25,15 @@ import Apk from "./apk/index";
 import ApkMain from "./apk/components/index";
 import myProfile from './myProfile';
 import InvalidPage from "./InvalidPage";
-import FourOFour from "./404/";
+// import FourOFour from "./404/";
+import FourOFour from "./InvalidPage/FourOFour";
 import AppMarket from "./appMarket/index";
 import ManageData from './account/ManageData/index'
 import SetPrice from './account/PricesPakages/index'
 import Domains from "./domains/index";
 import Reporting from './account/Reporting/index'
+import Support from './Support/index'
+import SystemMessages from './SystemMessages/index'
 import DealerAgent from './dealerAgent/index'
 import BulkActivities from './bulkActivities/index'
 // import Documents from "./documents/index";
@@ -94,7 +97,11 @@ const App = ({ match }) => {
           component={PaymentHistory}
         />
 
-
+        <Route
+          exact
+          path={`${match.url}support`}
+          component={Support}
+        />
 
         <Route
           exact
@@ -154,6 +161,12 @@ const App = ({ match }) => {
           exact
           path={`${match.url}reporting`}
           component={Reporting}
+        />
+
+        <Route
+          exact
+          path={`${match.url}system-messages`}
+          component={SystemMessages}
         />
 
         <Route

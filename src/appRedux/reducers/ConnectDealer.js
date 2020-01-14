@@ -10,7 +10,11 @@ import {
     DEALER_PAYMENT_HISTORY,
     SET_DEALER_LIMIT,
     DEALER_SALES_HISTORY,
-    DEALER_DOMAINS
+    DEALER_DOMAINS,
+    CONNECT_DEALER_LOADING,
+    DEALER_ACCOUNT_STATUS,
+    SET_DEMOS_LIMIT,
+    CD_PERMISSION_DOMAINS
 } from "../../constants/ActionTypes";
 
 // import { Button_Cancel } from '../../constants/ButtonConstants';
@@ -29,27 +33,38 @@ const initialState = {
     dealer: null,
     paymentHistory: [],
     salesHistory: [],
-    domains: []
+    domains: [],
+    connectDealerLoading: false
 };
 
 export default (state = initialState, action) => {
 
     switch (action.type) {
 
+        case CONNECT_DEALER_LOADING: {
+            return {
+                ...state,
+                connectDealerLoading: true
+            }
+        }
+
         case DEALER_DETAILS: {
             // console.log(DEALER_DETAILS,':',action.payload)
             return {
                 ...state,
-                dealer: action.payload.dealer
+                dealer: action.payload.dealer,
+                connectDealerLoading: false
             }
         }
+
         case DEALER_DOMAINS: {
-            console.log(DEALER_DOMAINS,':', action.payload)
+            console.log(DEALER_DOMAINS, ':', action.payload)
             return {
                 ...state,
                 domains: action.payload.domains
             }
         }
+
         case DEALER_SALES_HISTORY: {
             return {
                 ...state,
@@ -57,12 +72,14 @@ export default (state = initialState, action) => {
 
             }
         }
+
         case DEALER_PAYMENT_HISTORY: {
             return {
                 ...state,
                 paymentHistory: action.payload.data
             }
         }
+
         case CONNECT_EDIT_DEALER: {
             let dealer = JSON.parse(JSON.stringify(state.dealer));
             // let dealer = state.dealer;
@@ -152,6 +169,7 @@ export default (state = initialState, action) => {
                 dealer: dealer
             }
         }
+
         case CONNECT_UNDO_DEALER: {
             let dealer = JSON.parse(JSON.stringify(state.dealer));
             if (action.response.status) {
@@ -190,6 +208,76 @@ export default (state = initialState, action) => {
                 ...state,
                 dealer: dealer
             };
+        }
+
+        case SET_DEMOS_LIMIT: {
+            let dealer = JSON.parse(JSON.stringify(state.dealer));
+            // let dealer = state.dealer;
+            if (action.payload.status) {
+                dealer.demos = action.payload.data.demos;
+                dealer.remaining_demos = action.payload.data.remaining_demos;
+                success({
+                    title: action.payload.msg,
+                });
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+            return {
+                ...state,
+                dealer: dealer
+            };
+        }
+
+        case DEALER_ACCOUNT_STATUS: {
+            // console.log(DEALER_ACCOUNT_STATUS, ':', action.payload);
+            let dealer = JSON.parse(JSON.stringify(state.dealer));
+            if (action.payload.status === true) {
+                dealer.account_balance_status = action.payload.account_balance_status;
+                dealer.account_balance_status_by = action.payload.account_balance_status_by;
+                success({
+                    title: action.payload.msg,
+                });
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+            return {
+                ...state,
+                dealer: dealer
+
+            }
+        }
+
+        case CD_PERMISSION_DOMAINS: {
+            // console.log("action.selectedDomains ", action.selectedDomains, state.domains);
+            let dealerDomains = state.domains;
+
+            if (action.payload.status) {
+                success({
+                    title: action.payload.msg
+                });
+
+                // Save permission for new dealers
+                if (action.formData.action == "save") {
+                    dealerDomains = state.domains.concat(action.selectedDomains)
+                }
+                else if (action.formData.action == "delete") {
+                    dealerDomains = state.domains.filter(item => item.id !== action.selectedDomains)
+                }
+            } else {
+                error({
+                    title: action.payload.msg
+                });
+            }
+
+            return {
+                ...state,
+                isloading: false,
+                domains: dealerDomains
+            }
         }
 
         default:

@@ -54,8 +54,20 @@ export const loginUser = (user) => {
 						type: resp.data.user.user_type,
 						dealer_pin: resp.data.user.link_code,
 						dealer_token: '',
-            account_balance_status: resp.data.user.account_balance_status,
-						two_factor_auth: resp.data.user.two_factor_auth
+						account_balance_status: resp.data.user.account_balance_status,
+						account_balance_status_by: resp.data.user.account_balance_status_by,
+						two_factor_auth: resp.data.user.two_factor_auth,
+						demos: resp.data.user.demos,
+						remaining_demos: resp.data.user.remaining_demos,
+						company_name: resp.data.user.company_name,
+						company_address: resp.data.user.company_address,
+						city: resp.data.user.city,
+						state: resp.data.user.state,
+						country: resp.data.user.country,
+						postal_code: resp.data.user.postal_code,
+						tel_no: resp.data.user.tel_no,
+						website: resp.data.user.website,
+						timezone: resp.data.user.timezone,
 					}
 					RestService.authLogIn(resp.data)
 					dispatch({
@@ -71,7 +83,8 @@ export const loginUser = (user) => {
 export const verifyCode = (verifyForm) => {
 	return (dispatch) => {
 		RestService.verifyCode(verifyForm).then((response) => {
-			if (response.data.status) {console.log('aaaaaaaaaaaaaaaaaaa',response.data.user)
+			if (response.data.status) {
+				
 				let payload = {
 					id: response.data.user.id,
 					connected_dealer: response.data.user.connected_dealer,
@@ -86,7 +99,19 @@ export const verifyCode = (verifyForm) => {
 					dealer_pin: response.data.user.link_code,
 					dealer_token: '',
 					two_factor_auth: response.data.user.two_factor_auth,
-          account_balance_status: response.data.user.account_balance_status,
+					account_balance_status: response.data.user.account_balance_status,
+					account_balance_status_by: response.data.user.account_balance_status_by,
+					demos: response.data.user.demos,
+					remaining_demos: response.data.user.remaining_demos,
+					company_name: response.data.user.company_name,
+					company_address: response.data.user.company_address,
+					city: response.data.user.city,
+					state: response.data.user.state,
+					country: response.data.user.country,
+					postal_code: response.data.user.postal_code,
+					tel_no: response.data.user.tel_no,
+					website: response.data.user.website,
+					timezone: response.data.user.timezone,
 				}
 				RestService.authLogIn(response.data)
 				dispatch({
@@ -151,7 +176,19 @@ export const checkComponent = (componentUri) => {
 						dealer_pin: resp.data.user.link_code,
 						two_factor_auth: resp.data.user.two_factor_auth,
 						verified: resp.data.user.verified,
-            account_balance_status: resp.data.user.account_balance_status,
+						account_balance_status: resp.data.user.account_balance_status,
+						account_balance_status_by: resp.data.user.account_balance_status_by,
+						demos: resp.data.user.demos,
+						remaining_demos: resp.data.user.remaining_demos,
+						company_name: resp.data.user.company_name,
+						company_address: resp.data.user.company_address,
+						city: resp.data.user.city,
+						state: resp.data.user.state,
+						country: resp.data.user.country,
+						postal_code: resp.data.user.postal_code,
+						tel_no: resp.data.user.tel_no,
+						website: resp.data.user.website,
+						timezone: resp.data.user.timezone,
 					}
 					RestService.setUserData(resp.data);
 

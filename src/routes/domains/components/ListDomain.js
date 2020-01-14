@@ -131,7 +131,7 @@ export default class ListDomain extends Component {
                 permission: (
                     <div data-column="PERMISSION" style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
                         {/* {(app.dealers) ? (parseDealers.includes(this.props.user.id)) ? parseDealers.length - 1 : parseDealers.length : 0} */}
-                        {(app.permission_count === "All" || this.props.totalDealers === app.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
+                        {(app.permission_count === "All" || (this.props.totalDealers === app.permission_count && app.permission_count !== 0)) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
                     </div>
                 ),
                 permissions: app.dealers ? JSON.parse(app.dealers) : [],

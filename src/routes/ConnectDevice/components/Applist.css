@@ -61,6 +61,14 @@
     margin-bottom: 0 !important;
 }
 
+.p-25{
+  padding: 25px;
+}
+
+.m-0 {
+  margin: 0 !important;
+}
+
 .captilize {
     text-transform: capitalize;
 }
@@ -189,6 +197,7 @@
 .activities .ant-modal-body {
     max-height: 540px;
     overflow: overlay;
+    width: 100%;
 }
 
 .load_policy_popup .ant-modal-title {
@@ -204,7 +213,7 @@
 }
 
 .push_apps .ant-table-body {
-    height: 440px;
+    height: 350px;
     overflow: overlay;
 }
 

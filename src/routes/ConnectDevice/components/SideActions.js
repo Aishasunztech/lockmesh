@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip, Progress, Select, Tabs } from "antd";
+import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip, Progress, Select, Tabs, AutoComplete } from "antd";
 import TableHistory from "./TableHistory";
 import SuspendDevice from '../../devices/components/SuspendDevice';
 import ActivateDevcie from '../../devices/components/ActivateDevice';
@@ -97,6 +97,7 @@ import {
 import TransferHistory from './TransferModule/TransferHistory'
 import Services from './Services';
 import DeviceBillingHistory from './DeviceBillingHistory';
+import { generateGraceDaysReport } from "../../../appRedux/actions";
 
 const confirm = Modal.confirm;
 var coppyList = [];
@@ -386,6 +387,9 @@ class SideActions extends Component {
             selectedPullApps: [],
 
             activities: [],
+            searchedValue: '',
+            device_list: [],
+            disabledSearchButton: true,
 
             policyId: '',
             showChangesModal: false,
@@ -395,9 +399,10 @@ class SideActions extends Component {
             changedCtrls: [],
             guestAllPushApps: props.guestAllPushApps,
             enableAllPushApps: props.enableAllPushApps,
-            encryptedAllPushApps: props.encryptedAllPushApps
+            encryptedAllPushApps: props.encryptedAllPushApps,
             // DEVICE_TRANSFERED_DONE: 'not transfer',
 
+            pushApkSeachText: ''
         }
         this.otpModalRef = React.createRef();
     }
@@ -469,6 +474,11 @@ class SideActions extends Component {
         if (this.props.wipeDevieStatus != nextProps.wipeDevieStatus) {
             showConfirm1(nextProps, this.props.device, convertToLang(this.props.translation[DO_YOU_REALLY_WANT_TO_WIPE_THE_DEVICE], "Do you really want to Wipe the device ") + this.props.device.device_id + "?")
         }
+
+        // console.log("will receive props: ", nextProps.apk_list, this.state.pushApkSeachText)
+        if (nextProps.pushAppsModal) {
+            this.handleComponentSearch(this.state.pushApkSeachText, 'push_apps');
+        }
     }
 
     showHistoryModal = (visible, type) => {
@@ -504,7 +514,8 @@ class SideActions extends Component {
         }
         this.setState({
             selectedPushAppsModal: visible,
-            pushApps: dumyList
+            pushApps: dumyList,
+            pushApkSeachText: ''
         })
     }
 
@@ -602,33 +613,22 @@ class SideActions extends Component {
 
     handleComponentSearch = (value, label) => {
         try {
+            let updatedApkList = this.props.apk_list;
+            // console.log(value, 'value')
+            if (value && value.length) {
 
-            if (value.length) {
-                // console.log(value, 'value')
-                if (status) {
-                    // console.log('status')
-                    coppyList = this.state.apk_list;
-                    status = false;
-                }
-                // console.log(this.state.apk_list, 'coppy de', coppyList)
-                let foundList = componentSearch(coppyList, value);
+                let foundList = componentSearch(updatedApkList, value);
                 // console.log('found devics', foundList)
                 if (foundList.length) {
-                    this.setState({
-                        apk_list: foundList,
-                    })
+                    updatedApkList = foundList;
                 } else {
-                    this.setState({
-                        apk_list: []
-                    })
+                    updatedApkList = [];
                 }
-            } else {
-                status = true;
-
-                this.setState({
-                    apk_list: coppyList,
-                })
             }
+            this.setState({
+                apk_list: updatedApkList,
+                pushApkSeachText: value
+            })
         } catch (error) {
         }
     }
@@ -816,12 +816,36 @@ class SideActions extends Component {
     //     })
     // }
 
+
+
+    handleSearch = (value) => {
+        let searchedDevices = [];
+        // console.log("searchedValue: ",value)
+        searchedDevices = this.props.device_list.filter((device) => device.device_id.toLowerCase().includes(value.toLowerCase()));
+        // console.log(searchedDevices);
+        let index = this.props.device_list.findIndex((device) => device.device_id.toLowerCase() === value.toLowerCase());
+        let states = {
+            device_list: value ? searchedDevices : [],
+            searchedValue: value
+        }
+
+        if (index === -1) {
+            states.disabledSearchButton = true;
+        } else {
+            states.disabledSearchButton = false
+        }
+
+        this.setState({
+            ...states
+        });
+    }
+
     showPushAppsModal_ = (visible) => {
         this.props.showPushAppsModal(visible);
         // this.props.resetPushApps();
         this.setState({
             pushAppsModal: visible,
-            selectedApps: this.state.apk_list
+            selectedApps: this.state.apk_list,
         })
     }
 
@@ -837,37 +861,61 @@ class SideActions extends Component {
             servicesModal: visible,
         })
     }
-    handleDeviceChange = (device_id) => {
-        console.log(device_id);
-        let path = `${btoa(device_id)}`.trim()
-        this.props.history.push(path)
+    handleDeviceChange = (e) => {
+        if (e) {
+            let path = `${btoa(e)}`.trim()
+            this.props.history.push(path)
+        }
     }
 
+    handleDeviceButtonClick = (e) => {
+        if (this.state.searchedValue) {
+            let path = `${btoa(this.state.searchedValue)}`.trim()
+            this.props.history.push(path)
+        }
+    }
     render() {
         // console.log(this.state.app_list, 'device is: ', this.props.app_list)
         const device_status = (this.props.device.account_status === "suspended") ? "Unsuspend" : "suspended";
         const button_type = (device_status === "Unsuspend") ? "dashed" : "danger";
         const flaggedButtonText = (this.props.device.flagged !== 'Not flagged') ? convertToLang(this.props.translation[Button_UNFLAG], "UNFLAG") : convertToLang(this.props.translation[Button_Flag], "Flag");
         const flagged = ((this.props.device.flagged !== 'Not flagged') ? 'Unflag' : 'flag')
+        const { device_list } = this.state;
         return (
             <div className="gutter-box bordered">
                 <Card className="search_dev_id">
                     <Row gutter={16} type="flex" justify="center" align="top">
                         <Col span={24} className="gutter-row" justify="center" >
                             <h4 className="mb-6">Search Device ID</h4>
-                            <Select
+                            <AutoComplete
+                                className="global-search"
+                                size="large"
                                 style={{ width: '100%' }}
-                                showSearch
-                                placeholder={convertToLang(this.props.translation[""], "Select Device ID")}
-                                optionFilterProp="children"
-                                onChange={this.handleDeviceChange}
-                                filterOption={(input, option) => { return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0 }}
-                                defaultValue={this.props.device.device_id}
-                            >
-                                {this.props.device_list.map((item, index) => {
+                                dataSource={device_list.map((item, index) => {
                                     return (<Option key={index} value={item.device_id}>{item.device_id + ' (' + item.finalStatus + ')'}</Option>)
                                 })}
-                            </Select>
+                                onSelect={this.handleDeviceChange}
+                                onSearch={this.handleSearch}
+                                placeholder={convertToLang(this.props.translation[""], "Select Device ID")}
+                                optionLabelProp="text"
+                            >
+                                <Input
+                                    suffix={
+                                        <Button
+                                            className="search-btn"
+                                            style={{ marginRight: -12 }}
+                                            size="large"
+                                            type="primary"
+                                            onClick={this.handleDeviceButtonClick}
+                                            disabled={this.state.disabledSearchButton}
+
+                                        >
+                                            <Icon type="search" />
+                                        </Button>
+                                    }
+                                />
+                            </AutoComplete>
+
                         </Col>
                     </Row>
                 </Card>
