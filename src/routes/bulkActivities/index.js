@@ -422,7 +422,7 @@ class BulkActivities extends Component {
         })
     }
 
-    renderList(list) {
+    renderList(list, timezone) {
         // console.log('renderList ', list)
         return list.map((device, index) => {
 
@@ -478,8 +478,8 @@ class BulkActivities extends Component {
                 s_dealer: checkValue(device.s_dealer),
                 s_dealer_name: checkValue(device.s_dealer_name),
                 remainTermDays: device.remainTermDays,
-                start_date: convertTimezoneValue(this.props.user.timezone, device.start_date, TIMESTAMP_FORMAT),
-                expiry_date: convertTimezoneValue(this.props.user.timezone, device.expiry_date, TIMESTAMP_FORMAT),
+                start_date: convertTimezoneValue(timezone, device.start_date, TIMESTAMP_FORMAT),
+                expiry_date: convertTimezoneValue(timezone, device.expiry_date, TIMESTAMP_FORMAT),
                 // start_date: checkValue(device.start_date),
                 // expiry_date: checkValue(device.expiry_date),
             }
@@ -853,6 +853,7 @@ class BulkActivities extends Component {
                         applyPushApps={this.props.applyPushApps}
                         applyPullApps={this.props.applyPullApps}
                         renderList={this.renderList}
+                        user={this.props.user}
                         translation={this.props.translation}
                         onChangeTableSorting={this.handleTableChange}
                         selectedDevices={this.props.selectedDevices}

@@ -814,7 +814,7 @@ class FilterDevices extends Component {
                       bordered
                       columns={this.state.selectedDevicesColumns}
                       onChange={this.props.onChangeTableSorting}
-                      dataSource={this.props.renderList(this.actionRelatedDevice(this.state.selectedDevices))}
+                      dataSource={this.props.renderList(this.actionRelatedDevice(this.state.selectedDevices), this.props.user.timezone)}
                       pagination={false}
                     // scroll={{ x: true }}
                     />
@@ -838,7 +838,7 @@ class FilterDevices extends Component {
           }}
         >
           <FilterDevicesList
-            devices={this.props.renderList(this.getUnSelectedDevices(this.state.allBulkDevices))}
+            devices={this.props.renderList(this.getUnSelectedDevices(this.state.allBulkDevices), this.props.user.timezone)}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
@@ -869,7 +869,7 @@ class FilterDevices extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            devices={this.props.renderList(this.state.searchRemoveModal)}
+            devices={this.props.renderList(this.state.searchRemoveModal, this.props.user.timezone)}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
@@ -900,7 +900,7 @@ class FilterDevices extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            devices={this.props.renderList(this.getUnSelectedDevices(this.state.allBulkDevices))}
+            devices={this.props.renderList(this.getUnSelectedDevices(this.state.allBulkDevices), this.props.user.timezone)}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
