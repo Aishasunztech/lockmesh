@@ -24,7 +24,7 @@ import {
 //     DEALER_TOKENS
 // } from '../../constants/DealerConstants';
 import { message, Modal } from 'antd';
-import { DEALER_LOADING,ALL_TO_ALL_DEALERS, CHANGE_TIMEZONE } from "../../constants/ActionTypes";
+import { DEALER_LOADING,ALL_TO_ALL_DEALERS, CHANGE_TIMEZONE, HANDLE_ADD_DEALER_MODAL, ADD_DEALER_LOADING } from "../../constants/ActionTypes";
 
 const success = Modal.success
 const error = Modal.error
@@ -39,6 +39,8 @@ const initialState = {
     msg: 'no message',
     selectedOptions: [],
     allDealers: [],
+    dealerModal: false,
+    addBtnLoading: false
     // options: [
     //     DEALER_ID,
     //     DEALER_NAME,
@@ -271,10 +273,26 @@ export default (state = initialState, action) => {
             }
 
         }
+        case ADD_DEALER_LOADING: {
+            return {
+                ...state,
+                addBtnLoading: true
+            }
+        }
+
+        case HANDLE_ADD_DEALER_MODAL: {
+            return {
+                ...state,
+                dealerModal: action.payload
+            }
+        }
         case ADD_DEALER: {
             // console.log('item added is:',action.response.item_added[0])
 
+            let visibleModal = state.dealerModal;
             if (action.response.status) {
+                visibleModal = false;
+
                 if (action.response.added_dealer && action.response.added_dealer.length) {
                     state.dealers.unshift(action.response.added_dealer[0])
                 }
@@ -290,6 +308,7 @@ export default (state = initialState, action) => {
                 //  state.dealers[state.dealers.length] = action.response.item_added[0];
             }
             else {
+                visibleModal = true;
                 error({
                     title: action.response.msg,
                 });
@@ -300,6 +319,8 @@ export default (state = initialState, action) => {
                 isloading: false,
                 dealers: [...state.dealers],
                 // options: [...state.options],
+                dealerModal: visibleModal,
+                addBtnLoading: false
 
             }
         }
