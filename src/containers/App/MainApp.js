@@ -174,29 +174,7 @@ export class MainApp extends Component {
 					onAction={this.onAction}
 					debounce={250}
 					timeout={3600000} />
-				<Layout className="gx-app-layout">
-					{/* sidebar */}
-					{this.getSidebar(navStyle, width)}
-					<Layout>
-						{/* topbar */}
-						{this.getNavStyles(navStyle)}
-						{/* <h1>hello</h1> */}
-
-						{/* Application content */}
-						<Content className={`gx-layout-content ${this.getContainerClass(navStyle)} `}>
-							<App match={match} />
-							{(HOST_NAME === 'localhost') ? <RightSidebar /> : null}
-
-							<Footer>
-								<div className="gx-layout-footer-content">
-									{footerText}
-								</div>
-							</Footer>
-						</Content>
-					</Layout>
-					<Customizer />
-
-				</Layout>
+				<App match={match} />
 			</div>
 		)
 	}

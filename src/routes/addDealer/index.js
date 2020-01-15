@@ -15,9 +15,18 @@ class AddDealer extends Component {
         super(props);
         this.state = {
             validateStatus: 'success',
-            help: null
+            help: null,
+            btnLoading: false
         }
 
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props !== nextProps) {
+            this.setState({
+                btnLoading: nextProps.btnLoading
+            })
+        }
     }
 
     handleNameValidation = (event) => {
@@ -58,6 +67,9 @@ class AddDealer extends Component {
                         help: convertToLang(this.props.translation[Only_alpha_numeric], "Please insert only alphabets and numbers")
                     })
                 } else {
+                    this.setState({
+                        btnLoading: true
+                    })
                     values.pageType = window.location.pathname.split("/").pop();
                     // values.dealerId = this.props.profile.dealerId;
                     values.name = values.name.trim();
@@ -65,9 +77,10 @@ class AddDealer extends Component {
                     // message.success('Action done Successfylly');
                     //  this.props.history.goBack();
                     //  this.props.getDealerList(window.location.pathname.split("/").pop()); 
-                    setTimeout(() => {
-                        this.props.handleCancel();
-                    }, 1000);
+                    // setTimeout(() => {
+                    //     this.props.handleCancel(false);
+                    // }, 1000);
+
                 }
                 // console.log('form values',values);
             }
@@ -180,7 +193,7 @@ class AddDealer extends Component {
                     </Form.Item>
 
                     <div className='submitButton' style={{ justifyContent: 'right', alignItems: 'right' }} >
-                        <Button className='submitButton' onClick={this.handleSubmit}  >{this.props.dealerTypeText}</Button>
+                        <Button className='submitButton' onClick={this.handleSubmit} loading={this.state.btnLoading} >{this.props.dealerTypeText}</Button>
                         {/* <Button className='submitButton' onClick={this.showModal}  >Add Dealer </Button> */}
                     </div>
 

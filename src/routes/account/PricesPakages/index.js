@@ -145,7 +145,7 @@ class Prices extends Component {
                 key: 'services',
                 className: 'row '
             },
-        
+
             {
                 title: (
                     <Input.Search
@@ -233,6 +233,7 @@ class Prices extends Component {
             //     ]
             // }
         ];
+
         this.hardwareColumns = [
             {
                 title: "Sr.#",
@@ -334,6 +335,7 @@ class Prices extends Component {
                 ]
             }
         ];
+
         this.state = {
             pricing_modal: false,
             innerTabData: this.props.prices ? this.props.prices[sim] : {},
@@ -347,7 +349,8 @@ class Prices extends Component {
             modify_item: null,
             isModify: false,
             hardwares: [],
-            modify_item_type: ''
+            modify_item_type: '',
+            packageListTab: '1'
         }
     }
 
@@ -528,27 +531,46 @@ class Prices extends Component {
                 // console.log(this.state.packages)
                 let i = 0
 
-                return this.state.packages.map((item, index) => {
+                let packages_type = 'services';
+                if (this.state.packageListTab === '1') {
+                    packages_type = 'services';
+                } else if (this.state.packageListTab === '2') {
+                    packages_type = 'data_plan';
+                }
+                let packages = this.state.packages.filter(packageItem => packageItem.package_type === packages_type);
+                let DeleteBtn = null;
+                let EditBtn = null;
+                let ModifyBtn = null;
+                return packages.map((item, index) => {
                     let customStyle = {}
                     if (item.pkg_term === "trial") {
                         customStyle = { display: 'none' }
                     }
-                    let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px ', textTransform: 'uppercase' }} onClick={() => { this.deletePackage(item.id, item.pkg_name) }} >{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
-                    let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.editPackage(item) }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "EDIT")}</Button>
-                    let ModifyBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase', ...customStyle }} onClick={() => { this.modifyItem(item, true, 'package') }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "MODIFY PRICE")}</Button>
+
+                    if (item.package_type === 'services') {
+
+                        DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px ', textTransform: 'uppercase' }} onClick={() => { this.deletePackage(item.id, item.pkg_name) }} >{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
+                        EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.editPackage(item) }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "EDIT")}</Button>
+                        ModifyBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase', ...customStyle }} onClick={() => { this.modifyItem(item, true, 'package') }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "MODIFY PRICE")}</Button>
+                    }
+
                     return {
                         id: item.id,
                         key: item.id,
                         rowKey: index,
                         statusAll: item.statusAll,
-                        sr: ++i,
+                        package_type: item.package_type,
+                        data_limit: (item.data_limit)? item.data_limit: 'N/A',
                         action: (item.dealer_type === "super_admin" && (this.props.auth.type === ADMIN || this.props.auth.type === DEALER || this.props.auth.type === SDEALER)) ?
                             (<Fragment>{ModifyBtn}</Fragment>) :
                             (item.dealer_type === "admin" && this.props.auth.type === DEALER || this.props.auth.type === SDEALER) ?
-                                (<Fragment>{ModifyBtn}</Fragment>) :
+                                (
+                                    <Fragment>{ModifyBtn}</Fragment>) :
                                 (item.dealer_type === "dealer" && this.props.auth.type === SDEALER) ?
-                                    (<Fragment>{ModifyBtn}</Fragment>)
-                                    : (<Fragment>{DeleteBtn}{EditBtn}</Fragment>),
+                                    (
+                                        <Fragment>{ModifyBtn}</Fragment>)
+                                    : (<Fragment>{DeleteBtn}{EditBtn}</Fragment>
+                                    ),
 
                         pkg_name: item.pkg_name,
                         services:
@@ -676,11 +698,16 @@ class Prices extends Component {
         }
     }
 
-    tabChaged = (e) => {
+    tabChanged = (e) => {
         // this.props.innerTabChanged(e)
         this.setState({
             tabSelected: e,
             innerTabData: this.state.prices ? this.state.prices[e] : {}
+        })
+    }
+    packagesFilterHandler = (e) => {
+        this.setState({
+            packageListTab: e
         })
     }
     render() {
@@ -732,7 +759,7 @@ class Prices extends Component {
                                         <Tabs
                                             tabPosition={'left'}
                                             type="card"
-                                            onChange={(e) => this.tabChaged(e)}
+                                            onChange={(e) => this.tabChanged(e)}
                                             className="price_table_tabs"
                                         >
                                             <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_SIM_ID], "SIM")} key={sim} >
@@ -760,45 +787,60 @@ class Prices extends Component {
                                 : null
                             }
                             <Tabs.TabPane tab={convertToLang(this.props.translation[Tab_PACKAGES], "PACKAGES")} key="2">
-                                <Table
-                                    className="devices policy_expand"
-                                    rowClassName={(record, index) => this.state.expandedRowKeys.includes(index) ? 'exp_row' : ''}
-                                    size="default"
-                                    bordered
-                                    expandIcon={(props) => this.customExpandIcon(props)}
-                                    // onExpand={this.onExpandRow}
-                                    expandedRowRender={(record) => {
-                                        // console.log("expandTabSelected", record);
-                                        // console.log("table row", this.state.expandTabSelected[record.rowKey]);
-                                        if (Object.keys(record.pkg_features).length !== 0 && record.pkg_features.constructor === Object) {
-                                            return (
-                                                <div>
-                                                    <PackagesInfo
-                                                        selected={this.state.expandTabSelected[record.rowKey]}
-                                                        package={record}
-                                                        savePermission={this.props.packagePermission}
-                                                        translation={this.props.translation}
+                                <>
+                                    <Tabs
+                                        tabPosition={'left'}
+                                        type="card"
+                                        onChange={(e) => this.packagesFilterHandler(e)}
+                                        style={{ width: '10%', float: 'left' }}
+                                    >
+                                        <Tabs.TabPane tab={'Service Packages'} key='1' >
 
-                                                    />
-                                                </div>)
-                                        } else {
-                                            return (
-                                                <div>
-                                                </div>
-                                            )
-                                        }
-                                    }}
-                                    expandIconColumnIndex={2}
-                                    expandedRowKeys={this.state.expandedRowKeys}
-                                    expandIconAsCell={false}
-                                    columns={this.columns}
-                                    onChange={this.props.onChangeTableSorting}
-                                    dataSource={this.renderList("packages")}
-                                    pagination={false}
-                                    rowKey="policy_list"
-                                    ref='policy_table'
-                                    scroll={{ x: true }}
-                                />
+                                        </Tabs.TabPane>
+                                        <Tabs.TabPane tab={'Data Plan Packages'} key='2' >
+
+                                        </Tabs.TabPane>
+                                    </Tabs>
+                                    <div style={{ width: '90%', float: 'right' }}>
+                                        <Table
+                                            className="devices policy_expand"
+                                            rowClassName={(record, index) => this.state.expandedRowKeys.includes(index) ? 'exp_row' : ''}
+                                            size="default"
+                                            bordered
+                                            expandIcon={(props) => this.customExpandIcon(props)}
+                                            // onExpand={this.onExpandRow}
+                                            expandedRowRender={(record) => {
+                                                // console.log("expandTabSelected", record);
+                                                // console.log("table row", this.state.expandTabSelected[record.rowKey]);
+                                                return <PackagesInfo
+                                                    selected={this.state.expandTabSelected[record.rowKey]}
+                                                    package={record}
+                                                    savePermission={this.props.packagePermission}
+                                                    translation={this.props.translation}
+
+                                                />
+
+                                                // if (Object.keys(record.pkg_features).length !== 0 && record.pkg_features.constructor === Object) {
+                                                // } else {
+                                                //     return (
+                                                //         <div>
+                                                //         </div>
+                                                //     )
+                                                // }
+                                            }}
+                                            expandIconColumnIndex={2}
+                                            expandedRowKeys={this.state.expandedRowKeys}
+                                            expandIconAsCell={false}
+                                            columns={this.columns}
+                                            onChange={this.props.onChangeTableSorting}
+                                            dataSource={this.renderList("packages")}
+                                            pagination={false}
+                                            rowKey="policy_list"
+                                            ref='policy_table'
+                                            scroll={{ x: true }}
+                                        />
+                                    </div>
+                                </>
                             </Tabs.TabPane>
                             <Tabs.TabPane tab="Hardware" key="3">
                                 <Table
@@ -861,8 +903,7 @@ class Prices extends Component {
                     />
                 </Modal>
 
-
-            </div >
+            </div>
         )
     }
 }

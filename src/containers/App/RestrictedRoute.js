@@ -120,8 +120,8 @@ class RestrictedRoute extends Component {
   componentDidMount() {
 
   }
-  
-  componentWillReceiveProps(nextProps, prevProps){
+
+  componentWillReceiveProps(nextProps, prevProps) {
 
   }
 
@@ -135,7 +135,7 @@ class RestrictedRoute extends Component {
     }
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
 
   }
 
@@ -153,36 +153,18 @@ class RestrictedRoute extends Component {
               return <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
             } else {
               if (isRequested) {
-
-                if (isAllowed || location.pathname === "/invalid_page") {
+                if (isAllowed || (location && location.pathname === "/invalid_page")) {
                   return <Component re_render={this.props.re_render} {...props} />;
                 } else {
                   return <Redirect to={{ pathname: '/invalid_page', state: { from: props.location } }} />
                 }
-
               } else {
-
                 return (
-                  <Layout className="gx-app-layout">
-                    {this.getSidebar(navStyle, width)}
-                    <Layout>
-                      {this.getNavStyles(navStyle)}
-                      <Content className={`gx-layout-content ${this.getContainerClass(navStyle)} `}>
-                        <CircularProgress />
-                        <Footer>
-                          <div className="gx-layout-footer-content">
-                            {footerText}
-                          </div>
-                        </Footer>
-                      </Content>
-                    </Layout>
-                    {/* <Customizer/> */}
-                  </Layout>
+                  <CircularProgress />
                 )
               }
 
             }
-
           }
         } />
     )

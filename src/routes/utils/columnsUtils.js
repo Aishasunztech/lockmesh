@@ -3897,52 +3897,52 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                 }
             ]
         },
-        {
-            title: (
-                <Input.Search
-                    name="repeat"
-                    key="repeat"
-                    id="repeat"
-                    className="search_heading"
-                    onChange={handleSearch}
-                    autoComplete="new-password"
-                    placeholder="INTERVAL"
-                />
-            ),
-            dataIndex: 'repeat',
-            className: '',
-            key: 'repeat',
-            children: [
-                {
-                    width: 100,
-                    title: convertToLang(translation[""], "INTERVAL"),
-                    dataIndex: 'repeat',
-                    key: 'repeat',
-                }
-            ]
+        // {
+        //     title: (
+        //         <Input.Search
+        //             name="repeat"
+        //             key="repeat"
+        //             id="repeat"
+        //             className="search_heading"
+        //             onChange={handleSearch}
+        //             autoComplete="new-password"
+        //             placeholder="INTERVAL"
+        //         />
+        //     ),
+        //     dataIndex: 'repeat',
+        //     className: '',
+        //     key: 'repeat',
+        //     children: [
+        //         {
+        //             width: 100,
+        //             title: convertToLang(translation[""], "INTERVAL"),
+        //             dataIndex: 'repeat',
+        //             key: 'repeat',
+        //         }
+        //     ]
 
-        },
+        // },
         { // date/time
             title: (
                 <Input.Search
-                    name="sending_time"
-                    key="sending_time"
-                    id="sending_time"
+                    name="date_time"
+                    key="date_time"
+                    id="date_time"
                     className="search_heading"
                     onChange={handleSearch}
                     autoComplete="new-password"
-                    placeholder="SENDING TIME"
+                    placeholder="DATE/TIME"
                 />
             ),
-            dataIndex: 'sending_time',
+            dataIndex: 'date_time',
             className: '',
-            key: 'sending_time',
+            key: 'date_time',
             children: [
                 {
                     width: 130,
-                    title: convertToLang(translation[""], "SENDING TIME"),
-                    dataIndex: 'sending_time',
-                    key: 'sending_time',
+                    title: convertToLang(translation[""], "DATE/TIME"),
+                    dataIndex: 'date_time',
+                    key: 'date_time',
                 }
             ]
 
@@ -3964,7 +3964,7 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
             key: 'interval_description',
             children: [
                 {
-                    width: 130,
+                    // width: 130,
                     title: convertToLang(translation[""], "INTERVAL DESCRIPTION"),
                     dataIndex: 'interval_description',
                     key: 'interval_description',

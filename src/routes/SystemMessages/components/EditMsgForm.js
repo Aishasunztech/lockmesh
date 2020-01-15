@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Button, Form, Input, Select, InputNumber, Row, Col, Tag, Calendar, DatePicker, TimePicker, Modal } from 'antd';
-import { checkValue, convertToLang, getMonthName, checkTimezoneValue } from '../../utils/commonUtils'
+import { checkValue, convertToLang, getMonthName, checkTimezoneValue, convertTimezoneValue, getWeekDay } from '../../utils/commonUtils'
 
 import {
     DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, User_Name_require, Only_alpha_numeric, Not_valid_Email, Email, Name, Required_Email
@@ -12,6 +12,7 @@ import BulkUpdateMsgConfirmation from './bulkUpdateMsgConfirmation';
 // import RepeatMsgCalender from './repeateMsgCalender';
 import moment from 'moment';
 import DataNotFound from '../../InvalidPage/dataNotFound';
+import { TIMESTAMP_FORMAT, SERVER_TIMEZONE } from '../../../constants/Application';
 
 const confirm = Modal.confirm;
 const success = Modal.success
@@ -60,6 +61,7 @@ class EditMsgForm extends Component {
         ];
 
         this.monthDays = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+        let dealerTZ = checkTimezoneValue(props.user.timezone, false); // withGMT = false
 
         this.state = {
             visible: false,
@@ -70,11 +72,22 @@ class EditMsgForm extends Component {
             allUsers: [],
             allDealers: [],
             selectedAction: 'NONE',
-            selected_dateTime: '',
+            selected_Time: '',
             isNowSet: false,
-            repeat_duration: 'NONE',
+            // timer: '',
+            // monthDate: 0,
+            // editRecord: null,
+
             timer: '',
-            editRecord: null
+            selected_dateTime: null,
+
+            repeat_duration: 'NONE',
+            // date_time: '',
+            time: '',
+            week_day: 0,
+            month_date: 0,
+            month_name: 0,
+            dealerTZ: dealerTZ 
         }
     }
 
@@ -83,94 +96,157 @@ class EditMsgForm extends Component {
         // const { } = this.props.form;
         // console.log("handle submit ", this.props.selectedDevices, this.state.selectedDealers, this.state.selectedUsers);
         this.props.form.validateFieldsAndScroll((err, values) => {
-            console.log("handle submit 02 ", values, this.state.editRecord)
+            console.log("handle submit 02 ", values, this.props.editRecord)
 
             if (!err) {
-                let copyEditRecord = this.state.editRecord;
+                // let copyEditRecord = this.state.editRecord;
 
-                if (copyEditRecord.timer_status === "NOW") {
-                    copyEditRecord.date_time = "";
-                    copyEditRecord.repeat_duration = "NONE";
-                    copyEditRecord.week_day = "";
-                    copyEditRecord.month_date = "";
-                    copyEditRecord.month_name = "";
-                } else if (copyEditRecord.timer_status === "DATE/TIME") {
-                    copyEditRecord.repeat_duration = "NONE";
-                    copyEditRecord.week_day = "";
-                    copyEditRecord.month_date = "";
-                    copyEditRecord.month_name = "";
-                } else if (copyEditRecord.timer_status === "REPEAT") {
+                let repeatVal = 'NONE';
+                let dateTimeVal = '';
+                let timeVal = this.state.selected_Time;
+                let weekDay = this.state.week_day;
+                let monthDate = this.state.month_date;
+                let monthName = this.state.month_name;
+
+                // let dealerTZ = checkTimezoneValue(this.props.user.timezone, false);
+                if (this.state.timer === "NOW") {
+                    // this.state.selected_dateTime = "";
+
+                    // dateTimeVal = dealerTZ ? moment().tz(dealerTZ).tz(SERVER_TIMEZONE).format(TIMESTAMP_FORMAT) : '';
+                    timeVal = '';
+                    dateTimeVal = moment().tz(this.state.dealerTZ).format(TIMESTAMP_FORMAT);
+                    weekDay = "";
+                    monthDate = "";
+                    monthName = "";
+                } else if (this.state.timer === "DATE/TIME") {
+                    timeVal = '';
+                    dateTimeVal = this.state.selected_dateTime;
+                    weekDay = "";
+                    monthDate = "";
+                    monthName = "";
+                } else if (this.state.timer === "REPEAT") {
+                    repeatVal = this.state.repeat_duration;
+                    dateTimeVal = this.state.selected_dateTime;
 
                     // conditions for Repeat Timer
-                    if (copyEditRecord.repeat_duration === "DAILY") {
-                        copyEditRecord.week_day = "";
-                        copyEditRecord.month_date = "";
-                        copyEditRecord.month_name = "";
-                    } else if (copyEditRecord.repeat_duration === "WEEKLY") {
-                        copyEditRecord.month_date = "";
-                        copyEditRecord.month_name = "";
-                    } else if (copyEditRecord.repeat_duration === "MONTHLY" || copyEditRecord.repeat_duration === "3 MONTHS" || copyEditRecord.repeat_duration === "6 MONTHS") {
-                        copyEditRecord.week_day = "";
-                        copyEditRecord.month_name = "";
-                    } else if (copyEditRecord.repeat_duration === "12 MONTHS") {
-                        copyEditRecord.week_day = "";
+                    if (repeatVal === "DAILY") {
+                        weekDay = "";
+                        monthDate = "";
+                        monthName = "";
+                    } else if (repeatVal === "WEEKLY") {
+                        monthDate = "";
+                        monthName = "";
+                    } else if (repeatVal === "MONTHLY" || repeatVal === "3 MONTHS" || repeatVal === "6 MONTHS") {
+                        weekDay = "";
+                        monthName = "";
+                    } else if (repeatVal === "12 MONTHS") {
+                        weekDay = "";
                     }
 
+                    // // covert time to dateTime value
+                    // if (this.state.selected_Time) {
+                    //     let dealerTZ = checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
+
+                    //     const [hours, minutes] = this.state.selected_Time.split(':');
+                    //     dateTimeVal = moment().tz(dealerTZ).set({ hours, minutes }).format('YYYY-MM-DD HH:mm:ss');
+                    // }
                 }
 
-                // covert time to dateTime value
-                if (this.state.selected_Time) {
-                    let dealerTZ = checkTimezoneValue(this.props.user.timezone, false);
-                    copyEditRecord.date_time = moment().tz(dealerTZ).set(copyEditRecord.time, 'HH:mm').format('YYYY-MM-DD HH:mm:ss');
+
+
+                //********************* update interval description text w.r.t timer status */ 
+                let duration = repeatVal ? repeatVal : "NONE";
+                // set default dateTime format
+                // let dateTimeFormat = TIMESTAMP_FORMAT_NOT_SEC;
+
+                if (values.timer === "NOW" || values.timer === "DATE/TIME") {
+                    duration = `One Time`
+                }
+                else if (values.timer === "REPEAT") {
+                    // set dateTime format
+                    // dateTimeFormat = TIME_FORMAT_HM; // Display only hours and minutes
+
+                    if (duration === "DAILY") {
+                        duration = `Everyday`
+                    }
+                    else if (duration === "WEEKLY") {
+                        duration = getWeekDay(weekDay)
+                    }
+                    else if (duration === "MONTHLY") {
+                        duration = `Every month on ${checkValue(monthDate)} date`
+                    }
+                    else if (duration === "3 MONTHS") {
+                        duration = `Every 3 months later on ${checkValue(monthDate)} date`
+                    }
+                    else if (duration === "6 MONTHS") {
+                        duration = `Every 6 months later on ${checkValue(monthDate)} date`
+                    }
+                    else if (duration === "12 MONTHS") {
+                        duration = `Every ${getMonthName(monthName)} on ${checkValue(monthDate)} date`
+                    } else {
+                        duration = "N/A"
+                    }
+                } else {
+                    duration = "N/A"
                 }
 
-                copyEditRecord.msg = values.msg_txt
 
-                // console.log("copyEditRecord ", copyEditRecord.repeat_duration);
-                this.refs.update_bulk_msg.handleBulkUpdateMsg(copyEditRecord);
+                let data = {
+                    id: this.props.editRecord.id,
+                    msg: values.msg_txt,
+                    timer_status: values.timer,
+                    repeat_duration: repeatVal,
+                    date_time: dateTimeVal, // convertTimezoneValue(this.props.user.timezone, dateTimeVal, TIMESTAMP_FORMAT, true), // convert time from client timezone to server timezone
+                    week_day: weekDay,
+                    month_date: monthDate,
+                    month_name: monthName,
+                    time: timeVal,
+                    interval_description: duration
+                }
+
+                // // covert time to dateTime value
+                // if (copyEditRecord.time) {
+                //     console.log("set time to dateTime ");
+                //     // let dealerTZ = checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
+                //     let updateDateTime = moment().set(copyEditRecord.time, 'HH:mm').format('YYYY-MM-DD HH:mm:ss');
+                //     let convetTime = convertTimezoneValue(this.props.user.timezone, updateDateTime, TIMESTAMP_FORMAT, true);
+                //     console.log("check date time: ", copyEditRecord.time, updateDateTime, "convetTime ", convetTime);
+                //     copyEditRecord.date_time = convetTime;
+                // }
+
+                // copyEditRecord.msg = values.msg_txt
+
+                console.log("copyEditRecord data ", data);
+                this.refs.update_bulk_msg.handleBulkUpdateMsg(data, this.props.editRecord.devices, this.state.dealerTZ);
 
             }
 
         });
     }
-    // handleNameValidation = (event) => {
-    //     var fieldvalue = event.target.value;
-
-    //     if (fieldvalue === '') {
-    //         this.setState({
-    //             validateStatus: 'error',
-    //             help: convertToLang(this.props.translation[User_Name_require], "Name is Required")
-    //         })
-    //     }
-    //     if (/[^A-Za-z \d]/.test(fieldvalue)) {
-    //         this.setState({
-    //             validateStatus: 'error',
-    //             help: convertToLang(this.props.translation[Only_alpha_numeric], "Please insert only alphabets and numbers")
-    //         })
-    //     }
-    //     else {
-    //         this.setState({
-    //             validateStatus: 'success',
-    //             help: null,
-    //         })
-    //     }
-    // }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.editRecord !== nextProps.editRecord) {
+        if (nextProps.editRecord && this.props.editRecord !== nextProps.editRecord) {
             this.setState({
                 editRecord: nextProps.editRecord,
+                msg: nextProps.editRecord.msg,
+                repeat_duration: nextProps.editRecord.repeat_duration,
+                timer: nextProps.editRecord.timer_status,
+                selected_dateTime: moment(nextProps.editRecord.date_time).format(TIMESTAMP_FORMAT),
+                selected_Time: moment(nextProps.editRecord.date_time).format("HH:mm"),
+                week_day: nextProps.editRecord.week_day,
+                month_date: nextProps.editRecord.month_date,
+                month_name: nextProps.editRecord.month_name,
             })
         }
     }
 
 
 
-    componentDidMount() {
-        this.setState({
-            editRecord: this.props.editRecord,
-        })
-    }
+    // componentDidMount() {
+    //     this.setState({
+    //         editRecord: this.props.editRecord,
+    //     })
+    // }
 
     handleReset = () => {
         this.props.form.resetFields();
@@ -184,21 +260,32 @@ class EditMsgForm extends Component {
         this.props.handleEditMsgModal(false);
     }
 
+    // dateTimeOnChange = (value, dateString) => {
+    //     this.state.editRecord.date_time = dateString;
+    //     this.setState({ editRecord: this.state.editRecord });
+    // }
     dateTimeOnChange = (value, dateString) => {
-        this.state.editRecord.date_time = dateString;
-        this.setState({ editRecord: this.state.editRecord });
+        console.log("dateString ", dateString)
+        this.setState({ selected_dateTime: dateString });
     }
 
     timeOnChange = (value, dateString) => {
-        this.state.editRecord.time = dateString;
-        this.setState({ editRecord: this.state.editRecord });
+        const [hours, minutes] = dateString.split(':');
+
+        // let dealerTZ = checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
+        let dateTimeVal = moment.tz(this.state.dealerTZ).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+        // this.state.editRecord.date_time = dateTimeVal;
+
+        // console.log("u dateTimeVal:: ", dateString, dateTimeVal);
+        // this.setState({ editRecord: this.state.editRecord });
+        this.setState({ selected_Time: dateString, selected_dateTime: dateTimeVal });
     }
 
     handleEditMsgRecord = (e, fieldName) => {
-        let record = this.state.editRecord;
-        record[fieldName] = e;
+        // let record = this.state.editRecord;
+        // record[fieldName] = e;
         // console.log("record:", record);
-        this.setState({ editRecord: record });
+        this.setState({ [fieldName]: e });
     }
 
     validateRepeater = async (rule, value, callback) => {
@@ -230,12 +317,15 @@ class EditMsgForm extends Component {
     }
 
     render() {
-        var { editRecord } = this.props;
-        // console.log("editRecord ", editRecord);
+        var { editRecord } = this.state;
 
         if (!editRecord) {
             return null // <DataNotFound />
         }
+        // console.log("moment().set(copyEditRecord.time, 'HH:mm').format('YYYY-MM-DD HH:mm:ss') ",this.state.editRecord,  moment(new Date()).set("12:22", 'HH:mm').format('YYYY-MM-DD HH:mm:ss'))
+        // let checkTime = convertTimezoneValue(this.props.user.timezone, this.state.selected_dateTime, "HH:mm");
+        // console.log("edit msg checkTime:  ", checkTime, this.state.selected_dateTime, this.state.selected_Time, this.props.editRecord);
+        // console.log("conditions render func: ", this.state.timer === "DATE/TIME", moment(this.state.selected_dateTime).format(TIMESTAMP_FORMAT) < moment().tz(this.state.dealerTZ).format(TIMESTAMP_FORMAT), moment(this.state.selected_dateTime, this.state.dealerTZ).format(TIMESTAMP_FORMAT), moment().tz(this.state.dealerTZ).format(TIMESTAMP_FORMAT))
         return (
             <div>
                 <Modal
@@ -260,7 +350,7 @@ class EditMsgForm extends Component {
                                     wrapperCol={{ span: 16 }}
                                 >
                                     {this.props.form.getFieldDecorator('msg_txt', {
-                                        initialValue: editRecord.msg ? editRecord.msg : '',
+                                        initialValue: this.state.msg ? this.state.msg : '',
                                         rules: [
                                             {
                                                 required: true, message: convertToLang(this.props.translation[""], "Message field is required"),
@@ -283,7 +373,7 @@ class EditMsgForm extends Component {
                                     wrapperCol={{ span: 16 }}
                                 >
                                     {this.props.form.getFieldDecorator('timer', {
-                                        initialValue: editRecord.timer_status ? editRecord.timer_status : '',
+                                        initialValue: this.state.timer ? this.state.timer : '',
                                         rules: [
                                             {
                                                 required: true, message: convertToLang(this.props.translation[""], "Timer field is required"),
@@ -294,7 +384,7 @@ class EditMsgForm extends Component {
                                             showSearch={false}
                                             style={{ width: '100%' }}
                                             placeholder={convertToLang(this.props.translation[""], "Select Message Timer")}
-                                            onChange={(e) => this.handleEditMsgRecord(e, 'timer_status')}
+                                            onChange={(e) => this.handleEditMsgRecord(e, 'timer')}
                                         >
                                             <Select.Option key={"NOW"} value={"NOW"}>{"NOW"}</Select.Option>
                                             <Select.Option key={"DATE/TIME"} value={"DATE/TIME"}>{"Date/Time"}</Select.Option>
@@ -305,7 +395,7 @@ class EditMsgForm extends Component {
                             </Col>
                         </Row>
 
-                        {editRecord.timer_status === "REPEAT" ?
+                        {this.state.timer === "REPEAT" ?
                             <Row gutter={24} className="mt-4">
                                 <Col className="col-md-12 col-sm-12 col-xs-12">
                                     <Form.Item
@@ -314,7 +404,7 @@ class EditMsgForm extends Component {
                                         wrapperCol={{ span: 16 }}
                                     >
                                         {this.props.form.getFieldDecorator('repeat', {
-                                            initialValue: editRecord.repeat_duration ? editRecord.repeat_duration : '',
+                                            initialValue: this.state.repeat_duration ? this.state.repeat_duration : '',
                                             rules: [
                                                 {
                                                     required: true, message: convertToLang(this.props.translation[""], "Repeat Message field is required"),
@@ -338,9 +428,9 @@ class EditMsgForm extends Component {
                             </Row>
                             : null}
 
-                        {editRecord.repeat_duration !== "NONE" && editRecord.timer_status === "REPEAT" ?
+                        {this.state.repeat_duration !== "NONE" && this.state.timer === "REPEAT" ?
                             <Fragment>
-                                {editRecord.repeat_duration === "WEEKLY" ?
+                                {this.state.repeat_duration === "WEEKLY" ?
                                     <Row gutter={24} className="mt-4">
                                         <Col className="col-md-12 col-sm-12 col-xs-12">
                                             <Form.Item
@@ -349,7 +439,7 @@ class EditMsgForm extends Component {
                                                 wrapperCol={{ span: 16 }}
                                             >
                                                 {this.props.form.getFieldDecorator('weekDay', {
-                                                    initialValue: editRecord.week_day ? editRecord.week_day : '',
+                                                    initialValue: this.state.week_day ? this.state.week_day : '',
                                                     rules: [
                                                         {
                                                             required: true, message: convertToLang(this.props.translation[""], "Day is Required"),
@@ -370,7 +460,7 @@ class EditMsgForm extends Component {
                                     </Row>
                                     : null}
 
-                                {editRecord.repeat_duration === "12 MONTHS" ?
+                                {this.state.repeat_duration === "12 MONTHS" ?
                                     <Row gutter={24} className="mt-4">
                                         <Col className="col-md-12 col-sm-12 col-xs-12">
                                             <Form.Item
@@ -379,7 +469,7 @@ class EditMsgForm extends Component {
                                                 wrapperCol={{ span: 16 }}
                                             >
                                                 {this.props.form.getFieldDecorator('monthName', {
-                                                    initialValue: editRecord.month_name ? getMonthName(editRecord.month_name) : '',
+                                                    initialValue: this.state.month_name ? getMonthName(this.state.month_name) : '',
                                                     rules: [
                                                         {
                                                             required: true, message: convertToLang(this.props.translation[""], "Month is Required"),
@@ -399,7 +489,7 @@ class EditMsgForm extends Component {
                                         </Col>
                                     </Row>
                                     : null}
-                                {editRecord.repeat_duration !== "DAILY" && editRecord.repeat_duration !== "WEEKLY" ?
+                                {this.state.repeat_duration !== "DAILY" && this.state.repeat_duration !== "WEEKLY" ?
                                     <Row gutter={24} className="mt-4">
                                         <Col className="col-md-12 col-sm-12 col-xs-12">
                                             <Form.Item
@@ -408,7 +498,7 @@ class EditMsgForm extends Component {
                                                 wrapperCol={{ span: 16 }}
                                             >
                                                 {this.props.form.getFieldDecorator('monthDate', {
-                                                    initialValue: editRecord.month_date ? editRecord.month_date : '',
+                                                    initialValue: this.state.month_date ? this.state.month_date : '',
                                                     rules: [
                                                         {
                                                             required: true, message: convertToLang(this.props.translation[""], "Date of month is required"),
@@ -436,7 +526,7 @@ class EditMsgForm extends Component {
                                             wrapperCol={{ span: 16 }}
                                         >
                                             {this.props.form.getFieldDecorator('time', {
-                                                initialValue: editRecord.time ? moment(editRecord.time, 'HH:mm') : '',
+                                                initialValue: this.state.selected_Time ? moment(this.state.selected_Time, 'HH:mm') : '',
                                                 rules: [
                                                     {
                                                         required: true, message: convertToLang(this.props.translation[""], "Time field is required"),
@@ -456,7 +546,7 @@ class EditMsgForm extends Component {
                             </Fragment>
                             : null}
 
-                        {editRecord.timer_status === "DATE/TIME" ?
+                        {this.state.timer === "DATE/TIME" ?
                             <Row gutter={24} className="mt-4">
                                 <Col className="col-md-12 col-sm-12 col-xs-12">
                                     <Form.Item
@@ -465,7 +555,7 @@ class EditMsgForm extends Component {
                                         wrapperCol={{ span: 16 }}
                                     >
                                         {this.props.form.getFieldDecorator('date/time', {
-                                            initialValue: (editRecord.date_time && editRecord.date_time !== "0000-00-00 00:00:00") ? moment(editRecord.date_time, 'YYYY-MM-DD HH:mm') : '',
+                                            initialValue: (this.state.selected_dateTime && this.state.selected_dateTime !== "0000-00-00 00:00:00") ? moment(this.state.selected_dateTime, 'YYYY-MM-DD HH:mm') : '',
                                             rules: [
                                                 {
                                                     required: true, message: convertToLang(this.props.translation[""], "Date/Time field is required"),
@@ -479,7 +569,7 @@ class EditMsgForm extends Component {
                                                 format="YYYY-MM-DD HH:mm"
                                                 disabledDate={this.disabledDate}
                                                 disabledTime={this.disabledDateTime}
-                                                showTime={{ defaultValue: moment('00:00', 'HH:mm') }}
+                                                showTime={{ defaultValue: moment('00:00'), format: 'HH:mm' }}
                                             />
                                         )}
                                     </Form.Item>
@@ -493,7 +583,11 @@ class EditMsgForm extends Component {
                             }}
                         >
                             <Button type="button" onClick={this.handleCancel}> {convertToLang(this.props.translation[Button_Cancel], "Cancel")} </Button>
-                            <Button type="primary" htmlType="submit"> {convertToLang(this.props.translation[""], "UPDATE")} </Button>
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                disabled={this.state.timer === "DATE/TIME" && moment(this.state.selected_dateTime).format(TIMESTAMP_FORMAT) < moment().tz(this.state.dealerTZ).format(TIMESTAMP_FORMAT) ? true : false}
+                            > {convertToLang(this.props.translation[""], "UPDATE")} </Button>
                         </Form.Item>
 
                     </Form>

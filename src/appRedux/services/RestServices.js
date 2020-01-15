@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BASE_URL, SUPERADMIN_URL, SUPPORT_URL } from '../../constants/Application';
+import { BASE_URL, SOCKET_BASE_URL, SUPERADMIN_URL, SUPPORT_URL } from '../../constants/Application';
 import io from "socket.io-client";
 import SupportSystemSocketIO from "socket.io-client";
 
@@ -262,7 +262,9 @@ const RestService = {
     addProduct: (payload) => {
         return axios.post(`${BASE_URL}users/create-service-product`, payload, RestService.getHeader());
     },
-
+    activateICCID: (iccid, user_acc_id) => {
+        return axios.post(`${BASE_URL}users/validate_sim_id`, { sim_id: iccid, user_acc_id }, RestService.getHeader());
+    },
     /**
      * @section Dealers
      */
@@ -468,6 +470,10 @@ const RestService = {
 
     extendServices: (formData) => {
         return axios.put(BASE_URL + 'users/edit-device/extendServices', formData, RestService.getHeader());
+    },
+
+    addDataPlan: (formData) => {
+        return axios.put(BASE_URL + 'users/add-data-plans', formData, RestService.getHeader());
     },
 
 
@@ -1022,8 +1028,8 @@ const RestService = {
         return axios.post(BASE_URL + 'users/apply_bulk_policy', data, RestService.getHeader());
     },
 
-    sendBulkMsg: (data) => {
-        return axios.post(BASE_URL + 'users/send_bulk_msg', data, RestService.getHeader());
+    sendBulkMsg: (data, timezone) => {
+        return axios.post(BASE_URL + 'users/send_bulk_msg', { data, timezone }, RestService.getHeader());
     },
 
     updateBulkMsg: (data) => {
@@ -1031,8 +1037,8 @@ const RestService = {
         return axios.post(BASE_URL + 'users/update_bulk_msg', data, RestService.getHeader());
     },
 
-    getBulkMsgsList: () => {
-        return axios.get(BASE_URL + 'users/get_bulk_msgs', RestService.getHeader());
+    getBulkMsgsList: (timezone) => {
+        return axios.post(BASE_URL + 'users/get_bulk_msgs', { timezone }, RestService.getHeader());
     },
 
     deleteBulkMsg: (id) => {

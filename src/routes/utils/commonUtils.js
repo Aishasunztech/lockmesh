@@ -547,6 +547,7 @@ export function convertTimezoneValue(dealerTimezone, data, dateFormat, clientToS
     if (clientToServerTZ) {
       coverted_dateTime = moment.tz(data, dealerTimezone).tz(SERVER_TIMEZONE).format(dateFormat);
     } else {
+      // convert server time to client time
       coverted_dateTime = moment.tz(data, SERVER_TIMEZONE).tz(dealerTimezone).format(dateFormat);
     }
   }

@@ -370,7 +370,21 @@ class Dashboard extends Component {
                                     </Col>
                                 </Fragment> : null
                         }
-
+                        <Col xl={4} lg={4} md={4} sm={12} xs={12}>
+                            <div className='dashboard-item-div'>
+                                <Link to='support'>
+                                    <Card className='dashboard-card'>
+                                        <Avatar
+                                            src={require("../../assets/images/dashboard/support.jpg")}
+                                            alt=""
+                                        />
+                                    </Card>
+                                    <div className="dash_btm_txt">
+                                        <span className='db-span-text'>{convertToLang(this.props.translation[""], "Support")}</span>
+                                    </div>
+                                </Link>
+                            </div>
+                        </Col>
                     </Row>
 
 
@@ -401,7 +415,7 @@ function mapDispatchToProps(dispatch) {
         getTicketsNotifications,
     }, dispatch);
 }
-var mapStateToProps = ({ dashboard, auth, devices, sidebar, settings , dealers}) => {
+var mapStateToProps = ({ dashboard, auth, devices, sidebar, settings, dealers }) => {
 
     return {
         items: dashboard.dashboard_items,

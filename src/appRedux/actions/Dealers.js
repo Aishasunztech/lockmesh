@@ -14,7 +14,8 @@ import {
   CONNECT_DELETE_DEALER,
   CONNECT_UNDO_DEALER,
   CONNECT_SUSPEND_DEALER,
-  CONNECT_ACTIVATE_DEALER, ALL_TO_ALL_DEALERS,CHANGE_TIMEZONE
+  CONNECT_ACTIVATE_DEALER, ALL_TO_ALL_DEALERS,CHANGE_TIMEZONE, HANDLE_ADD_DEALER_MODAL,
+  ADD_DEALER_LOADING
 
 } from "../../constants/ActionTypes"
 // import { message } from 'antd';
@@ -219,9 +220,20 @@ export function editDealer(formData, actionType) {
 
     };
 }
-
+export function handleAddDealerModalAction(visible) {
+    return (dispatch) => {
+        dispatch({
+            type: HANDLE_ADD_DEALER_MODAL,
+            payload: visible
+        })
+    }
+}
 export function addDealer(formData) {
     return (dispatch) => {
+
+        dispatch({
+            type: ADD_DEALER_LOADING
+        })
 
         // console.log('add dealer call',formData);
         RestService.addDealer(formData).then((response) => {
