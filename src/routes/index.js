@@ -9,6 +9,7 @@ import Devices from "./devices/index";
 import ConnectDevice from "./ConnectDevice/index";
 
 import Users from './users';
+import StandAloneSims from './StandAloneSims';
 import Account from "./account/index";
 
 import Dealers from "./dealers/index";
@@ -54,6 +55,12 @@ const App = ({ match }) => {
           exact
           path={`${match.url}devices`}
           component={Devices}
+        />
+
+        <Route
+          exact
+          path={`${match.url}sims`}
+          component={StandAloneSims}
         />
 
         <Route

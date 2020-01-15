@@ -107,6 +107,7 @@ import {
     POLICY_SIZE
 } from "../../constants/PolicyConstants";
 import { DUMY_TRANS_ID } from "../../constants/LabelConstants";
+import { PACKAGE_TERM } from "../../constants/AccountConstants";
 
 
 
@@ -1116,6 +1117,97 @@ export function usersColumns(translation, handleSearch) {
             dataIndex: 'tokens',
             key: "tokens",
             className: "token_w",
+        },
+        {
+            title: (
+                <Input.Search
+                    name="created_at"
+                    key="created_at"
+                    id="created_at"
+                    className="search_heading created_at_w"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[USER_DATE_REGISTERED], "DATE REGISTERED")}
+                />
+            ),
+            dataIndex: 'created_at',
+            className: 'row',
+            children: [{
+                title: convertToLang(translation[USER_DATE_REGISTERED], "DATE REGISTERED"),
+                dataIndex: 'created_at',
+                align: "center",
+                key: 'created_at',
+                sorter: (a, b) => { return a.created_at.localeCompare(b.created_at.toString()) },
+                sortDirections: ['ascend', 'descend'],
+            }]
+        },
+    ]);
+}
+export function StandAloneSimsColumns(translation, handleSearch) {
+    return ([
+        {
+            title: "#",
+            dataIndex: 'counter',
+            align: 'center',
+            className: 'row',
+            render: (text, record, index) => ++index,
+        },
+        {
+            title: convertToLang(translation[ACTION], "ACTION"),
+            align: "center",
+            dataIndex: 'action',
+            key: "action",
+        },
+        {
+            title: (
+                <Input.Search
+                    name="sim_iccid"
+                    key="sim_iccid"
+                    id="sim_iccid"
+                    className="search_heading user_id_w"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[""], "SIM ICCID")}
+                />
+            ),
+            dataIndex: 'sim_iccid',
+            children: [
+                {
+                    title: convertToLang(translation[""], "SIM ICCID"),
+                    align: "center",
+                    dataIndex: 'sim_iccid',
+                    key: "sim_iccid",
+                    sorter: (a, b) => {
+                        // console.log(a, 'user is is')
+                        return a.sim_iccid.localeCompare(b.sim_iccid)
+                    },
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ],
+        },
+
+        {
+            title: (
+                <Input.Search
+                    name="term"
+                    key="term"
+                    id="term"
+                    className="search_heading email_w"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[""], "TERM")}
+                />
+            ),
+            dataIndex: 'term',
+            className: 'row',
+            children: [{
+                title: convertToLang(translation[""], "TERM"),
+                dataIndex: 'term',
+                align: "center",
+                key: 'term',
+                sorter: (a, b) => { return a.term.localeCompare(b.term.toString()) },
+                sortDirections: ['ascend', 'descend'],
+            }]
         },
         {
             title: (
@@ -3902,103 +3994,103 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
 }
 
 export function supportSystemMessage(translation, handleSearch, isModal = false) {
-  let columns = [
-    {
-      title: "#",
-      dataIndex: 'counter',
-      align: 'center',
-      className: 'row',
-      width: 50,
-      render: (text, record, index) => ++index,
-    },
-
-    {
-      title: (
-        <Input.Search
-          name="receiver"
-          key="receiver"
-          id="receiver"
-          className="search_heading"
-          onChange={handleSearch}
-          autoComplete="new-password"
-          placeholder="RECEIVER"
-        />
-      ),
-      dataIndex: 'receiver',
-      className: '',
-      key: 'receiver',
-      children: [
+    let columns = [
         {
-          width: 200,
-          title: convertToLang(translation[""], "RECEIVER"),
-          dataIndex: 'receiver',
-          key: 'receiver',
-        }
-      ]
-    },
+            title: "#",
+            dataIndex: 'counter',
+            align: 'center',
+            className: 'row',
+            width: 50,
+            render: (text, record, index) => ++index,
+        },
 
-    {
-      title: (
-        <Input.Search
-          name="subject"
-          key="subject"
-          id="subject"
-          className="search_heading"
-          onChange={handleSearch}
-          autoComplete="new-password"
-          placeholder="SUBJECT"
-        />
-      ),
-      dataIndex: 'subject',
-      className: '',
-      key: 'subject',
-      children: [
         {
-          title: convertToLang(translation[""], "SUBJECT"),
-          dataIndex: 'subject',
-          key: 'subject',
-        }
-      ]
-    },
+            title: (
+                <Input.Search
+                    name="receiver"
+                    key="receiver"
+                    id="receiver"
+                    className="search_heading"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    placeholder="RECEIVER"
+                />
+            ),
+            dataIndex: 'receiver',
+            className: '',
+            key: 'receiver',
+            children: [
+                {
+                    width: 200,
+                    title: convertToLang(translation[""], "RECEIVER"),
+                    dataIndex: 'receiver',
+                    key: 'receiver',
+                }
+            ]
+        },
 
-    {
-      title: (
-        <Input.Search
-          name="date"
-          key="date"
-          id="date"
-          className="search_heading"
-          onChange={handleSearch}
-          autoComplete="new-password"
-          placeholder="DATE"
-        />
-      ),
-      dataIndex: 'date',
-      className: '',
-      key: 'date',
-      children: [
         {
-          width: 200,
-          title: convertToLang(translation[""], "DATE"),
-          dataIndex: 'date',
-          key: 'date',
-        }
-      ]
-    },
+            title: (
+                <Input.Search
+                    name="subject"
+                    key="subject"
+                    id="subject"
+                    className="search_heading"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    placeholder="SUBJECT"
+                />
+            ),
+            dataIndex: 'subject',
+            className: '',
+            key: 'subject',
+            children: [
+                {
+                    title: convertToLang(translation[""], "SUBJECT"),
+                    dataIndex: 'subject',
+                    key: 'subject',
+                }
+            ]
+        },
 
-    {
-      title: "ACTION",
-      dataIndex: 'action',
-      align: 'center',
-      width: 150,
-      className: '',
-    },
-  ];
+        {
+            title: (
+                <Input.Search
+                    name="date"
+                    key="date"
+                    id="date"
+                    className="search_heading"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    placeholder="DATE"
+                />
+            ),
+            dataIndex: 'date',
+            className: '',
+            key: 'date',
+            children: [
+                {
+                    width: 200,
+                    title: convertToLang(translation[""], "DATE"),
+                    dataIndex: 'date',
+                    key: 'date',
+                }
+            ]
+        },
+
+        {
+            title: "ACTION",
+            dataIndex: 'action',
+            align: 'center',
+            width: 150,
+            className: '',
+        },
+    ];
 
 
-  if (isModal) {
-    columns.splice(1, 1)
-  }
+    if (isModal) {
+        columns.splice(1, 1)
+    }
 
-  return columns;
+    return columns;
 }

@@ -345,6 +345,16 @@ class SidebarContent extends Component {
                   {convertToLang(translation[Sidebar_users_devices], "Users & Devices")}
                 </Link>
               </Menu.Item>
+              <Menu.Item key="sims">
+                <Link to="/sims">
+                  <i className="icon icon-mobile" >
+                    <i class="fa fa-file" aria-hidden="true"></i>
+                    {/* <i className="fa fa-mobile" aria-hidden="true"></i> */}
+                  </i>
+                  {/* <IntlMessages id="sidebar.devices" /> */}
+                  {convertToLang(translation[Sidebar_users_devices], "Sims")}
+                </Link>
+              </Menu.Item>
               <Menu.Item key="users">
                 <Link to="/users">
                   <i className="icon icon-user" />

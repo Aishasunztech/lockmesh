@@ -1171,7 +1171,17 @@ const RestService = {
     //Support System Messages
     //generate Support System Messages
     generateSupportSystemMessages: (data) => {
-      return axios.post(SUPPORT_URL + 'system-messages/store', data, RestService.getHeader());
+        return axios.post(SUPPORT_URL + 'system-messages/store', data, RestService.getHeader());
     },
+
+    //SIMS MODULE
+    //GET SIMS List
+    getStandaloneSimsList: () => {
+        return axios.get(BASE_URL + 'users/get-standalone-sims',
+            RestService.getHeader()
+        )
+    },
+
+
 };
 export default RestService;
