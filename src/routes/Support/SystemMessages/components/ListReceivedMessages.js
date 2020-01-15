@@ -4,7 +4,7 @@ import {getDateFromTimestamp, checkValue, convertToLang} from '../../../utils/co
 import { supportSystemMessagesReceiversColumns } from '../../../utils/columnsUtils';
 import ViewMessage from './ViewMessage'
 
-export default class ListMessages extends Component {
+export default class ListReceivedMessages extends Component {
 
   constructor(props) {
     super(props);
@@ -41,11 +41,10 @@ export default class ListMessages extends Component {
   };
 
   componentDidMount() {
-
+    this.props.getReceivedSupportSystemMessages();
   }
 
   componentDidUpdate(prevProps) {
-
     if (this.props !== prevProps) {
       this.setState({
         columns: this.props.columns
@@ -71,13 +70,13 @@ export default class ListMessages extends Component {
       data = {
         key: item.id,
         id: item.id,
-        receiver_ids: item.receiver_ids,
-        subject: checkValue(item.subject),
-        createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "N/A",
+        sender: <span className="text-capitalize">{item.system_message.sender_user_type}</span>,
+        subject: checkValue(item.system_message.subject),
+        createdAt: item.system_message.createdAt ? getDateFromTimestamp(item.system_message.createdAt) : "N/A",
         action: (
           <div data-column="ACTION" style={{ display: "inline-flex" }}>
             <Fragment>
-              <Fragment><Button type="primary" size="small" onClick={() => this.handleMessageModal(JSON.parse(JSON.stringify(item)))}>VIEW MESSAGE</Button></Fragment>
+              <Fragment><Button type="primary" size="small" onClick={() => this.handleMessageModal(JSON.parse(JSON.stringify(item.system_message)))}>VIEW MESSAGE</Button></Fragment>
             </Fragment>
           </div>
         ),
@@ -107,32 +106,6 @@ export default class ListMessages extends Component {
     return receiversData
   }
 
-  customExpandIcon(props) {
-    if (props.expanded) {
-      return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
-        props.onExpand(props.record, e);
-      }}><Icon type="caret-down" /></a>
-    } else {
-
-      return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
-        props.onExpand(props.record, e);
-      }}><Icon type="caret-right" /></a>
-    }
-  }
-
-  onExpandRow = (expanded, record) => {
-    if (expanded) {
-      if (!this.state.expandedRowKeys.includes(record.rowKey)) {
-        this.state.expandedRowKeys.push(record.rowKey);
-        this.setState({ expandedRowKeys: this.state.expandedRowKeys })
-      }
-    } else if (!expanded) {
-      if (this.state.expandedRowKeys.includes(record.rowKey)) {
-        let list = this.state.expandedRowKeys.filter(item => item !== record.rowKey);
-        this.setState({ expandedRowKeys: list })
-      }
-    }
-  };
 
   render() {
 
@@ -141,31 +114,10 @@ export default class ListMessages extends Component {
         <Card>
           <Table
             className="gx-table-responsive"
-            rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
-            expandIcon={(props) => this.customExpandIcon(props)}
-            expandedRowRender={(record) => {
-              return (
-                <Fragment>
-
-                  <Table
-                    style={{ margin: 10 }}
-                    size="middle"
-                    bordered
-                    columns={this.state.receiversColumns}
-                    dataSource={this.renderReceiversList(record.receiver_ids)}
-                    pagination={false}
-                    scroll={{ x: true }}
-                  />
-                </Fragment>
-              );
-            }}
-            onExpand={this.onExpandRow}
-            expandIconColumnIndex={1}
-            expandIconAsCell={false}
             size="midddle"
             bordered
             columns={this.state.columns}
-            dataSource={this.renderList(this.props.supportSystemMessages ? this.props.supportSystemMessages : [])}
+            dataSource={this.renderList(this.props.receivedSupportSystemMessages ? this.props.receivedSupportSystemMessages : [])}
             pagination={false
             }
             scroll={{ x: true }}

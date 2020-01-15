@@ -1401,6 +1401,162 @@ export function userDevicesListColumns(translation, handleSearch) {
     ]);
 }
 
+export function supportSystemMessagesReceiversColumns(translation, handleSearch) {
+  return ([
+    {
+      title: '#',
+      dataIndex: 'counter',
+      align: 'center',
+      className: 'row',
+      render: (text, record, index) => ++index,
+    },
+    {
+      title: (
+        <Input.Search
+          name="name"
+          key="name"
+          id="name"
+          className="search_heading link_code_w"
+          onChange={handleSearch}
+          autoComplete="new-password"
+          placeholder={titleCase(convertToLang(translation[DEVICE_ACTIVATION_CODE], "NAME"))}
+        />
+      ),
+      dataIndex: 'name',
+      children: [
+        {
+          title: convertToLang(translation[DEVICE_ACTIVATION_CODE], "NAME"),
+          align: "center",
+          dataIndex: 'name',
+          sorter: (a, b) => { return a.name.localeCompare(b.name) },
+          sortDirections: ['ascend', 'descend'],
+        }
+      ]
+    },
+    {
+      title: (
+        <Input.Search
+          name="link_code"
+          key="link_code"
+          id="link_code"
+          className="search_heading link_code_w"
+          onChange={handleSearch}
+          autoComplete="new-password"
+          placeholder={titleCase(convertToLang(translation[DEVICE_DEALER_PIN], "DEALER PIN"))}
+        />
+      ),
+      dataIndex: 'dealer_pin',
+      children: [
+        {
+          title: convertToLang(translation[DEVICE_DEALER_PIN], "DEALER PIN"),
+          align: "center",
+          dataIndex: 'link_code',
+          key: 'link_code',
+          sorter: (a, b) => { return a.link_code - b.link_code },
+          sortDirections: ['ascend', 'descend'],
+        }
+      ]
+    },
+  ]);
+}
+
+export function receivedSupportSystemMessagesColumns(translation, handleSearch) {
+  let columns = [
+    {
+      title: "#",
+      dataIndex: 'counter',
+      align: 'center',
+      className: 'row',
+      width: 50,
+      render: (text, record, index) => ++index,
+    },
+
+    {
+      title: (
+        <Input.Search
+          name="sender"
+          key="sender"
+          id="sender"
+          className="search_heading"
+          onChange={handleSearch}
+          autoComplete="new-password"
+          placeholder="RECEIVER"
+        />
+      ),
+      dataIndex: 'sender',
+      className: '',
+      key: 'sender',
+      children: [
+        {
+          width: 200,
+          title: convertToLang(translation[""], "SENDER"),
+          dataIndex: 'sender',
+          key: 'sender',
+        }
+      ]
+    },
+
+    {
+      title: (
+        <Input.Search
+          name="subject"
+          key="subject"
+          id="subject"
+          className="search_heading"
+          onChange={handleSearch}
+          autoComplete="new-password"
+          placeholder="SUBJECT"
+        />
+      ),
+      dataIndex: 'subject',
+      className: '',
+      key: 'subject',
+      children: [
+        {
+          title: convertToLang(translation[""], "SUBJECT"),
+          dataIndex: 'subject',
+          key: 'subject',
+        }
+      ]
+    },
+
+    {
+      title: (
+        <Input.Search
+          name="createdAt"
+          key="createdAt"
+          id="createdAt"
+          className="search_heading"
+          onChange={handleSearch}
+          autoComplete="new-password"
+          placeholder="DATE"
+        />
+      ),
+      dataIndex: 'date',
+      className: '',
+      key: 'date',
+      children: [
+        {
+          width: 200,
+          title: convertToLang(translation[""], "DATE"),
+          dataIndex: 'createdAt',
+          key: 'createdAt',
+        }
+      ]
+    },
+
+    {
+      title: "ACTION",
+      dataIndex: 'action',
+      align: 'center',
+      width: 150,
+      className: '',
+    },
+  ];
+
+  return columns;
+}
+
 export function bulkDeviceHistoryColumns(translation) {
     return ([
         {
@@ -3964,9 +4120,9 @@ export function supportSystemMessage(translation, handleSearch, isModal = false)
     {
       title: (
         <Input.Search
-          name="date"
-          key="date"
-          id="date"
+          name="createdAt"
+          key="createdAt"
+          id="createdAt"
           className="search_heading"
           onChange={handleSearch}
           autoComplete="new-password"
@@ -3980,8 +4136,8 @@ export function supportSystemMessage(translation, handleSearch, isModal = false)
         {
           width: 200,
           title: convertToLang(translation[""], "DATE"),
-          dataIndex: 'date',
-          key: 'date',
+          dataIndex: 'createdAt',
+          key: 'createdAt',
         }
       ]
     },

@@ -30,8 +30,12 @@ class SendMessage extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
+
+      let dealerData = [];
+      dealerData  = this.props.dealerList.filter(dealer => this.state.selectedDealers.find(item => item.key === dealer.dealer_id));
+
       if (!err){
-        values.receiver_ids = this.state.selectedDealers;
+        values.receivers = dealerData;
         this.props.generateSupportSystemMessages(values);
         this.handleCancel();
       }
@@ -54,17 +58,6 @@ class SendMessage extends Component {
 
 
   }
-
-  handleMultipleSelect = () => {
-    let data = {}
-
-    if (this.state.selectedDealers.length) {
-      data = {
-        dealers: this.state.selectedDealers
-      };
-      this.props.getAllDealers();
-    }
-  };
 
   handleDeselect = (e, dealerOrUser = '') => {
 
@@ -173,7 +166,7 @@ class SendMessage extends Component {
                     <Select.Option key="allDealers" value="all">Select All</Select.Option>
                     : <Select.Option key="" value="">Data Not Found</Select.Option>
                   }
-                  {this.state.allDealers.map(item => <Select.Option key={item.key} value={item.key} data-object={item}>{item.label}</Select.Option>)}
+                  {this.state.allDealers.map(item => <Select.Option key={item.key} value={item.key} >{item.label}</Select.Option>)}
                 </Select>
               </Form.Item>
             </Col>

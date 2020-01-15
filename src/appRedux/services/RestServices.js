@@ -1163,9 +1163,25 @@ const RestService = {
     },
 
     //Support System Messages
+
+    //get Support System Messages
+    getSupportSystemMessages: (data) => {
+      return axios.get(SUPPORT_URL + 'system-messages', RestService.getHeader());
+    },
+
+    //get Support System Messages
+    getReceivedSupportSystemMessages: (data) => {
+      return axios.get(SUPPORT_URL + 'system-messages/received', RestService.getHeader());
+    },
+
     //generate Support System Messages
     generateSupportSystemMessages: (data) => {
       return axios.post(SUPPORT_URL + 'system-messages/store', data, RestService.getHeader());
+    },
+
+    //update Support System Message Notification
+    updateSupportSystemMessageNotification: (data) => {
+      return axios.post(SUPPORT_URL + 'system-messages/update-notification', data, RestService.getHeader());
     },
 };
 export default RestService;

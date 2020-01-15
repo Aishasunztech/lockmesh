@@ -1,54 +1,69 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Icon, Modal } from "antd";
-
+import {Card, Icon, Modal, Tabs} from "antd";
 import AppFilter from "../../../components/AppFilter";
 import { convertToLang } from '../../utils/commonUtils'
-import ListMessages from './components/ListMessages';
+import ListSentMessages from './components/ListSentMessages';
+import ListReceivedMessages from './components/ListReceivedMessages';
 import SendMessage from './components/SendMessage';
 import { getAllDealers } from "../../../appRedux/actions/Dealers";
 import {
-  updateBulkMsg,
   closeResponseModal
 } from "../../../appRedux/actions/BulkDevices";
 
-import { generateSupportSystemMessages } from "../../../appRedux/actions/SupportSystemMessages";
+import { updateSupportSystemMessageNotification,
+  generateSupportSystemMessages,
+  getSupportSystemMessages,
+  getReceivedSupportSystemMessages } from "../../../appRedux/actions/SupportSystemMessages";
+import { supportSystemMessage, receivedSupportSystemMessagesColumns } from "../../utils/columnsUtils";
+import {ADMIN, SDEALER} from "../../../constants/Constants";
 
-import { supportSystemMessage } from "../../utils/columnsUtils";
+const TabPane = Tabs.TabPane;
 
-var domainStatus = true;
-var copyDomainList = [];
 
 class SystemMessages extends Component {
 
   constructor(props) {
     super(props);
     var columns = supportSystemMessage(props.translation, this.handleSearch);
+    var receivedSupportSystemMessagesCols = receivedSupportSystemMessagesColumns(props.translation, this.handleSearch);
 
     this.state = {
       sorterKey: '',
       sortOrder: 'ascend',
-      apk_list: [],
-      bulkMsgs: [],
-      uploadApkModal: false,
-      showUploadModal: false,
-      showUploadData: {},
       columns: columns,
+      receivedSupportSystemMessagesCols: receivedSupportSystemMessagesCols,
       visible: false,
+      messageTab: (this.props.user.type === SDEALER) ? "2": "1",
       editRecord: null,
       editModal: false
     };
     this.confirm = Modal.confirm;
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props !== prevProps) {
-      this.setState({
-        bulkMsgs: this.props.bulkMsgs
-      })
+  handleChangeCardTabs = (value) => {
+
+    switch (value) {
+      case '1':
+        this.setState({
+          messageTab: '1'
+        });
+        break;
+
+      case '2':
+        this.setState({
+          messageTab: '2'
+        });
+
+        break;
+      default:
+        this.setState({
+          messageTab: '1'
+        });
+        break;
     }
-  }
+  };
 
   componentDidMount() {
     this.props.getAllDealers();
@@ -68,19 +83,42 @@ class SystemMessages extends Component {
               isAddButton={true}
               handleSendMsgModal={true}
               handleSendMsgButton={this.handleSendMsgButton}
-              pageHeading={convertToLang(this.props.translation[""], "System  Messages")}
+              pageHeading={convertToLang(this.props.translation[""], "System Messages")}
               addButtonText={convertToLang(this.props.translation[""], "Send New Message")}
             />
 
-            <ListMessages
-              bulkMsgs={this.state.bulkMsgs}
-              handleConfirmDelete={this.handleConfirmDelete}
-              columns={this.state.columns}
-              getApkList={this.props.getApkList}
-              ref="list_msgs"
-              translation={this.props.translation}
-              updateBulkMsgAction={this.props.updateBulkMsg}
-            />
+            <Card>
+              <Tabs defaultActiveKey={ (this.props.user.type === SDEALER) ? "2": "1" } activeKey={this.state.messageTab} type="card" onChange={this.handleChangeCardTabs}>
+
+                {(this.props.user.type !== SDEALER) ?
+                <TabPane tab="SENT SYSTEM MESSAGES" key="1" forceRender={true}>
+                  <ListSentMessages
+                    supportSystemMessages={this.props.supportSystemMessages}
+                    columns={this.state.columns}
+                    dealerList={this.props.dealerList}
+                    getSupportSystemMessages={this.props.getSupportSystemMessages}
+                    translation={this.props.translation}
+                  />
+                </TabPane> : ''}
+
+                {(this.props.user.type !== ADMIN) ?
+                <TabPane tab="RECEIVED SYSTEM MESSAGES" key="2" forceRender={true}>
+                  <ListReceivedMessages
+                    receivedSupportSystemMessages={this.props.receivedSupportSystemMessages}
+                    columns={this.state.receivedSupportSystemMessagesCols}
+                    dealerList={this.props.dealerList}
+                    translation={this.props.translation}
+                    user={this.props.user}
+                    getReceivedSupportSystemMessages={this.props.getReceivedSupportSystemMessages}
+                    updateSupportSystemMessageNotification={this.props.updateSupportSystemMessageNotification}
+                  />
+                </TabPane>
+                  : ''}
+
+              </Tabs>
+            </Card>
+
+
           </div>
         }
         {/* Send Message modal */}
@@ -119,12 +157,7 @@ class SystemMessages extends Component {
     let fieldName = e.target.name;
     let fieldValue = e.target.value;
 
-    if (domainStatus) {
-      copyDomainList = this.props.bulkMsgs
-      domainStatus = false;
-    }
-
-    let searchedData = this.searchField(copyDomainList, fieldName, fieldValue);
+    let searchedData = this.searchField(fieldName, fieldValue);
     this.setState({
       bulkMsgs: searchedData
     });
@@ -162,21 +195,23 @@ class SystemMessages extends Component {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    updateBulkMsg: updateBulkMsg,
     getAllDealers: getAllDealers,
     closeResponseModal: closeResponseModal,
-    generateSupportSystemMessages: generateSupportSystemMessages
+    generateSupportSystemMessages: generateSupportSystemMessages,
+    getSupportSystemMessages: getSupportSystemMessages,
+    getReceivedSupportSystemMessages: getReceivedSupportSystemMessages,
+    updateSupportSystemMessageNotification: updateSupportSystemMessageNotification
   }, dispatch);
 }
 
-const mapStateToProps = ({ account, auth, settings, dealers, bulkDevices, SupportSystemMessages }) => {
+const mapStateToProps = ({ account, auth, settings, dealers, SupportSystemMessages }) => {
   return {
     isloading: account.isloading,
+    user: auth.authUser,
     dealerList: dealers.dealers,
     translation: settings.translation,
     supportSystemMessages: SupportSystemMessages.supportSystemMessages,
-    response_modal_action: bulkDevices.response_modal_action,
-    bulkMsgs: bulkDevices.bulkMsgs
+    receivedSupportSystemMessages: SupportSystemMessages.receivedSupportSystemMessages,
   };
 };
 

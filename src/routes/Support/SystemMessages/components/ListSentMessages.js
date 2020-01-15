@@ -4,7 +4,7 @@ import {getDateFromTimestamp, checkValue, convertToLang} from '../../../utils/co
 import { supportSystemMessagesReceiversColumns } from '../../../utils/columnsUtils';
 import ViewMessage from './ViewMessage'
 
-export default class ListMessages extends Component {
+export default class ListSentMessages extends Component {
 
   constructor(props) {
     super(props);
@@ -41,7 +41,7 @@ export default class ListMessages extends Component {
   };
 
   componentDidMount() {
-
+    this.props.getSupportSystemMessages();
   }
 
   componentDidUpdate(prevProps) {
@@ -51,11 +51,6 @@ export default class ListMessages extends Component {
         columns: this.props.columns
       })
     }
-
-    if (this.state.viewMessage && this.props.user.type !== this.state.messageObject.sender_user_type){
-      this.props.updateSupportSystemMessageNotification({systemMessageId: this.state.messageObject._id})
-    }
-
   }
 
   handleMessageModal = (data) => {
@@ -185,8 +180,6 @@ export default class ListMessages extends Component {
           <ViewMessage
             messageObject={this.state.messageObject}
             translation={this.props.translation}
-            user={this.props.user}
-            updateSupportSystemMessageNotification={this.props.updateSupportSystemMessageNotification}
           />
 
         </Modal>
