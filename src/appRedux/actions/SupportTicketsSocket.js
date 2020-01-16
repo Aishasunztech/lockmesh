@@ -1,6 +1,6 @@
 //==========> Connect Device events
 
-import {GENERATE_SUPPORT_TICKET} from "../../constants/ActionTypes";
+import {GENERATE_SUPPORT_TICKET, UPDATE_SUPPORT_TICKET_REPLY} from "../../constants/ActionTypes";
 
 export const generateSupportTicketEvent = (socket) => {
 
@@ -11,6 +11,16 @@ export const generateSupportTicketEvent = (socket) => {
 
         dispatch({
           type: GENERATE_SUPPORT_TICKET,
+          payload: response
+        })
+      })
+    }
+
+    if (socket && socket._callbacks['$' + GENERATE_SUPPORT_TICKET] == undefined){
+      socket.on(UPDATE_SUPPORT_TICKET_REPLY, (response) => {
+
+        dispatch({
+          type: UPDATE_SUPPORT_TICKET_REPLY,
           payload: response
         })
       })

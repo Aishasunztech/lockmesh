@@ -7,7 +7,8 @@ import {
   GET_SUPPORT_TICKET_REPLY,
   UPDATE_NOTIFICATION_STATUS,
   INVALID_TOKEN,
-  SPIN_lOADING
+  SPIN_lOADING, SET_CURRENT_TICKET_ID,
+  RESET_CURRENT_TICKET_ID
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -30,6 +31,23 @@ export function generateSupportTicket(data) {
           type: INVALID_TOKEN
         });
       }
+    });
+  };
+}
+
+export function setCurrentTicketId(data){
+  return (dispatch) => {
+    dispatch({
+      type: SET_CURRENT_TICKET_ID,
+      payload: data
+    });
+  };
+}
+
+export function resetCurrentTicketId(){
+  return (dispatch) => {
+    dispatch({
+      type: RESET_CURRENT_TICKET_ID
     });
   };
 }

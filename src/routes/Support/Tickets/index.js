@@ -19,12 +19,15 @@ import {
   closeSupportTicket,
   deleteSupportTicket,
   getSupportTicketReplies,
-  getAllToAllDealers
+  getAllToAllDealers,
+  setCurrentTicketId,
+  resetCurrentTicketId
 } from "../../../appRedux/actions";
 import { connect } from "react-redux";
 import {
   ADMIN, DEALER, SDEALER
 } from "../../../constants/Constants";
+import {SET_CURRENT_TICKET_ID} from "../../../constants/ActionTypes";
 
 const confirm = Modal.confirm;
 
@@ -330,6 +333,7 @@ class Mail extends PureComponent {
       currentMail: mail,
       selectedMails: []
     });
+    this.props.setCurrentTicket(mail._id);
   }
 
   addLabel(mail, label) {
@@ -392,6 +396,7 @@ class Mail extends PureComponent {
                   {this.state.currentMail === null ? '' :
                     <i className="icon icon-arrow-left gx-icon-btn" onClick={() => {
                       this.setState({ currentMail: null })
+                      this.props.resetCurrentTicket();
                     }} />
                   }
 
@@ -442,6 +447,8 @@ function mapDispatchToProps(dispatch) {
     closeSupportTicket: closeSupportTicket,
     deleteSupportTicket: deleteSupportTicket,
     getSupportTicketReplies: getSupportTicketReplies,
+    setCurrentTicket: setCurrentTicketId,
+    resetCurrentTicket: resetCurrentTicketId
   }, dispatch);
 }
 

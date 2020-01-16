@@ -190,7 +190,6 @@ const mapStateToProps = ({ rightSidebar, auth, socket }) => {
     tasks: rightSidebar.tasks,
     supportSystemSocket: socket.supportSystemSocket,
     socket: socket.socket
-
   }
 };
 

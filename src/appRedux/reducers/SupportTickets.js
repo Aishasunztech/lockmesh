@@ -6,6 +6,9 @@ import {
   CLOSE_SUPPORT_TICKET,
   DELETE_SUPPORT_TICKET,
   LOADING, GENERATE_SUPPORT_TICKET_SOCKET,
+  SET_CURRENT_TICKET_ID,
+  RESET_CURRENT_TICKET_ID,
+  UPDATE_SUPPORT_TICKET_REPLY
 } from "../../constants/ActionTypes";
 
 import { message, Modal } from 'antd';
@@ -14,7 +17,7 @@ const error   = Modal.error;
 const initialState = {
   isloading: true,
   supportTickets: [],
-  ticketReply: [],
+  currentTicketId: null,
   closeSupportTicketStatus: false,
   supportTicketReplies: [],
 };
@@ -30,6 +33,20 @@ export default (state = initialState, action) => {
         isloading: true,
         dealers: [],
       };
+
+    case SET_CURRENT_TICKET_ID: {
+      return {
+        ...state,
+        currentTicketId: action.payload
+      };
+    }
+
+    case RESET_CURRENT_TICKET_ID: {
+      return {
+        ...state,
+        currentTicketId: null
+      }
+    }
 
     case GENERATE_SUPPORT_TICKET:{
       let tickets = state.supportTickets;
@@ -102,9 +119,44 @@ export default (state = initialState, action) => {
 
     case GET_SUPPORT_TICKET_REPLY:{
 
+      // let ticketId = action.payload.data.replies.filter(a => );
+
       return {
         ...state,
         supportTicketReplies: action.payload.data,
+      };
+    }
+
+    case UPDATE_SUPPORT_TICKET_REPLY: {
+
+      console.log(action.payload.data);
+
+      let replies = state.supportTicketReplies;
+      if (action.payload.status) {
+        replies = action.payload.data;
+        success({
+          title: action.payload.msg,
+        });
+      }
+      else {
+        error({
+          title: action.payload.msg,
+        });
+      }
+
+      if(state.currentTicketId != null){
+        if(state.currentTicketId === action.payload.data._id){
+          replies = action.payload.data.replies;
+        } else {
+          replies = state.supportTicketReplies
+        }
+      } else {
+        replies = []
+      }
+
+      return {
+        ...state,
+        supportTicketReplies: replies,
       };
     }
 
