@@ -3,8 +3,7 @@ import { Button, Drawer, Form, Tag, Tabs, Collapse, } from "antd";
 import { connect } from "react-redux";
 import Auxiliary from "../../util/Auxiliary";
 import CustomScrollbars from "../../util/CustomScrollbars";
-import {getSocketProcesses, getNotification, connectSocket} from '../../appRedux/actions';
-import { generateSupportTicketEvent } from "../../appRedux/actions";
+import {getSocketProcesses, getNotification } from '../../appRedux/actions';
 import styles from './rightSidebar.css'
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
@@ -148,10 +147,6 @@ class RightSidebar extends Component {
     if (nextProps.socket && nextProps.socket.connected) {
       nextProps.getNotification(nextProps.socket)
     }
-
-    if (nextProps.supportSystemSocket) {
-      this.props.generateSupportTicketEvent(nextProps.supportSystemSocket);
-    }
   }
   render() {
     // console.log(this.props)
@@ -188,11 +183,10 @@ const mapStateToProps = ({ rightSidebar, auth, socket }) => {
   // console.log("rightSidebar.tasks ", rightSidebar.tasks)
   return {
     tasks: rightSidebar.tasks,
-    supportSystemSocket: socket.supportSystemSocket,
     socket: socket.socket
   }
 };
 
 RightSidebar = Form.create()(RightSidebar);
 
-export default connect(mapStateToProps, { getSocketProcesses, getNotification, generateSupportTicketEvent })(RightSidebar);
+export default connect(mapStateToProps, { getSocketProcesses, getNotification })(RightSidebar);

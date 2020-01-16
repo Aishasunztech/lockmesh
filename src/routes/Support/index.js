@@ -67,5 +67,6 @@ class Support extends Component {
   }
 }
 
+
 const WrappedAddDeviceForm = Form.create()(Support);
 export default WrappedAddDeviceForm;
