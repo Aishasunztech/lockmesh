@@ -16,7 +16,8 @@ export const generateSupportTicketEvent = (socket) => {
       })
     }
 
-    if (socket && socket._callbacks['$' + GENERATE_SUPPORT_TICKET] == undefined){
+    if (socket && socket._callbacks['$' + UPDATE_SUPPORT_TICKET_REPLY] == undefined) {
+
       socket.on(UPDATE_SUPPORT_TICKET_REPLY, (response) => {
 
         dispatch({
