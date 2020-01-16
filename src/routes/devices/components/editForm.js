@@ -1852,7 +1852,7 @@ class EditDevice extends Component {
                         <div className="edit_ftr_btn" >
                             <Button onClick={() => { this.setState({ showConfirmCredit: false }) }}>CANCEL</Button>
 
-                            {(this.props.user_credit < this.state.serviceData.total_price) ?
+                            {(this.props.user_credit < this.state.serviceData.total_price && this.props.user.account_balance_status === 'active') ?
                                 <Button type='primary' onClick={() => { this.submitServicesConfirm(false) }}>PAY LATER</Button>
                                 : null
                             }
