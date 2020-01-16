@@ -4069,28 +4069,11 @@ export function supportSystemMessage(translation, handleSearch, isModal = false)
     },
 
     {
-      title: (
-        <Input.Search
-          name="receiver"
-          key="receiver"
-          id="receiver"
-          className="search_heading"
-          onChange={handleSearch}
-          autoComplete="new-password"
-          placeholder="RECEIVER"
-        />
-      ),
+      title: "RECEIVER",
       dataIndex: 'receiver',
       className: '',
       key: 'receiver',
-      children: [
-        {
-          width: 200,
-          title: convertToLang(translation[""], "RECEIVER"),
-          dataIndex: 'receiver',
-          key: 'receiver',
-        }
-      ]
+      width: 200,
     },
 
     {

@@ -136,7 +136,6 @@ export default class ListSentMessages extends Component {
         <Card>
           <Table
             className="gx-table-responsive"
-            rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
             expandIcon={(props) => this.customExpandIcon(props)}
             expandedRowRender={(record) => {
               return (

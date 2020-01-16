@@ -52,7 +52,7 @@ export default class ListReceivedMessages extends Component {
     }
 
     if (this.state.viewMessage && this.props.user.type !== this.state.messageObject.sender_user_type){
-      this.props.updateSupportSystemMessageNotification({systemMessageId: this.state.messageObject._id})
+      this.props.updateSupportSystemMessageNotification({systemMessageId: this.state.messageObject.id})
     }
 
   }
@@ -68,15 +68,16 @@ export default class ListReceivedMessages extends Component {
 
     list.map((item) => {
       data = {
-        key: item.id,
         id: item.id,
-        sender: <span className="text-capitalize">{item.system_message.sender_user_type}</span>,
-        subject: checkValue(item.system_message.subject),
-        createdAt: item.system_message.createdAt ? getDateFromTimestamp(item.system_message.createdAt) : "N/A",
+        key: item.id,
+        rowKey: item.id,
+        sender: <span className="text-capitalize">{item.sender}</span>,
+        subject: checkValue(item.subject),
+        createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "N/A",
         action: (
           <div data-column="ACTION" style={{ display: "inline-flex" }}>
             <Fragment>
-              <Fragment><Button type="primary" size="small" onClick={() => this.handleMessageModal(JSON.parse(JSON.stringify(item.system_message)))}>VIEW MESSAGE</Button></Fragment>
+              <Fragment><Button type="primary" size="small" onClick={() => this.handleMessageModal(JSON.parse(JSON.stringify(item)))}>VIEW MESSAGE</Button></Fragment>
             </Fragment>
           </div>
         ),
@@ -86,26 +87,6 @@ export default class ListReceivedMessages extends Component {
     });
     return supportSystemMessages
   }
-
-  renderReceiversList(list) {
-    let receiversData = [];
-    let data;
-
-    let dealerData = [];
-    dealerData  = this.props.dealerList.filter(dealer => list.includes(dealer.dealer_id));
-    dealerData.map((item, index) => {
-      data = {
-        key: item.dealer_id,
-        counter: ++index,
-        name: item.dealer_name ? item.dealer_name : "N/A",
-        link_code: item.link_code ? item.link_code : "N/A",
-      };
-      receiversData.push(data)
-    });
-
-    return receiversData
-  }
-
 
   render() {
 
