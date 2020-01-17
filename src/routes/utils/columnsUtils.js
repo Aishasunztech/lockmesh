@@ -4103,94 +4103,19 @@ export function supportSystemMessage(translation, handleSearch, isModal = false)
         }
       ]
     },
-
-        {
-            title: (
-                <Input.Search
-                    name="receiver"
-                    key="receiver"
-                    id="receiver"
-                    className="search_heading"
-                    onChange={handleSearch}
-                    autoComplete="new-password"
-                    placeholder="RECEIVER"
-                />
-            ),
-            dataIndex: 'receiver',
-            className: '',
-            key: 'receiver',
-            children: [
-                {
-                    width: 200,
-                    title: convertToLang(translation[""], "RECEIVER"),
-                    dataIndex: 'receiver',
-                    key: 'receiver',
-                }
-            ]
-        },
-
-        {
-            title: (
-                <Input.Search
-                    name="subject"
-                    key="subject"
-                    id="subject"
-                    className="search_heading"
-                    onChange={handleSearch}
-                    autoComplete="new-password"
-                    placeholder="SUBJECT"
-                />
-            ),
-            dataIndex: 'subject',
-            className: '',
-            key: 'subject',
-            children: [
-                {
-                    title: convertToLang(translation[""], "SUBJECT"),
-                    dataIndex: 'subject',
-                    key: 'subject',
-                }
-            ]
-        },
-
-        {
-            title: (
-                <Input.Search
-                    name="date"
-                    key="date"
-                    id="date"
-                    className="search_heading"
-                    onChange={handleSearch}
-                    autoComplete="new-password"
-                    placeholder="DATE"
-                />
-            ),
-            dataIndex: 'date',
-            className: '',
-            key: 'date',
-            children: [
-                {
-                    width: 200,
-                    title: convertToLang(translation[""], "DATE"),
-                    dataIndex: 'date',
-                    key: 'date',
-                }
-            ]
-        },
-
-        {
-            title: "ACTION",
-            dataIndex: 'action',
-            align: 'center',
-            width: 150,
-            className: '',
-        },
-    ];
+    {
+      title: "ACTION",
+      dataIndex: 'action',
+      align: 'center',
+      width: 150,
+      className: '',
+    },
+  ];
 
 
-    if (isModal) {
-        columns.splice(1, 1)
-    }
+  if (isModal) {
+    columns.splice(1, 1)
+  }
 
-    return columns;
+  return columns;
 }
