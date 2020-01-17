@@ -10,19 +10,13 @@ class ViewMessage extends Component {
 
     this.state = {
       visible: true,
-      messageBody : null
     }
   }
-
-  componentDidMount() {
-    this.setState({messageBody: this.props.messageObject.message})
-  }
-
 
   render() {
     return (
       <div>
-        {this.state.messageBody}
+        {this.props.messageObject.message}
       </div>
     )
 

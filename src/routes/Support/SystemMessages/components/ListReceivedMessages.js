@@ -58,6 +58,7 @@ export default class ListReceivedMessages extends Component {
   }
 
   handleMessageModal = (data) => {
+
     this.setState({ viewMessage: true, messageObject: data })
   };
 

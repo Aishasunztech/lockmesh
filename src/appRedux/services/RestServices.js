@@ -1180,6 +1180,11 @@ const RestService = {
       return axios.get(SUPPORT_URL + 'system-messages/received', RestService.getHeader());
     },
 
+    //get Support System Messages
+    getSupportSystemMessagesNotifications: (data) => {
+      return axios.get(SUPPORT_URL + 'system-messages/notifications', RestService.getHeader());
+    },
+
     //generate Support System Messages
     generateSupportSystemMessages: (data) => {
       return axios.post(SUPPORT_URL + 'system-messages/store', data, RestService.getHeader());

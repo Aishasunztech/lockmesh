@@ -1411,51 +1411,20 @@ export function supportSystemMessagesReceiversColumns(translation, handleSearch)
       render: (text, record, index) => ++index,
     },
     {
-      title: (
-        <Input.Search
-          name="name"
-          key="name"
-          id="name"
-          className="search_heading link_code_w"
-          onChange={handleSearch}
-          autoComplete="new-password"
-          placeholder={titleCase(convertToLang(translation[DEVICE_ACTIVATION_CODE], "NAME"))}
-        />
-      ),
+      title: convertToLang(translation[DEVICE_ACTIVATION_CODE], "NAME"),
+      align: "center",
       dataIndex: 'name',
-      children: [
-        {
-          title: convertToLang(translation[DEVICE_ACTIVATION_CODE], "NAME"),
-          align: "center",
-          dataIndex: 'name',
-          sorter: (a, b) => { return a.name.localeCompare(b.name) },
-          sortDirections: ['ascend', 'descend'],
-        }
-      ]
+      sorter: (a, b) => { return a.name.localeCompare(b.name) },
+      sortDirections: ['ascend', 'descend'],
     },
     {
-      title: (
-        <Input.Search
-          name="link_code"
-          key="link_code"
-          id="link_code"
-          className="search_heading link_code_w"
-          onChange={handleSearch}
-          autoComplete="new-password"
-          placeholder={titleCase(convertToLang(translation[DEVICE_DEALER_PIN], "DEALER PIN"))}
-        />
-      ),
-      dataIndex: 'dealer_pin',
-      children: [
-        {
-          title: convertToLang(translation[DEVICE_DEALER_PIN], "DEALER PIN"),
-          align: "center",
-          dataIndex: 'link_code',
-          key: 'link_code',
-          sorter: (a, b) => { return a.link_code - b.link_code },
-          sortDirections: ['ascend', 'descend'],
-        }
-      ]
+      title: convertToLang(translation[DEVICE_DEALER_PIN], "DEALER PIN"),
+      align: "center",
+      dataIndex: 'link_code',
+      key: 'link_code',
+      sorter: (a, b) => { return a.link_code - b.link_code },
+      sortDirections: ['ascend', 'descend'],
+
     },
   ]);
 }
@@ -1492,6 +1461,8 @@ export function receivedSupportSystemMessagesColumns(translation, handleSearch) 
           title: convertToLang(translation[""], "SENDER"),
           dataIndex: 'sender',
           key: 'sender',
+          sorter: (a, b) => { return a.sender.props.children.localeCompare(b.sender.props.children) },
+          sortDirections: ['ascend', 'descend'],
         }
       ]
     },
@@ -1516,6 +1487,8 @@ export function receivedSupportSystemMessagesColumns(translation, handleSearch) 
           title: convertToLang(translation[""], "SUBJECT"),
           dataIndex: 'subject',
           key: 'subject',
+          sorter: (a, b) => { return a.subject.localeCompare(b.subject) },
+          sortDirections: ['ascend', 'descend'],
         }
       ]
     },
@@ -1541,6 +1514,8 @@ export function receivedSupportSystemMessagesColumns(translation, handleSearch) 
           title: convertToLang(translation[""], "DATE"),
           dataIndex: 'createdAt',
           key: 'createdAt',
+          sorter: (a, b) => { return a.createdAt.localeCompare(b.createdAt) },
+          sortDirections: ['ascend', 'descend'],
         }
       ]
     },
@@ -4096,6 +4071,8 @@ export function supportSystemMessage(translation, handleSearch, isModal = false)
           title: convertToLang(translation[""], "SUBJECT"),
           dataIndex: 'subject',
           key: 'subject',
+          sorter: (a, b) => { return a.subject.localeCompare(b.subject) },
+          sortDirections: ['ascend', 'descend'],
         }
       ]
     },
@@ -4121,6 +4098,8 @@ export function supportSystemMessage(translation, handleSearch, isModal = false)
           title: convertToLang(translation[""], "DATE"),
           dataIndex: 'createdAt',
           key: 'createdAt',
+          sorter: (a, b) => { return a.createdAt.localeCompare(b.createdAt) },
+          sortDirections: ['ascend', 'descend'],
         }
       ]
     },

@@ -82,9 +82,9 @@ class SystemMessages extends Component {
       let data;
       this.props.receivedSupportSystemMessages.map((item) => {
         data = {
-          id: item._id,
-          key: item._id,
-          rowKey: item._id,
+          id: item.system_message._id,
+          key: item.system_message._id,
+          rowKey: item.system_message._id,
           sender: item.system_message.sender_user_type,
           subject: checkValue(item.system_message.subject),
           message: checkValue(item.system_message.message),

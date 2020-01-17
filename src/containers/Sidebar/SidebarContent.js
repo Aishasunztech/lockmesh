@@ -18,10 +18,13 @@ import {
   acceptServiceRequest,
   getCancelServiceRequests,
   getTicketsNotifications,
+
 } from "../../appRedux/actions/SideBar";
 import {
   getLatestPaymentHistory, getOverdueDetails,
 } from "../../appRedux/actions/Account";
+
+import { getSupportSystemMessagesNotifications } from "../../appRedux/actions";
 
 import { transferDeviceProfile } from "../../appRedux/actions/ConnectDevice";
 
@@ -108,6 +111,7 @@ class SidebarContent extends Component {
       this.refs.new_device.showModal();
     }
     this.props.getTicketsNotifications()
+    this.props.getSupportSystemMessagesNotifications()
     // alert('its working');
   }
   showCreditsModal = () => {
@@ -130,6 +134,7 @@ class SidebarContent extends Component {
     this.props.getNewDevicesList();
     this.props.getNewCashRequests();
     this.props.getTicketsNotifications()
+    this.props.getSupportSystemMessagesNotifications()
     this.props.getAllToAllDealers()
 
     console.log("asdsad");
@@ -254,6 +259,7 @@ class SidebarContent extends Component {
               acceptServiceRequest={this.props.acceptServiceRequest}
               ticketNotifications={this.props.ticketNotifications}
               allDealers={this.props.allDealers}
+              supportSystemMessagesNotifications={this.props.supportSystemMessagesNotifications}
 
             />
             <span className="font_14">
@@ -412,7 +418,7 @@ class SidebarContent extends Component {
 
 // SidebarContent.propTypes = {};
 
-const mapStateToProps = ({ settings, devices, sidebar, account, auth, dealers }) => {
+const mapStateToProps = ({ settings, devices, sidebar, account, auth, dealers, SupportSystemMessages }) => {
   const { navStyle, themeType, locale, pathname, languages, translation, isSwitched } = settings;
   // console.log(sidebar.ticketNotifications);
   return {
@@ -436,6 +442,7 @@ const mapStateToProps = ({ settings, devices, sidebar, account, auth, dealers })
     account_balance_status: auth.authUser.account_balance_status,
     account_balance_status_by: auth.authUser.account_balance_status_by,
     allDealers: dealers.allDealers,
+    supportSystemMessagesNotifications: SupportSystemMessages.supportSystemMessagesNotifications,
 
   }
 };
@@ -461,6 +468,7 @@ export default connect(mapStateToProps,
     acceptServiceRequest,
     rejectServiceRequest,
     getTicketsNotifications,
+    getSupportSystemMessagesNotifications,
     getAllToAllDealers
 
   }

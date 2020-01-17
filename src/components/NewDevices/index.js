@@ -46,11 +46,18 @@ export default class NewDevices extends Component {
             { title: convertToLang(props.translation[""], "CREATED AT"), dataIndex: 'created_at', key: 'created_at', align: "center" },
         ];
 
+        const supportSystemMessages = [
+          { title: convertToLang(props.translation[""], "SENDER"), dataIndex: 'sender', key: 'sender', align: "center" },
+          { title: convertToLang(props.translation[""], "SUBJECT"), dataIndex: 'subject', key: 'subject', align: "center" },
+          { title: convertToLang(props.translation[""], "CREATED AT"), dataIndex: 'created_at', key: 'created_at', align: "center" },
+        ];
+
         this.state = {
             columns: columns,
             columns1: columns1,
             cancelServiceColumns: cancelServiceColumns,
             ticketNotificationColumns: ticketNotificationColumns,
+            supportSystemMessages: supportSystemMessages,
             visible: false,
             NewDevices: [],
             NewRequests: [],
@@ -199,6 +206,23 @@ export default class NewDevices extends Component {
             return [];
         }
 
+    }
+
+  renderSupportSystemMessagesNotifications(list) {
+        if (list) {
+            return list.map((notification) => {
+
+                return {
+                    id: notification.id,
+                    key: notification.id,
+                    sender: <span className="text-capitalize">{notification.sender_user_type}</span>,
+                    subject: notification.system_message.subject,
+                    created_at: moment(notification.createdAt).format('YYYY/MM/DD hh:mm:ss'),
+                }
+            });
+        }else {
+            return [];
+        }
     }
 
     renderServiceRequestList(list) {
@@ -355,6 +379,19 @@ export default class NewDevices extends Component {
 
                         />
                     </Fragment>
+
+                  <Fragment>
+                    <h1>{convertToLang(this.props.translation[""], "System Message Notifications")}</h1>
+                    <Table
+                      bordered
+                      columns={this.state.supportSystemMessages}
+                      style={{ marginTop: 20 }}
+                      dataSource={this.renderSupportSystemMessagesNotifications(this.props.supportSystemMessagesNotifications)}
+                      pagination={false}
+
+                    />
+                  </Fragment>
+
                 </Modal>
                 <AddDeviceModal ref='add_device_modal' translation={this.props.translation} />
 
