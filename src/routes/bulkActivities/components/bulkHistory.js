@@ -180,11 +180,11 @@ export default class Activity extends Component {
     }
 
 
-    renderHistoryList = () => {
+    renderHistoryList = (data) => {
         // let data = this.props.history;
-        let data = this.state.activities;
+        // let data = this.state.activities;
         // console.log("history is: ", data)
-        if (data.length) {
+        if (data && data.length) {
             return data.map((row, index) => {
                 // console.log(row);
                 return {
@@ -195,11 +195,13 @@ export default class Activity extends Component {
                     data: row.data
                 }
             })
+        } else {
+            return [];
         }
     }
     render() {
 
-        // console.log(this.state.activities[16], 'activities to')
+        console.log(this.state.activities, 'activities to')
 
         const { visible, loading } = this.state;
         return (
@@ -262,7 +264,7 @@ export default class Activity extends Component {
                                 this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''
                             }
                             onExpand={this.onExpandRow}
-                            dataSource={this.renderHistoryList}
+                            dataSource={this.renderHistoryList(this.state.activities ? this.state.activities : [])}
                             expandedRowRender={record => {
                                 // console.log('recored', record)
 
