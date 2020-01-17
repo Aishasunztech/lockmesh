@@ -733,7 +733,7 @@ class AddDevice extends Component {
                 showConfirmCredit: false
             })
         } else {
-            showCreditPurchase(this)
+            showCreditPurchase(this, "Your Credits are not enough to apply these services. Please select other services OR Purchase Credits.")
         }
 
         this.setState({
