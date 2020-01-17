@@ -912,7 +912,7 @@ class AddDevice extends Component {
         // console.log(this.props);
         // console.log('id is', this.state.products, this.state.packages);
         // console.log("form props: ", this.props.form);
-
+        // console.log(this.props.user);
         const { visible, loading, isloading, addNewUserValue } = this.state;
         const { users_list } = this.props;
         var lastObject = users_list[0]
@@ -1901,7 +1901,7 @@ class AddDevice extends Component {
 
                         <div className="edit_ftr_btn" >
                             <Button onClick={() => { this.setState({ showConfirmCredit: false }) }}>CANCEL</Button>
-                            {(this.props.user_credit < (this.state.serviceData.total_price + this.state.serviceData.hardwarePrice)) ?
+                            {(this.props.user_credit < (this.state.serviceData.total_price + this.state.serviceData.hardwarePrice) && this.props.user.account_balance_status === 'active') ?
                                 <Button type='primary' onClick={() => { this.submitServicesConfirm(false) }}>PAY LATER</Button>
                                 : null
                             }

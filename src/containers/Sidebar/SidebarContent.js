@@ -418,7 +418,7 @@ class SidebarContent extends Component {
 
 // SidebarContent.propTypes = {};
 
-const mapStateToProps = ({ settings, devices, sidebar, account, auth, dealers, SupportSystemMessages }) => {
+const mapStateToProps = ({ settings, devices, sidebar, account, auth, dealers, SupportSystemMessages, socket }) => {
   const { navStyle, themeType, locale, pathname, languages, translation, isSwitched } = settings;
   // console.log(sidebar.ticketNotifications);
   return {
@@ -443,7 +443,7 @@ const mapStateToProps = ({ settings, devices, sidebar, account, auth, dealers, S
     account_balance_status_by: auth.authUser.account_balance_status_by,
     allDealers: dealers.allDealers,
     supportSystemMessagesNotifications: SupportSystemMessages.supportSystemMessagesNotifications,
-
+    socket: socket.socket
   }
 };
 export default connect(mapStateToProps,
@@ -470,7 +470,6 @@ export default connect(mapStateToProps,
     getTicketsNotifications,
     getSupportSystemMessagesNotifications,
     getAllToAllDealers
-
   }
 )(SidebarContent);
 

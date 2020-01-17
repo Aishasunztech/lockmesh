@@ -2,7 +2,7 @@ import {
   GENERATE_SUPPORT_SYSTEM_MESSAGE,
   GET_SUPPORT_SYSTEM_MESSAGE,
   GET_RECEIVED_SUPPORT_SYSTEM_MESSAGES,
-  LOADING, UPDATE_SUPPORT_SYSTEM_MESSAGE_NOTIFICATION, GET_SUPPORT_SYSTEM_MESSAGE_NOTIFICATION
+  LOADING, UPDATE_SUPPORT_SYSTEM_MESSAGE_NOTIFICATION, GET_SUPPORT_SYSTEM_MESSAGE_NOTIFICATION, SYSTEM_SUPPORT_MESSAGE_RECEIVED
 } from "../../constants/ActionTypes";
 
 import { message, Modal } from 'antd';
@@ -67,6 +67,18 @@ export default (state = initialState, action) => {
         ...state,
         receivedSupportSystemMessages: action.payload,
       };
+    }
+
+    case SYSTEM_SUPPORT_MESSAGE_RECEIVED: {
+
+      let receivedSupportSystemMessagesList = state.receivedSupportSystemMessages;
+      success({
+        title: action.payload.msg
+      });
+      return {
+        ...state,
+        receivedSupportSystemMessages: [...receivedSupportSystemMessagesList, action.payload.data]
+      }
     }
 
     case UPDATE_SUPPORT_SYSTEM_MESSAGE_NOTIFICATION:{
