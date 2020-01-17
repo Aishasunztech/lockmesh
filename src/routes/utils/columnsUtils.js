@@ -3712,6 +3712,8 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                     title: convertToLang(translation[""], "MESSAGE"),
                     dataIndex: 'msg',
                     key: 'msg',
+                    sorter: (a, b) => { return a.msg.localeCompare(b.msg) },
+                    sortDirections: ['ascend', 'descend'],
                     // className: ''
                 }
             ]
@@ -3738,6 +3740,8 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                     title: convertToLang(translation[""], "TIMER STATUS"),
                     dataIndex: 'timer_status',
                     key: 'timer_status',
+                    sorter: (a, b) => { return a.timer_status.localeCompare(b.timer_status) },
+                    sortDirections: ['ascend', 'descend'],
                 }
             ]
         },
@@ -3787,6 +3791,8 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                     title: convertToLang(translation[""], "DATE/TIME"),
                     dataIndex: 'date_time',
                     key: 'date_time',
+                    sorter: (a, b) => { return a.date_time.localeCompare(b.date_time) },
+                    sortDirections: ['ascend', 'descend'],
                 }
             ]
 
@@ -3812,6 +3818,8 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                     title: convertToLang(translation[""], "INTERVAL DESCRIPTION"),
                     dataIndex: 'interval_description',
                     key: 'interval_description',
+                    sorter: (a, b) => { return a.interval_description.localeCompare(b.interval_description) },
+                    sortDirections: ['ascend', 'descend'],
                 }
             ]
 
