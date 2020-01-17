@@ -105,6 +105,7 @@ export function closeSupportTicket(data) {
 
     RestService.closeSupportTicket(data).then((response) => {
       if (RestService.checkAuth(response.data)) {
+        response.data.data = data;
         dispatch({
           type: CLOSE_SUPPORT_TICKET,
           payload: response.data

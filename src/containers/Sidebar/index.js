@@ -24,8 +24,6 @@ export class Sidebar extends Component {
 	};
 
 	componentDidMount() {
-	  console.log('testing here');
-	  console.log('this component is mounted');
 		window.addEventListener('resize', () => {
 			this.props.updateWindowWidth(window.innerWidth)
 		});

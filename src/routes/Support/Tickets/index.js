@@ -316,6 +316,7 @@ class Mail extends PureComponent {
 
   onCloseTicket(data) {
     let _this = this;
+    console.log(data);
     confirm({
       title: 'Do you want to change the ticket status to close?',
       okText: "Confirm",
@@ -401,33 +402,35 @@ class Mail extends PureComponent {
                   }
 
                   <div classID="toolbar-separator" />
-                  <Row className="width_100">
-                    <div className="gx-module-list-content">
-                      <div className="gx-mail-user-des">
-                        <Col span="2">
-                          {(selectedMails.length > 0) && this.getMailActions()}
-                        </Col>
-                        <Col span="4">
-                          <h4>Name</h4>
-                        </Col>
-                        <Col span="9">
-                          <h4>Subject</h4>
-                        </Col>
-                        <Col span="2">
-                          <h4>Status</h4>
-                        </Col>
-                        <Col span="2">
-                          <h4>Type</h4>
-                        </Col>
-                        <Col span="2">
-                          <h4>Priority</h4>
-                        </Col>
-                        <Col span="3">
-                          <h4>Time</h4>
-                        </Col>
+                  {this.state.currentMail === null ? (
+                    <Row className="width_100">
+                      <div className="gx-module-list-content">
+                        <div className="gx-mail-user-des">
+                          <Col span="2">
+                            {(selectedMails.length > 0) && this.getMailActions()}
+                          </Col>
+                          <Col span="4">
+                            <h4>Name</h4>
+                          </Col>
+                          <Col span="9">
+                            <h4>Subject</h4>
+                          </Col>
+                          <Col span="2">
+                            <h4>Status</h4>
+                          </Col>
+                          <Col span="2">
+                            <h4>Type</h4>
+                          </Col>
+                          <Col span="2">
+                            <h4>Priority</h4>
+                          </Col>
+                          <Col span="3">
+                            <h4>Time</h4>
+                          </Col>
+                        </div>
                       </div>
-                    </div>
-                  </Row>
+                    </Row>
+                  ) : '' }
                 </div>
 
                 {this.displayMail(currentMail, folderMails, noContentFoundMessage)}

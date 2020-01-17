@@ -11,36 +11,42 @@ const MailListItem = ({ supportTicket, onMailSelect, onMailChecked, user }) => {
 
   return (
     <div className="gx-module-list-item gx-mail-cell">
-      <div className="gx-module-list-icon">
-        {(user.type === ADMIN && supportTicket.status === 'closed') ?
-          <Checkbox color="primary" className="gx-icon-btn selectCheckBox"
-
-            onClick={(event) => {
-              event.stopPropagation();
-              onMailChecked(supportTicket)
-            }}
-            value="SelectMail"
-          />
-          :
-          <Checkbox color="primary" className="gx-icon-btn selectCheckBox" style={{ visibility: 'hidden' }}
-
-            onClick={(event) => {
-              event.stopPropagation();
-              onMailChecked(supportTicket)
-            }}
-            value="SelectMail"
-          />
+      <div className="gx-mail-list-info" style={{ maxWidth: '100%', paddingLeft: 0 }} onClick={(e) => {
+        let element = /excludeCheckBoxClickOnMainRow/.test(e.target.classList.value);
+        let directParent = /excludeCheckBoxClickOnMainRow/.test(e.target.parentNode.classList.value);
+        let directdirectParent = /excludeCheckBoxClickOnMainRow/.test(e.target.parentNode.parentNode.classList.value);
+        if(element || directParent || directdirectParent){
+        } else {
+          onMailSelect(supportTicket);
         }
-
-      </div>
-
-      <div className="gx-mail-list-info" onClick={() => {
-        onMailSelect(supportTicket);
       }}>
-        <Row>
+        <Row className="width_100">
           <div className="gx-module-list-content">
             <div className="gx-mail-user-des">
-              <Col span="6">
+              <Col span="2">
+                <div className="gx-module-list-icon excludeCheckBoxClickOnMainRow">
+                  {(user.type === ADMIN && supportTicket.status === 'closed') ?
+                    <Checkbox color="primary" className="gx-icon-btn selectCheckBox"
+
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                onMailChecked(supportTicket)
+                              }}
+                              value="SelectMail"
+                    />
+                    :
+                    <Checkbox color="primary" className="gx-icon-btn selectCheckBox" disabled={true} style={{ visibility: 'hidden' }}
+
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                onMailChecked(supportTicket)
+                              }}
+                              value="SelectMail"
+                    />
+                  }
+                </div>
+              </Col>
+              <Col span="4">
                 <span className="gx-sender-name">{supportTicket.user.dealer_name} ({supportTicket.user.link_code})</span>
                 <span className="gx-toolbar-separator">&nbsp;</span>
               </Col>
