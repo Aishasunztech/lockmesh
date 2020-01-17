@@ -148,33 +148,6 @@ export function devicesColumns(translation, handleSearch) {
         {
             title: (
                 <Input.Search
-                    name="validity"
-                    key="validity"
-                    id="validity"
-                    className="search_heading remaning_days_w"
-                    onChange={handleSearch}
-                    onFocus={handleSearch}
-                    autoComplete="new-password"
-                    placeholder={convertToLang(translation[DEVICE_REMAINING_DAYS], "REMAINING DAYS")}
-                />
-            ),
-            dataIndex: 'validity',
-            className: 'hide',
-            children: [
-                {
-                    title: convertToLang(translation[DEVICE_REMAINING_DAYS], "REMAINING DAYS"),
-                    align: "center",
-                    dataIndex: 'validity',
-                    key: "validity",
-                    className: 'hide',
-                    sorter: (a, b) => { return a.validity - b.validity },
-                    sortDirections: ['ascend', 'descend'],
-                }
-            ],
-        },
-        {
-            title: (
-                <Input.Search
                     name="device_id"
                     key="device_id"
                     id="device_id"
@@ -199,7 +172,8 @@ export function devicesColumns(translation, handleSearch) {
                     sortDirections: ['ascend', 'descend'],
                 }
             ],
-        }, {
+        },
+        {
             title: (
                 <Input.Search
                     name="user_id"
@@ -368,6 +342,33 @@ export function devicesColumns(translation, handleSearch) {
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="validity"
+                    key="validity"
+                    id="validity"
+                    className="search_heading remaning_days_w"
+                    onChange={handleSearch}
+                    onFocus={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[DEVICE_REMAINING_DAYS], "REMAINING DAYS")}
+                />
+            ),
+            dataIndex: 'validity',
+            className: 'hide',
+            children: [
+                {
+                    title: convertToLang(translation[DEVICE_REMAINING_DAYS], "REMAINING DAYS"),
+                    align: "center",
+                    dataIndex: 'validity',
+                    key: "validity",
+                    className: 'hide',
+                    sorter: (a, b) => { return a.validity - b.validity },
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ],
         },
         {
             title: (
