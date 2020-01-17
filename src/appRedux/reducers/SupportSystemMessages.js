@@ -1,6 +1,8 @@
 import {
-  GENERATE_SYSTEM_MESSAGE,
-  LOADING
+  GENERATE_SUPPORT_SYSTEM_MESSAGE,
+  GET_SUPPORT_SYSTEM_MESSAGE,
+  GET_RECEIVED_SUPPORT_SYSTEM_MESSAGES,
+  LOADING, UPDATE_SUPPORT_SYSTEM_MESSAGE_NOTIFICATION, GET_SUPPORT_SYSTEM_MESSAGE_NOTIFICATION, SYSTEM_SUPPORT_MESSAGE_RECEIVED
 } from "../../constants/ActionTypes";
 
 import { message, Modal } from 'antd';
@@ -9,6 +11,8 @@ const error   = Modal.error;
 const initialState = {
   isloading: true,
   supportSystemMessages: [],
+  receivedSupportSystemMessages: [],
+  supportSystemMessagesNotifications: [],
 };
 
 export default (state = initialState, action) => {
@@ -23,7 +27,7 @@ export default (state = initialState, action) => {
         dealers: [],
       };
 
-    case GENERATE_SYSTEM_MESSAGE:{
+    case GENERATE_SUPPORT_SYSTEM_MESSAGE:{
       let supportSystemMessages = state.supportSystemMessages;
 
       if (action.payload.status) {
@@ -41,6 +45,45 @@ export default (state = initialState, action) => {
       return {
         ...state,
         supportSystemMessages: [...supportSystemMessages],
+      };
+    }
+
+    case GET_SUPPORT_SYSTEM_MESSAGE:{
+      return {
+        ...state,
+        supportSystemMessages: action.payload,
+      };
+    }
+
+    case GET_SUPPORT_SYSTEM_MESSAGE_NOTIFICATION:{
+      return {
+        ...state,
+        supportSystemMessagesNotifications: action.payload,
+      };
+    }
+
+    case GET_RECEIVED_SUPPORT_SYSTEM_MESSAGES:{
+      return {
+        ...state,
+        receivedSupportSystemMessages: action.payload,
+      };
+    }
+
+    case SYSTEM_SUPPORT_MESSAGE_RECEIVED: {
+
+      let receivedSupportSystemMessagesList = state.receivedSupportSystemMessages;
+      success({
+        title: action.payload.msg
+      });
+      return {
+        ...state,
+        receivedSupportSystemMessages: [...receivedSupportSystemMessagesList, action.payload.data]
+      }
+    }
+
+    case UPDATE_SUPPORT_SYSTEM_MESSAGE_NOTIFICATION:{
+      return {
+        ...state,
       };
     }
 

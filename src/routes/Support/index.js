@@ -3,9 +3,6 @@ import {Card, Tabs, Form} from "antd";
 import AppFilter from "../../components/AppFilter";
 import Ticket from "./Tickets";
 import SystemMessages from "./SystemMessages";
-import {bindActionCreators} from "redux";
-import { generateSupportTicket } from "../../appRedux/actions";
-import {connect} from "react-redux";
 
 
 const TabPane = Tabs.TabPane;
@@ -69,6 +66,7 @@ class Support extends Component {
     )
   }
 }
+
 
 const WrappedAddDeviceForm = Form.create()(Support);
 export default WrappedAddDeviceForm;

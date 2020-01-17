@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { Button, Checkbox, Drawer, Dropdown, Menu, message, Modal } from "antd";
+import { Button, Checkbox, Drawer, Dropdown, Menu, message, Modal, Col, Row } from "antd";
 import CustomScrollbars from "util/CustomScrollbars";
 
 import mails from "./data/mails";
@@ -19,12 +19,15 @@ import {
   closeSupportTicket,
   deleteSupportTicket,
   getSupportTicketReplies,
-  getAllToAllDealers
+  getAllToAllDealers,
+  setCurrentTicketId,
+  resetCurrentTicketId
 } from "../../../appRedux/actions";
 import { connect } from "react-redux";
 import {
   ADMIN, DEALER, SDEALER
 } from "../../../constants/Constants";
+import {SET_CURRENT_TICKET_ID} from "../../../constants/ActionTypes";
 
 const confirm = Modal.confirm;
 
@@ -313,6 +316,7 @@ class Mail extends PureComponent {
 
   onCloseTicket(data) {
     let _this = this;
+    console.log(data);
     confirm({
       title: 'Do you want to change the ticket status to close?',
       okText: "Confirm",
@@ -330,6 +334,7 @@ class Mail extends PureComponent {
       currentMail: mail,
       selectedMails: []
     });
+    this.props.setCurrentTicket(mail._id);
   }
 
   addLabel(mail, label) {
@@ -392,13 +397,40 @@ class Mail extends PureComponent {
                   {this.state.currentMail === null ? '' :
                     <i className="icon icon-arrow-left gx-icon-btn" onClick={() => {
                       this.setState({ currentMail: null })
+                      this.props.resetCurrentTicket();
                     }} />
                   }
 
                   <div classID="toolbar-separator" />
-
-                  {(selectedMails.length > 0) && this.getMailActions()}
-
+                  {this.state.currentMail === null ? (
+                    <Row className="width_100">
+                      <div className="gx-module-list-content">
+                        <div className="gx-mail-user-des">
+                          <Col span="2">
+                            {(selectedMails.length > 0) && this.getMailActions()}
+                          </Col>
+                          <Col span="4">
+                            <h4>Name</h4>
+                          </Col>
+                          <Col span="9">
+                            <h4>Subject</h4>
+                          </Col>
+                          <Col span="2">
+                            <h4>Status</h4>
+                          </Col>
+                          <Col span="2">
+                            <h4>Type</h4>
+                          </Col>
+                          <Col span="2">
+                            <h4>Priority</h4>
+                          </Col>
+                          <Col span="3">
+                            <h4>Time</h4>
+                          </Col>
+                        </div>
+                      </div>
+                    </Row>
+                  ) : '' }
                 </div>
 
                 {this.displayMail(currentMail, folderMails, noContentFoundMessage)}
@@ -442,6 +474,8 @@ function mapDispatchToProps(dispatch) {
     closeSupportTicket: closeSupportTicket,
     deleteSupportTicket: deleteSupportTicket,
     getSupportTicketReplies: getSupportTicketReplies,
+    setCurrentTicket: setCurrentTicketId,
+    resetCurrentTicket: resetCurrentTicketId
   }, dispatch);
 }
 
