@@ -6,7 +6,8 @@ import moment from 'moment';
 import { userDevicesListColumns } from '../../utils/columnsUtils';
 import { TIMESTAMP_FORMAT_NOT_SEC, TIME_FORMAT_HM, SERVER_TIMEZONE } from '../../../constants/Application';
 import EditMsgModal from './EditMsgForm';
-
+import { Link } from "react-router-dom";
+import styles from './deviceMsg.css'
 
 export default class ListMsgs extends Component {
 
@@ -132,9 +133,15 @@ export default class ListMsgs extends Component {
                 action: (
                     <div data-column="ACTION" style={{ display: "inline-flex" }}>
                         <Fragment>
-                            {(item.timer_status === "NOW" || item.timer_status === "DATE/TIME") ? null :
-                                <Fragment><Button type="primary" size="small" onClick={() => this.handleEditModal(JSON.parse(JSON.stringify(item)))}>EDIT</Button></Fragment>
-                            }
+                            {/* {(item.timer_status === "NOW" || item.timer_status === "DATE/TIME") ? null :
+                                <Fragment>
+                                        <Button
+                                            type="primary"
+                                            size="small"
+                                            onClick={() => this.handleEditModal(JSON.parse(JSON.stringify(item)))}
+                                        >EDIT</Button>
+                                </Fragment>
+                            } */}
                             <Fragment><Button type="danger" size="small" onClick={() => this.deleteMsg(item.id)}>DELETE</Button></Fragment>
                         </Fragment>
                     </div>
@@ -202,7 +209,7 @@ export default class ListMsgs extends Component {
             <Fragment>
                 <Card>
                     <Table
-                        className="gx-table-responsive"
+                        className="gx-table-responsive msgList"
                         rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
