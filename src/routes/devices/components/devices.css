@@ -6,6 +6,10 @@
     white-space: nowrap !important;
 }
 
+.innerDevicesNameValue table td {
+    white-space: normal !important;
+}
+
 .ant-btn-sm {
     line-height: 20px !important;
     font-size: 10px;
