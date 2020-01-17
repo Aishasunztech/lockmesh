@@ -67,11 +67,11 @@ export default class ListReceivedMessages extends Component {
     let supportSystemMessages = [];
     let data;
 
-    list.map((item) => {
+    list.map((item, index) => {
       data = {
         id: item.id,
         key: item.id,
-        rowKey: item.id,
+        rowKey: index,
         sender: <span className="text-capitalize">{item.sender}</span>,
         subject: checkValue(item.subject),
         createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "N/A",

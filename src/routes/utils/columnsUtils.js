@@ -4045,9 +4045,9 @@ export function supportSystemMessage(translation, handleSearch, isModal = false)
 
     {
       title: "RECEIVER",
-      dataIndex: 'receiver',
+      dataIndex: 'receivers',
       className: '',
-      key: 'receiver',
+      key: 'receivers',
       width: 200,
     },
 

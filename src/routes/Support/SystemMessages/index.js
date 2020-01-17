@@ -102,6 +102,7 @@ class SystemMessages extends Component {
 
       let data;
       this.props.sentSupportSystemMessages.map((item) => {
+
         data = {
           id: item._id,
           key: item._id,

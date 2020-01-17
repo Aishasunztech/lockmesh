@@ -3,6 +3,7 @@ import { Table, Button, Icon, Card, Modal } from "antd";
 import {getDateFromTimestamp, checkValue, convertToLang} from '../../../utils/commonUtils';
 import { supportSystemMessagesReceiversColumns } from '../../../utils/columnsUtils';
 import ViewMessage from './ViewMessage'
+import {Tab_All} from "../../../../constants/TabConstants";
 
 export default class ListSentMessages extends Component {
 
@@ -67,6 +68,7 @@ export default class ListSentMessages extends Component {
         key: item.id,
         id: item.id,
         receiver_ids: item.receiver_ids,
+        receivers: item.receiver_ids.length,
         subject: checkValue(item.subject),
         createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "N/A",
         action: (
@@ -117,13 +119,13 @@ export default class ListSentMessages extends Component {
 
   onExpandRow = (expanded, record) => {
     if (expanded) {
-      if (!this.state.expandedRowKeys.includes(record.rowKey)) {
-        this.state.expandedRowKeys.push(record.rowKey);
+      if (!this.state.expandedRowKeys.includes(record.key)) {
+        this.state.expandedRowKeys.push(record.key);
         this.setState({ expandedRowKeys: this.state.expandedRowKeys })
       }
     } else if (!expanded) {
-      if (this.state.expandedRowKeys.includes(record.rowKey)) {
-        let list = this.state.expandedRowKeys.filter(item => item !== record.rowKey);
+      if (this.state.expandedRowKeys.includes(record.key)) {
+        let list = this.state.expandedRowKeys.filter(item => item !== record.key);
         this.setState({ expandedRowKeys: list })
       }
     }
@@ -136,6 +138,7 @@ export default class ListSentMessages extends Component {
         <Card>
           <Table
             className="gx-table-responsive"
+            rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''}
             expandIcon={(props) => this.customExpandIcon(props)}
             expandedRowRender={(record) => {
               return (
@@ -163,7 +166,7 @@ export default class ListSentMessages extends Component {
             pagination={false
             }
             scroll={{ x: true }}
-            rowKey="domain_id"
+            rowKey="key"
           />
         </Card>
 
