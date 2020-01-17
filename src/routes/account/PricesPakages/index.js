@@ -236,10 +236,11 @@ class Prices extends Component {
 
         this.hardwareColumns = [
             {
-                title: "Sr.#",
+                title: "#",
                 dataIndex: 'sr',
                 key: 'sr',
                 align: "center",
+                render: (text, record, index) => ++index,
             },
             {
                 dataIndex: 'action',

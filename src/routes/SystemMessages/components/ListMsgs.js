@@ -21,7 +21,8 @@ export default class ListMsgs extends Component {
             expandedRowKeys: [],
             visible: false,
             editRecord: null,
-            editModal: false
+            editModal: false,
+            textLimit: 100
         };
         this.renderList = this.renderList.bind(this);
         this.confirm = Modal.confirm;
@@ -77,6 +78,20 @@ export default class ListMsgs extends Component {
 
     handleEditModal = (data) => {
         this.setState({ editModal: true, editRecord: data })
+    }
+
+    expandText = () => {
+        this.setState({ textLimit: this.state.textLimit + 100 })
+    }
+
+    handleMoreLessText = (msg) => {
+        let updateMsg = msg;
+        let _this = this;
+        if (msg && msg.length > _this.state.textLimit) {
+            updateMsg = <p>{updateMsg.substr(0, _this.state.textLimit)}... <a href='#' onClick={() => _this.expandText()}>Read more</a></p>
+        }
+
+        return updateMsg
     }
 
     renderList(list) {
@@ -147,7 +162,7 @@ export default class ListMsgs extends Component {
                     </div>
                 ),
                 send_to: parseDevices.length,
-                msg: checkValue(item.msg),
+                msg: this.handleMoreLessText(checkValue(item.msg)), // checkValue(item.msg),
                 timer_status: item.timer_status ? item.timer_status : "N/A",
                 repeat: item.repeat_duration ? item.repeat_duration : "NONE",
                 // date_time: item.date_time ? item.date_time : "N/A",

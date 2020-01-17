@@ -658,6 +658,7 @@ class DevicesList extends Component {
                                     <Fragment>
                                         <div className="col-md-4 expand_table">
                                             <Table
+                                                className="innerDevicesNameValue"
                                                 pagination={false}
                                                 columns={
                                                     [
@@ -680,6 +681,7 @@ class DevicesList extends Component {
                                         </div>
                                         <div className="col-md-4 expand_table">
                                             <Table
+                                                className="innerDevicesNameValue"
                                                 pagination={false}
                                                 columns={
                                                     [
