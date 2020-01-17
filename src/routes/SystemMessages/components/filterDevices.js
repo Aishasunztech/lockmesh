@@ -698,7 +698,7 @@ class FilterDevices extends Component {
 
       } else {
         error({
-          title: `Sorry, You have not any device to perform an action`,
+          title: `Sorry, You have not selected any device to perform an action`,
         });
       }
     } else {

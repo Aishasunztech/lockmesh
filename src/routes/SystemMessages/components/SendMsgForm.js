@@ -35,13 +35,13 @@ class SendMsgForm extends Component {
         ];
 
         this.weekDays = [
-            { key: 1, value: "Monday" },
-            { key: 2, value: "Tuesday" },
-            { key: 3, value: "Wednesday" },
-            { key: 4, value: "Thursday" },
-            { key: 5, value: "Friday" },
-            { key: 6, value: "Saturday" },
-            { key: 7, value: "Sunday" },
+            { key: 1, value: "Sunday" },
+            { key: 2, value: "Monday" },
+            { key: 3, value: "Tuesday" },
+            { key: 4, value: "Wednesday" },
+            { key: 5, value: "Thursday" },
+            { key: 6, value: "Friday" },
+            { key: 7, value: "Saturday" },
         ];
 
         this.monthNames = [
@@ -85,8 +85,13 @@ class SendMsgForm extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
 
             if (!err) {
+                let monthDate = values.monthDate ? values.monthDate : 0;
+                let weekDay = values.weekDay ? values.weekDay : 0;
+                let monthName = values.monthName ? values.monthName : 0;
 
                 if (this.props.selectedDevices && this.props.selectedDevices.length) {
+
+                    let dealerTZ = checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
                     let repeatVal = 'NONE';
                     let dateTimeVal = '';
 
@@ -100,15 +105,62 @@ class SendMsgForm extends Component {
                         // dateTimeVal = this.state.selected_dateTime;
                         repeatVal = this.state.repeat_duration;
 
-
+                        let currentDateIs = moment().tz(dealerTZ).format(TIMESTAMP_FORMAT);
                         // covert time to dateTime value
                         if (this.state.selected_Time) {
-                            let dealerTZ = checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
-
                             const [hours, minutes] = this.state.selected_Time.split(':');
-                            dateTimeVal = moment().tz(dealerTZ).set({ hours, minutes }).format('YYYY-MM-DD HH:mm:ss');
+                            // console.log("hours, minutes ", hours, minutes)
+
+                            if (repeatVal === "WEEKLY") { // set minutes, hrs and day name of week 
+                                dateTimeVal = moment().tz(dealerTZ).day(weekDay).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+
+                                if (dateTimeVal < currentDateIs) {
+                                    // let currentWeekNumber = moment().tz(dealerTZ).weekday();
+                                    // console.log("currentWeekNumber ", currentWeekNumber, "selecte week day: ", weekDay);
+
+                                    // next same week day if current date passed
+                                    dateTimeVal = moment().tz(dealerTZ).day(weekDay + 7).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                                }
+                            }
+                            else if (repeatVal === "MONTHLY" || repeatVal === "3 MONTHS" || repeatVal === "6 MONTHS") { // set minutes, hrs and day of month 
+                                dateTimeVal = moment().tz(dealerTZ).set({ "date": monthDate, hours, minutes }).format(TIMESTAMP_FORMAT)
+
+                                if (dateTimeVal < currentDateIs) {
+                                    // set next months with same date if current date passed
+                                    if (repeatVal === "MONTHLY") {
+                                        dateTimeVal = moment().tz(dealerTZ).add(1, 'months').set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                                    }
+                                    else if (repeatVal === "3 MONTHS") {
+                                        dateTimeVal = moment().tz(dealerTZ).add(3, 'months').set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                                    }
+                                    else if (repeatVal === "6 MONTHS") {
+                                        dateTimeVal = moment().tz(dealerTZ).add(6, 'months').set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                                    }
+                                }
+                            }
+                            else if (repeatVal === "12 MONTHS") { // set minutes, hrs, day of month and name of month
+                                dateTimeVal = moment().tz(dealerTZ).set({ "month": monthName - 1, "date": monthDate, hours, minutes }).format(TIMESTAMP_FORMAT);
+                                // console.log("compare date: ", dateTimeVal < currentDateIs, dateTimeVal, currentDateIs, moment().month())
+
+                                if (dateTimeVal < currentDateIs) {
+                                    // set next year with same date if current date passed 
+                                    dateTimeVal = moment().tz(dealerTZ).add(1, 'years').set({ "date": monthDate, hours, minutes }).format(TIMESTAMP_FORMAT);
+                                }
+
+                            } else {
+                                dateTimeVal = moment().tz(dealerTZ).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                            }
+                            // console.log('current date without any set:: ', moment().tz(dealerTZ).format(TIMESTAMP_FORMAT))
+                            // console.log('set hrs minuts:: ', moment().tz(dealerTZ).set({ hours, minutes }).format(TIMESTAMP_FORMAT))
+                            // console.log('get week day number:: ', moment().tz(dealerTZ).weekday())
+                            // console.log('set hrs minuts and day name of week:: ', moment().tz(dealerTZ).day(weekDay).set({ hours, minutes }).format(TIMESTAMP_FORMAT))
+                            // console.log('set days:: ', moment().tz(dealerTZ).set("date", monthDate).format(TIMESTAMP_FORMAT))
+                            // console.log('set hrs, minuts & days:: ', moment().tz(dealerTZ).set({ "date": monthDate, hours, minutes }).format(TIMESTAMP_FORMAT))
                         }
                     }
+
+
+                    // console.log("dateTimeVal ", dateTimeVal);
 
                     let data = {
                         devices: this.props.selectedDevices,
@@ -118,17 +170,16 @@ class SendMsgForm extends Component {
                         timer: values.timer,
                         repeat: repeatVal,
                         dateTime: convertTimezoneValue(this.props.user.timezone, dateTimeVal, TIMESTAMP_FORMAT, true),
-                        weekDay: values.weekDay ? values.weekDay : 0,
-                        monthDate: values.monthDate ? values.monthDate : 0,
-                        monthName: values.monthName ? values.monthName : 0,
+                        weekDay,
+                        monthDate,
+                        monthName,
                         time: this.state.selected_Time,
                     }
-                    // console.log("data ", data);
-                    let dealerTZ = checkTimezoneValue(this.props.user.timezone, false);
+                    // console.log("submit data:: ", data);
                     this.refs.bulk_msg.handleBulkSendMsg(data, dealerTZ);
                 } else {
                     error({
-                        title: `Sorry, You have not any device to perform an action, to add devices please select dealers/users`,
+                        title: `Sorry, You have not selected any device to perform an action, to add devices please select dealers/users`,
                     });
                 }
             }
@@ -629,7 +680,7 @@ class SendMsgForm extends Component {
                                         wrapperCol={{ span: 16 }}
                                     >
                                         {this.props.form.getFieldDecorator('time', {
-                                            initialValue: moment('00:00', 'HH:mm'),
+                                            initialValue: '',// moment('00:00', 'HH:mm'),
                                             rules: [
                                                 {
                                                     required: true, message: convertToLang(this.props.translation[""], "Time field is required"),
@@ -677,7 +728,7 @@ class SendMsgForm extends Component {
                                             format="YYYY-MM-DD HH:mm"
                                             disabledDate={this.disabledDate}
                                             disabledTime={this.disabledDateTime}
-                                            showTime={{ defaultValue: moment('00:00:00', 'HH:mm') }}
+                                            showTime={{ defaultValue: moment('00:00'), format: 'HH:mm' }}
                                         />
                                     )}
                                 </Form.Item>
