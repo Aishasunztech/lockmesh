@@ -13,12 +13,13 @@ class DeviceBillingDetails extends Component {
         super(props);
         this.columns = [
             {
-                title: "Sr.#",
+                title: "#",
                 dataIndex: 'count',
                 key: 'count',
                 align: "center",
-                sorter: (a, b) => { return a.count - b.count },
-                sortDirections: ['ascend', 'descend'],
+                render: (text, record, index) => ++index,
+                // sorter: (a, b) => { return a.count - b.count },
+                // sortDirections: ['ascend', 'descend'],
             },
             {
                 title: convertToLang(props.translation[''], "TYPE"),

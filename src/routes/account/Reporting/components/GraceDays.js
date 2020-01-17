@@ -336,6 +336,7 @@ class Invoice extends Component {
                   columns={this.columns}
                   dataSource={this.renderList(this.props.graceDaysReportReport)}
                   bordered
+                  scroll={{ x: true, y: true }}
                   pagination={false}
                 />
               </Fragment>

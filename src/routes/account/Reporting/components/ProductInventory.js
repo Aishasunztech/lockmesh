@@ -820,6 +820,7 @@ class ProductInventory extends Component {
                   columns={this.state.columns}
                   rowKey='row_key'
                   align='center'
+                  scroll={{ x: true, y: true }}
                   pagination={false}
                   dataSource={this.renderList(this.props.productReport)}
                 />

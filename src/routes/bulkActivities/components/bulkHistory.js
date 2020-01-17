@@ -201,7 +201,7 @@ export default class Activity extends Component {
     }
     render() {
 
-        console.log(this.state.activities, 'activities to')
+        // console.log(this.state.activities, 'activities to')
 
         const { visible, loading } = this.state;
         return (
