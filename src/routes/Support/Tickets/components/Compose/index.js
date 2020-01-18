@@ -26,7 +26,7 @@ class ComposeTicket extends React.Component {
   };
 
   render() {
-    const { onClose, user, connectedDealer} = this.props;
+    const { onClose, user, connectedDealer, admin} = this.props;
     return (
       <Modal onCancel={onClose} visible={this.props.open}
              title='Generate Ticket'
@@ -62,7 +62,7 @@ class ComposeTicket extends React.Component {
             width='100%'
           >
             {this.props.form.getFieldDecorator('receiver_id', {
-              initialValue: ADMIN_ID,
+              initialValue: '',
               rules: [
                 {
                   required: true,
@@ -70,7 +70,7 @@ class ComposeTicket extends React.Component {
               ],
             })(
               <Select style={{ width: '100%' }}>
-                <Select.Option key='1' value={ADMIN_ID}><span className='text-capitalize'>Admin</span></Select.Option>
+                <Select.Option key='1' value={JSON.stringify(admin)}><span className='text-capitalize'>Admin</span></Select.Option>
                 {user.type === SDEALER ?
                   <Select.Option key='2' value={JSON.stringify(connectedDealer)}><span className='text-capitalize'>Dealer</span></Select.Option>
                   : '' }
