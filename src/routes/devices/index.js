@@ -296,20 +296,21 @@ class Devices extends Component {
             }
 
             // if (indexTransfered > -1) {
-            if (value === DEVICE_TRANSFERED) {
                 let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
+            if (value === DEVICE_TRANSFERED) {
                 isCheckedColumn = this.props.selectedOptions.findIndex((item) => { return item.key === "transfered_to" }); // item.key === "transfered_to"
                 if (indexTransfered >= 0 && indexTransfered !== undefined && isCheckedColumn !== -1) {
                     this.state.columns[indexTransfered].className = '';
                     this.state.columns[indexTransfered].children[0].className = '';
                 }
-            } else {
-                this.state.columns[indexTransfered].className = 'hide';
-                this.state.columns[indexTransfered].children[0].className = 'hide';
-            }
+            } 
+            // else {
+            //     this.state.columns[indexTransfered].className = 'hide';
+            //     this.state.columns[indexTransfered].children[0].className = 'hide';
+            // }
             // }
 
-            let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
+            // let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
 
             if (value === '8' || value === '1') {
                 if (indexTransfered >= 0 && indexTransfered !== undefined && isCheckedColumn !== -1) {
