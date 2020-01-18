@@ -268,15 +268,23 @@ class AddDevice extends Component {
                 tabselect: '0',
             })
         }
+
+        /**
+         * select first pgp email by default
+         */
         if (!this.state.disablePgp && nextProps.pgp_emails.length) {
-            this.setState({
-                pgp_email: nextProps.pgp_emails[0].pgp_email
-            })
+            // this.setState({
+            //     pgp_email: nextProps.pgp_emails[0].pgp_email
+            // })
         }
+
+        /**
+         * select first chat id by default
+         */
         if (!this.state.disableChat && nextProps.chat_ids.length) {
-            this.setState({
-                chat_id: nextProps.chat_ids[0].chat_id
-            })
+            // this.setState({
+            //     chat_id: nextProps.chat_ids[0].chat_id
+            // })
         }
 
     }
@@ -1272,7 +1280,7 @@ class AddDevice extends Component {
                                             wrapperCol={{ span: 16 }}
                                         >
                                             {this.props.form.getFieldDecorator('pgp_email', {
-                                                initialValue: this.state.pgp_email,
+                                                initialValue: (this.state.pgp_email)? this.state.pgp_email: '',
                                                 rules: [
 
                                                     {
@@ -1292,6 +1300,7 @@ class AddDevice extends Component {
                                                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                                     disabled={this.state.disablePgp}
                                                 >
+                                                    <Select.Option key="Select PGP Email" value="">Select PGP Email</Select.Option>
                                                     {this.props.pgp_emails.map((pgp_email) => {
                                                         return (<Select.Option key={pgp_email.id} value={pgp_email.pgp_email}>{pgp_email.pgp_email}</Select.Option>)
                                                     })}
@@ -1332,7 +1341,7 @@ class AddDevice extends Component {
                                             wrapperCol={{ span: 16 }}
                                         >
                                             {this.props.form.getFieldDecorator('chat_id', {
-                                                initialValue: this.state.chat_id,
+                                                initialValue: (this.state.chat_id) ? this.state.chat_id : '',
                                             })(
                                                 // <Input />
                                                 <Select
@@ -1345,6 +1354,7 @@ class AddDevice extends Component {
                                                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                                     disabled={this.state.disableChat}
                                                 >
+                                                    <Select.Option key="Select Chat ID" value="">Select Chat ID</Select.Option>
                                                     {this.props.chat_ids.map((chat_id, index) => {
                                                         return (<Select.Option key={index} value={chat_id.chat_id}>{chat_id.chat_id}</Select.Option>)
                                                     })}
