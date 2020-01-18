@@ -166,7 +166,6 @@ export default class NewDevices extends Component {
 
     renderList1(list) {
         if (list && Array.isArray(list)) {
-
             return list.map((request) => {
                 return {
                     key: request.id ? `${request.id}` : "N/A",
@@ -185,7 +184,7 @@ export default class NewDevices extends Component {
                 }
             });
         } else {
-            []
+            return []
         }
 
     }
@@ -328,7 +327,7 @@ export default class NewDevices extends Component {
                 }
             });
         } else {
-            []
+            return []
         }
 
     }
