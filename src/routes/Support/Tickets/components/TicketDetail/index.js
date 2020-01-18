@@ -33,8 +33,8 @@ class TicketDetail extends React.Component {
 
               <div className="gx-mail-header-content gx-col gx-pl-0">
                 <div className="gx-subject">
-                  <h3 style={{fontSize: '20px'}}>Subject: <strong>{supportTicket.subject}</strong></h3>
-                  <small>Tracking Id: <strong>({ supportTicket.ticketId })</strong></small>
+                  Subject: {supportTicket.subject}<br />
+                  Ticket Id: ({ supportTicket.ticketId })
                 </div>
 
               </div>

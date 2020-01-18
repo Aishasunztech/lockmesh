@@ -62,7 +62,7 @@ class ComposeTicket extends React.Component {
             width='100%'
           >
             {this.props.form.getFieldDecorator('receiver_id', {
-              initialValue: '',
+              initialValue: JSON.stringify(admin),
               rules: [
                 {
                   required: true,
@@ -143,6 +143,7 @@ class ComposeTicket extends React.Component {
             })(
               <TextArea
                 placeholder='Description'
+                autosize={{ minRows: 5, maxRows: 5 }}
               />
             )}
           </Form.Item>
