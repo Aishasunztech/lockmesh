@@ -1,5 +1,6 @@
 import {
-    INVALID_TOKEN, NEW_REQUEST_LIST, REJECT_REQUEST, ACCEPT_REQUEST, USER_CREDITS, GET_CANCEL_REQUEST, ACCEPT_SERVICE_REQUEST, REJECT_SERVICES_REQUEST
+  INVALID_TOKEN, NEW_REQUEST_LIST, REJECT_REQUEST, ACCEPT_REQUEST, USER_CREDITS, GET_CANCEL_REQUEST,
+  ACCEPT_SERVICE_REQUEST, REJECT_SERVICES_REQUEST, NEW_NOTIFICATION_LIST, WINDOW_WIDTH, SET_ADMIN_FOR_SUPPORT_TICKETS
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -18,6 +19,29 @@ export function getNewCashRequests() {
                         payload: response.data.data,
                         response: response.data,
 
+                    });
+                }
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+
+    };
+}
+export function getTicketsNotifications() {
+
+    return (dispatch) => {
+
+        RestService.getTicketsNotifications().then((response) => {
+          if (RestService.checkAuth(response.data)) {
+
+                if (response.data.status) {
+                    dispatch({
+                        type: NEW_NOTIFICATION_LIST,
+                        payload: response.data
                     });
                 }
 
@@ -154,4 +178,22 @@ export function getCancelServiceRequests() {
             }
         });
     }
+}
+
+
+export function getAdmin(){
+  return (dispatch) => {
+    RestService.getAdmin().then((response) => {
+      if(RestService.checkAuth( response.data )){
+        dispatch({
+          type: SET_ADMIN_FOR_SUPPORT_TICKETS,
+          payload: response.data
+        })
+      } else {
+        dispatch({
+          type: INVALID_TOKEN
+        })
+      }
+    });
+  }
 }

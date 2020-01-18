@@ -19,6 +19,9 @@
         margin-right: auto;
         padding-left: 16px;
         padding-right: 16px;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
 
         @media screen and (min-width: @screen-md-min) {
             width: (@screen-md-min - 48); //720
@@ -46,6 +49,12 @@
     padding: 3px 0;
     text-align: center;
     font-size: 14px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: #fff;
+    padding: 4px;
+    border-top: 1px solid #e8e8e8;
 }
 
 .fix_card .ant-table-bordered .ant-table-thead>tr>th {
@@ -147,6 +156,15 @@
     width: 100%;
 }
 
+.fix_header_border_login_history {
+    border-bottom: 1px solid #e8e8e8;
+    position: sticky;
+    z-index: 0;
+    top: 33px;
+    padding: 0;
+    margin: 0;
+}
+
 .fix_card {
     position: absolute;
     top: 142px;
@@ -212,7 +230,7 @@
 }
 
 // .gx-popover-scroll div:first-child {
-//     margin-right: 0px !important;
+//     margin-right : 0px !important;
 //     margin-bottom: 0px !important;
 // }
 
@@ -271,6 +289,10 @@
     white-space: nowrap;
 }
 
+.white_normal {
+    white-space: normal;
+}
+
 .display_none {
     display: none;
 }
@@ -278,6 +300,12 @@
 .ant-table-thead>tr>th.white_normal {
     white-space: normal !important;
 }
+
+.bulk_msg .ant-table-tbody>tr>td {
+    white-space: normal !important;
+}
+
+
 
 .ant-empty-normal {
     margin: 4px 0 0;
@@ -445,11 +473,6 @@
     border-left: 1px solid #e8e8e8;
 }
 
-.credit_popup .weight_600 {
-    font-weight: 600;
-    margin: 0;
-}
-
 .credit_popup .weight_400 {
     font-weight: 400;
     margin: 0;
@@ -605,6 +628,10 @@
     margin-top: 12px;
 }
 
+.mt-13 {
+    margin-top: 13px;
+}
+
 .mt-16 {
     margin-top: 16px;
 }
@@ -639,6 +666,10 @@
 
 .ml-6 {
     margin-left: 6px;
+}
+
+.ml-12 {
+    margin-left: 12px;
 }
 
 .ml-16 {

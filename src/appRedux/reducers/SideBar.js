@@ -1,13 +1,16 @@
 import {
-    NEW_REQUEST_LIST,
-    REJECT_REQUEST,
-    ACCEPT_REQUEST,
-    USER_CREDITS,
-    GET_CANCEL_REQUEST,
-    ACCEPT_SERVICE_REQUEST,
-    REJECT_SERVICES_REQUEST
+  NEW_REQUEST_LIST,
+  REJECT_REQUEST,
+  ACCEPT_REQUEST,
+  USER_CREDITS,
+  GET_CANCEL_REQUEST,
+  ACCEPT_SERVICE_REQUEST,
+  REJECT_SERVICES_REQUEST,
+  NEW_NOTIFICATION_LIST,
+  UPDATE_NOTIFICATION_STATUS,
+  SET_ADMIN_FOR_SUPPORT_TICKETS
 } from "../../constants/ActionTypes";
-import { Modal } from 'antd';
+import { Modal, notification } from 'antd';
 
 const success = Modal.success
 const error = Modal.error
@@ -17,8 +20,10 @@ const initialSidebar = {
     newRequests: [],
     user_credit: 0,
     due_credit: 0,
+    admin: {},
     credits_limit: 0,
-    cancel_service_requests: []
+    cancel_service_requests: [],
+    ticketNotifications: []
 };
 
 export default (state = initialSidebar, action) => {
@@ -95,6 +100,13 @@ export default (state = initialSidebar, action) => {
                 cancel_service_requests: action.response.data,
             }
         }
+        case NEW_NOTIFICATION_LIST: {
+
+            return {
+                ...state,
+                ticketNotifications: action.payload.status ? action.payload.tickets : [],
+            }
+        }
 
         case ACCEPT_SERVICE_REQUEST: {
             var newRequests = state.cancel_service_requests;
@@ -137,6 +149,23 @@ export default (state = initialSidebar, action) => {
                 ...state,
                 cancel_service_requests: filteredRequests,
             }
+        }
+
+        case UPDATE_NOTIFICATION_STATUS: {
+
+            let notifications = state.ticketNotifications
+            let updateNotifications = notifications.filter(notification => notification.ticket._id != action.payload)
+            return {
+                ...state,
+                ticketNotifications: updateNotifications,
+            }
+        }
+
+        case SET_ADMIN_FOR_SUPPORT_TICKETS: {
+          return {
+            ...state,
+            admin: action.payload
+          }
         }
 
         default:

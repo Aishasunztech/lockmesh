@@ -296,20 +296,21 @@ class Devices extends Component {
             }
 
             // if (indexTransfered > -1) {
-            if (value === DEVICE_TRANSFERED) {
                 let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
+            if (value === DEVICE_TRANSFERED) {
                 isCheckedColumn = this.props.selectedOptions.findIndex((item) => { return item.key === "transfered_to" }); // item.key === "transfered_to"
                 if (indexTransfered >= 0 && indexTransfered !== undefined && isCheckedColumn !== -1) {
                     this.state.columns[indexTransfered].className = '';
                     this.state.columns[indexTransfered].children[0].className = '';
                 }
-            } else {
-                this.state.columns[indexTransfered].className = 'hide';
-                this.state.columns[indexTransfered].children[0].className = 'hide';
-            }
+            } 
+            // else {
+            //     this.state.columns[indexTransfered].className = 'hide';
+            //     this.state.columns[indexTransfered].children[0].className = 'hide';
+            // }
             // }
 
-            let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
+            // let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
 
             if (value === '8' || value === '1') {
                 if (indexTransfered >= 0 && indexTransfered !== undefined && isCheckedColumn !== -1) {
@@ -1006,25 +1007,34 @@ class Devices extends Component {
                     this.props.isloading ? <CircularProgress /> :
                         <Fragment>
                             <AppFilter
+
+                                // provide page heading if you need
+                                pageHeading={convertToLang(this.props.translation[Sidebar_users_devices], "Users & Devices")}
+                                
+                                // column selection Dropdown props
                                 handleFilterOptions={this.handleFilterOptions}
                                 selectedOptions={this.props.selectedOptions}
-                                searchPlaceholder={convertToLang(this.props.translation[Appfilter_SearchDevices], "Search Devices")}
-                                defaultPagingValue={this.state.defaultPagingValue}
-                                addButtonText={convertToLang(this.props.translation[Button_Add_Device], "Add Device")}
                                 options={this.props.options}
-                                isAddButton={this.props.user.type !== ADMIN}
+                                handleCheckChange={this.handleCheckChange}
+
+                                // Searching
+                                searchPlaceholder={convertToLang(this.props.translation[Appfilter_SearchDevices], "Search Devices")}
+                                handleComponentSearch={this.handleComponentSearch}
+
+                                // Pagination
+                                defaultPagingValue={this.state.defaultPagingValue}
+                                handlePagination={this.handlePagination}
+
+                                // Add Button
                                 AddDeviceModal={true}
+                                addButtonText={convertToLang(this.props.translation[Button_Add_Device], "Add Device")}
+                                isAddButton={this.props.user.type !== ADMIN}
                                 disableAddButton={this.props.user.type === ADMIN}
                                 // toLink="add-device"
                                 handleDeviceModal={this.handleDeviceModal}
                                 handleUserModal={this.handleUserModal}
-                                handleCheckChange={this.handleCheckChange}
-                                handlePagination={this.handlePagination}
-                                handleComponentSearch={this.handleComponentSearch}
                                 locale={this.props.locale}
                                 translation={this.state.translation}
-                                // provide page heading if you need
-                                pageHeading={convertToLang(this.props.translation[Sidebar_users_devices], "Users & Devices")}
                             />
                             <DevicesList
                                 transferDeviceProfile={this.transferDeviceProfile}

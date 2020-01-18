@@ -1,24 +1,54 @@
+// Libraries
 import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { Markup } from 'interweave';
+import moment from 'moment';
+import axios from 'axios';
+
+import moment from 'moment-timezone';
+
+moment.tz.setDefault("Europe/Berlin");
 
 import { Button, Form, Input, Select, InputNumber, Spin, Modal, Table, Switch, DatePicker, Row, Col } from 'antd';
-import { checkValue, convertToLang } from '../../utils/commonUtils'
 
-import { getSimIDs, getChatIDs, getPGPEmails, getParentPackages, getProductPrices, extendServices } from "../../../appRedux/actions/Devices";
+// Components
+import AddUser from '../../users/components/AddUser';
+import AddPGPEmailModal from './AddPGPEmailModal';
+import Services from './Services';
+import Invoice from './invoice';
+
+// Helpers
+import { checkValue, convertToLang } from '../../utils/commonUtils'
+import RestService from '../../../appRedux/services/RestServices';
+import { inventorySales, refundServiceColumns } from '../../utils/columnsUtils';
+
+// actions
+import {
+    getSimIDs,
+    getChatIDs,
+    getPGPEmails,
+    getParentPackages,
+    getProductPrices,
+    extendServices,
+    addUser,
+    getUserList,
+    getInvoiceId,
+    getDomains,
+    addProduct,
+    addDataPlan
+} from "../../../appRedux/actions";
+
+// Constants
 import {
     DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, ADMIN, Model_text, Expire_Date, one_month, three_month, six_month, twelve_month, Days, Start_Date, Expire_Date_Require, Not_valid_Email, DEVICE_EXPIRED
 } from '../../../constants/Constants';
-import AddUser from '../../users/components/AddUser';
-import {
-    addUser,
-    getUserList,
-    getInvoiceId
-} from "../../../appRedux/actions/Users";
-import Services from './Services'
+
+
 import {
     Required_Fields,
-    DEVICE_ID, USER_ID,
+    DEVICE_ID,
+    USER_ID,
     DEVICE_SIM_ID,
     DEVICE_Select_SIM_ID,
     DEVICE_CHAT_ID,
@@ -31,22 +61,29 @@ import {
     SELECT_PGP_EMAILS,
     DEVICE_EDIT
 } from '../../../constants/DeviceConstants';
-import { Button_Add_User, Button_submit, Button_Cancel } from '../../../constants/ButtonConstants';
-import { LABEL_DATA_PGP_EMAIL, DUMY_TRANS_ID, LABEL_DATA_CHAT_ID, LABEL_DATA_SIM_ID, LABEL_APPLY_SERVICES } from '../../../constants/LabelConstants';
-// import moment from 'moment';
-import axios from 'axios';
-import RestService from '../../../appRedux/services/RestServices';
-import { async } from 'q';
-import { inventorySales, refundServiceColumns } from '../../utils/columnsUtils';
-import Invoice from './invoice';
-import { PRE_ACTIVATE_DEVICE } from '../../../constants/ActionTypes';
-import { Markup } from 'interweave';
-import moment from 'moment-timezone';
 
-moment.tz.setDefault("Europe/Berlin");;
+
+import {
+    Button_Add_User,
+    Button_submit,
+    Button_Cancel
+} from '../../../constants/ButtonConstants';
+
+import {
+    LABEL_DATA_PGP_EMAIL,
+    DUMY_TRANS_ID,
+    LABEL_DATA_CHAT_ID,
+    LABEL_DATA_SIM_ID,
+    LABEL_APPLY_SERVICES
+} from '../../../constants/LabelConstants';
+
+import { PRE_ACTIVATE_DEVICE } from '../../../constants/ActionTypes';
 
 const { TextArea } = Input;
 const confirm = Modal.confirm
+const success = Modal.success
+const error = Modal.error;
+
 class EditDevice extends Component {
 
     constructor(props) {
@@ -54,6 +91,8 @@ class EditDevice extends Component {
 
         const invoiceColumns = inventorySales(props.translation);
         const refundServicesColumns = refundServiceColumns(props.translation);
+        this.data_plan_1_added = false;
+        this.data_plan_2_added = false;
 
         this.state = {
             visible: false,
@@ -99,7 +138,16 @@ class EditDevice extends Component {
             invoiceID: 'PI00001',
             paidByUser: "PAID",
             applyServicesValue: null,
-            renewService: false
+            renewService: false,
+            valid_sim_id_1: true,
+            valid_sim_id_2: true,
+            valid_toActivate_sim_id_1: false,
+            valid_toActivate_sim_id_2: false,
+            data_limit_1: '',
+            data_limit_2: '',
+            disable_data_plan_sim1: true,
+            disable_data_plan_sim2: true,
+            change_data_plan: false
         }
     }
     handleUserChange = (e) => {
@@ -172,6 +220,53 @@ class EditDevice extends Component {
 
                     values.products = this.state.products;
                     values.packages = this.state.packages;
+
+                    if (this.state.data_limit_1 && !this.data_plan_1_added) {
+                        this.state.data_limit_1.sim_type = 'sim_id'
+                        values.packages.push(this.state.data_limit_1)
+                        // values.packages.push(this.state.data_limit_1)
+                        this.state.PkgSelectedRows = values.packages;
+                        priceToCharge = priceToCharge + Number(this.state.data_limit_1.pkg_price)
+                        this.state.total_price += Number(this.state.data_limit_1.pkg_price)
+
+                        this.data_plan_1_added = true
+                    } else if (this.state.data_limit_1 === '') {
+                        let index = values.packages.findIndex(item => item.sim_type === 'sim_id')
+                        if (index !== -1) {
+                            let data_plan_package = values.packages[index]
+                            values.packages.splice(index, 1)
+                            this.state.PkgSelectedRows = values.packages;
+                            priceToCharge = priceToCharge - Number(data_plan_package.pkg_price)
+                            this.state.total_price -= Number(data_plan_package.pkg_price)
+
+                        }
+                    }
+
+                    if (this.state.data_limit_2 && !this.data_plan_2_added) {
+
+                        this.state.data_limit_2.sim_type = 'sim_id2'
+                        values.packages.push(this.state.data_limit_2)
+                        this.state.PkgSelectedRows = values.packages
+                        priceToCharge = priceToCharge + Number(this.state.data_limit_2.pkg_price)
+                        this.state.total_price += Number(this.state.data_limit_2.pkg_price)
+                        this.data_plan_2_added = true
+                    }
+                    else if (this.state.data_limit_2 === '') {
+                        let index = values.packages.findIndex(item => item.sim_type === 'sim_id2')
+                        if (index !== -1) {
+                            let data_plan_package = values.packages[index]
+                            values.packages.splice(index, 1)
+                            this.state.PkgSelectedRows = values.packages;
+                            priceToCharge = priceToCharge - Number(data_plan_package.pkg_price)
+                            this.state.total_price -= Number(data_plan_package.pkg_price)
+                        }
+                    }
+                    let data_plans = {
+                        sim_id: this.state.data_limit_1 ? this.state.data_limit_1 : "",
+                        sim_id2: this.state.data_limit_2 ? this.state.data_limit_2 : "",
+                    }
+                    values.data_plans = data_plans
+
                     values.expiry_date = this.state.term;
                     values.total_price = priceToCharge
                     values.service = true
@@ -190,8 +285,6 @@ class EditDevice extends Component {
                         this.handleReset();
                     }
                 }
-
-
             }
         });
 
@@ -204,14 +297,14 @@ class EditDevice extends Component {
         this.props.getUserList();
         this.props.getParentPackages()
         this.props.getProductPrices()
-        if (this.props.device.services && this.props.user.type === ADMIN) {
+        if (this.props.device.services) {
             let disableChat = true
             let disablePgp = true
             let disableSim2 = true
             let disableSim = true
             let disableVpn = true
-            let packgaes = JSON.parse(this.props.device.services.packages)
-            let pkg_features = packgaes[0].pkg_features
+            let packages = JSON.parse(this.props.device.services.packages)
+            let pkg_features = packages[0].pkg_features
             if (pkg_features) {
                 if (pkg_features.pgp_email) {
                     disablePgp = false
@@ -255,6 +348,16 @@ class EditDevice extends Component {
                 product_prices: this.props.device.finalStatus === DEVICE_PRE_ACTIVATION ? [] : this.filterList('1 month', nextProps.product_prices, 'product'),
             })
         }
+        // if (!this.state.disablePgp && nextProps.pgp_emails.length) {
+        //     this.setState({
+        //         pgp_email: nextProps.pgp_emails[0].pgp_email
+        //     })
+        // }
+        // if (!this.state.disableChat && nextProps.chat_ids.length) {
+        //     this.setState({
+        //         chat_id: nextProps.chat_ids[0].chat_id
+        //     })
+        // }
 
     }
 
@@ -266,7 +369,7 @@ class EditDevice extends Component {
     handleServicesModal = async (e) => {
         if (this.props.device.extended_services) {
             this.setState({
-                changeServiceMsg: "You have Applied a Renewal or Extension for this device, please cancel service first before chosing new service.",
+                changeServiceMsg: "You have Applied a Renewal or Extension for this device, please cancel service first before choosing new service.",
                 checkServices: { color: "Red" },
             })
         }
@@ -373,6 +476,7 @@ class EditDevice extends Component {
         });
         return [...packagesList, ...productList]
     }
+
     refundServiceRenderList(services, serviceRemainingDays, creditsToRefund, prevService_totalDays) {
         if (services) {
             let service_term = ''
@@ -417,7 +521,7 @@ class EditDevice extends Component {
     }
 
     filterList = (type, list, listType) => {
-        let dumyPackages = [];
+        let dummyPackages = [];
         if (list.length) {
             list.filter(function (item) {
                 let packageTerm;
@@ -427,11 +531,11 @@ class EditDevice extends Component {
                     packageTerm = item.price_term
                 }
                 if (packageTerm == type) {
-                    dumyPackages.push(item);
+                    dummyPackages.push(item);
                 }
             });
         }
-        return dumyPackages;
+        return dummyPackages;
     }
 
     handleCancel = () => {
@@ -445,7 +549,7 @@ class EditDevice extends Component {
     }
 
 
-    handleChangetab = (value) => {
+    handleChangeTab = (value) => {
         // 
         switch (value) {
             case '0':
@@ -628,7 +732,12 @@ class EditDevice extends Component {
         // 
         if (this.state.serviceData.total_price <= this.props.user_credit || !this.state.serviceData.pay_now) {
             this.state.serviceData.paid_by_user = this.state.paidByUser
-            if (this.state.renewService || this.state.applyServicesValue === 'extend') {
+            if (this.state.change_data_plan) {
+                delete this.state.serviceData.packages;
+                console.log(this.state.serviceData);
+                this.props.addDataPlan(this.state.serviceData)
+            }
+            else if (this.state.renewService || this.state.applyServicesValue === 'extend') {
                 this.props.extendServices(this.state.serviceData)
             } else {
                 this.props.editDeviceFunc(this.state.serviceData)
@@ -639,7 +748,8 @@ class EditDevice extends Component {
                 serviceData: {},
                 showConfirmCredit: false,
                 invoiceVisible: false,
-                servicesModal: false
+                servicesModal: false,
+                change_data_plan: false,
             })
         } else {
             showCreditPurchase(this)
@@ -663,35 +773,38 @@ class EditDevice extends Component {
             })
         }
     }
-    handleRenewService = () => {
-        let packagesData = this.props.device.services ? JSON.parse(this.props.device.services.packages) : []
-        let productData = this.props.device.services ? JSON.parse(this.props.device.services.products) : []
-        let total_price = 0
-        if (packagesData && packagesData.length) {
-            packagesData.map((item) => {
-                total_price = total_price + Number(item.pkg_price)
-            })
-        }
-        if (productData && productData.length) {
-            productData.map((item) => {
-                total_price = total_price + Number(item.unit_price)
-            })
-        }
-        // 
 
-        this.setState({
-            packages: packagesData,
-            products: productData,
-            total_price: total_price,
-            visible: false,
-            servicesModal: false,
-            renewService: true,
-            checkServices: { display: 'inline', color: "Red", margin: 0 },
-            changeServiceMsg: "You requested to renew current services.",
-            PkgSelectedRows: packagesData,
-            proSelectedRows: productData,
-            expiry_date: this.state.tabselect + " Months"
-        })
+    handleRenewService = () => {
+        if (this.props.device.finalStatus !== DEVICE_TRIAL) {
+            let packagesData = this.props.device.services ? JSON.parse(this.props.device.services.packages) : []
+            let productData = this.props.device.services ? JSON.parse(this.props.device.services.products) : []
+            let total_price = 0
+            if (packagesData && packagesData.length) {
+                packagesData.map((item) => {
+                    total_price = total_price + Number(item.pkg_price)
+                })
+            }
+            if (productData && productData.length) {
+                productData.map((item) => {
+                    total_price = total_price + Number(item.unit_price)
+                })
+            }
+            // 
+
+            this.setState({
+                packages: packagesData,
+                products: productData,
+                total_price: total_price,
+                visible: false,
+                servicesModal: false,
+                renewService: true,
+                checkServices: { display: 'inline', color: "Red", margin: 0 },
+                changeServiceMsg: "You requested to renew current services.",
+                PkgSelectedRows: packagesData,
+                proSelectedRows: productData,
+                expiry_date: this.state.tabselect + " Months"
+            })
+        }
     }
 
     disabledDate = (current) => {
@@ -717,6 +830,173 @@ class EditDevice extends Component {
             callback();
         }
     }
+    handlePGPModal = () => {
+        this.addPGPEmailModal.showModal();
+    }
+
+    handleChatID = (e) => {
+        let payload = {
+            type: 'chat_id',
+            auto_generated: true,
+            product_data: {}
+        }
+        this.props.addProduct(payload)
+    }
+
+
+    validateICCID = (rule, value, callback, simField) => {
+        // console.log(simField);
+        if ((value !== undefined) && value.length > 0) {
+            if (simField === 'sim_id') {
+                this.setState({
+                    valid_sim_id_1: false,
+                    valid_toActivate_sim_id_1: false
+                })
+            } else if (simField === 'sim_id2') {
+                this.setState({
+                    valid_sim_id_2: false,
+                    valid_toActivate_sim_id_2: false
+                })
+            }
+            console.log("validation: ", ((this.state.disableSim === false && this.state.valid_sim_id_1 === false) || (this.state.disableSim2 === false && this.state.valid_sim_id_2 === false)), this.state.valid_sim_id_1, this.state.valid_sim_id_2)
+            if (/^[0-9]+$/.test(value)) {
+                if (value.length != 20 && value.length != 19) {
+                    return callback(`${convertToLang(this.props.translation[''], "ICC ID should be 19 or 20 digits long")}  :(${value.length})`);
+                }
+                else {
+                    if (simField === 'sim_id') {
+                        this.setState({
+                            valid_toActivate_sim_id_1: true
+                        })
+                    } else if (simField === 'sim_id2') {
+                        this.setState({
+                            valid_toActivate_sim_id_2: true
+                        })
+                    }
+                }
+            } else {
+                return callback(convertToLang(this.props.translation[''], "Please insert only numbers"));
+            }
+        } else {
+            if (simField === 'sim_id') {
+                this.setState({
+                    valid_sim_id_1: true
+                })
+            } else if (simField === 'sim_id2') {
+                this.setState({
+                    valid_sim_id_2: true
+                })
+            }
+        }
+
+
+
+        return callback();
+    }
+
+    activateICCID = (simField) => {
+        let value = this.props.form.getFieldValue(simField);
+        if (value) {
+            RestService.activateICCID(value, this.props.device.id).then((response) => {
+                if (response.data) {
+                    if (response.data.valid) {
+                        if (simField === 'sim_id') {
+                            this.setState({
+                                valid_sim_id_1: true
+                            })
+                        } else if (simField === 'sim_id2') {
+                            this.setState({
+                                valid_sim_id_2: true
+                            })
+                        }
+                        success({
+                            title: response.data.msg
+                        })
+                    } else {
+                        error({
+                            title: response.data.msg
+                        })
+                    }
+                }
+                // should be logged out
+                else {
+
+                }
+            });
+        } else {
+            this.props.form.setFields({
+                [simField]: {
+                    errors: [new Error('Please enter sim id to activate.')],
+                },
+            });
+        }
+    }
+
+    renderDataLimitOptions = () => {
+
+        let data_plan_term = this.state.term ? this.state.term : this.props.device.expiry_months
+        console.log(this.props.device.expiry_months);
+        // console.log(this.props.device.expiry_months);
+        return this.props.parent_packages.map((packageItem) => {
+            // console.log(packageItem.pkg_term, this.state.term + ' month', packageItem.pkg_term == (this.state.term + ' month'))
+            if (packageItem.package_type === 'data_plan' && packageItem.pkg_term == (data_plan_term + ' month')) {
+                return <Select.Option key={packageItem.id} value={packageItem.id} >{packageItem.pkg_name}</Select.Option>
+            }
+        })
+    }
+
+    changeDataLimit = (type, value) => {
+        if (value) {
+            let data_plan = this.props.parent_packages.find(item => item.id == value)
+            if (type === 'data_limit_1') {
+                let disable_data_plan_sim1 = false
+                if ((!this.state.disableSim && this.state.services)) {
+                    disable_data_plan_sim1 = true
+                }
+                // else if ((this.props.device.sim_id2_data_plan && JSON.parse(this.props.device.sim_id_data_plan.data_plan_package).id !== value)) {
+                //     disable_data_plan_sim1 = false
+                // }
+                this.setState({
+                    data_limit_1: data_plan ? data_plan : '',
+                    disable_data_plan_sim1: disable_data_plan_sim1
+                })
+                this.data_plan_1_added = false
+            } else if (type === 'data_limit_2') {
+                let disable_data_plan_sim2 = false
+                if ((!this.state.disableSim2 && this.state.services)) {
+                    disable_data_plan_sim2 = true
+                }
+                this.setState({
+                    data_limit_2: data_plan ? data_plan : '',
+                    disable_data_plan_sim2: disable_data_plan_sim2
+                })
+                this.data_plan_2_added = false
+            }
+        } else {
+            if (type === 'data_limit_1') {
+                this.setState({
+                    data_limit_1: '',
+                    disable_data_plan_sim1: true
+                })
+            } else if (type === 'data_limit_2') {
+                this.setState({
+                    data_limit_2: '',
+                    disable_data_plan_sim2: true
+                })
+            }
+        }
+    }
+
+
+    addDataPlan(type) {
+        let data_plan = null
+        if (type == 'sim_id') {
+            data_plan = this.state.data_limit_1
+        } else if (type == 'sim_id2') {
+            data_plan = this.state.data_limit_2
+        }
+        confirmDataPlanChange(this, type, data_plan)
+    }
 
 
     onChangeAdjustExpiry = (value, dateString) => {
@@ -730,8 +1010,8 @@ class EditDevice extends Component {
 
     render() {
         // 
-        const { users_list } = this.props;
-
+        const { users_list, device } = this.props;
+        // console.log(device);
         return (
             <div>
                 <Row>
@@ -773,69 +1053,71 @@ class EditDevice extends Component {
                                     )}
                                 </Form.Item>
                             </Col>
+
                             {/* {(isloading ?
 
-                        <div className="addUserSpin">
-                            <Spin />
-                        </div>
-                        :
-                        // (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? null :
-                        <Fragment> */}
-                            {/* <Form.Item
-                                label={convertToLang(this.props.translation[USER_ID], "USER ID")}
-                                 labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 16 }}
-                            >
+                                <div className="addUserSpin">
+                                    <Spin />
+                                </div>
+                                :
+                                // (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? null :
+                                <Fragment>
+                                    <Form.Item
+                                        label={convertToLang(this.props.translation[USER_ID], "USER ID")}
+                                        labelCol={{ span: 8 }}
+                                        wrapperCol={{ span: 16 }}
+                                    >
 
 
-                                {this.props.form.getFieldDecorator('user_id', {
-                                    initialValue: this.state.addNewUserModal ? lastObject.user_id : this.props.device.user_id,
+                                        {this.props.form.getFieldDecorator('user_id', {
+                                            initialValue: this.state.addNewUserModal ? lastObject.user_id : this.props.device.user_id,
 
-                                    // rules: [
-                                    //     (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? {} :
-                                    //         {
-                                    //             required: true, message: convertToLang(this.props.translation[USER_ID_IS_REQUIRED], "User ID is Required !"),
-                                    //         }
-                                    // ]
-                                })(
-                                    <Select
-                                        className="pos_rel"
-                                        setFieldsValue={this.state.addNewUserModal ? lastObject.user_id : addNewUserValue}
-                                        showSearch
-                                        disabled
-                                        // disabled={(this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? true : false}
-                                        placeholder={convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}
-                                        optionFilterProp="children"
-                                        onChange={this.handleUserChange}
-                                        filterOption={
-                                            (input, option) => {
-                                                // 
-                                                // return null;
-                                                return (option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0)
-                                            }
+                                            // rules: [
+                                            //     (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? {} :
+                                            //         {
+                                            //             required: true, message: convertToLang(this.props.translation[USER_ID_IS_REQUIRED], "User ID is Required !"),
+                                            //         }
+                                            // ]
+                                        })(
+                                            <Select
+                                                className="pos_rel"
+                                                setFieldsValue={this.state.addNewUserModal ? lastObject.user_id : addNewUserValue}
+                                                showSearch
+                                                disabled
+                                                // disabled={(this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? true : false}
+                                                placeholder={convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}
+                                                optionFilterProp="children"
+                                                onChange={this.handleUserChange}
+                                                filterOption={
+                                                    (input, option) => {
+                                                        // 
+                                                        // return null;
+                                                        return (option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0)
+                                                    }
+                                                }
+                                                disabled={true}
+                                            >
+                                                <Select.Option value="">{convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}</Select.Option>
+                                                {users_list.map((item, index) => {
+                                                    return (<Select.Option key={index} value={item.user_id}>{`${item.user_id} (${item.user_name})`}</Select.Option>)
+                                                })}
+                                            </Select>
+                                        )}
+                                        {(this.props.user.type === ADMIN || (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1')) ? null :
+                                            <Button
+                                                className="add_user_btn"
+                                                type="primary"
+                                                onClick={() => this.handleUserModal()}
+                                            >
+                                                {convertToLang(this.props.translation[Button_Add_User], "Add User")}
+                                            </Button>
                                         }
-                                        disabled={true}
-                                    >
-                                        <Select.Option value="">{convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}</Select.Option>
-                                        {users_list.map((item, index) => {
-                                            return (<Select.Option key={index} value={item.user_id}>{`${item.user_id} (${item.user_name})`}</Select.Option>)
-                                        })}
-                                    </Select>
-                                )}
-                                 {(this.props.user.type === ADMIN || (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1')) ? null :
-                                    <Button
-                                        className="add_user_btn"
-                                        type="primary"
-                                        onClick={() => this.handleUserModal()}
-                                    >
-                                        {convertToLang(this.props.translation[Button_Add_User], "Add User")}
-                                    </Button>
-                                } 
 
-                            </Form.Item> */}
+                                    </Form.Item>
 
-                            {/* </Fragment>
-                    )} */}
+                                </Fragment>
+                            )} */}
+
                             < Form.Item style={{ marginBottom: 0 }}
                             >
                                 {this.props.form.getFieldDecorator('dealer_id', {
@@ -875,7 +1157,7 @@ class EditDevice extends Component {
                             {(this.props.user.type === ADMIN) ? null :
                                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                     <Form.Item
-                                        label={<Markup content={convertToLang(this.props.translation[LABEL_APPLY_SERVICES], "APPLY <br />SERVICES")} />}
+                                        label={<Markup content={convertToLang(this.props.translation[''], "APPLY <br />SERVICES")} />}
                                         labelCol={{ span: 8 }}
                                         wrapperCol={{ span: 16 }}
                                         className="apply_services"
@@ -993,6 +1275,23 @@ class EditDevice extends Component {
                             </Col>
                         </Col>
                         <Col xs={24} sm={24} md={12} lg={12} xl={12} className="p-0">
+
+                            {/**
+                             * @author Usman Hafeez
+                             * @description added button of PGP Email
+                             */}
+
+                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                <Button
+                                    disabled={this.state.disablePgp}
+                                    className="add_user_btn"
+                                    type="primary"
+                                    style={{ width: "100%" }}
+                                    onClick={() => this.handlePGPModal()}
+                                    style={{ width: "100%" }}
+                                >Add PGP Email</Button>
+                            </Col>
+
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
                                     label={convertToLang(this.props.translation[LABEL_DATA_PGP_EMAIL], "PGP Email ")}
@@ -1022,6 +1321,22 @@ class EditDevice extends Component {
                                     )}
                                 </Form.Item>
                             </Col>
+
+                            {/**
+                             * @author Usman Hafeez
+                             * @description added button of Chat ID
+                             */}
+                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                <Button
+                                    disabled={this.state.disableChat}
+                                    className="add_user_btn"
+                                    type="primary"
+                                    style={{ width: "100%" }}
+                                    onClick={this.handleChatID}
+                                    style={{ width: "100%" }}
+                                >Generate Chat ID</Button>
+                            </Col>
+
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
                                     label={convertToLang(this.props.translation[LABEL_DATA_CHAT_ID], "Chat ID ")}
@@ -1049,6 +1364,23 @@ class EditDevice extends Component {
                                     )}
                                 </Form.Item>
                             </Col>
+
+                            {/**
+                             * @author Usman Hafeez
+                             * @description added button of Chat ID
+                             */}
+                            {/* <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                <Button
+                                    disabled={true}
+                                    className="add_user_btn"
+                                    type="primary"
+                                    style={{ width: "100%" }}
+                                    onClick={this.handleChatID}
+                                    style={{ width: "100%" }}
+                                >ADD SIM ID</Button>
+                            </Col> */}
+
+                            {/* Sim ID Input */}
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
                                     label={convertToLang(this.props.translation[LABEL_DATA_SIM_ID], "Sim ID ")}
@@ -1057,25 +1389,132 @@ class EditDevice extends Component {
                                 >
                                     {this.props.form.getFieldDecorator('sim_id', {
                                         initialValue: this.state.sim_id,
+                                        rules: [
+                                            // {
+                                            //     required: true, message: "SIM ID is required"
+                                            // },
+                                            {
+                                                validator: (rule, value, callback) => { this.validateICCID(rule, value, callback, 'sim_id') },
+                                            }
+                                        ]
                                     })(
-                                        <Select
-                                            // className="pos_rel"
-                                            showSearch
-                                            placeholder={convertToLang(this.props.translation[DEVICE_Select_SIM_ID], "Select Sim ID ")}
-                                            optionFilterProp="children"
-                                            onChange={(value) => this.setState({ sim_id: value })}
-                                            // onFocus={handleFocus}
-                                            // onBlur={handleBlur}
-                                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                        <Input
+                                            placeholder={convertToLang(this.props.translation[DUMY_TRANS_ID], "Enter Sim ID")}
                                             disabled={this.state.disableSim}
-                                        >
-                                            {this.props.sim_ids.map((sim_id, index) => {
-                                                return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
-                                            })}
-                                        </Select>,
+                                        // onChange={(value) => this.setState({ sim_id: value })}
+                                        />
+                                        // <Select
+                                        //     // className="pos_rel"
+                                        //     showSearch
+                                        //     placeholder={convertToLang(this.props.translation[DEVICE_Select_SIM_ID], "Select Sim ID ")}
+                                        //     optionFilterProp="children"
+                                        //     onChange={(value) => this.setState({ sim_id: value })}
+                                        //     // onFocus={handleFocus}
+                                        //     // onBlur={handleBlur}
+                                        //     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                        //     disabled={this.state.disableSim}
+                                        // >
+                                        //     {this.props.sim_ids.map((sim_id, index) => {
+                                        //         return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
+                                        //     })}
+                                        // </Select>
                                     )}
                                 </Form.Item>
                             </Col>
+
+
+                            {/**
+                             * @author Usman Hafeez
+                             * @description Add SIM ID button
+                             */}
+                            {(this.state.valid_toActivate_sim_id_1)
+                                ?
+
+                                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                    <Form.Item
+                                        // label={''}
+                                        labelCol={{ span: 0 }}
+                                        wrapperCol={{ span: 24 }}
+                                    >
+                                        <Button
+                                            className="add_user_btn"
+                                            type="primary"
+                                            style={{ width: "100%" }}
+                                            onClick={this.handleChatID}
+                                            style={{ width: "100%" }}
+                                            // disabled={this.state.disableSim || this.state.valid_sim_id_1}
+                                            disabled={this.state.disableSim}
+                                            onClick={(e) => { this.activateICCID('sim_id') }}
+                                        >
+                                            {convertToLang(this.props.translation[''], "Activate Sim ID")}
+                                        </Button>
+                                    </Form.Item>
+                                </Col>
+                                : null
+                            }
+
+                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                {(!this.state.disableSim) ?
+                                    (this.state.services) ?
+                                        <div style={{ color: 'red', textAlign: "center" }}>Basic Data Limit for SIM ID is 2 GB</div>
+                                        :
+                                        (device.sim_id_data_plan) ?
+                                            <div style={{ color: 'red', textAlign: "center" }}>Current Data Limit for SIM ID is {device.sim_id_data_plan.total_data / 1000} GB</div>
+                                            : null
+                                    : null
+                                }
+                                {(this.props.user.type == ADMIN) ? null :
+                                    <Form.Item
+                                        label={<Markup content={convertToLang(this.props.translation[''], "ADD DATA <br />(SIM ID 1)")} />}
+                                        labelCol={{ span: 8 }}
+                                        wrapperCol={{ span: 16 }}
+                                        className="apply_services"
+                                    >
+                                        {this.props.form.getFieldDecorator('data_limit_1', {
+                                            initialValue: '',
+                                            // rules: [
+                                            //     // {
+                                            //     //     required: true, message: "SIM ID is required"
+                                            //     // },
+                                            //     {
+                                            //         validator: (rule, value, callback) => { this.validateICCID(rule, value, callback, 'sim_id') },
+                                            //     }
+                                            // ]
+                                        })(
+
+                                            <Select
+                                                placeholder="SELECT SIM DATA PLAN FOR SIM ID 1"
+
+                                                disabled={this.state.disableSim}
+                                                onChange={(value) => {
+                                                    this.changeDataLimit('data_limit_1', value)
+                                                }}
+                                            >
+                                                <Select.Option key={""} value="" >SELECT DATA PLAN</Select.Option>
+                                                {this.renderDataLimitOptions()}
+
+                                            </Select>
+                                        )}
+                                    </Form.Item>
+                                }
+                            </Col>
+                            {((!this.state.services && !this.state.disable_data_plan_sim1)) ?
+                                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                    <Button
+                                        disabled={this.state.disable_data_plan_sim1}
+                                        className="add_user_btn"
+                                        type="primary"
+                                        style={{ width: "100%" }}
+                                        onClick={() => {
+                                            this.addDataPlan('sim_id')
+                                        }}
+                                        style={{ width: "100%" }}
+                                    >Add Data Plan SIM ID 1</Button>
+                                </Col>
+                                : null
+                            }
+
+                            {/* Sim ID 2 Input */}
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
                                     label={convertToLang(this.props.translation[DUMY_TRANS_ID], "Sim ID 2 ")}
@@ -1084,29 +1523,130 @@ class EditDevice extends Component {
                                 >
                                     {this.props.form.getFieldDecorator('sim_id2', {
                                         initialValue: this.state.sim_id2,
+                                        rules: [
+                                            {
+                                                validator: (rule, value, callback) => { this.validateICCID(rule, value, callback, 'sim_id2') },
+                                            }
+                                        ]
                                     })(
-                                        <Select
-                                            // className="pos_rel"
-                                            showSearch
-                                            placeholder={convertToLang(this.props.translation[DUMY_TRANS_ID], "Select Sim ID 2")}
-                                            optionFilterProp="children"
-                                            onChange={(value) => this.setState({ sim_id2: value })}
-                                            // onFocus={handleFocus}
-                                            // onBlur={handleBlur}
-                                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                        <Input
+                                            placeholder={convertToLang(this.props.translation[''], "Enter Sim ID 2")}
                                             disabled={this.state.disableSim2}
-                                        >
-                                            <Select.Option value=""> {convertToLang(this.props.translation[DUMY_TRANS_ID], "Select Sim ID 2")}</Select.Option>
-                                            {this.props.sim_ids.map((sim_id, index) => {
-                                                if (index > 0) {
+                                        // onChange={(value) => this.setState({sim_id2: value})}
+                                        />
+                                        // <Select
+                                        //     // className="pos_rel"
+                                        //     showSearch
+                                        //     placeholder={convertToLang(this.props.translation[DUMY_TRANS_ID], "Select Sim ID 2")}
+                                        //     optionFilterProp="children"
+                                        //     onChange={(value) => this.setState({ sim_id2: value })}
+                                        //     // onFocus={handleFocus}
+                                        //     // onBlur={handleBlur}
+                                        //     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                        //     disabled={this.state.disableSim2}
+                                        // >
+                                        //     <Select.Option value=""> {convertToLang(this.props.translation[DUMY_TRANS_ID], "Select Sim ID 2")}</Select.Option>
+                                        //     {this.props.sim_ids.map((sim_id, index) => {
+                                        //         if (index > 0) {
 
-                                                    return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
-                                                }
-                                            })}
-                                        </Select>,
+                                        //             return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
+                                        //         }
+                                        //     })}
+                                        // </Select>
                                     )}
                                 </Form.Item>
                             </Col>
+
+                            {/**
+                             * @author Usman Hafeez
+                             * @description Add SIM ID 2 button
+                             */}
+                            {(this.state.valid_toActivate_sim_id_2)
+                                ?
+                                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                    <Form.Item
+                                        // label={''}
+                                        labelCol={{ span: 0 }}
+                                        wrapperCol={{ span: 24 }}
+                                    >
+                                        <Button
+                                            className="add_user_btn"
+                                            type="primary"
+                                            style={{ width: "100%" }}
+                                            onClick={this.handleChatID}
+                                            style={{ width: "100%" }}
+                                            disabled={this.state.disableSim2}
+                                            onClick={(e) => { this.activateICCID('sim_id2') }}
+
+                                        >
+                                            {convertToLang(this.props.translation[''], "Activate Sim ID 2")}
+                                        </Button>
+                                    </Form.Item>
+                                </Col>
+                                : null
+                            }
+                            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                {(!this.state.disableSim2) ?
+                                    (this.state.services) ?
+                                        <div style={{ color: 'red', textAlign: "center" }}>Basic Data Limit for SIM ID 2 is 2 GB</div>
+                                        :
+                                        (device.sim_id2_data_plan) ?
+                                            <div style={{ color: 'red', textAlign: "center" }}>Current Data Limit for SIM ID 2 is {device.sim_id2_data_plan.total_data / 1000} GB</div>
+                                            : null
+                                    : null
+                                }
+                                {(this.props.user.type == ADMIN) ? null :
+                                    <Form.Item
+                                        label={<Markup content={convertToLang(this.props.translation[''], "ADD DATA <br />(SIM ID 2)")} />}
+                                        labelCol={{ span: 8 }}
+                                        wrapperCol={{ span: 16 }}
+                                        className="apply_services"
+
+                                    >
+                                        {this.props.form.getFieldDecorator('data_limit_2', {
+                                            initialValue: '',
+                                            // rules: [
+                                            //     // {
+                                            //     //     required: true, message: "SIM ID is required"
+                                            //     // },
+                                            //     {
+                                            //         validator: (rule, value, callback) => { this.validateICCID(rule, value, callback, 'sim_id') },
+                                            //     }
+                                            // ]
+                                        })(
+
+                                            <Select
+                                                placeholder="SELECT SIM DATA PLAN FOR SIM ID 2"
+
+                                                disabled={this.state.disableSim2}
+                                                onChange={(value) => {
+                                                    this.changeDataLimit('data_limit_2', value)
+                                                }}
+                                            >
+                                                <Select.Option key={""} value="" >SELECT DATA PLAN</Select.Option>
+                                                {this.renderDataLimitOptions()}
+
+                                            </Select>
+                                        )}
+                                    </Form.Item>
+                                }
+                            </Col>
+                            {((!this.state.services && !this.state.disable_data_plan_sim2)) ?
+                                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                    <Button
+                                        disabled={this.state.disable_data_plan_sim2}
+                                        className="add_user_btn"
+                                        type="primary"
+                                        style={{ width: "100%" }}
+                                        onClick={() => {
+                                            this.addDataPlan('sim_id2')
+                                        }}
+                                        style={{ width: "100%" }}
+                                    >Add Data Plan SIM ID 2</Button>
+                                </Col>
+                                : null
+                            }
+                            {/* VPN Input */}
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
                                     label={convertToLang(this.props.translation[DUMY_TRANS_ID], "VPN")}
@@ -1131,6 +1671,8 @@ class EditDevice extends Component {
                                     )}
                                 </Form.Item>
                             </Col>
+
+                            {/* Client ID Input */}
                             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                                 <Form.Item
                                     label={convertToLang(this.props.translation[DUMY_TRANS_ID], "Client ID ")}
@@ -1148,6 +1690,7 @@ class EditDevice extends Component {
                                     )}
                                 </Form.Item>
                             </Col>
+
                             {(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ?
                                 <Fragment>
                                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
@@ -1174,9 +1717,10 @@ class EditDevice extends Component {
                                     </Col>
                                 </Fragment>
                                 :
-                                <Fragment>
-                                </Fragment>
+                                null
                             }
+
+                            {/* section 3 */}
                             <Col xs={24} sm={24} md={24} lg={24} xl={24} className="text-right">
                                 <Form.Item className="edit_ftr_btn11"
                                     wrapperCol={{
@@ -1185,13 +1729,45 @@ class EditDevice extends Component {
                                     }}
                                 >
                                     <Button key="back" type="button" onClick={() => { this.props.handleCancel(); this.handleCancelForm() }} > {convertToLang(this.props.translation[Button_Cancel], "Cancel")}</Button>
-                                    <Button type="primary" htmlType="submit">{convertToLang(this.props.translation[Button_submit], "Submit")}</Button>
+                                    <Button
+                                        type="primary"
+                                        htmlType="submit"
+                                        disabled={((this.state.disableSim === false && this.state.valid_sim_id_1 === false) || (this.state.disableSim2 === false && this.state.valid_sim_id_2 === false)) ? true : false}
+
+                                    >{convertToLang(this.props.translation[Button_submit], "Submit")}</Button>
                                 </Form.Item>
                             </Col>
                         </Col>
                     </Row>
                 </Form>
+
+                {/**
+                 * @section AddUserModal
+                 */}
                 <AddUser ref="add_user" translation={this.props.translation} />
+
+                {/**
+                 * @author Usman Hafeez
+                 * @description from here pgp email will be generated
+                 */}
+
+                <AddPGPEmailModal
+                    ref="addPGPEmailModal"
+                    translation={this.props.translation}
+                    wrappedComponentRef={(form) => this.addPGPEmailModal = form}
+
+                    // actions
+                    getDomains={this.props.getDomains}
+                    addProduct={this.props.addProduct}
+                    // data
+                    domainList={this.props.domainList}
+
+                />
+
+                {/**
+                 * 
+                 * @section ServicesModal
+                 *  */}
                 <Modal
                     width={750}
                     visible={this.state.servicesModal}
@@ -1209,7 +1785,7 @@ class EditDevice extends Component {
                         parent_packages={this.state.parent_packages}
                         product_prices={this.state.product_prices}
                         tabselect={this.state.tabselect}
-                        handleChangetab={this.handleChangetab}
+                        handleChangeTab={this.handleChangeTab}
                         translation={this.props.translation}
                         handleServicesSubmit={this.handleServicesSubmit}
                         user_credit={this.props.user_credit}
@@ -1223,6 +1799,10 @@ class EditDevice extends Component {
                     />
                 </Modal>
 
+                {/**
+                 * 
+                 * @section ServicesDetailsModal
+                 *  */}
                 <Modal
                     width={900}
                     visible={this.state.showConfirmCredit}
@@ -1290,7 +1870,7 @@ class EditDevice extends Component {
                         <div className="edit_ftr_btn" >
                             <Button onClick={() => { this.setState({ showConfirmCredit: false }) }}>CANCEL</Button>
 
-                            {(this.props.user_credit < this.state.serviceData.total_price) ?
+                            {(this.props.user_credit < this.state.serviceData.total_price && this.props.user.account_balance_status === 'active') ?
                                 <Button type='primary' onClick={() => { this.submitServicesConfirm(false) }}>PAY LATER</Button>
                                 : null
                             }
@@ -1298,6 +1878,11 @@ class EditDevice extends Component {
                         </div >
                     </Fragment>
                 </Modal>
+
+                {/**
+                 * 
+                 * @section InvoiceModal
+                 *  */}
                 <Modal
                     width="850px"
                     visible={this.state.invoiceVisible}
@@ -1342,7 +1927,7 @@ class EditDevice extends Component {
     }
 }
 
-const WrappedEditDeviceForm = Form.create({ name: 'register' })(EditDevice);
+const WrappedEditDeviceForm = Form.create({ name: 'editDevice' })(EditDevice);
 // export default WrappedRegistrationForm;
 
 function mapDispatchToProps(dispatch) {
@@ -1357,10 +1942,14 @@ function mapDispatchToProps(dispatch) {
         getParentPackages: getParentPackages,
         getProductPrices: getProductPrices,
         getInvoiceId: getInvoiceId,
-        extendServices: extendServices
+        extendServices: extendServices,
+        getDomains: getDomains,
+        addProduct: addProduct,
+        addDataPlan: addDataPlan
+
     }, dispatch);
 }
-var mapStateToProps = ({ routing, devices, users, auth, settings, sidebar }) => {
+var mapStateToProps = ({ routing, devices, users, auth, settings, sidebar, account }) => {
     // 
 
     return {
@@ -1377,6 +1966,7 @@ var mapStateToProps = ({ routing, devices, users, auth, settings, sidebar }) => 
         product_prices: devices.product_prices,
         user_credit: sidebar.user_credit,
         credits_limit: sidebar.credits_limit,
+        domainList: account.domainList,
     };
 }
 
@@ -1408,3 +1998,34 @@ function showCancelServiceConfirm(_this, values) {
     })
 }
 
+function confirmDataPlanChange(_this, type, data_plan) {
+    let data_plan_id = data_plan.id
+    let sim_type = "sim id 1"
+    if (type === 'sim_id2') {
+        sim_type = "sim id 2"
+    }
+    confirm({
+        title: "Are you sure you want to add data plan on " + sim_type + " ?",
+        okText: "PROCEED WITH ADD DATA PLAN",
+        onOk() {
+            let values = {}
+            values.packages = [data_plan];
+            values.total_price = data_plan.pkg_price
+            values.renewService = true
+            values.usr_acc_id = _this.props.device.id
+            values.usr_device_id = _this.props.device.usr_device_id
+            values.user_id = _this.props.device.user_id
+            values.device_id = _this.props.device.device_id
+            values.data_plan_package_id = data_plan_id
+            values.sim_type = type
+            _this.setState({
+                serviceData: values,
+                showConfirmCredit: true,
+                renewService: true,
+                total_price: values.total_price,
+                PkgSelectedRows: [data_plan],
+                change_data_plan: true
+            })
+        }
+    })
+}

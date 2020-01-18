@@ -124,6 +124,7 @@ export var initialSettings = {
     { "key": "link_code", "value": DEALER_PIN },
     { "key": "connected_devices", "value": DEALER_DEVICES },
     { "key": "dealer_credits", "value": DEALER_CREDITS },
+    { "key": "last_login", "value": 'LAST LOGIN' },
     { "key": "parent_dealer", "value": Parent_Dealer },
     { "key": "parent_dealer_id", "value": Parent_Dealer_ID },
   ],

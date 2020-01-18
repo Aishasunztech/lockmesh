@@ -117,7 +117,7 @@ class BulkWipe extends Component {
 
     render() {
         // return (null);
-        console.log("state ", this.state)
+        // console.log("state ", this.state)
         return (
             <div>
                 <WipePasswordModal

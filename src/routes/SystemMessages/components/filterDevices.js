@@ -37,6 +37,11 @@ const confirm = Modal.confirm;
 const success = Modal.success
 const error = Modal.error
 
+var addAllBtn = false;
+var removeAllBtn = false;
+var addBtn = false;
+var updateDealers = true;
+
 var copyDevices = [];
 var status = true;
 
@@ -693,7 +698,7 @@ class FilterDevices extends Component {
 
       } else {
         error({
-          title: `Sorry, You have not any device to perform an action`,
+          title: `Sorry, You have not selected any device to perform an action`,
         });
       }
     } else {
@@ -724,109 +729,54 @@ class FilterDevices extends Component {
     return updateSelectedDevices;
   }
 
-  renderList(list) {
-    // console.log('renderList ', list)
-    return list.map((device, index) => {
 
-        var status = device.finalStatus;
-        // console.log("status ", status)
-
-        let color = getColor(status);
-        var style = { margin: '0', width: 'auto', textTransform: 'uppercase' }
-        // var text = convertToLang(this.props.translation[Button_Edit], "EDIT");
-
-        // if ((status === DEVICE_PENDING_ACTIVATION) || (status === DEVICE_UNLINKED)) {
-        //     style = { margin: '0 8px 0 0', width: 'auto', display: 'none', textTransform: 'uppercase' }
-        //     text = "ACTIVATE";
-        // }
-
-        return {
-            rowKey: index,
-            // key: device.device_id ? `${device.device_id}` : device.usr_device_id,
-            key: status == DEVICE_UNLINKED ? `${device.user_acc_id} ${device.created_at} ` : device.id,
-            counter: ++index,
-
-            status: (<span style={color} > {status}</span>),
-            lastOnline: checkValue(device.lastOnline),
-            flagged: device.flagged,
-            type: checkValue(device.type),
-            version: checkValue(device.version),
-            device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
-            // device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
-            user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
-            validity: checkValue(device.validity),
-            transfered_to: checkValue((device.finalStatus == "Transfered") ? device.transfered_to : null),
-            name: checkValue(device.name),
-            activation_code: checkValue(device.activation_code),
-            account_email: checkValue(device.account_email),
-            pgp_email: checkValue(device.pgp_email),
-            chat_id: checkValue(device.chat_id),
-            client_id: checkValue(device.client_id),
-            dealer_id: checkValue(device.dealer_id),
-            dealer_pin: checkValue(device.link_code),
-            mac_address: checkValue(device.mac_address),
-            sim_id: checkValue(device.sim_id),
-            imei_1: checkValue(device.imei),
-            sim_1: checkValue(device.simno),
-            imei_2: checkValue(device.imei2),
-            sim_2: checkValue(device.simno2),
-            serial_number: checkValue(device.serial_number),
-            model: checkValue(device.model),
-            // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
-            // expiry_date: device.expiry_date ? `${new Date(device.expiry_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
-            dealer_name: <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a>,
-            // dealer_name: (this.props.user.type === ADMIN) ? <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a> : <a >{checkValue(device.dealer_name)}</a>,
-            online: device.online === 'online' ? (<span style={{ color: "green" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) : (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
-            s_dealer: checkValue(device.s_dealer),
-            s_dealer_name: checkValue(device.s_dealer_name),
-            remainTermDays: device.remainTermDays,
-            start_date: checkValue(device.start_date),
-            expiry_date: checkValue(device.expiry_date),
-        }
-    });
-}
 
   render() {
 
     // console.log('selected devices are: ', this.state.selectedDevices);
+
+    // if (this.state.checkChanges) {
+    //   if (this.state.dealerList.length == this.props.record.permissions.length) {
+    //     addAllBtn = true; // disable 
+    //     addBtn = true;
+    //   } else {
+    //     addAllBtn = false; // visible
+    //     addBtn = false;
+    //   }
+    //   this.state.checkChanges = false;
+    //   // this.setState({ checkChanges: false })
+    // } else {
+    //   if (this.state.dealerList.length == this.props.record.permissions.length) {
+    //     addBtn = true; // disable 
+    //   } else {
+    //     addBtn = false; // visible
+    //   }
+
+    // }
     return (
       <Fragment>
         <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
-          <Col className="gutter-row" sm={5} xs={5} md={5}>
-            <div className="gutter-box text-left">
-              <h2>{convertToLang(this.props.translation["Select Devices:"], "Select Devices:")}</h2>
-            </div>
-          </Col>
-          <Col className="gutter-row" sm={2} xs={2} md={2}>
-            <div className="gutter-box">
-              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
-                onClick={() => { this.showDealersModal(true) }}>{convertToLang(this.props.translation[Button_Add], "Add")}</Button>
-            </div>
-          </Col>
-          <Col className="gutter-row" sm={4} xs={4} md={4}>
-            <div className="gutter-box">
-              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
-                onClick={() => { this.addSelectedDealersModal(true) }}>{convertToLang(this.props.translation[Button_AddExceptSelected], "Add Except Selected")}</Button>
-            </div>
-          </Col>
-          <Col className="gutter-row" sm={2} xs={2} md={2}>
-            <div className="gutter-box">
-              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
-                onClick={() => { this.saveAllDealersConfirm() }}>{convertToLang(this.props.translation[Button_AddAll], "Add All")}</Button>
-            </div>
-          </Col>
-          <Col className="gutter-row" sm={3} xs={3} md={3}>
-            <div className="gutter-box">
-              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger"
-                onClick={() => { this.removeAllDealersConfirm() }}>{convertToLang(this.props.translation[Button_RemoveAll], "Remove All")}</Button>
-            </div>
-          </Col>
-          <Col className="gutter-row" sm={3} xs={3} md={3}>
-            <div className="gutter-box">
-              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger"
-                onClick={() => { this.showPermissionedDealersModal(true) }}>{convertToLang(this.props.translation[Button_RemoveExcept], "Remove Except")}</Button>
-            </div>
-          </Col>
+          <h2 className="mr-24 ml-8">{convertToLang(this.props.translation["Select Devices:"], "Select Devices:")}</h2>
+          <div className="mr-16">
+            <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
+              onClick={() => { this.showDealersModal(true) }}>{convertToLang(this.props.translation[Button_Add], "Add")}</Button>
+          </div>
+          <div className="mr-16">
+            <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
+              onClick={() => { this.addSelectedDealersModal(true) }}>{convertToLang(this.props.translation[Button_AddExceptSelected], "Add Except Selected")}</Button>
+          </div>
+          <div className="mr-16">
+            <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
+              onClick={() => { this.saveAllDealersConfirm() }}>{convertToLang(this.props.translation[Button_AddAll], "Add All")}</Button>
+          </div>
+          <div className="mr-16">
+            <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger"
+              onClick={() => { this.removeAllDealersConfirm() }}>{convertToLang(this.props.translation[Button_RemoveAll], "Remove All")}</Button>
+          </div>
+          <div className="mr-16">
+            <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger"
+              onClick={() => { this.showPermissionedDealersModal(true) }}>{convertToLang(this.props.translation[Button_RemoveExcept], "Remove Except")}</Button>
+          </div>
 
           <Col className="gutter-row" sm={15} xs={15} md={15}>
             <div className="gutter-box search_heading">
@@ -842,19 +792,8 @@ class FilterDevices extends Component {
               />
             </div>
           </Col>
-          {/* <Col className="gutter-row" sm={9} xs={9} md={9}>
-            <div className="gutter-box">
-              <Button
-                style={{ marginBottom: 16, float: 'right' }}
-                onClick={this.applyAction}
-                type="primary"
-              >Apply Action
-              </Button>
-            </div>
-          </Col> */}
 
         </Row>
-        {/* <span>(Only allow active & trial devices for your selected action)</span> */}
         <Row gutter={24} style={{ marginBottom: '24px' }}>
           {
             this.props.spinloading ? <CircularProgress /> :
@@ -867,7 +806,7 @@ class FilterDevices extends Component {
                   bordered
                   columns={this.state.selectedDevicesColumns}
                   onChange={this.props.onChangeTableSorting}
-                  dataSource={this.renderList(this.state.selectedDevices)}
+                  dataSource={this.props.renderList(this.state.selectedDevices)}
                   pagination={false}
                   scroll={{ x: true }}
                 />
@@ -890,7 +829,7 @@ class FilterDevices extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            devices={this.renderList(this.getUnSelectedDevices(this.state.allBulkDevices))}
+            devices={this.props.renderList(this.getUnSelectedDevices(this.state.allBulkDevices))}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
@@ -921,7 +860,7 @@ class FilterDevices extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            devices={this.renderList(this.state.searchRemoveModal)}
+            devices={this.props.renderList(this.state.searchRemoveModal)}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
@@ -952,7 +891,7 @@ class FilterDevices extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            devices={this.renderList(this.getUnSelectedDevices(this.state.allBulkDevices))}
+            devices={this.props.renderList(this.getUnSelectedDevices(this.state.allBulkDevices))}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
@@ -964,50 +903,6 @@ class FilterDevices extends Component {
             selectedRowKeys={this.state.selectedRowKeys}
           />
         </Modal>
-
-        {/* <BulkSuspendDevices
-          ref="bulk_suspend"
-          suspendDevice={this.props.bulkSuspendDevice}
-          translation={this.props.translation}
-        />
-
-        <BulkActivateDevices
-          ref="bulk_activate"
-          bulkActivateDevice={this.props.bulkActivateDevice}
-          translation={this.props.translation}
-        />
-
-        <BulkUnlinkConfirmation
-          ref="bulk_unlink"
-          unlinkBulkDevices={this.props.unlinkBulkDevices}
-          translation={this.props.translation}
-        />
-
-        <BulkPushAppsConfirmation
-          ref="bulk_push_apps"
-          applyPushApps={this.props.applyPushApps}
-          selectedPushAppsList={this.props.selectedPushAppsList}
-          translation={this.props.translation}
-        />
-
-        <BulkPullAppsConfirmation
-          ref="bulk_pull_apps"
-          applyPullApps={this.props.applyPullApps}
-          selectedPullAppsList={this.props.selectedPullAppsList}
-          translation={this.props.translation}
-        />
-
-        <BulkWipeConfirmation
-          ref="bulk_wipe"
-          wipeBulkDevices={this.props.wipeBulkDevices}
-          translation={this.props.translation}
-        />
-
-        <BulkPolicyConfirmation
-          ref="bulk_policy"
-          bulkApplyPolicy={this.props.bulkApplyPolicy}
-          translation={this.props.translation}
-        /> */}
 
       </Fragment>
     )

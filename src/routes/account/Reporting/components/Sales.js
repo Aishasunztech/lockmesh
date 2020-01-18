@@ -390,6 +390,7 @@ class Sales extends Component {
                 wrapperCol={{ span: 14 }}
               >
                 {this.props.form.getFieldDecorator('to', {
+                  initialValue: moment(),
                   rules: [
                     {
                       required: false
@@ -446,6 +447,7 @@ class Sales extends Component {
                   columns={this.columns}
                   dataSource={this.renderList(this.props.salesReport)}
                   bordered
+                  scroll={{ x: true}}
                   pagination={false}
                 />
               </Fragment>

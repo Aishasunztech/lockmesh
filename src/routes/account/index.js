@@ -27,7 +27,7 @@ import { convertToLang } from '../utils/commonUtils';
 
 
 import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Table, Select, Divider } from "antd";
-import { BASE_URL } from "../../constants/Application";
+import { BASE_URL, HOST_NAME } from "../../constants/Application";
 import {
     MANAGE_DATA,
     BACKUP_DATABASE,
@@ -1186,8 +1186,6 @@ class Account extends Component {
                                     <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
                                     {/* </a> */}
                                 </Link>
-
-
                                 {/* <div className="middle">
                                         <SetPricingModal
                                             showPricingModal={this.showPricingModal}
@@ -1204,7 +1202,6 @@ class Account extends Component {
                                     </div> */}
                             </div>
                         </Col>
-
                         {(this.props.user.type === ADMIN || this.props.user.type === DEALER) ?
                             <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                                 <div>
@@ -1290,7 +1287,7 @@ class Account extends Component {
                                 </Link>
                             </div>
                         </Col>
-                        {false ?
+                        {((HOST_NAME === 'localhost' || HOST_NAME === 'dev.lockmesh.com') && this.props.user.type === ADMIN) ?
                             <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                                 <div>
                                     <Link to={"/system-messages"}>
@@ -1299,7 +1296,7 @@ class Account extends Component {
                                                 <Fragment>
                                                     <Row>
                                                         <div className="col-md-12 ac_card">
-                                                            <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[''], "System Messages")} </h2>
+                                                            <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[''], "Device Messages")} </h2>
                                                             <Divider className="mb-0" />
                                                             <Row style={{ padding: '12px 0 0px' }}>
                                                                 <Col span={8} className="" style={{ textAlign: "center" }}>

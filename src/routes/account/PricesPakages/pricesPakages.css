@@ -74,15 +74,15 @@
     overflow: overlay;
 }
 
-.price_table_tabs {
+.set_price_table_tabs {
     position: relative;
 }
 
-.set_price .price_table_tabs .ant-tabs-tab {
+.set_price .set_price_table_tabs .ant-tabs-tab {
     width: auto;
 }
 
-.set_price .price_table_tabs .ant-tabs-tab:first-child {
+.set_price .set_price_table_tabs .ant-tabs-tab:first-child {
     margin-top: 8px;
 }
 
@@ -93,6 +93,14 @@
     width: auto;
     right: 0;
 }
+/* 
+.pkg_table {
+    position: absolute;
+    left: 0;
+    top: 56px;
+    width: auto;
+    right: 0;
+} */
 
 .price_table1 {
     position: absolute;

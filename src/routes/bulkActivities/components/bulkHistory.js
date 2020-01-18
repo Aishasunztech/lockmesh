@@ -1,13 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import { Modal, message, Input, Table, Switch, Avatar } from 'antd';
-import { componentSearch, getFormattedDate, convertToLang } from '../../utils/commonUtils';
+import { componentSearch, getFormattedDate, convertToLang, convertTimezoneValue } from '../../utils/commonUtils';
 import Moment from 'react-moment';
 import { SECURE_SETTING, DATE, PROFILE_NAME } from '../../../constants/Constants';
-import { BASE_URL } from '../../../constants/Application';
+import { BASE_URL, TIMESTAMP_FORMAT } from '../../../constants/Application';
+import CircularProgress from "components/CircularProgress";
 // import styles from './Applist.css';
 import { POLICY_APP_NAME, POLICY_NAME, ACTIVITY } from '../../../constants/PolicyConstants';
 import { Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
 import { DEVICE_IMEI_1, DEVICE_IMEI_2, ACTIVITIES, DEVICE_ID } from '../../../constants/DeviceConstants';
+import { bulkDeviceHistoryColumns } from '../../utils/columnsUtils';
 
 var copyActivities = [];
 var status = true;
@@ -15,6 +17,8 @@ export default class Activity extends Component {
 
     constructor(props) {
         super(props);
+        let columns = bulkDeviceHistoryColumns(props.translation, this.handleSearch);
+
         this.appsColumns = [
             {
                 title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
@@ -67,6 +71,7 @@ export default class Activity extends Component {
             },
         ];
         this.state = {
+            columns: columns,
             visible: false,
             activities: props.history ? props.history : [],
             expandedRowKeys: [],
@@ -83,107 +88,39 @@ export default class Activity extends Component {
     }
 
     showModal = () => {
-        // console.log("this.props.activities show modal: ", this.props.activities)
         this.setState({
             visible: true,
             activities: this.props.history
-
         });
     }
 
     handleCancel = () => {
         this.setState({ visible: false });
     }
-    // handlePagination = (value) => {
-    //     this.setState({
-    //         pagination: value
-    //     })
-    // }
 
-    // handleComponentSearch = (e) => {
-
-    //     try {
-    //         let value = e.target.value;
-    //         console.log(status,'searched value', e.target.value)
-    //         if (value.length) {
-    //             // console.log(status,'searched value', value)
-    //             if (status) {
-    //                 // console.log('status')
-    //                 copyActivities = this.state.activities;
-    //                 status = false;
-    //             }
-    //             // console.log(this.state.users,'coppy de', coppyDevices)
-    //             let foundActivities = componentSearch(copyActivities, value);
-    //             //  console.log('found devics', foundImeis)
-    //             if (foundActivities.length) {
-
-    //                 this.setState({
-    //                     activities: foundActivities,
-    //                 })
-    //             } else {
-
-    //                 this.setState({
-    //                     activities: [],
-    //                 })
-    //             }
-    //         } else {
-    //             status = true;
-    //             this.setState({
-    //                 activities: copyActivities,
-    //             })
-    //         }
-
-    //     } catch (error) {
-    //         console.log('error')
-    //         // alert("hello");
-    //     }
-    // }
 
     handleComponentSearch = (e) => {
-
+        // console.log("e.target.value ", e.target.name, e.target.value);
         let demoHistory = [];
-        if (status) {
-            copyActivities = this.props.history;
-            status = false;
-        }
-        console.log("copyActivities ", copyActivities);
-        // return [];
-
-        if (e.target.value.length) {
-            // let foundDevices = componentSearch(copyActivities, e.target.value);
-
-            // console.log("foundDevices ", foundDevices);
-            copyActivities.forEach((device) => {
-                Object.keys(device).map(key => {
-                    // console.log("device[key] ", device[key])
-                    if (device[key] !== undefined) {
-                        if ((typeof device[key]) === 'string') {
-                            if (device[key].toUpperCase().includes(e.target.value.toUpperCase())) {
-                                if (!demoHistory.includes(device)) {
-                                    demoHistory.push(device);
-                                }
-                            }
-                        } else if (device[key] !== null) {
-                            if (device[key].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
-                                if (!demoHistory.includes(device)) {
-                                    demoHistory.push(device);
-                                }
-                            }
+        if (e.target.value.length && this.props.history && this.props.history.length) {
+            this.props.history.forEach((device) => {
+                if (device.action) {
+                    if (device.action.toUpperCase().includes(e.target.value.toUpperCase())) {
+                        if (!demoHistory.includes(device)) {
+                            demoHistory.push(device);
                         }
                     }
-                })
+                }
             });
-            // console.log("searched value", demoHistory);
             this.setState({
                 activities: demoHistory
             })
         } else {
             this.setState({
-                activities: copyActivities
+                activities: this.props.history ? this.props.history : []
             })
         }
     }
-
 
     renderApps = (apps) => {
 
@@ -243,107 +180,113 @@ export default class Activity extends Component {
     }
 
 
-    renderList = () => {
+    renderHistoryList = (data) => {
         // let data = this.props.history;
-        let data = this.state.activities;
+        // let data = this.state.activities;
         // console.log("history is: ", data)
-        if (data.length) {
+        if (data && data.length) {
             return data.map((row, index) => {
                 // console.log(row);
                 return {
                     key: index,
                     action: row.action.toUpperCase(),
-                    created_at: getFormattedDate(row.created_at),
+                    created_at: convertTimezoneValue(this.props.user.timezone, row.created_at, TIMESTAMP_FORMAT),
+                    // created_at: getFormattedDate(row.created_at),
                     data: row.data
                 }
             })
+        } else {
+            return [];
         }
     }
     render() {
 
-        // console.log(this.state.activities[16], 'activities to')
+        // console.log(this.state.activities, 'activities to')
 
         const { visible, loading } = this.state;
         return (
             <div>
                 <Modal
-                    width="880px"
+                    width="850px"
                     maskClosable={false}
                     visible={this.props.historyModalShow}
-                    title={convertToLang(this.props.translation[""], "History of Bulk Device Activities")}
+                    title={
+                        <div className="pp_popup">
+                            {convertToLang(this.props.translation[""], "History of Bulk Device Activities")}
+                            <Input.Search
+                                name="search"
+                                key="search"
+                                id="search"
+                                className="search_heading1"
+                                onKeyUp={
+                                    (e) => {
+                                        this.handleComponentSearch(e)
+                                    }
+                                }
+                                placeholder="Search"
+                            />
+                        </div>
+                    }
                     onOk={this.handleOk}
                     onCancel={this.props.handleHistoryCancel}
                     footer={null}
                     className="activities"
                 // className="edit_form"
                 >
-                    <Input.Search
-                        name="search"
-                        key="search"
-                        id="search"
-                        // className="search_heading1"
-                        onKeyUp={
-                            (e) => {
-                                this.handleComponentSearch(e)
+                    {this.props.history_loading ? <CircularProgress /> :
+                        <Table
+                            columns={[
+                                {
+                                    title: convertToLang(this.props.translation[ACTIVITY], "ACTIVITY"),
+                                    align: "center",
+                                    dataIndex: 'action',
+                                    key: "action",
+                                    className: '',
+                                    sorter: (a, b) => { return a.action.localeCompare(b.action) },
+                                    sortDirections: ['ascend', 'descend'],
+
+                                },
+                                {
+                                    title: convertToLang(this.props.translation[DATE], "DATE"),
+                                    align: "center",
+                                    dataIndex: 'created_at',
+                                    key: "created_at",
+                                    className: '',
+                                    sorter: (a, b) => { return a.created_at.localeCompare(b.created_at) },
+                                    sortDirections: ['ascend', 'descend'],
+                                    defaultSortOrder: 'descend'
+
+                                },
+                            ]}
+                            onChange={this.props.onChangeTableSorting}
+                            bordered
+                            rowClassName={(record, index) =>
+                                this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''
                             }
-                        }
-                        placeholder="Search"
-                    />
+                            onExpand={this.onExpandRow}
+                            dataSource={this.renderHistoryList(this.state.activities ? this.state.activities : [])}
+                            expandedRowRender={record => {
+                                // console.log('recored', record)
 
-                    <Table
-                        columns={[
-                            {
-                                title: convertToLang(this.props.translation[ACTIVITY], "ACTIVITY"),
-                                align: "center",
-                                dataIndex: 'action',
-                                key: "action",
-                                className: '',
-                                sorter: (a, b) => { return a.action.localeCompare(b.action) },
-                                sortDirections: ['ascend', 'descend'],
+                                return (
+                                    <Table
+                                        style={{ margin: 0, padding: 0 }}
+                                        size='middle'
+                                        bordered={false}
+                                        columns={this.state.columns}
+                                        align='center'
+                                        dataSource={this.props.renderList(JSON.parse(record.data), this.props.user.timezone)}
+                                        pagination={false}
+                                        scroll={{ x: true }}
+                                    />
+                                )
 
-                            },
-                            {
-                                title: convertToLang(this.props.translation[DATE], "DATE"),
-                                align: "center",
-                                dataIndex: 'created_at',
-                                key: "created_at",
-                                className: '',
-                                sorter: (a, b) => { return a.created_at.localeCompare(b.created_at) },
-                                sortDirections: ['ascend', 'descend'],
-                                defaultSortOrder: 'descend'
-
-                            },
-                        ]}
-                        onChange={this.props.onChangeTableSorting}
-                        bordered
-                        rowClassName={(record, index) =>
-                            this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''
-                        }
-                        onExpand={this.onExpandRow}
-                        dataSource={this.renderList()}
-                        expandedRowRender={record => {
-                            // console.log('recored', record)
-
-                            return (
-                                <Table
-                                    style={{ margin: 0, padding: 0 }}
-                                    size='middle'
-                                    bordered={false}
-                                    columns={this.props.columns}
-                                    align='center'
-                                    dataSource={this.props.renderList(JSON.parse(record.data))}
-                                    pagination={false}
-                                    scroll={{ x: true }}
-                                />
-                            )
-
-                        }}
-                        // scroll={{ y: 350 }}
-                        pagination={false}
-                    />
-
+                            }}
+                            // scroll={{ y: 350 }}
+                            pagination={false}
+                        />
+                    }
                 </Modal>
-
             </div>
         )
     }

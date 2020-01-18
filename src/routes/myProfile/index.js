@@ -4,15 +4,16 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import CustomScrollbars from "../../util/CustomScrollbars";
 import { Markup } from 'interweave';
-import { updatePassword } from "../../appRedux/actions/Dealers";
+import { updatePassword, changeTimeZone } from "../../appRedux/actions/Dealers";
 import { updateUserProfile, twoFactorAuth, getLoginHistory } from "../../appRedux/actions/Auth";
 import { Row, Col, Card, Table, Button, Divider, Icon, Modal, Switch, Input } from 'antd';
 import ChangePassword from './components/changePassword';
+import UpdateTimezone from './components/changeTimezone';
 import ChangeProfile from './components/change_profile';
 import BASE_URL from '../../constants/Application';
 import Customizer1 from './components/Customizer';
 import styles from './components/profile.css';
-import { componentSearch, getFormattedDate, convertToLang } from '../utils/commonUtils';
+import { componentSearch, getFormattedDate, convertToLang, checkValue, getSelectedTZDetail } from '../utils/commonUtils';
 import {
     SDEALER, Login_Email, DEVICES, Name, Value, Profile_Info, Edit_Profile, Edit_Profile_02, Edit_Profile_03, Edit_Profile_01, Change_Password, Change_Email, Login_Email_Authentication, Date_Text, CREDITS, ADMIN
 } from "../../constants/Constants";
@@ -102,8 +103,9 @@ class Profile extends Component {
         return data;
     }
 
+
     render() {
-        // console.log(this.props.loginHistory);
+        let selected_tz_detail = getSelectedTZDetail(this.props.profile.timezone);
         let columnData = null
         let commonColumns = [
             {
@@ -125,6 +127,51 @@ class Profile extends Component {
                 key: 4,
                 name: <a>{convertToLang(this.props.translation[Login_Email], "LOGIN EMAIL")}</a>,
                 value: this.props.profile.email,
+            },
+            {
+                key: 41,
+                name: <a>{convertToLang(this.props.translation[""], "COMPANY NAME")}</a>,
+                value: checkValue(this.props.profile.company_name),
+            },
+            {
+                key: 42,
+                name: <a>{convertToLang(this.props.translation[""], "COMPANY ADDRESS")}</a>,
+                value: <span className="company_address">{checkValue(this.props.profile.company_address)}</span>,
+            },
+            {
+                key: 43,
+                name: <a>{convertToLang(this.props.translation[""], "CITY")}</a>,
+                value: checkValue(this.props.profile.city),
+            },
+            {
+                key: 44,
+                name: <a>{convertToLang(this.props.translation[""], "STATE/PROVINCE")}</a>,
+                value: checkValue(this.props.profile.state),
+            },
+            {
+                key: 45,
+                name: <a>{convertToLang(this.props.translation[""], "COUNTRY")}</a>,
+                value: checkValue(this.props.profile.country),
+            },
+            {
+                key: 46,
+                name: <a>{convertToLang(this.props.translation[""], "POSTAL CODE")}</a>,
+                value: checkValue(this.props.profile.postal_code),
+            },
+            {
+                key: 47,
+                name: <a>{convertToLang(this.props.translation[""], "TEL #")}</a>,
+                value: checkValue(this.props.profile.tel_no),
+            },
+            {
+                key: 48,
+                name: <a>{convertToLang(this.props.translation[""], "WEBSITE")}</a>,
+                value: checkValue(this.props.profile.website),
+            },
+            {
+                key: 49,
+                name: <a>{convertToLang(this.props.translation[""], "TIMEZONE")}</a>,
+                value: selected_tz_detail,
             },
             {
                 key: 5,
@@ -159,6 +206,7 @@ class Profile extends Component {
                     name: <a>{convertToLang(this.props.translation[CREDITS], "CREDITS")}</a>,
                     value: (this.props.credits) ? this.props.credits : 'N/A',
                 },
+
                 {
                     key: 6,
                     name: <a><Markup content={convertToLang(this.props.translation[Login_History], "LOGIN HISTORY")} /> </a>,
@@ -167,7 +215,6 @@ class Profile extends Component {
 
             ];
         }
-        // console.log('datasource', dataSource);
 
         const columns = [{
             title: convertToLang(this.props.translation[Name], "Name"),
@@ -187,7 +234,7 @@ class Profile extends Component {
                 <Row justify='center' style={{ backgroundColor: '#012346', height: 110, paddingTop: 20 }}>
                 </Row>
                 <div style={{ marginTop: -40 }}>
-                    <Row>
+                    <Row gutter={16}>
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
                                 <Card className="manage_sec_pro height_auto" style={{ borderRadius: 12 }}>
@@ -210,16 +257,22 @@ class Profile extends Component {
                                             <h2 style={{ textAlign: "center" }}>{convertToLang(this.props.translation[Edit_Profile], "Edit Profile")}</h2>
                                             <Divider className="mb-0" />
                                             <Row style={{ padding: '12px 0px 0px' }}>
-                                                <Col span={8} className="text-center ">
-                                                    {/* <Icon type="file-text" className="policy_icon" /> */}
-                                                    <img src={require("assets/images/profile-image.png")} className="mb-8"></img>
-                                                    <h1 className="mb-0" style={{ fontSize: '3vh' }}>{this.props.profile.name}</h1>
-                                                    <p>({this.props.profile.type})</p>
+                                                <Col span={7} className="text-center ">
+                                                    <div className="text-left">
+                                                        <img src={require("assets/images/profile-image.png")} className="prof_pic" width="85px" />
+                                                        <div className="text-center">
+                                                            <p style={{ textTransform: 'capitalize', }}> ({this.props.profile.type})</p>
+                                                        </div>
+                                                    </div>
                                                 </Col>
-                                                <Col span={16} style={{ padding: 0, marginTop: 12 }}>
+                                                <Col span={17} style={{ padding: 0 }}>
+                                                    <div className="name_type">
+                                                        <h1 className="mb-12 d_n_vh_vw" >{this.props.profile.name}</h1>
+                                                    </div>
                                                     <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[Edit_Profile_01], "Change password")}</h5>
                                                     <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[Edit_Profile_02], "Change Email")}</h5>
                                                     <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[Edit_Profile_03], "Enable Dual Authentication")}  </h5>
+                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[""], "Change Timezone")}  </h5>
                                                     {/* <h5 className="more_txt">and more...</h5> */}
                                                 </Col>
                                             </Row>
@@ -232,7 +285,9 @@ class Profile extends Component {
 
                                         </div>
                                     </Card>
-                                    <Button type="primary" size="small" className="open_btn open_btn1">{convertToLang(this.props.translation[Button_Open], "OPEN")}</Button>
+                                    <Button type="primary" size="small" className="open_btn open_btn1">
+                                        {convertToLang(this.props.translation[Button_Open], "OPEN")}
+                                    </Button>
                                 </a>
                             </div>
                             <Modal
@@ -250,8 +305,12 @@ class Profile extends Component {
                                         <Button type="primary" size="small" style={{ width: "100%" }}
                                             onClick={() => this.refs.change_password.showModal()} icon="unlock">{convertToLang(this.props.translation[Change_Password], "Change Password")}</Button>
                                     </Col>
-                                    <Col span={6}></Col>
-                                    <Col span={6}></Col>
+                                    <Col span={12} style={{ padding: "0 16px 0" }} className="  ">
+                                        <Button type="primary" size="small" style={{ width: "100%" }}
+                                            onClick={() => this.refs.set_timezone.showModal()}
+                                            icon="unlock">{convertToLang(this.props.translation[""], "Change Timezone")}</Button>
+                                    </Col>
+
                                     <Col span={12} style={{ padding: "16px 16px 0 " }} className="change_email">
                                         <Button disabled size="small" type="primary" style={{ width: "100%" }} icon="mail">{convertToLang(this.props.translation[Change_Email], "Change Email")}</Button>
                                     </Col>
@@ -276,6 +335,12 @@ class Profile extends Component {
                     </Row>
                 </div>
                 <ChangePassword ref="change_password" profile={this.props.profile} func={this.props.updatePassword} translation={this.props.translation} />
+                <UpdateTimezone
+                    ref="set_timezone"
+                    changeTimeZone={this.props.changeTimeZone}
+                    profile={this.props.profile}
+                    translation={this.props.translation}
+                />
                 <ChangeProfile
                     ref="change_profile"
                     profile={this.props.profile}
@@ -315,7 +380,8 @@ class Profile extends Component {
                                 />
                             </div>
                         </div> */}
-                        <div className="overflow_table">
+                        <div className="">
+                            <hr className="fix_header_border_login_history" />
                             <Table
                                 columns={[
                                     {
@@ -367,13 +433,14 @@ var matchDispatchToProps = (dispatch) => {
     return bindActionCreators({
         twoFactorAuth: twoFactorAuth,
         updatePassword, updateUserProfile,
-        getLoginHistory: getLoginHistory
+        getLoginHistory: getLoginHistory,
+        changeTimeZone: changeTimeZone
     }, dispatch);
 }
 
 var mapStateToProps = ({ auth, settings, sidebar }) => {
     // console.log("mapStateToProps");
-    // console.log('ooo', state.auth);
+    // console.log('ooo', auth.authUser);
     return {
         profile: auth.authUser,
         loginHistory: auth.loginHistory,
