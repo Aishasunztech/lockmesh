@@ -561,7 +561,7 @@ class Prices extends Component {
                         rowKey: index,
                         statusAll: item.statusAll,
                         package_type: item.package_type,
-                        data_limit: (item.data_limit)? item.data_limit: 'N/A',
+                        data_limit: (item.data_limit) ? item.data_limit : 'N/A',
                         action: (item.dealer_type === "super_admin" && (this.props.auth.type === ADMIN || this.props.auth.type === DEALER || this.props.auth.type === SDEALER)) ?
                             (<Fragment>{ModifyBtn}</Fragment>) :
                             (item.dealer_type === "admin" && this.props.auth.type === DEALER || this.props.auth.type === SDEALER) ?
@@ -746,9 +746,7 @@ class Prices extends Component {
                         handleComponentSearch={this.handleComponentSearch}
                         pageHeading={convertToLang(this.props.translation[Button_SET_PRICE], "Set Price")}
                     />
-
                     <Card>
-
                         <Tabs
                             // className="set_price"
                             type="card"
@@ -788,21 +786,20 @@ class Prices extends Component {
                                 : null
                             }
                             <Tabs.TabPane tab={convertToLang(this.props.translation[Tab_PACKAGES], "PACKAGES")} key="2">
-                                <>
+                                <div>
                                     <Tabs
-                                        tabPosition={'left'}
+                                        // tabPosition="left"
                                         type="card"
                                         onChange={(e) => this.packagesFilterHandler(e)}
-                                        style={{ width: '10%', float: 'left' }}
+                                        className="pkgs_tab"
+                                    // style={{ width: '10%', float: 'left' }}
                                     >
-                                        <Tabs.TabPane tab={'Service Packages'} key='1' >
-
-                                        </Tabs.TabPane>
-                                        <Tabs.TabPane tab={'Data Plan Packages'} key='2' >
-
-                                        </Tabs.TabPane>
+                                        <Tabs.TabPane tab={'Service Packages'} key='1' ></Tabs.TabPane>
+                                        <Tabs.TabPane tab={'Data Plan Packages'} key='2' ></Tabs.TabPane>
                                     </Tabs>
-                                    <div style={{ width: '90%', float: 'right' }}>
+                                    <div
+                                    // style={{ width: '90%', float: 'right' }}
+                                    >
                                         <Table
                                             className="devices policy_expand"
                                             rowClassName={(record, index) => this.state.expandedRowKeys.includes(index) ? 'exp_row' : ''}
@@ -841,7 +838,7 @@ class Prices extends Component {
                                             scroll={{ x: true }}
                                         />
                                     </div>
-                                </>
+                                </div>
                             </Tabs.TabPane>
                             <Tabs.TabPane tab="Hardware" key="3">
                                 <Table
