@@ -1,6 +1,7 @@
 // libraries
 import React, { Component, Fragment } from "react";
 import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Divider, Table, Select, AutoComplete, Input } from "antd";
+import { Markup } from "interweave";
 
 // Components
 import EditDealer from '../../dealers/components/editDealer';
@@ -32,7 +33,9 @@ import {
     DEALER_TEXT
 } from '../../../constants/DealerConstants';
 import CreditsLimits from "./CreditLimits";
-import { Markup } from "interweave";
+import DemosLimit from "./DemosLimits";
+import RestrictDealerAccount from "./RestrictDealerAccount";
+import { ADMIN } from "../../../constants/Constants";
 
 
 // user defined
@@ -58,10 +61,10 @@ function showConfirm(_this, dealer, action, btn_title, name = "") {
         title: <Markup content={(btn_title === 'DELETE') ?
             convertToLang(_this.props.translation[''], `Do you wish to Permanently Delete Dealer ${name}?<br/> This action cannot be reversed!`)
             :
-            (btn_title === 'RESET PASSWORD') ? 
-            `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[OF_THIS], " of this dealer")} ${name ? `(${name})` : ""} ?`
-            :
-            `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[""], " this dealer ")} ${name ? `(${name})` : ""} ?`
+            (btn_title === 'RESET PASSWORD') ?
+                `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[OF_THIS], " of this dealer")} ${name ? `(${name})` : ""} ?`
+                :
+                `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[""], " this dealer ")} ${name ? `(${name})` : ""} ?`
         } />,
         onOk() {
             return new Promise((resolve, reject) => {
@@ -102,19 +105,17 @@ export default class DealerAction extends Component {
     }
 
     handleDealerSearch = (value) => {
-        console.log(this.props.dealerList)
+        
         let dealerList = [];
         let index = -1;
         let states = {}
 
-        console.log("searchedValue: ", value)
         if (value && this.props.dealerList && this.props.dealerList.length) {
             dealerList = componentSearch(this.props.dealerList, value)
-            
+
             index = this.props.dealerList.findIndex((dealer) => (dealer.dealer_name.toLowerCase() === value.toLowerCase() || dealer.dealer_id.toString().toLowerCase() === value.toLowerCase() || dealer.dealer_email.toLowerCase() === value.toLowerCase() || dealer.link_code.toString().toLowerCase() === value.toLowerCase()));
         }
 
-        console.log(dealerList);
 
         states.dealerList = dealerList;
         states.searchedValue = value
@@ -151,17 +152,19 @@ export default class DealerAction extends Component {
         let dealer = this.props.dealer;
 
         const { dealerList } = this.state;
-        console.log("dealerList:", dealerList);
+
         const dealer_status = (dealer.account_status === "suspended") ? "Suspended" : "Activated";
 
         const restrict_button_type = (dealer_status === "Activated") ? "danger" : "default";
-        const restrict_button_text = (dealer_status === 'Activated') ? 'Suspend/Restrict' : 'Activate';
+        const restrict_button_text = (dealer_status === 'Activated') ? 'Suspend' : 'Activate';
 
         const undo_button_type = (dealer.unlink_status === 0) ? 'danger' : "default";
         const undo_button_text = (dealer.unlink_status === 0) ? 'Delete' : 'Undelete';
 
         return (
             <Fragment>
+
+                {/* Dealer Search */}
                 <Card className="search_dev_id" style={{ borderRadius: 12 }}>
                     <Row gutter={16} type="flex" justify="center" align="top">
                         <Col span={24} className="gutter-row" justify="center" >
@@ -207,35 +210,58 @@ export default class DealerAction extends Component {
                     </Row>
                 </Card>
 
+                {/* Dealer Action */}
                 <Card style={{ borderRadius: 12 }}>
                     <Row gutter={16} type="flex" justify="center" align="top">
+
+                        {/* Activities Button */}
                         <Col span={12} className="gutter-row" justify="center" >
                             <Button disabled style={{ width: "100%", marginBottom: 16, }} >
                                 <h6 className="mb-0">Activity</h6>
                             </Button>
                         </Col>
+
+                        {/* Domains Button */}
                         <Col
                             span={12}
                             className="gutter-row"
                             justify="center">
                             <Button
-                                onClick={() => this.refs.dealerDomains.showModal(this.props.dealer, this.props.getDealerDomains)}
+                                onClick={() => this.refs.dealerDomains.showModal(this.props.dealer, this.props.getDomains, this.props.getDealerDomains)}
                                 style={{ width: "100%", marginBottom: 16, }}>
                                 <h6 className="mb-0">Domains</h6>
                             </Button>
                         </Col>
-                        <Col className="gutter-row" justify="center" span={12} >
-                            <Button style={{ width: "100%", marginBottom: 16, }}
-                                onClick={() => { this.form1.showModal() }}
-                            >
-                                <h6 className="mb-0">Credit Limit</h6>
-                            </Button>
-                        </Col>
-                        <Col className="gutter-row" justify="center" span={12} >
-                            <Button disabled style={{ width: "100%", marginBottom: 16, }}>
-                                <h6 className="mb-0">DEMO</h6>
-                            </Button>
-                        </Col>
+
+                        {/* Credit Limit Button */}
+                        {(this.props.authUser.type === ADMIN) ?
+                            <Col className="gutter-row" justify="center" span={12} >
+                                <Button style={{ width: "100%", marginBottom: 16, }}
+                                    onClick={() => { this.form1.showModal() }}
+                                >
+                                    <h6 className="mb-0">Credit Limit</h6>
+                                </Button>
+                            </Col>
+                            :
+                            null
+                        }
+
+                        {/* Demo Button */}
+                        {(this.props.authUser.type === ADMIN) ?
+
+                            <Col className="gutter-row" justify="center" span={12} >
+                                <Button
+                                    style={{ width: "100%", marginBottom: 16, }}
+                                    onClick={() => { this.form2.showModal()}}
+                                >
+                                    <h6 className="mb-0">DEMO</h6>
+                                </Button>
+                            </Col>
+                            :
+                            null
+                        }
+
+                        {/* Payment History Button */}
                         <Col
                             className="gutter-row"
                             justify="center"
@@ -247,6 +273,8 @@ export default class DealerAction extends Component {
                                 <h6 className="mb-0">Payment History</h6>
                             </Button>
                         </Col>
+
+                        {/* Sales History Button */}
                         <Col
                             className="gutter-row"
                             justify="center"
@@ -262,6 +290,7 @@ export default class DealerAction extends Component {
                         </Col>
                     </Row>
                 </Card>
+
                 <Card style={{ borderRadius: 12 }}>
                     <Row
                         gutter={16}
@@ -269,14 +298,17 @@ export default class DealerAction extends Component {
                         justify="center"
                         align="top"
                     >
+                        {/* Password Button */}
                         <Col span={12} className="gutter-row" justify="center" >
                             <Button
                                 style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }}
                                 onClick={() => showConfirm(this, this.props.dealer, this.props.updatePassword, 'RESET PASSWORD', this.props.dealer.dealer_name)}
                             >
                                 Pass Reset
-                        </Button>
+                            </Button>
                         </Col>
+
+                        {/* Edit Button */}
                         <Col className="gutter-row" justify="center" span={12} >
                             <Button
                                 // disabled
@@ -285,8 +317,10 @@ export default class DealerAction extends Component {
                             >
                                 <Icon type='edit' />
                                 Edit
-                        </Button>
+                            </Button>
                         </Col>
+
+                        {/* Suspend Button */}
                         <Col className="gutter-row" justify="center" span={12} >
                             <Button
                                 type={restrict_button_type}
@@ -300,6 +334,34 @@ export default class DealerAction extends Component {
                                 {restrict_button_text}
                             </Button>
                         </Col>
+
+                        {/* Account Limit Button */}
+                        {
+                            (this.props.authUser.type === ADMIN) ?
+                                <Col span={12} className="gutter-row" justify="center" >
+                                    <Button
+                                        className="btn_break_line"
+                                        style={{
+                                            width: "100%", marginBottom: 16,
+                                            backgroundColor: 'yellow'
+                                            // backgroundColor: '#f31517', color: '#fff'
+                                        }}
+                                        onClick={
+                                            (e) => {
+                                                this.restrictDealerAction.showModal(dealer, this.props.changeDealerStatus)
+                                                // showConfirm(this, this.props.dealer, this.props.handleDealerChange, 'RESET PASSWORD', this.props.dealer.dealer_name)
+                                            }
+                                        }
+
+                                    >
+                                        {/* <Icon type="lock" className="lock_icon" /> */}
+                                        Restrict
+                                    </Button>
+                                </Col>
+                                : null
+                        }
+
+                        {/* Delete Button */}
                         <Col span={12} className="gutter-row" justify="center" >
                             <Button
                                 type={undo_button_type}
@@ -341,6 +403,14 @@ export default class DealerAction extends Component {
                     credits_limit={this.props.dealer.credits_limit}
                     setCreditLimit={this.props.setCreditLimit}
                 />
+                <DemosLimit
+                    ref='demosLimit'
+                    translation={this.props.translation}
+                    wrappedComponentRef={(form) => this.form2 = form}
+                    dealer={this.props.dealer}
+                    demos={this.props.dealer.demos}
+                    setDemosLimit={this.props.setDemosLimit}
+                />
 
                 <DealerSalesHistory
                     ref='dealerSalesHistory'
@@ -349,10 +419,21 @@ export default class DealerAction extends Component {
                 />
 
                 <DealerDomains
-                    ref="dealerDomains"
+                    ref='dealerDomains'
                     translation={this.props.translation}
+                    domainPermission={this.props.domainPermission}
                     domains={this.props.domains}
+                    allDomainList={this.props.allDomainList}
+                    authUser={this.props.authUser}
+                    getDomains={this.props.getDomains}
                 // dealerDomains
+                />
+
+                <RestrictDealerAccount
+                    ref='restrictDealerAction'
+                    dealer={this.props.dealer}
+                    wrappedComponentRef={(form) => this.restrictDealerAction = form}
+                    translation={this.props.translation}
                 />
 
             </Fragment >

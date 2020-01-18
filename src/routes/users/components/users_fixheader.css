@@ -15,7 +15,10 @@
     min-width: 100px !important;
 }
 
-
+.expand_row .ant-table-thead>tr>th {
+    position: relative;
+    z-index: 0;
+}
 
 .users_list.lng_eng .user_id_w {
     min-width: 139px !important;

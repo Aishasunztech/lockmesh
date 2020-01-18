@@ -7,11 +7,12 @@ import CustomScrollbars from "../../../util/CustomScrollbars";
 import { Link } from "react-router-dom";
 import SuspendDevice from './SuspendDevice';
 import ActivateDevcie from './ActivateDevice';
-import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, convertToLang, checkRemainTermDays } from '../../utils/commonUtils'
+import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, convertToLang, checkRemainTermDays, convertTimezoneValue, getDevicesListActionBtns } from '../../utils/commonUtils'
 import EditDevice from './editDevice';
 import AddDevice from './AddDevice';
 import { Tabs, Modal } from 'antd';
-import moment from 'moment';
+// import moment from 'moment';
+import moment from 'moment-timezone';
 import {
     DEVICE_ACTIVATED,
     DEVICE_EXPIRED,
@@ -66,6 +67,7 @@ import {
 import { isNull } from 'util';
 import { unlink } from 'fs';
 import { ARE_YOU_SURE_YOU_WANT_DELETE_THE_DEVICE, DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE, ARE_YOU_SURE_YOU_WANT_UNLINK_THE_DEVICE, DEVICE_ID, DEVICE_SERIAL_NUMBER, DEVICE_SIM_1, DEVICE_IMEI_1, DEVICE_SIM_2, DEVICE_IMEI_2 } from '../../../constants/DeviceConstants';
+import { TIMESTAMP_FORMAT, DATE_FORMAT } from '../../../constants/Application';
 
 const TabPane = Tabs.TabPane;
 class DevicesList extends Component {
@@ -192,24 +194,16 @@ class DevicesList extends Component {
 
     // renderList
     renderList(list) {
-        // console.log('list of dec', list)
         return list.map((device, index) => {
             var status = device.finalStatus;
             const button_type = (status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ? "danger" : "dashed";
-            const flagged = device.flagged;
-            // console.log("not avail", status);
-            var order = getSortOrder(status)
             let color = getColor(status);
             var style = { margin: '0', width: 'auto', textTransform: 'uppercase' }
             var text = convertToLang(this.props.translation[Button_Edit], "EDIT");
-            // var icon = "edit";
 
-            // if ((status === 'pending activation') || (device.unlink_status === 1)) {
             if ((status === DEVICE_PENDING_ACTIVATION) || (status === DEVICE_UNLINKED)) {
-                // console.log('device name', device.name, 'status', device.unlink_status)
                 style = { margin: '0 8px 0 0', width: 'auto', display: 'none', textTransform: 'uppercase' }
                 text = "ACTIVATE";
-                // icon = 'add'
             }
             let transferButton = <Button type="default" size="small" style={{ margin: '0 8px 0 8px', textTransform: "uppercase" }} onClick={() => this.showFlaggedDevices(device)}>{convertToLang(this.props.translation[Button_Transfer], "TRANSFER")}</Button>
             let SuspendBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleSuspendDevice(device)}> {convertToLang(this.props.translation[Button_Suspend], "SUSPEND")}</Button>;
@@ -217,7 +211,6 @@ class DevicesList extends Component {
             let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px ', textTransform: 'uppercase' }} onClick={() => this.deleteUnlinkedDevice('unlink', device)} >{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
             let ConnectBtn = <Link to={`connect-device/${btoa(device.device_id)}`.trim()}><Button type="default" size="small" style={style}>  {convertToLang(this.props.translation[Button_Connect], "CONNECT")}</Button></Link>
             let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
-            // let EditBtnPreActive = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
             let AcceptBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.refs.add_device.showModal(device, this.props.addDevice) }}> {convertToLang(this.props.translation[Button_ACCEPT], "ACCEPT")} </Button>;
             let DeclineBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.handleRejectDevice(device) }}>{convertToLang(this.props.translation[Button_Decline], "DECLINE")}</Button>
             let DeleteBtnPreActive = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => this.deleteUnlinkedDevice('pre-active', device)}>{convertToLang(this.props.translation[Button_Delete], "DELETE")} </Button>
@@ -225,63 +218,35 @@ class DevicesList extends Component {
                 type="defualt"
                 size="small"
                 style={{ margin: '0 8px 0 0', color: "#fff", background: "#000", textTransform: 'uppercase' }}
-                onClick={() => { (device.finalStatus == "Transfered") ? this.props.unlinkConfirm(device, true) : this.props.unflagConfirm(device) }}
-            // disabled={(device.finalStatus == "Transfered") ? true : false}
+                onClick={() => { (status == "Transfered") ? this.props.unlinkConfirm(device, true) : this.props.unflagConfirm(device) }}
             >{convertToLang(this.props.translation[Button_UNFLAG], "UNFLAG")} </Button>;
 
-            // console.log(device.usr_device_id,'key', device.device_id)
-            // console.log('end', device)
-            // console.log(device.id, 'ids')
+            let allButtons = {
+                transferButton,
+                SuspendBtn,
+                ActiveBtn,
+                DeleteBtn,
+                ConnectBtn,
+                EditBtn,
+                AcceptBtn,
+                DeclineBtn,
+                DeleteBtnPreActive,
+                Unflagbtn,
+            }
+
+            let actionBtns = getDevicesListActionBtns(this.props.user, device, status, allButtons);
             return {
-                // sortOrder: <span style={{ display: 'none' }}>{order}</span>,
-                // sortOrder: (<span id="order">{order}</span>),
-                // sortOrder: {order},
                 rowKey: index,
-                // key: device.device_id ? `${device.device_id}` : device.usr_device_id,
                 key: status == DEVICE_UNLINKED ? `${device.user_acc_id} ${device.created_at} ` : device.id,
-                counter: ++index,
-                action: ((status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ?
-                    (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                    : (status === DEVICE_PRE_ACTIVATION) ?
-                        (<Fragment>
-                            {(this.props.user.type !== ADMIN) ?
-                                <Fragment>{DeleteBtnPreActive}</Fragment> : null
-                            }
-                            <Fragment>{EditBtn/* EditBtnPreActive */}</Fragment>
-                        </Fragment>)
-                        // : (device.flagged !== 'Not flagged') ?
-                        //     (<Fragment><Fragment>{Unflagbtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                        : (device.flagged !== 'Not flagged' && device.transfer_status === 0 && device.finalStatus === "Flagged") ?
-                            (<Fragment><Fragment>{Unflagbtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                            : (device.flagged !== 'Not flagged' && device.transfer_status === 1 && device.finalStatus === "Transfered") ?
-                                (<Fragment><Fragment>{Unflagbtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                                : (status === DEVICE_SUSPENDED) ?
-                                    (<Fragment><Fragment>{ActiveBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                                    : (status === DEVICE_EXPIRED) ?
-                                        (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                                        : (status === DEVICE_UNLINKED && this.props.user.type !== ADMIN) ?
-                                            (<Fragment>{DeleteBtn}</Fragment>)
-                                            : (status === DEVICE_PENDING_ACTIVATION && this.props.user.type !== ADMIN && device.link_code === this.props.user.dealer_pin) ?
-                                                (<Fragment>
-                                                    <Fragment>{DeclineBtn}</Fragment><Fragment>{AcceptBtn}</Fragment><Fragment>{transferButton}</Fragment>
-                                                </Fragment>)
-                                                : (device.status === DEVICE_PRE_ACTIVATION) ?
-                                                    false
-                                                    : (status === DEVICE_EXPIRED) ?
-                                                        (<Fragment><Fragment>{(status === DEVICE_ACTIVATED) ? SuspendBtn : ActiveBtn}</Fragment><Fragment>{ConnectBtn}</Fragment><Fragment>{EditBtn}</Fragment></Fragment>)
-                                                        : false
-
-
-                ),
+                // counter: ++index,
+                action: actionBtns,
                 status: (<span style={color} > {status}</span>),
-                // lastOnline: moment(device.lastOnline).format("MM/DD/YYYY HH:mm:ss"),
-                lastOnline: checkValue(device.lastOnline),
+                lastOnline: convertTimezoneValue(this.props.user.timezone, device.lastOnline, TIMESTAMP_FORMAT),
                 flagged: device.flagged,
                 type: checkValue(device.type),
                 version: checkValue(device.version),
                 firmware_info: checkValue(device.firmware_info),
                 device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
-                // device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
                 user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
                 validity: checkValue(device.validity),
                 transfered_to: checkValue((device.finalStatus == "Transfered") ? device.transfered_to : null),
@@ -302,15 +267,13 @@ class DevicesList extends Component {
                 sim_2: checkValue(device.simno2),
                 serial_number: checkValue(device.serial_number),
                 model: checkValue(device.model),
-                // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
-                // expiry_date: device.expiry_date ? `${new Date(device.expiry_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
                 dealer_name: (this.props.user.type === ADMIN) ? <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a> : <a >{checkValue(device.dealer_name)}</a>,
                 online: device.online === 'online' ? (<span style={{ color: "green" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) : (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
                 s_dealer: checkValue(device.s_dealer),
                 s_dealer_name: checkValue(device.s_dealer_name),
                 remainTermDays: (Number(device.remainTermDays) > 0) ? device.remainTermDays : 0,
-                start_date: checkValue(device.start_date),
-                expiry_date: checkValue(device.expiry_date),
+                start_date: (status !== DEVICE_PRE_ACTIVATION) ? convertTimezoneValue(this.props.user.timezone, device.start_date, DATE_FORMAT) : "N/A",
+                expiry_date: (status !== DEVICE_PRE_ACTIVATION) ? convertTimezoneValue(this.props.user.timezone, device.expiry_date, DATE_FORMAT) : "N/A",
             }
         });
     }
@@ -695,6 +658,7 @@ class DevicesList extends Component {
                                     <Fragment>
                                         <div className="col-md-4 expand_table">
                                             <Table
+                                                className="innerDevicesNameValue"
                                                 pagination={false}
                                                 columns={
                                                     [
@@ -717,6 +681,7 @@ class DevicesList extends Component {
                                         </div>
                                         <div className="col-md-4 expand_table">
                                             <Table
+                                                className="innerDevicesNameValue"
                                                 pagination={false}
                                                 columns={
                                                     [

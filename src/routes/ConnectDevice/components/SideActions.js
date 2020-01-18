@@ -97,6 +97,7 @@ import {
 import TransferHistory from './TransferModule/TransferHistory'
 import Services from './Services';
 import DeviceBillingHistory from './DeviceBillingHistory';
+import { generateGraceDaysReport } from "../../../appRedux/actions";
 
 const confirm = Modal.confirm;
 var coppyList = [];
@@ -398,9 +399,10 @@ class SideActions extends Component {
             changedCtrls: [],
             guestAllPushApps: props.guestAllPushApps,
             enableAllPushApps: props.enableAllPushApps,
-            encryptedAllPushApps: props.encryptedAllPushApps
+            encryptedAllPushApps: props.encryptedAllPushApps,
             // DEVICE_TRANSFERED_DONE: 'not transfer',
 
+            pushApkSeachText: ''
         }
         this.otpModalRef = React.createRef();
     }
@@ -472,6 +474,11 @@ class SideActions extends Component {
         if (this.props.wipeDevieStatus != nextProps.wipeDevieStatus) {
             showConfirm1(nextProps, this.props.device, convertToLang(this.props.translation[DO_YOU_REALLY_WANT_TO_WIPE_THE_DEVICE], "Do you really want to Wipe the device ") + this.props.device.device_id + "?")
         }
+
+        // console.log("will receive props: ", nextProps.apk_list, this.state.pushApkSeachText)
+        if (nextProps.pushAppsModal) {
+            this.handleComponentSearch(this.state.pushApkSeachText, 'push_apps');
+        }
     }
 
     showHistoryModal = (visible, type) => {
@@ -507,7 +514,8 @@ class SideActions extends Component {
         }
         this.setState({
             selectedPushAppsModal: visible,
-            pushApps: dumyList
+            pushApps: dumyList,
+            pushApkSeachText: ''
         })
     }
 
@@ -605,33 +613,22 @@ class SideActions extends Component {
 
     handleComponentSearch = (value, label) => {
         try {
+            let updatedApkList = this.props.apk_list;
+            // console.log(value, 'value')
+            if (value && value.length) {
 
-            if (value.length) {
-                // console.log(value, 'value')
-                if (status) {
-                    // console.log('status')
-                    coppyList = this.state.apk_list;
-                    status = false;
-                }
-                // console.log(this.state.apk_list, 'coppy de', coppyList)
-                let foundList = componentSearch(coppyList, value);
+                let foundList = componentSearch(updatedApkList, value);
                 // console.log('found devics', foundList)
                 if (foundList.length) {
-                    this.setState({
-                        apk_list: foundList,
-                    })
+                    updatedApkList = foundList;
                 } else {
-                    this.setState({
-                        apk_list: []
-                    })
+                    updatedApkList = [];
                 }
-            } else {
-                status = true;
-
-                this.setState({
-                    apk_list: coppyList,
-                })
             }
+            this.setState({
+                apk_list: updatedApkList,
+                pushApkSeachText: value
+            })
         } catch (error) {
         }
     }
@@ -833,7 +830,7 @@ class SideActions extends Component {
         }
 
         if (index === -1) {
-            states.disabledSearchButton=true;            
+            states.disabledSearchButton = true;
         } else {
             states.disabledSearchButton = false
         }
@@ -848,7 +845,7 @@ class SideActions extends Component {
         // this.props.resetPushApps();
         this.setState({
             pushAppsModal: visible,
-            selectedApps: this.state.apk_list
+            selectedApps: this.state.apk_list,
         })
     }
 
@@ -918,7 +915,7 @@ class SideActions extends Component {
                                     }
                                 />
                             </AutoComplete>
-                            
+
                         </Col>
                     </Row>
                 </Card>

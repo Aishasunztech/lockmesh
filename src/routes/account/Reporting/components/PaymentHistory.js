@@ -17,12 +17,13 @@ class PaymentHistory extends Component {
 
     this.columns = [
       {
-        title: "Sr.#",
+        title: "#",
         dataIndex: 'count',
         key: 'count',
         align: "center",
-        sorter: (a, b) => { return a.count - b.count },
-        sortDirections: ['ascend', 'descend'],
+        render: (text, record, index) => ++index,
+        // sorter: (a, b) => { return a.count - b.count },
+        // sortDirections: ['ascend', 'descend'],
       },
 
       {
@@ -347,6 +348,7 @@ class PaymentHistory extends Component {
                 wrapperCol={{ span: 14 }}
               >
                 {this.props.form.getFieldDecorator('to', {
+                  initialValue: moment(),
                   rules: [
                     {
                       required: false

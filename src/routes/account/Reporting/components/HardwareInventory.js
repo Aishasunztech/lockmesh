@@ -285,6 +285,7 @@ class PaymentHistory extends Component {
                 wrapperCol={{ span: 14 }}
               >
                 {this.props.form.getFieldDecorator('to', {
+                  initialValue: moment(),
                   rules: [
                     {
                       required: false,
@@ -329,6 +330,7 @@ class PaymentHistory extends Component {
                   columns={this.columns}
                   dataSource={this.renderList(this.props.hardwareReport)}
                   bordered
+                  scroll={{ x: true, y: true }}
                   pagination={false}
 
                 />

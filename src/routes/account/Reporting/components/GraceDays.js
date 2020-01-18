@@ -290,6 +290,7 @@ class Invoice extends Component {
                 wrapperCol={{ span: 14 }}
               >
                 {this.props.form.getFieldDecorator('to', {
+                  initialValue: moment(),
                   rules: [
                     {
                       required: false
@@ -335,6 +336,7 @@ class Invoice extends Component {
                   columns={this.columns}
                   dataSource={this.renderList(this.props.graceDaysReportReport)}
                   bordered
+                  scroll={{ x: true, y: true }}
                   pagination={false}
                 />
               </Fragment>

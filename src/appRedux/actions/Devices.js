@@ -20,7 +20,9 @@ import {
     ADD_DEVICE,
     DEVICES_LIST_FOR_REPORT,
     BULK_DEVICES_LIST,
-    GET_PARENT_HARDWARES
+    GET_PARENT_HARDWARES,
+    ADD_PRODUCT,
+    ADD_DATA_PLAN
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -58,29 +60,30 @@ export function getDevicesList() {
 
 export function getDevicesForReport() {
 
-  return (dispatch) => {
-    dispatch({
-      type: LOADING,
-      isloading: true
-    });
-    RestService.getDevicesForReport().then((response) => {
-
-      if (RestService.checkAuth(response.data)) {
-
+    return (dispatch) => {
         dispatch({
-          type: DEVICES_LIST_FOR_REPORT,
-          payload: response.data,
-
+            type: LOADING,
+            isloading: true
         });
-      } else {
-        dispatch({
-          type: INVALID_TOKEN
-        });
-      }
-    })
+        RestService.getDevicesForReport().then((response) => {
 
-  };
+            if (RestService.checkAuth(response.data)) {
+
+                dispatch({
+                    type: DEVICES_LIST_FOR_REPORT,
+                    payload: response.data,
+
+                });
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+
+    };
 }
+
 export function editDevice(formData) {
     return (dispatch) => {
         //
@@ -107,6 +110,7 @@ export function editDevice(formData) {
         });
     }
 }
+
 export function extendServices(formData) {
     return (dispatch) => {
         //
@@ -114,6 +118,33 @@ export function extendServices(formData) {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: EDIT_DEVICE,
+                    response: response.data,
+                    payload: {
+                        formData: formData,
+                    }
+                });
+                if (response.data.status && response.data.credits) {
+                    dispatch({
+                        type: USER_CREDITS,
+                        response: response.data
+                    });
+                }
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        });
+    }
+}
+
+export function addDataPlan(formData) {
+    return (dispatch) => {
+        //
+        RestService.addDataPlan(formData).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: ADD_DATA_PLAN,
                     response: response.data,
                     payload: {
                         formData: formData,
@@ -168,7 +199,6 @@ export function deleteUnlinkDevice(action, devices) {
         });
     }
 }
-
 
 export function suspendDevice(device) {
 
@@ -234,6 +264,24 @@ export function activateDevice(device) {
 
 }
 
+export function rejectDevice(device) {
+    return (dispatch) => {
+        //
+        RestService.rejectDevice(device).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: REJECT_DEVICE,
+                    response: response.data,
+                    device: device,
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+    }
+}
 
 export function connectDevice(device_id) {
 
@@ -367,24 +415,6 @@ export function getAllPGPEmails() {
         });
     }
 }
-export function rejectDevice(device) {
-    return (dispatch) => {
-        //
-        RestService.rejectDevice(device).then((response) => {
-            if (RestService.checkAuth(response.data)) {
-                dispatch({
-                    type: REJECT_DEVICE,
-                    response: response.data,
-                    device: device,
-                })
-            } else {
-                dispatch({
-                    type: INVALID_TOKEN
-                })
-            }
-        });
-    }
-}
 
 export function addDevice(device) {
     return (dispatch) => {
@@ -461,6 +491,7 @@ export const getParentPackages = () => {
 
     }
 }
+
 export const getHardwaresPrices = () => {
     return (dispatch) => {
         RestService.getHardwaresPrices().then((response) => {
@@ -488,6 +519,32 @@ export const getProductPrices = () => {
                 dispatch({
                     type: GET_PRODUCT_PRICES,
                     response: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+
+    }
+}
+
+/**
+ * @author Usman Hafeez
+ * @description action for creating pgp, chat and sim
+ */
+
+export const addProduct = (payload) => {
+    return (dispatch) => {
+        RestService.addProduct(payload).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: ADD_PRODUCT,
+                    payload: {
+                        type: payload.type,
+                        ...response.data
+                    }
                 })
             } else {
                 dispatch({

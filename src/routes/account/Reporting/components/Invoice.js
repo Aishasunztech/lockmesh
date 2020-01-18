@@ -283,7 +283,7 @@ class Invoice extends Component {
                   <Select style={{ width: '100%' }}>
                     <Select.Option value=''>ALL</Select.Option>
                     <Select.Option value='PAID'>PAID</Select.Option>
-                    <Select.Option value='PGP'>UNPAID</Select.Option>
+                    <Select.Option value='UNPAID'>UNPAID</Select.Option>
                   </Select>
                 )}
               </Form.Item>
@@ -312,6 +312,7 @@ class Invoice extends Component {
                 wrapperCol={{ span: 14 }}
               >
                 {this.props.form.getFieldDecorator('to', {
+                  initialValue: moment(),
                   rules: [
                     {
                       required: false
@@ -348,7 +349,6 @@ class Invoice extends Component {
                   </Col>
                   <Col xs={10} sm={10} md={10} lg={10} xl={10}>
                     <div className="pull-right">
-                      <Button className="mb-8" type="dotted" icon="download" size="small">Preview Report</Button>
                       <Button className="mb-8" type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, 'Invoice Report', fileName, this.state.reportFormData) }}>Download PDF</Button>
                       <Button className="mb-8" type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName) }}>Download Excel</Button>
                     </div>
@@ -358,6 +358,7 @@ class Invoice extends Component {
                   columns={this.columns}
                   dataSource={this.renderList(this.props.invoiceReport)}
                   bordered
+                  scroll={{ y: true }}
                   pagination={false}
                 />
               </Fragment>

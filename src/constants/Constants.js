@@ -5,6 +5,7 @@ export const ADMIN = "admin";
 export const DEALER = "dealer";
 export const SDEALER = "sdealer";
 export const AUTO_UPDATE_ADMIN = "auto_update_admin";
+export const ADMIN_ID = "154";
 
 // Device
 export const DEALER_SUSPENDED = "suspended";
@@ -95,7 +96,7 @@ export const twelve_month = '12.month.id'; // 12 month
 
 export const ACTION = "action.id"; // ACTION
 export const SEARCH = "search.id"; // Search
-export const SEARCH_APPS = "search_APPS.id"; // Search APPS 
+export const SEARCH_APPS = "search_APPS.id"; // Search APPS
 export const Model_text = "modal.text" // Model
 export const DATE = "DATE.id"; // DATE
 export const Start_Date = "start.date"; // Start Date
@@ -120,14 +121,14 @@ export const DEVICES = "devices.id"; // DEVICES
 
 export const Profile_Info = "profile.info.id"; // Profile Info
 export const Change_Profile = "change.profile.id"; // Change Profile
-export const SAVE_PROFILE_TEXT = "save.profile.text.id"; // Save Profile 
+export const SAVE_PROFILE_TEXT = "save.profile.text.id"; // Save Profile
 
 export const Edit_Profile = "edit.profile.id"; // Edit Profile
 export const Edit_Profile_01 = "edit.profile.01.id"; // Change password
 export const Edit_Profile_02 = "edit.profile.02.id"; // Change Email
 export const Edit_Profile_03 = "edit.profile.03.id"; // Enable Dual Authentication
 
-// Edit Profile Modal 
+// Edit Profile Modal
 export const Change_Password = "change.password.id"; // Change Password
 export const Change_Email = "change.email.id"; // Change Email
 export const Login_Email_Authentication = "login.email.authentication"; // Login Email Authentication

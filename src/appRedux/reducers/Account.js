@@ -18,7 +18,7 @@ import {
     PURCHASE_CREDITS,
     GET_OVERDUE_DETAILS,
     GET_PARENT_PACKAGES,
-    PACKAGE_PERMSSION_SAVED,
+    PACKAGE_PERMISSION_SAVED,
     DELETE_PACKAGE,
     EDIT_PACKAGE,
     LATEST_PAYMENT_HISTORY,
@@ -451,7 +451,7 @@ export default (state = initialState, action) => {
         //     }
         // }
 
-        case PACKAGE_PERMSSION_SAVED: {
+        case PACKAGE_PERMISSION_SAVED: {
 
             // 
             if (action.payload.status) {

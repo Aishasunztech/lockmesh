@@ -52,6 +52,7 @@ class Invoice extends Component {
 
     render() {
         const { user, deviceAction, renewService, applyServicesValue } = this.props;
+        console.log(applyServicesValue);
 
         let total;
         let discount = Math.ceil(Number(this.props.subTotal) * 0.03);
@@ -167,7 +168,7 @@ class Invoice extends Component {
                         <Col span={4}>{this.props.subTotal} Credits</Col>
                     </Row>
                     {(deviceAction === "Edit") ?
-                        (renewService || applyServicesValue) ? null :
+                        (renewService || applyServicesValue === 'extend') ? null :
                             <Row>
                                 <Col span={12} />
                                 <Col span={8}>REFUND : </Col>
