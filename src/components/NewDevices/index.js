@@ -47,9 +47,9 @@ export default class NewDevices extends Component {
         ];
 
         const supportSystemMessages = [
-          { title: convertToLang(props.translation[""], "SENDER"), dataIndex: 'sender', key: 'sender', align: "center" },
-          { title: convertToLang(props.translation[""], "SUBJECT"), dataIndex: 'subject', key: 'subject', align: "center" },
-          { title: convertToLang(props.translation[""], "CREATED AT"), dataIndex: 'created_at', key: 'created_at', align: "center" },
+            { title: convertToLang(props.translation[""], "SENDER"), dataIndex: 'sender', key: 'sender', align: "center" },
+            { title: convertToLang(props.translation[""], "SUBJECT"), dataIndex: 'subject', key: 'subject', align: "center" },
+            { title: convertToLang(props.translation[""], "CREATED AT"), dataIndex: 'created_at', key: 'created_at', align: "center" },
         ];
 
         this.state = {
@@ -186,8 +186,8 @@ export default class NewDevices extends Component {
     }
 
     renderTicketNotifications(list) {
-        // console.log(list);
-        if (list) {
+        // console.log();
+        if (list && Array.isArray(list)) {
             return list.map((notification) => {
                 let dealer = this.props.allDealers.find(dealer => dealer.dealer_id == notification.user_id)
                 return {
@@ -202,13 +202,13 @@ export default class NewDevices extends Component {
                     created_at: moment(notification.createdAt).format('YYYY/MM/DD hh:mm:ss'),
                 }
             });
-        }else {
+        } else {
             return [];
         }
 
     }
 
-  renderSupportSystemMessagesNotifications(list) {
+    renderSupportSystemMessagesNotifications(list) {
         if (list) {
             return list.map((notification) => {
 
@@ -220,7 +220,7 @@ export default class NewDevices extends Component {
                     created_at: moment(notification.createdAt).format('YYYY/MM/DD hh:mm:ss'),
                 }
             });
-        }else {
+        } else {
             return [];
         }
     }
@@ -379,19 +379,19 @@ export default class NewDevices extends Component {
 
                         />
                     </Fragment>
-                  {this.props.authUser.type !== ADMIN ?
-                  <Fragment>
-                    <h1>{convertToLang(this.props.translation[""], "System Message Notifications")}</h1>
-                    <Table
-                      bordered
-                      columns={this.state.supportSystemMessages}
-                      style={{ marginTop: 20 }}
-                      dataSource={this.renderSupportSystemMessagesNotifications(this.props.supportSystemMessagesNotifications)}
-                      pagination={false}
+                    {this.props.authUser.type !== ADMIN ?
+                        <Fragment>
+                            <h1>{convertToLang(this.props.translation[""], "System Message Notifications")}</h1>
+                            <Table
+                                bordered
+                                columns={this.state.supportSystemMessages}
+                                style={{ marginTop: 20 }}
+                                dataSource={this.renderSupportSystemMessagesNotifications(this.props.supportSystemMessagesNotifications)}
+                                pagination={false}
 
-                    />
-                  </Fragment>
-                    : '' }
+                            />
+                        </Fragment>
+                        : ''}
 
                 </Modal>
                 <AddDeviceModal ref='add_device_modal' translation={this.props.translation} />
