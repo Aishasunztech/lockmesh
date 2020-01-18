@@ -165,7 +165,7 @@ export default class NewDevices extends Component {
     }
 
     renderList1(list) {
-        if (list && Array.isArray(list)) {
+        if (list && Array.isArray(list) && list.length > 0) {
             return list.map((request) => {
                 return {
                     key: request.id ? `${request.id}` : "N/A",
@@ -191,7 +191,7 @@ export default class NewDevices extends Component {
 
     renderTicketNotifications(list) {
         // console.log();
-        if (list && Array.isArray(list)) {
+        if (list && Array.isArray(list) && list.length > 0) {
             return list.map((notification) => {
                 let dealer = this.props.allDealers.find(dealer => dealer.dealer_id == notification.user_id)
                 return {
@@ -213,7 +213,7 @@ export default class NewDevices extends Component {
     }
 
     renderSupportSystemMessagesNotifications(list) {
-        if (list && Array.isArray(list)) {
+        if (list && Array.isArray(list) && list.length > 0) {
             return list.map((notification) => {
 
                 return {
@@ -230,7 +230,7 @@ export default class NewDevices extends Component {
     }
 
     renderServiceRequestList(list) {
-        if (list && Array.isArray(list)) {
+        if (list && Array.isArray(list) && list.length > 0) {
             return list.map((request) => {
 
                 return {
@@ -264,7 +264,7 @@ export default class NewDevices extends Component {
     }
 
     renderList(list, flagged = false) {
-        if (list && Array.isArray(list)) {
+        if (list && Array.isArray(list) && list.length > 0) {
             return list.map((device) => {
 
                 let transferButton;
