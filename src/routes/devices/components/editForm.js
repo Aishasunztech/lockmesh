@@ -3,7 +3,6 @@ import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Markup } from 'interweave';
-import moment from 'moment';
 import axios from 'axios';
 
 import moment from 'moment-timezone';
