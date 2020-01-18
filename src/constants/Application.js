@@ -67,7 +67,7 @@ switch (hostName) {
         URL = "https://api.lockmesh.com/"
         SOCKET_URL = 'wss://api.lockmesh.com';
 
-        SUPPORT = "https://lockmesh.com/support/v1/"
+        SUPPORT = "https://api.lockmesh.com/support/v1/"
         SUPERADMIN = 'https://api.meshguard.co/'
 
         TITLE = "LockMesh"
@@ -114,7 +114,7 @@ switch (hostName) {
 
 export const HOST_NAME = hostName;
 export const BASE_URL = URL;
-export const SOCKET_BASE_URL= SOCKET_URL;
+export const SOCKET_BASE_URL = SOCKET_URL;
 
 export const SUPPORT_URL = SUPPORT;
 export const APP_TITLE = TITLE;
