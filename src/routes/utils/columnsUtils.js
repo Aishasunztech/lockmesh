@@ -1635,7 +1635,7 @@ export function dealerColumns(translation, handleSearch) {
             render: (text, record, index) => ++index,
         },
         {
-            title: '',
+            title: 'ACTION',
             dataIndex: 'accounts',
             align: 'center',
             className: 'row',
