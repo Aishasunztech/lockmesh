@@ -39,7 +39,7 @@ import {
 import {
     Button_SET_PRICE, Button_Delete, Button_Yes, Button_No, Button_Save,
 } from '../../../constants/ButtonConstants'
-
+import CustomScrollbars from "../../../util/CustomScrollbars";
 import { isArray } from "util";
 import PricingModal from './PricingModal';
 import EditPackage from './components/EditPackage';
@@ -561,7 +561,7 @@ class Prices extends Component {
                         rowKey: index,
                         statusAll: item.statusAll,
                         package_type: item.package_type,
-                        data_limit: (item.data_limit)? item.data_limit: 'N/A',
+                        data_limit: (item.data_limit) ? item.data_limit : 'N/A',
                         action: (item.dealer_type === "super_admin" && (this.props.auth.type === ADMIN || this.props.auth.type === DEALER || this.props.auth.type === SDEALER)) ?
                             (<Fragment>{ModifyBtn}</Fragment>) :
                             (item.dealer_type === "admin" && this.props.auth.type === DEALER || this.props.auth.type === SDEALER) ?
@@ -793,7 +793,7 @@ class Prices extends Component {
                                         tabPosition={'left'}
                                         type="card"
                                         onChange={(e) => this.packagesFilterHandler(e)}
-                                        style={{ width: '10%', float: 'left' }}
+                                        style={{ width: '178px', float: 'left' }}
                                     >
                                         <Tabs.TabPane tab={'Service Packages'} key='1' >
 
@@ -802,7 +802,10 @@ class Prices extends Component {
 
                                         </Tabs.TabPane>
                                     </Tabs>
-                                    <div style={{ width: '90%', float: 'right' }}>
+                                    <div style={{ width: '83%', float: 'right' }}>
+                                        {/* <Card className={`fix_card `} style={{ width: '83%', float: 'right' }}>
+                                        <hr className="fix_header_border" style={{ top: "56px" }} />
+                                        <CustomScrollbars className="gx-popover-scroll "> */}
                                         <Table
                                             className="devices policy_expand"
                                             rowClassName={(record, index) => this.state.expandedRowKeys.includes(index) ? 'exp_row' : ''}
@@ -840,6 +843,8 @@ class Prices extends Component {
                                             ref='policy_table'
                                             scroll={{ x: true }}
                                         />
+                                        {/* </CustomScrollbars>
+                                    </Card> */}
                                     </div>
                                 </>
                             </Tabs.TabPane>
@@ -904,7 +909,7 @@ class Prices extends Component {
                     />
                 </Modal>
 
-            </div>
+            </div >
         )
     }
 }
