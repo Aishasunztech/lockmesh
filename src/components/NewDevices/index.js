@@ -379,7 +379,7 @@ export default class NewDevices extends Component {
 
                         />
                     </Fragment>
-                  {this.props.user.type !== ADMIN ?
+                  {this.props.authUser.type !== ADMIN ?
                   <Fragment>
                     <h1>{convertToLang(this.props.translation[""], "System Message Notifications")}</h1>
                     <Table

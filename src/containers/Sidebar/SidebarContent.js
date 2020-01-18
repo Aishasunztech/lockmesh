@@ -260,7 +260,6 @@ class SidebarContent extends Component {
               ticketNotifications={this.props.ticketNotifications}
               allDealers={this.props.allDealers}
               supportSystemMessagesNotifications={this.props.supportSystemMessagesNotifications}
-              user={this.props.user}
             />
             <span className="font_14">
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}
@@ -441,7 +440,6 @@ const mapStateToProps = ({ settings, devices, sidebar, account, auth, dealers, S
     isSwitched: isSwitched,
     account_balance_status: auth.authUser.account_balance_status,
     account_balance_status_by: auth.authUser.account_balance_status_by,
-    user: auth.authUser,
     allDealers: dealers.allDealers,
     supportSystemMessagesNotifications: SupportSystemMessages.supportSystemMessagesNotifications,
     socket: socket.socket
