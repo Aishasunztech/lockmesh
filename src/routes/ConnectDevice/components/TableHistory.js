@@ -43,11 +43,10 @@ class TableHistory extends Component {
     }
 
     renderList = (histories, type, callback) => {
-        // console.log("list", histories);
-        return histories.map((history) => {
+        let historyList = [];
 
-
-            return ({
+        histories.map((history) => {
+            let historyObj = {
                 key: history.id,
                 history_date: (type === "history") ? history.created_at : (type === 'policy') ? history.policy_name : (type === "profile") ? history.profile_name : null,
                 action: (
@@ -73,8 +72,24 @@ class TableHistory extends Component {
                 secure_apps: (type === "profile") ? history.secure_apps : history.secure_apps,
                 push_apps: history.push_apps,
                 passwords: history.passwords
-            })
-        })
+            }
+
+            /**
+             * @author Usman Hafeez
+             * @description #to be fixed: this check should be in API
+             */
+            if(type==='policy'){
+                if(history.status===1){
+                    historyList.push(historyObj);
+                }
+
+            } else {
+                historyList.push(historyObj);
+            }
+
+        });
+
+        return historyList;
     }
 
     renderColumn = (type) => {
