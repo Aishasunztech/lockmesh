@@ -4,6 +4,7 @@ export const WINDOW_WIDTH = 'WINDOW-WIDTH';
 export const SWITCH_LANGUAGE = 'SWITCH-LANGUAGE';
 export const GET_LANGUAGE = 'GET_LANGUAGE';
 export const LANGUAGES = 'LANGUAGES';
+export const SET_ADMIN_FOR_SUPPORT_TICKETS = "SET_ADMIN_FOR_SUPPORT_TICKETS";
 
 
 // Right Sidebar

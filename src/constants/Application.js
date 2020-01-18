@@ -6,7 +6,7 @@ let hostName = window.location.hostname
 let URL = "http://localhost:3000/";
 let SOCKET_URL = 'ws://localhost:3000';
 
-let SUPPORT = "http://localhost:3010/";
+let SUPPORT = "http://localhost:3010/v1/";
 let SUPERADMIN = "http://localhost:8042/";
 
 let TITLE = packageJson.name;

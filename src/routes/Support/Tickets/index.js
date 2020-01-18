@@ -30,6 +30,7 @@ import {
 import {SET_CURRENT_TICKET_ID} from "../../../constants/ActionTypes";
 
 const confirm = Modal.confirm;
+let connectedDealer;
 
 class Mail extends PureComponent {
 
@@ -252,7 +253,6 @@ class Mail extends PureComponent {
   }
 
   componentDidMount() {
-
     this.props.getDealerList();
     this.props.getSupportTickets(this.props.user);
   }
@@ -297,6 +297,10 @@ class Mail extends PureComponent {
       })
     }
 
+    if (this.props.dealerList.length > 0){
+      connectedDealer = this.props.dealerList.find(dealer => this.props.user.connected_dealer === dealer.dealer_id);
+    }
+
   }
 
 
@@ -316,7 +320,6 @@ class Mail extends PureComponent {
 
   onCloseTicket(data) {
     let _this = this;
-    console.log(data);
     confirm({
       title: 'Do you want to change the ticket status to close?',
       okText: "Confirm",
@@ -410,7 +413,7 @@ class Mail extends PureComponent {
                             {(selectedMails.length > 0) && this.getMailActions()}
                           </Col>
                           <Col span="3">
-                            <h4>TicketId</h4>
+                            <h4>Ticket Id</h4>
                           </Col>
                           <Col span="4">
                             <h4>Name</h4>
@@ -440,7 +443,9 @@ class Mail extends PureComponent {
 
                 <ComposeMail
                   open={composeMail}
+                  admin={this.props.admin}
                   user={this.props.user}
+                  connectedDealer={connectedDealer}
                   generateSupportTicket={this.props.generateSupportTicket}
                   onClose={this.handleRequestClose.bind(this)}
                 />
@@ -457,10 +462,11 @@ class Mail extends PureComponent {
 }
 
 
-var mapStateToProps = ({ auth, SupportTickets, dealers }) => {
+var mapStateToProps = ({ auth, SupportTickets, dealers, sidebar }) => {
 
   return {
     user: auth.authUser,
+    admin: sidebar.admin,
     supportTickets: SupportTickets.supportTickets,
     dealerList: dealers.allDealers,
     closeSupportTicketStatus: SupportTickets.closeSupportTicketStatus,
