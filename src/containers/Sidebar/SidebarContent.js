@@ -260,7 +260,6 @@ class SidebarContent extends Component {
               ticketNotifications={this.props.ticketNotifications}
               allDealers={this.props.allDealers}
               supportSystemMessagesNotifications={this.props.supportSystemMessagesNotifications}
-
             />
             <span className="font_14">
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}

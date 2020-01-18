@@ -26,7 +26,7 @@ switch (hostName) {
         URL = "https://devapi.lockmesh.com/";
         SOCKET_URL = 'wss://devapi.lockmesh.com';
 
-        SUPPORT = "https://devsupportapi.lockmesh.com/";
+        SUPPORT = "https://devapi.lockmesh.com/support/v1/";
         SUPERADMIN = 'https://devapi.meshguard.co/';
 
         TITLE = "LockMesh"
@@ -66,7 +66,7 @@ switch (hostName) {
     case "https://www.lockmesh.com":
         URL = "https://api.lockmesh.com/"
         SOCKET_URL = 'wss://api.lockmesh.com';
-        
+
         SUPPORT = "https://support.lockmesh.com/"
         SUPERADMIN = 'https://api.meshguard.co/'
 
@@ -91,7 +91,7 @@ switch (hostName) {
     case "https://cryptc.lockmesh.com":
         URL = "https://cryptcapi.lockmesh.com/"
         SOCKET_URL = 'wss://cryptcapi.lockmesh.com';
-        
+
         SUPERADMIN = 'https://api.meshguard.co/'
         TITLE = "CryptPhoneC"
         TIMEZONE = "Europe/Berlin"

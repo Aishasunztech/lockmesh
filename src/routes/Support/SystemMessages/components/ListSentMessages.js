@@ -4,6 +4,7 @@ import {getDateFromTimestamp, checkValue, convertToLang} from '../../../utils/co
 import { supportSystemMessagesReceiversColumns } from '../../../utils/columnsUtils';
 import ViewMessage from './ViewMessage'
 import {Tab_All} from "../../../../constants/TabConstants";
+import {ADMIN} from "../../../../constants/Constants";
 
 export default class ListSentMessages extends Component {
 
@@ -63,26 +64,32 @@ export default class ListSentMessages extends Component {
     let supportSystemMessages = [];
     let data;
 
-    list.map((item) => {
-      data = {
-        key: item.id,
-        id: item.id,
-        receiver_ids: item.receiver_ids,
-        receivers: item.receiver_ids.length,
-        subject: checkValue(item.subject),
-        createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "N/A",
-        action: (
-          <div data-column="ACTION" style={{ display: "inline-flex" }}>
-            <Fragment>
-              <Fragment><Button type="primary" size="small" onClick={() => this.handleMessageModal(JSON.parse(JSON.stringify(item)))}>VIEW MESSAGE</Button></Fragment>
-            </Fragment>
-          </div>
-        ),
+    if (list.length > 0){
+      list.map((item) => {
+        data = {
+          key: item.id,
+          id: item.id,
+          receiver_ids: item.receiver_ids,
+          receivers: item.receiver_ids.length,
+          sender: item.sender.charAt(0).toUpperCase() + item.sender.slice(1),
+          subject: checkValue(item.subject),
+          createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "N/A",
+          action: (
+            <div data-column="ACTION" style={{ display: "inline-flex" }}>
+              <Fragment>
+                <Fragment><Button type="primary" size="small" onClick={() => this.handleMessageModal(JSON.parse(JSON.stringify(item)))}>VIEW MESSAGE</Button></Fragment>
+              </Fragment>
+            </div>
+          ),
 
-      };
-      supportSystemMessages.push(data)
-    });
-    return supportSystemMessages
+        };
+        supportSystemMessages.push(data)
+      });
+      return supportSystemMessages
+    }else{
+      return []
+    }
+
   }
 
   renderReceiversList(list) {

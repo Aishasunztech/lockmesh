@@ -409,10 +409,13 @@ class Mail extends PureComponent {
                           <Col span="2">
                             {(selectedMails.length > 0) && this.getMailActions()}
                           </Col>
+                          <Col span="3">
+                            <h4>TicketId</h4>
+                          </Col>
                           <Col span="4">
                             <h4>Name</h4>
                           </Col>
-                          <Col span="9">
+                          <Col span="6">
                             <h4>Subject</h4>
                           </Col>
                           <Col span="2">
