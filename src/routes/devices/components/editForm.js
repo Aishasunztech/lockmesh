@@ -7,7 +7,6 @@ import axios from 'axios';
 
 import moment from 'moment-timezone';
 
-moment.tz.setDefault("Europe/Berlin");
 
 import { Button, Form, Input, Select, InputNumber, Spin, Modal, Table, Switch, DatePicker, Row, Col } from 'antd';
 
@@ -82,6 +81,8 @@ const { TextArea } = Input;
 const confirm = Modal.confirm
 const success = Modal.success
 const error = Modal.error;
+moment.tz.setDefault("Europe/Berlin");
+
 
 class EditDevice extends Component {
 
