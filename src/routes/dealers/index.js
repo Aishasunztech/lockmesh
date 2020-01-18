@@ -486,7 +486,7 @@ class Dealers extends Component {
     componentDidUpdate(prevProps) {
 
         if (
-            (window.location.pathname.split("/").pop() === 'sdealer') 
+            (window.location.pathname.split("/").pop() === 'sdealer')
             && (this.state.columns !== undefined)
             && (this.state.options !== undefined)
             && (this.state.columns !== null)
