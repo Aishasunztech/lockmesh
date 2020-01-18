@@ -639,7 +639,7 @@ export default (state = initialState, action) => {
             if (action.payload.status) {
 
                 let newMsg = { ...action.payload.lastMsg, devices: action.payload.devices };
-                state.bulkMsgs.push(newMsg);
+                state.bulkMsgs.unshift(newMsg);
 
                 success({
                     title: action.payload.msg,

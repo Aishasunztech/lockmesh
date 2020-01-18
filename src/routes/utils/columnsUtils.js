@@ -148,33 +148,6 @@ export function devicesColumns(translation, handleSearch) {
         {
             title: (
                 <Input.Search
-                    name="validity"
-                    key="validity"
-                    id="validity"
-                    className="search_heading remaning_days_w"
-                    onChange={handleSearch}
-                    onFocus={handleSearch}
-                    autoComplete="new-password"
-                    placeholder={convertToLang(translation[DEVICE_REMAINING_DAYS], "REMAINING DAYS")}
-                />
-            ),
-            dataIndex: 'validity',
-            className: 'hide',
-            children: [
-                {
-                    title: convertToLang(translation[DEVICE_REMAINING_DAYS], "REMAINING DAYS"),
-                    align: "center",
-                    dataIndex: 'validity',
-                    key: "validity",
-                    className: 'hide',
-                    sorter: (a, b) => { return a.validity - b.validity },
-                    sortDirections: ['ascend', 'descend'],
-                }
-            ],
-        },
-        {
-            title: (
-                <Input.Search
                     name="device_id"
                     key="device_id"
                     id="device_id"
@@ -199,7 +172,8 @@ export function devicesColumns(translation, handleSearch) {
                     sortDirections: ['ascend', 'descend'],
                 }
             ],
-        }, {
+        },
+        {
             title: (
                 <Input.Search
                     name="user_id"
@@ -368,6 +342,33 @@ export function devicesColumns(translation, handleSearch) {
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="validity"
+                    key="validity"
+                    id="validity"
+                    className="search_heading remaning_days_w"
+                    onChange={handleSearch}
+                    onFocus={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[DEVICE_REMAINING_DAYS], "REMAINING DAYS")}
+                />
+            ),
+            dataIndex: 'validity',
+            className: 'hide',
+            children: [
+                {
+                    title: convertToLang(translation[DEVICE_REMAINING_DAYS], "REMAINING DAYS"),
+                    align: "center",
+                    dataIndex: 'validity',
+                    key: "validity",
+                    className: 'hide',
+                    sorter: (a, b) => { return a.validity - b.validity },
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ],
         },
         {
             title: (
@@ -3843,6 +3844,8 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                     title: convertToLang(translation[""], "MESSAGE"),
                     dataIndex: 'msg',
                     key: 'msg',
+                    sorter: (a, b) => { return a.msg.localeCompare(b.msg) },
+                    sortDirections: ['ascend', 'descend'],
                     // className: ''
                 }
             ]
@@ -3869,6 +3872,8 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                     title: convertToLang(translation[""], "TIMER STATUS"),
                     dataIndex: 'timer_status',
                     key: 'timer_status',
+                    sorter: (a, b) => { return a.timer_status.localeCompare(b.timer_status) },
+                    sortDirections: ['ascend', 'descend'],
                 }
             ]
         },
@@ -3918,6 +3923,8 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                     title: convertToLang(translation[""], "DATE/TIME"),
                     dataIndex: 'date_time',
                     key: 'date_time',
+                    sorter: (a, b) => { return a.date_time.localeCompare(b.date_time) },
+                    sortDirections: ['ascend', 'descend'],
                 }
             ]
 
@@ -3943,6 +3950,8 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                     title: convertToLang(translation[""], "INTERVAL DESCRIPTION"),
                     dataIndex: 'interval_description',
                     key: 'interval_description',
+                    sorter: (a, b) => { return a.interval_description.localeCompare(b.interval_description) },
+                    sortDirections: ['ascend', 'descend'],
                 }
             ]
 

@@ -447,6 +447,7 @@ class Sales extends Component {
                   columns={this.columns}
                   dataSource={this.renderList(this.props.salesReport)}
                   bordered
+                  scroll={{ x: true}}
                   pagination={false}
                 />
               </Fragment>

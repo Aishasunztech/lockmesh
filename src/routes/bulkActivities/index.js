@@ -663,7 +663,7 @@ class BulkActivities extends Component {
     }
 
     render() {
-        console.log("bulk actin at render ", this.state.selectedAction);
+        // console.log("bulk actin at render ", this.state.selectedAction);
         const {
             response_modal_action,
             failed_device_ids,
@@ -1069,7 +1069,7 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users, device_details, socket }, otherProps) => {
     // console.log(bulkDevices.usersOfDealers, 'usersOfDealers ,devices.bulkDevices ', bulkDevices.bulkDevices);
     // console.log("bulkDevices.selectedDevices", bulkDevices.selectedDevices, "bulkDevices.bulkSelectedPushApps ", bulkDevices.bulkSelectedPushApps, "bulkDevices.bulkSelectedPullApps ", bulkDevices.bulkSelectedPullApps);
-    console.log("bulkDevices.bulkDevices:: ", bulkDevices.bulkDevices)
+    // console.log("bulkDevices.bulkDevices:: ", bulkDevices.bulkDevices)
     return {
         socket: socket.socket,
         user: auth.authUser,
