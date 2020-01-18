@@ -4054,6 +4054,34 @@ export function supportSystemMessage(translation, handleSearch, isModal = false)
     {
       title: (
         <Input.Search
+          name="sender"
+          key="sender"
+          id="sender"
+          className="search_heading"
+          onChange={handleSearch}
+          autoComplete="new-password"
+          placeholder="SENDER"
+        />
+      ),
+      dataIndex: 'sender',
+      width: 200,
+      className: '',
+      key: 'sender',
+      children: [
+        {
+          title: convertToLang(translation[""], "SENDER"),
+          width: 200,
+          dataIndex: 'sender',
+          key: 'sender',
+          sorter: (a, b) => { return a.sender.localeCompare(b.sender) },
+          sortDirections: ['ascend', 'descend'],
+        }
+      ]
+    },
+
+    {
+      title: (
+        <Input.Search
           name="subject"
           key="subject"
           id="subject"
