@@ -507,9 +507,7 @@ class ConnectDealer extends Component {
                                                 </div>
                                             </div>
                                         </Col>
-
                                         <Col span={24}>
-
                                             {/* Account Data Information */}
                                             <Table
                                                 columns={this.dealerAccountInfoColumns}
@@ -519,39 +517,11 @@ class ConnectDealer extends Component {
                                                 pagination={false}
                                                 className="ac_pro_table"
                                             />
-
-                                            {/* <Divider className="mb-0" /> */}
-
                                             {/* OverDue Information */}
-                                            <div
-                                                style={{
-                                                    // position: 'relative',
-                                                    height: "45px",
-                                                    width: "100%"
-                                                }}
-                                            >
-
-                                                <h4
-                                                    className="mt-13 border_bottom"
-                                                    // style={{
-                                                    //     float: 'left'
-                                                    // }}
-                                                >Overdue </h4>
-                                                <p>(click on overdue period to check pending payments)</p>
-                                                {/* <Button
-                                                    type="default"
-                                                    size="small"
-                                                    className="full_list_btn"
-                                                    style={{
-                                                        float: 'right',
-                                                        marginTop: '10px'
-                                                    }}
-                                                    onClick={() => this.refs.dealerPaymentHistory.showModal(this.props.dealer, this.props.getDealerPaymentHistory, 'pending')}
-                                                >
-                                                    Full List
-                                                </Button> */}
+                                            <div>
+                                                <h4 className="mt-13 border_bottom">Overdue </h4>
+                                                <p className='mb-4'>(click on overdue period to check pending payments)</p>
                                             </div>
-
                                             <Table
                                                 columns={this.overDueColumns}
                                                 bordered
@@ -561,8 +531,6 @@ class ConnectDealer extends Component {
                                                 className="ovd_table"
                                             />
                                         </Col>
-
-
                                     </Row>
                                 </Card>
                             </Col>

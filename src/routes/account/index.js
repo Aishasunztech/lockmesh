@@ -1186,8 +1186,6 @@ class Account extends Component {
                                     <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
                                     {/* </a> */}
                                 </Link>
-
-
                                 {/* <div className="middle">
                                         <SetPricingModal
                                             showPricingModal={this.showPricingModal}
@@ -1204,7 +1202,6 @@ class Account extends Component {
                                     </div> */}
                             </div>
                         </Col>
-
                         {(this.props.user.type === ADMIN || this.props.user.type === DEALER) ?
                             <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                                 <div>

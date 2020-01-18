@@ -108,18 +108,18 @@
 }
 
 .wipe_device .ant-modal-body {
-   padding: 0 45px 0;
- }
+    padding: 0 45px 0;
+}
 
 .reset_pin_modal .ant-modal-body {
-  padding: 0 45px 0;
+    padding: 0 45px 0;
 }
 
 .reset_pin_modal .ant-modal-content {
-  height: 400px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .password_field {
@@ -190,6 +190,11 @@
 
 .expand_table .bold {
     font-weight: 500 !important
+}
+
+.devices .expand_table .ant-table-thead>tr>th {
+    position: relative;
+    z-index: 0;
 }
 
 .dev_tabs.ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab {
