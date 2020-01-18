@@ -379,7 +379,7 @@ export default class NewDevices extends Component {
 
                         />
                     </Fragment>
-
+                  {this.props.user.type !== ADMIN ?
                   <Fragment>
                     <h1>{convertToLang(this.props.translation[""], "System Message Notifications")}</h1>
                     <Table
@@ -391,6 +391,7 @@ export default class NewDevices extends Component {
 
                     />
                   </Fragment>
+                    : '' }
 
                 </Modal>
                 <AddDeviceModal ref='add_device_modal' translation={this.props.translation} />
