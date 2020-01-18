@@ -46,11 +46,13 @@ const MailListItem = ({ supportTicket, onMailSelect, onMailChecked, user }) => {
                   }
                 </div>
               </Col>
-              <Col span="4">
-                <span className="gx-sender-name">{supportTicket.user.dealer_name} ({supportTicket.user.link_code})</span>
-                <span className="gx-toolbar-separator">&nbsp;</span>
+              <Col span="3">
+                <span className="gx-labels">{supportTicket.ticketId}</span>
               </Col>
-              <Col span="9">
+              <Col span="4">
+                <span className="gx-sender-name">{supportTicket.user.dealer_name}<br />({supportTicket.user.link_code})</span>
+              </Col>
+              <Col span="6">
                 <span className="gx-d-inline-block gx-text-truncate gx-send-subject">{supportTicket.subject}</span>
               </Col>
               <Col span="2">
