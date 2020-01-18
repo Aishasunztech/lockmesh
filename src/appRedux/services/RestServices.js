@@ -279,6 +279,9 @@ const RestService = {
     getAllToAllDealers: () => {
         return axios.get(BASE_URL + 'users/get-all-dealers', RestService.getHeader());
     },
+    getAdmin: () => {
+      return axios.get(BASE_URL + 'users/get-admin', RestService.getHeader());
+    },
     getUserDealers: () => {
         return axios.get(BASE_URL + 'users/user_dealers', RestService.getHeader());
     },

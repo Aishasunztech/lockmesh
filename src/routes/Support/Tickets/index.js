@@ -252,7 +252,6 @@ class Mail extends PureComponent {
   }
 
   componentDidMount() {
-
     this.props.getDealerList();
     this.props.getSupportTickets(this.props.user);
   }
@@ -440,6 +439,7 @@ class Mail extends PureComponent {
 
                 <ComposeMail
                   open={composeMail}
+                  admin={this.props.admin}
                   user={this.props.user}
                   generateSupportTicket={this.props.generateSupportTicket}
                   onClose={this.handleRequestClose.bind(this)}
@@ -457,10 +457,11 @@ class Mail extends PureComponent {
 }
 
 
-var mapStateToProps = ({ auth, SupportTickets, dealers }) => {
+var mapStateToProps = ({ auth, SupportTickets, dealers, sidebar }) => {
 
   return {
     user: auth.authUser,
+    admin: sidebar.admin,
     supportTickets: SupportTickets.supportTickets,
     dealerList: dealers.allDealers,
     closeSupportTicketStatus: SupportTickets.closeSupportTicketStatus,

@@ -1,13 +1,14 @@
 import {
-    NEW_REQUEST_LIST,
-    REJECT_REQUEST,
-    ACCEPT_REQUEST,
-    USER_CREDITS,
-    GET_CANCEL_REQUEST,
-    ACCEPT_SERVICE_REQUEST,
-    REJECT_SERVICES_REQUEST,
-    NEW_NOTIFICATION_LIST,
-    UPDATE_NOTIFICATION_STATUS
+  NEW_REQUEST_LIST,
+  REJECT_REQUEST,
+  ACCEPT_REQUEST,
+  USER_CREDITS,
+  GET_CANCEL_REQUEST,
+  ACCEPT_SERVICE_REQUEST,
+  REJECT_SERVICES_REQUEST,
+  NEW_NOTIFICATION_LIST,
+  UPDATE_NOTIFICATION_STATUS,
+  SET_ADMIN_FOR_SUPPORT_TICKETS
 } from "../../constants/ActionTypes";
 import { Modal, notification } from 'antd';
 
@@ -19,6 +20,7 @@ const initialSidebar = {
     newRequests: [],
     user_credit: 0,
     due_credit: 0,
+    admin: {},
     credits_limit: 0,
     cancel_service_requests: [],
     ticketNotifications: []
@@ -158,6 +160,14 @@ export default (state = initialSidebar, action) => {
                 ticketNotifications: updateNotifications,
             }
         }
+
+        case SET_ADMIN_FOR_SUPPORT_TICKETS: {
+          return {
+            ...state,
+            admin: action.payload
+          }
+        }
+
         default:
             return state;
     }
