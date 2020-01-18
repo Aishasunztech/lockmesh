@@ -165,29 +165,33 @@ export default class NewDevices extends Component {
     }
 
     renderList1(list) {
-        return list.map((request) => {
-            return {
-                key: request.id ? `${request.id}` : "N/A",
-                action: <div>  <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.rejectRequest(request); }}>{convertToLang(this.props.translation[Button_Decline], "DECLINE")}</Button>
-                    <Button
-                        type="primary"
-                        size="small"
-                        style={{ margin: '0 8px 0 8px' }}
-                        onClick={() => { this.acceptRequest(request) }}>
-                        {convertToLang(this.props.translation[Button_ACCEPT], "ACCEPT")}
-                    </Button>
-                </div>,
-                dealer_name: request.dealer_name ? `${request.dealer_name}` : "N/A",
-                label: request.label ? `${request.label}` : "N/A",
-                credits: request.credits ? `${request.credits}` : "N/A",
-            }
-        });
+        if (list && Array.isArray(list) && list.length > 0) {
+            return list.map((request) => {
+                return {
+                    key: request.id ? `${request.id}` : "N/A",
+                    action: <div>  <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.rejectRequest(request); }}>{convertToLang(this.props.translation[Button_Decline], "DECLINE")}</Button>
+                        <Button
+                            type="primary"
+                            size="small"
+                            style={{ margin: '0 8px 0 8px' }}
+                            onClick={() => { this.acceptRequest(request) }}>
+                            {convertToLang(this.props.translation[Button_ACCEPT], "ACCEPT")}
+                        </Button>
+                    </div>,
+                    dealer_name: request.dealer_name ? `${request.dealer_name}` : "N/A",
+                    label: request.label ? `${request.label}` : "N/A",
+                    credits: request.credits ? `${request.credits}` : "N/A",
+                }
+            });
+        } else {
+            return []
+        }
 
     }
 
     renderTicketNotifications(list) {
         // console.log();
-        if (list && Array.isArray(list)) {
+        if (list && Array.isArray(list) && list.length > 0) {
             return list.map((notification) => {
                 let dealer = this.props.allDealers.find(dealer => dealer.dealer_id == notification.user_id)
                 return {
@@ -209,7 +213,7 @@ export default class NewDevices extends Component {
     }
 
     renderSupportSystemMessagesNotifications(list) {
-        if (list) {
+        if (list && Array.isArray(list) && list.length > 0) {
             return list.map((notification) => {
 
                 return {
@@ -226,7 +230,7 @@ export default class NewDevices extends Component {
     }
 
     renderServiceRequestList(list) {
-        if (list) {
+        if (list && Array.isArray(list) && list.length > 0) {
             return list.map((request) => {
 
                 return {
@@ -260,67 +264,71 @@ export default class NewDevices extends Component {
     }
 
     renderList(list, flagged = false) {
-        return list.map((device) => {
+        if (list && Array.isArray(list) && list.length > 0) {
+            return list.map((device) => {
 
-            let transferButton;
-            if (this.state.sectionVisible || this.state.showLInkRequest) {
-                transferButton = <Button type="default" size="small" style={{ margin: '0 8px 0 8px', textTransform: "uppercase" }} onClick={(flagged) ? () => this.transferDevice(device) : () => this.flaggedDevices(device)}>{convertToLang(this.props.translation[Button_Transfer], "TRANSFER")}</Button>;
-            }
-            else {
-                transferButton = <Button type="default" size="small" style={{ margin: '0 8px 0 8px', textTransform: "uppercase" }} onClick={() => this.transferDevice(this.props.device_details, device)}>{convertToLang(this.props.translation[Button_Transfer], "TRANSFER")}</Button>;
-            }
+                let transferButton;
+                if (this.state.sectionVisible || this.state.showLInkRequest) {
+                    transferButton = <Button type="default" size="small" style={{ margin: '0 8px 0 8px', textTransform: "uppercase" }} onClick={(flagged) ? () => this.transferDevice(device) : () => this.flaggedDevices(device)}>{convertToLang(this.props.translation[Button_Transfer], "TRANSFER")}</Button>;
+                }
+                else {
+                    transferButton = <Button type="default" size="small" style={{ margin: '0 8px 0 8px', textTransform: "uppercase" }} onClick={() => this.transferDevice(this.props.device_details, device)}>{convertToLang(this.props.translation[Button_Transfer], "TRANSFER")}</Button>;
+                }
 
-            let declineButton = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.rejectDevice(device); }}>{convertToLang(this.props.translation[Button_Decline], "DECLINE")}</Button>;
-            let acceptButton = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.acceptDevice(device) }}> {convertToLang(this.props.translation[Button_ACCEPT], "ACCEPT")}</Button>;
+                let declineButton = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.rejectDevice(device); }}>{convertToLang(this.props.translation[Button_Decline], "DECLINE")}</Button>;
+                let acceptButton = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.acceptDevice(device) }}> {convertToLang(this.props.translation[Button_ACCEPT], "ACCEPT")}</Button>;
 
-            let actionButns;
-            if (this.state.sectionVisible) {
-                if (this.props.allDevices !== undefined) {
-                    if (flagged) {
-                        actionButns = (<Fragment>{transferButton}</Fragment>);
+                let actionButns;
+                if (this.state.sectionVisible) {
+                    if (this.props.allDevices !== undefined) {
+                        if (flagged) {
+                            actionButns = (<Fragment>{transferButton}</Fragment>);
+                        } else {
+                            actionButns = (<Fragment>
+                                <Fragment>{declineButton}</Fragment>
+                                <Fragment>{acceptButton}</Fragment>
+                                <Fragment>{transferButton}</Fragment>
+                            </Fragment>);
+                        }
                     } else {
                         actionButns = (<Fragment>
                             <Fragment>{declineButton}</Fragment>
                             <Fragment>{acceptButton}</Fragment>
-                            <Fragment>{transferButton}</Fragment>
                         </Fragment>);
                     }
-                } else {
-                    actionButns = (<Fragment>
-                        <Fragment>{declineButton}</Fragment>
-                        <Fragment>{acceptButton}</Fragment>
-                    </Fragment>);
-                }
 
-            } else {
-                if (this.state.showLInkRequest) {
-                    if (flagged) {
+                } else {
+                    if (this.state.showLInkRequest) {
+                        if (flagged) {
+                            actionButns = (<Fragment>{transferButton}</Fragment>);
+                        }
+                        else {
+                            actionButns = (<Fragment>
+                                <Fragment>{declineButton}</Fragment>
+                                <Fragment>{acceptButton}</Fragment>
+                                <Fragment>{transferButton}</Fragment>
+                            </Fragment>);
+                        }
+                    } else {
                         actionButns = (<Fragment>{transferButton}</Fragment>);
                     }
-                    else {
-                        actionButns = (<Fragment>
-                            <Fragment>{declineButton}</Fragment>
-                            <Fragment>{acceptButton}</Fragment>
-                            <Fragment>{transferButton}</Fragment>
-                        </Fragment>);
-                    }
-                } else {
-                    actionButns = (<Fragment>{transferButton}</Fragment>);
                 }
-            }
 
-            return {
-                key: device.device_id ? `${device.device_id}` : "N/A",
-                action: actionButns,
-                device_id: device.device_id ? `${device.device_id}` : "N/A",
-                imei_1: device.imei ? `${device.imei}` : "N/A",
-                sim_1: device.simno ? `${device.simno}` : "N/A",
-                imei_2: device.imei2 ? `${device.imei2}` : "N/A",
-                sim_2: device.simno2 ? `${device.simno2}` : "N/A",
-                serial_number: device.serial_number ? `${device.serial_number}` : "N/A",
+                return {
+                    key: device.device_id ? `${device.device_id}` : "N/A",
+                    action: actionButns,
+                    device_id: device.device_id ? `${device.device_id}` : "N/A",
+                    imei_1: device.imei ? `${device.imei}` : "N/A",
+                    sim_1: device.simno ? `${device.simno}` : "N/A",
+                    imei_2: device.imei2 ? `${device.imei2}` : "N/A",
+                    sim_2: device.simno2 ? `${device.simno2}` : "N/A",
+                    serial_number: device.serial_number ? `${device.serial_number}` : "N/A",
 
-            }
-        });
+                }
+            });
+        } else {
+            return []
+        }
 
     }
 
