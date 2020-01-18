@@ -77,7 +77,7 @@ export default (state = initialState, action) => {
       });
       return {
         ...state,
-        receivedSupportSystemMessages: [...receivedSupportSystemMessagesList, action.payload.data]
+        receivedSupportSystemMessages: [action.payload.data, ...receivedSupportSystemMessagesList]
       }
     }
 

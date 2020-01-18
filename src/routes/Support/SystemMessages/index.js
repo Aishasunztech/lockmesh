@@ -98,27 +98,33 @@ class SystemMessages extends Component {
       });
     }
 
-    if (this.props.sentSupportSystemMessages.length > 0 && prevProps.sentSupportSystemMessages !== this.props.sentSupportSystemMessages){
+    if ((this.props.sentSupportSystemMessages.length > 0 && prevProps.sentSupportSystemMessages !== this.props.sentSupportSystemMessages) || (this.props.dealerList.length > 0 && prevProps.dealerList !== this.props.dealerList)){
 
-      let data;
-      this.props.sentSupportSystemMessages.map((item) => {
+      if (this.props.dealerList.length > 0 ){
+        let data;
+        this.props.sentSupportSystemMessages.map((item) => {
 
-        data = {
-          id: item._id,
-          key: item._id,
-          rowKey: item._id,
-          receiver_ids: item.receiver_ids,
-          subject: checkValue(item.subject),
-          message: checkValue(item.message),
-          createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "N/A",
-        };
-        sentSupportSystemMessagesData.push(data)
-      });
-      this.setState({
-        sentSupportSystemMessages: sentSupportSystemMessagesData,
-        copySentSupportSystemMessages: sentSupportSystemMessagesData,
-      });
+          let dealer = item.sender_user_type === ADMIN ? ADMIN : this.props.dealerList.find(dealer => dealer.dealer_id === item.sender_id) ;
+
+          data = {
+            id: item._id,
+            key: item._id,
+            rowKey: item._id,
+            receiver_ids: item.receiver_ids,
+            sender: item.sender_user_type === ADMIN ? ADMIN : dealer.dealer_name,
+            subject: checkValue(item.subject),
+            message: checkValue(item.message),
+            createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "N/A",
+          };
+          sentSupportSystemMessagesData.push(data)
+        });
+        this.setState({
+          sentSupportSystemMessages: sentSupportSystemMessagesData,
+          copySentSupportSystemMessages: sentSupportSystemMessagesData,
+        });}
+
     }
+
   }
 
   handleSendMsgButton = (visible) => {

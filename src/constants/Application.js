@@ -6,7 +6,7 @@ let hostName = window.location.hostname
 let URL = "http://localhost:3000/";
 let SOCKET_URL = 'ws://localhost:3000';
 
-let SUPPORT = "http://localhost:3010/";
+let SUPPORT = "http://localhost:3010/v1/";
 let SUPERADMIN = "http://localhost:8042/";
 
 let TITLE = packageJson.name;
@@ -26,7 +26,7 @@ switch (hostName) {
         URL = "https://devapi.lockmesh.com/";
         SOCKET_URL = 'wss://devapi.lockmesh.com';
 
-        SUPPORT = "https://devsupportapi.lockmesh.com/";
+        SUPPORT = "https://devapi.lockmesh.com/support/v1/";
         SUPERADMIN = 'https://devapi.meshguard.co/';
 
         TITLE = "LockMesh"
@@ -66,7 +66,7 @@ switch (hostName) {
     case "https://www.lockmesh.com":
         URL = "https://api.lockmesh.com/"
         SOCKET_URL = 'wss://api.lockmesh.com';
-        
+
         SUPPORT = "https://support.lockmesh.com/"
         SUPERADMIN = 'https://api.meshguard.co/'
 
@@ -91,7 +91,7 @@ switch (hostName) {
     case "https://cryptc.lockmesh.com":
         URL = "https://cryptcapi.lockmesh.com/"
         SOCKET_URL = 'wss://cryptcapi.lockmesh.com';
-        
+
         SUPERADMIN = 'https://api.meshguard.co/'
         TITLE = "CryptPhoneC"
         TIMEZONE = "Europe/Berlin"

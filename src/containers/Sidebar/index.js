@@ -4,7 +4,7 @@ import { Drawer, Layout } from "antd";
 import styles from './sidebar.css';
 import SidebarContent from "./SidebarContent";
 import { toggleCollapsedSideNav, updateWindowWidth } from "appRedux/actions/Setting";
-import { generateSupportTicketEvent, systemMessageSocket } from "../../appRedux/actions";
+import { generateSupportTicketEvent, systemMessageSocket, getAdmin } from "../../appRedux/actions";
 import {
 	NAV_STYLE_DRAWER,
 	NAV_STYLE_FIXED,
@@ -34,6 +34,7 @@ export class Sidebar extends Component {
       this.props.generateSupportTicketEvent(nextProps.supportSystemSocket);
       this.props.systemMessageSocket(nextProps.supportSystemSocket);
     }
+    nextProps.getAdmin();
   }
 
 	render() {
@@ -87,4 +88,4 @@ const mapStateToProps = ({ settings, auth, socket }) => {
 	const { supportSystemSocket } = socket;
 	return { themeType, navStyle, navCollapsed, width, locale, authUser, supportSystemSocket }
 };
-export default connect(mapStateToProps, { toggleCollapsedSideNav, updateWindowWidth, systemMessageSocket, generateSupportTicketEvent })(Sidebar);
+export default connect(mapStateToProps, { toggleCollapsedSideNav, updateWindowWidth, systemMessageSocket, generateSupportTicketEvent, getAdmin })(Sidebar);
