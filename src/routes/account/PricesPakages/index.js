@@ -39,7 +39,7 @@ import {
 import {
     Button_SET_PRICE, Button_Delete, Button_Yes, Button_No, Button_Save,
 } from '../../../constants/ButtonConstants'
-
+import CustomScrollbars from "../../../util/CustomScrollbars";
 import { isArray } from "util";
 import PricingModal from './PricingModal';
 import EditPackage from './components/EditPackage';
@@ -837,6 +837,8 @@ class Prices extends Component {
                                             ref='policy_table'
                                             scroll={{ x: true }}
                                         />
+                                        {/* </CustomScrollbars>
+                                    </Card> */}
                                     </div>
                                 </div>
                             </Tabs.TabPane>
@@ -901,7 +903,7 @@ class Prices extends Component {
                     />
                 </Modal>
 
-            </div>
+            </div >
         )
     }
 }

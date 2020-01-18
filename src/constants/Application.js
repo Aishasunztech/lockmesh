@@ -67,7 +67,7 @@ switch (hostName) {
         URL = "https://api.lockmesh.com/"
         SOCKET_URL = 'wss://api.lockmesh.com';
 
-        SUPPORT = "https://support.lockmesh.com/"
+        SUPPORT = "https://lockmesh.com/support/v1/"
         SUPERADMIN = 'https://api.meshguard.co/'
 
         TITLE = "LockMesh"

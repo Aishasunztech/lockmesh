@@ -451,7 +451,7 @@ class DevicesList extends Component {
                 //  columnTitle: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
             };
         }
-        else if (this.props.tabselect === '3') {
+        else if (this.props.tabselect === '3' && this.props.user.type !== ADMIN) {
             rowSelection = {
                 onChange: (selectedRowKeys, selectedRows) => {
                     this.setState({ selectedRows: selectedRows, selectedRowKeys: selectedRowKeys })
