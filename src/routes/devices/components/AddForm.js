@@ -945,7 +945,10 @@ class AddDevice extends Component {
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
                     {(this.props.preActive) ?
                         <Radio.Group className="width_100 text-center" onChange={this.handleChange} ref='option' defaultValue="0" buttonStyle="solid">
+                            {/* Single Pre-activation */}
                             <Radio.Button className="dev_radio_btn" value="0">{convertToLang(this.props.translation[SINGLE_DEVICE], "Single Device")}</Radio.Button>
+                            
+                            {/* multiple Pre-activation */}
                             <Radio.Button className="dev_radio_btn" value="1" disabled>
                                 <a>{convertToLang(this.props.translation[DUPLICATE_DEVICES], "Multiple Devices")}</a>
                                 <Popover placement="bottomRight" content={(
