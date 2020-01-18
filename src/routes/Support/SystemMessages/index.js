@@ -102,16 +102,21 @@ class SystemMessages extends Component {
 
       if (this.props.dealerList.length > 0 ){
         let data;
+        let sender = '';
         this.props.sentSupportSystemMessages.map((item) => {
 
-          let dealer = item.sender_user_type === ADMIN ? ADMIN : this.props.dealerList.find(dealer => dealer.dealer_id === item.sender_id) ;
+          if (this.props.user.type === ADMIN){
+            let dealer = item.sender_user_type === ADMIN ? ADMIN : this.props.dealerList.find(dealer => dealer.dealer_id === item.sender_id) ;
+            sender = item.sender_user_type === ADMIN ? ADMIN : dealer.dealer_name;
+            sender = sender.charAt(0).toUpperCase() + sender.slice(1);
+          }
 
           data = {
             id: item._id,
             key: item._id,
             rowKey: item._id,
             receiver_ids: item.receiver_ids,
-            sender: item.sender_user_type === ADMIN ? ADMIN : dealer.dealer_name,
+            sender: sender,
             subject: checkValue(item.subject),
             message: checkValue(item.message),
             createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "N/A",
@@ -132,6 +137,10 @@ class SystemMessages extends Component {
   };
 
   render() {
+    if(this.props.user.type !== ADMIN && this.state.columns[2].dataIndex == 'sender'){
+      this.state.columns.splice(2,1)
+    }
+
     return (
       <div>
         {

@@ -63,15 +63,17 @@ export default class ListSentMessages extends Component {
 
     let supportSystemMessages = [];
     let data;
+    let sender = '';
 
     if (list.length > 0){
       list.map((item) => {
+
         data = {
           key: item.id,
           id: item.id,
           receiver_ids: item.receiver_ids,
           receivers: item.receiver_ids.length,
-          sender: item.sender.charAt(0).toUpperCase() + item.sender.slice(1),
+          sender: item.sender,
           subject: checkValue(item.subject),
           createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "N/A",
           action: (
