@@ -30,6 +30,7 @@ import {
 import {SET_CURRENT_TICKET_ID} from "../../../constants/ActionTypes";
 
 const confirm = Modal.confirm;
+let connectedDealer;
 
 class Mail extends PureComponent {
 
@@ -297,6 +298,10 @@ class Mail extends PureComponent {
       })
     }
 
+    if (this.props.dealerList.length > 0){
+      connectedDealer = this.props.dealerList.find(dealer => this.props.user.connected_dealer === dealer.dealer_id);
+    }
+
   }
 
 
@@ -316,7 +321,6 @@ class Mail extends PureComponent {
 
   onCloseTicket(data) {
     let _this = this;
-    console.log(data);
     confirm({
       title: 'Do you want to change the ticket status to close?',
       okText: "Confirm",
@@ -441,6 +445,7 @@ class Mail extends PureComponent {
                 <ComposeMail
                   open={composeMail}
                   user={this.props.user}
+                  connectedDealer={connectedDealer}
                   generateSupportTicket={this.props.generateSupportTicket}
                   onClose={this.handleRequestClose.bind(this)}
                 />
