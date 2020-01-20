@@ -70,7 +70,6 @@ export default (state = initialState, action) => {
     }
 
     case SYSTEM_SUPPORT_MESSAGE_RECEIVED: {
-
       let receivedSupportSystemMessagesList = state.receivedSupportSystemMessages;
       success({
         title: action.payload.msg
