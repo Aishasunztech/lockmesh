@@ -5,6 +5,7 @@ let hostName = window.location.hostname
 
 let URL = "http://localhost:3000/";
 let SOCKET_URL = 'ws://localhost:3000';
+let SUPPORT_SOCKET = "http://localhost:3010";
 
 let SUPPORT = "http://localhost:3010/v1/";
 let SUPERADMIN = "http://localhost:8042/";
@@ -27,6 +28,7 @@ switch (hostName) {
         SOCKET_URL = 'wss://devapi.lockmesh.com';
 
         SUPPORT = "https://devapi.lockmesh.com/support/v1/";
+        SUPPORT_SOCKET = "https://devapi.lockmesh.com/support";
         SUPERADMIN = 'https://devapi.meshguard.co/';
 
         TITLE = "LockMesh"
@@ -68,6 +70,7 @@ switch (hostName) {
         SOCKET_URL = 'wss://api.lockmesh.com';
 
         SUPPORT = "https://api.lockmesh.com/support/v1/"
+        SUPPORT_SOCKET = "https://api.lockmesh.com/support";
         SUPERADMIN = 'https://api.meshguard.co/'
 
         TITLE = "LockMesh"
@@ -115,6 +118,7 @@ switch (hostName) {
 export const HOST_NAME = hostName;
 export const BASE_URL = URL;
 export const SOCKET_BASE_URL = SOCKET_URL;
+export const SUPPORT_SOCKET_URL = SUPPORT_SOCKET;
 
 export const SUPPORT_URL = SUPPORT;
 export const APP_TITLE = TITLE;

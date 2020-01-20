@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BASE_URL, SOCKET_BASE_URL, SUPERADMIN_URL, SUPPORT_URL } from '../../constants/Application';
+import { BASE_URL, SOCKET_BASE_URL, SUPERADMIN_URL, SUPPORT_URL, SUPPORT_SOCKET_URL } from '../../constants/Application';
 import io from "socket.io-client";
 import SupportSystemSocketIO from "socket.io-client";
 
@@ -41,7 +41,7 @@ const RestService = {
         let id = localStorage.getItem('id');
         let type = localStorage.getItem('type');
         let makeToken = "token=" + token + "&isWeb=true&user_id=" + id + "&type=" + type;
-        let socket = SupportSystemSocketIO.connect(SUPPORT_URL, {
+        let socket = SupportSystemSocketIO.connect(SUPPORT_SOCKET_URL, {
             transports: ['websocket'],
             query: makeToken,
             secure: true
