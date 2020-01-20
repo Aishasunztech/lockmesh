@@ -240,10 +240,10 @@ export const updateUserProfile = (fromData) => {
 		});
 	}
 };
-export const getLoginHistory = () => {
+export const getLoginHistory = (offset, limit) => {
 	return (dispatch) => {
 		// alert("hello");
-		RestService.getLoginHistory().then((resp) => {
+		RestService.getLoginHistory(offset, limit).then((resp) => {
 			if (RestService.checkAuth(resp.data)) {
 				if (resp.data.status === true) {
 
