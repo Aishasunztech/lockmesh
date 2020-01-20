@@ -3,6 +3,7 @@ import {Card, Tabs, Form} from "antd";
 import AppFilter from "../../components/AppFilter";
 import Ticket from "./Tickets";
 import SystemMessages from "./SystemMessages";
+import Chat from "./Chat/index";
 
 
 const TabPane = Tabs.TabPane;
@@ -58,6 +59,7 @@ class Support extends Component {
               <Ticket />
             </TabPane>
             <TabPane tab="LIVE CHAT" key="3" forceRender={false}>
+              <Chat />
             </TabPane>
           </Tabs>
         </Card>
