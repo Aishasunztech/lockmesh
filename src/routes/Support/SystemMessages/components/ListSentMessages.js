@@ -3,9 +3,7 @@ import { Table, Button, Icon, Card, Modal } from "antd";
 import {getDateFromTimestamp, checkValue, convertToLang} from '../../../utils/commonUtils';
 import { supportSystemMessagesReceiversColumns } from '../../../utils/columnsUtils';
 import ViewMessage from './ViewMessage'
-import {Tab_All} from "../../../../constants/TabConstants";
-import {ADMIN} from "../../../../constants/Constants";
-
+import {ADMIN, SDEALER} from "../../../../constants/Constants";
 export default class ListSentMessages extends Component {
 
   constructor(props) {
@@ -20,6 +18,7 @@ export default class ListSentMessages extends Component {
       messageObject: null,
       viewMessage: false
     };
+
     this.renderList = this.renderList.bind(this);
     this.confirm = Modal.confirm;
   }
@@ -43,7 +42,7 @@ export default class ListSentMessages extends Component {
   };
 
   componentDidMount() {
-    this.props.getSupportSystemMessages();
+
   }
 
   componentDidUpdate(prevProps) {
@@ -53,17 +52,33 @@ export default class ListSentMessages extends Component {
         columns: this.props.columns
       })
     }
+
+
+    if (this.state.viewMessage && this.props.user.type !== this.state.messageObject.sender_user_type){
+      this.props.updateSupportSystemMessageNotification({systemMessageId: this.state.messageObject.id})
+    }
   }
 
   handleMessageModal = (data) => {
     this.setState({ viewMessage: true, messageObject: data })
   };
 
-  renderList(list) {
+  renderList() {
 
-    let supportSystemMessages = [];
+    let sentMessages    = this.props.supportSystemMessages ? this.props.supportSystemMessages : [];
+    let receiveMessages = this.props.receivedSupportSystemMessages ? this.props.receivedSupportSystemMessages : [];
     let data;
-    let sender = '';
+    let sender      = '';
+    let renderList  = [];
+    let list        = [];
+
+    if (this.props.filterOption === 'all'){
+      list        = [...sentMessages , ...receiveMessages];
+    } else if(this.props.filterOption === 'received'){
+      list        = receiveMessages;
+    }else{
+      list        = sentMessages;
+    }
 
     if (list.length > 0){
       list.map((item) => {
@@ -72,10 +87,11 @@ export default class ListSentMessages extends Component {
           key: item.id,
           id: item.id,
           receiver_ids: item.receiver_ids,
-          receivers: item.receiver_ids.length,
-          sender: item.sender,
+          receivers: item.type === 'Sent' ? item.receiver_ids.length : '--',
+          type: item.type,
+          sender: item.sender === "" ? "--" : item.sender,
           subject: checkValue(item.subject),
-          createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "N/A",
+          createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "--",
           action: (
             <div data-column="ACTION" style={{ display: "inline-flex" }}>
               <Fragment>
@@ -85,9 +101,9 @@ export default class ListSentMessages extends Component {
           ),
 
         };
-        supportSystemMessages.push(data)
+        renderList.push(data)
       });
-      return supportSystemMessages
+      return renderList
     }else{
       return []
     }
@@ -144,24 +160,29 @@ export default class ListSentMessages extends Component {
 
     return (
       <Fragment>
-        <Card>
           <Table
             className="gx-table-responsive"
             rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''}
-            expandIcon={(props) => this.customExpandIcon(props)}
+            expandIcon={(props) => props.record.receivers === '--' ? "" : this.customExpandIcon(props)}
             expandedRowRender={(record) => {
+              let expandedTable;
+              if(record.receivers === '--'){
+                expandedTable = "";
+              } else {
+                expandedTable = <Table
+                  style={{ margin: 10 }}
+                  size="middle"
+                  bordered
+                  columns={this.state.receiversColumns}
+                  dataSource={this.renderReceiversList(record.receiver_ids)}
+                  pagination={false}
+                  scroll={{ x: true }}
+                />;
+              }
               return (
                 <Fragment>
+                  {expandedTable}
 
-                  <Table
-                    style={{ margin: 10 }}
-                    size="middle"
-                    bordered
-                    columns={this.state.receiversColumns}
-                    dataSource={this.renderReceiversList(record.receiver_ids)}
-                    pagination={false}
-                    scroll={{ x: true }}
-                  />
                 </Fragment>
               );
             }}
@@ -171,13 +192,12 @@ export default class ListSentMessages extends Component {
             size="midddle"
             bordered
             columns={this.state.columns}
-            dataSource={this.renderList(this.props.supportSystemMessages ? this.props.supportSystemMessages : [])}
+            dataSource={this.renderList()}
             pagination={false
             }
             scroll={{ x: true }}
             rowKey="key"
           />
-        </Card>
 
         <Modal
           title={convertToLang(this.props.translation[""], "View Message")}
