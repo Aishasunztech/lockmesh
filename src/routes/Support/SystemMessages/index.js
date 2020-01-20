@@ -15,7 +15,7 @@ import {
   updateSupportSystemMessageNotification
 } from "../../../appRedux/actions/SupportSystemMessages";
 import {receivedSupportSystemMessagesColumns, supportSystemMessage} from "../../utils/columnsUtils";
-import {ADMIN, SDEALER} from "../../../constants/Constants";
+import {ADMIN, DEALER, SDEALER} from "../../../constants/Constants";
 
 const TabPane           = Tabs.TabPane;
 var copySystemMessages  = [];
@@ -69,8 +69,16 @@ class SystemMessages extends Component {
 
   componentDidMount() {
     this.props.getAllDealers();
-    this.props.getSupportSystemMessages();
-    this.props.getReceivedSupportSystemMessages();
+
+    if (this.props.user.type === SDEALER){
+      this.props.getReceivedSupportSystemMessages();
+    }else if (this.props.user.type === ADMIN){
+      this.props.getSupportSystemMessages();
+    }else{
+      this.props.getSupportSystemMessages();
+      this.props.getReceivedSupportSystemMessages();
+    }
+
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {

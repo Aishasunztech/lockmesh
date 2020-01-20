@@ -52,7 +52,9 @@ export default class ListSentMessages extends Component {
       })
     }
 
-    console.log(this.props.receivedSupportSystemMessages)
+    if (this.state.viewMessage && this.props.user.type !== this.state.messageObject.sender_user_type){
+      this.props.updateSupportSystemMessageNotification({systemMessageId: this.state.messageObject.id})
+    }
   }
 
   handleMessageModal = (data) => {
