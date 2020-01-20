@@ -38,6 +38,9 @@ import RestService from '../services/RestServices'
 
 // socket should connect on login
 export const connectSocket = () => {
+    console.log('+++');
+    console.log('socket trying to connect');
+    console.log('+++');
     return (dispatch) => {
         let socket              = RestService.connectSocket();
         let SupportSystemSocket = RestService.connectSupportSystemSocket();
