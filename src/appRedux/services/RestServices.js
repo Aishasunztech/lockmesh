@@ -42,6 +42,7 @@ const RestService = {
         let type = localStorage.getItem('type');
         let makeToken = "token=" + token + "&isWeb=true&user_id=" + id + "&type=" + type;
         let socket = SupportSystemSocketIO.connect(SUPPORT_SOCKET_URL, {
+            path: '/v1/socket',
             transports: ['websocket'],
             query: makeToken,
             secure: true
