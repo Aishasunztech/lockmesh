@@ -280,7 +280,7 @@ const RestService = {
         return axios.get(BASE_URL + 'users/get-all-dealers', RestService.getHeader());
     },
     getAdmin: () => {
-      return axios.get(BASE_URL + 'users/get-admin', RestService.getHeader());
+        return axios.get(BASE_URL + 'users/get-admin', RestService.getHeader());
     },
     getUserDealers: () => {
         return axios.get(BASE_URL + 'users/user_dealers', RestService.getHeader());
@@ -529,8 +529,9 @@ const RestService = {
     updateUserProfile: (formData) => {
         return axios.put(BASE_URL + 'users/updateProfile/' + formData.dealerId, formData, RestService.getHeader());
     },
-    getLoginHistory: () => {
-        return axios.get(BASE_URL + 'users/login_history', RestService.getHeader());
+    getLoginHistory: (offset, limit) => {
+        let query = `?start=${offset}&limit=${limit}`;
+        return axios.get(BASE_URL + `users/login_history${query}`, RestService.getHeader());
     },
 
     getDeviceHistory: (device_id = "") => {
@@ -1175,27 +1176,27 @@ const RestService = {
 
     //get Support System Messages
     getSupportSystemMessages: (data) => {
-      return axios.get(SUPPORT_URL + 'system-messages', RestService.getHeader());
+        return axios.get(SUPPORT_URL + 'system-messages', RestService.getHeader());
     },
 
     //get Support System Messages
     getReceivedSupportSystemMessages: (data) => {
-      return axios.get(SUPPORT_URL + 'system-messages/received', RestService.getHeader());
+        return axios.get(SUPPORT_URL + 'system-messages/received', RestService.getHeader());
     },
 
     //get Support System Messages
     getSupportSystemMessagesNotifications: (data) => {
-      return axios.get(SUPPORT_URL + 'system-messages/notifications', RestService.getHeader());
+        return axios.get(SUPPORT_URL + 'system-messages/notifications', RestService.getHeader());
     },
 
     //generate Support System Messages
     generateSupportSystemMessages: (data) => {
-      return axios.post(SUPPORT_URL + 'system-messages/store', data, RestService.getHeader());
+        return axios.post(SUPPORT_URL + 'system-messages/store', data, RestService.getHeader());
     },
 
     //update Support System Message Notification
     updateSupportSystemMessageNotification: (data) => {
-      return axios.post(SUPPORT_URL + 'system-messages/update-notification', data, RestService.getHeader());
+        return axios.post(SUPPORT_URL + 'system-messages/update-notification', data, RestService.getHeader());
     },
 };
 export default RestService;
