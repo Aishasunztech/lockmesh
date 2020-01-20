@@ -7,6 +7,7 @@ import styles from './style.css'
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {SDEALER} from "../../constants/Constants";
+import priorities from "./Tickets/data/priorities";
 
 const TabPane = Tabs.TabPane;
 
@@ -21,15 +22,17 @@ class Support extends Component {
       filterOption: 'all',
     };
 
-    this.systemMessagesOptions = <span  style={{ float: 'right' }}>
+    this.systemMessagesOptions = <span>
         <Input
           type="text"
-
-          style={{ width: '20%', marginRight: '3%' }}
+          placeholder="Search"
+          style={{ width: '40%', marginRight: '3%' }}
         />
+
         <Select
+          style={{ width: '25%', marginRight: '3%' }}
           onChange={ (e) => { this.setState({filterOption: e})} }
-          style={{ width: '20%', marginRight: '3%' }}
+          defaultValue="all"
         >
           <Select.Option value="all">All</Select.Option>
           <Select.Option value="received">Received</Select.Option>
