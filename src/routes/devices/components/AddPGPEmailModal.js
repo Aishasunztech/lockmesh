@@ -45,6 +45,12 @@ class AddPGPEmailModal extends Component {
         });
     }
 
+    componentDidMount() {
+        this.setState({
+            domainList: this.props.domainList
+        })
+    }
+
     componentWillReceiveProps(nextProps) {
         if (this.props.domainList.length !== nextProps.domainList.length) {
             this.setState({
