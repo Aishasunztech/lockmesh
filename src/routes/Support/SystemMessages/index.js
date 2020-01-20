@@ -27,6 +27,11 @@ class SystemMessages extends Component {
     var columns                           = supportSystemMessage(props.translation, this.handleSentMessagesSearch);
     var receivedSupportSystemMessagesCols = receivedSupportSystemMessagesColumns(props.translation, this.handleReceivedMessageSearch);
 
+    columns = this.removeColumns(props, columns);
+
+    console.log('hello world');
+    console.log(columns);
+
     this.state = {
       sorterKey: '',
       sortOrder: 'ascend',
@@ -42,6 +47,16 @@ class SystemMessages extends Component {
       editModal: false
     };
     this.confirm = Modal.confirm;
+  }
+
+  removeColumns = ({ user }, columns) => {
+    if(user.type === ADMIN){
+      columns.splice(2,2);
+    } else if(user.type === SDEALER){
+      columns.splice(1, 2);
+    }
+
+    return columns;
   }
 
   handleChangeCardTabs = (value) => {
@@ -69,7 +84,6 @@ class SystemMessages extends Component {
 
   componentDidMount() {
     this.props.getAllDealers();
-
     if (this.props.user.type === SDEALER){
       this.props.getReceivedSupportSystemMessages();
     }else if (this.props.user.type === ADMIN){
