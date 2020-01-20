@@ -14,14 +14,7 @@ import CircularProgress from "../../../components/CircularProgress/index";
 const TabPane = Tabs.TabPane;
 
 class Chat extends Component {
-  filterContact = (userName) => {
-    if (userName === '') {
-      return users.filter(user => !user.recent);
-    }
-    return users.filter((user) =>
-      !user.recent && user.name.toLowerCase().indexOf(userName.toLowerCase()) > -1
-    );
-  };
+
   filterUsers = (userName) => {
     if (userName === '') {
       return users.filter(user => user.recent);
@@ -168,7 +161,7 @@ class Chat extends Component {
       </div>
 
       <div className="gx-chat-sidenav-content">
-        {/*<AppBar position="static" className="no-shadow chat-tabs-header">*/}
+
         <CustomScrollbars className="gx-chat-sidenav-scroll-tab-1">
           {this.state.chatUsers.length === 0 ?
             <div className="gx-p-5">{this.state.userNotFound}</div>
