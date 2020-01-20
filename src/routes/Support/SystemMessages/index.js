@@ -172,48 +172,20 @@ class SystemMessages extends Component {
       <div>
         {
           <div>
-            {/*<AppFilter*/}
-            {/*  translation={this.props.translation}*/}
-            {/*  isAddButton={this.props.user.type !== SDEALER}*/}
-            {/*  handleSendMsgModal={true}*/}
-            {/*  handleSendMsgButton={this.handleSendMsgButton}*/}
-            {/*  pageHeading={convertToLang(this.props.translation[""], "System Messages")}*/}
-            {/*  addButtonText={convertToLang(this.props.translation[""], "Send New Message")}*/}
-            {/*/>*/}
 
-            <Card>
-              <Tabs defaultActiveKey={ (this.props.user.type === SDEALER) ? "2": "1" } activeKey={this.state.messageTab} type="card" onChange={this.handleChangeCardTabs}>
 
-                {(this.props.user.type !== SDEALER) ?
-                  <TabPane tab="SENT SYSTEM MESSAGES" key="1" forceRender={true}>
-                    <ListSentMessages
-                      supportSystemMessages={this.state.sentSupportSystemMessages}
-                      getSupportSystemMessages={this.props.getSupportSystemMessages}
-                      getReceivedSupportSystemMessages={this.props.getReceivedSupportSystemMessages}
-                      receivedSupportSystemMessages={this.state.receivedSupportSystemMessages}
-                      columns={this.state.columns}
-                      dealerList={this.props.dealerList}
-                      translation={this.props.translation}
-                    />
-                  </TabPane> : ''}
-
-                {(this.props.user.type !== ADMIN) ?
-                  <TabPane tab="RECEIVED SYSTEM MESSAGES" key="2" forceRender={true}>
-                    <ListReceivedMessages
-                      getReceivedSupportSystemMessages={this.props.getReceivedSupportSystemMessages}
-                      receivedSupportSystemMessages={this.state.receivedSupportSystemMessages}
-                      columns={this.state.receivedSupportSystemMessagesCols}
-                      dealerList={this.props.dealerList}
-                      translation={this.props.translation}
-                      user={this.props.user}
-                      updateSupportSystemMessageNotification={this.props.updateSupportSystemMessageNotification}
-                    />
-                  </TabPane>
-                  : ''}
-
-              </Tabs>
-            </Card>
-
+            <ListSentMessages
+              supportSystemMessages={this.state.sentSupportSystemMessages}
+              getSupportSystemMessages={this.props.getSupportSystemMessages}
+              getReceivedSupportSystemMessages={this.props.getReceivedSupportSystemMessages}
+              receivedSupportSystemMessages={this.state.receivedSupportSystemMessages}
+              updateSupportSystemMessageNotification={this.props.updateSupportSystemMessageNotification}
+              columns={this.state.columns}
+              dealerList={this.props.dealerList}
+              user={this.props.user}
+              translation={this.props.translation}
+              filterOption={this.props.filterOption}
+            />
 
           </div>
         }
