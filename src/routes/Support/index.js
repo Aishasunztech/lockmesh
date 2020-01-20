@@ -17,7 +17,8 @@ class Support extends Component {
     super(props);
 
     this.state = {
-      innerTabSelect: '1'
+      innerTabSelect: '1',
+      filterOption: 'all',
     };
 
     this.systemMessagesOptions = <span  style={{ float: 'right' }}>
@@ -27,11 +28,12 @@ class Support extends Component {
           style={{ width: '20%', marginRight: '3%' }}
         />
         <Select
-
+          onChange={ (e) => { this.setState({filterOption: e})} }
           style={{ width: '20%', marginRight: '3%' }}
         >
-          <Select.Option value="rmb">RMB</Select.Option>
-          <Select.Option value="dollar">Dollar</Select.Option>
+          <Select.Option value="all">All</Select.Option>
+          <Select.Option value="received">Received</Select.Option>
+          <Select.Option value="sent">Sent</Select.Option>
         </Select>
 
       {this.props.user.type !== SDEALER ?
@@ -84,7 +86,7 @@ class Support extends Component {
 
           <Tabs tabBarExtraContent={ this.state.innerTabSelect === '1'? this.systemMessagesOptions : '' } defaultActiveKey="1" activeKey={this.state.innerTabSelect} type="card" className="supportModuleMainTab" onChange={this.handleChangeCardTabs}>
             <TabPane tab="SYSTEM MESSAGES" key="1" forceRender={false}>
-              <SystemMessages ref="systemMessages"/>
+              <SystemMessages ref="systemMessages" filterOption={this.state.filterOption}/>
             </TabPane>
             <TabPane tab="TICKETS" key="2" forceRender={false}>
               <Ticket />

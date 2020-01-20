@@ -52,6 +52,7 @@ export default class ListSentMessages extends Component {
       })
     }
 
+
     if (this.state.viewMessage && this.props.user.type !== this.state.messageObject.sender_user_type){
       this.props.updateSupportSystemMessageNotification({systemMessageId: this.state.messageObject.id})
     }
@@ -68,7 +69,16 @@ export default class ListSentMessages extends Component {
     let data;
     let sender      = '';
     let renderList  = [];
-    let list        = [...sentMessages , ...receiveMessages];
+    let list        = [];
+
+    if (this.props.filterOption === 'all'){
+      list        = [...sentMessages , ...receiveMessages];
+    } else if(this.props.filterOption === 'received'){
+      list        = receiveMessages;
+    }else{
+      list        = sentMessages;
+    }
+
     if (list.length > 0){
       list.map((item) => {
 
@@ -149,7 +159,6 @@ export default class ListSentMessages extends Component {
 
     return (
       <Fragment>
-        <Card>
           <Table
             className="gx-table-responsive"
             rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''}
@@ -182,7 +191,6 @@ export default class ListSentMessages extends Component {
             scroll={{ x: true }}
             rowKey="key"
           />
-        </Card>
 
         <Modal
           title={convertToLang(this.props.translation[""], "View Message")}
