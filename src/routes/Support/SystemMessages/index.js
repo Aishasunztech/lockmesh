@@ -1,22 +1,20 @@
-import React, { Component, Fragment } from 'react'
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import {Button, Card, Icon, Modal, Tabs} from "antd";
-import AppFilter from "../../../components/AppFilter";
+import React, {Component} from 'react'
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import {Card, Modal, Tabs} from "antd";
 import {checkValue, convertToLang, getDateFromTimestamp} from '../../utils/commonUtils'
 import ListSentMessages from './components/ListSentMessages';
 import ListReceivedMessages from './components/ListReceivedMessages';
 import SendMessage from './components/SendMessage';
-import { getAllDealers } from "../../../appRedux/actions/Dealers";
-import {
-  closeResponseModal
-} from "../../../appRedux/actions/BulkDevices";
+import {getAllDealers} from "../../../appRedux/actions/Dealers";
 
-import { updateSupportSystemMessageNotification,
+import {
   generateSupportSystemMessages,
+  getReceivedSupportSystemMessages,
   getSupportSystemMessages,
-  getReceivedSupportSystemMessages } from "../../../appRedux/actions/SupportSystemMessages";
-import { supportSystemMessage, receivedSupportSystemMessagesColumns } from "../../utils/columnsUtils";
+  updateSupportSystemMessageNotification
+} from "../../../appRedux/actions/SupportSystemMessages";
+import {receivedSupportSystemMessagesColumns, supportSystemMessage} from "../../utils/columnsUtils";
 import {ADMIN, SDEALER} from "../../../constants/Constants";
 
 const TabPane           = Tabs.TabPane;
@@ -71,6 +69,8 @@ class SystemMessages extends Component {
 
   componentDidMount() {
     this.props.getAllDealers();
+    this.props.getSupportSystemMessages();
+    this.props.getReceivedSupportSystemMessages();
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -85,6 +85,7 @@ class SystemMessages extends Component {
           id: item.system_message._id,
           key: item.system_message._id,
           rowKey: item.system_message._id,
+          type: 'Received',
           sender: item.system_message.sender_user_type,
           subject: checkValue(item.system_message.subject),
           message: checkValue(item.system_message.message),
@@ -115,6 +116,7 @@ class SystemMessages extends Component {
             id: item._id,
             key: item._id,
             rowKey: item._id,
+            type: 'Sent',
             receiver_ids: item.receiver_ids,
             sender: sender,
             subject: checkValue(item.subject),
@@ -126,9 +128,12 @@ class SystemMessages extends Component {
         this.setState({
           sentSupportSystemMessages: sentSupportSystemMessagesData,
           copySentSupportSystemMessages: sentSupportSystemMessagesData,
-        });}
+        });
+      }
 
     }
+
+
 
   }
 
@@ -145,14 +150,14 @@ class SystemMessages extends Component {
       <div>
         {
           <div>
-            <AppFilter
-              translation={this.props.translation}
-              isAddButton={this.props.user.type !== SDEALER}
-              handleSendMsgModal={true}
-              handleSendMsgButton={this.handleSendMsgButton}
-              pageHeading={convertToLang(this.props.translation[""], "System Messages")}
-              addButtonText={convertToLang(this.props.translation[""], "Send New Message")}
-            />
+            {/*<AppFilter*/}
+            {/*  translation={this.props.translation}*/}
+            {/*  isAddButton={this.props.user.type !== SDEALER}*/}
+            {/*  handleSendMsgModal={true}*/}
+            {/*  handleSendMsgButton={this.handleSendMsgButton}*/}
+            {/*  pageHeading={convertToLang(this.props.translation[""], "System Messages")}*/}
+            {/*  addButtonText={convertToLang(this.props.translation[""], "Send New Message")}*/}
+            {/*/>*/}
 
             <Card>
               <Tabs defaultActiveKey={ (this.props.user.type === SDEALER) ? "2": "1" } activeKey={this.state.messageTab} type="card" onChange={this.handleChangeCardTabs}>
@@ -161,9 +166,11 @@ class SystemMessages extends Component {
                   <TabPane tab="SENT SYSTEM MESSAGES" key="1" forceRender={true}>
                     <ListSentMessages
                       supportSystemMessages={this.state.sentSupportSystemMessages}
+                      getSupportSystemMessages={this.props.getSupportSystemMessages}
+                      getReceivedSupportSystemMessages={this.props.getReceivedSupportSystemMessages}
+                      receivedSupportSystemMessages={this.state.receivedSupportSystemMessages}
                       columns={this.state.columns}
                       dealerList={this.props.dealerList}
-                      getSupportSystemMessages={this.props.getSupportSystemMessages}
                       translation={this.props.translation}
                     />
                   </TabPane> : ''}
@@ -262,7 +269,6 @@ class SystemMessages extends Component {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     getAllDealers: getAllDealers,
-    closeResponseModal: closeResponseModal,
     generateSupportSystemMessages: generateSupportSystemMessages,
     getSupportSystemMessages: getSupportSystemMessages,
     getReceivedSupportSystemMessages: getReceivedSupportSystemMessages,
@@ -281,4 +287,4 @@ const mapStateToProps = ({ account, auth, settings, dealers, SupportSystemMessag
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SystemMessages);
+export default connect(mapStateToProps, mapDispatchToProps, null, {withRef: true})(SystemMessages);

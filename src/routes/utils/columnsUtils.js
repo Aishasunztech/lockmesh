@@ -1450,7 +1450,7 @@ export function receivedSupportSystemMessagesColumns(translation, handleSearch) 
           className="search_heading"
           onChange={handleSearch}
           autoComplete="new-password"
-          placeholder="RECEIVER"
+          placeholder="SENDER"
         />
       ),
       dataIndex: 'sender',
@@ -4061,84 +4061,38 @@ export function supportSystemMessage(translation, handleSearch, isModal = false)
     },
 
     {
-      title: (
-        <Input.Search
-          name="sender"
-          key="sender"
-          id="sender"
-          className="search_heading"
-          onChange={handleSearch}
-          autoComplete="new-password"
-          placeholder="SENDER"
-        />
-      ),
-      dataIndex: 'sender',
+      title: convertToLang(translation[""], "TYPE"),
       width: 200,
-      className: '',
+      dataIndex: 'type',
+      key: 'type',
+      sorter: (a, b) => { return a.type.localeCompare(b.type) },
+      sortDirections: ['ascend', 'descend'],
+    },
+
+    {
+      title: convertToLang(translation[""], "SENDER"),
+      width: 200,
+      dataIndex: 'sender',
       key: 'sender',
-      children: [
-        {
-          title: convertToLang(translation[""], "SENDER"),
-          width: 200,
-          dataIndex: 'sender',
-          key: 'sender',
-          sorter: (a, b) => { return a.sender.localeCompare(b.sender) },
-          sortDirections: ['ascend', 'descend'],
-        }
-      ]
+      sorter: (a, b) => { return a.sender.localeCompare(b.sender) },
+      sortDirections: ['ascend', 'descend'],
     },
 
     {
-      title: (
-        <Input.Search
-          name="subject"
-          key="subject"
-          id="subject"
-          className="search_heading"
-          onChange={handleSearch}
-          autoComplete="new-password"
-          placeholder="SUBJECT"
-        />
-      ),
+      title: convertToLang(translation[""], "SUBJECT"),
       dataIndex: 'subject',
-      className: '',
       key: 'subject',
-      children: [
-        {
-          title: convertToLang(translation[""], "SUBJECT"),
-          dataIndex: 'subject',
-          key: 'subject',
-          sorter: (a, b) => { return a.subject.localeCompare(b.subject) },
-          sortDirections: ['ascend', 'descend'],
-        }
-      ]
+      sorter: (a, b) => { return a.subject.localeCompare(b.subject) },
+      sortDirections: ['ascend', 'descend'],
     },
 
     {
-      title: (
-        <Input.Search
-          name="createdAt"
-          key="createdAt"
-          id="createdAt"
-          className="search_heading"
-          onChange={handleSearch}
-          autoComplete="new-password"
-          placeholder="DATE"
-        />
-      ),
-      dataIndex: 'date',
-      className: '',
-      key: 'date',
-      children: [
-        {
-          width: 200,
-          title: convertToLang(translation[""], "DATE"),
-          dataIndex: 'createdAt',
-          key: 'createdAt',
-          sorter: (a, b) => { return a.createdAt.localeCompare(b.createdAt) },
-          sortDirections: ['ascend', 'descend'],
-        }
-      ]
+      width: 200,
+      title: convertToLang(translation[""], "DATE"),
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      sorter: (a, b) => { return a.createdAt.localeCompare(b.createdAt) },
+      sortDirections: ['ascend', 'descend'],
     },
     {
       title: "ACTION",

@@ -3,9 +3,7 @@ import { Table, Button, Icon, Card, Modal } from "antd";
 import {getDateFromTimestamp, checkValue, convertToLang} from '../../../utils/commonUtils';
 import { supportSystemMessagesReceiversColumns } from '../../../utils/columnsUtils';
 import ViewMessage from './ViewMessage'
-import {Tab_All} from "../../../../constants/TabConstants";
-import {ADMIN} from "../../../../constants/Constants";
-
+import {SDEALER} from "../../../../constants/Constants";
 export default class ListSentMessages extends Component {
 
   constructor(props) {
@@ -43,7 +41,7 @@ export default class ListSentMessages extends Component {
   };
 
   componentDidMount() {
-    this.props.getSupportSystemMessages();
+
   }
 
   componentDidUpdate(prevProps) {
@@ -53,18 +51,22 @@ export default class ListSentMessages extends Component {
         columns: this.props.columns
       })
     }
+
+    console.log(this.props.receivedSupportSystemMessages)
   }
 
   handleMessageModal = (data) => {
     this.setState({ viewMessage: true, messageObject: data })
   };
 
-  renderList(list) {
+  renderList() {
 
-    let supportSystemMessages = [];
+    let sentMessages    = this.props.supportSystemMessages ? this.props.supportSystemMessages : [];
+    let receiveMessages = this.props.receivedSupportSystemMessages ? this.props.receivedSupportSystemMessages : [];
     let data;
-    let sender = '';
-
+    let sender      = '';
+    let renderList  = [];
+    let list        = [...sentMessages , ...receiveMessages];
     if (list.length > 0){
       list.map((item) => {
 
@@ -72,7 +74,8 @@ export default class ListSentMessages extends Component {
           key: item.id,
           id: item.id,
           receiver_ids: item.receiver_ids,
-          receivers: item.receiver_ids.length,
+          receivers: item.type === 'Sent' ? item.receiver_ids.length : 'N/A',
+          type: item.type,
           sender: item.sender,
           subject: checkValue(item.subject),
           createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "N/A",
@@ -85,9 +88,9 @@ export default class ListSentMessages extends Component {
           ),
 
         };
-        supportSystemMessages.push(data)
+        renderList.push(data)
       });
-      return supportSystemMessages
+      return renderList
     }else{
       return []
     }
@@ -171,7 +174,7 @@ export default class ListSentMessages extends Component {
             size="midddle"
             bordered
             columns={this.state.columns}
-            dataSource={this.renderList(this.props.supportSystemMessages ? this.props.supportSystemMessages : [])}
+            dataSource={this.renderList()}
             pagination={false
             }
             scroll={{ x: true }}

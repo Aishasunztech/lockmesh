@@ -43,6 +43,7 @@ const RestService = {
         let makeToken = "token=" + token + "&isWeb=true&user_id=" + id + "&type=" + type;
         let socket = SupportSystemSocketIO.connect(SUPPORT_SOCKET_URL, {
             transports: ['websocket'],
+            path: '/v1/socket',
             query: makeToken,
             secure: true
         });
