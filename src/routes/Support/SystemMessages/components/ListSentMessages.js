@@ -3,7 +3,7 @@ import { Table, Button, Icon, Card, Modal } from "antd";
 import {getDateFromTimestamp, checkValue, convertToLang} from '../../../utils/commonUtils';
 import { supportSystemMessagesReceiversColumns } from '../../../utils/columnsUtils';
 import ViewMessage from './ViewMessage'
-import {SDEALER} from "../../../../constants/Constants";
+import {ADMIN, SDEALER} from "../../../../constants/Constants";
 export default class ListSentMessages extends Component {
 
   constructor(props) {
@@ -18,6 +18,7 @@ export default class ListSentMessages extends Component {
       messageObject: null,
       viewMessage: false
     };
+
     this.renderList = this.renderList.bind(this);
     this.confirm = Modal.confirm;
   }
@@ -86,11 +87,11 @@ export default class ListSentMessages extends Component {
           key: item.id,
           id: item.id,
           receiver_ids: item.receiver_ids,
-          receivers: item.type === 'Sent' ? item.receiver_ids.length : 'N/A',
+          receivers: item.type === 'Sent' ? item.receiver_ids.length : '--',
           type: item.type,
-          sender: item.sender,
+          sender: item.sender === "" ? "--" : item.sender,
           subject: checkValue(item.subject),
-          createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "N/A",
+          createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "--",
           action: (
             <div data-column="ACTION" style={{ display: "inline-flex" }}>
               <Fragment>
@@ -162,20 +163,26 @@ export default class ListSentMessages extends Component {
           <Table
             className="gx-table-responsive"
             rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''}
-            expandIcon={(props) => this.customExpandIcon(props)}
+            expandIcon={(props) => props.record.receivers === '--' ? "" : this.customExpandIcon(props)}
             expandedRowRender={(record) => {
+              let expandedTable;
+              if(record.receivers === '--'){
+                expandedTable = "";
+              } else {
+                expandedTable = <Table
+                  style={{ margin: 10 }}
+                  size="middle"
+                  bordered
+                  columns={this.state.receiversColumns}
+                  dataSource={this.renderReceiversList(record.receiver_ids)}
+                  pagination={false}
+                  scroll={{ x: true }}
+                />;
+              }
               return (
                 <Fragment>
+                  {expandedTable}
 
-                  <Table
-                    style={{ margin: 10 }}
-                    size="middle"
-                    bordered
-                    columns={this.state.receiversColumns}
-                    dataSource={this.renderReceiversList(record.receiver_ids)}
-                    pagination={false}
-                    scroll={{ x: true }}
-                  />
                 </Fragment>
               );
             }}
