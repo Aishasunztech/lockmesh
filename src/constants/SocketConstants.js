@@ -1,4 +1,5 @@
 export const CONNECT_SOCKET = 'CONNECT_SOCKET';
+export const CONNECT_SUPPORT_SYSTEM_SOCKET = 'CONNECT_SUPPORT_SYSTEM_SOCKET';
 export const DISCONNECT_SOCKET = 'DISCONNECT_SOCKET';
 
 export const SEND_ONLINE_OFFLINE_STATUS = 'send_online_offline_status_';

@@ -37,14 +37,14 @@ const RestService = {
 
 
     connectSupportSystemSocket: () => {
+
         let token = localStorage.getItem('token');
         let id = localStorage.getItem('id');
         let type = localStorage.getItem('type');
         let makeToken = "token=" + token + "&isWeb=true&user_id=" + id + "&type=" + type;
         let socket = SupportSystemSocketIO.connect(SUPPORT_SOCKET_URL, {
-            path: '/v1/socket',
+            path: '/support/v1/socket',
             transports: ['websocket'],
-            path: '/v1/socket',
             query: makeToken,
             secure: true
         });

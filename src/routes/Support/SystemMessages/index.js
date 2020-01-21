@@ -3,8 +3,7 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import {Card, Modal, Tabs} from "antd";
 import {checkValue, convertToLang, getDateFromTimestamp} from '../../utils/commonUtils'
-import ListSentMessages from './components/ListSentMessages';
-import ListReceivedMessages from './components/ListReceivedMessages';
+import ListSystemMessages from './components/ListSystemMessages';
 import SendMessage from './components/SendMessage';
 import {getAllDealers} from "../../../appRedux/actions/Dealers";
 
@@ -14,7 +13,7 @@ import {
   getSupportSystemMessages,
   updateSupportSystemMessageNotification
 } from "../../../appRedux/actions/SupportSystemMessages";
-import {receivedSupportSystemMessagesColumns, supportSystemMessage} from "../../utils/columnsUtils";
+import { supportSystemMessage} from "../../utils/columnsUtils";
 import {ADMIN, DEALER, SDEALER} from "../../../constants/Constants";
 
 const TabPane           = Tabs.TabPane;
@@ -24,27 +23,17 @@ class SystemMessages extends Component {
 
   constructor(props) {
     super(props);
-    var columns                           = supportSystemMessage(props.translation, this.handleSentMessagesSearch);
-    var receivedSupportSystemMessagesCols = receivedSupportSystemMessagesColumns(props.translation, this.handleReceivedMessageSearch);
-
-    columns = this.removeColumns(props, columns);
-
-    console.log('hello world');
-    console.log(columns);
+    var columns  = supportSystemMessage(props.translation);
+    columns      = this.removeColumns(props, columns);
 
     this.state = {
-      sorterKey: '',
-      sortOrder: 'ascend',
       columns: columns,
-      receivedSupportSystemMessagesCols: receivedSupportSystemMessagesCols,
       visible: false,
       sentSupportSystemMessages: [],
       copySentSupportSystemMessages: [],
       receivedSupportSystemMessages: [],
       copyReceivedSupportSystemMessages: [],
-      messageTab: (this.props.user.type === SDEALER) ? "2": "1",
-      editRecord: null,
-      editModal: false
+      searchSystemMessagesColumns: [],
     };
     this.confirm = Modal.confirm;
   }
@@ -55,50 +44,31 @@ class SystemMessages extends Component {
     } else if(user.type === SDEALER){
       columns.splice(1, 2);
     }
-
     return columns;
-  }
-
-  handleChangeCardTabs = (value) => {
-
-    switch (value) {
-      case '1':
-        this.setState({
-          messageTab: '1'
-        });
-        break;
-
-      case '2':
-        this.setState({
-          messageTab: '2'
-        });
-
-        break;
-      default:
-        this.setState({
-          messageTab: '1'
-        });
-        break;
-    }
   };
 
   componentDidMount() {
+    let searchSystemMessagesColumnsArray = [];
     this.props.getAllDealers();
     if (this.props.user.type === SDEALER){
+      searchSystemMessagesColumnsArray = ['sender', 'subject' ,'createdAt'];
       this.props.getReceivedSupportSystemMessages();
     }else if (this.props.user.type === ADMIN){
+      searchSystemMessagesColumnsArray = ['subject' ,'createdAt'];
       this.props.getSupportSystemMessages();
     }else{
+      searchSystemMessagesColumnsArray = ['sender', 'type', 'subject' ,'createdAt'];
       this.props.getSupportSystemMessages();
       this.props.getReceivedSupportSystemMessages();
     }
 
+    this.setState({searchSystemMessagesColumns: searchSystemMessagesColumnsArray})
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
 
     let receivedSupportSystemMessagesData = [];
-    let sentSupportSystemMessagesData = [];
+    let sentSupportSystemMessagesData     = [];
 
     if (this.props.receivedSupportSystemMessages.length > 0 && prevProps.receivedSupportSystemMessages !== this.props.receivedSupportSystemMessages){
       let data;
@@ -129,9 +99,9 @@ class SystemMessages extends Component {
         this.props.sentSupportSystemMessages.map((item) => {
 
           if (this.props.user.type === ADMIN){
-            let dealer = item.sender_user_type === ADMIN ? ADMIN : this.props.dealerList.find(dealer => dealer.dealer_id === item.sender_id) ;
-            sender = item.sender_user_type === ADMIN ? ADMIN : dealer.dealer_name;
-            sender = sender.charAt(0).toUpperCase() + sender.slice(1);
+            let dealer  = item.sender_user_type === ADMIN ? ADMIN : this.props.dealerList.find(dealer => dealer.dealer_id === item.sender_id) ;
+            sender      = item.sender_user_type === ADMIN ? ADMIN : dealer.dealer_name;
+            sender      = sender.charAt(0).toUpperCase() + sender.slice(1);
           }
 
           data = {
@@ -154,9 +124,6 @@ class SystemMessages extends Component {
       }
 
     }
-
-
-
   }
 
   handleSendMsgButton = (visible) => {
@@ -173,8 +140,7 @@ class SystemMessages extends Component {
         {
           <div>
 
-
-            <ListSentMessages
+            <ListSystemMessages
               supportSystemMessages={this.state.sentSupportSystemMessages}
               getSupportSystemMessages={this.props.getSupportSystemMessages}
               getReceivedSupportSystemMessages={this.props.getReceivedSupportSystemMessages}
@@ -185,6 +151,8 @@ class SystemMessages extends Component {
               user={this.props.user}
               translation={this.props.translation}
               filterOption={this.props.filterOption}
+              systemMessagesSearchValue={this.props.systemMessagesSearchValue}
+              searchSystemMessagesColumns={this.state.searchSystemMessagesColumns}
             />
 
           </div>
@@ -213,50 +181,6 @@ class SystemMessages extends Component {
     )
   }
 
-
-  handleReceivedMessageSearch = (e) => {
-    let fieldName       = e.target.name;
-    let fieldValue      = e.target.value;
-    let searchedData = this.searchField(this.state.copyReceivedSupportSystemMessages, fieldName, fieldValue);
-    this.setState({
-      receivedSupportSystemMessages: searchedData
-    });
-  };
-
-  handleSentMessagesSearch = (e) => {
-    let fieldName       = e.target.name;
-    let fieldValue      = e.target.value;
-    let searchedData = this.searchField(this.state.copySentSupportSystemMessages, fieldName, fieldValue);
-    this.setState({
-      sentSupportSystemMessages: searchedData
-    });
-  };
-
-  searchField = (originalData, fieldName, value) => {
-    let demoData = [];
-    if (value.length) {
-      originalData.forEach((data) => {
-        if (data[fieldName] !== undefined) {
-          if ((typeof data[fieldName]) === 'string') {
-
-            if (data[fieldName].toUpperCase().includes(value.toUpperCase())) {
-              demoData.push(data);
-            }
-          } else if (data[fieldName] != null) {
-            if (data[fieldName].toString().toUpperCase().includes(value.toUpperCase())) {
-              demoData.push(data);
-            }
-          }
-        } else {
-          demoData.push(data);
-        }
-      });
-
-      return demoData;
-    } else {
-      return originalData;
-    }
-  }
 }
 
 
