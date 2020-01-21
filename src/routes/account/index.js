@@ -1290,7 +1290,7 @@ class Account extends Component {
                         {(this.props.user.type === ADMIN) ?
                             <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                                 <div>
-                                    <Link to={"/system-messages"}>
+                                    <Link to={"/device-messages"}>
                                         <Card style={{ borderRadius: 12 }} className="manage_ac">
                                             <div className="profile_table image_1">
                                                 <Fragment>

@@ -3790,7 +3790,7 @@ export function addDomainModalColumns(translation, handleSearch) {
 
     return columns;
 }
-export function systemMsgColumns(translation, handleSearch, isModal = false) {
+export function deviceMsgsColumns(translation, handleSearch, isModal = false) {
     let columns = [
         {
             title: "#",
