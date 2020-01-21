@@ -137,7 +137,7 @@ class SidebarContent extends Component {
     this.props.getSupportSystemMessagesNotifications()
     this.props.getAllToAllDealers()
 
-    console.log("asdsad");
+
     this.props.getUserCredit();
     if (this.props.allDevices.length === 0) {
       this.props.getDevicesList();

@@ -37,6 +37,7 @@ const RestService = {
 
 
     connectSupportSystemSocket: () => {
+
         let token = localStorage.getItem('token');
         let id = localStorage.getItem('id');
         let type = localStorage.getItem('type');

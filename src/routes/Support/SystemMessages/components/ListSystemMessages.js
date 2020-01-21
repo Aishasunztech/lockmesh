@@ -1,15 +1,12 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Button, Icon, Card, Modal } from "antd";
 import {
-  getDateFromTimestamp,
   checkValue,
   convertToLang,
-  componentSearch,
   componentSearchSystemMessages
 } from '../../../utils/commonUtils';
 import { supportSystemMessagesReceiversColumns } from '../../../utils/columnsUtils';
 import ViewMessage from './ViewMessage'
-import {ADMIN, SDEALER} from "../../../../constants/Constants";
 
 let list                = [];
 let systemMessagesCopy  = [];
@@ -60,10 +57,6 @@ export default class ListSystemMessages extends Component {
 
     if (this.props !== prevProps) {
 
-      if (this.state.viewMessage && this.props.user.type !== this.state.messageObject.sender_user_type){
-        this.props.updateSupportSystemMessageNotification({systemMessageId: this.state.messageObject.id})
-      }
-
       let sentMessages    = this.props.supportSystemMessages ? this.props.supportSystemMessages : [];
       let receiveMessages = this.props.receivedSupportSystemMessages ? this.props.receivedSupportSystemMessages : [];
 
@@ -80,8 +73,6 @@ export default class ListSystemMessages extends Component {
         systemMessages: list,
       });
 
-
-
     }
 
 
@@ -95,8 +86,8 @@ export default class ListSystemMessages extends Component {
           status              = false;
 
         }
-        let keys = ['subject'];
-        let foundUsers = componentSearchSystemMessages(systemMessagesCopy, keys, this.props.systemMessagesSearchValue);
+
+        let foundUsers = componentSearchSystemMessages(systemMessagesCopy, this.props.searchSystemMessagesColumns, this.props.systemMessagesSearchValue);
 
         if (foundUsers.length) {
           this.setState({
@@ -109,11 +100,13 @@ export default class ListSystemMessages extends Component {
         }
       } else {
         status = true;
-
-        console.log('foundUsers')
       }
     } catch (error) {
 
+    }
+
+    if (this.state.viewMessage && this.props.user.type !== this.state.messageObject.sender_user_type && this.state.messageObject.type === 'Received'){
+      this.props.updateSupportSystemMessageNotification({systemMessageId: this.state.messageObject.id})
     }
   }
 
@@ -138,7 +131,7 @@ export default class ListSystemMessages extends Component {
           type: item.type,
           sender: item.sender === "" ? "--" : item.sender,
           subject: checkValue(item.subject),
-          createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "N/A",
+          createdAt: item.createdAt,
           action: (
             <div data-column="ACTION" style={{ display: "inline-flex" }}>
               <Fragment>
@@ -148,43 +141,18 @@ export default class ListSystemMessages extends Component {
           ),
 
         };
+
         renderList.push(data)
       });
+
+      renderList.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+
       return renderList
     }else{
       return []
     }
 
   }
-
-  handleComponentSearch = (value) => {
-    try {
-      if (value.length) {
-
-
-        if (status) {
-
-          systemMessagesCopy  = list;
-          status              = false;
-
-        }
-
-        let foundUsers = componentSearch(systemMessagesCopy, value);
-
-        if (foundUsers.length) {
-          console.log(foundUsers)
-        } else {
-          console.log(foundUsers)
-        }
-      } else {
-        status = true;
-
-        console.log('foundUsers')
-      }
-    } catch (error) {
-
-    }
-  };
 
   renderReceiversList(list) {
     let receiversData = [];

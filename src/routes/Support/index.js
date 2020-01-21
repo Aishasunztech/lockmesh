@@ -6,7 +6,7 @@ import SystemMessages from "./SystemMessages";
 import styles from './style.css'
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {SDEALER} from "../../constants/Constants";
+import {DEALER, SDEALER} from "../../constants/Constants";
 
 const TabPane = Tabs.TabPane;
 
@@ -23,13 +23,16 @@ class Support extends Component {
     };
 
     this.systemMessagesOptions = <span>
-        <Input
-          type="text"
-          placeholder="Search"
-          style={{ width: '40%', marginRight: '3%' }}
-          onChange={ (e) => {this.setState({systemMessagesSearchValue: e.target.value})} }
-        />
 
+      <Input
+        type="text"
+        placeholder="Search"
+        style={{ width: '40%', marginRight: '3%' }}
+        onChange={ (e) => {this.setState({systemMessagesSearchValue: e.target.value})} }
+      />
+
+
+      {this.props.user.type === DEALER ?
         <Select
           style={{ width: '25%', marginRight: '3%' }}
           onChange={ (e) => { this.setState({filterOption: e})} }
@@ -39,6 +42,7 @@ class Support extends Component {
           <Select.Option value="received">Received</Select.Option>
           <Select.Option value="sent">Sent</Select.Option>
         </Select>
+        : ''}
 
       {this.props.user.type !== SDEALER ?
 
