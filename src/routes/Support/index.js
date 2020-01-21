@@ -17,25 +17,24 @@ class Support extends Component {
   constructor(props) {
     super(props);
 
+    let currentTabId = (this.props.location ? this.props.location.state ? this.props.location.state.page ? this.props.location.state.page : '1' : '1' : '1')
+
     this.state = {
-      innerTabSelect: '1',
+      innerTabSelect: currentTabId,
       filterOption: 'all',
       systemMessagesSearchValue: '',
     };
 
     this.systemMessagesOptions = <span>
 
-      <Input
-        type="text"
-        placeholder="Search"
-        style={{ width: '40%', marginRight: '3%' }}
-        onChange={ (e) => {this.setState({systemMessagesSearchValue: e.target.value})} }
-      />
+      {this.props.user.type !== SDEALER ?
 
+        <Button type="primary" style={{float: "right"}} onClick={ () => { this.refs.systemMessages.getWrappedInstance().handleSendMsgButton(true)} } size="default" >Send New Message</Button>
+        : ''}
 
       {this.props.user.type === DEALER ?
         <Select
-          style={{ width: '25%', marginRight: '3%' }}
+          style={{ width: '25%', marginRight: '1%', float: "right" }}
           onChange={ (e) => { this.setState({filterOption: e})} }
           defaultValue="all"
         >
@@ -45,10 +44,12 @@ class Support extends Component {
         </Select>
         : ''}
 
-      {this.props.user.type !== SDEALER ?
-
-        <Button type="primary" onClick={ () => { this.refs.systemMessages.getWrappedInstance().handleSendMsgButton(true)} } size="default" >Send New Message</Button>
-        : ''}
+      <Input
+        type="text"
+        placeholder="Search"
+        style={{ width: '40%', marginRight: '1%', float: "right" }}
+        onChange={ (e) => {this.setState({systemMessagesSearchValue: e.target.value})} }
+      />
       </span>;
   }
 
@@ -93,7 +94,7 @@ class Support extends Component {
         />
         <Card>
 
-          <Tabs tabBarExtraContent={ this.state.innerTabSelect === '1'? this.systemMessagesOptions : '' } defaultActiveKey="1" activeKey={this.state.innerTabSelect} type="card" className="supportModuleMainTab" onChange={this.handleChangeCardTabs}>
+          <Tabs tabBarExtraContent={ this.state.innerTabSelect === '1'? this.systemMessagesOptions : '' } defaultActiveKey={this.state.innerTabSelect} activeKey={this.state.innerTabSelect} type="card" className="supportModuleMainTab" onChange={this.handleChangeCardTabs}>
             <TabPane tab="SYSTEM MESSAGES" key="1" forceRender={false}>
               <SystemMessages
                 ref="systemMessages"

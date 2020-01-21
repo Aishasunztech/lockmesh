@@ -43,6 +43,8 @@ class SystemMessages extends Component {
       columns.splice(2,2);
     } else if(user.type === SDEALER){
       columns.splice(1, 2);
+    } else if(user.type === DEALER){
+      columns.splice(3, 1);
     }
     return columns;
   };
@@ -73,12 +75,13 @@ class SystemMessages extends Component {
     if (this.props.receivedSupportSystemMessages.length > 0 && prevProps.receivedSupportSystemMessages !== this.props.receivedSupportSystemMessages){
       let data;
       this.props.receivedSupportSystemMessages.map((item) => {
+        let sender = item.system_message.sender_user_type.charAt(0).toUpperCase() + item.system_message.sender_user_type.slice(1);
         data = {
           id: item.system_message._id,
           key: item.system_message._id,
           rowKey: item.system_message._id,
           type: 'Received',
-          sender: item.system_message.sender_user_type,
+          sender: sender,
           subject: checkValue(item.system_message.subject),
           message: checkValue(item.system_message.message),
           createdAt: item.system_message.createdAt ? getDateFromTimestamp(item.system_message.createdAt) : "N/A",
@@ -131,10 +134,6 @@ class SystemMessages extends Component {
   };
 
   render() {
-    if(this.props.user.type !== ADMIN && this.state.columns[2].dataIndex == 'sender'){
-      this.state.columns.splice(2,1)
-    }
-
     return (
       <div>
         {

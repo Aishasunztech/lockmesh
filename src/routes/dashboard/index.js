@@ -44,7 +44,7 @@ import { ONLINE } from "../../constants/DeviceConstants";
 
 class Dashboard extends Component {
     constructor(props) {
-        super(props)
+        super(props);
     }
 
 
@@ -59,7 +59,7 @@ class Dashboard extends Component {
         Modal.confirm({
             content: `Are you sure you want to Transfer, from ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
             onOk() {
-                // 
+                //
                 _this.props.transferDeviceProfile(obj);
             },
             onCancel() { },
