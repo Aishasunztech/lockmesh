@@ -1,19 +1,54 @@
 import React, {Component} from 'react';
-import {Card, Tabs, Form} from "antd";
+import {Card, Tabs, Form, Input, Select, Button} from "antd";
 import AppFilter from "../../components/AppFilter";
 import Ticket from "./Tickets";
 import SystemMessages from "./SystemMessages";
-
+import styles from './style.css'
+import {bindActionCreators} from "redux";
+import {connect} from "react-redux";
+import {SDEALER} from "../../constants/Constants";
+import priorities from "./Tickets/data/priorities";
 
 const TabPane = Tabs.TabPane;
+
+let systemMessagesOptions;
+
 class Support extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      innerTabSelect: '1'
+      innerTabSelect: '1',
+      filterOption: 'all',
+      systemMessagesSearchValue: '',
     };
+
+    this.systemMessagesOptions = <span>
+        <Input
+          type="text"
+          placeholder="Search"
+          style={{ width: '40%', marginRight: '3%' }}
+          onChange={ (e) => {this.setState({systemMessagesSearchValue: e.target.value})} }
+        />
+
+        <Select
+          style={{ width: '25%', marginRight: '3%' }}
+          onChange={ (e) => { this.setState({filterOption: e})} }
+          defaultValue="all"
+        >
+          <Select.Option value="all">All</Select.Option>
+          <Select.Option value="received">Received</Select.Option>
+          <Select.Option value="sent">Sent</Select.Option>
+        </Select>
+
+      {this.props.user.type !== SDEALER ?
+
+        <Button type="primary" onClick={ () => { this.refs.systemMessages.getWrappedInstance().handleSendMsgButton(true)} } size="default" >Send New Message</Button>
+        : ''}
+      </span>;
   }
+
+
 
   handleChangeCardTabs = (value) => {
 
@@ -41,7 +76,10 @@ class Support extends Component {
         });
         break;
     }
+
   };
+
+
 
   render() {
     return (
@@ -50,16 +88,25 @@ class Support extends Component {
           pageHeading="SUPPORT"
         />
         <Card>
-          <Tabs defaultActiveKey="1" activeKey={this.state.innerTabSelect} type="card" className="" onChange={this.handleChangeCardTabs}>
+
+          <Tabs tabBarExtraContent={ this.state.innerTabSelect === '1'? this.systemMessagesOptions : '' } defaultActiveKey="1" activeKey={this.state.innerTabSelect} type="card" className="supportModuleMainTab" onChange={this.handleChangeCardTabs}>
             <TabPane tab="SYSTEM MESSAGES" key="1" forceRender={false}>
-              <SystemMessages />
+              <SystemMessages
+                ref="systemMessages"
+                filterOption={this.state.filterOption}
+                systemMessagesSearchValue={this.state.systemMessagesSearchValue}
+              />
             </TabPane>
             <TabPane tab="TICKETS" key="2" forceRender={false}>
               <Ticket />
             </TabPane>
             <TabPane tab="LIVE CHAT" key="3" forceRender={false}>
             </TabPane>
+
+
           </Tabs>
+
+
         </Card>
       </div>
 
@@ -68,5 +115,16 @@ class Support extends Component {
 }
 
 
-const WrappedAddDeviceForm = Form.create()(Support);
-export default WrappedAddDeviceForm;
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+
+  }, dispatch);
+}
+
+const mapStateToProps = ({ auth }) => {
+  return {
+    user: auth.authUser,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps, null, {withRef: true})(Support);
