@@ -230,6 +230,7 @@ class SendMsgForm extends Component {
             });
             this.setState({ allUsers, allDealers })
         }
+        // console.log("nextProps  ", nextProps.dealerList , nextProps.users_list)
     }
 
     componentDidMount() {
@@ -237,9 +238,26 @@ class SendMsgForm extends Component {
         // this.props.getAllDealers();
         // this.props.getUserList();
 
+        // console.log("didmount ", this.props.dealerList, this.props.users_list)
+
+        let allDealers = [];
+        let allUsers = [];
+
+        if (this.props.users_list || this.props.dealerList) {
+            allDealers = this.props.dealerList.map((item) => {
+                return ({ key: item.dealer_id, label: item.dealer_name })
+            });
+
+            allUsers = this.props.users_list.map((item) => {
+                return ({ key: item.user_id, label: item.user_name })
+            });
+        }
+
         this.setState({
             filteredDevices: this.props.devices,
             dealerList: this.props.dealerList,
+            allDealers,
+            allUsers
         })
     }
 
@@ -423,6 +441,7 @@ class SendMsgForm extends Component {
     }
 
     render() {
+        // console.log("this.state.allDealers ", this.state.allDealers)
         return (
             <div>
                 <Form onSubmit={this.handleSubmit}>
@@ -736,28 +755,33 @@ class SendMsgForm extends Component {
                         </Row>
                         : null}
 
-                    <FilterDevices
-                        devices={this.state.filteredDevices}
-                        selectedDealers={this.state.selectedDealers}
-                        selectedUsers={this.state.selectedUsers}
-                        handleActionValue={this.state.selectedAction}
-                        bulkSuspendDevice={this.props.bulkSuspendDevice}
-                        bulkActivateDevice={this.props.bulkActivateDevice}
-                        selectedPushAppsList={this.props.selectedPushAppsList}
-                        selectedPullAppsList={this.props.selectedPullAppsList}
-                        applyPushApps={this.props.applyPushApps}
-                        applyPullApps={this.props.applyPullApps}
-                        translation={this.props.translation}
-                        onChangeTableSorting={this.handleTableChange}
-                        selectedDevices={this.props.selectedDevices}
-                        setSelectedBulkDevices={this.props.setSelectedBulkDevices}
-                        unlinkBulkDevices={this.props.unlinkBulkDevices}
-                        wipeBulkDevices={this.props.wipeBulkDevices}
-                        bulkApplyPolicy={this.props.applyBulkPolicy}
-                        selectedPolicy={this.state.selectedPolicy}
-                        renderList={this.props.renderList}
-                    />
-
+                    {/* {this.state.filteredDevices && this.state.filteredDevices.length ? */}
+                        <FilterDevices
+                            devices={this.state.filteredDevices}
+                            selectedDealers={this.state.selectedDealers}
+                            selectedUsers={this.state.selectedUsers}
+                            handleActionValue={this.state.selectedAction}
+                            bulkSuspendDevice={this.props.bulkSuspendDevice}
+                            bulkActivateDevice={this.props.bulkActivateDevice}
+                            selectedPushAppsList={this.props.selectedPushAppsList}
+                            selectedPullAppsList={this.props.selectedPullAppsList}
+                            applyPushApps={this.props.applyPushApps}
+                            applyPullApps={this.props.applyPullApps}
+                            translation={this.props.translation}
+                            onChangeTableSorting={this.handleTableChange}
+                            selectedDevices={this.props.selectedDevices}
+                            setSelectedBulkDevices={this.props.setSelectedBulkDevices}
+                            unlinkBulkDevices={this.props.unlinkBulkDevices}
+                            wipeBulkDevices={this.props.wipeBulkDevices}
+                            bulkApplyPolicy={this.props.applyBulkPolicy}
+                            selectedPolicy={this.state.selectedPolicy}
+                            renderList={this.props.renderList}
+                        />
+                        {/* :
+                        <div>
+                            Note: *To performe an action please select dealers/users to get their devices. <span style={{ color: 'red' }}>(Devices not found!)</span>
+                        </div>
+                    } */}
                     <Form.Item className="edit_ftr_btn"
                         wrapperCol={{
                             xs: { span: 24, offset: 0 },

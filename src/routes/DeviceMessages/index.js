@@ -507,7 +507,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const mapStateToProps = ({ account, auth, settings, dealers, bulkDevices }) => {
-    // console.log("bulkDevices.bulkMsgs ", bulkDevices.bulkMsgs);
+    // console.log("bulkDevices.usersOfDealers ", bulkDevices.usersOfDealers);
     return {
         isloading: account.isloading,
         user: auth.authUser,

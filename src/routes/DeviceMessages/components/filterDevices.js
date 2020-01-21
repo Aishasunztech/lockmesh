@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Button, Modal, Row, Col, Spin, Input } from "antd";
+import { Table, Button, Modal, Row, Col, Spin, Input, Card } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 // import styles from './devices.css'
@@ -17,8 +17,7 @@ import CircularProgress from "components/CircularProgress";
 import { checkValue, titleCase, convertToLang, getColor } from '../../utils/commonUtils'
 
 import { bulkDevicesColumns, devicesColumns, userDevicesListColumns } from '../../utils/columnsUtils';
-
-
+import CustomScrollbars from '../../../util/CustomScrollbars';
 
 import {
   DEVICE_PENDING_ACTIVATION,
@@ -753,6 +752,11 @@ class FilterDevices extends Component {
     //   }
 
     // }
+
+    if (!this.props.devices || !this.props.devices.length){
+      return <div>Note: *To performe an action please select dealers/users to get their devices. <span style={{ color: 'red' }}>(Devices not found!)</span></div>;
+    }
+
     return (
       <Fragment>
         <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
@@ -798,6 +802,9 @@ class FilterDevices extends Component {
           {
             this.props.spinloading ? <CircularProgress /> :
               <Col className="gutter-row" span={24}>
+                {/* <Card className='fix_card fix_card_bulk_act'>
+                  <hr className="fix_header_border" style={{ top: "56px" }} />
+                  <CustomScrollbars className="gx-popover-scroll "> */}
                 <Table
                   id='scrolltablelist'
                   ref='tablelist'
@@ -810,6 +817,8 @@ class FilterDevices extends Component {
                   pagination={false}
                   scroll={{ x: true }}
                 />
+                {/* </CustomScrollbars>
+                </Card> */}
               </Col>
           }
         </Row>
