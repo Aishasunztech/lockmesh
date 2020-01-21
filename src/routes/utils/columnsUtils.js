@@ -1430,108 +1430,6 @@ export function supportSystemMessagesReceiversColumns(translation, handleSearch)
   ]);
 }
 
-export function receivedSupportSystemMessagesColumns(translation, handleSearch) {
-  let columns = [
-    {
-      title: "#",
-      dataIndex: 'counter',
-      align: 'center',
-      className: 'row',
-      width: 50,
-      render: (text, record, index) => ++index,
-    },
-
-    {
-      title: (
-        <Input.Search
-          name="sender"
-          key="sender"
-          id="sender"
-          className="search_heading"
-          onChange={handleSearch}
-          autoComplete="new-password"
-          placeholder="SENDER"
-        />
-      ),
-      dataIndex: 'sender',
-      className: '',
-      key: 'sender',
-      children: [
-        {
-          width: 200,
-          title: convertToLang(translation[""], "SENDER"),
-          dataIndex: 'sender',
-          key: 'sender',
-          sorter: (a, b) => { return a.sender.props.children.localeCompare(b.sender.props.children) },
-          sortDirections: ['ascend', 'descend'],
-        }
-      ]
-    },
-
-    {
-      title: (
-        <Input.Search
-          name="subject"
-          key="subject"
-          id="subject"
-          className="search_heading"
-          onChange={handleSearch}
-          autoComplete="new-password"
-          placeholder="SUBJECT"
-        />
-      ),
-      dataIndex: 'subject',
-      className: '',
-      key: 'subject',
-      children: [
-        {
-          title: convertToLang(translation[""], "SUBJECT"),
-          dataIndex: 'subject',
-          key: 'subject',
-          sorter: (a, b) => { return a.subject.localeCompare(b.subject) },
-          sortDirections: ['ascend', 'descend'],
-        }
-      ]
-    },
-
-    {
-      title: (
-        <Input.Search
-          name="createdAt"
-          key="createdAt"
-          id="createdAt"
-          className="search_heading"
-          onChange={handleSearch}
-          autoComplete="new-password"
-          placeholder="DATE"
-        />
-      ),
-      dataIndex: 'date',
-      className: '',
-      key: 'date',
-      children: [
-        {
-          width: 200,
-          title: convertToLang(translation[""], "DATE"),
-          dataIndex: 'createdAt',
-          key: 'createdAt',
-          sorter: (a, b) => { return a.createdAt.localeCompare(b.createdAt) },
-          sortDirections: ['ascend', 'descend'],
-        }
-      ]
-    },
-
-    {
-      title: "ACTION",
-      dataIndex: 'action',
-      align: 'center',
-      width: 150,
-      className: '',
-    },
-  ];
-
-  return columns;
-}
 
 export function bulkDeviceHistoryColumns(translation) {
     return ([
@@ -4041,7 +3939,7 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
     return columns;
 }
 
-export function supportSystemMessage(translation, handleSearch, isModal = false) {
+export function supportSystemMessage(translation, isModal = false) {
   let columns = [
     {
       title: "#",
@@ -4102,11 +4000,6 @@ export function supportSystemMessage(translation, handleSearch, isModal = false)
       className: '',
     },
   ];
-
-
-  if (isModal) {
-    columns.splice(1, 1)
-  }
 
   return columns;
 }

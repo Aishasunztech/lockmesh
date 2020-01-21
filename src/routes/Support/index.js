@@ -6,7 +6,7 @@ import SystemMessages from "./SystemMessages";
 import styles from './style.css'
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {SDEALER} from "../../constants/Constants";
+import {DEALER, SDEALER} from "../../constants/Constants";
 import priorities from "./Tickets/data/priorities";
 
 const TabPane = Tabs.TabPane;
@@ -20,15 +20,20 @@ class Support extends Component {
     this.state = {
       innerTabSelect: '1',
       filterOption: 'all',
+      systemMessagesSearchValue: '',
     };
 
     this.systemMessagesOptions = <span>
-        <Input
-          type="text"
-          placeholder="Search"
-          style={{ width: '40%', marginRight: '3%' }}
-        />
 
+      <Input
+        type="text"
+        placeholder="Search"
+        style={{ width: '40%', marginRight: '3%' }}
+        onChange={ (e) => {this.setState({systemMessagesSearchValue: e.target.value})} }
+      />
+
+
+      {this.props.user.type === DEALER ?
         <Select
           style={{ width: '25%', marginRight: '3%' }}
           onChange={ (e) => { this.setState({filterOption: e})} }
@@ -38,6 +43,7 @@ class Support extends Component {
           <Select.Option value="received">Received</Select.Option>
           <Select.Option value="sent">Sent</Select.Option>
         </Select>
+        : ''}
 
       {this.props.user.type !== SDEALER ?
 
@@ -89,7 +95,11 @@ class Support extends Component {
 
           <Tabs tabBarExtraContent={ this.state.innerTabSelect === '1'? this.systemMessagesOptions : '' } defaultActiveKey="1" activeKey={this.state.innerTabSelect} type="card" className="supportModuleMainTab" onChange={this.handleChangeCardTabs}>
             <TabPane tab="SYSTEM MESSAGES" key="1" forceRender={false}>
-              <SystemMessages ref="systemMessages" filterOption={this.state.filterOption}/>
+              <SystemMessages
+                ref="systemMessages"
+                filterOption={this.state.filterOption}
+                systemMessagesSearchValue={this.state.systemMessagesSearchValue}
+              />
             </TabPane>
             <TabPane tab="TICKETS" key="2" forceRender={false}>
               <Ticket />

@@ -151,6 +151,28 @@ export function componentSearch(arr, search) {
 	return foundDevices;
 }
 
+
+export function componentSearchSystemMessages(arr, keys, search) {
+  let foundDevices = [];
+  let obks = keys;
+  arr.map((el) => {
+    obks.some((obk) => {
+      if (obk) {
+        let temp = el[obk];
+        if (obk === 'dealer_id')
+          temp = temp.toString()
+        if ((typeof temp) === 'string') {
+          if (temp.toLowerCase().includes(search.toLowerCase())) {
+            foundDevices.push(el);
+            return true;
+          }
+        }
+      }
+    });
+  })
+  return foundDevices;
+}
+
 export function getFormattedDate(value) {
 	function convert(str) {
 		var month, day, year, hours, minutes, seconds;
@@ -497,7 +519,7 @@ export function getWeekDay(key) {
 			return "Every Friday";
 		case 7:
 			return "Every Saturday";
-		
+
 
 		default:
 			return "N/A";
