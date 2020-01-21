@@ -1,10 +1,20 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Button, Icon, Card, Modal } from "antd";
-import {getDateFromTimestamp, checkValue, convertToLang} from '../../../utils/commonUtils';
+import {
+  getDateFromTimestamp,
+  checkValue,
+  convertToLang,
+  componentSearch,
+  componentSearchSystemMessages
+} from '../../../utils/commonUtils';
 import { supportSystemMessagesReceiversColumns } from '../../../utils/columnsUtils';
 import ViewMessage from './ViewMessage'
 import {ADMIN, SDEALER} from "../../../../constants/Constants";
-export default class ListSentMessages extends Component {
+
+let list                = [];
+let systemMessagesCopy  = [];
+let status              = true;
+export default class ListSystemMessages extends Component {
 
   constructor(props) {
     super(props);
@@ -16,7 +26,8 @@ export default class ListSentMessages extends Component {
       expandedRowKeys: [],
       visible: false,
       messageObject: null,
-      viewMessage: false
+      viewMessage: false,
+      systemMessages: []
     };
 
     this.renderList = this.renderList.bind(this);
@@ -48,14 +59,61 @@ export default class ListSentMessages extends Component {
   componentDidUpdate(prevProps) {
 
     if (this.props !== prevProps) {
+
+      if (this.state.viewMessage && this.props.user.type !== this.state.messageObject.sender_user_type){
+        this.props.updateSupportSystemMessageNotification({systemMessageId: this.state.messageObject.id})
+      }
+
+      let sentMessages    = this.props.supportSystemMessages ? this.props.supportSystemMessages : [];
+      let receiveMessages = this.props.receivedSupportSystemMessages ? this.props.receivedSupportSystemMessages : [];
+
+      if (this.props.filterOption === 'all'){
+        list        = [...sentMessages , ...receiveMessages];
+      } else if(this.props.filterOption === 'received'){
+        list        = receiveMessages;
+      }else{
+        list        = sentMessages;
+      }
+
       this.setState({
-        columns: this.props.columns
-      })
+        columns: this.props.columns,
+        systemMessages: list,
+      });
+
+
+
     }
 
 
-    if (this.state.viewMessage && this.props.user.type !== this.state.messageObject.sender_user_type){
-      this.props.updateSupportSystemMessageNotification({systemMessageId: this.state.messageObject.id})
+    try {
+      if (this.props.systemMessagesSearchValue.length !== prevProps.systemMessagesSearchValue.length) {
+
+
+        if (status) {
+
+          systemMessagesCopy  = list;
+          status              = false;
+
+        }
+        let keys = ['subject'];
+        let foundUsers = componentSearchSystemMessages(systemMessagesCopy, keys, this.props.systemMessagesSearchValue);
+
+        if (foundUsers.length) {
+          this.setState({
+            systemMessages: foundUsers,
+          });
+        } else {
+          this.setState({
+            systemMessages: [],
+          });
+        }
+      } else {
+        status = true;
+
+        console.log('foundUsers')
+      }
+    } catch (error) {
+
     }
   }
 
@@ -65,23 +123,12 @@ export default class ListSentMessages extends Component {
 
   renderList() {
 
-    let sentMessages    = this.props.supportSystemMessages ? this.props.supportSystemMessages : [];
-    let receiveMessages = this.props.receivedSupportSystemMessages ? this.props.receivedSupportSystemMessages : [];
     let data;
-    let sender      = '';
-    let renderList  = [];
-    let list        = [];
+    let renderList      = [];
 
-    if (this.props.filterOption === 'all'){
-      list        = [...sentMessages , ...receiveMessages];
-    } else if(this.props.filterOption === 'received'){
-      list        = receiveMessages;
-    }else{
-      list        = sentMessages;
-    }
+    if (this.state.systemMessages.length > 0){
 
-    if (list.length > 0){
-      list.map((item) => {
+      this.state.systemMessages.map((item) => {
 
         data = {
           key: item.id,
@@ -91,7 +138,7 @@ export default class ListSentMessages extends Component {
           type: item.type,
           sender: item.sender === "" ? "--" : item.sender,
           subject: checkValue(item.subject),
-          createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "--",
+          createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "N/A",
           action: (
             <div data-column="ACTION" style={{ display: "inline-flex" }}>
               <Fragment>
@@ -110,12 +157,41 @@ export default class ListSentMessages extends Component {
 
   }
 
+  handleComponentSearch = (value) => {
+    try {
+      if (value.length) {
+
+
+        if (status) {
+
+          systemMessagesCopy  = list;
+          status              = false;
+
+        }
+
+        let foundUsers = componentSearch(systemMessagesCopy, value);
+
+        if (foundUsers.length) {
+          console.log(foundUsers)
+        } else {
+          console.log(foundUsers)
+        }
+      } else {
+        status = true;
+
+        console.log('foundUsers')
+      }
+    } catch (error) {
+
+    }
+  };
+
   renderReceiversList(list) {
     let receiversData = [];
     let data;
 
-    let dealerData = [];
-    dealerData  = this.props.dealerList.filter(dealer => list.includes(dealer.dealer_id));
+    let dealerData  = [];
+    dealerData      = this.props.dealerList.filter(dealer => list.includes(dealer.dealer_id));
     dealerData.map((item, index) => {
       data = {
         key: item.dealer_id,

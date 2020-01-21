@@ -20,6 +20,7 @@ class Support extends Component {
     this.state = {
       innerTabSelect: '1',
       filterOption: 'all',
+      systemMessagesSearchValue: '',
     };
 
     this.systemMessagesOptions = <span>
@@ -27,6 +28,7 @@ class Support extends Component {
           type="text"
           placeholder="Search"
           style={{ width: '40%', marginRight: '3%' }}
+          onChange={ (e) => {this.setState({systemMessagesSearchValue: e.target.value})} }
         />
 
         <Select
@@ -89,7 +91,11 @@ class Support extends Component {
 
           <Tabs tabBarExtraContent={ this.state.innerTabSelect === '1'? this.systemMessagesOptions : '' } defaultActiveKey="1" activeKey={this.state.innerTabSelect} type="card" className="supportModuleMainTab" onChange={this.handleChangeCardTabs}>
             <TabPane tab="SYSTEM MESSAGES" key="1" forceRender={false}>
-              <SystemMessages ref="systemMessages" filterOption={this.state.filterOption}/>
+              <SystemMessages
+                ref="systemMessages"
+                filterOption={this.state.filterOption}
+                systemMessagesSearchValue={this.state.systemMessagesSearchValue}
+              />
             </TabPane>
             <TabPane tab="TICKETS" key="2" forceRender={false}>
               <Ticket />
