@@ -3,6 +3,7 @@ import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col, Tag, Modal }
 import { convertToLang, checkValue, convertTimezoneValue, getWeekDay, getMonthName, checkTimezoneValue } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 import moment from 'moment';
+import ReadMoreAndLess from 'react-read-more-less';
 import { userDevicesListColumns } from '../../utils/columnsUtils';
 import { TIMESTAMP_FORMAT_NOT_SEC, TIME_FORMAT_HM, SERVER_TIMEZONE } from '../../../constants/Application';
 import EditMsgModal from './EditMsgForm';
@@ -22,7 +23,7 @@ export default class ListMsgs extends Component {
             visible: false,
             editRecord: null,
             editModal: false,
-            textLimit: 100
+            // textLimit: 100
         };
         this.renderList = this.renderList.bind(this);
         this.confirm = Modal.confirm;
@@ -80,19 +81,26 @@ export default class ListMsgs extends Component {
         this.setState({ editModal: true, editRecord: data })
     }
 
-    expandText = () => {
-        this.setState({ textLimit: this.state.textLimit + 100 })
-    }
+    // expandText = (id) => {
+    //     this.setState({ textLimit: this.state.textLimit + 100 })
+    // }
 
-    handleMoreLessText = (msg) => {
-        let updateMsg = msg;
-        let _this = this;
-        if (msg && msg.length > _this.state.textLimit) {
-            updateMsg = <p>{updateMsg.substr(0, _this.state.textLimit)}... <a href='#' onClick={() => _this.expandText()}>Read more</a></p>
-        }
+    // handleLoadMoreText = (msg) => {
+    //     let updateMsg = msg;
+    //     let _this = this;
+    //     if (msg && msg.length > _this.state.textLimit) {
+    //         let random_id = Math.floor(Math.random() * 1000) + 1;
+    //         updateMsg = <p className={'read_more_' + random_id}>{updateMsg.substr(0, _this.state.textLimit)}... <a href='#' onClick={() => _this.expandText(random_id)}>Read more</a></p>
+    //     } else {
+    //         updateMsg = <p>{updateMsg}<a hre='#'></a></p>
+    //     }
 
-        return updateMsg
-    }
+    //     return updateMsg
+    // }
+
+    // ReadMore = (e) => {
+    //     console.log("data: e ", e);
+    // }
 
     renderList(list) {
         // console.log("renderList: ", list);
@@ -162,7 +170,18 @@ export default class ListMsgs extends Component {
                     </div>
                 ),
                 send_to: parseDevices.length,
-                msg: this.handleMoreLessText(checkValue(item.msg)), // checkValue(item.msg),
+                // msg: this.handleLoadMoreText(checkValue(item.msg)), // checkValue(item.msg),
+                msg: (
+                    <ReadMoreAndLess
+                        ref={this.ReadMore}
+                        className="read-more-content"
+                        charLimit={250}
+                        readMoreText=" Read more"
+                        readLessText=" Read less"
+                    >
+                        {checkValue(item.msg)}
+                    </ReadMoreAndLess>
+                ),
                 timer_status: item.timer_status ? item.timer_status : "N/A",
                 repeat: item.repeat_duration ? item.repeat_duration : "NONE",
                 // date_time: item.date_time ? item.date_time : "N/A",

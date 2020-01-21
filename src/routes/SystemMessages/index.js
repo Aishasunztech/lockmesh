@@ -455,7 +455,7 @@ class SystemMessages extends Component {
     }
 
     searchField = (originalData, fieldName, value) => {
-        console.log('check data for search:: originalData', originalData, "fieldName ", fieldName, "value ", value)
+        // console.log('check data for search:: originalData', originalData, "fieldName ", fieldName, "value ", value)
         let demoData = [];
         if (value.length) {
             originalData.forEach((data) => {
