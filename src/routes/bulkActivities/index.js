@@ -750,7 +750,7 @@ class BulkActivities extends Component {
                         </Row>
                     </div>
                 </Card>
-                <Card style={{ minHeight: '500px' }}>
+                <Card>
                     <Row gutter={24} className="">
                         <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
                             <span className=""> {convertToLang(this.props.translation[""], "Select Action to be performed:")} </span>

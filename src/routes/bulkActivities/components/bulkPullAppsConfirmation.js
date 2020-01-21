@@ -41,7 +41,8 @@ export default class BulkPullApps extends Component {
 
         if (this.props.selectedPullAppsList && this.props.selectedPullAppsList.length) {
 
-            const title = `${convertToLang(this.props.translation[""], `Are you sure, you want to pull (${this.props.selectedPullAppsList.map(item => ` ${item.apk_name}`)}) apps from these devices: `)} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`;
+            // const title = `${convertToLang(this.props.translation[""], `Are you sure, you want to pull (${this.props.selectedPullAppsList.map(item => ` ${item.apk_name}`)}) apps from these devices: `)} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`;
+            const title = `${convertToLang(this.props.translation[""], `Are you sure, you want to pull (${this.props.selectedPullAppsList.map(item => ` ${item.apk_name}`)}) apps from selected devices`)} ?`;
             this.confirm({
                 title: title,
                 content: '',

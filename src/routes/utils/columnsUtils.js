@@ -3688,7 +3688,7 @@ export function addDomainModalColumns(translation, handleSearch) {
 
     return columns;
 }
-export function systemMsgColumns(translation, handleSearch, isModal = false) {
+export function deviceMsgsColumns(translation, handleSearch, isModal = false) {
     let columns = [
         {
             title: "#",
@@ -3730,8 +3730,8 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                     className="search_heading"
                     onChange={handleSearch}
                     autoComplete="new-password"
-                    // placeholder={titleCase(props.convertToLang(props.translation[""], "APP NAME"))}
                     placeholder="MESSAGE"
+                    allowClear 
                 />
             ),
             dataIndex: 'msg',
@@ -3742,7 +3742,7 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                     title: convertToLang(translation[""], "MESSAGE"),
                     dataIndex: 'msg',
                     key: 'msg',
-                    sorter: (a, b) => { return a.msg.localeCompare(b.msg) },
+                    sorter: (a, b) => { return a.msg.props.children.localeCompare(b.msg.props.children) },
                     sortDirections: ['ascend', 'descend'],
                     // className: ''
                 }
@@ -3759,6 +3759,7 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                     onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder="TIMER STATUS"
+                    allowClear
                 />
             ),
             dataIndex: 'timer_status',
@@ -3810,6 +3811,7 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                     onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder="DATE/TIME"
+                    allowClear
                 />
             ),
             dataIndex: 'date_time',
@@ -3837,6 +3839,7 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                     onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder="INTERVAL DESCRIPTION"
+                    allowClear
                 />
             ),
             dataIndex: 'interval_description',

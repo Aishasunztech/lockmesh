@@ -42,7 +42,8 @@ export default class BulkPushPolicy extends Component {
         if (selectedPolicy && selectedPolicy.policy_name) {
 
             this.confirm({
-                title: `${convertToLang(this.props.translation[DO_YOU_WANT_TO_APPLY], "Do you want to apply")} # ${selectedPolicy.policy_name} ${convertToLang(this.props.translation[""], "policy on these devices ")} ${devices.map(item => ` ${item.device_id}`)} ?`,
+                // title: `${convertToLang(this.props.translation[DO_YOU_WANT_TO_APPLY], "Do you want to apply")} # ${selectedPolicy.policy_name} ${convertToLang(this.props.translation[""], "policy on these devices ")} ${devices.map(item => ` ${item.device_id}`)} ?`,
+                title: `${convertToLang(this.props.translation[DO_YOU_WANT_TO_APPLY], "Do you want to apply")} # ${selectedPolicy.policy_name} ${convertToLang(this.props.translation[""], "policy on selected devices")} ?`,
                 content: '',
                 okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
                 cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),

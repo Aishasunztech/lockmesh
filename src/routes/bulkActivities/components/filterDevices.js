@@ -737,7 +737,7 @@ class FilterDevices extends Component {
     // console.log('selected devices are: ', this.state.selectedDevices);
 
     if (!this.props.devices || !this.props.devices.length){
-      return "Note: *To performe an action please select dealers or users to get their devices ";
+      return "Note: *To performe an action please select dealers/users to get their devices ";
     }
 
 

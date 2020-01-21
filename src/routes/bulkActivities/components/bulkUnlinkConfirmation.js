@@ -38,7 +38,8 @@ export default class BulkUnlink extends Component {
             user_ids
         }
 
-        const title = `${convertToLang(this.props.translation[""], "Are you sure, you want to unlink these selected devices ")} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`;
+        // const title = `${convertToLang(this.props.translation[""], "Are you sure, you want to unlink these selected devices ")} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`;
+        const title = `${convertToLang(this.props.translation[""], "Are you sure, you want to unlink selected devices")} ?`;
         this.confirm({
             title: title,
             content: '',

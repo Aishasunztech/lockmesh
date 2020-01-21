@@ -93,8 +93,9 @@ class BulkWipe extends Component {
 
         // console.log("data ", data)
 
-        const title = `${convertToLang(this.props.translation[""], "Are you sure, you want to wipe these selected devices ")} ${devices.map(item => ` ${item.device_id}`)} ?`;
-      let _this = this;
+        // const title = `${convertToLang(this.props.translation[""], "Are you sure, you want to wipe these selected devices ")} ${devices.map(item => ` ${item.device_id}`)} ?`;
+        const title = `${convertToLang(this.props.translation[""], "Are you sure, you want to wipe selected devices")} ?`;
+        let _this = this;
         this.confirm({
             title: title,
             content: '',
