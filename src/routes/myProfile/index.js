@@ -27,7 +27,8 @@ class Profile extends Component {
 
     state = {
         visible: false,
-        historyModel: false
+        historyModel: false,
+        limitValue: 20
     }
     showModal1 = () => {
         this.setState({
@@ -67,8 +68,15 @@ class Profile extends Component {
             historyModel: false
         })
     }
+
+    loadMoreLoginHistory = () => {
+        let limitUpdate = this.state.limitValue + 20;
+        this.props.getLoginHistory(0, limitUpdate);
+        this.setState({ limitValue: limitUpdate })
+    }
+
     componentDidMount = () => {
-        this.props.getLoginHistory()
+        this.props.getLoginHistory(0, this.state.limitValue);
     }
     renderList = (history) => {
         let data = history.map((data, index) => {
@@ -353,13 +361,13 @@ class Profile extends Component {
                     maskClosable={false}
                     title={<div>{convertToLang(this.props.translation[Login_History], "Login History")} </div>}
                     visible={this.state.historyModel}
-                    onOk={this.handleOk1}
+                    onOk={this.loadMoreLoginHistory}
                     onCancel={this.handleCancelHistory}
                     className="login_history"
                     centered
-                    footer={false}
+                    // footer={false}
                     //bodyStyle={{ height: 500, overflow: "overlay" }}
-                    okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
+                    okText={convertToLang(this.props.translation[""], "Load More History")}
                     cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     <Fragment>

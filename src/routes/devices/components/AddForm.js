@@ -939,13 +939,15 @@ class AddDevice extends Component {
                         <Radio.Group className="width_100 text-center" onChange={this.handleChange} ref='option' defaultValue="0" buttonStyle="solid">
                             <Radio.Button className="dev_radio_btn" value="0">{convertToLang(this.props.translation[SINGLE_DEVICE], "Single Device")}</Radio.Button>
                             <Radio.Button className="dev_radio_btn" value="1" disabled>
-                                <a>{convertToLang(this.props.translation[DUPLICATE_DEVICES], "Multiple Devices")}</a>
-                                <Popover placement="bottomRight" content={(
+                                {/* <a> */}
+                                {convertToLang(this.props.translation[DUPLICATE_DEVICES], "Multiple Devices")}
+                                {/* </a> */}
+                                {/* <Popover placement="bottomRight" content={(
                                     <Markup content={convertToLang(this.props.translation[DUPLICATE_DEVICES_HELPING_TEXT],
                                         `<p>Generate multiple activation <br /> codes with same settings</p>`)} />
                                 )}>
                                     <span className="helping_txt"><Icon type="info-circle" /></span>
-                                </Popover>
+                                </Popover> */}
                             </Radio.Button>
                         </Radio.Group>
                         :
@@ -968,7 +970,7 @@ class AddDevice extends Component {
                                     wrapperCol={{ span: 24 }}
                                 >
                                     <Button
-                                        className="add_user_btn"
+                                        className="add_user_btn mb-6"
                                         type="primary"
                                         style={{ width: "100%" }}
                                         onClick={() => this.handleUserModal()}
@@ -1043,6 +1045,7 @@ class AddDevice extends Component {
                                                 type="primary"
                                                 onClick={() => this.handleServicesModal()}
                                                 style={{ width: '100%' }}
+                                                className="add_user_btn"
                                             >
                                                 {convertToLang(this.props.translation[DUMY_TRANS_ID], "SELECT SERVICES")}
                                             </Button>
@@ -1176,6 +1179,35 @@ class AddDevice extends Component {
                                 null
                             }
 
+                            {/* Valid For Input */}
+                            {(this.props.preActive) ?
+                                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                    <Form.Item
+                                        label={convertToLang(this.props.translation[Device_Valid_For], "VALID FOR(DAYS)")}
+                                        labelCol={{ span: 12 }}
+                                        wrapperCol={{ span: 12 }}
+                                        className="val_days"
+                                    >
+                                        {this.props.form.getFieldDecorator('validity', {
+                                            initialValue: '',
+                                            rules: [
+                                                {
+                                                    required: true, message: convertToLang(this.props.translation[Device_Valid_days_Required], "Valid days required"),
+                                                },
+                                                {
+                                                    validator: this.validateValidDays,
+                                                }
+                                            ],
+                                        })(
+                                            <InputNumber min={1} />
+                                        )}
+
+                                    </Form.Item>
+                                </Col>
+                                :
+                                null
+                            }
+
                             {(this.props.preActive === false) ?
                                 <Fragment>
 
@@ -1252,9 +1284,8 @@ class AddDevice extends Component {
                                             wrapperCol={{ span: 24 }}
                                         >
                                             <Button
-                                                className="add_user_btn"
+                                                className="add_user_btn mb-6"
                                                 type="primary"
-                                                style={{ width: "100%" }}
                                                 onClick={() => this.handlePGPModal()}
                                                 style={{ width: "100%" }}
                                                 disabled={this.state.disablePgp}
@@ -1312,7 +1343,7 @@ class AddDevice extends Component {
                                             wrapperCol={{ span: 24 }}
                                         >
                                             <Button
-                                                className="add_user_btn"
+                                                className="add_user_btn mb-6"
                                                 type="primary"
                                                 style={{ width: "100%" }}
                                                 onClick={this.handleChatID}
@@ -1410,7 +1441,7 @@ class AddDevice extends Component {
                                                 wrapperCol={{ span: 24 }}
                                             >
                                                 <Button
-                                                    className="add_user_btn"
+                                                    className="add_user_btn mb-6"
                                                     type="primary"
                                                     style={{ width: "100%" }}
                                                     onClick={this.handleChatID}
@@ -1529,7 +1560,7 @@ class AddDevice extends Component {
                                                 wrapperCol={{ span: 24 }}
                                             >
                                                 <Button
-                                                    className="add_user_btn"
+                                                    className="add_user_btn mb-6"
                                                     type="primary"
                                                     style={{ width: "100%" }}
                                                     onClick={this.handleChatID}
@@ -1650,34 +1681,7 @@ class AddDevice extends Component {
                                 null
                             }
 
-                            {/* Valid For Input */}
-                            {(this.props.preActive) ?
-                                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                                    <Form.Item
-                                        label={convertToLang(this.props.translation[Device_Valid_For], "VALID FOR(DAYS)")}
-                                        labelCol={{ span: 12 }}
-                                        wrapperCol={{ span: 12 }}
-                                        className="val_days"
-                                    >
-                                        {this.props.form.getFieldDecorator('validity', {
-                                            initialValue: '',
-                                            rules: [
-                                                {
-                                                    required: true, message: convertToLang(this.props.translation[Device_Valid_days_Required], "Valid days required"),
-                                                },
-                                                {
-                                                    validator: this.validateValidDays,
-                                                }
-                                            ],
-                                        })(
-                                            <InputNumber min={1} />
-                                        )}
 
-                                    </Form.Item>
-                                </Col>
-                                :
-                                null
-                            }
 
                             {(this.state.type == 1) ?
                                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>

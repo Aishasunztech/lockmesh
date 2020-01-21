@@ -14,7 +14,7 @@ let TITLE = packageJson.name;
 let CHARSET = 'UTF-8';
 
 // set default timezone for local test
-let TIMEZONE = "Europe/Berlin" // "Asia/Karachi";
+let TIMEZONE = "Europe/London" // "Asia/Karachi";
 
 switch (hostName) {
     case "localhost":
@@ -28,11 +28,11 @@ switch (hostName) {
         SOCKET_URL = 'wss://devapi.lockmesh.com';
 
         SUPPORT = "https://devapi.lockmesh.com/support/v1/";
-        SUPPORT_SOCKET = "https://devapi.lockmesh.com/support";
+        SUPPORT_SOCKET = "https://devapi.lockmesh.com/support/";
         SUPERADMIN = 'https://devapi.meshguard.co/';
 
         TITLE = "LockMesh"
-        TIMEZONE = "Europe/Berlin"
+        TIMEZONE = "Europe/London"
         break;
 
     // pre dev server for unfinished work
@@ -46,7 +46,7 @@ switch (hostName) {
         SUPPORT = "https://predevsupport.lockmesh.com/"
 
         TITLE = "LockMesh"
-        TIMEZONE = "Europe/Berlin"
+        TIMEZONE = "Europe/London"
         break;
 
     // for load testing = live LM
@@ -58,7 +58,7 @@ switch (hostName) {
 
         SUPERADMIN = 'https://devapi.meshguard.co/'
         TITLE = "LockMesh"
-        TIMEZONE = "Europe/Berlin"
+        TIMEZONE = "Europe/London"
         break;
 
     // Live systems
@@ -74,7 +74,7 @@ switch (hostName) {
         SUPERADMIN = 'https://api.meshguard.co/'
 
         TITLE = "LockMesh"
-        TIMEZONE = "Europe/Berlin"
+        TIMEZONE = "Europe/London"
         break;
 
     case "titansecureserver.com":
@@ -86,7 +86,7 @@ switch (hostName) {
 
         SUPERADMIN = 'https://api.meshguard.co/'
         TITLE = "TitanLocker"
-        TIMEZONE = "Europe/Berlin"
+        TIMEZONE = "Europe/London"
         break;
 
     case "cryptc.lockmesh.com":
@@ -97,7 +97,7 @@ switch (hostName) {
 
         SUPERADMIN = 'https://api.meshguard.co/'
         TITLE = "CryptPhoneC"
-        TIMEZONE = "Europe/Berlin"
+        TIMEZONE = "Europe/London"
         break;
 
     case "cryptk.lockmesh.com":
@@ -108,7 +108,7 @@ switch (hostName) {
 
         SUPERADMIN = 'https://api.meshguard.co/'
         TITLE = "CryptPhoneK"
-        TIMEZONE = "Europe/Berlin"
+        TIMEZONE = "Europe/London"
         break;
 
     default:
