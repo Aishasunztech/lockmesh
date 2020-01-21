@@ -7,7 +7,6 @@ import styles from './style.css'
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {SDEALER} from "../../constants/Constants";
-import priorities from "./Tickets/data/priorities";
 
 const TabPane = Tabs.TabPane;
 

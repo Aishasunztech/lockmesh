@@ -44,7 +44,6 @@ const RestService = {
         let socket = SupportSystemSocketIO.connect(SUPPORT_SOCKET_URL, {
             path: '/v1/socket',
             transports: ['websocket'],
-            path: '/v1/socket',
             query: makeToken,
             secure: true
         });

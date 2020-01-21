@@ -27,8 +27,8 @@ switch (hostName) {
         URL = "https://devapi.lockmesh.com/";
         SOCKET_URL = 'wss://devapi.lockmesh.com';
 
-        SUPPORT = "https://devapi.lockmesh.com/support/v1/";
-        SUPPORT_SOCKET = "http://178.128.192.244:3010";
+        SUPPORT = "https://devsupportapi.lockmesh.com/v1/";
+        SUPPORT_SOCKET = "https://devsupportapi.lockmesh.com";
         SUPERADMIN = 'https://devapi.meshguard.co/';
 
         TITLE = "LockMesh"
