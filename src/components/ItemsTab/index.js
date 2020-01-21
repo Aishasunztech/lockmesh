@@ -39,7 +39,7 @@ export default class ItemTabs extends Component {
                     tabPosition={'left'}
                     type="card"
                     onChange={(e) => this.tabChaged(e)}
-                    className="price_table_tabs"
+                    className="price_table_tabs width_auto"
                 >
                     <TabPane tab={convertToLang(this.props.translation[TAB_SIM_ID], "SIM")} key={sim} >
 
