@@ -33,6 +33,7 @@ class SystemMessages extends Component {
       copySentSupportSystemMessages: [],
       receivedSupportSystemMessages: [],
       copyReceivedSupportSystemMessages: [],
+      searchSystemMessagesColumns: [],
     };
     this.confirm = Modal.confirm;
   }
@@ -47,15 +48,21 @@ class SystemMessages extends Component {
   };
 
   componentDidMount() {
+    let searchSystemMessagesColumnsArray = [];
     this.props.getAllDealers();
     if (this.props.user.type === SDEALER){
+      searchSystemMessagesColumnsArray = ['sender', 'subject' ,'createdAt'];
       this.props.getReceivedSupportSystemMessages();
     }else if (this.props.user.type === ADMIN){
+      searchSystemMessagesColumnsArray = ['subject' ,'createdAt'];
       this.props.getSupportSystemMessages();
     }else{
+      searchSystemMessagesColumnsArray = ['sender', 'type', 'subject' ,'createdAt'];
       this.props.getSupportSystemMessages();
       this.props.getReceivedSupportSystemMessages();
     }
+
+    this.setState({searchSystemMessagesColumns: searchSystemMessagesColumnsArray})
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -145,6 +152,7 @@ class SystemMessages extends Component {
               translation={this.props.translation}
               filterOption={this.props.filterOption}
               systemMessagesSearchValue={this.props.systemMessagesSearchValue}
+              searchSystemMessagesColumns={this.state.searchSystemMessagesColumns}
             />
 
           </div>
