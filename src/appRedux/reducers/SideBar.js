@@ -32,11 +32,11 @@ export default (state = initialSidebar, action) => {
     switch (action.type) {
 
         case NEW_REQUEST_LIST:
-            // console.log('reducer new device', action.payload);
+
             return {
                 ...state,
                 newRequests: action.payload,
-            }
+            };
         case REJECT_REQUEST: {
 
 
@@ -87,7 +87,7 @@ export default (state = initialSidebar, action) => {
         }
 
         case USER_CREDITS: {
-            // console.log("REMAINING CREDITS", action.response.credits);
+
             return {
                 ...state,
                 user_credit: action.response.credits,
@@ -172,18 +172,7 @@ export default (state = initialSidebar, action) => {
         case UPDATE_SUPPORT_TICKET_NOTIFICATIONS: {
             let ticketNotifications = state.ticketNotifications
             if (action.payload.status) {
-                ticketNotifications.push(action.payload.data)
-            }
-            return {
-                ...state,
-                ticketNotifications: [...ticketNotifications],
-            }
-        }
-
-        case UPDATE_SUPPORT_TICKET_NOTIFICATIONS: {
-            let ticketNotifications = state.ticketNotifications
-            if (action.payload.status) {
-                ticketNotifications.push(action.payload.data)
+                ticketNotifications.push(action.payload.notification)
             }
             return {
                 ...state,

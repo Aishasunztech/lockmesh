@@ -10,7 +10,7 @@ export const generateSupportTicketEvent = (socket) => {
         dispatch({
           type: GENERATE_SUPPORT_TICKET,
           payload: response
-        })
+        });
         dispatch({
           type: UPDATE_SUPPORT_TICKET_NOTIFICATIONS,
           payload: response
