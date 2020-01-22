@@ -1,6 +1,6 @@
 //==========> Connect Device events
 
-import { SYSTEM_SUPPORT_MESSAGE_RECEIVED } from "../../constants/ActionTypes";
+import { SYSTEM_SUPPORT_MESSAGE_RECEIVED, ADD_SUPPORT_SYSTEM_MESSAGE_NOTIFICATION } from "../../constants/ActionTypes";
 
 export const systemMessageSocket = (socket) => {
 
@@ -10,6 +10,10 @@ export const systemMessageSocket = (socket) => {
         console.log('event received');
         dispatch({
           type: SYSTEM_SUPPORT_MESSAGE_RECEIVED,
+          payload: response
+        })
+        dispatch({
+          type: ADD_SUPPORT_SYSTEM_MESSAGE_NOTIFICATION,
           payload: response
         })
       })
