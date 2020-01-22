@@ -3992,6 +3992,15 @@ export function supportSystemMessage(translation, isModal = false) {
       sorter: (a, b) => { return a.createdAt.localeCompare(b.createdAt) },
       sortDirections: ['ascend', 'descend'],
     },
+
+    {
+      width: 200,
+      title: convertToLang(translation[""], "TIME"),
+      dataIndex: 'createdTime',
+      key: 'createdTime',
+      sorter: (a, b) => { return a.createdTime.localeCompare(b.createdTime) },
+      sortDirections: ['ascend', 'descend'],
+    },
     {
       title: "ACTION",
       dataIndex: 'action',
