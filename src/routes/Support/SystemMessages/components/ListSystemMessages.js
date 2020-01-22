@@ -131,6 +131,7 @@ export default class ListSystemMessages extends Component {
           sender: item.sender === "" ? "--" : item.sender,
           subject: checkValue(item.subject),
           createdAt: item.createdAt,
+          createdTime: item.createdTime,
           action: (
             <div data-column="ACTION" style={{ display: "inline-flex" }}>
               <Fragment>
