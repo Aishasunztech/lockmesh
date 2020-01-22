@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import {Card, Modal, Tabs} from "antd";
-import {checkValue, convertToLang, getDateFromTimestamp} from '../../utils/commonUtils'
+import {checkValue, convertToLang, getDateFromTimestamp, getOnlyTimeFromTimestamp} from '../../utils/commonUtils'
 import ListSystemMessages from './components/ListSystemMessages';
 import SendMessage from './components/SendMessage';
 import {getAllDealers} from "../../../appRedux/actions/Dealers";
@@ -53,13 +53,13 @@ class SystemMessages extends Component {
     let searchSystemMessagesColumnsArray = [];
     this.props.getAllDealers();
     if (this.props.user.type === SDEALER){
-      searchSystemMessagesColumnsArray = ['sender', 'subject' ,'createdAt'];
+      searchSystemMessagesColumnsArray = ['sender', 'subject' ,'createdAt','createdTime'];
       this.props.getReceivedSupportSystemMessages();
     }else if (this.props.user.type === ADMIN){
-      searchSystemMessagesColumnsArray = ['subject' ,'createdAt'];
+      searchSystemMessagesColumnsArray = ['subject' ,'createdAt','createdTime'];
       this.props.getSupportSystemMessages();
     }else{
-      searchSystemMessagesColumnsArray = ['sender', 'type', 'subject' ,'createdAt'];
+      searchSystemMessagesColumnsArray = ['sender', 'type', 'subject' ,'createdAt','createdTime'];
       this.props.getSupportSystemMessages();
       this.props.getReceivedSupportSystemMessages();
     }
@@ -84,7 +84,8 @@ class SystemMessages extends Component {
           sender: sender,
           subject: checkValue(item.system_message.subject),
           message: checkValue(item.system_message.message),
-          createdAt: item.system_message.createdAt ? getDateFromTimestamp(item.system_message.createdAt) : "N/A",
+          createdAt: getDateFromTimestamp(item.system_message.createdAt),
+          createdTime: getOnlyTimeFromTimestamp(item.system_message.createdAt),
         };
         receivedSupportSystemMessagesData.push(data)
       });
@@ -117,6 +118,7 @@ class SystemMessages extends Component {
             subject: checkValue(item.subject),
             message: checkValue(item.message),
             createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "N/A",
+            createdTime: getOnlyTimeFromTimestamp(item.createdAt),
           };
           sentSupportSystemMessagesData.push(data)
         });
