@@ -249,17 +249,15 @@ class SidebarContent extends Component {
             <ul className="gx-app-nav mt-12 " style={{ justifyContent: "center" }}>
               {/* Price */}
               <li>
-                <a className="head-example">
+                <Link to='/account/balance_info' className="head-example">
                   <div className="cred_badge" >
-                    <Link to='/account/balance_info'>
-                      <i className="icon icon-dollar notification_icn" >
-                        <Icon type="dollar" className="mb-10" >
-                        </Icon>
-                        <span className="badge badge-pill doller-icon" >{this.props.user_credit}</span>
-                      </i>
-                    </Link>
+                    <i className="icon icon-dollar notification_icn" >
+                      <Icon type="dollar" className="mb-10" >
+                      </Icon>
+                      <span className="badge badge-pill doller-icon" >{this.props.user_credit}</span>
+                    </i>
                   </div>
-                </a>
+                </Link>
               </li>
               {/* {/* Chat Icon */}
               <li>
