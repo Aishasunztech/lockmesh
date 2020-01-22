@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { Modal, Table, Button, Form } from 'antd';
-import { withRouter, Link } from "react-router-dom";
+import { Modal, Table, Button, Form, Row, Col } from 'antd';
+import { withRouter, Link, Redirect } from "react-router-dom";
 import AddDeviceModal from '../../routes/devices/components/AddDevice';
 import { ADMIN, ACTION, CREDITS, CREDITS_CASH_REQUESTS, ARE_YOU_SURE_YOU_WANT_TO_DECLINE_THIS_REQUEST, ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST, WARNING, DEVICE_UNLINKED } from '../../constants/Constants';
 import { convertToLang } from '../../routes/utils/commonUtils';
@@ -64,6 +64,7 @@ export default class NewDevices extends Component {
             sectionVisible: true,
             flaggedDevicesModal: false,
             reqDevice: '',
+            supportPage: '',
             showLInkRequest: false
         }
     }
@@ -76,6 +77,10 @@ export default class NewDevices extends Component {
             sectionVisible,
             showLInkRequest: showLInkRequest
         });
+    }
+
+    setPageState(data){
+      this.setState({supportPage: data, visible: false});
     }
 
     handleOk = (e) => {
@@ -338,6 +343,11 @@ export default class NewDevices extends Component {
         let flaggedDevices = this.filterList(this.props.allDevices)
         // console.log(this.props);
         // console.log('check flaggedDevices ', flaggedDevices, 'requests', this.props.requests, 'NewDevices', this.props.devices)
+        if(this.state.supportPage !== ''){
+          let page = this.state.supportPage;
+          this.setPageState("");
+          return <Redirect to={{ pathname: '/support', state: {page: page }}} />
+        }
         return (
             <div>
                 <Modal
@@ -377,7 +387,16 @@ export default class NewDevices extends Component {
                         </Fragment>
                         : null}
                     <Fragment>
-                        <h1>{convertToLang(this.props.translation[""], "Ticket Notifications")}</h1>
+                        <Row className="width_100" style={{display: "block", marginLeft: 0}}>
+                          <h1 style={{display: "inline"}}>{convertToLang(this.props.translation[""], "Ticket Notifications")}
+                            <Button type="primary" size="small" style={{float: "right", marginTop: '6px'}} onClick={() => {
+                              if(window.location.pathname !== '/support'){
+                                this.setPageState('2');
+                              }
+                            }}>View Tickets</Button>
+                          </h1>
+
+                        </Row>
                         <Table
                             bordered
                             columns={this.state.ticketNotificationColumns}
@@ -389,7 +408,17 @@ export default class NewDevices extends Component {
                     </Fragment>
                     {this.props.authUser.type !== ADMIN ?
                         <Fragment>
-                            <h1>{convertToLang(this.props.translation[""], "System Message Notifications")}</h1>
+                          <Row className="width_100" style={{display: "block", marginLeft: 0}}>
+                            <h1>{convertToLang(this.props.translation[""], "System Message Notifications")}
+
+                              <Button type="primary" size="small" style={{float: "right", marginTop: '6px'}} onClick={() => {
+                                if(window.location.pathname !== '/support'){
+                                  this.setPageState('1');
+                                }
+                              }}>View System Messages</Button>
+                            </h1>
+
+                          </Row>
                             <Table
                                 bordered
                                 columns={this.state.supportSystemMessages}

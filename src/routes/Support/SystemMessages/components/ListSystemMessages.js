@@ -122,7 +122,6 @@ export default class ListSystemMessages extends Component {
     if (this.state.systemMessages.length > 0){
 
       this.state.systemMessages.map((item) => {
-
         data = {
           key: item.id,
           id: item.id,
