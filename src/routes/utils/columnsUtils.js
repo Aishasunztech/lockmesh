@@ -1412,7 +1412,7 @@ export function supportSystemMessagesReceiversColumns(translation, handleSearch)
       render: (text, record, index) => ++index,
     },
     {
-      title: convertToLang(translation[DEVICE_ACTIVATION_CODE], "NAME"),
+      title: convertToLang(translation[""], "NAME"),
       align: "center",
       dataIndex: 'name',
       sorter: (a, b) => { return a.name.localeCompare(b.name) },
