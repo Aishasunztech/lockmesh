@@ -26,3 +26,4 @@ export * from './SupportTickets';
 export * from './SupportTicketsSocket';
 export * from './SupportSystemMessages';
 export * from './SupportSystemMessagesSocket';
+export * from './SupportLiveChat';

@@ -1,5 +1,6 @@
 import {
   SEND_SUPPORT_LIVE_MESSAGE,
+  LOADING
 } from "../../constants/ActionTypes";
 
 import { message, Modal } from 'antd';

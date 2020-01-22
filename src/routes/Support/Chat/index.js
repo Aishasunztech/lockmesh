@@ -4,7 +4,6 @@ import CustomScrollbars from "util/CustomScrollbars";
 import Moment from "moment";
 
 import ChatUserList from "./components/ChatUserList";
-import conversationList from "./data/conversationList";
 import Conversation from "./components/Conversation/index";
 import ContactList from "./components/ContactList/index";
 import users from "./data/chatUsers";
@@ -14,7 +13,7 @@ import CircularProgress from "../../../components/CircularProgress/index";
 import {bindActionCreators} from "redux";
 
 import {connect} from "react-redux";
-import {getAllDealers} from "../../../appRedux/actions";
+import {getAllDealers, sendSupportLiveChatMessage} from "../../../appRedux/actions";
 
 const TabPane = Tabs.TabPane;
 
@@ -218,26 +217,33 @@ class Chat extends Component {
   }
 
   submitComment() {console.log(this.state.selectedUser)
-    // if (this.state.message !== '') {
-    //   const updatedConversation = this.state.conversation.conversationData.concat({
-    //     'type': 'sent',
-    //     'message': this.state.message,
-    //     'sentAt': Moment().format('hh:mm:ss A'),
-    //   });
-    //   this.setState({
-    //     conversation: {
-    //       ...this.state.conversation, conversationData: updatedConversation
-    //     },
-    //     message: '',
-    //     conversationList: this.state.conversationList.map(conversationData => {
-    //       if (conversationData.id === this.state.conversation.id) {
-    //         return {...this.state.conversation, conversationData: updatedConversation};
-    //       } else {
-    //         return conversationData;
-    //       }
-    //     })
-    //   });
-    // }
+    if (this.state.message !== '') {
+      let data = {
+        sender: this.props.user.id,
+        receiver: this.state.selectedUser.dealer_id,
+        message: this.state.message,
+      };
+
+      this.props.sendSupportLiveChatMessage(data);
+      // const updatedConversation = this.state.conversation.conversationData.concat({
+      //   'type': 'sent',
+      //   'message': this.state.message,
+      //   'sentAt': Moment().format('hh:mm:ss A'),
+      // });
+      // this.setState({
+      //   conversation: {
+      //     ...this.state.conversation, conversationData: updatedConversation
+      //   },
+      //   message: '',
+      //   conversationList: this.state.conversationList.map(conversationData => {
+      //     if (conversationData.id === this.state.conversation.id) {
+      //       return {...this.state.conversation, conversationData: updatedConversation};
+      //     } else {
+      //       return conversationData;
+      //     }
+      //   })
+      // });
+    }
   }
 
   updateMessageValue(evt) {
@@ -292,6 +298,7 @@ var mapStateToProps = ({ auth, SupportTickets, dealers, sidebar }) => {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     getAllDealers: getAllDealers,
+    sendSupportLiveChatMessage: sendSupportLiveChatMessage,
   }, dispatch);
 }
 
