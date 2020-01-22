@@ -1,14 +1,15 @@
 import {
-  NEW_REQUEST_LIST,
-  REJECT_REQUEST,
-  ACCEPT_REQUEST,
-  USER_CREDITS,
-  GET_CANCEL_REQUEST,
-  ACCEPT_SERVICE_REQUEST,
-  REJECT_SERVICES_REQUEST,
-  NEW_NOTIFICATION_LIST,
-  UPDATE_NOTIFICATION_STATUS,
-  SET_ADMIN_FOR_SUPPORT_TICKETS
+    NEW_REQUEST_LIST,
+    REJECT_REQUEST,
+    ACCEPT_REQUEST,
+    USER_CREDITS,
+    GET_CANCEL_REQUEST,
+    ACCEPT_SERVICE_REQUEST,
+    REJECT_SERVICES_REQUEST,
+    NEW_NOTIFICATION_LIST,
+    UPDATE_NOTIFICATION_STATUS,
+    SET_ADMIN_FOR_SUPPORT_TICKETS,
+    UPDATE_SUPPORT_TICKET_NOTIFICATIONS
 } from "../../constants/ActionTypes";
 import { Modal, notification } from 'antd';
 
@@ -162,10 +163,32 @@ export default (state = initialSidebar, action) => {
         }
 
         case SET_ADMIN_FOR_SUPPORT_TICKETS: {
-          return {
-            ...state,
-            admin: action.payload
-          }
+            return {
+                ...state,
+                admin: action.payload
+            }
+        }
+
+        case UPDATE_SUPPORT_TICKET_NOTIFICATIONS: {
+            let ticketNotifications = state.ticketNotifications
+            if (action.payload.status) {
+                ticketNotifications.push(action.payload.data)
+            }
+            return {
+                ...state,
+                ticketNotifications: [...ticketNotifications],
+            }
+        }
+
+        case UPDATE_SUPPORT_TICKET_NOTIFICATIONS: {
+            let ticketNotifications = state.ticketNotifications
+            if (action.payload.status) {
+                ticketNotifications.push(action.payload.data)
+            }
+            return {
+                ...state,
+                ticketNotifications: [...ticketNotifications],
+            }
         }
 
         default:

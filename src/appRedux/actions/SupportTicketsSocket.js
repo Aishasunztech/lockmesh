@@ -1,6 +1,6 @@
 //==========> Connect Device events
 
-import {GENERATE_SUPPORT_TICKET, UPDATE_SUPPORT_TICKET_REPLY} from "../../constants/ActionTypes";
+import { GENERATE_SUPPORT_TICKET, UPDATE_SUPPORT_TICKET_REPLY, UPDATE_SUPPORT_TICKET_NOTIFICATIONS } from "../../constants/ActionTypes";
 
 export const generateSupportTicketEvent = (socket) => {
 
@@ -9,6 +9,10 @@ export const generateSupportTicketEvent = (socket) => {
       socket.on(GENERATE_SUPPORT_TICKET, (response) => {
         dispatch({
           type: GENERATE_SUPPORT_TICKET,
+          payload: response
+        })
+        dispatch({
+          type: UPDATE_SUPPORT_TICKET_NOTIFICATIONS,
           payload: response
         })
       })
