@@ -6,15 +6,27 @@ import Moment from "moment";
 import ChatUserList from "./components/ChatUserList";
 import conversationList from "./data/conversationList";
 import Conversation from "./components/Conversation/index";
+import ContactList from "./components/ContactList/index";
 import users from "./data/chatUsers";
 
 import SearchBox from "./components/SearchBox";
 import CircularProgress from "../../../components/CircularProgress/index";
+import {bindActionCreators} from "redux";
+
+import {connect} from "react-redux";
+import {getAllDealers} from "../../../appRedux/actions";
 
 const TabPane = Tabs.TabPane;
 
 class Chat extends Component {
-
+  filterContact = (userName) => {
+    if (userName === '') {
+      return users.filter(user => !user.recent);
+    }
+    return users.filter((user) =>
+      !user.recent && user.name.toLowerCase().indexOf(userName.toLowerCase()) > -1
+    );
+  };
   filterUsers = (userName) => {
     if (userName === '') {
       return users.filter(user => user.recent);
@@ -25,7 +37,7 @@ class Chat extends Component {
   };
   Communication = () => {
     const {message, selectedUser, conversation} = this.state;
-    const {conversationData} = conversation;
+    const {conversationData} = [conversation];
     return <div className="gx-chat-main">
       <div className="gx-chat-main-header">
         <span className="gx-d-block gx-d-lg-none gx-chat-btn"><i className="gx-icon-btn icon icon-chat"
@@ -34,7 +46,7 @@ class Chat extends Component {
 
           <div className="gx-chat-avatar gx-mr-2">
             <div className="gx-status-pos">
-              <Avatar src={selectedUser.thumb}
+              <Avatar src='/static/media/profile-image.c9452584.png'
                       className="gx-rounded-circle gx-size-60"
                       alt=""/>
 
@@ -43,8 +55,10 @@ class Chat extends Component {
           </div>
 
           <div className="gx-chat-contact-name">
-            {selectedUser.name}
+            {selectedUser.dealer_name}
+            <div className="gx-chat-info-des gx-text-truncate">{selectedUser.link_code}</div>
           </div>
+
         </div>
 
       </div>
@@ -63,6 +77,7 @@ class Chat extends Component {
                               onKeyUp={this._handleKeyPress.bind(this)}
                               onChange={this.updateMessageValue.bind(this)}
                               value={message}
+                              required={true}
                               placeholder="Type and hit enter to send message"
                             />
             </div>
@@ -73,53 +88,6 @@ class Chat extends Component {
     </div>
   };
 
-  AppUsersInfo = () => {
-    return <div className="gx-chat-sidenav-main">
-      <div className="gx-bg-grey-light gx-chat-sidenav-header">
-
-        <div className="gx-chat-user-hd gx-mb-0">
-          <i className="gx-icon-btn icon icon-arrow-left" onClick={() => {
-            this.setState({userState: 1});
-          }}/>
-
-        </div>
-        <div className="gx-chat-user gx-chat-user-center">
-          <div className="gx-chat-avatar gx-mx-auto">
-            <Avatar src='https://via.placeholder.com/150x150'
-                    className="gx-size-60" alt="John Doe"/>
-          </div>
-
-          <div className="gx-user-name h4 gx-my-2">Robert Johnson</div>
-
-        </div>
-      </div>
-      <div className="gx-chat-sidenav-content">
-
-        <CustomScrollbars className="gx-chat-sidenav-scroll">
-          <div className="gx-p-4">
-            <form>
-              <div className="gx-form-group gx-mt-4">
-                <label>Mood</label>
-
-                <Input
-                  fullWidth
-                  id="exampleTextarea"
-                  multiline
-                  rows={3}
-                  onKeyUp={this._handleKeyPress.bind(this)}
-                  onChange={this.updateMessageValue.bind(this)}
-                  defaultValue="it's a status....not your diary..."
-                  placeholder="Status"
-                  margin="none"/>
-
-              </div>
-            </form>
-          </div>
-        </CustomScrollbars>
-
-      </div>
-    </div>
-  };
   ChatUsers = () => {
     return <div className="gx-chat-sidenav-main">
 
@@ -133,7 +101,7 @@ class Chat extends Component {
             });
           }}>
             <div className="gx-status-pos">
-              <Avatar id="avatar-button" src='https://via.placeholder.com/150x150'
+              <Avatar id="avatar-button" src='/static/media/profile-image.c9452584.png'
                       className="gx-size-50"
                       alt=""/>
               <span className="gx-status gx-online"/>
@@ -142,10 +110,10 @@ class Chat extends Component {
 
           <div className="gx-module-user-info gx-flex-column gx-justify-content-center">
             <div className="gx-module-title">
-              <h5 className="gx-mb-0">Robert Johnson</h5>
+              <h5 className="gx-mb-0">{this.props.user.name}</h5>
             </div>
             <div className="gx-module-user-detail">
-              <span className="gx-text-grey gx-link">robert@example.com</span>
+              <span className="gx-text-grey gx-link">{this.props.user.email}</span>
             </div>
           </div>
         </div>
@@ -162,15 +130,34 @@ class Chat extends Component {
 
       <div className="gx-chat-sidenav-content">
 
-        <CustomScrollbars className="gx-chat-sidenav-scroll-tab-1">
-          {this.state.chatUsers.length === 0 ?
-            <div className="gx-p-5">{this.state.userNotFound}</div>
-            :
-            <ChatUserList chatUsers={this.state.chatUsers}
-                          selectedSectionId={this.state.selectedSectionId}
-                          onSelectUser={this.onSelectUser.bind(this)}/>
-          }
-        </CustomScrollbars>
+        <Tabs className="gx-tabs-half" defaultActiveKey="1">
+          <TabPane label="Chat User" tab="Chat User" key="1">
+            <CustomScrollbars className="gx-chat-sidenav-scroll-tab-1">
+              {this.state.chatUsers.length === 0 ?
+                <div className="gx-p-5">{this.state.userNotFound}</div>
+                :
+                <ChatUserList chatUsers={this.state.chatUsers}
+                              selectedSectionId={this.state.selectedSectionId}
+                              onSelectUser={this.onSelectUser.bind(this)}/>
+              }
+            </CustomScrollbars>
+          </TabPane>
+          <TabPane label="Chat Contacts" tab="Chat Contacts" key="2">
+            <CustomScrollbars className="gx-chat-sidenav-scroll-tab-2">
+              {
+                this.state.contactList.length === 0 ?
+                  <div className="gx-p-5">{this.state.userNotFound}</div>
+                  :
+                  <ContactList
+                    contactList={this.props.contactList}
+                    selectedSectionId={this.state.selectedSectionId}
+                    onSelectUser={this.onSelectUser.bind(this)}/>
+              }
+            </CustomScrollbars>
+          </TabPane>
+        </Tabs>
+
+
       </div>
     </div>
   };
@@ -180,13 +167,17 @@ class Chat extends Component {
     }
   };
 
+  handleChange = (event, value) => {
+    this.setState({selectedTabIndex: value});
+  };
+
   onSelectUser = (user) => {
     this.setState({
       loader: true,
-      selectedSectionId: user.id,
+      selectedSectionId: user.dealer_id,
       drawerState: this.props.drawerState,
       selectedUser: user,
-      conversation: this.state.conversationList.find((data) => data.id === user.id)
+      conversation: []
     });
     setTimeout(() => {
       this.setState({loader: false});
@@ -200,7 +191,7 @@ class Chat extends Component {
             <div className="gx-fs-80"><i className="icon icon-chat gx-text-muted"/></div>
             <h1 className="gx-text-muted">Select User to start Chat</h1>
             <Button className="gx-d-block gx-d-lg-none" type="primary"
-                    onClick={this.onToggleDrawer.bind(this)}>'gjhjhg jhgjh'</Button>
+                    onClick={this.onToggleDrawer.bind(this)}>Select User to start Chat</Button>
 
           </div>
           : this.Communication()}
@@ -214,37 +205,39 @@ class Chat extends Component {
       userNotFound: 'No user found',
       drawerState: false,
       selectedSectionId: '',
+      selectedTabIndex: 1,
       userState: 1,
       searchChatUser: '',
+      contactList: users.filter((user) => !user.recent),
       selectedUser: null,
       message: '',
       chatUsers: users.filter((user) => user.recent),
-      conversationList: conversationList,
+      conversationList: [],
       conversation: null
     }
   }
 
-  submitComment() {
-    if (this.state.message !== '') {
-      const updatedConversation = this.state.conversation.conversationData.concat({
-        'type': 'sent',
-        'message': this.state.message,
-        'sentAt': Moment().format('hh:mm:ss A'),
-      });
-      this.setState({
-        conversation: {
-          ...this.state.conversation, conversationData: updatedConversation
-        },
-        message: '',
-        conversationList: this.state.conversationList.map(conversationData => {
-          if (conversationData.id === this.state.conversation.id) {
-            return {...this.state.conversation, conversationData: updatedConversation};
-          } else {
-            return conversationData;
-          }
-        })
-      });
-    }
+  submitComment() {console.log(this.state.selectedUser)
+    // if (this.state.message !== '') {
+    //   const updatedConversation = this.state.conversation.conversationData.concat({
+    //     'type': 'sent',
+    //     'message': this.state.message,
+    //     'sentAt': Moment().format('hh:mm:ss A'),
+    //   });
+    //   this.setState({
+    //     conversation: {
+    //       ...this.state.conversation, conversationData: updatedConversation
+    //     },
+    //     message: '',
+    //     conversationList: this.state.conversationList.map(conversationData => {
+    //       if (conversationData.id === this.state.conversation.id) {
+    //         return {...this.state.conversation, conversationData: updatedConversation};
+    //       } else {
+    //         return conversationData;
+    //       }
+    //     })
+    //   });
+    // }
   }
 
   updateMessageValue(evt) {
@@ -256,6 +249,7 @@ class Chat extends Component {
   updateSearchChatUser(evt) {
     this.setState({
       searchChatUser: evt.target.value,
+      contactList: this.filterContact(evt.target.value),
       chatUsers: this.filterUsers(evt.target.value)
     });
   }
@@ -267,22 +261,13 @@ class Chat extends Component {
   }
 
   render() {
-    const {loader, userState, drawerState} = this.state;
+    const {loader} = this.state;
     return (
       <div className="gx-main-content">
-        <div className="gx-app-module m-0 gx-chat-module">
+        <div className="gx-app-module gx-chat-module m-0">
           <div className="gx-chat-module-box">
-            <div className="gx-d-block gx-d-lg-none">
-              <Drawer
-                placement="left"
-                closable={false}
-                visible={drawerState}
-                onClose={this.onToggleDrawer.bind(this)}>
-                {userState === 1 ? this.ChatUsers() : this.AppUsersInfo()}
-              </Drawer>
-            </div>
             <div className="gx-chat-sidenav gx-d-none gx-d-lg-flex">
-              {userState === 1 ? this.ChatUsers() : this.AppUsersInfo()}
+              {this.ChatUsers()}
             </div>
             {loader ?
               <div className="gx-loader-view">
@@ -296,5 +281,18 @@ class Chat extends Component {
   }
 }
 
+var mapStateToProps = ({ auth, SupportTickets, dealers, sidebar }) => {
 
-export default Chat;
+  return {
+    contactList: dealers.dealers,
+    user: auth.authUser,
+  };
+};
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    getAllDealers: getAllDealers,
+  }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Chat);

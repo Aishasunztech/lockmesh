@@ -2,7 +2,7 @@ export default [
   {
     id: 1,
     name: 'Alex Dolgove',
-    thumb: 'https://via.placeholder.com/150x150',
+    thumb: '/static/media/profile-image.c9452584.png',
     status: 'away',
     mood: 'English versions from the 1914 translation by H. Rackham',
     lastMessage: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem',
@@ -12,7 +12,7 @@ export default [
   }, {
     id: 2,
     name: 'Domnic Brown',
-    thumb: 'https://via.placeholder.com/150x150',
+    thumb: '/static/media/profile-image.c9452584.png',
     status: 'online',
     mood: 'English versions from the 1914 translation by H. Rackham',
     lastMessage: 'It is a long established fact',
@@ -22,7 +22,7 @@ export default [
   }, {
     id: 3,
     name: 'Domnic Harris',
-    thumb: 'https://via.placeholder.com/150x150',
+    thumb: '/static/media/profile-image.c9452584.png',
     status: 'offline',
     mood: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem',
     lastMessage: 'There are many variations of passages of ',
@@ -32,7 +32,7 @@ export default [
   }, {
     id: 4,
     name: 'Garry Sobars',
-    thumb: 'https://via.placeholder.com/150x150',
+    thumb: '/static/media/profile-image.c9452584.png',
     status: 'away',
     mood: 'It is a long established fact',
     lastMessage: 'English versions from the 1914 translation by H. Rackham',
@@ -42,7 +42,7 @@ export default [
   }, {
     id: 5,
     name: 'Jeson Born',
-    thumb: 'https://via.placeholder.com/150x150',
+    thumb: '/static/media/profile-image.c9452584.png',
     status: 'away',
     mood: 'I must explain to you how all this mistaken idea of denouncing ',
     lastMessage: 'It is a long established fact',
@@ -52,7 +52,7 @@ export default [
   }, {
     id: 6,
     name: 'Jimmy Jo',
-    thumb: 'https://via.placeholder.com/150x150',
+    thumb: '/static/media/profile-image.c9452584.png',
     status: 'online',
     mood: 'The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested',
     lastMessage: 'All the Lorem Ipsum generators on the',
@@ -62,7 +62,7 @@ export default [
   }, {
     id: 7,
     name: 'John Smith',
-    thumb: 'https://via.placeholder.com/150x150',
+    thumb: '/static/media/profile-image.c9452584.png',
     status: 'away',
     mood: 'There are many variations of passages of ',
     lastMessage: 'The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested',
@@ -72,7 +72,7 @@ export default [
   }, {
     id: 8,
     name: 'Kadir M',
-    thumb: 'https://via.placeholder.com/150x150',
+    thumb: '/static/media/profile-image.c9452584.png',
     status: 'online',
     mood: 'All the Lorem Ipsum generators on the',
     lastMessage: 'I must explain to you how all this mistaken idea of denouncing ',
@@ -82,7 +82,7 @@ export default [
   }, {
     id: 9,
     name: 'Jimmy Jon',
-    thumb: 'https://via.placeholder.com/150x150',
+    thumb: '/static/media/profile-image.c9452584.png',
     status: 'offline',
     mood: 'There are many variations of passages of ',
     lastMessage: 'There are many variations of passages of ',
@@ -92,7 +92,7 @@ export default [
   }, {
     id: 10,
     name: 'Stella Johnson',
-    thumb: 'https://via.placeholder.com/150x150',
+    thumb: '/static/media/profile-image.c9452584.png',
     status: 'offline',
     mood: 'It is a long established fact',
     lastMessage: 'English versions from the 1914 translation by H. Rackham',
@@ -102,7 +102,7 @@ export default [
   }, {
     id: 11,
     name: 'Steve Smith',
-    thumb: 'https://via.placeholder.com/150x150',
+    thumb: '/static/media/profile-image.c9452584.png',
     status: 'online',
     mood: 'The standard chunk of Lorem Ipsum used since the 1500s',
     lastMessage: 'The standard chunk of Lorem Ipsum used since the 1500s',
