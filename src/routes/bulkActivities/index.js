@@ -21,7 +21,6 @@ import {
     wipeBulkDevices,
     closeResponseModal,
     applyBulkPolicy,
-    // setBulkMsg,
     setBulkData
 } from "../../appRedux/actions/BulkDevices";
 
@@ -41,7 +40,6 @@ import { devicesColumns, userDevicesListColumns } from '../utils/columnsUtils';
 
 import FilterDevices from './components/filterDevices';
 import PushPullApps from './components/pushPullApps';
-// import SendMsgForm from './components/SendMsgForm';
 
 import {
     DEVICE_PENDING_ACTIVATION,
@@ -1004,30 +1002,6 @@ class BulkActivities extends Component {
 
                 </Modal>
 
-                {/* Send Message modal */}
-                {/* <Modal
-                    title={convertToLang(this.props.translation[""], "Send Message to Selected Devcies")}
-                    maskClosable={false}
-                    style={{ top: 20 }}
-                    visible={this.state.sendMsgModal}
-                    onOk={() => this.setState({ sendMsgModal: false })}
-                    onCancel={() => this.setState({ sendMsgModal: false })}
-                    // className="load_policy_popup"
-                    footer={false}
-                // okText={convertToLang(this.props.translation[Button_Ok], "SEND")}
-                // cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
-                >
-                    <SendMsgForm
-                        setBulkMsg={this.props.setBulkMsg}
-                        bulkMsg={this.props.bulkMsg}
-                        handleCancel={this.handleCancelMsgModal}
-                        user={this.state.user}
-                        ref='send_msg_form'
-                        translation={this.props.translation}
-                    />
-
-                </Modal> */}
-
             </Fragment >
         )
     }
@@ -1055,7 +1029,6 @@ const mapDispatchToProps = (dispatch) => {
         closeResponseModal: closeResponseModal,
         applyBulkPolicy: applyBulkPolicy,
         getPolicies: getPolicies,
-        // setBulkMsg: setBulkMsg,
         setBulkData: setBulkData,
         handleCheckedAllPushApps: handleCheckedAllPushApps,
 
@@ -1092,7 +1065,6 @@ const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users,
         expire_device_ids: bulkDevices.expire_device_ids,
         selectedDevices: bulkDevices.selectedDevices,
         policies: device_details.policies,
-        // bulkMsg: bulkDevices.bulkMsg,
         guestAllPushApps: device_details.guestAllPushApps,
         enableAllPushApps: device_details.enableAllPushApps,
         encryptedAllPushApps: device_details.encryptedAllPushApps,
