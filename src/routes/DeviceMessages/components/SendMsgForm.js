@@ -113,7 +113,15 @@ class SendMsgForm extends Component {
                             const [hours, minutes] = this.state.selected_Time.split(':');
                             // console.log("hours, minutes ", hours, minutes)
 
-                            if (repeatVal === "WEEKLY") { // set minutes, hrs and day name of week 
+                            if (repeatVal === "DAILY") { // set minutes, hrs
+                                dateTimeVal = moment().tz(dealerTZ).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+
+                                if (dateTimeVal < currentDateIs) {
+                                    // next same week day if current date passed
+                                    dateTimeVal = moment().tz(dealerTZ).add(1, 'days').set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                                }
+                            }
+                            else if (repeatVal === "WEEKLY") { // set minutes, hrs and day name of week 
                                 dateTimeVal = moment().tz(dealerTZ).day(weekDay).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
 
                                 if (dateTimeVal < currentDateIs) {
@@ -177,7 +185,7 @@ class SendMsgForm extends Component {
                         monthName,
                         time: this.state.selected_Time,
                     }
-                    console.log("submit data:: ", data);
+                    // console.log("submit data:: ", data);
                     this.refs.bulk_msg.handleBulkSendMsg(data, dealerTZ);
                 } else {
                     error({
