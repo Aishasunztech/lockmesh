@@ -114,16 +114,6 @@ class SidebarContent extends Component {
     this.props.getSupportSystemMessagesNotifications()
     // alert('its working');
   }
-  showCreditsModal = () => {
-    // if (this.props.authUser.type !== ADMIN) {
-    this.props.getUserCredit()
-    this.props.getLatestPaymentHistory({ limit: 10, type: 'credits' })
-    this.props.getOverdueDetails();
-    this.refs.credits_modal.getWrappedInstance().showModal();
-    // }
-
-    // alert('its working');
-  }
 
   componentDidMount() {
     this.props.getLanguage();
@@ -232,16 +222,7 @@ class SidebarContent extends Component {
         <div className="gx-sidebar-content ">
           <div className={`gx-sidebar-notifications text-center ${this.getNoHeaderClass(navStyle)} `}>
             <UserProfile />
-            <CreditsModal
-              ref='credits_modal'
-              translation={this.props.translation}
-              user_credit={this.props.user_credit}
-              due_credit={this.props.due_credit}
-              latestPaymentTransaction={this.props.latestPaymentTransaction}
-              overdueDetails={this.props.overdueDetails}
-              account_balance_status={this.props.account_balance_status}
-              account_balance_status_by={this.props.account_balance_status_by}
-            />
+
             <NewDevice
               ref='new_device'
               devices={this.props.devices}
@@ -268,15 +249,15 @@ class SidebarContent extends Component {
             <ul className="gx-app-nav mt-12 " style={{ justifyContent: "center" }}>
               {/* Price */}
               <li>
-                <a className="head-example">
+                <Link to='/account/balance_info' className="head-example">
                   <div className="cred_badge" >
-                    <i className="icon icon-dollar notification_icn" onClick={() => this.showCreditsModal()} >
+                    <i className="icon icon-dollar notification_icn" >
                       <Icon type="dollar" className="mb-10" >
                       </Icon>
                       <span className="badge badge-pill doller-icon" >{this.props.user_credit}</span>
                     </i>
                   </div>
-                </a>
+                </Link>
               </li>
               {/* {/* Chat Icon */}
               <li>
@@ -419,7 +400,7 @@ class SidebarContent extends Component {
 
 const mapStateToProps = ({ settings, devices, sidebar, account, auth, dealers, SupportSystemMessages, socket }) => {
   const { navStyle, themeType, locale, pathname, languages, translation, isSwitched } = settings;
-  // console.log(sidebar.ticketNotifications);
+
   return {
     navStyle,
     themeType,
@@ -445,30 +426,29 @@ const mapStateToProps = ({ settings, devices, sidebar, account, auth, dealers, S
     socket: socket.socket
   }
 };
-export default connect(mapStateToProps,
-  {
-    getLatestPaymentHistory,
-    getOverdueDetails,
-    getDevicesList,
-    rejectDevice,
-    addDevice,
-    logout,
-    getNewDevicesList,
-    toggleCollapsedSideNav,
-    switchLanguage,
-    getLanguage,
-    getAll_Languages,
-    getNewCashRequests,
-    getUserCredit,
-    acceptRequest,
-    rejectRequest,
-    transferDeviceProfile,
-    getCancelServiceRequests,
-    acceptServiceRequest,
-    rejectServiceRequest,
-    getTicketsNotifications,
-    getSupportSystemMessagesNotifications,
-    getAllToAllDealers
-  }
+export default connect(mapStateToProps, {
+  getLatestPaymentHistory,
+  getOverdueDetails,
+  getDevicesList,
+  rejectDevice,
+  addDevice,
+  logout,
+  getNewDevicesList,
+  toggleCollapsedSideNav,
+  switchLanguage,
+  getLanguage,
+  getAll_Languages,
+  getNewCashRequests,
+  getUserCredit,
+  acceptRequest,
+  rejectRequest,
+  transferDeviceProfile,
+  getCancelServiceRequests,
+  acceptServiceRequest,
+  rejectServiceRequest,
+  getTicketsNotifications,
+  getSupportSystemMessagesNotifications,
+  getAllToAllDealers
+}
 )(SidebarContent);
 

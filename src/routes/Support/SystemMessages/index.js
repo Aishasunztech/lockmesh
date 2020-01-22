@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import {Card, Modal, Tabs} from "antd";
-import {checkValue, convertToLang, getDateFromTimestamp} from '../../utils/commonUtils'
+import {checkValue, convertToLang, getDateFromTimestamp, getOnlyTimeFromTimestamp} from '../../utils/commonUtils'
 import ListSystemMessages from './components/ListSystemMessages';
 import SendMessage from './components/SendMessage';
 import {getAllDealers} from "../../../appRedux/actions/Dealers";
@@ -43,6 +43,8 @@ class SystemMessages extends Component {
       columns.splice(2,2);
     } else if(user.type === SDEALER){
       columns.splice(1, 2);
+    } else if(user.type === DEALER){
+      columns.splice(3, 1);
     }
     return columns;
   };
@@ -51,13 +53,13 @@ class SystemMessages extends Component {
     let searchSystemMessagesColumnsArray = [];
     this.props.getAllDealers();
     if (this.props.user.type === SDEALER){
-      searchSystemMessagesColumnsArray = ['sender', 'subject' ,'createdAt'];
+      searchSystemMessagesColumnsArray = ['sender', 'subject' ,'createdAt','createdTime'];
       this.props.getReceivedSupportSystemMessages();
     }else if (this.props.user.type === ADMIN){
-      searchSystemMessagesColumnsArray = ['subject' ,'createdAt'];
+      searchSystemMessagesColumnsArray = ['subject' ,'createdAt','createdTime'];
       this.props.getSupportSystemMessages();
     }else{
-      searchSystemMessagesColumnsArray = ['sender', 'type', 'subject' ,'createdAt'];
+      searchSystemMessagesColumnsArray = ['sender', 'type', 'subject' ,'createdAt','createdTime'];
       this.props.getSupportSystemMessages();
       this.props.getReceivedSupportSystemMessages();
     }
@@ -73,15 +75,17 @@ class SystemMessages extends Component {
     if (this.props.receivedSupportSystemMessages.length > 0 && prevProps.receivedSupportSystemMessages !== this.props.receivedSupportSystemMessages){
       let data;
       this.props.receivedSupportSystemMessages.map((item) => {
+        let sender = item.system_message.sender_user_type.charAt(0).toUpperCase() + item.system_message.sender_user_type.slice(1);
         data = {
           id: item.system_message._id,
           key: item.system_message._id,
           rowKey: item.system_message._id,
           type: 'Received',
-          sender: item.system_message.sender_user_type,
+          sender: sender,
           subject: checkValue(item.system_message.subject),
           message: checkValue(item.system_message.message),
-          createdAt: item.system_message.createdAt ? getDateFromTimestamp(item.system_message.createdAt) : "N/A",
+          createdAt: getDateFromTimestamp(item.system_message.createdAt),
+          createdTime: getOnlyTimeFromTimestamp(item.system_message.createdAt),
         };
         receivedSupportSystemMessagesData.push(data)
       });
@@ -114,6 +118,7 @@ class SystemMessages extends Component {
             subject: checkValue(item.subject),
             message: checkValue(item.message),
             createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "N/A",
+            createdTime: getOnlyTimeFromTimestamp(item.createdAt),
           };
           sentSupportSystemMessagesData.push(data)
         });
@@ -131,10 +136,6 @@ class SystemMessages extends Component {
   };
 
   render() {
-    if(this.props.user.type !== ADMIN && this.state.columns[2].dataIndex == 'sender'){
-      this.state.columns.splice(2,1)
-    }
-
     return (
       <div>
         {

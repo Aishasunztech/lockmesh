@@ -122,7 +122,6 @@ export default class ListSystemMessages extends Component {
     if (this.state.systemMessages.length > 0){
 
       this.state.systemMessages.map((item) => {
-
         data = {
           key: item.id,
           id: item.id,
@@ -132,6 +131,7 @@ export default class ListSystemMessages extends Component {
           sender: item.sender === "" ? "--" : item.sender,
           subject: checkValue(item.subject),
           createdAt: item.createdAt,
+          createdTime: item.createdTime,
           action: (
             <div data-column="ACTION" style={{ display: "inline-flex" }}>
               <Fragment>
