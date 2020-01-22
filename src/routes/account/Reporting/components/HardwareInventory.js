@@ -330,6 +330,7 @@ class PaymentHistory extends Component {
                   columns={this.columns}
                   dataSource={this.renderList(this.props.hardwareReport)}
                   bordered
+                  scroll={{ x: true, y: true }}
                   pagination={false}
 
                 />

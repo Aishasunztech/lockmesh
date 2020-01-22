@@ -520,8 +520,8 @@ export default (state = initialState, action) => {
                             //     state.packages[index].dealer_permission = filterDealers;
                             //     state.packages[index].permission_count = filterDealers.length;
                             // } else {
-                                state.packages[index].dealer_permission = allDealers;
-                                state.packages[index].permission_count = allDealers.length;
+                            state.packages[index].dealer_permission = allDealers;
+                            state.packages[index].permission_count = allDealers.length;
                             // }
                             state.packages[index].statusAll = false;
                         } else {
@@ -588,7 +588,7 @@ export default (state = initialState, action) => {
                     success({
                         title: action.payload.msg
                     });
-                    let objIndex = packages.findIndex((obj => obj.id === action.package_id));
+                    let objIndex = packages.findIndex((obj => obj.id === action.item_id));
                     if (objIndex > -1) {
                         state.packages[objIndex].pkg_price = action.price;
                     }
@@ -702,8 +702,8 @@ export default (state = initialState, action) => {
                             //     state.domainList[index].dealers = JSON.stringify(filterDealers);
                             //     state.domainList[index].permission_count = filterDealers.length;
                             // } else {
-                                state.domainList[index].dealers = JSON.stringify(allDealers);
-                                state.domainList[index].permission_count = allDealers.length;
+                            state.domainList[index].dealers = JSON.stringify(allDealers);
+                            state.domainList[index].permission_count = allDealers.length;
                             // }
                             state.domainList[index].statusAll = false;
                         } else {

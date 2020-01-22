@@ -41,22 +41,31 @@ export default class BulkPushApps extends Component {
 
         // console.log('data is', data, this.props.selectedPushAppsList, "this.props.selectedPushAppsList");
 
-        const title =
-            <Markup content={`${convertToLang(this.props.translation[""], `Are you sure, you want to push ${this.props.selectedPushAppsList ? `(${this.props.selectedPushAppsList.map(item => ` ${item.apk_name}`)})` : "selected"} apps into these devices `)} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`} ></Markup>
-        // `${convertToLang(this.props.translation[""], `Are you sure, you want to push ${this.props.selectedPushAppsList ? <div style={{textDecoration: 'underline'}}>{this.props.selectedPushAppsList.map(item => ` ${item.apk_name}`)}</div> : "selected"} apps into these devices `)} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`;
+        if (this.props.selectedPushAppsList && this.props.selectedPushAppsList.length) {
+            const title =
+                <Markup content={`${convertToLang(this.props.translation[""], `Are you sure, you want to push (${this.props.selectedPushAppsList.map(item => ` ${item.apk_name}`)}) apps into selected devices`)} ?`} ></Markup>
+                // <Markup content={`${convertToLang(this.props.translation[""], `Are you sure, you want to push (${this.props.selectedPushAppsList.map(item => ` ${item.apk_name}`)}) apps into these devices `)} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`} ></Markup>
+            // `${convertToLang(this.props.translation[""], `Are you sure, you want to push ${this.props.selectedPushAppsList ? <div style={{textDecoration: 'underline'}}>{this.props.selectedPushAppsList.map(item => ` ${item.apk_name}`)}</div> : "selected"} apps into these devices `)} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`;
 
-        this.confirm({
-            title: title,
-            content: '',
-            okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
-            cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
-            onOk: (() => {
-                console.log('click on ok btn');
-                return this.props.applyPushApps(data);
-            }),
-            onCancel() { },
-        });
+            this.confirm({
+                title: title,
+                content: '',
+                okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
+                cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
+                onOk: (() => {
+                    // console.log('click on ok btn');
+                    return this.props.applyPushApps(data);
+                }),
+                onCancel() { },
+            });
+        } else {
 
+            Modal.error({
+                title: 'Apps not selected to push on your selected devices. Please select apps to performe an action.',
+                // content: 'some messages...some messages...',
+              });
+
+        }
     }
 
     render() {

@@ -20,7 +20,8 @@ import {
     getDropdown,
     postDropdown,
     postPagination,
-    getPagination
+    getPagination,
+    handleAddDealerModalAction
 } from "../../appRedux/actions";
 
 // import {getDevicesList} from '../../appRedux/actions/Devices';
@@ -89,7 +90,7 @@ class Dealers extends Component {
             columns: columns,
             options: this.props.options,
             loading_DealerModal: false,
-            visible_DealerModal: false,
+            dealerModal: false,
             pagination: 10,
             tabselect: '2',
             allDealers: [],
@@ -100,6 +101,7 @@ class Dealers extends Component {
             SearchValues: [],
             filteredDealers: [],
             globalSearchedValue: "",
+            addBtnLoading: false
         };
 
     }
@@ -131,18 +133,23 @@ class Dealers extends Component {
         });
     }
 
-    showAddDealer = () => {
-        this.setState({
-            visible_DealerModal: true,
-        });
+    // showAddDealer = () => {
+    //     this.setState({
+    //         visible_DealerModal: true,
+    //     });
 
+    // };
+
+    handleAddDealerModal = (visible) => {
+        // console.log("handleAddDealerModal ", visible)
+        this.props.handleAddDealerModalAction(visible);
     };
 
 
-    handleCancel = (e) => {
-        this.setState({ visible_DealerModal: false });
+    // handleCancel = (e) => {
+    //     this.setState({ visible_DealerModal: false });
 
-    };
+    // };
 
     showModal = () => {
         this.setState({
@@ -479,7 +486,7 @@ class Dealers extends Component {
     componentDidUpdate(prevProps) {
 
         if (
-            (window.location.pathname.split("/").pop() === 'sdealer') 
+            (window.location.pathname.split("/").pop() === 'sdealer')
             && (this.state.columns !== undefined)
             && (this.state.options !== undefined)
             && (this.state.columns !== null)
@@ -559,9 +566,12 @@ class Dealers extends Component {
         const dealer_type = nextProps.match.params.dealer_type;
         //    console.log('device type received', dealer_type);
 
+        console.log("nextProps.dealerModal ", nextProps.dealerModal)
         if (this.props !== nextProps) {
             this.setState({
-                expandedRowsKeys: (this.props.location.state) ? [this.props.location.state.id] : []
+                expandedRowsKeys: (this.props.location.state) ? [this.props.location.state.id] : [],
+                dealerModal: nextProps.dealerModal,
+                addBtnLoading: nextProps.addBtnLoading
             })
         }
 
@@ -625,7 +635,7 @@ class Dealers extends Component {
                                 handlePagination={this.handlePagination}
                                 handleComponentSearch={this.handleComponentSearch}
 
-                                addDealer={this.showAddDealer}
+                                addDealer={this.handleAddDealerModal}
                                 translation={this.props.translation}
                                 //  toLink={"/create-dealer/" + this.state.dealer_type}
                                 pageHeading={dealerHeadingType}
@@ -658,9 +668,9 @@ class Dealers extends Component {
 
                             {/* <AddDealer ref='addDealer'  /> */}
                             <Modal
-                                visible={this.state.visible_DealerModal}
+                                visible={this.state.dealerModal}
                                 title={dealerType}
-                                onCancel={this.handleCancel}
+                                onCancel={() => this.handleAddDealerModal(false)}
                                 footer={null}
                                 maskClosable={false}
                                 destroyOnClose={true}
@@ -668,7 +678,8 @@ class Dealers extends Component {
                             // cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                             >
                                 <AddDealer
-                                    handleCancel={this.handleCancel}
+                                    handleCancel={this.handleAddDealerModal}
+                                    btnLoading={this.state.addBtnLoading}
                                     dealersList={this.state.dealers}
                                     dealer_type={this.state.dealer_type}
                                     dealerTypeText={dealerType}
@@ -698,7 +709,8 @@ function mapDispatchToProps(dispatch) {
         getDropdown: getDropdown,
         postDropdown: postDropdown,
         postPagination: postPagination,
-        getPagination: getPagination
+        getPagination: getPagination,
+        handleAddDealerModalAction: handleAddDealerModalAction
     }, dispatch);
 }
 
@@ -714,7 +726,9 @@ const mapStateToProps = (state) => {
         action: state.action,
         user: state.auth.authUser,
         locale: state.settings.locale,
-        translation: state.settings.translation
+        translation: state.settings.translation,
+        dealerModal: state.dealers.dealerModal,
+        addBtnLoading: state.dealers.addBtnLoading,
     };
 }
 

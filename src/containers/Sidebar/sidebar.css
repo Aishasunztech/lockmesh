@@ -148,6 +148,7 @@
 .noClick {
     /* background-color: red; */
     pointer-events: none;
+    opacity: 0.6;
 }
 
 @media screen and (max-width: 768px) {

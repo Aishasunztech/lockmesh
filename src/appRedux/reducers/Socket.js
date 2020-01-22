@@ -4,7 +4,15 @@ import {
 } from "../../constants/ActionTypes";
 
 import { message, Modal } from 'antd';
-import { CONNECT_SOCKET, DISCONNECT_SOCKET, ACK_SETTING_APPLIED, ACK_INSTALLED_APPS, ACK_UNINSTALLED_APPS, FINISHED_BULK_PUSH_APPS } from '../../constants/SocketConstants';
+import {
+  CONNECT_SOCKET,
+  DISCONNECT_SOCKET,
+  ACK_SETTING_APPLIED,
+  ACK_INSTALLED_APPS,
+  ACK_UNINSTALLED_APPS,
+  FINISHED_BULK_PUSH_APPS,
+  CONNECT_SUPPORT_SYSTEM_SOCKET
+} from '../../constants/SocketConstants';
 
 // import io from 'socket.io-client';
 
@@ -31,9 +39,17 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 socket: action.payload,
-                supportSystemSocket: action.supportSystemSocket,
             }
         }
+
+      case CONNECT_SUPPORT_SYSTEM_SOCKET: {
+        console.log("socket connected support system");
+        return {
+          ...state,
+          supportSystemSocket: action.supportSystemSocket,
+        }
+      }
+
         case DISCONNECT_SOCKET: {
             console.log('socket disconnected');
 

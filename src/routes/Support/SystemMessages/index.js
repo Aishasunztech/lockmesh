@@ -1,57 +1,134 @@
-import React, { Component, Fragment } from 'react'
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { Icon, Modal } from "antd";
-
-import AppFilter from "../../../components/AppFilter";
-import { convertToLang } from '../../utils/commonUtils'
-import ListMessages from './components/ListMessages';
+import React, {Component} from 'react'
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import {Card, Modal, Tabs} from "antd";
+import {checkValue, convertToLang, getDateFromTimestamp, getOnlyTimeFromTimestamp} from '../../utils/commonUtils'
+import ListSystemMessages from './components/ListSystemMessages';
 import SendMessage from './components/SendMessage';
-import { getAllDealers } from "../../../appRedux/actions/Dealers";
+import {getAllDealers} from "../../../appRedux/actions/Dealers";
+
 import {
-  updateBulkMsg,
-  closeResponseModal
-} from "../../../appRedux/actions/BulkDevices";
+  generateSupportSystemMessages,
+  getReceivedSupportSystemMessages,
+  getSupportSystemMessages,
+  updateSupportSystemMessageNotification
+} from "../../../appRedux/actions/SupportSystemMessages";
+import { supportSystemMessage} from "../../utils/columnsUtils";
+import {ADMIN, DEALER, SDEALER} from "../../../constants/Constants";
 
-import { generateSupportSystemMessages } from "../../../appRedux/actions/SupportSystemMessages";
-
-import { supportSystemMessage } from "../../utils/columnsUtils";
-
-var domainStatus = true;
-var copyDomainList = [];
+const TabPane           = Tabs.TabPane;
+var copySystemMessages  = [];
 
 class SystemMessages extends Component {
 
   constructor(props) {
     super(props);
-    var columns = supportSystemMessage(props.translation, this.handleSearch);
+    var columns  = supportSystemMessage(props.translation);
+    columns      = this.removeColumns(props, columns);
 
     this.state = {
-      sorterKey: '',
-      sortOrder: 'ascend',
-      apk_list: [],
-      bulkMsgs: [],
-      uploadApkModal: false,
-      showUploadModal: false,
-      showUploadData: {},
       columns: columns,
       visible: false,
-      editRecord: null,
-      editModal: false
+      sentSupportSystemMessages: [],
+      copySentSupportSystemMessages: [],
+      receivedSupportSystemMessages: [],
+      copyReceivedSupportSystemMessages: [],
+      searchSystemMessagesColumns: [],
     };
     this.confirm = Modal.confirm;
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props !== prevProps) {
-      this.setState({
-        bulkMsgs: this.props.bulkMsgs
-      })
+  removeColumns = ({ user }, columns) => {
+    if(user.type === ADMIN){
+      columns.splice(2,2);
+    } else if(user.type === SDEALER){
+      columns.splice(1, 2);
+    } else if(user.type === DEALER){
+      columns.splice(3, 1);
     }
-  }
+    return columns;
+  };
 
   componentDidMount() {
+    let searchSystemMessagesColumnsArray = [];
     this.props.getAllDealers();
+    if (this.props.user.type === SDEALER){
+      searchSystemMessagesColumnsArray = ['sender', 'subject' ,'createdAt','createdTime'];
+      this.props.getReceivedSupportSystemMessages();
+    }else if (this.props.user.type === ADMIN){
+      searchSystemMessagesColumnsArray = ['subject' ,'createdAt','createdTime'];
+      this.props.getSupportSystemMessages();
+    }else{
+      searchSystemMessagesColumnsArray = ['sender', 'type', 'subject' ,'createdAt','createdTime'];
+      this.props.getSupportSystemMessages();
+      this.props.getReceivedSupportSystemMessages();
+    }
+
+    this.setState({searchSystemMessagesColumns: searchSystemMessagesColumnsArray})
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+
+    let receivedSupportSystemMessagesData = [];
+    let sentSupportSystemMessagesData     = [];
+
+    if (this.props.receivedSupportSystemMessages.length > 0 && prevProps.receivedSupportSystemMessages !== this.props.receivedSupportSystemMessages){
+      let data;
+      this.props.receivedSupportSystemMessages.map((item) => {
+        let sender = item.system_message.sender_user_type.charAt(0).toUpperCase() + item.system_message.sender_user_type.slice(1);
+        data = {
+          id: item.system_message._id,
+          key: item.system_message._id,
+          rowKey: item.system_message._id,
+          type: 'Received',
+          sender: sender,
+          subject: checkValue(item.system_message.subject),
+          message: checkValue(item.system_message.message),
+          createdAt: getDateFromTimestamp(item.system_message.createdAt),
+          createdTime: getOnlyTimeFromTimestamp(item.system_message.createdAt),
+        };
+        receivedSupportSystemMessagesData.push(data)
+      });
+      this.setState({
+        receivedSupportSystemMessages: receivedSupportSystemMessagesData,
+        copyReceivedSupportSystemMessages: receivedSupportSystemMessagesData,
+      });
+    }
+
+    if ((this.props.sentSupportSystemMessages.length > 0 && prevProps.sentSupportSystemMessages !== this.props.sentSupportSystemMessages) || (this.props.dealerList.length > 0 && prevProps.dealerList !== this.props.dealerList)){
+
+      if (this.props.dealerList.length > 0 ){
+        let data;
+        let sender = '';
+        this.props.sentSupportSystemMessages.map((item) => {
+
+          if (this.props.user.type === ADMIN){
+            let dealer  = item.sender_user_type === ADMIN ? ADMIN : this.props.dealerList.find(dealer => dealer.dealer_id === item.sender_id) ;
+            sender      = item.sender_user_type === ADMIN ? ADMIN : dealer.dealer_name;
+            sender      = sender.charAt(0).toUpperCase() + sender.slice(1);
+          }
+
+          data = {
+            id: item._id,
+            key: item._id,
+            rowKey: item._id,
+            type: 'Sent',
+            receiver_ids: item.receiver_ids,
+            sender: sender,
+            subject: checkValue(item.subject),
+            message: checkValue(item.message),
+            createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "N/A",
+            createdTime: getOnlyTimeFromTimestamp(item.createdAt),
+          };
+          sentSupportSystemMessagesData.push(data)
+        });
+        this.setState({
+          sentSupportSystemMessages: sentSupportSystemMessagesData,
+          copySentSupportSystemMessages: sentSupportSystemMessagesData,
+        });
+      }
+
+    }
   }
 
   handleSendMsgButton = (visible) => {
@@ -63,24 +140,22 @@ class SystemMessages extends Component {
       <div>
         {
           <div>
-            <AppFilter
+
+            <ListSystemMessages
+              supportSystemMessages={this.state.sentSupportSystemMessages}
+              getSupportSystemMessages={this.props.getSupportSystemMessages}
+              getReceivedSupportSystemMessages={this.props.getReceivedSupportSystemMessages}
+              receivedSupportSystemMessages={this.state.receivedSupportSystemMessages}
+              updateSupportSystemMessageNotification={this.props.updateSupportSystemMessageNotification}
+              columns={this.state.columns}
+              dealerList={this.props.dealerList}
+              user={this.props.user}
               translation={this.props.translation}
-              isAddButton={true}
-              handleSendMsgModal={true}
-              handleSendMsgButton={this.handleSendMsgButton}
-              pageHeading={convertToLang(this.props.translation[""], "System  Messages")}
-              addButtonText={convertToLang(this.props.translation[""], "Send New Message")}
+              filterOption={this.props.filterOption}
+              systemMessagesSearchValue={this.props.systemMessagesSearchValue}
+              searchSystemMessagesColumns={this.state.searchSystemMessagesColumns}
             />
 
-            <ListMessages
-              bulkMsgs={this.state.bulkMsgs}
-              handleConfirmDelete={this.handleConfirmDelete}
-              columns={this.state.columns}
-              getApkList={this.props.getApkList}
-              ref="list_msgs"
-              translation={this.props.translation}
-              updateBulkMsgAction={this.props.updateBulkMsg}
-            />
           </div>
         }
         {/* Send Message modal */}
@@ -107,77 +182,28 @@ class SystemMessages extends Component {
     )
   }
 
-  renderResponseList(list) {
-    return list.map(item => {
-      return {
-        device_id: item
-      }
-    })
-  }
-
-  handleSearch = (e) => {
-    let fieldName = e.target.name;
-    let fieldValue = e.target.value;
-
-    if (domainStatus) {
-      copyDomainList = this.props.bulkMsgs
-      domainStatus = false;
-    }
-
-    let searchedData = this.searchField(copyDomainList, fieldName, fieldValue);
-    this.setState({
-      bulkMsgs: searchedData
-    });
-
-  };
-
-  searchField = (originalData, fieldName, value) => {
-    let demoData = [];
-    if (value.length) {
-      originalData.forEach((data) => {
-        if (data[fieldName] !== undefined) {
-          if ((typeof data[fieldName]) === 'string') {
-
-            if (data[fieldName].toUpperCase().includes(value.toUpperCase())) {
-              demoData.push(data);
-            }
-          } else if (data[fieldName] != null) {
-            if (data[fieldName].toString().toUpperCase().includes(value.toUpperCase())) {
-              demoData.push(data);
-            }
-          }
-        } else {
-          demoData.push(data);
-        }
-      });
-
-      return demoData;
-    } else {
-      return originalData;
-    }
-  }
-
 }
 
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    updateBulkMsg: updateBulkMsg,
     getAllDealers: getAllDealers,
-    closeResponseModal: closeResponseModal,
-    generateSupportSystemMessages: generateSupportSystemMessages
+    generateSupportSystemMessages: generateSupportSystemMessages,
+    getSupportSystemMessages: getSupportSystemMessages,
+    getReceivedSupportSystemMessages: getReceivedSupportSystemMessages,
+    updateSupportSystemMessageNotification: updateSupportSystemMessageNotification
   }, dispatch);
 }
 
-const mapStateToProps = ({ account, auth, settings, dealers, bulkDevices, SupportSystemMessages }) => {
+const mapStateToProps = ({ account, auth, settings, dealers, SupportSystemMessages }) => {
   return {
     isloading: account.isloading,
+    user: auth.authUser,
     dealerList: dealers.dealers,
     translation: settings.translation,
-    supportSystemMessages: SupportSystemMessages.supportSystemMessages,
-    response_modal_action: bulkDevices.response_modal_action,
-    bulkMsgs: bulkDevices.bulkMsgs
+    sentSupportSystemMessages: SupportSystemMessages.supportSystemMessages,
+    receivedSupportSystemMessages: SupportSystemMessages.receivedSupportSystemMessages,
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SystemMessages);
+export default connect(mapStateToProps, mapDispatchToProps, null, {withRef: true})(SystemMessages);

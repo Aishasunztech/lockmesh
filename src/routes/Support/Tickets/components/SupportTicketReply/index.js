@@ -50,6 +50,7 @@ class ComposeTicket extends React.Component {
             })(
               <TextArea
                 placeholder='Description'
+                autosize={{ minRows: 5, maxRows: 5 }}
               />
             )}
           </Form.Item>

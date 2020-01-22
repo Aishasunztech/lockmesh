@@ -33,24 +33,8 @@ class TicketDetail extends React.Component {
 
               <div className="gx-mail-header-content gx-col gx-pl-0">
                 <div className="gx-subject">
-                  {supportTicket.subject}
-                </div>
-
-                <div className="gx-labels">
-                  {statuses.map((status, index) => {
-                    return (supportTicket.status).includes(status.title) &&
-                      <div key={index} className={`gx-badge gx-text-white gx-bg-${status.title === 'open' ?'green' : 'red'} text-capitalize`}>{status.title}</div>
-                  })}
-
-                  {categories.map((category, index) => {
-                    return (supportTicket.category).includes(category.title) &&
-                      <div key={index} className={`gx-badge gx-text-white gx-bg-blue text-capitalize`}>{category.title}</div>
-                  })}
-
-                  {priorities.map((priority, index) => {
-                    return (supportTicket.priority).includes(priority.title) &&
-                      <div key={index} className={`gx-badge gx-text-white gx-bg-purple text-capitalize`}>{priority.title}</div>
-                  })}
+                  Subject: {supportTicket.subject}<br />
+                  Ticket Id: ({ supportTicket.ticketId })
                 </div>
 
               </div>
@@ -79,11 +63,9 @@ class TicketDetail extends React.Component {
 
             <hr/>
 
-            <div className="gx-mail-user-info gx-ml-0 gx-mr-3">
-              <div className="gx-sender-name">{supportTicket.user.dealer_name} ({supportTicket.user.link_code})</div>
-            </div>
+            <p style={{fontSize: '16px', textAlign: 'justify'}}>
+              <strong>Description:</strong><br />
 
-            <p>
               {supportTicket.description}
             </p>
 
@@ -92,14 +74,14 @@ class TicketDetail extends React.Component {
                 <h2>Replies ({this.props.supportTicketReplies.length})</h2>
                 {this.props.supportTicketReplies.map((reply, index) => {
                   return (<div className="gx-module-list-item gx-mail-cell" key={index}>
-                    <div className="gx-mail-list-info">
+                    <div className="gx-mail-list-info" style={{maxWidth: '100%'}}>
                       <div className="gx-module-list-content">
                         <div className="gx-mail-user-des">
                           <span className="gx-sender-name">{(reply.user_type === 'admin') ? 'Admin' : reply.user.dealer_name +' ('+reply.user.link_code+')' }</span>
                           <div className="gx-time">{getDateFromTimestamp(reply.createdAt)}</div>
                         </div>
                         <div className="gx-message">
-                          <p>{reply.description}</p>
+                          <p style={{textAlign: 'justify'}}>{reply.description.split("\n").map((i,k) => <span key={k}>{i}<br /></span>)}</p>
                         </div>
                       </div>
                     </div>

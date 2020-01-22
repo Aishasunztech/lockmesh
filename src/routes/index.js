@@ -30,11 +30,12 @@ import InvalidPage from "./InvalidPage";
 import FourOFour from "./InvalidPage/FourOFour";
 import AppMarket from "./appMarket/index";
 import ManageData from './account/ManageData/index'
+import AccountBalanceInfo from './account/AccountBalanceInfo/index'
 import SetPrice from './account/PricesPakages/index'
 import Domains from "./domains/index";
 import Reporting from './account/Reporting/index'
 import Support from './Support/index'
-import SystemMessages from './SystemMessages/index'
+import DeviceMessages from './DeviceMessages/index'
 import DealerAgent from './dealerAgent/index'
 import BulkActivities from './bulkActivities/index'
 // import Documents from "./documents/index";
@@ -160,6 +161,12 @@ const App = ({ match }) => {
 
         <Route
           exact
+          path={`${match.url}account/balance_info`}
+          component={AccountBalanceInfo}
+        />
+
+        <Route
+          exact
           path={`${match.url}set-prices`}
           component={SetPrice}
         />
@@ -172,8 +179,8 @@ const App = ({ match }) => {
 
         <Route
           exact
-          path={`${match.url}system-messages`}
-          component={SystemMessages}
+          path={`${match.url}device-messages`}
+          component={DeviceMessages}
         />
 
         <Route

@@ -44,7 +44,7 @@ import { ONLINE } from "../../constants/DeviceConstants";
 
 class Dashboard extends Component {
     constructor(props) {
-        super(props)
+        super(props);
     }
 
 
@@ -59,7 +59,7 @@ class Dashboard extends Component {
         Modal.confirm({
             content: `Are you sure you want to Transfer, from ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
             onOk() {
-                // 
+                //
                 _this.props.transferDeviceProfile(obj);
             },
             onCancel() { },
@@ -370,7 +370,21 @@ class Dashboard extends Component {
                                     </Col>
                                 </Fragment> : null
                         }
-
+                        <Col xl={4} lg={4} md={4} sm={12} xs={12}>
+                            <div className='dashboard-item-div'>
+                                <Link to='support'>
+                                    <Card className='dashboard-card'>
+                                        <Avatar
+                                            src={require("../../assets/images/dashboard/support.jpg")}
+                                            alt=""
+                                        />
+                                    </Card>
+                                    <div className="dash_btm_txt">
+                                        <span className='db-span-text'>{convertToLang(this.props.translation[""], "Support")}</span>
+                                    </div>
+                                </Link>
+                            </div>
+                        </Col>
                     </Row>
 
 
@@ -401,7 +415,7 @@ function mapDispatchToProps(dispatch) {
         getTicketsNotifications,
     }, dispatch);
 }
-var mapStateToProps = ({ dashboard, auth, devices, sidebar, settings , dealers}) => {
+var mapStateToProps = ({ dashboard, auth, devices, sidebar, settings, dealers }) => {
 
     return {
         items: dashboard.dashboard_items,

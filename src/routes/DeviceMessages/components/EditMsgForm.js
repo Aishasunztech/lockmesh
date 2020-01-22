@@ -36,13 +36,13 @@ class EditMsgForm extends Component {
         ];
 
         this.weekDays = [
-            { key: 1, value: "Monday" },
-            { key: 2, value: "Tuesday" },
-            { key: 3, value: "Wednesday" },
-            { key: 4, value: "Thursday" },
-            { key: 5, value: "Friday" },
-            { key: 6, value: "Saturday" },
-            { key: 7, value: "Sunday" },
+            { key: 1, value: "Sunday" },
+            { key: 2, value: "Monday" },
+            { key: 3, value: "Tuesday" },
+            { key: 4, value: "Wednesday" },
+            { key: 5, value: "Thursday" },
+            { key: 6, value: "Friday" },
+            { key: 7, value: "Saturday" },
         ];
 
         this.monthNames = [
@@ -61,6 +61,7 @@ class EditMsgForm extends Component {
         ];
 
         this.monthDays = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+        let dealerTZ = checkTimezoneValue(props.user.timezone, false); // withGMT = false
 
         this.state = {
             visible: false,
@@ -86,6 +87,7 @@ class EditMsgForm extends Component {
             week_day: 0,
             month_date: 0,
             month_name: 0,
+            dealerTZ: dealerTZ 
         }
     }
 
@@ -101,21 +103,23 @@ class EditMsgForm extends Component {
 
                 let repeatVal = 'NONE';
                 let dateTimeVal = '';
+                let timeVal = this.state.selected_Time;
                 let weekDay = this.state.week_day;
                 let monthDate = this.state.month_date;
                 let monthName = this.state.month_name;
 
-                let dealerTZ = checkTimezoneValue(this.props.user.timezone, false);
+                // let dealerTZ = checkTimezoneValue(this.props.user.timezone, false);
                 if (this.state.timer === "NOW") {
                     // this.state.selected_dateTime = "";
 
                     // dateTimeVal = dealerTZ ? moment().tz(dealerTZ).tz(SERVER_TIMEZONE).format(TIMESTAMP_FORMAT) : '';
-
-                    dateTimeVal = moment().tz(dealerTZ).format(TIMESTAMP_FORMAT);
+                    timeVal = '';
+                    dateTimeVal = moment().tz(this.state.dealerTZ).format(TIMESTAMP_FORMAT);
                     weekDay = "";
                     monthDate = "";
                     monthName = "";
                 } else if (this.state.timer === "DATE/TIME") {
+                    timeVal = '';
                     dateTimeVal = this.state.selected_dateTime;
                     weekDay = "";
                     monthDate = "";
@@ -196,7 +200,7 @@ class EditMsgForm extends Component {
                     week_day: weekDay,
                     month_date: monthDate,
                     month_name: monthName,
-                    time: this.state.selected_Time,
+                    time: timeVal,
                     interval_description: duration
                 }
 
@@ -213,7 +217,7 @@ class EditMsgForm extends Component {
                 // copyEditRecord.msg = values.msg_txt
 
                 console.log("copyEditRecord data ", data);
-                this.refs.update_bulk_msg.handleBulkUpdateMsg(data, this.props.editRecord.devices, dealerTZ);
+                this.refs.update_bulk_msg.handleBulkUpdateMsg(data, this.props.editRecord.devices, this.state.dealerTZ);
 
             }
 
@@ -227,7 +231,7 @@ class EditMsgForm extends Component {
                 msg: nextProps.editRecord.msg,
                 repeat_duration: nextProps.editRecord.repeat_duration,
                 timer: nextProps.editRecord.timer_status,
-                selected_dateTime: nextProps.editRecord.date_time,
+                selected_dateTime: moment(nextProps.editRecord.date_time).format(TIMESTAMP_FORMAT),
                 selected_Time: moment(nextProps.editRecord.date_time).format("HH:mm"),
                 week_day: nextProps.editRecord.week_day,
                 month_date: nextProps.editRecord.month_date,
@@ -261,17 +265,18 @@ class EditMsgForm extends Component {
     //     this.setState({ editRecord: this.state.editRecord });
     // }
     dateTimeOnChange = (value, dateString) => {
+        console.log("dateString ", dateString)
         this.setState({ selected_dateTime: dateString });
     }
 
     timeOnChange = (value, dateString) => {
         const [hours, minutes] = dateString.split(':');
 
-        let dealerTZ = checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
-        let dateTimeVal = moment.tz(dealerTZ).set({ hours, minutes }).format('YYYY-MM-DD HH:mm:ss');
-        this.state.editRecord.date_time = dateTimeVal;
+        // let dealerTZ = checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
+        let dateTimeVal = moment.tz(this.state.dealerTZ).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+        // this.state.editRecord.date_time = dateTimeVal;
 
-        // console.log("u dateTimeVal:: ", dealerTZ, dateString, dateTimeVal);
+        // console.log("u dateTimeVal:: ", dateString, dateTimeVal);
         // this.setState({ editRecord: this.state.editRecord });
         this.setState({ selected_Time: dateString, selected_dateTime: dateTimeVal });
     }
@@ -318,8 +323,9 @@ class EditMsgForm extends Component {
             return null // <DataNotFound />
         }
         // console.log("moment().set(copyEditRecord.time, 'HH:mm').format('YYYY-MM-DD HH:mm:ss') ",this.state.editRecord,  moment(new Date()).set("12:22", 'HH:mm').format('YYYY-MM-DD HH:mm:ss'))
-        let checkTime = convertTimezoneValue(this.props.user.timezone, this.state.selected_dateTime, "HH:mm");
-        // console.log("edit msg checkTime:  ", checkTime, this.state.selected_dateTime, this.state.selected_Time);
+        // let checkTime = convertTimezoneValue(this.props.user.timezone, this.state.selected_dateTime, "HH:mm");
+        // console.log("edit msg checkTime:  ", checkTime, this.state.selected_dateTime, this.state.selected_Time, this.props.editRecord);
+        // console.log("conditions render func: ", this.state.timer === "DATE/TIME", moment(this.state.selected_dateTime).format(TIMESTAMP_FORMAT) < moment().tz(this.state.dealerTZ).format(TIMESTAMP_FORMAT), moment(this.state.selected_dateTime, this.state.dealerTZ).format(TIMESTAMP_FORMAT), moment().tz(this.state.dealerTZ).format(TIMESTAMP_FORMAT))
         return (
             <div>
                 <Modal
@@ -520,7 +526,7 @@ class EditMsgForm extends Component {
                                             wrapperCol={{ span: 16 }}
                                         >
                                             {this.props.form.getFieldDecorator('time', {
-                                                initialValue: checkTime ? moment(checkTime, 'HH:mm') : '',
+                                                initialValue: this.state.selected_Time ? moment(this.state.selected_Time, 'HH:mm') : '',
                                                 rules: [
                                                     {
                                                         required: true, message: convertToLang(this.props.translation[""], "Time field is required"),
@@ -563,7 +569,7 @@ class EditMsgForm extends Component {
                                                 format="YYYY-MM-DD HH:mm"
                                                 disabledDate={this.disabledDate}
                                                 disabledTime={this.disabledDateTime}
-                                                showTime={{ defaultValue: moment('00:00', 'HH:mm') }}
+                                                showTime={{ defaultValue: moment('00:00'), format: 'HH:mm' }}
                                             />
                                         )}
                                     </Form.Item>
@@ -577,7 +583,11 @@ class EditMsgForm extends Component {
                             }}
                         >
                             <Button type="button" onClick={this.handleCancel}> {convertToLang(this.props.translation[Button_Cancel], "Cancel")} </Button>
-                            <Button type="primary" htmlType="submit"> {convertToLang(this.props.translation[""], "UPDATE")} </Button>
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                disabled={this.state.timer === "DATE/TIME" && moment(this.state.selected_dateTime).format(TIMESTAMP_FORMAT) < moment().tz(this.state.dealerTZ).format(TIMESTAMP_FORMAT) ? true : false}
+                            > {convertToLang(this.props.translation[""], "UPDATE")} </Button>
                         </Form.Item>
 
                     </Form>

@@ -640,7 +640,7 @@ class ManageData extends Component {
                                     </Col> */}
                                 </Row>
                             </Card>
-                            
+
                             {/* Product List */}
                             <AccountList
                                 user={this.props.user}

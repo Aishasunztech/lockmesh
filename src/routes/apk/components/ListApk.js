@@ -398,7 +398,8 @@ export default class ListApk extends Component {
         return (
             <Fragment>
                 <Tabs
-                    type="card" className="dev_tabs"
+                    type="card"
+                    className="dev_tabs"
                     activeKey={this.state.selectedTab}
                     onChange={this.handleTabChange}
                 >

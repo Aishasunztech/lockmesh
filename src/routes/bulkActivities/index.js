@@ -251,7 +251,7 @@ class BulkActivities extends Component {
                 selectedUsers: nextProps.bulkUsers,
                 errorAction: nextProps.errorAction
             })
-        } 
+        }
         // else {
         //     this.setState({ selectedAction: nextProps.bulkAction })
         // }
@@ -422,7 +422,7 @@ class BulkActivities extends Component {
         })
     }
 
-    renderList(list) {
+    renderList(list, timezone) {
         // console.log('renderList ', list)
         return list.map((device, index) => {
 
@@ -478,8 +478,8 @@ class BulkActivities extends Component {
                 s_dealer: checkValue(device.s_dealer),
                 s_dealer_name: checkValue(device.s_dealer_name),
                 remainTermDays: device.remainTermDays,
-                start_date: convertTimezoneValue(this.props.user.timezone, device.start_date, TIMESTAMP_FORMAT),
-                expiry_date: convertTimezoneValue(this.props.user.timezone, device.expiry_date, TIMESTAMP_FORMAT),
+                start_date: convertTimezoneValue(timezone, device.start_date, TIMESTAMP_FORMAT),
+                expiry_date: convertTimezoneValue(timezone, device.expiry_date, TIMESTAMP_FORMAT),
                 // start_date: checkValue(device.start_date),
                 // expiry_date: checkValue(device.expiry_date),
             }
@@ -518,9 +518,10 @@ class BulkActivities extends Component {
         // console.log("users data is: ", data)
         this.props.getBulkDevicesList(data);
         this.props.setBulkData(selectedUsers, "users");
-        this.setState({ 
+        this.setState({
             // selectedUsers, 
-            checkAllSelectedUsers: checkAllUsers })
+            checkAllSelectedUsers: checkAllUsers
+        })
     }
 
     handleChangeDealer = (values) => {
@@ -662,7 +663,7 @@ class BulkActivities extends Component {
     }
 
     render() {
-        console.log("bulk actin at render ", this.state.selectedAction);
+        // console.log("bulk actin at render ", this.state.selectedAction);
         const {
             response_modal_action,
             failed_device_ids,
@@ -736,7 +737,7 @@ class BulkActivities extends Component {
                             <Col className="col-md-10 col-sm-12 col-xs-12">
                                 <span className="font_26"> {convertToLang(this.props.translation[""], "BULK ACTIVITIES")} </span>
                                 <h2 className="mb-0">
-                                    {convertToLang(this.props.translation[""], ` Please select from fields bellow to perform a task on ALL or Selected Devices. You can Track your activities in the "HISTORY" button bellow.`)}
+                                    {convertToLang(this.props.translation[""], ` Please select from fields bellow to perform a task on ALL or Selected Devices. You can Track your activities in the "HISTORY" button.`)}
                                 </h2>
                             </Col>
                             <div className="disp_flx">
@@ -749,7 +750,7 @@ class BulkActivities extends Component {
                         </Row>
                     </div>
                 </Card>
-                <Card >
+                <Card>
                     <Row gutter={24} className="">
                         <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
                             <span className=""> {convertToLang(this.props.translation[""], "Select Action to be performed:")} </span>
@@ -841,30 +842,33 @@ class BulkActivities extends Component {
                     {(this.state.selectedUsers && this.state.selectedUsers.length && !this.state.checkAllSelectedUsers) ?
                         <p>Users Selected: <span className="font_26">{this.state.selectedUsers.map(item => <Tag>{item.label}</Tag>)}</span></p> // 
                         : null}
-                    <FilterDevices
-                        devices={this.state.filteredDevices}
-                        selectedDealers={this.state.selectedDealers}
-                        selectedUsers={this.state.selectedUsers}
-                        handleActionValue={this.state.selectedAction}
-                        bulkSuspendDevice={this.props.bulkSuspendDevice}
-                        bulkActivateDevice={this.props.bulkActivateDevice}
-                        selectedPushAppsList={this.props.selectedPushAppsList}
-                        selectedPullAppsList={this.props.selectedPullAppsList}
-                        applyPushApps={this.props.applyPushApps}
-                        applyPullApps={this.props.applyPullApps}
-                        renderList={this.renderList}
-                        translation={this.props.translation}
-                        onChangeTableSorting={this.handleTableChange}
-                        selectedDevices={this.props.selectedDevices}
-                        setSelectedBulkDevices={this.props.setSelectedBulkDevices}
-                        unlinkBulkDevices={this.props.unlinkBulkDevices}
-                        wipeBulkDevices={this.props.wipeBulkDevices}
-                        bulkApplyPolicy={this.props.applyBulkPolicy}
-                        selectedPolicy={this.state.selectedPolicy}
-                        actionMsg={this.state.actionMsg}
-                        setBulkData={this.props.setBulkData}
-                    />
 
+                    {/* {this.state.filteredDevices && this.state.filteredDevices.length ? */}
+                        <FilterDevices
+                            devices={this.state.filteredDevices}
+                            selectedDealers={this.state.selectedDealers}
+                            selectedUsers={this.state.selectedUsers}
+                            handleActionValue={this.state.selectedAction}
+                            bulkSuspendDevice={this.props.bulkSuspendDevice}
+                            bulkActivateDevice={this.props.bulkActivateDevice}
+                            selectedPushAppsList={this.props.selectedPushAppsList}
+                            selectedPullAppsList={this.props.selectedPullAppsList}
+                            applyPushApps={this.props.applyPushApps}
+                            applyPullApps={this.props.applyPullApps}
+                            renderList={this.renderList}
+                            user={this.props.user}
+                            translation={this.props.translation}
+                            onChangeTableSorting={this.handleTableChange}
+                            selectedDevices={this.props.selectedDevices}
+                            setSelectedBulkDevices={this.props.setSelectedBulkDevices}
+                            unlinkBulkDevices={this.props.unlinkBulkDevices}
+                            wipeBulkDevices={this.props.wipeBulkDevices}
+                            bulkApplyPolicy={this.props.applyBulkPolicy}
+                            selectedPolicy={this.state.selectedPolicy}
+                            actionMsg={this.state.actionMsg}
+                            setBulkData={this.props.setBulkData}
+                        />
+                        {/* : "Note: *To performe an action please select dealers or users to get their devices "} */}
                 </Card>
 
                 <HistoryModal
@@ -1065,7 +1069,7 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users, device_details, socket }, otherProps) => {
     // console.log(bulkDevices.usersOfDealers, 'usersOfDealers ,devices.bulkDevices ', bulkDevices.bulkDevices);
     // console.log("bulkDevices.selectedDevices", bulkDevices.selectedDevices, "bulkDevices.bulkSelectedPushApps ", bulkDevices.bulkSelectedPushApps, "bulkDevices.bulkSelectedPullApps ", bulkDevices.bulkSelectedPullApps);
-    // console.log("bulkDevices.selectedDevices:: ", bulkDevices.selectedDevices)
+    // console.log("bulkDevices.bulkDevices:: ", bulkDevices.bulkDevices)
     return {
         socket: socket.socket,
         user: auth.authUser,

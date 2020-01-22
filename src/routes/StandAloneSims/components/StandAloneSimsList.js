@@ -195,7 +195,7 @@ class UserList extends Component {
                             className="users_list"
                             size="middle"
                             bordered
-                            columns={this.state.columns}
+                            columns={this.props.columns}
                             onChange={this.props.onChangeTableSorting}
                             dataSource={this.renderList(this.props.simsList)}
                             pagination={false}

@@ -151,6 +151,28 @@ export function componentSearch(arr, search) {
 	return foundDevices;
 }
 
+
+export function componentSearchSystemMessages(arr, keys, search) {
+  let foundDevices = [];
+  let obks = keys;
+  arr.map((el) => {
+    obks.some((obk) => {
+      if (obk) {
+        let temp = el[obk];
+        if (obk === 'dealer_id')
+          temp = temp.toString()
+        if ((typeof temp) === 'string') {
+          if (temp.toLowerCase().includes(search.toLowerCase())) {
+            foundDevices.push(el);
+            return true;
+          }
+        }
+      }
+    });
+  })
+  return foundDevices;
+}
+
 export function getFormattedDate(value) {
 	function convert(str) {
 		var month, day, year, hours, minutes, seconds;
@@ -187,6 +209,10 @@ export function getDateFromTimestamp(value) {
 	let date = new Date(value);
 	let formattedDate = convert(date)
 	return moment(formattedDate).format('DD-MMM-YYYY');
+}
+
+export function getOnlyTimeFromTimestamp(value) {
+  return moment(value).format('HH:mm');
 }
 
 export function convertTimestampToDate(value) {
@@ -484,19 +510,20 @@ export function getWeekDay(key) {
 
 	switch (key) {
 		case 1:
-			return "Every Monday";
-		case 2:
-			return "Every Tuesday";
-		case 3:
-			return "Every Wednesday";
-		case 4:
-			return "Every Thursday";
-		case 5:
-			return "Every Friday";
-		case 6:
-			return "Every Saturday";
-		case 7:
 			return "Every Sunday";
+		case 2:
+			return "Every Monday";
+		case 3:
+			return "Every Tuesday";
+		case 4:
+			return "Every Wednesday";
+		case 5:
+			return "Every Thursday";
+		case 6:
+			return "Every Friday";
+		case 7:
+			return "Every Saturday";
+
 
 		default:
 			return "N/A";
