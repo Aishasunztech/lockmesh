@@ -125,9 +125,6 @@ class SendMsgForm extends Component {
                                 dateTimeVal = moment().tz(dealerTZ).day(weekDay).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
 
                                 if (dateTimeVal < currentDateIs) {
-                                    // let currentWeekNumber = moment().tz(dealerTZ).weekday();
-                                    // console.log("currentWeekNumber ", currentWeekNumber, "selecte week day: ", weekDay);
-
                                     // next same week day if current date passed
                                     dateTimeVal = moment().tz(dealerTZ).day(weekDay + 7).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
                                 }
