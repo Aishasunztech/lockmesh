@@ -29,6 +29,7 @@ import InvalidPage from "./InvalidPage";
 import FourOFour from "./InvalidPage/FourOFour";
 import AppMarket from "./appMarket/index";
 import ManageData from './account/ManageData/index'
+import AccountBalanceInfo from './account/AccountBalanceInfo/index'
 import SetPrice from './account/PricesPakages/index'
 import Domains from "./domains/index";
 import Reporting from './account/Reporting/index'
@@ -149,6 +150,12 @@ const App = ({ match }) => {
           exact
           path={`${match.url}account/managedata`}
           component={ManageData}
+        />
+
+        <Route
+          exact
+          path={`${match.url}account/balance_info`}
+          component={AccountBalanceInfo}
         />
 
         <Route
