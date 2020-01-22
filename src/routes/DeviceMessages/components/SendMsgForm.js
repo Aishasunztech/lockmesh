@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Button, Form, Input, Select, InputNumber, Row, Col, Tag, Calendar, DatePicker, TimePicker, Modal } from 'antd';
+import { Button, Form, Input, Select, InputNumber, Row, Col, Tag, Calendar, DatePicker, TimePicker, Modal, Alert } from 'antd';
 import { checkValue, convertToLang, checkTimezoneValue, convertTimezoneValue } from '../../utils/commonUtils'
 
 import {
@@ -60,6 +60,7 @@ class SendMsgForm extends Component {
         ];
 
         this.monthDays = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+        let dealerTZ = checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
 
         this.state = {
             visible: false,
@@ -76,6 +77,7 @@ class SendMsgForm extends Component {
             repeat_duration: 'NONE',
             timer: '',
             monthDate: 0,
+            dealerTZ: dealerTZ
         }
     }
 
@@ -91,7 +93,7 @@ class SendMsgForm extends Component {
 
                 if (this.props.selectedDevices && this.props.selectedDevices.length) {
 
-                    let dealerTZ = checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
+                    let dealerTZ = this.state.dealerTZ; // checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
                     let repeatVal = 'NONE';
                     let dateTimeVal = '';
 
@@ -175,7 +177,7 @@ class SendMsgForm extends Component {
                         monthName,
                         time: this.state.selected_Time,
                     }
-                    // console.log("submit data:: ", data);
+                    console.log("submit data:: ", data);
                     this.refs.bulk_msg.handleBulkSendMsg(data, dealerTZ);
                 } else {
                     error({
@@ -402,7 +404,7 @@ class SendMsgForm extends Component {
     }
 
     repeatHandler = (e) => {
-        // console.log("e is: ", e);
+        // console.log("repeatHandler e is: ", e);
         this.setState({ repeat_duration: e });
     }
 
@@ -446,6 +448,26 @@ class SendMsgForm extends Component {
             <div>
                 <Form onSubmit={this.handleSubmit}>
                     <p>(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")} </p>
+                    <Row>
+                        {/* <Col className="col-md-9 col-sm-9 col-xs-9">
+                        </Col> */}
+                        {/* <Col className="col-md-3 col-sm-3 col-xs-3">
+                            {(this.state.selectedDealers.length || this.state.selectedUsers.length) ?
+                                (this.state.filteredDevices.length) ? null :
+                                    <span style={{ color: 'red' }}>Devices not found against selected dealers/users!</span>
+                                :
+                                null
+                            }
+                        </Col> */}
+                        <Col className="col-md-12 col-sm-12 col-xs-12">
+                            {(this.state.selectedDealers.length || this.state.selectedUsers.length) ?
+                                (this.state.filteredDevices.length) ? null :
+                                    <Alert message="Devices not found against selected dealers/users!" type="warning" closable />
+                                :
+                                null
+                            }
+                        </Col>
+                    </Row>
 
                     <Row gutter={24} className="mt-4">
                         <Col className="col-md-12 col-sm-12 col-xs-12">
@@ -470,7 +492,7 @@ class SendMsgForm extends Component {
                                 >
                                     {(this.state.allDealers && this.state.allDealers.length > 0) ?
                                         <Select.Option key="allDealers" value="all">Select All</Select.Option>
-                                        : <Select.Option key="" value="">Data Not Found</Select.Option>
+                                        : <Select.Option key="" value="">Dealers not found</Select.Option>
                                     }
                                     {this.state.allDealers.map(item => <Select.Option key={item.key} value={item.key}>{item.label}</Select.Option>)}
                                 </Select>
@@ -503,7 +525,7 @@ class SendMsgForm extends Component {
                                 >
                                     {(this.state.allUsers && this.state.allUsers.length > 0) ?
                                         <Select.Option key="allUsers" value="all">Select All</Select.Option>
-                                        : <Select.Option key="" value="">Data Not Found</Select.Option>
+                                        : <Select.Option key="" value="">Users not found</Select.Option>
                                     }
                                     {this.state.allUsers.map(item => <Select.Option key={item.key} value={item.key} >{item.label}</Select.Option>)}
                                 </Select>
@@ -711,7 +733,6 @@ class SendMsgForm extends Component {
                                                 placeholder={"Select time"}
                                                 format="HH:mm"
                                                 style={{ width: '50%' }}
-                                            // defaultValue={moment('00:00:00', 'HH:mm:ss')}
                                             />
                                         )}
                                     </Form.Item>
@@ -756,28 +777,28 @@ class SendMsgForm extends Component {
                         : null}
 
                     {/* {this.state.filteredDevices && this.state.filteredDevices.length ? */}
-                        <FilterDevices
-                            devices={this.state.filteredDevices}
-                            selectedDealers={this.state.selectedDealers}
-                            selectedUsers={this.state.selectedUsers}
-                            handleActionValue={this.state.selectedAction}
-                            bulkSuspendDevice={this.props.bulkSuspendDevice}
-                            bulkActivateDevice={this.props.bulkActivateDevice}
-                            selectedPushAppsList={this.props.selectedPushAppsList}
-                            selectedPullAppsList={this.props.selectedPullAppsList}
-                            applyPushApps={this.props.applyPushApps}
-                            applyPullApps={this.props.applyPullApps}
-                            translation={this.props.translation}
-                            onChangeTableSorting={this.handleTableChange}
-                            selectedDevices={this.props.selectedDevices}
-                            setSelectedBulkDevices={this.props.setSelectedBulkDevices}
-                            unlinkBulkDevices={this.props.unlinkBulkDevices}
-                            wipeBulkDevices={this.props.wipeBulkDevices}
-                            bulkApplyPolicy={this.props.applyBulkPolicy}
-                            selectedPolicy={this.state.selectedPolicy}
-                            renderList={this.props.renderList}
-                        />
-                        {/* :
+                    <FilterDevices
+                        devices={this.state.filteredDevices}
+                        selectedDealers={this.state.selectedDealers}
+                        selectedUsers={this.state.selectedUsers}
+                        handleActionValue={this.state.selectedAction}
+                        bulkSuspendDevice={this.props.bulkSuspendDevice}
+                        bulkActivateDevice={this.props.bulkActivateDevice}
+                        selectedPushAppsList={this.props.selectedPushAppsList}
+                        selectedPullAppsList={this.props.selectedPullAppsList}
+                        applyPushApps={this.props.applyPushApps}
+                        applyPullApps={this.props.applyPullApps}
+                        translation={this.props.translation}
+                        onChangeTableSorting={this.handleTableChange}
+                        selectedDevices={this.props.selectedDevices}
+                        setSelectedBulkDevices={this.props.setSelectedBulkDevices}
+                        unlinkBulkDevices={this.props.unlinkBulkDevices}
+                        wipeBulkDevices={this.props.wipeBulkDevices}
+                        bulkApplyPolicy={this.props.applyBulkPolicy}
+                        selectedPolicy={this.state.selectedPolicy}
+                        renderList={this.props.renderList}
+                    />
+                    {/* :
                         <div>
                             Note: *To performe an action please select dealers/users to get their devices. <span style={{ color: 'red' }}>(Devices not found!)</span>
                         </div>

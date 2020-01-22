@@ -156,7 +156,7 @@ export default class ListMsgs extends Component {
                 action: (
                     <div data-column="ACTION" style={{ display: "inline-flex" }}>
                         <Fragment>
-                            {/* {(item.timer_status === "NOW" || item.timer_status === "DATE/TIME") ? null :
+                            {(item.timer_status === "NOW" || item.timer_status === "DATE/TIME") ? null :
                                 <Fragment>
                                         <Button
                                             type="primary"
@@ -164,7 +164,7 @@ export default class ListMsgs extends Component {
                                             onClick={() => this.handleEditModal(JSON.parse(JSON.stringify(item)))}
                                         >EDIT</Button>
                                 </Fragment>
-                            } */}
+                            }
                             <Fragment><Button type="danger" size="small" onClick={() => this.deleteMsg(item.id)}>DELETE</Button></Fragment>
                         </Fragment>
                     </div>

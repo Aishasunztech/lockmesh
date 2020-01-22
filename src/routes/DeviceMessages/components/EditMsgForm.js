@@ -104,11 +104,13 @@ class EditMsgForm extends Component {
                 let repeatVal = 'NONE';
                 let dateTimeVal = '';
                 let timeVal = this.state.selected_Time;
-                let weekDay = this.state.week_day;
-                let monthDate = this.state.month_date;
-                let monthName = this.state.month_name;
+                let weekDay = this.state.week_day ? this.state.week_day : 0;
+                let monthDate = this.state.month_date ? this.state.month_date : 0;
+                let monthName = this.state.month_name ? this.state.month_name : 0;
 
                 // let dealerTZ = checkTimezoneValue(this.props.user.timezone, false);
+               
+                let dealerTZ = checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
                 if (this.state.timer === "NOW") {
                     // this.state.selected_dateTime = "";
 

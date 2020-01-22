@@ -76,12 +76,13 @@ import {
 } from '../../../constants/LabelConstants';
 
 import { PRE_ACTIVATE_DEVICE } from '../../../constants/ActionTypes';
+import { SERVER_TIMEZONE } from '../../../constants/Application';
 
 const { TextArea } = Input;
 const confirm = Modal.confirm
 const success = Modal.success
 const error = Modal.error;
-moment.tz.setDefault("Europe/Berlin");
+moment.tz.setDefault(SERVER_TIMEZONE);
 
 
 class EditDevice extends Component {
