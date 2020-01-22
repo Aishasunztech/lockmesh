@@ -330,7 +330,7 @@ class Account extends Component {
         let type = this.props.user.type
         let styleType = {};
         if (type === ADMIN) {
-            styleType = "manage_ac"
+            styleType = "manage_sec"
         } else {
             styleType = "manage_sec"
         }
@@ -433,6 +433,150 @@ class Account extends Component {
                 </Row>
                 <div style={{ marginTop: -60 }}>
                     <Row>
+                        <Col xs={24} sm={24} md={8} lg={8} xl={8} >
+                            <Link to="/account/balance_info" onClick={this.showModal}>
+                                {/* <Link to="#" > */}
+                                <Card className="manage_ac" style={{ borderRadius: 12 }}>
+                                    <div>
+                                        <h2 style={{ textAlign: "center" }}>{convertToLang(this.props.translation[""], "Account Balance Info")} </h2>
+                                        <Divider className="mb-0" />
+                                        <Row style={{ padding: '12px 0 0px' }}>
+                                            <Col span={7} className="" style={{ textAlign: "center" }}>
+                                                <Icon type="form" className="and_icon" />
+                                            </Col>
+                                            <Col span={16} style={{ padding: 0 }} className="crd_txt">
+                                                <h5 className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[""], "View Account Balance/ Account balance Status")} />  </h5>
+                                                <h5 className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[""], "View OverDue Invoices Details")} /> </h5>
+                                                <h5 className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[""], "View Credits Purchase History")} />  </h5>
+                                                <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], "and more...")}</h5>
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                </Card>
+                                <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
+                            </Link>
+                        </Col>
+                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                            <div>
+                                <div>
+                                    <a href="javascript:void(0)"
+                                        onClick={(e) => {
+                                            this.showPurchaseModal(e, true);
+                                        }}
+                                    >
+                                        <Card style={{ borderRadius: 12 }} className="manage_ac">
+                                            <div className="profile_table image_1">
+                                                <Fragment>
+                                                    <div className="ac_card">
+                                                        <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[PURCHASE_CREDITS], "Purchase Credits")} </h2>
+                                                        <Divider className="mb-0" />
+                                                        <Row style={{ padding: '12px 0 0px' }}>
+                                                            <Col span={8} className="" style={{ textAlign: "center" }}>
+                                                                <Icon type="dollar" className="and_icon" />
+                                                            </Col>
+                                                            <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
+                                                                <h5>{convertToLang(this.props.translation[PURCHASE_CREDITS_DESCRIPTION], "Buy more Credits instantly with Bitcoin or Credit card and check out using our secure payment gateway.")}</h5>
+                                                            </Col>
+                                                        </Row>
+                                                    </div>
+                                                </Fragment>
+                                            </div>
+                                        </Card>
+                                        <Button type="default" style={{ backgroundColor: "red", color: "#fff" }} size="small" className="open_btn">{convertToLang(this.props.translation[Button_BUY], "Buy")}</Button>
+                                    </a>
+                                    <PurchaseCredit
+                                        showPurchaseModal={this.showPurchaseModal}
+                                        purchase_modal={this.state.purchase_modal}
+                                        purchaseCredits={this.props.purchaseCredits}
+                                        purchaseCreditsFromCC={this.props.purchaseCreditsFromCC}
+                                        translation={this.props.translation}
+                                    />
+                                </div>
+                            </div>
+                        </Col>
+                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                            <div>
+                                <Link to={"/reporting"}>
+                                    <Card style={{ borderRadius: 12 }} className="manage_ac">
+                                        <div className="profile_table image_1">
+                                            <Fragment>
+                                                <Row>
+                                                    <div className="col-md-12 ac_card">
+                                                        <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[''], "Reports")} </h2>
+                                                        <Divider className="mb-0" />
+                                                        <Row style={{ padding: '12px 0 0px' }}>
+                                                            <Col span={8} className="" style={{ textAlign: "center" }}>
+                                                                <Icon type="file-pdf" className="and_icon" />
+
+                                                            </Col>
+                                                            <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
+                                                                <div className="crd_txt">
+                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Run Reports on Sales, Inventory, Profit/loss, Payment history, etc...")}</h5>
+                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Ability to select date range for each reports")}</h5>
+                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Run reports on individual Dealers/SDealers")}</h5>
+                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Export Reports in PDF format")}</h5>
+                                                                    <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], "and more...")}</h5>
+                                                                </div>
+                                                            </Col>
+                                                        </Row>
+                                                    </div>
+                                                </Row>
+                                            </Fragment>
+                                        </div>
+                                    </Card>
+                                    <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
+                                </Link>
+                            </div>
+                        </Col>
+                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                            <div>
+                                {/* <a href="javascript:void(0)" onClick={() => this.showPricingModal(true)}> */}
+                                <Link to={"/set-prices"}>
+                                    {/* <Link to={"/set-prices/" + this.props.whiteLabelInfo.name}> */}
+                                    <Card style={{ borderRadius: 12 }} className={`${styleType}`}>
+                                        <div className="profile_table image_1">
+                                            <Fragment>
+                                                <Row>
+                                                    <div className="col-md-12 ac_card">
+                                                        <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[PACKAGES_AND_IDS], "Packages and ID's")} </h2>
+                                                        <Divider className="mb-0" />
+                                                        <Row style={{ padding: '12px 0 0px' }}>
+                                                            <Col span={8} className="" style={{ textAlign: "center" }}>
+                                                                <Icon type="control" className="and_icon" />
+                                                            </Col>
+                                                            <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
+                                                                <div className="crd_txt">
+                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_01], "Distribute tokens")}</h5>
+                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_02], "Set prices and delay for each token")}</h5>
+                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_03], "Set permissions for Tokens")}</h5>
+                                                                    <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], "and more...")}</h5>
+                                                                </div>
+                                                            </Col>
+                                                        </Row>
+                                                    </div>
+                                                </Row>
+                                            </Fragment>
+                                        </div>
+                                    </Card>
+                                    <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
+                                    {/* </a> */}
+                                </Link>
+                                {/* <div className="middle">
+                                        <SetPricingModal
+                                            showPricingModal={this.showPricingModal}
+                                            pricing_modal={this.state.pricing_modal}
+                                            // LabelName = {this.props.whiteLabelInfo.name}
+                                            saveIDPrices={this.props.saveIDPrices}
+                                            setPackage={this.props.setPackage}
+                                        // whitelabel_id={this.props.whiteLabelInfo.id}
+
+                                        />
+                                    </div> */}
+                                {/* <div className="middle">
+                                        <div className="text">Coming Soon</div>
+                                    </div> */}
+                            </div>
+                        </Col>
                         <Fragment>
                             {(this.props.user.type === ADMIN || this.props.user.type === DEALER || this.props.user.type === SDEALER) ?
                                 <Col xs={24} sm={24} md={8} lg={8} xl={8} >
@@ -1114,94 +1258,8 @@ class Account extends Component {
                                 </Col>
                                 : null}
                         </Fragment>
-                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                            <div>
-                                <div>
-                                    <a href="javascript:void(0)"
-                                        onClick={(e) => {
-                                            this.showPurchaseModal(e, true);
-                                        }}
-                                    >
-                                        <Card style={{ borderRadius: 12 }} className="manage_sec">
-                                            <div className="profile_table image_1">
-                                                <Fragment>
-                                                    <div className="ac_card">
-                                                        <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[PURCHASE_CREDITS], "Purchase Credits")} </h2>
-                                                        <Divider className="mb-0" />
-                                                        <Row style={{ padding: '12px 0 0px' }}>
-                                                            <Col span={8} className="" style={{ textAlign: "center" }}>
-                                                                <Icon type="dollar" className="and_icon" />
-                                                            </Col>
-                                                            <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
-                                                                <h5>{convertToLang(this.props.translation[PURCHASE_CREDITS_DESCRIPTION], "Buy more Credits instantly with Bitcoin or Credit card and check out using our secure payment gateway.")}</h5>
-                                                            </Col>
-                                                        </Row>
-                                                    </div>
-                                                </Fragment>
-                                            </div>
-                                        </Card>
-                                        <Button type="default" style={{ backgroundColor: "red", color: "#fff" }} size="small" className="open_btn">{convertToLang(this.props.translation[Button_BUY], "Buy")}</Button>
-                                    </a>
-                                    <PurchaseCredit
-                                        showPurchaseModal={this.showPurchaseModal}
-                                        purchase_modal={this.state.purchase_modal}
-                                        purchaseCredits={this.props.purchaseCredits}
-                                        purchaseCreditsFromCC={this.props.purchaseCreditsFromCC}
-                                        translation={this.props.translation}
-                                    />
-                                </div>
-                            </div>
-                        </Col>
 
-                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                            <div>
-                                {/* <a href="javascript:void(0)" onClick={() => this.showPricingModal(true)}> */}
-                                <Link to={"/set-prices"}>
-                                    {/* <Link to={"/set-prices/" + this.props.whiteLabelInfo.name}> */}
-                                    <Card style={{ borderRadius: 12 }} className={`${styleType}`}>
-                                        <div className="profile_table image_1">
-                                            <Fragment>
-                                                <Row>
-                                                    <div className="col-md-12 ac_card">
-                                                        <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[PACKAGES_AND_IDS], "Packages and ID's")} </h2>
-                                                        <Divider className="mb-0" />
-                                                        <Row style={{ padding: '12px 0 0px' }}>
-                                                            <Col span={8} className="" style={{ textAlign: "center" }}>
-                                                                <Icon type="control" className="and_icon" />
-                                                            </Col>
-                                                            <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
-                                                                <div className="crd_txt">
-                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_01], "Distribute tokens")}</h5>
-                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_02], "Set prices and delay for each token")}</h5>
-                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_03], "Set permissions for Tokens")}</h5>
-                                                                    <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], "and more...")}</h5>
-                                                                </div>
-                                                            </Col>
-                                                        </Row>
-                                                    </div>
-                                                </Row>
-                                            </Fragment>
-                                        </div>
-                                    </Card>
-                                    <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
-                                    {/* </a> */}
-                                </Link>
-                                {/* <div className="middle">
-                                        <SetPricingModal
-                                            showPricingModal={this.showPricingModal}
-                                            pricing_modal={this.state.pricing_modal}
-                                            // LabelName = {this.props.whiteLabelInfo.name}
-                                            saveIDPrices={this.props.saveIDPrices}
-                                            setPackage={this.props.setPackage}
-                                        // whitelabel_id={this.props.whiteLabelInfo.id}
 
-                                        />
-                                    </div> */}
-                                {/* <div className="middle">
-                                        <div className="text">Coming Soon</div>
-                                    </div> */}
-                            </div>
-                        </Col>
                         {(this.props.user.type === ADMIN || this.props.user.type === DEALER) ?
                             <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                                 <div>
@@ -1253,40 +1311,7 @@ class Account extends Component {
                                 </div>
                             </Col>
                             : null}
-                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                            <div>
-                                <Link to={"/reporting"}>
-                                    <Card style={{ borderRadius: 12 }} className="manage_ac">
-                                        <div className="profile_table image_1">
-                                            <Fragment>
-                                                <Row>
-                                                    <div className="col-md-12 ac_card">
-                                                        <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[''], "Reports")} </h2>
-                                                        <Divider className="mb-0" />
-                                                        <Row style={{ padding: '12px 0 0px' }}>
-                                                            <Col span={8} className="" style={{ textAlign: "center" }}>
-                                                                <Icon type="file-pdf" className="and_icon" />
 
-                                                            </Col>
-                                                            <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
-                                                                <div className="crd_txt">
-                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Run Reports on Sales, Inventory, Profit/loss, Payment history, etc...")}</h5>
-                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Ability to select date range for each reports")}</h5>
-                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Run reports on individual Dealers/SDealers")}</h5>
-                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[''], "Export Reports in PDF format")}</h5>
-                                                                    <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], "and more...")}</h5>
-                                                                </div>
-                                                            </Col>
-                                                        </Row>
-                                                    </div>
-                                                </Row>
-                                            </Fragment>
-                                        </div>
-                                    </Card>
-                                    <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
-                                </Link>
-                            </div>
-                        </Col>
                         {(this.props.user.type === ADMIN) ?
                             <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                                 <div>
