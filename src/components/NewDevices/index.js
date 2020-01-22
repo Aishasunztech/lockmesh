@@ -388,12 +388,14 @@ export default class NewDevices extends Component {
                         : null}
                     <Fragment>
                         <Row className="width_100" style={{display: "block", marginLeft: 0}}>
-                          <h1 style={{display: "inline"}}>{convertToLang(this.props.translation[""], "Ticket Notifications")}</h1>
-                          <Button type="primary" size="small" style={{float: "right", marginTop: '6px'}} onClick={() => {
-                            if(window.location.pathname !== '/support'){
-                              this.setPageState('2');
-                            }
-                          }}>View Tickets</Button>
+                          <h1 style={{display: "inline"}}>{convertToLang(this.props.translation[""], "Ticket Notifications")}
+                            <Button type="primary" size="small" style={{float: "right", marginTop: '6px'}} onClick={() => {
+                              if(window.location.pathname !== '/support'){
+                                this.setPageState('2');
+                              }
+                            }}>View Tickets</Button>
+                          </h1>
+
                         </Row>
                         <Table
                             bordered
@@ -407,12 +409,15 @@ export default class NewDevices extends Component {
                     {this.props.authUser.type !== ADMIN ?
                         <Fragment>
                           <Row className="width_100" style={{display: "block", marginLeft: 0}}>
-                            <h1>{convertToLang(this.props.translation[""], "System Message Notifications")}</h1>
-                            <Button type="primary" size="small" style={{float: "right", marginTop: '6px'}} onClick={() => {
-                              if(window.location.pathname !== '/support'){
-                                this.setPageState('1');
-                              }
-                            }}>View System Messages</Button>
+                            <h1>{convertToLang(this.props.translation[""], "System Message Notifications")}
+
+                              <Button type="primary" size="small" style={{float: "right", marginTop: '6px'}} onClick={() => {
+                                if(window.location.pathname !== '/support'){
+                                  this.setPageState('1');
+                                }
+                              }}>View System Messages</Button>
+                            </h1>
+
                           </Row>
                             <Table
                                 bordered
