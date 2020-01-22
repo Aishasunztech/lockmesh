@@ -3,10 +3,13 @@ import {Card, Tabs, Form, Input, Select, Button} from "antd";
 import AppFilter from "../../components/AppFilter";
 import Ticket from "./Tickets";
 import SystemMessages from "./SystemMessages";
+import categories from "./Tickets/data/categories";
+import statuses from "./Tickets/data/statuses";
+import priorities from "./Tickets/data/priorities";
 import styles from './style.css'
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {DEALER, SDEALER} from "../../constants/Constants";
+import {ADMIN, DEALER, SDEALER} from "../../constants/Constants";
 
 const TabPane = Tabs.TabPane;
 
@@ -33,6 +36,7 @@ class Support extends Component {
 
       {this.props.user.type === DEALER ?
         <Select
+          key="system_messages_key"
           style={{ width: '25%', marginRight: '1%', float: "right" }}
           onChange={ (e) => { this.setState({filterOption: e})} }
           defaultValue="all"
@@ -50,6 +54,48 @@ class Support extends Component {
         onChange={ (e) => {this.setState({systemMessagesSearchValue: e.target.value})} }
       />
       </span>;
+
+
+    this.supportTicketOptions = <span>
+
+
+      {this.props.user.type !== ADMIN ?
+        <Button type="primary" style={{float: "right"}} onClick={ () => {this.refs.supportTickets.getWrappedInstance().updateState({composeMail: true})} } size="default" >Generate New Ticket</Button>
+      : '' }
+
+      <Select
+        key="support_tickets_statuses_key"
+        style={{ width: '15%', marginRight: '1%', float: "right" }}
+        onChange={ (e) => { console.log(e);} }
+        defaultValue={statuses[0].title}
+      >
+        <Select.OptGroup label="Status">
+        {statuses.map( (status, index) => {
+          return <Select.Option value={status.title}>{status.title.charAt(0).toUpperCase() + status.title.substr(1)}</Select.Option>
+        }) }
+        </Select.OptGroup>
+        <Select.OptGroup label="Type">
+        {categories.map( (category, index) => {
+          return <Select.Option value={category.title}>{category.title.charAt(0).toUpperCase() + category.title.substr(1)}</Select.Option>
+        }) }
+        </Select.OptGroup>
+        <Select.OptGroup label="Priority">
+        {priorities.map( (priority, index) => {
+          return <Select.Option value={priority.title}>{priority.title.charAt(0).toUpperCase() + priority.title.substr(1)}</Select.Option>
+        }) }
+        </Select.OptGroup>
+      </Select>
+
+      <Input
+        type="text"
+        placeholder="Search"
+        style={{ width: '30%', marginRight: '1%', float: "right" }}
+        onChange={ (e) => {this.setState({systemMessagesSearchValue: e.target.value})} }
+      />
+      </span>;
+
+
+      this.tabBarContent.bind(this);
   }
 
 
@@ -83,6 +129,22 @@ class Support extends Component {
 
   };
 
+  tabBarContent(currentTab){
+
+    let content = '';
+    switch (currentTab){
+      case '1':
+        content = this.systemMessagesOptions;
+        break;
+      case '2':
+        content = this.supportTicketOptions;
+        break;
+      default:
+        break;
+    }
+    return content;
+  }
+
 
 
   render() {
@@ -93,7 +155,7 @@ class Support extends Component {
         />
         <Card>
 
-          <Tabs tabBarExtraContent={ this.state.innerTabSelect === '1'? this.systemMessagesOptions : '' } defaultActiveKey={this.state.innerTabSelect} activeKey={this.state.innerTabSelect} type="card" className="supportModuleMainTab" onChange={this.handleChangeCardTabs}>
+          <Tabs tabBarExtraContent={ this.tabBarContent(this.state.innerTabSelect) } defaultActiveKey={this.state.innerTabSelect} activeKey={this.state.innerTabSelect} type="card" className="supportModuleMainTab" onChange={this.handleChangeCardTabs}>
             <TabPane tab="SYSTEM MESSAGES" key="1" forceRender={false}>
               <SystemMessages
                 ref="systemMessages"
@@ -102,7 +164,7 @@ class Support extends Component {
               />
             </TabPane>
             <TabPane tab="TICKETS" key="2" forceRender={false}>
-              <Ticket />
+              <Ticket ref="supportTickets" />
             </TabPane>
             <TabPane tab="LIVE CHAT" key="3" forceRender={false}>
             </TabPane>

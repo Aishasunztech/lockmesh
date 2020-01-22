@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { Button, Checkbox, Drawer, Dropdown, Menu, message, Modal, Col, Row } from "antd";
+import { Button, Checkbox, Drawer, Dropdown, Menu, message, Modal, Col, Row, Table } from "antd";
 import CustomScrollbars from "util/CustomScrollbars";
 
 import mails from "./data/mails";
@@ -10,6 +10,7 @@ import MailList from "./components/MailList";
 import ComposeMail from "./components/Compose/index";
 import AppModuleHeader from "./components/AppModuleHeader/index";
 import MailDetail from "./components/TicketDetail/index";
+import { getDateFromTimestamp } from "../../utils/commonUtils";
 import { bindActionCreators } from "redux";
 import {
   generateSupportTicket,
@@ -28,6 +29,8 @@ import {
   ADMIN, DEALER, SDEALER
 } from "../../../constants/Constants";
 import {SET_CURRENT_TICKET_ID} from "../../../constants/ActionTypes";
+import {DEVICE_ACTIVATION_CODE, DEVICE_DEALER_PIN} from "../../../constants/DeviceConstants";
+import {convertToLang} from "../../utils/commonUtils";
 
 const confirm = Modal.confirm;
 let connectedDealer;
@@ -229,8 +232,8 @@ class Mail extends PureComponent {
     </div>
   };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       searchTicket: '',
       noContentFoundMessage: 'No support ticket found',
@@ -251,6 +254,12 @@ class Mail extends PureComponent {
       supportTicketReplies: [],
     }
   }
+
+  updateState = (obj) => {
+    this.setState( obj );
+  }
+
+
 
   componentDidMount() {
     this.props.getDealerList();
@@ -362,99 +371,109 @@ class Mail extends PureComponent {
     });
   }
 
+  createSupportTicketsTableData(tickets){
+    return tickets.map(item => {
+
+      let data = {
+        ticketId: item.ticketId,
+        name: { name: `${item.user.dealer_name} (${item.user.link_code})`, ticket: item},
+        subject: item.subject,
+        status: item.status,
+        type: item.category,
+        priority: item.priority,
+        time: getDateFromTimestamp(item.createdAt),
+        _id: item._id
+      };
+      return data;
+    });
+  }
+
+  supportTableColumns(){
+    return [{
+      title: 'Ticket Id',
+      dataIndex: 'ticketId',
+      align: 'center',
+      className: 'row'
+      // ,render: (text, record, index) => ++index,
+    },{
+      title: 'Name',
+      align: "center",
+      dataIndex: 'name',
+      sorter: (a, b) => { return a.name.localeCompare(b.name) },
+      sortDirections: ['ascend', 'descend'],
+      render: (item) => { return <a href="javascript:void(0);" onClick={() => this.onMailSelect(item.ticket)}>{item.name}</a>; }
+    },{
+      title: 'Subject',
+      align: "center",
+      dataIndex: 'subject',
+      key: 'link_code',
+      sorter: (a, b) => { return a.link_code - b.link_code },
+      sortDirections: ['ascend', 'descend'],
+
+    },{
+      title: 'Status',
+      align: "center",
+      dataIndex: 'status',
+      key: 'link_code',
+      sorter: (a, b) => { return a.link_code - b.link_code },
+      sortDirections: ['ascend', 'descend'],
+
+    },{
+      title: 'Type',
+      align: "center",
+      dataIndex: 'type',
+      key: 'link_code',
+      sorter: (a, b) => { return a.link_code - b.link_code },
+      sortDirections: ['ascend', 'descend'],
+
+    },{
+      title: 'Priority',
+      align: "center",
+      dataIndex: 'priority',
+      key: 'link_code',
+      sorter: (a, b) => { return a.link_code - b.link_code },
+      sortDirections: ['ascend', 'descend'],
+
+    },{
+      title: 'Time',
+      align: "center",
+      dataIndex: 'time',
+      key: 'link_code',
+      sorter: (a, b) => { return a.link_code - b.link_code },
+      sortDirections: ['ascend', 'descend'],
+
+    }];
+  }
+
+  renderTickets(filteredSupportTickets){
+    const { currentMail } = this.state;
+    return currentMail === null ? (<Table
+      className="gx-table-responsive"
+      size="midddle"
+      bordered
+      columns={this.supportTableColumns()}
+      dataSource={this.createSupportTicketsTableData(filteredSupportTickets)}
+      pagination={false}
+      scroll={{ x: true }}
+      rowKey="key"
+    />) : <MailDetail
+      user={this.props.user}
+      supportTicket={currentMail}
+      supportTicketReply={this.props.supportTicketReply}
+      onCloseTicket={this.onCloseTicket.bind(this)}
+      closeSupportTicketStatus={this.props.closeSupportTicketStatus}
+      supportTicketReplies={this.state.supportTicketReplies}
+      updateState={this.updateState.bind(this)}
+      resetCurrentTicket={this.props.resetCurrentTicket}
+    />;
+  }
+
   render() {
-    const { selectedMails, currentMail, drawerState, folderMails, composeMail, alertMessage, showMessage, noContentFoundMessage } = this.state;
+    const { selectedMails, currentMail, drawerState, folderMails, composeMail, alertMessage, showMessage, noContentFoundMessage, filteredSupportTickets } = this.state;
+    console.log(currentMail);
     return (
       <div>
-        <div className="gx-main-content">
-          <div className="gx-app-module m-0">
-
-            <div className="gx-d-block gx-d-lg-none">
-              <Drawer
-                placement="left"
-                closable={false}
-                visible={drawerState}
-                onClose={this.onToggleDrawer.bind(this)}>
-                {this.SupportTicketSideBar()}
-              </Drawer>
-
-            </div>
-            <div className="gx-module-sidenav gx-d-none gx-d-lg-flex">
-              {this.SupportTicketSideBar()}
-            </div>
-
-            <div className="gx-module-box">
-              <div className="gx-module-box-header">
-                <span className="gx-drawer-btn gx-d-flex gx-d-lg-none">
-                  <i className="icon icon-menu gx-icon-btn" aria-label="Menu"
-                    onClick={this.onToggleDrawer.bind(this)} />
-                </span>
-                <AppModuleHeader placeholder="Search tickets"
-                  onChange={this.updateSearch.bind(this)}
-                  value={this.state.searchTicket} />
-
-              </div>
-
-              <div className="gx-module-box-content">
-                <div className="gx-module-box-topbar">
-                  {this.state.currentMail === null ? '' :
-                    <i className="icon icon-arrow-left gx-icon-btn" onClick={() => {
-                      this.setState({ currentMail: null })
-                      this.props.resetCurrentTicket();
-                    }} />
-                  }
-
-                  <div classID="toolbar-separator" />
-                  {this.state.currentMail === null ? (
-                    <Row className="width_100">
-                      <div className="gx-module-list-content">
-                        <div className="gx-mail-user-des">
-                          <Col span="2">
-                            {(selectedMails.length > 0) && this.getMailActions()}
-                          </Col>
-                          <Col span="3">
-                            <h4>Ticket Id</h4>
-                          </Col>
-                          <Col span="4">
-                            <h4>Name</h4>
-                          </Col>
-                          <Col span="6">
-                            <h4>Subject</h4>
-                          </Col>
-                          <Col span="2">
-                            <h4>Status</h4>
-                          </Col>
-                          <Col span="2">
-                            <h4>Type</h4>
-                          </Col>
-                          <Col span="2">
-                            <h4>Priority</h4>
-                          </Col>
-                          <Col span="3">
-                            <h4>Time</h4>
-                          </Col>
-                        </div>
-                      </div>
-                    </Row>
-                  ) : '' }
-                </div>
-
-                {this.displayMail(currentMail, folderMails, noContentFoundMessage)}
-
-                <ComposeMail
-                  open={composeMail}
-                  admin={this.props.admin}
-                  user={this.props.user}
-                  connectedDealer={connectedDealer}
-                  generateSupportTicket={this.props.generateSupportTicket}
-                  onClose={this.handleRequestClose.bind(this)}
-                />
-
-              </div>
-            </div>
-          </div>
-          {showMessage && message.info(<span id="message-id">{alertMessage}</span>, 3, this.handleRequestClose)}
-        </div>
+        {this.renderTickets(filteredSupportTickets)}
       </div>
 
     )
@@ -488,4 +507,4 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Mail);
+export default connect(mapStateToProps, mapDispatchToProps, null, {withRef: true})(Mail);
