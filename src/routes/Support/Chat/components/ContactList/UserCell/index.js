@@ -5,7 +5,7 @@ const UserCell = ({onSelectUser, selectedSectionId, user}) => {
 
   return (
     <div className={`gx-chat-user-item ${selectedSectionId === user.id ? 'active' : ''}`} onClick={() => {
-      onSelectUser(user);
+      onSelectUser(user, 'user');
     }}>
       <div className="gx-chat-user-row">
         <div className="gx-chat-avatar">

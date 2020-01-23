@@ -13,30 +13,35 @@ import CircularProgress from "../../../components/CircularProgress/index";
 import {bindActionCreators} from "redux";
 
 import {connect} from "react-redux";
-import {getAllDealers, sendSupportLiveChatMessage} from "../../../appRedux/actions";
+import {
+  getAllDealers,
+  getAllToAllDealers,
+  getSupportLiveChatConversation, getSupportLiveChatMessages,
+  sendSupportLiveChatMessage
+} from "../../../appRedux/actions";
+import {DEALER, SDEALER} from "../../../constants/Constants";
 
 const TabPane = Tabs.TabPane;
 
 class Chat extends Component {
   filterContact = (userName) => {
     if (userName === '') {
-      return users.filter(user => !user.recent);
+      return this.state.copyContactList;
     }
-    return users.filter((user) =>
-      !user.recent && user.name.toLowerCase().indexOf(userName.toLowerCase()) > -1
+    return this.state.copyContactList.filter((list) =>
+      list.dealer_name.toLowerCase().indexOf(userName.toLowerCase()) > -1
     );
   };
   filterUsers = (userName) => {
     if (userName === '') {
-      return users.filter(user => user.recent);
+      return this.state.copyChatUsers;
     }
-    return users.filter((user) =>
-      user.recent && user.name.toLowerCase().indexOf(userName.toLowerCase()) > -1
+    return this.state.copyChatUsers.filter((list) =>
+      list.user.dealer_name.toLowerCase().indexOf(userName.toLowerCase()) > -1
     );
   };
   Communication = () => {
-    const {message, selectedUser, conversation} = this.state;
-    const {conversationData} = [conversation];
+    const {message, selectedUser} = this.state;
     return <div className="gx-chat-main">
       <div className="gx-chat-main-header">
         <span className="gx-d-block gx-d-lg-none gx-chat-btn"><i className="gx-icon-btn icon icon-chat"
@@ -63,22 +68,24 @@ class Chat extends Component {
       </div>
 
       <CustomScrollbars className="gx-chat-list-scroll">
-        <Conversation conversationData={conversationData}
-                      selectedUser={selectedUser}/>
+        <Conversation
+          conversationData={this.state.conversation}
+          selectedUser={selectedUser}
+        />
       </CustomScrollbars>
 
       <div className="gx-chat-main-footer">
         <div className="gx-flex-row gx-align-items-center" style={{maxHeight: 51}}>
           <div className="gx-col">
             <div className="gx-form-group">
-                            <textarea
-                              id="required" className="gx-border-0 ant-input gx-chat-textarea"
-                              onKeyUp={this._handleKeyPress.bind(this)}
-                              onChange={this.updateMessageValue.bind(this)}
-                              value={message}
-                              required={true}
-                              placeholder="Type and hit enter to send message"
-                            />
+              <textarea
+                id="required" className="gx-border-0 ant-input gx-chat-textarea"
+                onKeyUp={this._handleKeyPress.bind(this)}
+                onChange={this.updateMessageValue.bind(this)}
+                value={message}
+                required={true}
+                placeholder="Type and hit enter to send message"
+              />
             </div>
           </div>
           <i className="gx-icon-btn icon icon-sent" onClick={this.submitComment.bind(this)}/>
@@ -130,25 +137,26 @@ class Chat extends Component {
       <div className="gx-chat-sidenav-content">
 
         <Tabs className="gx-tabs-half" defaultActiveKey="1">
-          <TabPane label="Chat User" tab="Chat User" key="1">
+          <TabPane label="Chat Users" tab="Chat Users" key="1">
             <CustomScrollbars className="gx-chat-sidenav-scroll-tab-1">
               {this.state.chatUsers.length === 0 ?
                 <div className="gx-p-5">{this.state.userNotFound}</div>
                 :
-                <ChatUserList chatUsers={this.state.chatUsers}
-                              selectedSectionId={this.state.selectedSectionId}
-                              onSelectUser={this.onSelectUser.bind(this)}/>
+                <ChatUserList
+                  chatUsers={this.state.chatUsers}
+                  selectedSectionId={this.state.selectedSectionId}
+                  onSelectUser={this.onSelectUser.bind(this)}/>
               }
             </CustomScrollbars>
           </TabPane>
-          <TabPane label="Chat Contacts" tab="Chat Contacts" key="2">
+          <TabPane label="Contacts List" tab="Contacts List" key="2">
             <CustomScrollbars className="gx-chat-sidenav-scroll-tab-2">
               {
                 this.state.contactList.length === 0 ?
                   <div className="gx-p-5">{this.state.userNotFound}</div>
                   :
                   <ContactList
-                    contactList={this.props.contactList}
+                    contactList={this.state.contactList}
                     selectedSectionId={this.state.selectedSectionId}
                     onSelectUser={this.onSelectUser.bind(this)}/>
               }
@@ -167,21 +175,28 @@ class Chat extends Component {
   };
 
   handleChange = (event, value) => {
+
     this.setState({selectedTabIndex: value});
   };
 
-  onSelectUser = (user) => {
+  onSelectUser = (data, type) => {
+
+    if (type === 'chat'){
+      this.props.getSupportLiveChatMessages(data._id);
+    }
+
     this.setState({
       loader: true,
-      selectedSectionId: user.dealer_id,
+      selectedSectionId: type === 'user'? data.dealer_id : data.user.dealer_id,
       drawerState: this.props.drawerState,
-      selectedUser: user,
+      selectedUser: type === 'user'? data : data.user,
       conversation: []
     });
     setTimeout(() => {
       this.setState({loader: false});
-    }, 1500);
+    }, 500);
   };
+
   showCommunication = () => {
     return (
       <div className="gx-chat-box">
@@ -207,16 +222,87 @@ class Chat extends Component {
       selectedTabIndex: 1,
       userState: 1,
       searchChatUser: '',
-      contactList: users.filter((user) => !user.recent),
+      contactList: [],
+      copyContactList: [],
       selectedUser: null,
       message: '',
-      chatUsers: users.filter((user) => user.recent),
-      conversationList: [],
-      conversation: null
+      chatUsers: [],
+      copyChatUsers: [],
+      conversation: []
     }
   }
 
-  submitComment() {console.log(this.state.selectedUser)
+  componentDidMount() {
+    this.props.getAllToAllDealers();
+    this.props.getSupportLiveChatConversation();
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+
+    let chatUsersWithUser = [];
+
+    if (prevProps !== this.props && this.state.chatUsers.length !== this.props.supportLiveChatConversations.length && this.props.supportLiveChatConversations.length > 0 && this.props.dealerList.length > 0) {
+
+      this.props.supportLiveChatConversations.map((chatUsers, index) => {
+
+        chatUsers.user = this.props.dealerList.find((dealer) => (dealer.dealer_id === chatUsers.receiver || dealer.dealer_id === chatUsers.sender));
+
+        chatUsersWithUser.push(chatUsers)
+      });
+
+      this.setState({
+        chatUsers: chatUsersWithUser,
+        copyChatUsers: chatUsersWithUser,
+      })
+    }
+
+
+    if (prevProps !== this.props){
+
+      let admin ;
+      if (this.props.user.type === SDEALER || this.props.user.type === DEALER){
+        admin               = this.props.admin;
+        admin.dealer_name   = 'Admin';
+        admin.link_code     = '';
+      }
+
+      if (this.props.user.type === SDEALER  && this.props.dealerList.length > 0){
+
+        let dealer          = this.props.dealerList.find((dealer) => (dealer.dealer_id === this.props.user.connected_dealer ));
+
+        this.setState({
+          contactList: [dealer, admin],
+          copyContactList: [dealer, admin],
+        })
+
+      }else if (this.props.user.type === DEALER && this.props.contactList.length > 0){
+
+        this.setState({
+          contactList: [...this.props.contactList, admin],
+          copyContactList: [...this.props.contactList, admin],
+        })
+
+      }else if (this.props.contactList.length > 0){
+
+        this.setState({
+          contactList: this.props.contactList,
+          copyContactList: this.props.contactList,
+        })
+
+      }
+
+      if (this.props.supportLiveChatMessages.length > 0){
+        this.setState({
+          conversation: this.props.supportLiveChatMessages,
+        })
+      }
+
+    }
+
+  }
+
+  submitComment() {
+
     if (this.state.message !== '') {
       let data = {
         sender: this.props.user.id,
@@ -287,11 +373,15 @@ class Chat extends Component {
   }
 }
 
-var mapStateToProps = ({ auth, SupportTickets, dealers, sidebar }) => {
+var mapStateToProps = ({ auth, SupportLiveChat, dealers, sidebar }) => {
 
   return {
     contactList: dealers.dealers,
+    dealerList: dealers.allDealers,
+    admin: sidebar.admin,
     user: auth.authUser,
+    supportLiveChatConversations: SupportLiveChat.supportLiveChatConversations,
+    supportLiveChatMessages: SupportLiveChat.supportLiveChatMessages,
   };
 };
 
@@ -299,6 +389,9 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     getAllDealers: getAllDealers,
     sendSupportLiveChatMessage: sendSupportLiveChatMessage,
+    getSupportLiveChatConversation: getSupportLiveChatConversation,
+    getSupportLiveChatMessages: getSupportLiveChatMessages,
+    getAllToAllDealers: getAllToAllDealers,
   }, dispatch);
 }
 

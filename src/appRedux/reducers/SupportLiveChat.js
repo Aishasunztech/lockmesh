@@ -1,6 +1,6 @@
 import {
-  SEND_SUPPORT_LIVE_MESSAGE,
-  LOADING
+  SEND_SUPPORT_LIVE_CHAT_MESSAGE,
+  LOADING, GET_SUPPORT_LIVE_CHAT_CONVERSATION, GET_SUPPORT_LIVE_CHAT_MESSAGES
 } from "../../constants/ActionTypes";
 
 import { message, Modal } from 'antd';
@@ -9,6 +9,7 @@ const error   = Modal.error;
 const initialState = {
   isloading: true,
   supportLiveChatMessages: [],
+  supportLiveChatConversations: [],
 };
 
 export default (state = initialState, action) => {
@@ -23,14 +24,11 @@ export default (state = initialState, action) => {
         dealers: [],
       };
 
-    case SEND_SUPPORT_LIVE_MESSAGE:{
+    case SEND_SUPPORT_LIVE_CHAT_MESSAGE:{
       let supportLiveChatMessages = state.supportLiveChatMessages;
 
       if (action.payload.status) {
         supportLiveChatMessages.push(action.payload.data);
-        success({
-          title: action.payload.msg,
-        });
       }
       else {
         error({
@@ -41,6 +39,20 @@ export default (state = initialState, action) => {
       return {
         ...state,
         supportLiveChatMessages: [...supportLiveChatMessages],
+      };
+    }
+
+    case GET_SUPPORT_LIVE_CHAT_CONVERSATION:{
+      return {
+        ...state,
+        supportLiveChatConversations: action.payload.data,
+      };
+    }
+
+    case GET_SUPPORT_LIVE_CHAT_MESSAGES:{
+      return {
+        ...state,
+        supportLiveChatMessages: action.payload.data,
       };
     }
 
