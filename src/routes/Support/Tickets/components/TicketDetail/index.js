@@ -42,8 +42,8 @@ class TicketDetail extends React.Component {
           <div className="gx-mail-detail-inner">
             <div className="gx-mail-header">
               <div className="gx-mail-header-content gx-col gx-pl-0">
-                <div className="gx-subject" style={{fontSize: '20px'}}>
-                  <span style={{display: 'block', float: 'left', marginRight: '20px'}}><i className="icon icon-arrow-left gx-icon-btn" onClick={() => {
+                <div className="gx-subject" style={{fontSize: '15px'}}>
+                  <span style={{display: 'block', float: 'left', marginRight: '10px'}}><i className="icon icon-arrow-left gx-icon-btn" onClick={() => {
                     updateState({ currentMail: null });
                     this.props.updateOnTicketPage(false);
                     this.props.resetCurrentTicket();
