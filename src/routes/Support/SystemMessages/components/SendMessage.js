@@ -164,7 +164,7 @@ class SendMessage extends Component {
                 >
                   {(this.state.allDealers && this.state.allDealers.length > 0) ?
                     <Select.Option key="allDealers" value="all">Select All</Select.Option>
-                    : <Select.Option key="" value="">Data Not Found</Select.Option>
+                    : <Select.Option key="" value="">Dealers not found</Select.Option>
                   }
                   {this.state.allDealers.map(item => <Select.Option key={item.key} value={item.key} >{item.label}</Select.Option>)}
                 </Select>

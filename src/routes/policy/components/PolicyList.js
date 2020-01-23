@@ -19,6 +19,7 @@ import scrollIntoView from 'scroll-into-view';
 import { TIMESTAMP_FORMAT } from '../../../constants/Application';
 
 const confirm = Modal.confirm;
+const warning = Modal.warning;
 
 class PolicyList extends Component {
 
@@ -96,23 +97,36 @@ class PolicyList extends Component {
     }
 
 
-    deletePolicy = (id) => {
+    deletePolicy = (id, policies) => {
         let _this = this
-        confirm({
-            title: convertToLang(_this.props.translation[POLICY_DELETE_CONFIRMATION], "Do you want to delete this Policy?"),
-            onOk() {
-                _this.props.handlePolicyStatus(1, 'delete_status', id, _this.props.translation)
-            },
-            onCancel() { },
-            okText: convertToLang(_this.props.translation[Button_Yes], "Yes"),
-            cancelText: convertToLang(_this.props.translation[Button_No], "No")
 
-        });
+        if (policies && policies.length) {
+            Modal.error({
+                title: `This Policy Can't be deleted`,
+                content: (
+                    <Fragment>
+                        This policy is used in permissions
+                    </Fragment>
+                ),
+            });
+        } else {
+            confirm({
+                title: convertToLang(_this.props.translation[POLICY_DELETE_CONFIRMATION], "Do you want to delete this Policy?"),
+                onOk() {
+                    _this.props.handlePolicyStatus(1, 'delete_status', id, _this.props.translation)
+                },
+                onCancel() { },
+                okText: convertToLang(_this.props.translation[Button_Yes], "Yes"),
+                cancelText: convertToLang(_this.props.translation[Button_No], "No")
+
+            });
+        }
     }
 
     renderList(list) {
 
         return list.map((policy, index) => {
+            console.log("policy ", policy)
             return {
                 key: policy.id,
                 rowKey: policy.id,
@@ -139,7 +153,7 @@ class PolicyList extends Component {
                                     style={{ marginRight: 7, textTransform: "uppercase" }}
                                     type="danger"
                                     size="small"
-                                    onClick={() => { this.deletePolicy(policy.id) }}
+                                    onClick={() => { this.deletePolicy(policy.id, policy.dealer_permission) }}
                                 >
                                     {convertToLang(this.props.translation[Button_Delete], "DELETE")}
                                 </Button>

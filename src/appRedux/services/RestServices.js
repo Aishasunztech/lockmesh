@@ -1038,9 +1038,9 @@ const RestService = {
         return axios.post(BASE_URL + 'users/send_bulk_msg', { data, timezone }, RestService.getHeader());
     },
 
-    updateBulkMsg: (data) => {
+    updateBulkMsg: (data, timezone) => {
         // delete data.data; // delete devices list
-        return axios.post(BASE_URL + 'users/update_bulk_msg', data, RestService.getHeader());
+        return axios.post(BASE_URL + 'users/update_bulk_msg', {data, timezone}, RestService.getHeader());
     },
 
     getBulkMsgsList: (timezone) => {
