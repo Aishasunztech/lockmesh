@@ -1,14 +1,8 @@
 import React from "react";
-import { Button, Icon, Form, Input, Row, Col } from 'antd';
+import { Button } from 'antd';
 import SupportTicketReply from '../SupportTicketReply/index'
 import CustomScrollbars from 'util/CustomScrollbars'
 import { getDateFromTimestamp } from "../../../../utils/commonUtils";
-import Reply from '../SupportTicketReply/reply';
-import statuses from "../../data/statuses";
-import categories from "../../data/categories";
-import priorities from "../../data/priorities";
-
-const { TextArea } = Input;
 class TicketDetail extends React.Component {
 
   constructor(props){
@@ -29,8 +23,8 @@ class TicketDetail extends React.Component {
 
   }
 
-  scrollToReplyTab(){
-    this.replyRef.current.scrollIntoView({behavior: 'smooth'});
+  addReply = () => {
+    this.setState({replyTicket: true});
   }
 
   render() {
@@ -48,11 +42,6 @@ class TicketDetail extends React.Component {
                     this.props.updateOnTicketPage(false);
                     this.props.resetCurrentTicket();
                   }} />
-                    {/*<Icon type="arrow-left" style={{fontSize: '20px', marginTop: '15px'}} onClick={() => {*/}
-                    {/*updateState({ currentMail: null });*/}
-                    {/*this.props.updateOnTicketPage(false);*/}
-                    {/*this.props.resetCurrentTicket();*/}
-                  {/*}} />*/}
                   </span>
                   <span style={{display: 'block', float: 'left'}}>Subject: {supportTicket.subject}<br />
                     Ticket Id: ({ supportTicket.ticketId })</span>
@@ -63,7 +52,7 @@ class TicketDetail extends React.Component {
               <div className="gx-mail-header-actions">
 
                 <div onClick={() => {
-                  this.scrollToReplyTab();
+                  this.addReply();
                 }}>
                   {supportTicket.status === 'open' && closeSupportTicketStatus === false?
                     <Button type="primary" size="small">Add Reply</Button>
@@ -114,12 +103,19 @@ class TicketDetail extends React.Component {
               : ''}
           </div>
 
-          {supportTicket.status === 'open' && closeSupportTicketStatus === false?
-            <Reply formId={this.replyRef} user={user} ticket={supportTicket} supportTicketReply={this.props.supportTicketReply} />
-            : ''
-          }
-
         </CustomScrollbars>
+
+        {supportTicket.status === 'open' && closeSupportTicketStatus === false?
+          <SupportTicketReply open={this.state.replyTicket}
+                              user={this.props.user}
+                              supportTicketReply={this.props.supportTicketReply}
+                              supportTicket={this.props.supportTicket}
+                              onClose={this.handleRequestClose.bind(this)}
+          />
+          : ''
+        }
+
+
       </div>
     );
   }
