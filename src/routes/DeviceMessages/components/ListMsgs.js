@@ -4,6 +4,7 @@ import { convertToLang, checkValue, convertTimezoneValue, getWeekDay, getMonthNa
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 import moment from 'moment';
 import ReadMoreAndLess from 'react-read-more-less';
+import CustomScrollbars from "../../../util/CustomScrollbars";
 import { userDevicesListColumns } from '../../utils/columnsUtils';
 import { TIMESTAMP_FORMAT_NOT_SEC, TIME_FORMAT_HM, SERVER_TIMEZONE, HOST_NAME } from '../../../constants/Application';
 import EditMsgModal from './EditMsgForm';
@@ -209,6 +210,9 @@ export default class ListMsgs extends Component {
         return (
             <Fragment>
                 <Card>
+                    {/* <Card className='fix_msgList_card'>
+                        <hr className="fix_header_border" style={{ top: "56px" }} />
+                        <CustomScrollbars className="gx-popover-scroll "> */}
                     <Table
                         className="gx-table-responsive msgList"
                         rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
@@ -243,6 +247,7 @@ export default class ListMsgs extends Component {
                         scroll={{ x: true }}
                         rowKey="domain_id"
                     />
+                    {/* </CustomScrollbars> */}
                 </Card>
 
                 <EditMsgModal
