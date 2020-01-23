@@ -11,9 +11,13 @@ import priorities from "../../data/priorities";
 const { TextArea } = Input;
 class TicketDetail extends React.Component {
 
-  state = {
-    replyTicket: false
-  };
+  constructor(props){
+    super(props);
+    this.state = {
+      replyTicket: false
+    };
+    this.replyRef = React.createRef();
+  }
 
   handleRequestClose = () => {
     this.setState({
@@ -23,6 +27,10 @@ class TicketDetail extends React.Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
 
+  }
+
+  scrollToReplyTab(){
+    this.replyRef.current.scrollIntoView({behavior: 'smooth'});
   }
 
   render() {
@@ -35,10 +43,17 @@ class TicketDetail extends React.Component {
             <div className="gx-mail-header">
               <div className="gx-mail-header-content gx-col gx-pl-0">
                 <div className="gx-subject" style={{fontSize: '20px'}}>
-                  <span style={{display: 'block', float: 'left', marginRight: '20px'}}><Icon type="arrow-left" style={{fontSize: '20px', marginTop: '15px'}} onClick={() => {
-                    updateState({ currentMail: null })
+                  <span style={{display: 'block', float: 'left', marginRight: '20px'}}><i className="icon icon-arrow-left gx-icon-btn" onClick={() => {
+                    updateState({ currentMail: null });
+                    this.props.updateOnTicketPage(false);
                     this.props.resetCurrentTicket();
-                  }} /></span>
+                  }} />
+                    {/*<Icon type="arrow-left" style={{fontSize: '20px', marginTop: '15px'}} onClick={() => {*/}
+                    {/*updateState({ currentMail: null });*/}
+                    {/*this.props.updateOnTicketPage(false);*/}
+                    {/*this.props.resetCurrentTicket();*/}
+                  {/*}} />*/}
+                  </span>
                   <span style={{display: 'block', float: 'left'}}>Subject: {supportTicket.subject}<br />
                     Ticket Id: ({ supportTicket.ticketId })</span>
                 </div>
@@ -48,11 +63,21 @@ class TicketDetail extends React.Component {
               <div className="gx-mail-header-actions">
 
                 <div onClick={() => {
+                  this.scrollToReplyTab();
+                }}>
+                  {supportTicket.status === 'open' && closeSupportTicketStatus === false?
+                    <Button type="primary" size="small">Add Reply</Button>
+                    : ''
+                  }
+                </div>
+              </div>
+              <div className="gx-mail-header-actions">
+
+                <div onClick={() => {
                   onCloseTicket(supportTicket);
                 }}>
-
                   {supportTicket.status === 'open' && closeSupportTicketStatus === false?
-                    <Button type="danger" size="small">Close Ticket</Button>
+                    <Button type="danger" size="small">Close This Ticket</Button>
                     : ''
                   }
                 </div>
@@ -89,17 +114,12 @@ class TicketDetail extends React.Component {
               : ''}
           </div>
 
-          <Reply user={user} ticket={supportTicket} supportTicketReply={this.props.supportTicketReply} />
+          {supportTicket.status === 'open' && closeSupportTicketStatus === false?
+            <Reply formId={this.replyRef} user={user} ticket={supportTicket} supportTicketReply={this.props.supportTicketReply} />
+            : ''
+          }
 
         </CustomScrollbars>
-
-        {/*<SupportTicketReply open={this.state.replyTicket}*/}
-                            {/*user={this.props.user}*/}
-                            {/*supportTicketReply={this.props.supportTicketReply}*/}
-                            {/*supportTicket={this.props.supportTicket}*/}
-                            {/*onClose={this.handleRequestClose.bind(this)}*/}
-        {/*/>*/}
-
       </div>
     );
   }

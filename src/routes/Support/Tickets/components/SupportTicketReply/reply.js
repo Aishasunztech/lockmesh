@@ -18,7 +18,8 @@ const Reply = (props) => {
     })
   }
 
-  return (<Form autoComplete="new-password" onSubmit={handleSubmit}>
+  return (
+    <div ref={props.formId}><Form autoComplete="new-password" onSubmit={handleSubmit}>
     <Form.Item style={{padding: '24px'}} wrapperCol={{ span: 12 }}>
       {props.form.getFieldDecorator('description', {
         rules: [
@@ -36,7 +37,7 @@ const Reply = (props) => {
         Reply
       </Button>
     </Form.Item>
-  </Form>);
+    </Form></div>);
 
 };
 

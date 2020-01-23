@@ -14,17 +14,19 @@ import {ADMIN, DEALER, SDEALER} from "../../constants/Constants";
 const TabPane = Tabs.TabPane;
 
 let systemMessagesOptions;
-
 class Support extends Component {
+
+
   constructor(props) {
     super(props);
 
-    let currentTabId = (this.props.location ? this.props.location.state ? this.props.location.state.page ? this.props.location.state.page : '1' : '1' : '1')
+    let currentTabId = (this.props.location ? this.props.location.state ? this.props.location.state.page ? this.props.location.state.page : '1' : '1' : '1');
 
     this.state = {
       innerTabSelect: currentTabId,
       filterOption: 'all',
       systemMessagesSearchValue: '',
+      onTicketDetailPage: false
     };
 
     this.systemMessagesOptions = <span>
@@ -49,6 +51,7 @@ class Support extends Component {
 
       <Input
         type="text"
+        key="systemMessagesSearch"
         placeholder="Search"
         style={{ width: '40%', marginRight: '1%', float: "right" }}
         onChange={ (e) => {this.setState({systemMessagesSearchValue: e.target.value})} }
@@ -60,42 +63,49 @@ class Support extends Component {
 
 
       {this.props.user.type !== ADMIN ?
-        <Button type="primary" style={{float: "right"}} onClick={ () => {this.refs.supportTickets.getWrappedInstance().updateState({composeMail: true})} } size="default" >Generate New Ticket</Button>
+        <Button type="primary" style={{float: "right"}} onClick={ () => { this.refs.supportTickets.getWrappedInstance().updateState({composeMail: true})} } size="default" >Generate New Ticket</Button>
       : '' }
 
       <Select
-        key="support_tickets_statuses_key"
-        style={{ width: '15%', marginRight: '1%', float: "right" }}
-        onChange={ (e) => { console.log(e);} }
-        defaultValue={statuses[0].title}
+        key="support_tickets_key"
+        style={{ width: '25%', marginRight: '1%', float: "right" }}
+        onChange={ (e) => { this.refs.supportTickets.getWrappedInstance().filterTickets({filter: e}); }}
+        defaultValue="all_all"
       >
+        <Select.Option value="all_all">All</Select.Option>
         <Select.OptGroup label="Status">
-        {statuses.map( (status, index) => {
-          return <Select.Option value={status.title}>{status.title.charAt(0).toUpperCase() + status.title.substr(1)}</Select.Option>
+        {statuses.filter(status => status.title !== 'all').map( (status, index) => {
+          return <Select.Option value={"status_"+status.title}>{status.title.charAt(0).toUpperCase() + status.title.substr(1)}</Select.Option>
         }) }
         </Select.OptGroup>
         <Select.OptGroup label="Type">
-        {categories.map( (category, index) => {
-          return <Select.Option value={category.title}>{category.title.charAt(0).toUpperCase() + category.title.substr(1)}</Select.Option>
+        {categories.filter(category => category.title !== 'all').map( (category, index) => {
+          return <Select.Option value={"type_"+category.title}>{category.title.charAt(0).toUpperCase() + category.title.substr(1)}</Select.Option>
         }) }
         </Select.OptGroup>
         <Select.OptGroup label="Priority">
-        {priorities.map( (priority, index) => {
-          return <Select.Option value={priority.title}>{priority.title.charAt(0).toUpperCase() + priority.title.substr(1)}</Select.Option>
+        {priorities.filter(priority => priority.title !== 'all').map( (priority, index) => {
+          return <Select.Option value={"priority_"+priority.title}>{priority.title.charAt(0).toUpperCase() + priority.title.substr(1)}</Select.Option>
         }) }
         </Select.OptGroup>
       </Select>
 
       <Input
         type="text"
+        key="tokenSearch"
         placeholder="Search"
-        style={{ width: '30%', marginRight: '1%', float: "right" }}
-        onChange={ (e) => {this.setState({systemMessagesSearchValue: e.target.value})} }
+        style={{ width: '40%', marginRight: '1%', float: "right" }}
+        onChange={ (e) => {this.refs.supportTickets.getWrappedInstance().filterTickets({searchTicket: e.target.value})} }
       />
       </span>;
 
 
       this.tabBarContent.bind(this);
+  }
+
+
+  updateOnTicketDetailPage(value){
+    this.setState({onTicketDetailPage: value});
   }
 
 
@@ -129,19 +139,15 @@ class Support extends Component {
 
   };
 
-  tabBarContent(currentTab){
+  tabBarContent(currentTab, onTicketPage){
 
     let content = '';
-    switch (currentTab){
-      case '1':
-        content = this.systemMessagesOptions;
-        break;
-      case '2':
-        content = this.supportTicketOptions;
-        break;
-      default:
-        break;
+    if(currentTab === '1'){
+      content = this.systemMessagesOptions;
+    } else if (currentTab === '2' && !onTicketPage){
+      content = this.supportTicketOptions;
     }
+
     return content;
   }
 
@@ -155,7 +161,7 @@ class Support extends Component {
         />
         <Card>
 
-          <Tabs tabBarExtraContent={ this.tabBarContent(this.state.innerTabSelect) } defaultActiveKey={this.state.innerTabSelect} activeKey={this.state.innerTabSelect} type="card" className="supportModuleMainTab" onChange={this.handleChangeCardTabs}>
+          <Tabs tabBarExtraContent={ this.tabBarContent(this.state.innerTabSelect, this.state.onTicketDetailPage) } defaultActiveKey={this.state.innerTabSelect} activeKey={this.state.innerTabSelect} type="card" className="supportModuleMainTab" onChange={this.handleChangeCardTabs}>
             <TabPane tab="SYSTEM MESSAGES" key="1" forceRender={false}>
               <SystemMessages
                 ref="systemMessages"
@@ -164,7 +170,7 @@ class Support extends Component {
               />
             </TabPane>
             <TabPane tab="TICKETS" key="2" forceRender={false}>
-              <Ticket ref="supportTickets" />
+              <Ticket ref="supportTickets" updateOnTicketPage={this.updateOnTicketDetailPage.bind(this)} />
             </TabPane>
             <TabPane tab="LIVE CHAT" key="3" forceRender={false}>
             </TabPane>
