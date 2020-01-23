@@ -1162,6 +1162,33 @@ export function StandAloneSimsColumns(translation, handleSearch) {
         {
             title: (
                 <Input.Search
+                    name="status"
+                    key="status"
+                    id="status"
+                    className="search_heading user_id_w"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[""], "STATUS")}
+                />
+            ),
+            dataIndex: 'status',
+            children: [
+                {
+                    title: convertToLang(translation[""], "STATUS"),
+                    align: "center",
+                    dataIndex: 'status',
+                    key: "status",
+                    sorter: (a, b) => {
+                        // console.log(a, 'user is is')
+                        return a.status.localeCompare(b.status)
+                    },
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ],
+        },
+        {
+            title: (
+                <Input.Search
                     name="sim_iccid"
                     key="sim_iccid"
                     id="sim_iccid"
@@ -1495,31 +1522,31 @@ export function userDevicesListColumns(translation, handleSearch) {
 }
 
 export function supportSystemMessagesReceiversColumns(translation, handleSearch) {
-  return ([
-    {
-      title: '#',
-      dataIndex: 'counter',
-      align: 'center',
-      className: 'row',
-      render: (text, record, index) => ++index,
-    },
-    {
-      title: convertToLang(translation[""], "NAME"),
-      align: "center",
-      dataIndex: 'name',
-      sorter: (a, b) => { return a.name.localeCompare(b.name) },
-      sortDirections: ['ascend', 'descend'],
-    },
-    {
-      title: convertToLang(translation[DEVICE_DEALER_PIN], "DEALER PIN"),
-      align: "center",
-      dataIndex: 'link_code',
-      key: 'link_code',
-      sorter: (a, b) => { return a.link_code - b.link_code },
-      sortDirections: ['ascend', 'descend'],
+    return ([
+        {
+            title: '#',
+            dataIndex: 'counter',
+            align: 'center',
+            className: 'row',
+            render: (text, record, index) => ++index,
+        },
+        {
+            title: convertToLang(translation[""], "NAME"),
+            align: "center",
+            dataIndex: 'name',
+            sorter: (a, b) => { return a.name.localeCompare(b.name) },
+            sortDirections: ['ascend', 'descend'],
+        },
+        {
+            title: convertToLang(translation[DEVICE_DEALER_PIN], "DEALER PIN"),
+            align: "center",
+            dataIndex: 'link_code',
+            key: 'link_code',
+            sorter: (a, b) => { return a.link_code - b.link_code },
+            sortDirections: ['ascend', 'descend'],
 
-    },
-  ]);
+        },
+    ]);
 }
 
 
@@ -3823,7 +3850,7 @@ export function deviceMsgsColumns(translation, handleSearch, isModal = false) {
                     onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder="MESSAGE"
-                    allowClear 
+                    allowClear
                 />
             ),
             dataIndex: 'msg',
@@ -4035,75 +4062,75 @@ export function deviceMsgsColumns(translation, handleSearch, isModal = false) {
 }
 
 export function supportSystemMessage(translation, isModal = false) {
-  let columns = [
-    {
-      title: "#",
-      dataIndex: 'counter',
-      align: 'center',
-      className: 'row',
-      width: 50,
-      render: (text, record, index) => ++index,
-    },
+    let columns = [
+        {
+            title: "#",
+            dataIndex: 'counter',
+            align: 'center',
+            className: 'row',
+            width: 50,
+            render: (text, record, index) => ++index,
+        },
 
-    {
-      title: "RECEIVER",
-      dataIndex: 'receivers',
-      className: '',
-      key: 'receivers',
-      width: 200,
-    },
+        {
+            title: "RECEIVER",
+            dataIndex: 'receivers',
+            className: '',
+            key: 'receivers',
+            width: 200,
+        },
 
-    {
-      title: convertToLang(translation[""], "TYPE"),
-      width: 200,
-      dataIndex: 'type',
-      key: 'type',
-      sorter: (a, b) => { return a.type.localeCompare(b.type) },
-      sortDirections: ['ascend', 'descend'],
-    },
+        {
+            title: convertToLang(translation[""], "TYPE"),
+            width: 200,
+            dataIndex: 'type',
+            key: 'type',
+            sorter: (a, b) => { return a.type.localeCompare(b.type) },
+            sortDirections: ['ascend', 'descend'],
+        },
 
-    {
-      title: convertToLang(translation[""], "SENDER"),
-      width: 200,
-      dataIndex: 'sender',
-      key: 'sender',
-      sorter: (a, b) => { return a.sender.localeCompare(b.sender) },
-      sortDirections: ['ascend', 'descend'],
-    },
+        {
+            title: convertToLang(translation[""], "SENDER"),
+            width: 200,
+            dataIndex: 'sender',
+            key: 'sender',
+            sorter: (a, b) => { return a.sender.localeCompare(b.sender) },
+            sortDirections: ['ascend', 'descend'],
+        },
 
-    {
-      title: convertToLang(translation[""], "SUBJECT"),
-      dataIndex: 'subject',
-      key: 'subject',
-      sorter: (a, b) => { return a.subject.localeCompare(b.subject) },
-      sortDirections: ['ascend', 'descend'],
-    },
+        {
+            title: convertToLang(translation[""], "SUBJECT"),
+            dataIndex: 'subject',
+            key: 'subject',
+            sorter: (a, b) => { return a.subject.localeCompare(b.subject) },
+            sortDirections: ['ascend', 'descend'],
+        },
 
-    {
-      width: 200,
-      title: convertToLang(translation[""], "DATE"),
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      sorter: (a, b) => { return a.createdAt.localeCompare(b.createdAt) },
-      sortDirections: ['ascend', 'descend'],
-    },
+        {
+            width: 200,
+            title: convertToLang(translation[""], "DATE"),
+            dataIndex: 'createdAt',
+            key: 'createdAt',
+            sorter: (a, b) => { return a.createdAt.localeCompare(b.createdAt) },
+            sortDirections: ['ascend', 'descend'],
+        },
 
-    {
-      width: 200,
-      title: convertToLang(translation[""], "TIME"),
-      dataIndex: 'createdTime',
-      key: 'createdTime',
-      sorter: (a, b) => { return a.createdTime.localeCompare(b.createdTime) },
-      sortDirections: ['ascend', 'descend'],
-    },
-    {
-      title: "ACTION",
-      dataIndex: 'action',
-      align: 'center',
-      width: 150,
-      className: '',
-    },
-  ];
+        {
+            width: 200,
+            title: convertToLang(translation[""], "TIME"),
+            dataIndex: 'createdTime',
+            key: 'createdTime',
+            sorter: (a, b) => { return a.createdTime.localeCompare(b.createdTime) },
+            sortDirections: ['ascend', 'descend'],
+        },
+        {
+            title: "ACTION",
+            dataIndex: 'action',
+            align: 'center',
+            width: 150,
+            className: '',
+        },
+    ];
 
-  return columns;
+    return columns;
 }

@@ -267,7 +267,7 @@ class SidebarContent extends Component {
               {/* Notifications */}
               <li>
                 <a className="head-example">
-                  <Badge count={(localStorage.getItem('type') !== ADMIN) ? this.props.supportSystemMessagesNotifications.length + this.props.devices.length + this.props.requests.length + this.props.ticketNotifications.length : this.props.cancel_service_requests.length + this.props.supportSystemMessagesNotifications.length+ this.props.ticketNotifications.length}>
+                  <Badge count={(localStorage.getItem('type') !== ADMIN) ? this.props.supportSystemMessagesNotifications.length + this.props.devices.length + this.props.requests.length + this.props.ticketNotifications.length : this.props.cancel_service_requests.length + this.props.supportSystemMessagesNotifications.length + this.props.ticketNotifications.length}>
                     <i className="icon icon-notification notification_icn" onClick={() => this.showNotification()} />
                   </Badge>
                 </a>
@@ -338,7 +338,7 @@ class SidebarContent extends Component {
                     {/* <i className="fa fa-mobile" aria-hidden="true"></i> */}
                   </i>
                   {/* <IntlMessages id="sidebar.devices" /> */}
-                  {convertToLang(translation[Sidebar_users_devices], "Sims")}
+                  {convertToLang(translation[Sidebar_users_devices], "StandAlone Sims")}
                 </Link>
               </Menu.Item>
               <Menu.Item key="users">
