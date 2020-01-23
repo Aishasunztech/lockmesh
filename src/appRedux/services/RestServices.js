@@ -1200,5 +1200,20 @@ const RestService = {
     updateSupportSystemMessageNotification: (data) => {
         return axios.post(SUPPORT_URL + 'system-messages/update-notification', data, RestService.getHeader());
     },
+
+    //send Support Live Chat Message
+    sendSupportLiveChatMessage: (data) => {
+      return axios.post(SUPPORT_URL + 'messages/send', data, RestService.getHeader());
+    },
+
+    //get Support Live Chat conversations
+    getSupportLiveChatConversation: (data) => {
+      return axios.get(SUPPORT_URL + 'messages/conversations', RestService.getHeader());
+    },
+
+    //get Support Live Chat Message
+    getSupportLiveChatMessages: (data) => {
+      return axios.get(SUPPORT_URL + 'messages/get/'+data, RestService.getHeader());
+    },
 };
 export default RestService;

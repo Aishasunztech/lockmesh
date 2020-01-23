@@ -10,6 +10,7 @@ import styles from './style.css'
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {ADMIN, DEALER, SDEALER} from "../../constants/Constants";
+import Chat from "./Chat/index";
 
 const TabPane = Tabs.TabPane;
 
@@ -173,6 +174,7 @@ class Support extends Component {
               <Ticket ref="supportTickets" updateOnTicketPage={this.updateOnTicketDetailPage.bind(this)} />
             </TabPane>
             <TabPane tab="LIVE CHAT" key="3" forceRender={false}>
+              <Chat />
             </TabPane>
 
 
