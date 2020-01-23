@@ -195,8 +195,9 @@ export default class NewDevices extends Component {
     }
 
     renderTicketNotifications(list) {
-        // console.log();
+
         if (list && Array.isArray(list) && list.length > 0) {
+
             return list.map((notification) => {
                 let dealer = this.props.allDealers.find(dealer => dealer.dealer_id == notification.user_id)
                 return {

@@ -199,15 +199,15 @@ class CreditIcon extends Component {
         "bg_red"
     return <div>
       <Row gutter="16">
-        <Col span={12} className="credit_modal_heading ">
-          <h4 className="weight_600">{convertToLang(this.props.translation[""], "ACCOUNT STATUS")}</h4>
+        <Col span={12} className="credit_modal_heading bg_brown">
+          <h4 className="weight_600 mb-0 "><b> {convertToLang(this.props.translation[""], "ACCOUNT STATUS")} </b></h4>
         </Col>
         <Col span={12} className={"credit_modal_heading " + class_name}>
           <h4 className=" weight_600">
             {convertToLang(this.props.translation[""], (this.props.account_balance_status == 'active') ?
               <span className="">ACTIVE</span> : (this.props.account_balance_status === 'restricted') ?
                 <span> Restriction Level 1</span> :
-                <span className="" > Restriction Level 2</span>)
+                <span className="color_white" > Restriction Level 2</span>)
             }</h4>
         </Col>
       </Row>
@@ -284,8 +284,8 @@ class CreditIcon extends Component {
 
   renderAccountStatus = () => {
     let statusBGC, statusDays;
-
-    if (this.props.account_balance_status_by === 'due_credits') {
+    let textColor = ''
+    if (this.props.account_balance_status_by === 'due_credits' && this.props.account_balance_status !== 'active') {
       if (this.props.account_balance_status === 'restricted' && this.props.overdueDetails._30to60 > 0) {
         statusBGC = 'bg_yellow';
         statusDays = '31+ days Overdue';
@@ -295,32 +295,35 @@ class CreditIcon extends Component {
         statusDays = '21+ days Overdue';
         account_status_paragraph = "Your account is restricted. You May not use PAY LATER feature. Please pay invoices 21+ days overdue";
       } else if (this.props.account_balance_status === 'suspended') {
-        statusBGC = 'bg_red';
+        statusBGC = 'bg_red bg_white';
         statusDays = '60+ days Overdue';
         account_status_paragraph = "Your account is restricted. You May not add new Devices. Please pay invoices 60+ days overdue";
       } else {
         statusBGC = 'bg_green';
         statusDays = 'No Overdue';
       }
-    } else if (this.props.account_balance_status_by === 'admin') {
+    } else if (this.props.account_balance_status_by === 'admin' && this.props.account_balance_status !== 'active') {
       if (this.props.account_balance_status === 'restricted') {
         statusBGC = 'bg_yellow';
         statusDays = 'admin';
         account_status_paragraph = "Account restricted by Admin.You May not use PAY LATER feature until its restored."
-      } else {
-        statusBGC = 'bg_red';
+      } else if (this.props.account_balance_status === 'suspended') {
+        statusBGC = 'bg_red color_white';
+
         statusDays = 'admin';
         account_status_paragraph = "Account restricted by Admin.You May not add new Devices until its restored."
+      } else {
+        statusBGC = 'bg_green';
+        statusDays = 'admin';
       }
-
     } else {
       statusBGC = 'bg_green';
       statusDays = 'No Overdue';
       account_status_paragraph = "No Overdue"
       return [
         {
-          name: <h5 className={'ac_st_info '} >INFO</h5>,
-          value: <h5 className={"weight_600 bg_brown p-5 " + statusBGC} >{account_status_paragraph} </h5>,
+          name: <h5 className={'ac_st_info'} >INFO</h5>,
+          value: <h5 className={"weight_600 mb-0 p-8 bg_brown" + statusBGC} >{account_status_paragraph} </h5>,
         }
       ];
     }
@@ -328,12 +331,12 @@ class CreditIcon extends Component {
     return [
 
       {
-        name: <h5 className={'restricted_by'} >Restricted By</h5>,
-        value: <h5 className={"weight_600 bg_brown p-5 "} >{statusDays} </h5>
+        name: <h5 className={'restricted_by bg_brown'} >Restricted By</h5>,
+        value: <h5 className={"weight_600 mb-0 p-8 " + statusBGC} >{statusDays} </h5>
       },
       {
-        name: <h5 className={'weight_600 p-5 text-uppercase '} >INFO</h5>,
-        value: <h5 className={"weight_600 bg_brown p-5 " + statusBGC}>{account_status_paragraph} </h5>,
+        name: <h5 className={'weight_600 p-8 mb-0 text-uppercase'}>INFO</h5>,
+        value: <h5 className={"weight_600 mb-0 p-8 white_normal " + statusBGC}>{account_status_paragraph} </h5>,
       }
     ];
   };
@@ -447,7 +450,7 @@ class CreditIcon extends Component {
             </Col>
             <Col xs={24} sm={24} md={14} lg={12} xl={12}>
               <Table
-                className="ac_status_table"
+                className="current_bl_table"
                 dataSource={this.renderCreditBalance()}
                 columns={this.cr_blnc_columns}
                 pagination={false}
