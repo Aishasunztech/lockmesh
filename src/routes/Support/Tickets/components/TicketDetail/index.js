@@ -1,16 +1,23 @@
 import React from "react";
+import { Button, Icon, Form, Input, Row, Col } from 'antd';
 import SupportTicketReply from '../SupportTicketReply/index'
 import CustomScrollbars from 'util/CustomScrollbars'
 import { getDateFromTimestamp } from "../../../../utils/commonUtils";
+import Reply from '../SupportTicketReply/reply';
 import statuses from "../../data/statuses";
 import categories from "../../data/categories";
 import priorities from "../../data/priorities";
 
+const { TextArea } = Input;
 class TicketDetail extends React.Component {
 
-  state = {
-    replyTicket: false
-  };
+  constructor(props){
+    super(props);
+    this.state = {
+      replyTicket: false
+    };
+    this.replyRef = React.createRef();
+  }
 
   handleRequestClose = () => {
     this.setState({
@@ -22,19 +29,33 @@ class TicketDetail extends React.Component {
 
   }
 
+  scrollToReplyTab(){
+    this.replyRef.current.scrollIntoView({behavior: 'smooth'});
+  }
+
   render() {
-    const {supportTicket, onCloseTicket, closeSupportTicketStatus} = this.props;
+    const {supportTicket, onCloseTicket, closeSupportTicketStatus, user, updateState } = this.props;
 
     return (
       <div className="gx-module-detail gx-mail-detail">
         <CustomScrollbars className="gx-module-content-scroll">
           <div className="gx-mail-detail-inner">
             <div className="gx-mail-header">
-
               <div className="gx-mail-header-content gx-col gx-pl-0">
-                <div className="gx-subject">
-                  Subject: {supportTicket.subject}<br />
-                  Ticket Id: ({ supportTicket.ticketId })
+                <div className="gx-subject" style={{fontSize: '20px'}}>
+                  <span style={{display: 'block', float: 'left', marginRight: '20px'}}><i className="icon icon-arrow-left gx-icon-btn" onClick={() => {
+                    updateState({ currentMail: null });
+                    this.props.updateOnTicketPage(false);
+                    this.props.resetCurrentTicket();
+                  }} />
+                    {/*<Icon type="arrow-left" style={{fontSize: '20px', marginTop: '15px'}} onClick={() => {*/}
+                    {/*updateState({ currentMail: null });*/}
+                    {/*this.props.updateOnTicketPage(false);*/}
+                    {/*this.props.resetCurrentTicket();*/}
+                  {/*}} />*/}
+                  </span>
+                  <span style={{display: 'block', float: 'left'}}>Subject: {supportTicket.subject}<br />
+                    Ticket Id: ({ supportTicket.ticketId })</span>
                 </div>
 
               </div>
@@ -42,22 +63,24 @@ class TicketDetail extends React.Component {
               <div className="gx-mail-header-actions">
 
                 <div onClick={() => {
-                  onCloseTicket(supportTicket);
+                  this.scrollToReplyTab();
                 }}>
-
                   {supportTicket.status === 'open' && closeSupportTicketStatus === false?
-                    <i className="icon icon-close-circle gx-icon-btn"/>
+                    <Button type="primary" size="small">Add Reply</Button>
                     : ''
                   }
                 </div>
+              </div>
+              <div className="gx-mail-header-actions">
 
                 <div onClick={() => {
-                  this.setState({replyTicket: true})
+                  onCloseTicket(supportTicket);
                 }}>
-                  <i className="icon icon-reply gx-icon-btn" />
-
+                  {supportTicket.status === 'open' && closeSupportTicketStatus === false?
+                    <Button type="danger" size="small">Close This Ticket</Button>
+                    : ''
+                  }
                 </div>
-
               </div>
             </div>
 
@@ -91,15 +114,12 @@ class TicketDetail extends React.Component {
               : ''}
           </div>
 
+          {supportTicket.status === 'open' && closeSupportTicketStatus === false?
+            <Reply formId={this.replyRef} user={user} ticket={supportTicket} supportTicketReply={this.props.supportTicketReply} />
+            : ''
+          }
+
         </CustomScrollbars>
-
-        <SupportTicketReply open={this.state.replyTicket}
-                            user={this.props.user}
-                            supportTicketReply={this.props.supportTicketReply}
-                            supportTicket={this.props.supportTicket}
-                            onClose={this.handleRequestClose.bind(this)}
-        />
-
       </div>
     );
   }
