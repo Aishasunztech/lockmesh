@@ -203,7 +203,7 @@ class CreditIcon extends Component {
           <h4 className="weight_600 mb-0 "><b> {convertToLang(this.props.translation[""], "ACCOUNT STATUS")} </b></h4>
         </Col>
         <Col span={12} className={"credit_modal_heading " + class_name}>
-          <h4 className=" weight_600">
+          <h4 className=" weight_600  mb-0 ">
             {convertToLang(this.props.translation[""], (this.props.account_balance_status == 'active') ?
               <span className="">ACTIVE</span> : (this.props.account_balance_status === 'restricted') ?
                 <span> Restriction Level 1</span> :
@@ -300,7 +300,7 @@ class CreditIcon extends Component {
         account_status_paragraph = "Your account is restricted. You May not add new Devices. Please pay invoices 60+ days overdue";
       } else {
         statusBGC = 'bg_green';
-        statusDays = 'No Overdue';
+        statusDays = 'No Restriction';
       }
     } else if (this.props.account_balance_status_by === 'admin' && this.props.account_balance_status !== 'active') {
       if (this.props.account_balance_status === 'restricted') {
@@ -318,8 +318,8 @@ class CreditIcon extends Component {
       }
     } else {
       statusBGC = 'bg_green';
-      statusDays = 'No Overdue';
-      account_status_paragraph = "No Overdue"
+      statusDays = 'No Restriction';
+      account_status_paragraph = "No Restriction"
       return [
         {
           name: <h5 className={'ac_st_info'} >INFO</h5>,
