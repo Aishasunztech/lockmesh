@@ -122,7 +122,7 @@ export default class ListMsgs extends Component {
                 action: (
                     <div data-column="ACTION" style={{ display: "inline-flex" }}>
                         <Fragment>
-                            {(HOST_NAME === 'localhost') ?
+                            {(HOST_NAME === 'localhost' || HOST_NAME === 'dev.lockmesh.com') ?
                                 (item.timer_status === "NOW" || item.timer_status === "DATE/TIME") ? null :
                                     <Fragment>
                                         <Button
