@@ -754,7 +754,7 @@ class FilterDevices extends Component {
     // }
 
     if (!this.props.devices || !this.props.devices.length){
-      return <div>Note: *To performe an action please select dealers/users to get their devices. <span style={{ color: 'red' }}>(Devices not found!)</span></div>;
+      return <div>Note: *To performe an action please select dealers/users to get their devices.</div>;
     }
 
     return (

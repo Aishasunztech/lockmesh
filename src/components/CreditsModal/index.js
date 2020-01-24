@@ -203,7 +203,7 @@ class CreditIcon extends Component {
           <h4 className="weight_600 mb-0 "><b> {convertToLang(this.props.translation[""], "ACCOUNT STATUS")} </b></h4>
         </Col>
         <Col span={12} className={"credit_modal_heading " + class_name}>
-          <h4 className=" weight_600 mb-0 ">
+          <h4 className=" weight_600  mb-0 ">
             {convertToLang(this.props.translation[""], (this.props.account_balance_status == 'active') ?
               <span className="">ACTIVE</span> : (this.props.account_balance_status === 'restricted') ?
                 <span> Restriction Level 1</span> :

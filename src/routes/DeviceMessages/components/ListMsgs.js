@@ -4,8 +4,9 @@ import { convertToLang, checkValue, convertTimezoneValue, getWeekDay, getMonthNa
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 import moment from 'moment';
 import ReadMoreAndLess from 'react-read-more-less';
+import CustomScrollbars from "../../../util/CustomScrollbars";
 import { userDevicesListColumns } from '../../utils/columnsUtils';
-import { TIMESTAMP_FORMAT_NOT_SEC, TIME_FORMAT_HM, SERVER_TIMEZONE } from '../../../constants/Application';
+import { TIMESTAMP_FORMAT_NOT_SEC, TIME_FORMAT_HM, SERVER_TIMEZONE, HOST_NAME } from '../../../constants/Application';
 import EditMsgModal from './EditMsgForm';
 import { Link } from "react-router-dom";
 import styles from './deviceMsg.css'
@@ -105,46 +106,11 @@ export default class ListMsgs extends Component {
     renderList(list) {
         // console.log("renderList: ", list);
         let bulkMsgs = [];
-
         list.map((item) => {
             let parseDevices = item.devices ? JSON.parse(item.devices) : [];
-            // let duration = item.repeat_duration ? item.repeat_duration : "NONE";
-            // console.log(item);
 
             // set default dateTime format
             let dateTimeFormat = TIMESTAMP_FORMAT_NOT_SEC;
-
-            // if (item.timer_status === "NOW" || item.timer_status === "DATE/TIME") {
-            //     duration = `One Time`
-            // }
-            // else if (item.timer_status === "REPEAT") {
-            //     // set dateTime format
-            //     dateTimeFormat = TIME_FORMAT_HM; // Display only hours and minutes
-
-            //     if (duration === "DAILY") {
-            //         duration = `Everyday`
-            //     }
-            //     else if (duration === "WEEKLY") {
-            //         duration = getWeekDay(item.week_day)
-            //     }
-            //     else if (duration === "MONTHLY") {
-            //         duration = `Every month on ${checkValue(item.month_date)} date`
-            //     }
-            //     else if (duration === "3 MONTHS") {
-            //         duration = `Every 3 months later on ${checkValue(item.month_date)} date`
-            //     }
-            //     else if (duration === "6 MONTHS") {
-            //         duration = `Every 6 months later on ${checkValue(item.month_date)} date`
-            //     }
-            //     else if (duration === "12 MONTHS") {
-            //         duration = `Every ${getMonthName(item.month_name)} on ${checkValue(item.month_date)} date`
-            //     } else {
-            //         duration = "N/A"
-            //     }
-            // } else {
-            //     duration = "N/A"
-            // }
-
             if (item.timer_status === "REPEAT") {
                 // set dateTime format
                 dateTimeFormat = TIME_FORMAT_HM; // Display only hours and minutes
@@ -156,15 +122,17 @@ export default class ListMsgs extends Component {
                 action: (
                     <div data-column="ACTION" style={{ display: "inline-flex" }}>
                         <Fragment>
-                            {/* {(item.timer_status === "NOW" || item.timer_status === "DATE/TIME") ? null :
-                                <Fragment>
+                            {(HOST_NAME === 'localhost' || HOST_NAME === 'dev.lockmesh.com') ?
+                                (item.timer_status === "NOW" || item.timer_status === "DATE/TIME") ? null :
+                                    <Fragment>
                                         <Button
                                             type="primary"
                                             size="small"
                                             onClick={() => this.handleEditModal(JSON.parse(JSON.stringify(item)))}
                                         >EDIT</Button>
-                                </Fragment>
-                            } */}
+                                    </Fragment>
+                                : null
+                            }
                             <Fragment><Button type="danger" size="small" onClick={() => this.deleteMsg(item.id)}>DELETE</Button></Fragment>
                         </Fragment>
                     </div>
@@ -242,6 +210,9 @@ export default class ListMsgs extends Component {
         return (
             <Fragment>
                 <Card>
+                    {/* <Card className='fix_msgList_card'>
+                        <hr className="fix_header_border" style={{ top: "56px" }} />
+                        <CustomScrollbars className="gx-popover-scroll "> */}
                     <Table
                         className="gx-table-responsive msgList"
                         rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
@@ -276,6 +247,7 @@ export default class ListMsgs extends Component {
                         scroll={{ x: true }}
                         rowKey="domain_id"
                     />
+                    {/* </CustomScrollbars> */}
                 </Card>
 
                 <EditMsgModal

@@ -87,7 +87,7 @@ class EditMsgForm extends Component {
             week_day: 0,
             month_date: 0,
             month_name: 0,
-            dealerTZ: dealerTZ 
+            dealerTZ: dealerTZ
         }
     }
 
@@ -99,122 +99,113 @@ class EditMsgForm extends Component {
             console.log("handle submit 02 ", values, this.props.editRecord)
 
             if (!err) {
-                // let copyEditRecord = this.state.editRecord;
-
+                let dealerTZ = this.state.dealerTZ;
+                let timerVal = values.timer;
                 let repeatVal = 'NONE';
                 let dateTimeVal = '';
                 let timeVal = this.state.selected_Time;
-                let weekDay = this.state.week_day;
-                let monthDate = this.state.month_date;
-                let monthName = this.state.month_name;
+                let weekDay = this.state.week_day ? this.state.week_day : 0;
+                let monthDate = this.state.month_date ? this.state.month_date : 0;
+                let monthName = this.state.month_name ? this.state.month_name : 0;
+                let duration = 'N/A'; // update interval description text w.r.t timer status
 
-                // let dealerTZ = checkTimezoneValue(this.props.user.timezone, false);
-                if (this.state.timer === "NOW") {
-                    // this.state.selected_dateTime = "";
-
-                    // dateTimeVal = dealerTZ ? moment().tz(dealerTZ).tz(SERVER_TIMEZONE).format(TIMESTAMP_FORMAT) : '';
+                if (timerVal === "NOW") {
                     timeVal = '';
-                    dateTimeVal = moment().tz(this.state.dealerTZ).format(TIMESTAMP_FORMAT);
+                    dateTimeVal = moment().tz(dealerTZ).format(TIMESTAMP_FORMAT);
                     weekDay = "";
                     monthDate = "";
                     monthName = "";
-                } else if (this.state.timer === "DATE/TIME") {
+                    duration = `One Time`
+                } else if (timerVal === "DATE/TIME") {
                     timeVal = '';
                     dateTimeVal = this.state.selected_dateTime;
                     weekDay = "";
                     monthDate = "";
                     monthName = "";
-                } else if (this.state.timer === "REPEAT") {
+                    duration = `One Time`
+                } else if (timerVal === "REPEAT") {
                     repeatVal = this.state.repeat_duration;
                     dateTimeVal = this.state.selected_dateTime;
 
-                    // conditions for Repeat Timer
-                    if (repeatVal === "DAILY") {
-                        weekDay = "";
-                        monthDate = "";
-                        monthName = "";
-                    } else if (repeatVal === "WEEKLY") {
-                        monthDate = "";
-                        monthName = "";
-                    } else if (repeatVal === "MONTHLY" || repeatVal === "3 MONTHS" || repeatVal === "6 MONTHS") {
-                        weekDay = "";
-                        monthName = "";
-                    } else if (repeatVal === "12 MONTHS") {
-                        weekDay = "";
+                    let currentDateIs = moment().tz(dealerTZ).format(TIMESTAMP_FORMAT);
+                    // covert time to dateTime value
+                    if (this.state.selected_Time) {
+                        const [hours, minutes] = this.state.selected_Time.split(':');
+
+                        // conditions for Repeat Timer
+                        if (repeatVal === "DAILY") {  // set minutes, hrs
+                            weekDay = "";
+                            monthDate = "";
+                            monthName = "";
+                            duration = `Everyday`;
+
+                            dateTimeVal = moment().tz(dealerTZ).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                            if (dateTimeVal < currentDateIs) {
+                                // next same week day if current date passed
+                                dateTimeVal = moment().tz(dealerTZ).add(1, 'days').set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                            }
+
+                        } else if (repeatVal === "WEEKLY") { // set minutes, hrs and day name of week 
+                            monthDate = "";
+                            monthName = "";
+                            duration = getWeekDay(weekDay);
+                            dateTimeVal = moment().tz(dealerTZ).day(weekDay).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                            if (dateTimeVal < currentDateIs) {
+                                // next same week day if current date passed
+                                dateTimeVal = moment().tz(dealerTZ).day(weekDay + 7).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                            }
+                        } else if (repeatVal === "MONTHLY" || repeatVal === "3 MONTHS" || repeatVal === "6 MONTHS") {// set minutes, hrs and day of month 
+                            weekDay = "";
+                            monthName = "";
+                            dateTimeVal = moment().tz(dealerTZ).set({ "date": monthDate, hours, minutes }).format(TIMESTAMP_FORMAT)
+
+                            if (dateTimeVal < currentDateIs) {
+                                // set next months with same date if current date passed
+                                if (repeatVal === "MONTHLY") {
+                                    duration = `Every month on ${checkValue(monthDate)} date`;
+                                    dateTimeVal = moment().tz(dealerTZ).add(1, 'months').set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                                }
+                                else if (repeatVal === "3 MONTHS") {
+                                    duration = `Every 3 months later on ${checkValue(monthDate)} date`;
+                                    dateTimeVal = moment().tz(dealerTZ).add(3, 'months').set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                                }
+                                else if (repeatVal === "6 MONTHS") {
+                                    duration = `Every 6 months later on ${checkValue(monthDate)} date`;
+                                    dateTimeVal = moment().tz(dealerTZ).add(6, 'months').set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                                }
+                            }
+                        } else if (repeatVal === "12 MONTHS") { // set minutes, hrs, day of month and name of month
+                            weekDay = "";
+                            duration = `Every ${getMonthName(monthName)} on ${checkValue(monthDate)} date`;
+                            dateTimeVal = moment().tz(dealerTZ).set({ "month": monthName - 1, "date": monthDate, hours, minutes }).format(TIMESTAMP_FORMAT);
+                            // console.log("compare date: ", dateTimeVal < currentDateIs, dateTimeVal, currentDateIs, moment().month())
+
+                            if (dateTimeVal < currentDateIs) {
+                                // set next year with same date if current date passed 
+                                dateTimeVal = moment().tz(dealerTZ).add(1, 'years').set({ "date": monthDate, hours, minutes }).format(TIMESTAMP_FORMAT);
+                            }
+                        } else {
+                            duration = "N/A"
+                            dateTimeVal = moment().tz(dealerTZ).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                        }
                     }
 
-                    // // covert time to dateTime value
-                    // if (this.state.selected_Time) {
-                    //     let dealerTZ = checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
-
-                    //     const [hours, minutes] = this.state.selected_Time.split(':');
-                    //     dateTimeVal = moment().tz(dealerTZ).set({ hours, minutes }).format('YYYY-MM-DD HH:mm:ss');
-                    // }
-                }
-
-
-
-                //********************* update interval description text w.r.t timer status */ 
-                let duration = repeatVal ? repeatVal : "NONE";
-                // set default dateTime format
-                // let dateTimeFormat = TIMESTAMP_FORMAT_NOT_SEC;
-
-                if (values.timer === "NOW" || values.timer === "DATE/TIME") {
-                    duration = `One Time`
-                }
-                else if (values.timer === "REPEAT") {
-                    // set dateTime format
-                    // dateTimeFormat = TIME_FORMAT_HM; // Display only hours and minutes
-
-                    if (duration === "DAILY") {
-                        duration = `Everyday`
-                    }
-                    else if (duration === "WEEKLY") {
-                        duration = getWeekDay(weekDay)
-                    }
-                    else if (duration === "MONTHLY") {
-                        duration = `Every month on ${checkValue(monthDate)} date`
-                    }
-                    else if (duration === "3 MONTHS") {
-                        duration = `Every 3 months later on ${checkValue(monthDate)} date`
-                    }
-                    else if (duration === "6 MONTHS") {
-                        duration = `Every 6 months later on ${checkValue(monthDate)} date`
-                    }
-                    else if (duration === "12 MONTHS") {
-                        duration = `Every ${getMonthName(monthName)} on ${checkValue(monthDate)} date`
-                    } else {
-                        duration = "N/A"
-                    }
                 } else {
                     duration = "N/A"
                 }
-
-
+                
                 let data = {
                     id: this.props.editRecord.id,
                     msg: values.msg_txt,
-                    timer_status: values.timer,
+                    timer_status: timerVal,
                     repeat_duration: repeatVal,
-                    date_time: dateTimeVal, // convertTimezoneValue(this.props.user.timezone, dateTimeVal, TIMESTAMP_FORMAT, true), // convert time from client timezone to server timezone
+                    date_time: convertTimezoneValue(this.props.user.timezone, dateTimeVal, TIMESTAMP_FORMAT, true), // convert time from client timezone to server timezone
                     week_day: weekDay,
                     month_date: monthDate,
                     month_name: monthName,
                     time: timeVal,
                     interval_description: duration
                 }
-
-                // // covert time to dateTime value
-                // if (copyEditRecord.time) {
-                //     console.log("set time to dateTime ");
-                //     // let dealerTZ = checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
-                //     let updateDateTime = moment().set(copyEditRecord.time, 'HH:mm').format('YYYY-MM-DD HH:mm:ss');
-                //     let convetTime = convertTimezoneValue(this.props.user.timezone, updateDateTime, TIMESTAMP_FORMAT, true);
-                //     console.log("check date time: ", copyEditRecord.time, updateDateTime, "convetTime ", convetTime);
-                //     copyEditRecord.date_time = convetTime;
-                // }
-
-                // copyEditRecord.msg = values.msg_txt
 
                 console.log("copyEditRecord data ", data);
                 this.refs.update_bulk_msg.handleBulkUpdateMsg(data, this.props.editRecord.devices, this.state.dealerTZ);
@@ -269,16 +260,14 @@ class EditMsgForm extends Component {
         this.setState({ selected_dateTime: dateString });
     }
 
+    // timeOnChange = (value, dateString) => {
+    //     const [hours, minutes] = dateString.split(':');
+    //     let dateTimeVal = moment.tz(this.state.dealerTZ).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+    //     this.setState({ selected_Time: dateString, selected_dateTime: dateTimeVal });
+    // }
+
     timeOnChange = (value, dateString) => {
-        const [hours, minutes] = dateString.split(':');
-
-        // let dealerTZ = checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
-        let dateTimeVal = moment.tz(this.state.dealerTZ).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
-        // this.state.editRecord.date_time = dateTimeVal;
-
-        // console.log("u dateTimeVal:: ", dateString, dateTimeVal);
-        // this.setState({ editRecord: this.state.editRecord });
-        this.setState({ selected_Time: dateString, selected_dateTime: dateTimeVal });
+        this.setState({ selected_Time: dateString });
     }
 
     handleEditMsgRecord = (e, fieldName) => {
@@ -334,8 +323,8 @@ class EditMsgForm extends Component {
                     maskClosable={false}
                     style={{ top: 20 }}
                     visible={this.props.editModal}
-                    onOk={() => this.handleCancel}
-                    onCancel={() => this.handleCancel}
+                    // onOk={this.handleCancel}
+                    onCancel={this.handleCancel}
                     footer={false}
                 >
 
