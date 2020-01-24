@@ -28,6 +28,11 @@ class SystemMessages extends Component {
 
     this.state = {
       columns: columns,
+      filter: 'all',
+      searchText: '',
+      filteredMessages: [],
+      sentessages: [],
+      receivedMessages: [],
       visible: false,
       sentSupportSystemMessages: [],
       copySentSupportSystemMessages: [],
@@ -36,6 +41,10 @@ class SystemMessages extends Component {
       searchSystemMessagesColumns: [],
     };
     this.confirm = Modal.confirm;
+  }
+
+  filterMessages(obj){
+    this.setState(obj, this.filter);
   }
 
   removeColumns = ({ user }, columns) => {
@@ -48,6 +57,113 @@ class SystemMessages extends Component {
     }
     return columns;
   };
+
+  filter = () => {
+    let filter = this.state.filter;
+    let searchText = this.state.searchText;
+    let filteredSystemMessages = [];
+
+    switch (filter){
+      case 'sent':
+        if(this.props.dealerList.length > 0){
+          filteredSystemMessages = this.state.sentMessages.map((item) => {
+            let sender = '';
+            if (this.props.user.type === ADMIN){
+              let dealer  = item.sender_user_type === ADMIN ? ADMIN : this.props.dealerList.find(dealer => dealer.dealer_id === item.sender_id) ;
+              sender      = item.sender_user_type === ADMIN ? ADMIN : dealer.dealer_name;
+              sender      = sender.charAt(0).toUpperCase() + sender.slice(1);
+            }
+            return {
+              id: item._id,
+              key: item._id,
+              rowKey: item._id,
+              type: 'Sent',
+              receiver_ids: item.receiver_ids,
+              sender: sender,
+              subject: checkValue(item.subject),
+              message: checkValue(item.message),
+              createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "N/A",
+              createdTime: getOnlyTimeFromTimestamp(item.createdAt),
+            };
+          });
+        }
+        break;
+      case 'received' :
+        filteredSystemMessages = this.state.receivedMessages.map((item) => {
+          let sender = item.system_message.sender_user_type.charAt(0).toUpperCase() + item.system_message.sender_user_type.slice(1);
+          return {
+            id: item.system_message._id,
+            key: item.system_message._id,
+            rowKey: item.system_message._id,
+            type: 'Received',
+            sender: sender,
+            subject: checkValue(item.system_message.subject),
+            message: checkValue(item.system_message.message),
+            createdAt: getDateFromTimestamp(item.system_message.createdAt),
+            createdTime: getOnlyTimeFromTimestamp(item.system_message.createdAt),
+          };
+        });
+        break;
+      default:
+        let sent = [];
+        if(this.props.dealerList.length > 0){
+          sent = this.state.sentMessages.map((item) => {
+            let sender = '';
+            if (this.props.user.type === ADMIN){
+              let dealer  = item.sender_user_type === ADMIN ? ADMIN : this.props.dealerList.find(dealer => dealer.dealer_id === item.sender_id) ;
+              sender      = item.sender_user_type === ADMIN ? ADMIN : dealer.dealer_name;
+              sender      = sender.charAt(0).toUpperCase() + sender.slice(1);
+            }
+            return {
+              id: item._id,
+              key: item._id,
+              rowKey: item._id,
+              type: 'Sent',
+              receiver_ids: item.receiver_ids,
+              sender: sender,
+              subject: checkValue(item.subject),
+              message: checkValue(item.message),
+              createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "N/A",
+              createdTime: getOnlyTimeFromTimestamp(item.createdAt),
+            };
+          });
+        }
+        let received = this.state.receivedMessages.map((item) => {
+          let sender = item.system_message.sender_user_type.charAt(0).toUpperCase() + item.system_message.sender_user_type.slice(1);
+          return {
+            id: item.system_message._id,
+            key: item.system_message._id,
+            rowKey: item.system_message._id,
+            type: 'Received',
+            sender: sender,
+            subject: checkValue(item.system_message.subject),
+            message: checkValue(item.system_message.message),
+            createdAt: getDateFromTimestamp(item.system_message.createdAt),
+            createdTime: getOnlyTimeFromTimestamp(item.system_message.createdAt),
+          };
+        });
+        filteredSystemMessages = [...sent, ...received];
+        break;
+    }
+
+    let filteredMessages = filteredSystemMessages.filter(message => {
+      if(message.subject.toLowerCase().indexOf(searchText.toLowerCase()) > -1){
+        return message;
+      } else if(message.createdAt.toLowerCase().indexOf(searchText.toLowerCase()) > -1){
+        return message;
+      } else if(message.createdTime.toLowerCase().indexOf(searchText.toLowerCase()) > -1){
+        return message;
+      }
+
+      if(this.props.user.type === DEALER){
+        if(message.type.toLowerCase().indexOf(searchText.toLowerCase()) > -1){
+          return message;
+        }
+      }
+    });
+
+    this.setState({filteredMessages: filteredMessages});
+  }
 
   componentDidMount() {
     let searchSystemMessagesColumnsArray = [];
@@ -68,7 +184,6 @@ class SystemMessages extends Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-
     let receivedSupportSystemMessagesData = [];
     let sentSupportSystemMessagesData     = [];
 
@@ -90,6 +205,8 @@ class SystemMessages extends Component {
         receivedSupportSystemMessagesData.push(data)
       });
       this.setState({
+        sentMessages: this.props.sentSupportSystemMessages,
+        receivedMessages: this.props.receivedSupportSystemMessages,
         receivedSupportSystemMessages: receivedSupportSystemMessagesData,
         copyReceivedSupportSystemMessages: receivedSupportSystemMessagesData,
       });
@@ -131,6 +248,10 @@ class SystemMessages extends Component {
     }
   }
 
+  componentWillReceiveProps(prevProps){
+    this.setState({sentMessages: prevProps.sentSupportSystemMessages, receivedMessages: prevProps.receivedSupportSystemMessages}, this.filter);
+  }
+
   handleSendMsgButton = (visible) => {
     this.setState({ visible })
   };
@@ -146,6 +267,7 @@ class SystemMessages extends Component {
               getSupportSystemMessages={this.props.getSupportSystemMessages}
               getReceivedSupportSystemMessages={this.props.getReceivedSupportSystemMessages}
               receivedSupportSystemMessages={this.state.receivedSupportSystemMessages}
+              filteredMessage={this.state.filteredMessages}
               updateSupportSystemMessageNotification={this.props.updateSupportSystemMessageNotification}
               columns={this.state.columns}
               dealerList={this.props.dealerList}

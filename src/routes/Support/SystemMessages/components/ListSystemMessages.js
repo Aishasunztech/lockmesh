@@ -18,13 +18,12 @@ export default class ListSystemMessages extends Component {
     let receiversColumns = supportSystemMessagesReceiversColumns(props.translation, this.handleSearch);
     this.state = {
       receiversColumns: receiversColumns,
-      searchText: '',
       columns: [],
       expandedRowKeys: [],
       visible: false,
       messageObject: null,
       viewMessage: false,
-      systemMessages: []
+      systemMessages: props.filteredMessage
     };
 
     this.renderList = this.renderList.bind(this);
@@ -50,29 +49,29 @@ export default class ListSystemMessages extends Component {
   };
 
   componentDidMount() {
-
   }
 
   componentDidUpdate(prevProps) {
 
     if (this.props !== prevProps) {
 
-      let sentMessages    = this.props.supportSystemMessages ? this.props.supportSystemMessages : [];
-      let receiveMessages = this.props.receivedSupportSystemMessages ? this.props.receivedSupportSystemMessages : [];
+      // let sentMessages    = this.props.supportSystemMessages ? this.props.supportSystemMessages : [];
+      // let receiveMessages = this.props.receivedSupportSystemMessages ? this.props.receivedSupportSystemMessages : [];
+      //
+      // if (this.props.filterOption === 'all'){
+      //   list        = [...sentMessages , ...receiveMessages];
+      // } else if(this.props.filterOption === 'received'){
+      //   list        = receiveMessages;
+      // }else{
+      //   list        = sentMessages;
+      // }
+      //
+      // this.setState({
+      //   columns: this.props.columns,
+      //   systemMessages: list,
+      // });
 
-      if (this.props.filterOption === 'all'){
-        list        = [...sentMessages , ...receiveMessages];
-      } else if(this.props.filterOption === 'received'){
-        list        = receiveMessages;
-      }else{
-        list        = sentMessages;
-      }
-
-      this.setState({
-        columns: this.props.columns,
-        systemMessages: list,
-      });
-
+      this.setState({columns: this.props.columns, systemMessages: this.props.filteredMessage});
     }
 
 
@@ -201,7 +200,6 @@ export default class ListSystemMessages extends Component {
   };
 
   render() {
-
     return (
       <Fragment>
           <Table

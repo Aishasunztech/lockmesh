@@ -40,8 +40,8 @@ class Support extends Component {
       {this.props.user.type === DEALER ?
         <Select
           key="system_messages_key"
-          style={{ width: '25%', marginRight: '1%', float: "right" }}
-          onChange={ (e) => { this.setState({filterOption: e})} }
+          className="support_sel_dd"
+          onChange={ (e) => { this.refs.systemMessages.getWrappedInstance().filterMessages({filter: e})} }
           defaultValue="all"
         >
           <Select.Option value="all">All</Select.Option>
@@ -54,8 +54,8 @@ class Support extends Component {
         type="text"
         key="systemMessagesSearch"
         placeholder="Search"
-        style={{ width: '40%', marginRight: '1%', float: "right" }}
-        onChange={ (e) => {this.setState({systemMessagesSearchValue: e.target.value})} }
+        style={{ width: '40%', marginRight: '1%', float: "right", backgroundColor: '#dedede' }}
+        onChange={ (e) => {this.refs.systemMessages.getWrappedInstance().filterMessages({searchText: e.target.value})} }
       />
       </span>;
 
@@ -69,7 +69,7 @@ class Support extends Component {
 
       <Select
         key="support_tickets_key"
-        style={{ width: '25%', marginRight: '1%', float: "right" }}
+        className="support_sel_dd"
         onChange={ (e) => { this.refs.supportTickets.getWrappedInstance().filterTickets({filter: e}); }}
         defaultValue="all_all"
       >
@@ -95,7 +95,7 @@ class Support extends Component {
         type="text"
         key="tokenSearch"
         placeholder="Search"
-        style={{ width: '40%', marginRight: '1%', float: "right" }}
+        style={{ width: '40%', marginRight: '1%', float: "right", backgroundColor: '#dedede' }}
         onChange={ (e) => {this.refs.supportTickets.getWrappedInstance().filterTickets({searchTicket: e.target.value})} }
       />
       </span>;
@@ -137,7 +137,12 @@ class Support extends Component {
         });
         break;
     }
-
+    if(this.refs && this.refs.supportTickets && this.refs.supportTickets && this.refs.supportTickets.getWrappedInstance()){
+      if(value !== '2'){
+        this.setState({onTicketDetailPage: false});
+        this.refs.supportTickets.getWrappedInstance().deSelectMail();
+      }
+    }
   };
 
   tabBarContent(currentTab, onTicketPage){

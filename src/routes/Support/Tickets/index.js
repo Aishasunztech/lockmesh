@@ -198,13 +198,21 @@ class Mail extends PureComponent {
     this.props.setCurrentTicket(mail._id);
   }
 
+  deSelectMail() {
+    this.setState({
+      currentMail: null
+    });
+    this.props.resetCurrentTicket();
+  }
+
   createSupportTicketsTableData(tickets){
     return tickets.map(item => {
 
       let data = {
         ticketId: item.ticketId,
-        name: { name: `${item.user.dealer_name} (${item.user.link_code})`, ticket: item},
-        subject: item.subject,
+        name: item.user.dealer_name + " ("+ item.user.link_code +")",
+        subject: <a href="javascript:void(0);" onClick={() => this.onMailSelect(item)}>{item.subject}</a>,
+        subjectStr: item.subject,
         status: item.status,
         type: item.category,
         priority: item.priority,
@@ -229,34 +237,35 @@ class Mail extends PureComponent {
       render: (item) => { return item.isClosed ? <Button type="danger" size="small" onClick={() => this.onDeleteMail(item.id)}>Delete</Button> : ''; },
     };
     let defautlColumns = [{
+      title: 'Subject',
+      align: "center",
+      dataIndex: 'subject',
+      width: 500,
+      key: 'subject',
+      sorter: (a, b) => { return a.subjectStr.localeCompare(b.subjectStr) },
+      sortDirections: ['ascend', 'descend'],
+
+    },{
       title: 'Ticket Id',
       dataIndex: 'ticketId',
       align: 'center',
       className: 'row',
-      key: "ticketId"
-      // ,render: (text, record, index) => ++index,
+      key: "ticketId",
+      sorter: (a, b) => { return a.ticketId.localeCompare(b.ticketId) },
+      sortDirections: ['ascend', 'descend'],
     },{
-      title: 'Name',
+      title: 'Dealer/SDealer Name',
       align: "center",
       dataIndex: 'name',
-      sorter: (a, b) => { return a.name.localeCompare(b.name) },
+      sorter: (a, b) => { return a.name.localeCompare(b.name); },
       sortDirections: ['ascend', 'descend'],
       key: "name",
-      render: (item) => { return <a href="javascript:void(0);" onClick={() => this.onMailSelect(item.ticket)}>{item.name}</a>; }
-    },{
-      title: 'Subject',
-      align: "center",
-      dataIndex: 'subject',
-      key: 'subject',
-      sorter: (a, b) => { return a.localeCompare(b)},
-      sortDirections: ['ascend', 'descend'],
-
     },{
       title: 'Status',
       align: "center",
       dataIndex: 'status',
       key: 'status',
-      sorter: (a, b) => { return a.localeCompare(b) },
+      sorter: (a, b) => { return a.status.localeCompare(b.status) },
       sortDirections: ['ascend', 'descend'],
 
     },{
@@ -264,7 +273,7 @@ class Mail extends PureComponent {
       align: "center",
       dataIndex: 'type',
       key: 'type',
-      sorter: (a, b) => { return a.localeCompare(b) },
+      sorter: (a, b) => { return a.type.localeCompare(b.type) },
       sortDirections: ['ascend', 'descend'],
 
     },{
@@ -272,15 +281,15 @@ class Mail extends PureComponent {
       align: "center",
       dataIndex: 'priority',
       key: 'priority',
-      sorter: (a, b) => { return a.localeCompare(b) },
+      sorter: (a, b) => { return a.priority.localeCompare(b.priority) },
       sortDirections: ['ascend', 'descend'],
 
     },{
-      title: 'Time',
+      title: 'Date',
       align: "center",
       dataIndex: 'time',
       key: 'time',
-      sorter: (a, b) => { return a.localeCompare(b) },
+      sorter: (a, b) => { return a.time.localeCompare(b.time) },
       sortDirections: ['ascend', 'descend'],
     }];
 
