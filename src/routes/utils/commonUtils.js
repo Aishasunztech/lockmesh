@@ -215,6 +215,10 @@ export function getOnlyTimeFromTimestamp(value) {
   return moment(value).format('HH:mm');
 }
 
+export function getOnlyTimeAndDateTimestamp(value) {
+  return moment(value).format('DD-MM-YYYY HH:mm');
+}
+
 export function convertTimestampToDate(value) {
 	function convert(str) {
 		return moment(str).format('DD-MM-YYYY')

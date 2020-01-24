@@ -11,7 +11,8 @@ import {
   ACK_INSTALLED_APPS,
   ACK_UNINSTALLED_APPS,
   FINISHED_BULK_PUSH_APPS,
-  CONNECT_SUPPORT_SYSTEM_SOCKET
+  CONNECT_SUPPORT_SYSTEM_SOCKET,
+  DISCONNECT_SUPPORT_SYSTEM_SOCKET
 } from '../../constants/SocketConstants';
 
 // import io from 'socket.io-client';
@@ -56,9 +57,18 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 socket: action.payload,
-                supportSystemSocket: action.supportSystemSocket,
             }
         }
+
+
+      case DISCONNECT_SUPPORT_SYSTEM_SOCKET: {
+        console.log('support system socket disconnected');
+
+        return {
+          ...state,
+          supportSystemSocket: action.payload,
+        }
+      }
 
         case GET_APP_JOBS: {
             console.log("GET_APP_JOBS ", action.payload)
