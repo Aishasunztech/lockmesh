@@ -353,6 +353,18 @@ class Prices extends Component {
             },
             {
                 title: (
+                    <span>
+                        {convertToLang(props.translation[""], "PERMISSIONS")}
+                        {/* <Popover placement="top" content='dumy'>
+                                <span className="helping_txt"><Icon type="info-circle" /></span>
+                            </Popover> */}
+                    </span>),
+                dataIndex: 'permission',
+                key: 'permission',
+                className: 'row'
+            },
+            {
+                title: (
                     <Input.Search
                         name="pkg_name"
                         key="pkg_name"
@@ -958,11 +970,41 @@ class Prices extends Component {
                             </Tabs.TabPane>
                             <Tabs.TabPane tab="Stand Alone Sims" key="4">
                                 <Table
-                                    className="devices"
-                                    columns={this.standaloneColumns}
-                                    dataSource={this.renderList("packages")}
+                                    className="devices policy_expand"
+                                    rowClassName={(record, index) => this.state.expandedRowKeys.includes(index) ? 'exp_row' : ''}
+                                    size="default"
                                     bordered
+                                    expandIcon={(props) => this.customExpandIcon(props)}
+                                    // onExpand={this.onExpandRow}
+                                    expandedRowRender={(record) => {
+                                        // console.log("expandTabSelected", record);
+                                        // console.log("table row", this.state.expandTabSelected[record.rowKey]);
+                                        return <PackagesInfo
+                                            selected={this.state.expandTabSelected[record.rowKey]}
+                                            package={record}
+                                            savePermission={this.props.packagePermission}
+                                            translation={this.props.translation}
+
+                                        />
+
+                                        // if (Object.keys(record.pkg_features).length !== 0 && record.pkg_features.constructor === Object) {
+                                        // } else {
+                                        //     return (
+                                        //         <div>
+                                        //         </div>
+                                        //     )
+                                        // }
+                                    }}
+                                    expandIconColumnIndex={2}
+                                    expandedRowKeys={this.state.expandedRowKeys}
+                                    expandIconAsCell={false}
+                                    columns={this.standaloneColumns}
+                                    onChange={this.props.onChangeTableSorting}
+                                    dataSource={this.renderList("packages")}
                                     pagination={false}
+                                    rowKey="policy_list"
+                                    ref='policy_table'
+                                    scroll={{ x: true }}
                                 />
                             </Tabs.TabPane>
                         </Tabs>

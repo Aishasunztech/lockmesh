@@ -2,33 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Modal, Table, Button, Row, Col, Select } from 'antd';
 import { Link } from "react-router-dom";
 import PurchaseCredit from "../../routes/account/components/PurchaseCredit";
-import AddDeviceModal from '../../routes/devices/components/AddDevice';
-import {
-  ADMIN,
-  ACTION,
-  CREDITS,
-  CREDITS_CASH_REQUESTS,
-  ARE_YOU_SURE_YOU_WANT_TO_DECLINE_THIS_REQUEST,
-  ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST,
-  WARNING,
-  DEVICE_UNLINKED,
-  DEVICE_PRE_ACTIVATION
-} from '../../constants/Constants';
-import { convertToLang, generateExcel, formatMoney } from '../../routes/utils/commonUtils';
-import {
-  Button_Ok,
-  Button_Cancel,
-  Button_Confirm,
-  Button_Decline,
-  Button_ACCEPT,
-  Button_Transfer,
-  Button_DOWNLOAD
-} from '../../constants/ButtonConstants';
-import { DEVICE_ID, DEVICE_SERIAL_NUMBER, DEVICE_IMEI_1, DEVICE_SIM_2, DEVICE_IMEI_2, DEVICE_REQUESTS, DEVICE_SIM_1 } from '../../constants/DeviceConstants';
-import { DEALER_NAME } from '../../constants/DealerConstants';
-import { Markup } from "interweave";
-import { DT_MODAL_BODY_7 } from "../../constants/AppConstants";
-import { BASE_URL } from "../../constants/Application";
+import { convertToLang,  formatMoney } from '../../routes/utils/commonUtils';
 import { bindActionCreators } from "redux";
 import {
   purchaseCredits, purchaseCreditsFromCC

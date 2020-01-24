@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Modal, message } from 'antd';
-import AddUserForm from './AdduserForm';
+import AddSimForm from './AddSimForm';
 import { convertToLang } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel, Button_Add_User } from '../../../constants/ButtonConstants';
 
-export default class AddUser extends Component {
+export default class AddSim extends Component {
 
     constructor(props) {
         super(props);
@@ -18,7 +18,7 @@ export default class AddUser extends Component {
 
 
 
-    showModal = (handleSubmit, user = null, titleText = convertToLang(this.props.translation[Button_Add_User], "Add User")) => {
+    showModal = (handleSubmit, user = null, titleText = convertToLang(this.props.translation[""], "Add Stand Alone Sim")) => {
         // console.log(user);
         this.setState({
             visible: true,
@@ -34,6 +34,7 @@ export default class AddUser extends Component {
     }
     render() {
         const { visible, loading } = this.state;
+        // console.log(this.props.);
         return (
             <div>
                 <Modal
@@ -44,15 +45,16 @@ export default class AddUser extends Component {
                     onCancel={this.handleCancel}
                     footer={null}
                     className="edit_form"
-                    okText= {convertToLang(this.props.translation[Button_Ok], "Ok")}
-                    cancelText = {convertToLang(this.props.translation[Button_Cancel], "Cancel")}
+                    okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
-                    <AddUserForm
-                        AddUserHandler={this.state.handleSubmit}
+                    <AddSimForm
+                        AddSimHandler={this.state.handleSubmit}
                         handleCancel={this.handleCancel}
                         user={this.state.user}
                         ref='add_user_form'
                         translation={this.props.translation}
+                        standAlonePackages={this.props.standAlonePackages}
                     />
                 </Modal>
             </div>

@@ -11,12 +11,16 @@ import {
 
 
 import {
-    getStandaloneSimsList
+    getStandaloneSimsList,
 } from "../../appRedux/actions/StandAloneSims";
+import {
+    getParentPackages,
+} from "../../appRedux/actions/Devices";
 
 import { StandAloneSimsColumns } from '../utils/columnsUtils';
 
 import AddSim from './components/AddStandAloneSims';
+import { ADMIN } from '../../constants/Constants';
 
 var copyUsers = [];
 var status = true;
@@ -26,15 +30,23 @@ class StandAloneSims extends Component {
         super(props);
         var columns = StandAloneSimsColumns(props.translation, this.handleSearch);
         this.state = {
-            columns: columns
+            columns: columns,
+            standAlonePackages: []
         }
     }
 
     componentDidMount() {
         this.props.getStandaloneSimsList();
+        this.props.getParentPackages()
     }
 
     componentWillReceiveProps(nextProps) {
+        if (this.props.parent_packages.length !== nextProps.parent_packages.length) {
+            let standAlonePackages = nextProps.parent_packages.filter(item => item.package_type === 'standalone_sim')
+            this.setState({
+                standAlonePackages: standAlonePackages
+            })
+        }
     }
 
     componentDidUpdate(prevProps) {
@@ -114,7 +126,7 @@ class StandAloneSims extends Component {
                     // selectedOptions={this.props.selectedOptions}
                     // options={this.state.options}
                     // isAddButton={this.props.user.type !== ADMIN}
-                    isAddButton={true}
+                    isAddButton={this.props.user.type !== ADMIN}
                     isAddSimButton={true}
                     // AddPolicyModel={true}
                     handleAddSimModal={this.handleAddSimModal}
@@ -122,11 +134,12 @@ class StandAloneSims extends Component {
                     handlePagination={this.handlePagination}
                     handleComponentSearch={this.handleComponentSearch}
                     translation={this.props.translation}
-                    pageHeading={convertToLang(this.props.translation[""], "SIMS")}
+                    pageHeading={convertToLang(this.props.translation[""], "STAND ALONE SIMS")}
                 />
                 <AddSim
                     ref="add_sim"
                     translation={this.props.translation}
+                    standAlonePackages={this.state.standAlonePackages}
                 />
                 <SimsList
                     onChangeTableSorting={this.handleTableChange}
@@ -145,15 +158,18 @@ class StandAloneSims extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getStandaloneSimsList
+        getStandaloneSimsList,
+        getParentPackages
     }, dispatch);
+
 }
-var mapStateToProps = ({ auth, settings, standAloneSims }) => {
-    // 
+var mapStateToProps = ({ auth, settings, standAloneSims, devices }) => {
+    console.log(devices);
     return {
         user: auth.authUser,
         translation: settings.translation,
-        standAloneSimsList: standAloneSims.standAloneSimsList
+        standAloneSimsList: standAloneSims.standAloneSimsList,
+        parent_packages: devices.parent_packages
     };
 }
 
