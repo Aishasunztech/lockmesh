@@ -19,7 +19,7 @@ import {
   getSupportLiveChatConversation, getSupportLiveChatMessages,
   sendSupportLiveChatMessage
 } from "../../../appRedux/actions";
-import {DEALER, SDEALER} from "../../../constants/Constants";
+import {ADMIN, DEALER, SDEALER} from "../../../constants/Constants";
 
 const TabPane = Tabs.TabPane;
 
@@ -71,6 +71,7 @@ class Chat extends Component {
         <Conversation
           conversationData={this.state.conversation}
           selectedUser={selectedUser}
+          user={this.props.user}
         />
       </CustomScrollbars>
 
@@ -182,7 +183,9 @@ class Chat extends Component {
   onSelectUser = (data, type) => {
 
     if (type === 'chat'){
-      this.props.getSupportLiveChatMessages(data._id);
+      this.props.getSupportLiveChatMessages({type: 'conversation', id: data._id});
+    }else{
+      this.props.getSupportLiveChatMessages({type: 'user', id: data.dealer_id});
     }
 
     this.setState({
@@ -241,23 +244,37 @@ class Chat extends Component {
 
     let chatUsersWithUser = [];
 
-    if (prevProps !== this.props && this.state.chatUsers.length !== this.props.supportLiveChatConversations.length && this.props.supportLiveChatConversations.length > 0 && this.props.dealerList.length > 0) {
-
-      this.props.supportLiveChatConversations.map((chatUsers, index) => {
-
-        chatUsers.user = this.props.dealerList.find((dealer) => (dealer.dealer_id === chatUsers.receiver || dealer.dealer_id === chatUsers.sender));
-
-        chatUsersWithUser.push(chatUsers)
-      });
-
-      this.setState({
-        chatUsers: chatUsersWithUser,
-        copyChatUsers: chatUsersWithUser,
-      })
-    }
-
 
     if (prevProps !== this.props){
+
+
+      if (this.state.chatUsers.length !== this.props.supportLiveChatConversations.length && this.props.supportLiveChatConversations.length > 0 && this.props.dealerList.length > 0) {
+
+        this.props.supportLiveChatConversations.map((chatUsers) => {
+
+          if (this.props.user.id === chatUsers.sender){
+            chatUsers.user = this.props.dealerList.find((dealer) => (dealer.dealer_id === chatUsers.receiver));
+          }else{
+            chatUsers.user = this.props.dealerList.find((dealer) => (dealer.dealer_id === chatUsers.sender));
+          }
+
+          if (chatUsers.user.type === ADMIN){
+            let adminObject           = chatUsers.user;
+            adminObject.dealer_name   = 'Admin';
+            adminObject.link_code     = '';
+            chatUsers.user            = adminObject;
+          }
+
+
+          chatUsersWithUser.push(chatUsers)
+        });
+
+        this.setState({
+          chatUsers: chatUsersWithUser,
+          copyChatUsers: chatUsersWithUser,
+        });
+
+      }
 
       let admin ;
       if (this.props.user.type === SDEALER || this.props.user.type === DEALER){
@@ -303,7 +320,7 @@ class Chat extends Component {
 
   submitComment() {
 
-    if (this.state.message !== '') {
+    if (this.state.message.length > 1) {
       let data = {
         sender: this.props.user.id,
         receiver: this.state.selectedUser.dealer_id,
@@ -311,24 +328,9 @@ class Chat extends Component {
       };
 
       this.props.sendSupportLiveChatMessage(data);
-      // const updatedConversation = this.state.conversation.conversationData.concat({
-      //   'type': 'sent',
-      //   'message': this.state.message,
-      //   'sentAt': Moment().format('hh:mm:ss A'),
-      // });
-      // this.setState({
-      //   conversation: {
-      //     ...this.state.conversation, conversationData: updatedConversation
-      //   },
-      //   message: '',
-      //   conversationList: this.state.conversationList.map(conversationData => {
-      //     if (conversationData.id === this.state.conversation.id) {
-      //       return {...this.state.conversation, conversationData: updatedConversation};
-      //     } else {
-      //       return conversationData;
-      //     }
-      //   })
-      // });
+      this.setState({
+        message: '',
+      });
     }
   }
 
