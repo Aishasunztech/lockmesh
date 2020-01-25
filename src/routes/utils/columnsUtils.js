@@ -3731,7 +3731,7 @@ export function deviceMsgsColumns(translation, handleSearch, isModal = false) {
                     onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder="MESSAGE"
-                    allowClear 
+                    allowClear
                 />
             ),
             dataIndex: 'msg',
@@ -3952,7 +3952,13 @@ export function supportSystemMessage(translation, isModal = false) {
       width: 50,
       render: (text, record, index) => ++index,
     },
-
+    {
+      title: "ACTION",
+      dataIndex: 'action',
+      align: 'center',
+      width: 150,
+      className: '',
+    },
     {
       title: "RECEIVER",
       dataIndex: 'receivers',
@@ -4003,14 +4009,7 @@ export function supportSystemMessage(translation, isModal = false) {
       key: 'createdTime',
       sorter: (a, b) => { return a.createdTime.localeCompare(b.createdTime) },
       sortDirections: ['ascend', 'descend'],
-    },
-    {
-      title: "ACTION",
-      dataIndex: 'action',
-      align: 'center',
-      width: 150,
-      className: '',
-    },
+    }
   ];
 
   return columns;
