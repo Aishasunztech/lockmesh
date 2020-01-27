@@ -1213,7 +1213,7 @@ const RestService = {
 
     //get Support Live Chat Message
     getSupportLiveChatMessages: (data) => {
-      return axios.get(SUPPORT_URL + 'messages/get/'+data, RestService.getHeader());
+      return axios.get(SUPPORT_URL + 'messages/get?type='+data.type+'&id='+data.id, RestService.getHeader());
     },
 };
 export default RestService;

@@ -458,13 +458,14 @@
 }
 
 .invo_btn {
-    width: 40%;
+    width: 32px;
     height: 20px;
-    font-size: 11px !important;
+    letter-spacing: 1px;
+    font-size: 11px!important;
     font-weight: 100;
-    background-color: #5b9bd5 !important;
-    border: 1px solid #41719c !important;
-    color: #fff !important;
+    background-color: #5b9bd5!important;
+    border: 1px solid #41719c!important;
+    color: #fff!important;
 }
 
 .ac_status_table .ant-table.ant-table-bordered .ant-table-title {
