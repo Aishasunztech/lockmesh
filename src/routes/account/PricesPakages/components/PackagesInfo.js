@@ -9,6 +9,7 @@ import {
     PACKAGE_SERVICE_NAME,
     PACKAGE_INCLUDED,
 } from "../../../../constants/AccountConstants";
+import { SDEALER } from '../../../../constants/Constants';
 
 
 const TabPane = Tabs.TabPane;
@@ -60,11 +61,11 @@ export default class PackagesInfo extends Component {
         console.log("package expanding:", packageData);
 
 
-        let data =this.props.package.pkg_features;
+        let data = this.props.package.pkg_features;
         let features = [];
-        if(packageData.package_type==='services'){
+        if (packageData.package_type === 'services') {
             if (Object.keys(data).length !== 0 && data.constructor === Object) {
-    
+
                 for (var key in data) {
                     if (data.hasOwnProperty(key)) {
                         // console.log(key + " -> " + data[key]);
@@ -76,12 +77,12 @@ export default class PackagesInfo extends Component {
                             f_value: data[key] ? "yes" : 'No',
                             rowKey: key
                         }
-    
+
                         features.push(dump)
                     }
                 }
             }
-        } else if (packageData.package_type ==='data_plan') {
+        } else if (packageData.package_type === 'data_plan') {
             let dump = {
                 name: 'Data Limit',
                 f_value: packageData.data_limit,
@@ -107,14 +108,17 @@ export default class PackagesInfo extends Component {
                             pagination={false}
                         />
                     </Tabs.TabPane>
-                    <TabPane tab={convertToLang(this.props.translation[Tab_POLICY_Dealer_PERMISSIONS], "Dealer PERMISSIONS")} key="2">
-                        <Permissions
-                            record={this.props.package}
-                            permissionType="package"
-                            savePermissionAction={this.props.savePermission}
-                            translation={this.props.translation}
-                        />
-                    </TabPane>
+                    {(this.props.auth.type !== SDEALER) ?
+                        <TabPane tab={convertToLang(this.props.translation[Tab_POLICY_Dealer_PERMISSIONS], "Dealer PERMISSIONS")} key="2">
+                            <Permissions
+                                record={this.props.package}
+                                permissionType="package"
+                                savePermissionAction={this.props.savePermission}
+                                translation={this.props.translation}
+                            />
+                        </TabPane>
+                        : null
+                    }
                 </Tabs>
             </Fragment>
         )
