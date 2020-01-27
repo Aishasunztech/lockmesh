@@ -34,7 +34,8 @@ export default class AllDomainsModal extends Component {
             dealer_id: null,
             // allDomainList: []
             selectedDomainList: [],
-            selectedRowKeys: []
+            selectedRowKeys: [],
+            domainLoading: false
         }
 
         this.columns = addDomainModalColumns(props.translation, this.handleSearch);
@@ -137,9 +138,23 @@ export default class AllDomainsModal extends Component {
         console.log('object:', record);
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (this.props.dealerDomainLoading !== nextProps.dealerDomainLoading) {
+            let visible = this.state.visible;
+            if (!nextProps.dealerDomainLoading) {
+                visible = false;
+            }
+            this.setState({
+                domainLoading: nextProps.dealerDomainLoading,
+                visible
+            })
+        }
+    }
+
     handleAddDomain = () => {
-        console.log("handle add domain for connect deaeler: ", this.props.dealerId, JSON.stringify(this.state.selectedRowKeys), 'save', false, this.props.authUser);
-        this.handleCancel();
+        // console.log("handle add domain for connect deaeler: ", this.props.dealerId, JSON.stringify(this.state.selectedRowKeys), 'save', false, this.props.authUser);
+        this.setState({ domainLoading: true, selectedDomainList: [], selectedRowKeys: [] });
+        // this.handleCancel();
         this.props.domainPermission(this.state.selectedRowKeys, [this.props.dealerId], 'save', false, this.props.authUser, this.state.selectedDomainList);
     }
 
@@ -164,6 +179,7 @@ export default class AllDomainsModal extends Component {
                         </Button>,
                         <Button
                             key="add"
+                            loading={this.props.dealerDomainLoading}
                             disabled={this.state.selectedDomainList && this.state.selectedDomainList.length ? false : true}
                             onClick={this.handleAddDomain}
                         >

@@ -1464,16 +1464,17 @@ export function bulkDeviceHistoryColumns(translation) {
             sortDirections: ['ascend', 'descend'],
 
         },
+        // {
+        //     title: convertToLang(translation[DEVICE_STATUS], "STATUS"),
+        //     align: "center",
+        //     dataIndex: 'status',
+        //     key: 'status',
+        //     sorter: (a, b) => { return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
+
+        //     sortDirections: ['ascend', 'descend'],
+
+        // }, 
         {
-            title: convertToLang(translation[DEVICE_STATUS], "STATUS"),
-            align: "center",
-            dataIndex: 'status',
-            key: 'status',
-            sorter: (a, b) => { return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
-
-            sortDirections: ['ascend', 'descend'],
-
-        }, {
             title: convertToLang(translation[DEVICE_EXPIRY_DATE], "EXPIRY DATE"),
             align: "center",
             dataIndex: 'expiry_date',
