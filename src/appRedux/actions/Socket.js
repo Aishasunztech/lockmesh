@@ -315,6 +315,20 @@ export function getAppJobQueue(deviceId) {
     };
 }
 
+export const closeWebSocket = (socket) => {
+  return (dispatch) => {
+    if(socket) {
+      socket.off();
+      socket.disconnect();
+    }
+
+    dispatch({
+      type: DISCONNECT_SOCKET,
+      payload: null
+    });
+  }
+};
+
 export const closeConnectPageSocketEvents = (socket, deviceId) => {
     return (dispatch) => {
         if (socket) {
