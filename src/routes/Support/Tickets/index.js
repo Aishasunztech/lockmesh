@@ -1,15 +1,8 @@
 import React, { PureComponent } from "react";
-import { Button, Checkbox, Drawer, Dropdown, Menu, message, Modal, Col, Row } from "antd";
-import CustomScrollbars from "util/CustomScrollbars";
-
-import mails from "./data/mails";
-import categories from "./data/categories";
-import statuses from "./data/statuses";
-import priorities from "./data/priorities";
-import MailList from "./components/MailList";
+import { Button, Modal, Table } from "antd";
 import ComposeMail from "./components/Compose/index";
-import AppModuleHeader from "./components/AppModuleHeader/index";
 import MailDetail from "./components/TicketDetail/index";
+import { getDateFromTimestamp } from "../../utils/commonUtils";
 import { bindActionCreators } from "redux";
 import {
   generateSupportTicket,
@@ -28,229 +21,109 @@ import {
   ADMIN, DEALER, SDEALER
 } from "../../../constants/Constants";
 import {SET_CURRENT_TICKET_ID} from "../../../constants/ActionTypes";
+import {DEVICE_ACTIVATION_CODE, DEVICE_DEALER_PIN} from "../../../constants/DeviceConstants";
+import {convertToLang} from "../../utils/commonUtils";
 
 const confirm = Modal.confirm;
 let connectedDealer;
 
 class Mail extends PureComponent {
 
-  SupportTicketSideBar = () => {
-    return <div className="gx-module-side">
-
-      <div className="gx-module-side-header p-25">
-        <div className="gx-module-logo">
-          <i className="icon icon-ticket-new gx-mr-4" />
-          Tickets
-        </div>
-      </div>
-
-      <div className="gx-module-side-content">
-        <CustomScrollbars className="gx-module-side-scroll">
-          {this.props.user.type !== ADMIN ?
-            <div className="gx-module-add-task">
-              <Button type="primary" className="gx-btn-block"
-                onClick={() => {
-                  this.setState({ composeMail: true })
-                }}>
-                <i className="icon icon-edit gx-mr-2" />
-                Generate Ticket
-              </Button>
-            </div>
-            : ''}
-          <ul className="gx-module-nav">
-
-            <li className="gx-module-nav-label">
-              Statuses
-            </li>
-
-            {this.getStatuses()}
-
-            <li className="gx-module-nav-label">
-              Priorities
-            </li>
-
-            {this.getPriorities()}
-
-            <li className="gx-module-nav-label">
-              Categories
-            </li>
-            {this.getCategories()}
-          </ul>
-        </CustomScrollbars>
-      </div>
-    </div>
-  };
-
-  onDeleteMail = () => {
+  onDeleteMail = (ticketId) => {
     let _this = this;
-
     confirm({
       title: 'Do you want to delete the selected ticket?',
       okText: "Confirm",
       onOk() {
-        _this.props.deleteSupportTicket(_this.state.selectedMails);
-        _this.setState({
-          selectedMails: []
-        });
+        _this.props.deleteSupportTicket([ticketId]);
       },
       onCancel() { },
     });
-
-  };
-
-  getCategories = () => {
-
-    return categories.map((category, index) =>
-      <li key={index} onClick={() => {
-
-        const filterSupportTickets = this.state.supportTickets.filter(supportTickets => {
-          if (category.title === 'all') {
-            return true
-          } else if (category.title === supportTickets.category) {
-            return supportTickets
-          }
-        });
-        this.setState({
-          noContentFoundMessage: 'No support ticket found in selected filter',
-          filteredSupportTickets: filterSupportTickets
-        });
-      }
-      }>
-        <span className="gx-link">
-          <span className='ml-16 text-capitalize'>{category.title}</span>
-        </span>
-      </li>
-    );
-  };
-
-  getPriorities = () => {
-
-    return priorities.map((priority, index) =>
-      <li key={index} onClick={() => {
-
-        const filterSupportTickets = this.state.supportTickets.filter(supportTickets => {
-          if (priority.title === 'all') {
-            return true;
-          } else if (priority.title === supportTickets.priority) {
-            return supportTickets
-          }
-        });
-        this.setState({
-          noContentFoundMessage: 'No support ticket found in selected filter',
-          filteredSupportTickets: filterSupportTickets
-        });
-      }
-      }>
-        <span className="gx-link">
-          <span className='ml-16 text-capitalize'>{priority.title}</span>
-        </span>
-      </li>
-    );
   };
 
   handleRequestClose = () => {
     this.setState({
       composeMail: false,
-      showMessage: false,
     });
   };
 
-  getStatuses = () => {
-    return statuses.map((status, index) =>
-      <li key={index} onClick={() => {
-        let filterSupportTickets = [];
-        filterSupportTickets = this.state.supportTickets.filter(supportTickets => {
+  filter = () => {
 
-          if (status.title === 'all') {
-            return true;
-          } else if (status.title === supportTickets.status) {
-            return supportTickets
-          }
-        });
-
-        this.setState({
-          noContentFoundMessage: 'No support ticket found in selected filter',
-          filteredSupportTickets: filterSupportTickets
-        });
-      }
-      }>
-        <span className="gx-link">
-          <span className='ml-16 text-capitalize'>{status.title}</span>
-        </span>
-      </li>
-    )
-  };
-
-  searchTicket = (searchText) => {
-    if (searchText === '') {
-      this.setState({ filteredSupportTickets: this.state.supportTickets });
+    let filter = this.state.filter.split('_');
+    let searchText = this.state.searchTicket;
+    let filter_type = filter[0];
+    let value;
+    if(filter.length > 1){
+      value = filter[1];
     } else {
-      const searchMails = this.state.supportTickets.filter((mail) =>
-        mail.subject.toLowerCase().indexOf(searchText.toLowerCase()) > -1);
-      this.setState({
-        filteredSupportTickets: searchMails
-      });
+      filter_type = 'all';
+      value = 'all';
     }
-  };
 
-  displayMail = (currentMail, folderMails, noContentFoundMessage) => {
+    let filteredTickets;
 
-    return (<div className="gx-module-box-column">
-      {currentMail === null ?
-        this.state.filteredSupportTickets.length === 0 ?
-          <div className="gx-no-content-found gx-text-light gx-d-flex gx-align-items-center gx-justify-content-center">
-            {noContentFoundMessage}
-          </div>
-          :
-          <MailList
-            supportTickets={this.state.filteredSupportTickets}
-            onMailSelect={this.onMailSelect.bind(this)}
-            onMailChecked={this.onMailChecked.bind(this)}
-            user={this.props.user}
-          />
-        :
-        <MailDetail
-          user={this.props.user}
-          supportTicket={currentMail}
-          supportTicketReply={this.props.supportTicketReply}
-          onCloseTicket={this.onCloseTicket.bind(this)}
-          closeSupportTicketStatus={this.props.closeSupportTicketStatus}
-          supportTicketReplies={this.state.supportTicketReplies}
-        />}
-    </div>)
-  };
+    switch(filter_type) {
+      case "status":
+        filteredTickets = this.state.supportTickets.filter(ticket => ticket.status === value);
+        break;
+      case "type":
+        filteredTickets = this.state.supportTickets.filter(ticket => ticket.category === value);
+        break;
+      case "priority":
+        filteredTickets = this.state.supportTickets.filter(ticket => ticket.priority === value);
+        break;
+      default:
+        filteredTickets = this.state.supportTickets;
+        break;
+    }
 
-  getMailActions = () => {
-    return <div className="gx-flex-row gx-align-items-center">
+    let filtered = filteredTickets.filter(ticket => {
+      let name = `${ticket.user.dealer_name} (${ticket.user.link_code})`;
+      if(ticket.ticketId.toLowerCase().indexOf(searchText.toLowerCase()) > -1){
+        return ticket;
+      } else if(name.toLowerCase().indexOf(searchText.toLowerCase()) > -1){
+        return ticket;
+      } else if(ticket.subject.toLowerCase().indexOf(searchText.toLowerCase()) > -1){
+        return ticket;
+      } else if(ticket.status.toLowerCase().indexOf(searchText.toLowerCase()) > -1){
+        return ticket;
+      } else if(ticket.priority.toLowerCase().indexOf(searchText.toLowerCase()) > -1){
+        return ticket;
+      } else if(ticket.category.toLowerCase().indexOf(searchText.toLowerCase()) > -1){
+        return ticket;
+      } else if(getDateFromTimestamp(ticket.createdAt).toLowerCase().indexOf(searchText.toLowerCase()) > -1){
+        return ticket;
+      }
+    });
 
-      <span onClick={this.onDeleteMail.bind(this)}>
-        <i className="icon icon-trash gx-icon-btn" /></span>
+    this.setState({filteredSupportTickets: filtered});
+  }
 
-    </div>
-  };
-
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       searchTicket: '',
-      noContentFoundMessage: 'No support ticket found',
+      filter: 'all_all',
       alertMessage: '',
-      dealerList: [],
-      showMessage: false,
-      drawerState: false,
-      optionName: 'None',
-      anchorEl: null,
-      allMail: mails,
       currentMail: null,
-      selectedMails: [],
-      selectedFolder: 0,
       composeMail: false,
-      folderMails: mails.filter(mail => mail.folder === 0),
       filteredSupportTickets: [],
       supportTickets: [],
       supportTicketReplies: [],
     }
   }
+
+  updateState = (obj) => {
+    this.setState( obj );
+  }
+
+  filterTickets = (obj) => {
+    this.setState(obj, () => {
+      this.filter();
+    });
+  }
+
+
 
   componentDidMount() {
     this.props.getDealerList();
@@ -303,21 +176,6 @@ class Mail extends PureComponent {
 
   }
 
-
-  onMailChecked(data) {
-    let selectedMail = this.state.selectedMails;
-
-    if (selectedMail.includes(data._id)) {
-      selectedMail = selectedMail.filter(selectedMail => selectedMail != data._id);
-    } else {
-      selectedMail.push(data._id)
-    }
-
-    this.setState({
-      selectedMails: [...selectedMail]
-    });
-  }
-
   onCloseTicket(data) {
     let _this = this;
     confirm({
@@ -335,126 +193,151 @@ class Mail extends PureComponent {
     this.props.getSupportTicketReplies(mail._id);
     this.setState({
       currentMail: mail,
-      selectedMails: []
     });
+    this.props.updateOnTicketPage(true);
     this.props.setCurrentTicket(mail._id);
   }
 
-  addLabel(mail, label) {
-    if (this.state.currentMail !== null && mail.id === this.state.currentMail.id) {
-      this.setState({
-        currentMail: { ...mail, labels: mail.labels.concat(label) }
-      })
+  deSelectMail() {
+    this.setState({
+      currentMail: null
+    });
+    this.props.resetCurrentTicket();
+  }
+
+  createSupportTicketsTableData(tickets){
+    return tickets.map(item => {
+
+      let data = {
+        ticketId: item.ticketId,
+        name: item.user.dealer_name + " ("+ item.user.link_code +")",
+        subject: <a href="javascript:void(0);" onClick={() => this.onMailSelect(item)}>{item.subject}</a>,
+        subjectStr: item.subject,
+        status: item.status,
+        type: item.category,
+        priority: item.priority,
+        time: getDateFromTimestamp(item.createdAt),
+        delete: {
+          id: item._id,
+          isClosed: item.status === 'closed'
+        },
+        _id: item._id
+      };
+      return data;
+    });
+  }
+
+  supportTableColumns(admin = false){
+    let adminColumn = {
+      title: 'Actions',
+      dataIndex: 'delete',
+      align: 'center',
+      className: 'row',
+      key: "deleteTicket",
+      render: (item) => { return item.isClosed ? <Button type="danger" size="small" onClick={() => this.onDeleteMail(item.id)}>Delete</Button> : ''; },
+    };
+    let defautlColumns = [{
+      title: 'Subject',
+      align: "center",
+      dataIndex: 'subject',
+      width: 500,
+      key: 'subject',
+      sorter: (a, b) => { return a.subjectStr.localeCompare(b.subjectStr) },
+      sortDirections: ['ascend', 'descend'],
+
+    },{
+      title: 'Ticket Id',
+      dataIndex: 'ticketId',
+      align: 'center',
+      className: 'row',
+      key: "ticketId",
+      sorter: (a, b) => { return a.ticketId.localeCompare(b.ticketId) },
+      sortDirections: ['ascend', 'descend'],
+    },{
+      title: 'Dealer/SDealer Name',
+      align: "center",
+      dataIndex: 'name',
+      sorter: (a, b) => { return a.name.localeCompare(b.name); },
+      sortDirections: ['ascend', 'descend'],
+      key: "name",
+    },{
+      title: 'Status',
+      align: "center",
+      dataIndex: 'status',
+      key: 'status',
+      sorter: (a, b) => { return a.status.localeCompare(b.status) },
+      sortDirections: ['ascend', 'descend'],
+
+    },{
+      title: 'Type',
+      align: "center",
+      dataIndex: 'type',
+      key: 'type',
+      sorter: (a, b) => { return a.type.localeCompare(b.type) },
+      sortDirections: ['ascend', 'descend'],
+
+    },{
+      title: 'Priority',
+      align: "center",
+      dataIndex: 'priority',
+      key: 'priority',
+      sorter: (a, b) => { return a.priority.localeCompare(b.priority) },
+      sortDirections: ['ascend', 'descend'],
+
+    },{
+      title: 'Date',
+      align: "center",
+      dataIndex: 'time',
+      key: 'time',
+      sorter: (a, b) => { return a.time.localeCompare(b.time) },
+      sortDirections: ['ascend', 'descend'],
+    }];
+
+    if(admin){
+      return [adminColumn, ...defautlColumns];
     }
-    return mail.labels.concat(label)
+
+    return defautlColumns;
   }
 
-  updateSearch(evt) {
-    this.setState({
-      searchTicket: evt.target.value,
-    });
-    this.searchTicket(evt.target.value)
-  }
-
-  onToggleDrawer() {
-    this.setState({
-      drawerState: !this.state.drawerState
-    });
+  renderTickets(filteredSupportTickets){
+    const { currentMail } = this.state;
+    return currentMail === null ? (<Table
+      className="gx-table-responsive"
+      size="midddle"
+      bordered
+      columns={this.supportTableColumns(this.props.user.type === ADMIN)}
+      dataSource={this.createSupportTicketsTableData(filteredSupportTickets)}
+      pagination={false}
+      scroll={{ x: true }}
+      rowKey="key"
+    />) : <MailDetail
+      user={this.props.user}
+      supportTicket={currentMail}
+      supportTicketReply={this.props.supportTicketReply}
+      onCloseTicket={this.onCloseTicket.bind(this)}
+      updateOnTicketPage={this.props.updateOnTicketPage}
+      closeSupportTicketStatus={this.props.closeSupportTicketStatus}
+      supportTicketReplies={this.state.supportTicketReplies}
+      updateState={this.updateState.bind(this)}
+      resetCurrentTicket={this.props.resetCurrentTicket}
+    />;
   }
 
   render() {
-    const { selectedMails, currentMail, drawerState, folderMails, composeMail, alertMessage, showMessage, noContentFoundMessage } = this.state;
+    const { currentMail, composeMail, filteredSupportTickets } = this.state;
     return (
       <div>
-        <div className="gx-main-content">
-          <div className="gx-app-module m-0">
+        {this.renderTickets(filteredSupportTickets)}
 
-            <div className="gx-d-block gx-d-lg-none">
-              <Drawer
-                placement="left"
-                closable={false}
-                visible={drawerState}
-                onClose={this.onToggleDrawer.bind(this)}>
-                {this.SupportTicketSideBar()}
-              </Drawer>
-
-            </div>
-            <div className="gx-module-sidenav gx-d-none gx-d-lg-flex">
-              {this.SupportTicketSideBar()}
-            </div>
-
-            <div className="gx-module-box">
-              <div className="gx-module-box-header">
-                <span className="gx-drawer-btn gx-d-flex gx-d-lg-none">
-                  <i className="icon icon-menu gx-icon-btn" aria-label="Menu"
-                    onClick={this.onToggleDrawer.bind(this)} />
-                </span>
-                <AppModuleHeader placeholder="Search tickets"
-                  onChange={this.updateSearch.bind(this)}
-                  value={this.state.searchTicket} />
-
-              </div>
-
-              <div className="gx-module-box-content">
-                <div className="gx-module-box-topbar">
-                  {this.state.currentMail === null ? '' :
-                    <i className="icon icon-arrow-left gx-icon-btn" onClick={() => {
-                      this.setState({ currentMail: null })
-                      this.props.resetCurrentTicket();
-                    }} />
-                  }
-
-                  <div classID="toolbar-separator" />
-                  {this.state.currentMail === null ? (
-                    <Row className="width_100">
-                      <div className="gx-module-list-content">
-                        <div className="gx-mail-user-des">
-                          <Col span="2">
-                            {(selectedMails.length > 0) && this.getMailActions()}
-                          </Col>
-                          <Col span="3">
-                            <h4>Ticket Id</h4>
-                          </Col>
-                          <Col span="4">
-                            <h4>Name</h4>
-                          </Col>
-                          <Col span="6">
-                            <h4>Subject</h4>
-                          </Col>
-                          <Col span="2">
-                            <h4>Status</h4>
-                          </Col>
-                          <Col span="2">
-                            <h4>Type</h4>
-                          </Col>
-                          <Col span="2">
-                            <h4>Priority</h4>
-                          </Col>
-                          <Col span="3">
-                            <h4>Time</h4>
-                          </Col>
-                        </div>
-                      </div>
-                    </Row>
-                  ) : '' }
-                </div>
-
-                {this.displayMail(currentMail, folderMails, noContentFoundMessage)}
-
-                <ComposeMail
-                  open={composeMail}
-                  admin={this.props.admin}
-                  user={this.props.user}
-                  connectedDealer={connectedDealer}
-                  generateSupportTicket={this.props.generateSupportTicket}
-                  onClose={this.handleRequestClose.bind(this)}
-                />
-
-              </div>
-            </div>
-          </div>
-          {showMessage && message.info(<span id="message-id">{alertMessage}</span>, 3, this.handleRequestClose)}
-        </div>
+        <ComposeMail
+          open={composeMail}
+          admin={this.props.admin}
+          user={this.props.user}
+          connectedDealer={connectedDealer}
+          generateSupportTicket={this.props.generateSupportTicket}
+          onClose={this.handleRequestClose.bind(this)}
+        />
       </div>
 
     )
@@ -488,4 +371,4 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Mail);
+export default connect(mapStateToProps, mapDispatchToProps, null, {withRef: true})(Mail);

@@ -199,15 +199,15 @@ class CreditIcon extends Component {
         "bg_red"
     return <div>
       <Row gutter="16">
-        <Col span={12} className="credit_modal_heading ">
-          <h4 className="weight_600">{convertToLang(this.props.translation[""], "ACCOUNT STATUS")}</h4>
+        <Col span={12} className="credit_modal_heading bg_brown">
+          <h4 className="weight_600 mb-0 "><b> {convertToLang(this.props.translation[""], "ACCOUNT STATUS")} </b></h4>
         </Col>
         <Col span={12} className={"credit_modal_heading " + class_name}>
-          <h4 className=" weight_600">
+          <h4 className=" weight_600  mb-0 ">
             {convertToLang(this.props.translation[""], (this.props.account_balance_status == 'active') ?
               <span className="">ACTIVE</span> : (this.props.account_balance_status === 'restricted') ?
                 <span> Restriction Level 1</span> :
-                <span className="" > Restriction Level 2</span>)
+                <span className="color_white" > Restriction Level 2</span>)
             }</h4>
         </Col>
       </Row>
@@ -284,8 +284,8 @@ class CreditIcon extends Component {
 
   renderAccountStatus = () => {
     let statusBGC, statusDays;
-
-    if (this.props.account_balance_status_by === 'due_credits') {
+    let textColor = ''
+    if (this.props.account_balance_status_by === 'due_credits' && this.props.account_balance_status !== 'active') {
       if (this.props.account_balance_status === 'restricted' && this.props.overdueDetails._30to60 > 0) {
         statusBGC = 'bg_yellow';
         statusDays = '31+ days Overdue';
@@ -295,45 +295,48 @@ class CreditIcon extends Component {
         statusDays = '21+ days Overdue';
         account_status_paragraph = "Your account is restricted. You May not use PAY LATER feature. Please pay invoices 21+ days overdue";
       } else if (this.props.account_balance_status === 'suspended') {
-        statusBGC = 'bg_red';
+        statusBGC = 'bg_red bg_white';
         statusDays = '60+ days Overdue';
         account_status_paragraph = "Your account is restricted. You May not add new Devices. Please pay invoices 60+ days overdue";
       } else {
         statusBGC = 'bg_green';
-        statusDays = 'No Overdue';
+        statusDays = 'No Restriction';
       }
-    } else if (this.props.account_balance_status_by === 'admin') {
+    } else if (this.props.account_balance_status_by === 'admin' && this.props.account_balance_status !== 'active') {
       if (this.props.account_balance_status === 'restricted') {
         statusBGC = 'bg_yellow';
         statusDays = 'admin';
         account_status_paragraph = "Account restricted by Admin.You May not use PAY LATER feature until its restored."
-      } else {
-        statusBGC = 'bg_red';
+      } else if (this.props.account_balance_status === 'suspended') {
+        statusBGC = 'bg_red color_white';
+
         statusDays = 'admin';
         account_status_paragraph = "Account restricted by Admin.You May not add new Devices until its restored."
+      } else {
+        statusBGC = 'bg_green';
+        statusDays = 'admin';
       }
-
     } else {
       statusBGC = 'bg_green';
-      statusDays = 'No Overdue';
-      account_status_paragraph = "No Overdue"
+      statusDays = 'No Restriction';
+      account_status_paragraph = "No Restriction"
       return [
         {
-          name: <h5 className={'ac_st_info '} >INFO</h5>,
-          value: <h5 className={"weight_600 bg_brown p-5 " + statusBGC} >{account_status_paragraph} </h5>,
+          name: <h5 className={'ac_st_info'} >INFO</h5>,
+          value: <h5 className={"weight_600 mb-0 p-8 bg_brown" + statusBGC} >{account_status_paragraph} </h5>,
         }
       ];
     }
 
     return [
-      
+
       {
-        name: <h5 className={'restricted_by'} >Restricted By</h5>,
-        value: <h5 className={"weight_600 bg_brown p-5 "} >{statusDays} </h5>
+        name: <h5 className={'restricted_by bg_brown'} >Restricted By</h5>,
+        value: <h5 className={"weight_600 mb-0 p-8 " + statusBGC} >{statusDays} </h5>
       },
       {
-        name: <h5 className={'weight_600 p-5 text-uppercase '} >INFO</h5>,
-        value: <h5 className={"weight_600 bg_brown p-5 " + statusBGC}>{account_status_paragraph} </h5>,
+        name: <h5 className={'weight_600 p-8 mb-0 text-uppercase'}>INFO</h5>,
+        value: <h5 className={"weight_600 mb-0 p-8 white_normal " + statusBGC}>{account_status_paragraph} </h5>,
       }
     ];
   };
@@ -419,7 +422,7 @@ class CreditIcon extends Component {
           translation={this.props.translation}
 
         />
-        <Modal
+        {/* <Modal
           // width={'55%'}
           maskClosable={false}
           visible={this.state.visible}
@@ -428,73 +431,73 @@ class CreditIcon extends Component {
           okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
           footer={false}
           className="credit_popup"
-        >
-          <Fragment>
+        > */}
+        <Fragment>
+          <Row>
+            <Col xs={24} sm={24} md={11} lg={11} xl={11} className="mb-16">
+              <Table
+                className="ac_status_table"
+                dataSource={this.renderAccountStatus()}
+                columns={this.a_s_columns}
+                pagination={false}
+                title={this.ac_st_title}
+                bordered
+                showHeader={false}
+              />
+              {/* <h6 className="mt-6"> {account_status_paragraph}</h6> */}
+            </Col>
+            <Col xs={24} sm={24} md={0} lg={1} xl={1}>
+            </Col>
+            <Col xs={24} sm={24} md={14} lg={12} xl={12}>
+              <Table
+                className="current_bl_table"
+                dataSource={this.renderCreditBalance()}
+                columns={this.cr_blnc_columns}
+                pagination={false}
+                title={this.cr_blnc_title}
+                bordered
+              />
+            </Col>
+          </Row>
+          <div>
             <Row>
-              <Col xs={24} sm={24} md={11} lg={11} xl={11} className="mb-16">
+              <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                 <Table
-                  className="ac_status_table"
-                  dataSource={this.renderAccountStatus()}
-                  columns={this.a_s_columns}
+                  className="overdue_table"
+                  dataSource={this.renderOverData()}
+                  columns={this.overdue_columns}
                   pagination={false}
-                  title={this.ac_st_title}
+                  title={this.overdue_title}
                   bordered
-                  showHeader={false}
-                />
-                {/* <h6 className="mt-6"> {account_status_paragraph}</h6> */}
-              </Col>
-              <Col xs={24} sm={24} md={0} lg={1} xl={1}>
-              </Col>
-              <Col xs={24} sm={24} md={14} lg={12} xl={12}>
-                <Table
-                  className="ac_status_table"
-                  dataSource={this.renderCreditBalance()}
-                  columns={this.cr_blnc_columns}
-                  pagination={false}
-                  title={this.cr_blnc_title}
-                  bordered
+                  size="small"
+                  scroll={{ x: true }}
                 />
               </Col>
             </Row>
-            <div>
-              <Row>
-                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                  <Table
-                    className="overdue_table"
-                    dataSource={this.renderOverData()}
-                    columns={this.overdue_columns}
-                    pagination={false}
-                    title={this.overdue_title}
-                    bordered
-                    size="small"
-                    scroll={{ x: true }}
-                  />
-                </Col>
-              </Row>
 
-            </div>
+          </div>
 
-            <div>
-              <Table
-                className="pay_history"
-                columns={this.paymentHistoryColumns}
-                dataSource={this.renderPaymentHistoryList(this.props.latestPaymentTransaction)}
-                bordered
-                title={this.pay_history_title}
-                pagination={false}
-                scroll={{ x: true }}
-              />
-            </div>
+          <div>
+            <Table
+              className="pay_history"
+              columns={this.paymentHistoryColumns}
+              dataSource={this.renderPaymentHistoryList(this.props.latestPaymentTransaction)}
+              bordered
+              title={this.pay_history_title}
+              pagination={false}
+              scroll={{ x: true }}
+            />
+          </div>
 
-            {/* <div className="edit_ftr_btn11">
+          {/* <div className="edit_ftr_btn11">
               <Button type="primary" onClick={() => {
                 this.setState({
                   visible: false
                 })
               }} >{convertToLang(this.props.translation[""], "OK")}</Button>
             </div> */}
-          </Fragment>
-        </Modal>
+        </Fragment>
+        {/* </Modal> */}
 
       </div>
     )

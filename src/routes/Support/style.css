@@ -1,0 +1,44 @@
+
+.supportModuleMainTab .ant-tabs-extra-content{
+  width: 550px;
+}
+
+.font15 {
+  font-size: 15px;
+}
+
+.font16 {
+  font-size: 16px;
+}
+
+.justify {
+  text-align: justify;
+}
+
+.top10 {
+  margin-top: 10px;
+}
+
+.top15 {
+  margin-top: 15px;
+}
+.support_sel_dd {
+  width: 25%;
+  margin-right: 1%;
+  float: right;
+}
+.support_sel_dd > .ant-select-selection {
+  background-color: #dedede;
+}
+.right10 {
+  margin-right: 10px;
+}
+
+.display-float {
+  display: block;
+  float: left;
+}
+
+.float-left {
+  float: left;
+}

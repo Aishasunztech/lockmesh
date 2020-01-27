@@ -43,7 +43,8 @@ export default class BulkPushApps extends Component {
 
         if (this.props.selectedPushAppsList && this.props.selectedPushAppsList.length) {
             const title =
-                <Markup content={`${convertToLang(this.props.translation[""], `Are you sure, you want to push (${this.props.selectedPushAppsList.map(item => ` ${item.apk_name}`)}) apps into these devices `)} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`} ></Markup>
+                <Markup content={`${convertToLang(this.props.translation[""], `Are you sure, you want to push (${this.props.selectedPushAppsList.map(item => ` ${item.apk_name}`)}) apps into selected devices`)} ?`} ></Markup>
+                // <Markup content={`${convertToLang(this.props.translation[""], `Are you sure, you want to push (${this.props.selectedPushAppsList.map(item => ` ${item.apk_name}`)}) apps into these devices `)} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`} ></Markup>
             // `${convertToLang(this.props.translation[""], `Are you sure, you want to push ${this.props.selectedPushAppsList ? <div style={{textDecoration: 'underline'}}>{this.props.selectedPushAppsList.map(item => ` ${item.apk_name}`)}</div> : "selected"} apps into these devices `)} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`;
 
             this.confirm({

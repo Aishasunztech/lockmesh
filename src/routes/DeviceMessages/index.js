@@ -28,7 +28,7 @@ import {
 
 import { ACTION, Alert_Delete_APK, SEARCH, DEVICE_UNLINKED, DEVICE_PRE_ACTIVATION } from "../../constants/Constants";
 import { Button_Save, Button_Yes, Button_No, Button_Ok } from "../../constants/ButtonConstants";
-import { systemMsgColumns } from "../utils/columnsUtils";
+import { deviceMsgsColumns } from "../utils/columnsUtils";
 import { Tab_Active, Tab_All, Tab_Disabled } from "../../constants/TabConstants";
 
 var status = true;
@@ -36,11 +36,11 @@ var coppyApks = [];
 var domainStatus = true;
 var copyDomainList = [];
 
-class SystemMessages extends Component {
+class DeviceMessages extends Component {
 
     constructor(props) {
         super(props);
-        var columns = systemMsgColumns(props.translation, this.handleSearch);
+        var columns = deviceMsgsColumns(props.translation, this.handleSearch);
 
         this.state = {
             sorterKey: '',
@@ -455,7 +455,7 @@ class SystemMessages extends Component {
     }
 
     searchField = (originalData, fieldName, value) => {
-        console.log('check data for search:: originalData', originalData, "fieldName ", fieldName, "value ", value)
+        // console.log('check data for search:: originalData', originalData, "fieldName ", fieldName, "value ", value)
         let demoData = [];
         if (value.length) {
             originalData.forEach((data) => {
@@ -507,7 +507,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const mapStateToProps = ({ account, auth, settings, dealers, bulkDevices }) => {
-    // console.log("bulkDevices.bulkMsgs ", bulkDevices.bulkMsgs);
+    // console.log("bulkDevices.usersOfDealers ", bulkDevices.usersOfDealers);
     return {
         isloading: account.isloading,
         user: auth.authUser,
@@ -526,4 +526,4 @@ const mapStateToProps = ({ account, auth, settings, dealers, bulkDevices }) => {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SystemMessages);
+export default connect(mapStateToProps, mapDispatchToProps)(DeviceMessages);

@@ -339,17 +339,18 @@ export const sendBulkMsg = (data, dealerTZ) => {
 export const updateBulkMsg = (record, devices, dealerTZ) => {
     // console.log("updateBulkMsg action file: ", record)
 
-    let cloneRecord = JSON.parse(JSON.stringify(record));
-    cloneRecord["date_time"] = dealerTZ ? moment(cloneRecord.date_time).tz(dealerTZ).tz(SERVER_TIMEZONE).format(TIMESTAMP_FORMAT) : '';
-    // console.log("cloneRecord ", cloneRecord);
+    // let cloneRecord = JSON.parse(JSON.stringify(record));
+    // cloneRecord["date_time"] = dealerTZ ? moment(cloneRecord.date_time).tz(dealerTZ).tz(SERVER_TIMEZONE).format(TIMESTAMP_FORMAT) : '';
+    // console.log(record, "cloneRecord ", cloneRecord);
     return (dispatch) => {
-        RestService.updateBulkMsg(cloneRecord).then((response) => {
+        RestService.updateBulkMsg(record, dealerTZ).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 // console.log(response.data);
                 dispatch({
                     type: UPDATE_BULK_MESSAGE,
                     payload: response.data,
-                    msg_data: { ...record, devices }
+                    msg_data: { ...record, devices },
+                    dealerTZ
                 })
             } else {
                 dispatch({

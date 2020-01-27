@@ -45,8 +45,9 @@ class TableHistory extends Component {
 
     renderList = (histories, callback, selectedPolicy) => {
         // console.log("list", histories);
+        let historyList = [];
 
-        return histories.map((history) => {
+        histories.map((history) => {
             let btnTxt = "Add";
             let btnDisable = false;
 
@@ -62,7 +63,7 @@ class TableHistory extends Component {
                 btnDisable = false;
             }
 
-            return ({
+            let historyObj = {
                 key: history.id,
                 history_date: history.policy_name,
                 action: (
@@ -82,8 +83,14 @@ class TableHistory extends Component {
                 secure_apps: history.secure_apps,
                 push_apps: history.push_apps,
                 passwords: history.passwords
-            })
+            }
+
+            if (history.status === 1) {
+                historyList.push(historyObj);
+            }
+
         })
+        return historyList;
     }
 
     renderColumn = (type) => {

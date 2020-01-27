@@ -19,6 +19,7 @@ import Dashboard from './Dashboard';
 import Reporting from './Reports';
 import SupportTickets from './SupportTickets';
 import SupportSystemMessages from './SupportSystemMessages';
+import SupportLiveChat from './SupportLiveChat';
 import RightSidebar from './RightSidebar';
 
 const reducers = combineReducers({
@@ -43,6 +44,7 @@ const reducers = combineReducers({
   reporting: Reporting,
   SupportTickets: SupportTickets,
   SupportSystemMessages: SupportSystemMessages,
+  SupportLiveChat: SupportLiveChat,
 });
 
 export default reducers;

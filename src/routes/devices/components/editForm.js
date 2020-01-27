@@ -76,12 +76,13 @@ import {
 } from '../../../constants/LabelConstants';
 
 import { PRE_ACTIVATE_DEVICE } from '../../../constants/ActionTypes';
+import { SERVER_TIMEZONE } from '../../../constants/Application';
 
 const { TextArea } = Input;
 const confirm = Modal.confirm
 const success = Modal.success
 const error = Modal.error;
-moment.tz.setDefault("Europe/Berlin");
+moment.tz.setDefault(SERVER_TIMEZONE);
 
 
 class EditDevice extends Component {
@@ -706,6 +707,7 @@ class EditDevice extends Component {
         })
     }
 
+
     submitServicesConfirm(pay_now) {
 
         this.props.getInvoiceId();
@@ -718,12 +720,16 @@ class EditDevice extends Component {
                 showCreditPurchase(this)
             }
         } else {
-            let after_pay_credits = this.props.user_credit - this.state.serviceData.total_price
-            let credits_limit = this.props.credits_limit
-            if (credits_limit > after_pay_credits) {
-                showCreditPurchase(this, "Your Credits limits will exceed after apply this service. Please select other services OR Purchase Credits.")
-            } else {
+            if (this.state.serviceData.term == 0) {
                 this.setState({ invoiceVisible: true, invoiceType: "pay_later" })
+            } else {
+                let after_pay_credits = this.props.user_credit - this.state.serviceData.total_price
+                let credits_limit = this.props.credits_limit
+                if (credits_limit > after_pay_credits) {
+                    showCreditPurchase(this, "Your Credits limits will exceed after apply this service. Please select other services OR Purchase Credits.")
+                } else {
+                    this.setState({ invoiceVisible: true, invoiceType: "pay_later" })
+                }
             }
         }
     }
@@ -1869,12 +1875,15 @@ class EditDevice extends Component {
                         </div>
                         <div className="edit_ftr_btn" >
                             <Button onClick={() => { this.setState({ showConfirmCredit: false }) }}>CANCEL</Button>
-
-                            {(this.props.user_credit < this.state.serviceData.total_price && this.props.user.account_balance_status === 'active') ?
-                                <Button type='primary' onClick={() => { this.submitServicesConfirm(false) }}>PAY LATER</Button>
-                                : null
+                            {this.state.serviceData.expiry_date == 0 ? <Button type='primary' onClick={() => { this.submitServicesConfirm(false) }}>PROCEED</Button> :
+                                <Fragment>
+                                    {(this.props.user_credit < this.state.serviceData.total_price && this.props.user.account_balance_status === 'active') ?
+                                        <Button type='primary' onClick={() => { this.submitServicesConfirm(false) }}>PAY LATER</Button>
+                                        : null
+                                    }
+                                    <Button style={{ backgroundColor: "green", color: "white" }} onClick={() => { this.submitServicesConfirm(true) }}>PAY NOW (-3%)</Button>
+                                </Fragment>
                             }
-                            <Button style={{ backgroundColor: "green", color: "white" }} onClick={() => { this.submitServicesConfirm(true) }}>PAY NOW (-3%)</Button>
                         </div >
                     </Fragment>
                 </Modal>

@@ -1,37 +1,37 @@
 import {
-    FINISHED_PUSH_APPS,
-    FINISHED_PULL_APPS,
-    IN_PROCESS,
-    FINISHED_POLICY,
-    FINISHED_POLICY_STEP,
-    FINISHED_IMEI,
-    SINGLE_APP_PUSHED,
-    GET_APP_JOBS,
-    SINGLE_APP_PULLED,
-    RECEIVE_SIM_DATA,
-    FINISHED_WIPE,
-    DEVICE_SYNCED
+  FINISHED_PUSH_APPS,
+  FINISHED_PULL_APPS,
+  IN_PROCESS,
+  FINISHED_POLICY,
+  FINISHED_POLICY_STEP,
+  FINISHED_IMEI,
+  SINGLE_APP_PUSHED,
+  GET_APP_JOBS,
+  SINGLE_APP_PULLED,
+  RECEIVE_SIM_DATA,
+  FINISHED_WIPE,
+  DEVICE_SYNCED, GENERATE_SUPPORT_TICKET, UPDATE_SUPPORT_TICKET_REPLY, SYSTEM_SUPPORT_MESSAGE_RECEIVED
 } from "../../constants/ActionTypes";
 
 import {
-    SEND_ONLINE_OFFLINE_STATUS,
-    ACK_FINISHED_PUSH_APPS,
-    ACK_FINISHED_PULL_APPS,
-    ACTION_IN_PROCESS,
-    FINISH_POLICY,
-    FINISH_IMEI,
-    ACK_SINGLE_PUSH_APP,
-    ACK_SINGLE_PULL_APP,
-    FINISH_POLICY_STEP,
-    RECV_SIM_DATA,
-    CONNECT_SOCKET,
-    DISCONNECT_SOCKET,
-    ACK_SETTING_APPLIED,
-    ACK_INSTALLED_APPS,
-    ACK_UNINSTALLED_APPS,
-    FINISH_WIPE,
-    SEND_JOB_TO_PANEL,
-    FINISHED_BULK_PUSH_APPS
+  SEND_ONLINE_OFFLINE_STATUS,
+  ACK_FINISHED_PUSH_APPS,
+  ACK_FINISHED_PULL_APPS,
+  ACTION_IN_PROCESS,
+  FINISH_POLICY,
+  FINISH_IMEI,
+  ACK_SINGLE_PUSH_APP,
+  ACK_SINGLE_PULL_APP,
+  FINISH_POLICY_STEP,
+  RECV_SIM_DATA,
+  CONNECT_SOCKET,
+  DISCONNECT_SOCKET,
+  ACK_SETTING_APPLIED,
+  ACK_INSTALLED_APPS,
+  ACK_UNINSTALLED_APPS,
+  FINISH_WIPE,
+  SEND_JOB_TO_PANEL,
+  FINISHED_BULK_PUSH_APPS, CONNECT_SUPPORT_SYSTEM_SOCKET, DISCONNECT_SUPPORT_SYSTEM_SOCKET
 } from "../../constants/SocketConstants";
 
 import RestService from '../services/RestServices'
@@ -39,16 +39,26 @@ import RestService from '../services/RestServices'
 // socket should connect on login
 export const connectSocket = () => {
     return (dispatch) => {
-        let socket              = RestService.connectSocket();
-        let SupportSystemSocket = RestService.connectSupportSystemSocket();
-        SupportSystemSocket.emit('ping' , {})
+        let socket = RestService.connectSocket();
         dispatch({
             type: CONNECT_SOCKET,
             payload: socket,
-            supportSystemSocket: SupportSystemSocket
         })
         // CONNECT_SOCKET
     }
+}
+
+// socket should connect on login
+export const connectSupportSystemSocket = () => {
+  return (dispatch) => {
+    let SupportSystemSocket = RestService.connectSupportSystemSocket();
+
+    dispatch({
+      type: CONNECT_SUPPORT_SYSTEM_SOCKET,
+      supportSystemSocket: SupportSystemSocket
+    })
+    // CONNECT_SUPPORT_SYSTEM_SOCKET
+  }
 }
 
 //==========> Connect Device events
@@ -372,9 +382,25 @@ export const hello_web = (socket) => {
     }
 }
 
-export const closeAllSocketEvents = (socket) => {
+export const closeSupportSystemSocket = (socket) => {
+  return (dispatch) => {
+    if (socket) {
 
-}
+      socket.off(GENERATE_SUPPORT_TICKET);
+      socket.off(UPDATE_SUPPORT_TICKET_REPLY);
+      socket.off(SYSTEM_SUPPORT_MESSAGE_RECEIVED);
+
+      socket.disconnect();
+    } else {
+
+    }
+    dispatch({
+      type: DISCONNECT_SUPPORT_SYSTEM_SOCKET,
+      payload: null
+    });
+
+  }
+};
 
 
 

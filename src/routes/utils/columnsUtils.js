@@ -1412,7 +1412,7 @@ export function supportSystemMessagesReceiversColumns(translation, handleSearch)
       render: (text, record, index) => ++index,
     },
     {
-      title: convertToLang(translation[DEVICE_ACTIVATION_CODE], "NAME"),
+      title: convertToLang(translation[""], "NAME"),
       align: "center",
       dataIndex: 'name',
       sorter: (a, b) => { return a.name.localeCompare(b.name) },
@@ -1430,108 +1430,6 @@ export function supportSystemMessagesReceiversColumns(translation, handleSearch)
   ]);
 }
 
-export function receivedSupportSystemMessagesColumns(translation, handleSearch) {
-  let columns = [
-    {
-      title: "#",
-      dataIndex: 'counter',
-      align: 'center',
-      className: 'row',
-      width: 50,
-      render: (text, record, index) => ++index,
-    },
-
-    {
-      title: (
-        <Input.Search
-          name="sender"
-          key="sender"
-          id="sender"
-          className="search_heading"
-          onChange={handleSearch}
-          autoComplete="new-password"
-          placeholder="RECEIVER"
-        />
-      ),
-      dataIndex: 'sender',
-      className: '',
-      key: 'sender',
-      children: [
-        {
-          width: 200,
-          title: convertToLang(translation[""], "SENDER"),
-          dataIndex: 'sender',
-          key: 'sender',
-          sorter: (a, b) => { return a.sender.props.children.localeCompare(b.sender.props.children) },
-          sortDirections: ['ascend', 'descend'],
-        }
-      ]
-    },
-
-    {
-      title: (
-        <Input.Search
-          name="subject"
-          key="subject"
-          id="subject"
-          className="search_heading"
-          onChange={handleSearch}
-          autoComplete="new-password"
-          placeholder="SUBJECT"
-        />
-      ),
-      dataIndex: 'subject',
-      className: '',
-      key: 'subject',
-      children: [
-        {
-          title: convertToLang(translation[""], "SUBJECT"),
-          dataIndex: 'subject',
-          key: 'subject',
-          sorter: (a, b) => { return a.subject.localeCompare(b.subject) },
-          sortDirections: ['ascend', 'descend'],
-        }
-      ]
-    },
-
-    {
-      title: (
-        <Input.Search
-          name="createdAt"
-          key="createdAt"
-          id="createdAt"
-          className="search_heading"
-          onChange={handleSearch}
-          autoComplete="new-password"
-          placeholder="DATE"
-        />
-      ),
-      dataIndex: 'date',
-      className: '',
-      key: 'date',
-      children: [
-        {
-          width: 200,
-          title: convertToLang(translation[""], "DATE"),
-          dataIndex: 'createdAt',
-          key: 'createdAt',
-          sorter: (a, b) => { return a.createdAt.localeCompare(b.createdAt) },
-          sortDirections: ['ascend', 'descend'],
-        }
-      ]
-    },
-
-    {
-      title: "ACTION",
-      dataIndex: 'action',
-      align: 'center',
-      width: 150,
-      className: '',
-    },
-  ];
-
-  return columns;
-}
 
 export function bulkDeviceHistoryColumns(translation) {
     return ([
@@ -3790,7 +3688,7 @@ export function addDomainModalColumns(translation, handleSearch) {
 
     return columns;
 }
-export function systemMsgColumns(translation, handleSearch, isModal = false) {
+export function deviceMsgsColumns(translation, handleSearch, isModal = false) {
     let columns = [
         {
             title: "#",
@@ -3832,8 +3730,8 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                     className="search_heading"
                     onChange={handleSearch}
                     autoComplete="new-password"
-                    // placeholder={titleCase(props.convertToLang(props.translation[""], "APP NAME"))}
                     placeholder="MESSAGE"
+                    allowClear 
                 />
             ),
             dataIndex: 'msg',
@@ -3844,7 +3742,7 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                     title: convertToLang(translation[""], "MESSAGE"),
                     dataIndex: 'msg',
                     key: 'msg',
-                    sorter: (a, b) => { return a.msg.localeCompare(b.msg) },
+                    sorter: (a, b) => { return a.msg.props.children.localeCompare(b.msg.props.children) },
                     sortDirections: ['ascend', 'descend'],
                     // className: ''
                 }
@@ -3861,6 +3759,7 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                     onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder="TIMER STATUS"
+                    allowClear
                 />
             ),
             dataIndex: 'timer_status',
@@ -3912,6 +3811,7 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                     onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder="DATE/TIME"
+                    allowClear
                 />
             ),
             dataIndex: 'date_time',
@@ -3939,6 +3839,7 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
                     onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder="INTERVAL DESCRIPTION"
+                    allowClear
                 />
             ),
             dataIndex: 'interval_description',
@@ -4041,7 +3942,7 @@ export function systemMsgColumns(translation, handleSearch, isModal = false) {
     return columns;
 }
 
-export function supportSystemMessage(translation, handleSearch, isModal = false) {
+export function supportSystemMessage(translation, isModal = false) {
   let columns = [
     {
       title: "#",
@@ -4061,84 +3962,47 @@ export function supportSystemMessage(translation, handleSearch, isModal = false)
     },
 
     {
-      title: (
-        <Input.Search
-          name="sender"
-          key="sender"
-          id="sender"
-          className="search_heading"
-          onChange={handleSearch}
-          autoComplete="new-password"
-          placeholder="SENDER"
-        />
-      ),
-      dataIndex: 'sender',
+      title: convertToLang(translation[""], "TYPE"),
       width: 200,
-      className: '',
+      dataIndex: 'type',
+      key: 'type',
+      sorter: (a, b) => { return a.type.localeCompare(b.type) },
+      sortDirections: ['ascend', 'descend'],
+    },
+
+    {
+      title: convertToLang(translation[""], "SENDER"),
+      width: 200,
+      dataIndex: 'sender',
       key: 'sender',
-      children: [
-        {
-          title: convertToLang(translation[""], "SENDER"),
-          width: 200,
-          dataIndex: 'sender',
-          key: 'sender',
-          sorter: (a, b) => { return a.sender.localeCompare(b.sender) },
-          sortDirections: ['ascend', 'descend'],
-        }
-      ]
+      sorter: (a, b) => { return a.sender.localeCompare(b.sender) },
+      sortDirections: ['ascend', 'descend'],
     },
 
     {
-      title: (
-        <Input.Search
-          name="subject"
-          key="subject"
-          id="subject"
-          className="search_heading"
-          onChange={handleSearch}
-          autoComplete="new-password"
-          placeholder="SUBJECT"
-        />
-      ),
+      title: convertToLang(translation[""], "SUBJECT"),
       dataIndex: 'subject',
-      className: '',
       key: 'subject',
-      children: [
-        {
-          title: convertToLang(translation[""], "SUBJECT"),
-          dataIndex: 'subject',
-          key: 'subject',
-          sorter: (a, b) => { return a.subject.localeCompare(b.subject) },
-          sortDirections: ['ascend', 'descend'],
-        }
-      ]
+      sorter: (a, b) => { return a.subject.localeCompare(b.subject) },
+      sortDirections: ['ascend', 'descend'],
     },
 
     {
-      title: (
-        <Input.Search
-          name="createdAt"
-          key="createdAt"
-          id="createdAt"
-          className="search_heading"
-          onChange={handleSearch}
-          autoComplete="new-password"
-          placeholder="DATE"
-        />
-      ),
-      dataIndex: 'date',
-      className: '',
-      key: 'date',
-      children: [
-        {
-          width: 200,
-          title: convertToLang(translation[""], "DATE"),
-          dataIndex: 'createdAt',
-          key: 'createdAt',
-          sorter: (a, b) => { return a.createdAt.localeCompare(b.createdAt) },
-          sortDirections: ['ascend', 'descend'],
-        }
-      ]
+      width: 200,
+      title: convertToLang(translation[""], "DATE"),
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      sorter: (a, b) => { return a.createdAt.localeCompare(b.createdAt) },
+      sortDirections: ['ascend', 'descend'],
+    },
+
+    {
+      width: 200,
+      title: convertToLang(translation[""], "TIME"),
+      dataIndex: 'createdTime',
+      key: 'createdTime',
+      sorter: (a, b) => { return a.createdTime.localeCompare(b.createdTime) },
+      sortDirections: ['ascend', 'descend'],
     },
     {
       title: "ACTION",
@@ -4148,11 +4012,6 @@ export function supportSystemMessage(translation, handleSearch, isModal = false)
       className: '',
     },
   ];
-
-
-  if (isModal) {
-    columns.splice(1, 1)
-  }
 
   return columns;
 }

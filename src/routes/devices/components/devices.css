@@ -336,15 +336,9 @@
     position: relative;
 }
 
-/* .add_user_btn {
-    position: absolute;
-    left: 230px;
-    top: -9px;
-    width: 40%;
-    padding: 0;
-    float: right;
-    margin: 8px 0 4px;
-} */
+.add_user_btn {
+    margin-bottom: 6px;
+}
 
 .add_sim_permission_btn {
     position: absolute;
@@ -464,13 +458,14 @@
 }
 
 .invo_btn {
-    width: 40%;
+    width: 32px;
     height: 20px;
-    font-size: 11px !important;
+    letter-spacing: 1px;
+    font-size: 11px!important;
     font-weight: 100;
-    background-color: #5b9bd5 !important;
-    border: 1px solid #41719c !important;
-    color: #fff !important;
+    background-color: #5b9bd5!important;
+    border: 1px solid #41719c!important;
+    color: #fff!important;
 }
 
 .ac_status_table .ant-table.ant-table-bordered .ant-table-title {
@@ -517,7 +512,7 @@
     align-items: center;
     text-align: center;
     line-height: 16px;
-    margin-bottom: 0;
+    margin-bottom: 5px;
     margin-top: 3px;
 }
 

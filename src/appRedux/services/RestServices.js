@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BASE_URL, SOCKET_BASE_URL, SUPERADMIN_URL, SUPPORT_URL } from '../../constants/Application';
+import { BASE_URL, SOCKET_BASE_URL, SUPERADMIN_URL, SUPPORT_URL, SUPPORT_SOCKET_URL } from '../../constants/Application';
 import io from "socket.io-client";
 import SupportSystemSocketIO from "socket.io-client";
 
@@ -37,11 +37,13 @@ const RestService = {
 
 
     connectSupportSystemSocket: () => {
+
         let token = localStorage.getItem('token');
         let id = localStorage.getItem('id');
         let type = localStorage.getItem('type');
         let makeToken = "token=" + token + "&isWeb=true&user_id=" + id + "&type=" + type;
-        let socket = SupportSystemSocketIO.connect(SUPPORT_URL, {
+        let socket = SupportSystemSocketIO.connect(SUPPORT_SOCKET_URL, {
+            path: '/support/v1/socket',
             transports: ['websocket'],
             query: makeToken,
             secure: true
@@ -280,7 +282,7 @@ const RestService = {
         return axios.get(BASE_URL + 'users/get-all-dealers', RestService.getHeader());
     },
     getAdmin: () => {
-      return axios.get(BASE_URL + 'users/get-admin', RestService.getHeader());
+        return axios.get(BASE_URL + 'users/get-admin', RestService.getHeader());
     },
     getUserDealers: () => {
         return axios.get(BASE_URL + 'users/user_dealers', RestService.getHeader());
@@ -529,8 +531,9 @@ const RestService = {
     updateUserProfile: (formData) => {
         return axios.put(BASE_URL + 'users/updateProfile/' + formData.dealerId, formData, RestService.getHeader());
     },
-    getLoginHistory: () => {
-        return axios.get(BASE_URL + 'users/login_history', RestService.getHeader());
+    getLoginHistory: (offset, limit) => {
+        let query = `?start=${offset}&limit=${limit}`;
+        return axios.get(BASE_URL + `users/login_history${query}`, RestService.getHeader());
     },
 
     getDeviceHistory: (device_id = "") => {
@@ -1035,9 +1038,9 @@ const RestService = {
         return axios.post(BASE_URL + 'users/send_bulk_msg', { data, timezone }, RestService.getHeader());
     },
 
-    updateBulkMsg: (data) => {
+    updateBulkMsg: (data, timezone) => {
         // delete data.data; // delete devices list
-        return axios.post(BASE_URL + 'users/update_bulk_msg', data, RestService.getHeader());
+        return axios.post(BASE_URL + 'users/update_bulk_msg', {data, timezone}, RestService.getHeader());
     },
 
     getBulkMsgsList: (timezone) => {
@@ -1175,27 +1178,42 @@ const RestService = {
 
     //get Support System Messages
     getSupportSystemMessages: (data) => {
-      return axios.get(SUPPORT_URL + 'system-messages', RestService.getHeader());
+        return axios.get(SUPPORT_URL + 'system-messages', RestService.getHeader());
     },
 
     //get Support System Messages
     getReceivedSupportSystemMessages: (data) => {
-      return axios.get(SUPPORT_URL + 'system-messages/received', RestService.getHeader());
+        return axios.get(SUPPORT_URL + 'system-messages/received', RestService.getHeader());
     },
 
     //get Support System Messages
     getSupportSystemMessagesNotifications: (data) => {
-      return axios.get(SUPPORT_URL + 'system-messages/notifications', RestService.getHeader());
+        return axios.get(SUPPORT_URL + 'system-messages/notifications', RestService.getHeader());
     },
 
     //generate Support System Messages
     generateSupportSystemMessages: (data) => {
-      return axios.post(SUPPORT_URL + 'system-messages/store', data, RestService.getHeader());
+        return axios.post(SUPPORT_URL + 'system-messages/store', data, RestService.getHeader());
     },
 
     //update Support System Message Notification
     updateSupportSystemMessageNotification: (data) => {
-      return axios.post(SUPPORT_URL + 'system-messages/update-notification', data, RestService.getHeader());
+        return axios.post(SUPPORT_URL + 'system-messages/update-notification', data, RestService.getHeader());
+    },
+
+    //send Support Live Chat Message
+    sendSupportLiveChatMessage: (data) => {
+      return axios.post(SUPPORT_URL + 'messages/send', data, RestService.getHeader());
+    },
+
+    //get Support Live Chat conversations
+    getSupportLiveChatConversation: (data) => {
+      return axios.get(SUPPORT_URL + 'messages/conversations', RestService.getHeader());
+    },
+
+    //get Support Live Chat Message
+    getSupportLiveChatMessages: (data) => {
+      return axios.get(SUPPORT_URL + 'messages/get?type='+data.type+'&id='+data.id, RestService.getHeader());
     },
 };
 export default RestService;
