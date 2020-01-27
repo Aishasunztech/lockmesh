@@ -8,6 +8,8 @@ import UserProfile from "./UserProfile";
 import NewDevice from '../../components/NewDevices';
 import CreditsModal from '../../components/CreditsModal';
 import { updateSupportSystemMessageNotification } from '../../appRedux/actions/SupportSystemMessages';
+import { updateTicketNotifications } from '../../appRedux/actions';
+import { setSupportPage, resetSupportPage } from "../../appRedux/actions";
 import { getNewDevicesList, } from "../../appRedux/actions/Common";
 import {
   getNewCashRequests,
@@ -48,7 +50,6 @@ import {
   Sidebar_users_devices,
   Sidebar_clients,
 } from '../../constants/SidebarConstants'
-
 
 import { logout } from "appRedux/actions/Auth";
 
@@ -241,7 +242,13 @@ class SidebarContent extends Component {
               acceptServiceRequest={this.props.acceptServiceRequest}
               ticketNotifications={this.props.ticketNotifications}
               allDealers={this.props.allDealers}
+              supportPage={this.props.supportPage}
+              currentMessageId={this.props.currentMessageId}
+              currentTicketId={this.props.currentTicketId}
               supportSystemMessagesNotifications={this.props.supportSystemMessagesNotifications}
+              updateTicketNotifications={this.props.updateTicketNotifications}
+              setSupportPage={this.props.setSupportPage}
+              resetSupportPage={this.props.resetSupportPage}
             />
             <span className="font_14">
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}
@@ -424,7 +431,10 @@ const mapStateToProps = ({ settings, devices, sidebar, account, auth, dealers, S
     account_balance_status_by: auth.authUser.account_balance_status_by,
     allDealers: dealers.allDealers,
     supportSystemMessagesNotifications: SupportSystemMessages.supportSystemMessagesNotifications,
-    socket: socket.socket
+    socket: socket.socket,
+    supportPage: sidebar.supportPage,
+    currentTicketId: sidebar.currentTicketId,
+    currentMessageId: sidebar.currentMessageId
   }
 };
 export default connect(mapStateToProps, {
@@ -450,7 +460,10 @@ export default connect(mapStateToProps, {
   getTicketsNotifications,
   getSupportSystemMessagesNotifications,
   getAllToAllDealers,
-  updateSupportSystemMessageNotification
+  updateSupportSystemMessageNotification,
+  updateTicketNotifications,
+  setSupportPage,
+  resetSupportPage
 }
 )(SidebarContent);
 

@@ -37,23 +37,28 @@ export default class NewDevices extends Component {
             { title: convertToLang(props.translation[""], "CREDITS TO REFUND"), dataIndex: 'credits_to_refund', key: 'credits_to_refund', align: "center" },
         ];
         const ticketNotificationColumns = [
+            { title: <Button size="small" type="primary" onClick={() => {
+              let tickets = this.state.selectedTicketNotifications;
+              this.setState({selectedTicketNotifications: []});
+              this.props.updateTicketNotifications({ticketIds: tickets});
+            }}><Icon type="eye" /></Button>, dataIndex: 'selection', key: 'action', align: "center" },
+            { title: convertToLang(props.translation[""], "TICKET SUBJECT"), dataIndex: 'subject', key: 'ticket_subject', align: "center" },
             { title: convertToLang(props.translation[""], "DEALER NAME"), dataIndex: 'dealer_name', key: 'dealer_name', align: "center" },
             { title: convertToLang(props.translation[""], "DEALER PIN"), dataIndex: 'dealer_pin', key: 'dealer_pin', align: "center" },
             { title: convertToLang(props.translation[""], "TYPE"), dataIndex: 'type', key: 'type', align: "center" },
-            { title: convertToLang(props.translation[""], "TICKET SUBJECT"), dataIndex: 'subject', key: 'ticket_subject', align: "center" },
             { title: convertToLang(props.translation[""], "TICKET PRIORITY"), dataIndex: 'priority', key: 'priority', align: "center" },
             { title: convertToLang(props.translation[""], "TICKET CATEGORY"), dataIndex: 'category', key: 'category', align: "center" },
             { title: convertToLang(props.translation[""], "CREATED AT"), dataIndex: 'created_at', key: 'created_at', align: "center" },
         ];
 
         const supportSystemMessages = [
-          { title: <Button size="small" type="primary" onClick={() => {
+            { title: <Button size="small" type="primary" onClick={() => {
               let selectedMessage = this.state.selectedSystemMessages;
               this.setState({selectedSystemMessages: []});
               this.props.updateSupportSystemMessageNotification({systemMessageId: selectedMessage});
             }}><Icon type="eye" /></Button>, dataIndex: 'selection', key: 'action', align: "center" },
-            { title: convertToLang(props.translation[""], "SENDER"), dataIndex: 'sender', key: 'sender', align: "center" },
             { title: convertToLang(props.translation[""], "SUBJECT"), dataIndex: 'subject', key: 'subject', align: "center" },
+            { title: convertToLang(props.translation[""], "SENDER"), dataIndex: 'sender', key: 'sender', align: "center" },
             { title: convertToLang(props.translation[""], "CREATED AT"), dataIndex: 'created_at', key: 'created_at', align: "center" },
         ];
 
@@ -69,19 +74,30 @@ export default class NewDevices extends Component {
             sectionVisible: true,
             flaggedDevicesModal: false,
             reqDevice: '',
-            supportPage: '',
+            redirect: false,
             showLInkRequest: false,
             selectedSystemMessages: [],
-            systemMessagesNotifications: []
+            systemMessagesNotifications: [],
+            selectedTicketNotifications: [],
+            ticketNotifications: []
         }
     }
 
-    updateSelection = (e, val) => {
+    updateSystemMessagesSelection = (e, val) => {
       let selectedMessages = this.state.selectedSystemMessages;
       if(e.target.checked){
         this.setState({selectedSystemMessages: [...selectedMessages, val]});
       } else {
         this.setState({selectedSystemMessages: selectedMessages.filter(message => message !== val)});
+      }
+    }
+
+    updateTicketsSelection = (e, val) => {
+      let selectedTickets = this.state.selectedTicketNotifications;
+      if(e.target.checked){
+        this.setState({selectedTicketNotifications: [...selectedTickets, val]});
+      } else {
+        this.setState({selectedTicketNotifications: selectedTickets.filter(ticket => ticket !== val)});
       }
     }
 
@@ -96,7 +112,7 @@ export default class NewDevices extends Component {
     }
 
     setPageState(data){
-      this.setState({supportPage: data, visible: false});
+      this.setState({redirect: data, visible: false});
     }
 
     handleOk = (e) => {
@@ -120,6 +136,7 @@ export default class NewDevices extends Component {
     componentDidUpdate(prevProps){
       if(prevProps !== this.props){
         this.setState({systemMessagesNotifications: this.props.supportSystemMessagesNotifications});
+        this.setState({ticketNotifications: this.props.ticketNotifications});
       }
     }
     componentWillReceiveProps(nextProps) {
@@ -132,6 +149,10 @@ export default class NewDevices extends Component {
 
         if(nextProps.supportSystemMessagesNotifications){
           this.setState({systemMessagesNotifications: nextProps.supportSystemMessagesNotifications});
+        }
+
+        if(nextProps.ticketNotifications){
+          this.setState({ticketNotifications: nextProps.ticketNotifications});
         }
     }
     rejectDevice(device) {
@@ -223,12 +244,21 @@ export default class NewDevices extends Component {
         if (list && Array.isArray(list) && list.length > 0) {
 
             return list.map((notification) => {
-                let dealer = this.props.allDealers.find(dealer => dealer.dealer_id == notification.user_id)
-                return {
+                let dealer = this.props.allDealers.find(dealer => dealer.dealer_id == notification.user_id);
+                let dealer_name = 'N/A';
+                let dealer_pin = 'N/A';
+                if(typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_name')){
+                  dealer_name = dealer.dealer_name;
+                }
+                if(typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_type') && dealer.dealer_type !== 1 && dealer.hasOwnProperty('link_code')){
+                  dealer_pin = dealer.link_code;
+                }
+              return {
+                    selection: <Checkbox defaultChecked={false} checked={this.state.selectedTicketNotifications.some(item => item === notification._id)} onChange={(e) => this.updateTicketsSelection(e, notification._id)} />,
                     id: notification.id,
                     key: notification.id,
-                    dealer_name: dealer ? dealer.dealer_name : 'N/A',
-                    dealer_pin: dealer ? dealer.dealer_type != 1 ? dealer.link_code : 'N/A' : 'N/A',
+                    dealer_name: dealer_name,
+                    dealer_pin: dealer_pin,
                     type: notification.type,
                     subject: notification.ticket.subject,
                     category: notification.ticket.category,
@@ -245,10 +275,8 @@ export default class NewDevices extends Component {
     renderSupportSystemMessagesNotifications(list) {
         if (list && Array.isArray(list) && list.length > 0) {
             return list.map((notification) => {
-              console.log('$$$', this.state.selectedSystemMessages, '%%%');
-
                 return {
-                    selection: <Checkbox defaultChecked={false} checked={this.state.selectedSystemMessages.some(item => item === notification.system_message._id)} onChange={(e) => this.updateSelection(e, notification.system_message._id)} />,
+                    selection: <Checkbox defaultChecked={false} checked={this.state.selectedSystemMessages.some(item => item === notification.system_message._id)} onChange={(e) => this.updateSystemMessagesSelection(e, notification.system_message._id)} />,
                     id: notification.id,
                     key: notification.id,
                     sender: <span className="text-capitalize">{notification.sender_user_type}</span>,
@@ -369,11 +397,11 @@ export default class NewDevices extends Component {
     render() {
         let flaggedDevices = this.filterList(this.props.allDevices)
         // console.log('check flaggedDevices ', flaggedDevices, 'requests', this.props.requests, 'NewDevices', this.props.devices)
-        if(this.state.supportPage !== ''){
+        if(this.state.redirect){
           let page = this.state.supportPage;
-          this.setPageState("");
+          this.setPageState(false);
           window.history.replaceState({}, null);
-          return <Redirect to={{ pathname: '/support', state: {page: page }}} />
+          return <Redirect to={{ pathname: '/support'}} />
         }
         return (
             <div>
@@ -417,8 +445,9 @@ export default class NewDevices extends Component {
                         <Row className="width_100" style={{display: "block", marginLeft: 0}}>
                           <h1 style={{display: "inline"}}>{convertToLang(this.props.translation[""], "Ticket Notifications")}
                             <Button type="primary" size="small" style={{float: "right", marginTop: '6px'}} onClick={() => {
+                              this.props.setSupportPage('2');
                               if(window.location.pathname !== '/support'){
-                                this.setPageState('2');
+                                this.setPageState(true);
                               } else {
                                 this.setState({
                                   visible: false
@@ -432,7 +461,7 @@ export default class NewDevices extends Component {
                             bordered
                             columns={this.state.ticketNotificationColumns}
                             style={{ marginTop: 20 }}
-                            dataSource={this.renderTicketNotifications(this.props.ticketNotifications)}
+                            dataSource={this.renderTicketNotifications(this.state.ticketNotifications)}
                             pagination={false}
 
                         />
@@ -443,8 +472,9 @@ export default class NewDevices extends Component {
                             <h1>{convertToLang(this.props.translation[""], "System Message Notifications")}
 
                               <Button type="primary" size="small" style={{float: "right", marginTop: '6px'}} onClick={() => {
+                                this.props.setSupportPage('1');
                                 if(window.location.pathname !== '/support'){
-                                  this.setPageState('1');
+                                  this.setPageState(true);
                                 } else {
                                   this.setState({
                                     visible: false

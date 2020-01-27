@@ -146,28 +146,35 @@ class SendMessage extends Component {
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
               >
+                {this.props.form.getFieldDecorator('dealers', {
+                  rules: [
+                    {
+                      required: true, message: convertToLang(this.props.translation[""], "Dealer/SDealer is required"),
+                    }
+                  ],
+                })(
+                  <Select
+                    value={this.state.selectedDealers}
+                    mode="multiple"
+                    labelInValue
+                    showSearch
+                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                    maxTagCount={this.state.checkAllSelectedDealers ? 0 : 2}
+                    maxTagTextLength={10}
+                    maxTagPlaceholder={this.state.checkAllSelectedDealers ? "All Selected" : `${this.state.selectedDealers.length - 2} more`}
+                    style={{ width: '100%' }}
+                    placeholder={convertToLang(this.props.translation[""], "Select dealer/sdealers")}
+                    onChange={this.handleChangeDealer}
+                    onDeselect={(e) => this.handleDeselect(e, "dealers")}
 
-                <Select
-                  value={this.state.selectedDealers}
-                  mode="multiple"
-                  labelInValue
-                  showSearch
-                  filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                  maxTagCount={this.state.checkAllSelectedDealers ? 0 : 2}
-                  maxTagTextLength={10}
-                  maxTagPlaceholder={this.state.checkAllSelectedDealers ? "All Selected" : `${this.state.selectedDealers.length - 2} more`}
-                  style={{ width: '100%' }}
-                  placeholder={convertToLang(this.props.translation[""], "Select dealer/sdealers")}
-                  onChange={this.handleChangeDealer}
-                  onDeselect={(e) => this.handleDeselect(e, "dealers")}
-
-                >
-                  {(this.state.allDealers && this.state.allDealers.length > 0) ?
-                    <Select.Option key="allDealers" value="all">Select All</Select.Option>
-                    : <Select.Option key="" value="">Dealers not found</Select.Option>
-                  }
-                  {this.state.allDealers.map(item => <Select.Option key={item.key} value={item.key} >{item.label}</Select.Option>)}
-                </Select>
+                  >
+                    {(this.state.allDealers && this.state.allDealers.length > 0) ?
+                      <Select.Option key="allDealers" value="all">Select All</Select.Option>
+                      : <Select.Option key="" value="">Dealers not found</Select.Option>
+                    }
+                    {this.state.allDealers.map(item => <Select.Option key={item.key} value={item.key} >{item.label}</Select.Option>)}
+                  </Select>
+                )}
               </Form.Item>
             </Col>
           </Row>

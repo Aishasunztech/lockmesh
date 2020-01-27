@@ -1,15 +1,22 @@
 import {
-    NEW_REQUEST_LIST,
-    REJECT_REQUEST,
-    ACCEPT_REQUEST,
-    USER_CREDITS,
-    GET_CANCEL_REQUEST,
-    ACCEPT_SERVICE_REQUEST,
-    REJECT_SERVICES_REQUEST,
-    NEW_NOTIFICATION_LIST,
-    UPDATE_NOTIFICATION_STATUS,
-    SET_ADMIN_FOR_SUPPORT_TICKETS,
-    UPDATE_SUPPORT_TICKET_NOTIFICATIONS
+  NEW_REQUEST_LIST,
+  REJECT_REQUEST,
+  ACCEPT_REQUEST,
+  USER_CREDITS,
+  GET_CANCEL_REQUEST,
+  ACCEPT_SERVICE_REQUEST,
+  REJECT_SERVICES_REQUEST,
+  NEW_NOTIFICATION_LIST,
+  UPDATE_NOTIFICATION_STATUS,
+  SET_ADMIN_FOR_SUPPORT_TICKETS,
+  UPDATE_SUPPORT_TICKET_NOTIFICATIONS,
+  UPDATE_TICKET_NOTIFICATION_STATUS,
+  SET_SUPPORT_PAGE,
+  RESET_SUPPORT_PAGE,
+  SET_CURRENT_SYSTEM_MESSAGE_ID,
+  RESET_CURRENT_SYSTEM_MESSAGE_ID,
+  SET_CURRENT_SUPPORT_TICKET_ID,
+  RESET_CURRENT_SUPPORT_TICKET_ID, RESET_CURRENT_SUPPORT_SYSTEM_MESSAGE_ID
 } from "../../constants/ActionTypes";
 import { Modal, notification } from 'antd';
 
@@ -24,7 +31,10 @@ const initialSidebar = {
     admin: {},
     credits_limit: 0,
     cancel_service_requests: [],
-    ticketNotifications: []
+    ticketNotifications: [],
+    supportPage: '',
+    currentMessageId: '',
+    currentTicketId: ''
 };
 
 export default (state = initialSidebar, action) => {
@@ -180,7 +190,28 @@ export default (state = initialSidebar, action) => {
             }
         }
 
-        default:
-            return state;
+      case UPDATE_TICKET_NOTIFICATION_STATUS: {
+        let ticketNotifications = state.ticketNotifications.filter(notification => !action.payload.data.includes(notification._id));
+        return {
+          ...state,
+          ticketNotifications
+        };
+        // return state;
+      }
+
+      case SET_SUPPORT_PAGE :
+        return {
+          ...state,
+          supportPage: action.payload
+        };
+
+      case RESET_SUPPORT_PAGE:
+        return {
+          ...state,
+          supportPage: ''
+        };
+
+      default:
+          return state;
     }
 }
