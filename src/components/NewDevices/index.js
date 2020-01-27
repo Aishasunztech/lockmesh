@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Modal, Table, Button, Form, Row, Col } from 'antd';
+import { Modal, Table, Button, Form, Row, Col, Icon, Checkbox } from 'antd';
 import { withRouter, Link, Redirect } from "react-router-dom";
 import AddDeviceModal from '../../routes/devices/components/AddDevice';
 import { ADMIN, ACTION, CREDITS, CREDITS_CASH_REQUESTS, ARE_YOU_SURE_YOU_WANT_TO_DECLINE_THIS_REQUEST, ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST, WARNING, DEVICE_UNLINKED } from '../../constants/Constants';
@@ -47,6 +47,11 @@ export default class NewDevices extends Component {
         ];
 
         const supportSystemMessages = [
+          { title: <Button size="small" type="primary" onClick={() => {
+              let selectedMessage = this.state.selectedSystemMessages;
+              this.setState({selectedSystemMessages: []});
+              this.props.updateSupportSystemMessageNotification({systemMessageId: selectedMessage});
+            }}><Icon type="eye" /></Button>, dataIndex: 'selection', key: 'action', align: "center" },
             { title: convertToLang(props.translation[""], "SENDER"), dataIndex: 'sender', key: 'sender', align: "center" },
             { title: convertToLang(props.translation[""], "SUBJECT"), dataIndex: 'subject', key: 'subject', align: "center" },
             { title: convertToLang(props.translation[""], "CREATED AT"), dataIndex: 'created_at', key: 'created_at', align: "center" },
@@ -65,8 +70,19 @@ export default class NewDevices extends Component {
             flaggedDevicesModal: false,
             reqDevice: '',
             supportPage: '',
-            showLInkRequest: false
+            showLInkRequest: false,
+            selectedSystemMessages: [],
+            systemMessagesNotifications: []
         }
+    }
+
+    updateSelection = (e, val) => {
+      let selectedMessages = this.state.selectedSystemMessages;
+      if(e.target.checked){
+        this.setState({selectedSystemMessages: [...selectedMessages, val]});
+      } else {
+        this.setState({selectedSystemMessages: selectedMessages.filter(message => message !== val)});
+      }
     }
 
 
@@ -84,14 +100,12 @@ export default class NewDevices extends Component {
     }
 
     handleOk = (e) => {
-        // console.log(e);
         this.setState({
             visible: false,
         });
     }
 
     handleCancel = (e) => {
-        // console.log(e);
         this.setState({
             visible: false,
         });
@@ -102,12 +116,22 @@ export default class NewDevices extends Component {
             NewRequests: this.props.requests
         })
     }
+
+    componentDidUpdate(prevProps){
+      if(prevProps !== this.props){
+        this.setState({systemMessagesNotifications: this.props.supportSystemMessagesNotifications});
+      }
+    }
     componentWillReceiveProps(nextProps) {
         if (this.props.devices.length !== nextProps.devices.length || this.props.requests.length !== nextProps.requests.length) {
             this.setState({
                 NewDevices: nextProps.devices,
                 NewRequests: nextProps.requests
             });
+        }
+
+        if(nextProps.supportSystemMessagesNotifications){
+          this.setState({systemMessagesNotifications: nextProps.supportSystemMessagesNotifications});
         }
     }
     rejectDevice(device) {
@@ -221,8 +245,10 @@ export default class NewDevices extends Component {
     renderSupportSystemMessagesNotifications(list) {
         if (list && Array.isArray(list) && list.length > 0) {
             return list.map((notification) => {
+              console.log('$$$', this.state.selectedSystemMessages, '%%%');
 
                 return {
+                    selection: <Checkbox defaultChecked={false} checked={this.state.selectedSystemMessages.some(item => item === notification.system_message._id)} onChange={(e) => this.updateSelection(e, notification.system_message._id)} />,
                     id: notification.id,
                     key: notification.id,
                     sender: <span className="text-capitalize">{notification.sender_user_type}</span>,
@@ -342,11 +368,11 @@ export default class NewDevices extends Component {
 
     render() {
         let flaggedDevices = this.filterList(this.props.allDevices)
-        // console.log(this.props);
         // console.log('check flaggedDevices ', flaggedDevices, 'requests', this.props.requests, 'NewDevices', this.props.devices)
         if(this.state.supportPage !== ''){
           let page = this.state.supportPage;
           this.setPageState("");
+          window.history.replaceState({}, null);
           return <Redirect to={{ pathname: '/support', state: {page: page }}} />
         }
         return (
@@ -393,6 +419,10 @@ export default class NewDevices extends Component {
                             <Button type="primary" size="small" style={{float: "right", marginTop: '6px'}} onClick={() => {
                               if(window.location.pathname !== '/support'){
                                 this.setPageState('2');
+                              } else {
+                                this.setState({
+                                  visible: false
+                                });
                               }
                             }}>View Tickets</Button>
                           </h1>
@@ -415,6 +445,10 @@ export default class NewDevices extends Component {
                               <Button type="primary" size="small" style={{float: "right", marginTop: '6px'}} onClick={() => {
                                 if(window.location.pathname !== '/support'){
                                   this.setPageState('1');
+                                } else {
+                                  this.setState({
+                                    visible: false
+                                  });
                                 }
                               }}>View System Messages</Button>
                             </h1>
@@ -424,7 +458,7 @@ export default class NewDevices extends Component {
                                 bordered
                                 columns={this.state.supportSystemMessages}
                                 style={{ marginTop: 20 }}
-                                dataSource={this.renderSupportSystemMessagesNotifications(this.props.supportSystemMessagesNotifications)}
+                                dataSource={this.renderSupportSystemMessagesNotifications(this.state.systemMessagesNotifications)}
                                 pagination={false}
 
                             />
