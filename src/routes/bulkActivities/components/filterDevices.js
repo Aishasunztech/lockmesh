@@ -698,7 +698,7 @@ class FilterDevices extends Component {
 
       } else {
         error({
-          title: `Sorry, You have not any device to perform an action`,
+          title: `Sorry, You have not selected any device to perform an action`,
         });
       }
 
@@ -737,7 +737,7 @@ class FilterDevices extends Component {
     // console.log('selected devices are: ', this.state.selectedDevices);
 
     if (!this.props.devices || !this.props.devices.length){
-      return "Note: *To performe an action please select dealers or users to get their devices ";
+      return "Note: *To performe an action please select dealers/users to get their devices ";
     }
 
 

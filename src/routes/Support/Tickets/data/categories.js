@@ -21,11 +21,6 @@ export default [
   },
   {
     'id': 4,
-    'handle': 'support',
-    'title': 'support'
-  },
-  {
-    'id': 5,
     'handle': 'other',
     'title': 'other'
   },

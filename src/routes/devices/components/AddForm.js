@@ -709,12 +709,16 @@ class AddDevice extends Component {
                 showCreditPurchase(this, "Your Credits are not enough to apply these services. Please select other services OR Purchase Credits.")
             }
         } else {
-            let after_pay_credits = this.props.user_credit - (this.state.total_price + this.state.hardwarePrice)
-            let credits_limit = this.props.credits_limit
-            if (credits_limit > after_pay_credits) {
-                showCreditPurchase(this, "Your Credits limits will exceed after apply this service. Please select other services OR Purchase Credits.")
-            } else {
+            if (this.state.serviceData.term == 0) {
                 this.setState({ invoiceVisible: true, invoiceType: "pay_later" })
+            } else {
+                let after_pay_credits = this.props.user_credit - (this.state.total_price + this.state.hardwarePrice)
+                let credits_limit = this.props.credits_limit
+                if (credits_limit > after_pay_credits) {
+                    showCreditPurchase(this, "Your Credits limits will exceed after apply this service. Please select other services OR Purchase Credits.")
+                } else {
+                    this.setState({ invoiceVisible: true, invoiceType: "pay_later" })
+                }
             }
         }
 
@@ -733,7 +737,7 @@ class AddDevice extends Component {
                 showConfirmCredit: false
             })
         } else {
-            showCreditPurchase(this)
+            showCreditPurchase(this, "Your Credits are not enough to apply these services. Please select other services OR Purchase Credits.")
         }
 
         this.setState({
@@ -912,7 +916,7 @@ class AddDevice extends Component {
         // console.log(this.props);
         // console.log('id is', this.state.products, this.state.packages);
         // console.log("form props: ", this.props.form);
-
+        // console.log(this.props.user);
         const { visible, loading, isloading, addNewUserValue } = this.state;
         const { users_list } = this.props;
         var lastObject = users_list[0]
@@ -939,13 +943,15 @@ class AddDevice extends Component {
                         <Radio.Group className="width_100 text-center" onChange={this.handleChange} ref='option' defaultValue="0" buttonStyle="solid">
                             <Radio.Button className="dev_radio_btn" value="0">{convertToLang(this.props.translation[SINGLE_DEVICE], "Single Device")}</Radio.Button>
                             <Radio.Button className="dev_radio_btn" value="1" disabled>
-                                <a>{convertToLang(this.props.translation[DUPLICATE_DEVICES], "Multiple Devices")}</a>
-                                <Popover placement="bottomRight" content={(
+                                {/* <a> */}
+                                {convertToLang(this.props.translation[DUPLICATE_DEVICES], "Multiple Devices")}
+                                {/* </a> */}
+                                {/* <Popover placement="bottomRight" content={(
                                     <Markup content={convertToLang(this.props.translation[DUPLICATE_DEVICES_HELPING_TEXT],
                                         `<p>Generate multiple activation <br /> codes with same settings</p>`)} />
                                 )}>
                                     <span className="helping_txt"><Icon type="info-circle" /></span>
-                                </Popover>
+                                </Popover> */}
                             </Radio.Button>
                         </Radio.Group>
                         :
@@ -968,7 +974,7 @@ class AddDevice extends Component {
                                     wrapperCol={{ span: 24 }}
                                 >
                                     <Button
-                                        className="add_user_btn"
+                                        className="add_user_btn mb-6"
                                         type="primary"
                                         style={{ width: "100%" }}
                                         onClick={() => this.handleUserModal()}
@@ -1043,6 +1049,7 @@ class AddDevice extends Component {
                                                 type="primary"
                                                 onClick={() => this.handleServicesModal()}
                                                 style={{ width: '100%' }}
+                                                className="add_user_btn"
                                             >
                                                 {convertToLang(this.props.translation[DUMY_TRANS_ID], "SELECT SERVICES")}
                                             </Button>
@@ -1176,6 +1183,35 @@ class AddDevice extends Component {
                                 null
                             }
 
+                            {/* Valid For Input */}
+                            {(this.props.preActive) ?
+                                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                                    <Form.Item
+                                        label={convertToLang(this.props.translation[Device_Valid_For], "VALID FOR(DAYS)")}
+                                        labelCol={{ span: 12 }}
+                                        wrapperCol={{ span: 12 }}
+                                        className="val_days"
+                                    >
+                                        {this.props.form.getFieldDecorator('validity', {
+                                            initialValue: '',
+                                            rules: [
+                                                {
+                                                    required: true, message: convertToLang(this.props.translation[Device_Valid_days_Required], "Valid days required"),
+                                                },
+                                                {
+                                                    validator: this.validateValidDays,
+                                                }
+                                            ],
+                                        })(
+                                            <InputNumber min={1} />
+                                        )}
+
+                                    </Form.Item>
+                                </Col>
+                                :
+                                null
+                            }
+
                             {(this.props.preActive === false) ?
                                 <Fragment>
 
@@ -1252,9 +1288,8 @@ class AddDevice extends Component {
                                             wrapperCol={{ span: 24 }}
                                         >
                                             <Button
-                                                className="add_user_btn"
+                                                className="add_user_btn mb-6"
                                                 type="primary"
-                                                style={{ width: "100%" }}
                                                 onClick={() => this.handlePGPModal()}
                                                 style={{ width: "100%" }}
                                                 disabled={this.state.disablePgp}
@@ -1312,7 +1347,7 @@ class AddDevice extends Component {
                                             wrapperCol={{ span: 24 }}
                                         >
                                             <Button
-                                                className="add_user_btn"
+                                                className="add_user_btn mb-6"
                                                 type="primary"
                                                 style={{ width: "100%" }}
                                                 onClick={this.handleChatID}
@@ -1410,7 +1445,7 @@ class AddDevice extends Component {
                                                 wrapperCol={{ span: 24 }}
                                             >
                                                 <Button
-                                                    className="add_user_btn"
+                                                    className="add_user_btn mb-6"
                                                     type="primary"
                                                     style={{ width: "100%" }}
                                                     onClick={this.handleChatID}
@@ -1529,7 +1564,7 @@ class AddDevice extends Component {
                                                 wrapperCol={{ span: 24 }}
                                             >
                                                 <Button
-                                                    className="add_user_btn"
+                                                    className="add_user_btn mb-6"
                                                     type="primary"
                                                     style={{ width: "100%" }}
                                                     onClick={this.handleChatID}
@@ -1650,34 +1685,7 @@ class AddDevice extends Component {
                                 null
                             }
 
-                            {/* Valid For Input */}
-                            {(this.props.preActive) ?
-                                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                                    <Form.Item
-                                        label={convertToLang(this.props.translation[Device_Valid_For], "VALID FOR(DAYS)")}
-                                        labelCol={{ span: 12 }}
-                                        wrapperCol={{ span: 12 }}
-                                        className="val_days"
-                                    >
-                                        {this.props.form.getFieldDecorator('validity', {
-                                            initialValue: '',
-                                            rules: [
-                                                {
-                                                    required: true, message: convertToLang(this.props.translation[Device_Valid_days_Required], "Valid days required"),
-                                                },
-                                                {
-                                                    validator: this.validateValidDays,
-                                                }
-                                            ],
-                                        })(
-                                            <InputNumber min={1} />
-                                        )}
 
-                                    </Form.Item>
-                                </Col>
-                                :
-                                null
-                            }
 
                             {(this.state.type == 1) ?
                                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>
@@ -1901,11 +1909,14 @@ class AddDevice extends Component {
 
                         <div className="edit_ftr_btn" >
                             <Button onClick={() => { this.setState({ showConfirmCredit: false }) }}>CANCEL</Button>
-                            {(this.props.user_credit < (this.state.serviceData.total_price + this.state.serviceData.hardwarePrice)) ?
-                                <Button type='primary' onClick={() => { this.submitServicesConfirm(false) }}>PAY LATER</Button>
-                                : null
+                            {this.state.serviceData.term == 0 ? <Button type='primary' onClick={() => { this.submitServicesConfirm(false) }}>PROCEED</Button> :
+                                <Fragment>
+                                    {(this.props.user_credit < (this.state.serviceData.total_price + this.state.serviceData.hardwarePrice) && this.props.user.account_balance_status === 'active') ?
+                                        <Button type='primary' onClick={() => { this.submitServicesConfirm(false) }}>PAY LATER</Button>
+                                        : null}
+                                    <Button style={{ backgroundColor: "green", color: "white" }} onClick={() => { this.submitServicesConfirm(true) }}>PAY NOW (-3%)</Button>
+                                </Fragment>
                             }
-                            <Button style={{ backgroundColor: "green", color: "white" }} onClick={() => { this.submitServicesConfirm(true) }}>PAY NOW (-3%)</Button>
                         </div >
                     </Fragment>
                 </Modal>

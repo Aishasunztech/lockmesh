@@ -296,20 +296,21 @@ class Devices extends Component {
             }
 
             // if (indexTransfered > -1) {
-            if (value === DEVICE_TRANSFERED) {
                 let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
+            if (value === DEVICE_TRANSFERED) {
                 isCheckedColumn = this.props.selectedOptions.findIndex((item) => { return item.key === "transfered_to" }); // item.key === "transfered_to"
                 if (indexTransfered >= 0 && indexTransfered !== undefined && isCheckedColumn !== -1) {
                     this.state.columns[indexTransfered].className = '';
                     this.state.columns[indexTransfered].children[0].className = '';
                 }
-            } else {
-                this.state.columns[indexTransfered].className = 'hide';
-                this.state.columns[indexTransfered].children[0].className = 'hide';
-            }
+            } 
+            // else {
+            //     this.state.columns[indexTransfered].className = 'hide';
+            //     this.state.columns[indexTransfered].children[0].className = 'hide';
+            // }
             // }
 
-            let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
+            // let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
 
             if (value === '8' || value === '1') {
                 if (indexTransfered >= 0 && indexTransfered !== undefined && isCheckedColumn !== -1) {
@@ -458,6 +459,10 @@ class Devices extends Component {
 
     }
 
+    /**
+ * @description TO BE FIXED
+ */
+
     handleChangetab = (value) => {
 
         // this.handleCheckChange(this.props.selectedOptions);
@@ -473,13 +478,16 @@ class Devices extends Component {
         } else {
             if (indxAction < 0) {
                 this.state.columns.splice(1, 0, {
-                    title: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >DELETE SELECTED</Button>,
+                    // title: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >DELETE SELECTED</Button>,
+                    title: 'ACTION',
                     dataIndex: 'action',
                     align: 'center',
                     className: 'row',
                     width: 800,
 
                 })
+            } else {
+                this.state.columns[indxAction]['title'] = 'ACTION'
             }
         }
         let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex === 'activation_code');
@@ -515,7 +523,7 @@ class Devices extends Component {
         }
         else if (value === '10') {
             let indexFlagged = this.state.columns.findIndex(k => k.dataIndex === 'flagged');
-            this.state.columns[1]['title'] = 'ACTION';
+            
 
             if (indexFlagged > -1) {
                 this.state.columns.splice(2, 0, this.state.columns.splice(indexFlagged, 1)[0]);
@@ -526,8 +534,7 @@ class Devices extends Component {
             }
 
         } else {
-            this.state.columns[1]['title'] = 'ACTION';
-
+            // this.state.columns[1]['title'] = 'ACTION';
             let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
             if (value === '1') {
                 // check column from dropdown, checked or not

@@ -20,6 +20,7 @@ import App from "../../routes/index";
 
 import {
 	connectSocket,
+	connectSupportSystemSocket,
 	hello_web,
 	getNotification
 } from '../../appRedux/actions'
@@ -58,7 +59,13 @@ export class MainApp extends Component {
 	}
 
 	componentDidMount() {
-		this.props.connectSocket();
+		if ((!this.props.supportSystemSocket || !this.props.supportSystemSocket.connected)) {
+			this.props.connectSupportSystemSocket();
+		}
+
+		if ((!this.props.socket || !this.props.socket.connected)) {
+			this.props.connectSocket();
+		}
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -165,7 +172,7 @@ export class MainApp extends Component {
 	render() {
 		const { match, width, navStyle } = this.props;
 		return (
-			<div>
+			<div style={{ marginBottom: 40 }}>
 				<IdleTimer
 					ref={ref => { this.idleTimer = ref }}
 					element={document}
@@ -182,10 +189,11 @@ export class MainApp extends Component {
 
 const mapStateToProps = ({ settings, socket }) => {
 
-
 	const { width, navStyle } = settings;
-	return { width, navStyle, socket: socket.socket }
+	const { supportSystemSocket } = socket;
+
+	return { width, navStyle, socket: socket.socket, supportSystemSocket: supportSystemSocket }
 };
 
-export default connect(mapStateToProps, { connectSocket, hello_web, getNotification })(MainApp);
+export default connect(mapStateToProps, { connectSocket, connectSupportSystemSocket, hello_web, getNotification })(MainApp);
 

@@ -7,7 +7,9 @@ import {
     ACCEPT_SERVICE_REQUEST,
     REJECT_SERVICES_REQUEST,
     NEW_NOTIFICATION_LIST,
-    UPDATE_NOTIFICATION_STATUS
+    UPDATE_NOTIFICATION_STATUS,
+    SET_ADMIN_FOR_SUPPORT_TICKETS,
+    UPDATE_SUPPORT_TICKET_NOTIFICATIONS
 } from "../../constants/ActionTypes";
 import { Modal, notification } from 'antd';
 
@@ -19,6 +21,7 @@ const initialSidebar = {
     newRequests: [],
     user_credit: 0,
     due_credit: 0,
+    admin: {},
     credits_limit: 0,
     cancel_service_requests: [],
     ticketNotifications: []
@@ -29,11 +32,11 @@ export default (state = initialSidebar, action) => {
     switch (action.type) {
 
         case NEW_REQUEST_LIST:
-            // console.log('reducer new device', action.payload);
+
             return {
                 ...state,
                 newRequests: action.payload,
-            }
+            };
         case REJECT_REQUEST: {
 
 
@@ -84,7 +87,7 @@ export default (state = initialSidebar, action) => {
         }
 
         case USER_CREDITS: {
-            // console.log("REMAINING CREDITS", action.response.credits);
+
             return {
                 ...state,
                 user_credit: action.response.credits,
@@ -158,6 +161,25 @@ export default (state = initialSidebar, action) => {
                 ticketNotifications: updateNotifications,
             }
         }
+
+        case SET_ADMIN_FOR_SUPPORT_TICKETS: {
+            return {
+                ...state,
+                admin: action.payload
+            }
+        }
+
+        case UPDATE_SUPPORT_TICKET_NOTIFICATIONS: {
+            let ticketNotifications = state.ticketNotifications
+            if (action.payload.status) {
+                ticketNotifications.push(action.payload.notification)
+            }
+            return {
+                ...state,
+                ticketNotifications: [...ticketNotifications],
+            }
+        }
+
         default:
             return state;
     }

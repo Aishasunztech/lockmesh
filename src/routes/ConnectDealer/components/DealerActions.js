@@ -59,7 +59,8 @@ function showConfirm(_this, dealer, action, btn_title, name = "") {
 
     confirm({
         title: <Markup content={(btn_title === 'DELETE') ?
-            convertToLang(_this.props.translation[''], `Do you wish to Permanently Delete Dealer ${name}?<br/> This action cannot be reversed!`)
+            // convertToLang(_this.props.translation[''], `Do you wish to Permanently Delete Dealer ${name}?<br/> This action cannot be reversed!`)
+            convertToLang(_this.props.translation[''], `Do you wish to Delete Dealer ${name}?`)
             :
             (btn_title === 'RESET PASSWORD') ?
                 `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[OF_THIS], " of this dealer")} ${name ? `(${name})` : ""} ?`

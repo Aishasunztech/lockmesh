@@ -262,7 +262,7 @@ export default class Activity extends Component {
                                 dataIndex: 'created_at',
                                 key: "created_at",
                                 className: '',
-                                sorter: (a, b) => { return a.created_at.localeCompare(b.created_at) },
+                                sorter: (a, b) => { return new Date(a.created_at) - new Date(b.created_at) },
                                 sortDirections: ['ascend', 'descend'],
                                 defaultSortOrder: 'descend'
 

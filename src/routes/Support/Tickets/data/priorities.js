@@ -6,17 +6,17 @@ export default [
   },
   {
     'id': 1,
-    'handle': 'high',
-    'title': 'high'
-  },
-  {
-    'id': 2,
     'handle': 'low',
     'title': 'low'
   },
   {
+    'id': 2,
+    'handle': 'high',
+    'title': 'high'
+  },
+  {
     'id': 3,
-    'handle': 'medium',
-    'title': 'medium'
+    'handle': 'critical',
+    'title': 'critical'
   },
 ];

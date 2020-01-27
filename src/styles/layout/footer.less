@@ -173,6 +173,14 @@
     right   : 16px;
 }
 
+// .fix_msgList_card {
+//     position: absolute;
+//     top: 100px;
+//     bottom: 25px;
+//     left: 16px;
+//     right: 16px;
+// }
+
 .fix_card_sm {
     position     : relative;
     top          : 50px;
@@ -244,6 +252,10 @@
     margin: 0 auto;
 }
 
+.width_auto .ant-tabs-bar .ant-tabs-tab {
+    width: auto;
+}
+
 .disp_flx {
     display        : flex;
     justify-content: center;
@@ -304,6 +316,8 @@
 .bulk_msg .ant-table-tbody>tr>td {
     white-space: normal !important;
 }
+
+
 
 .ant-empty-normal {
     margin: 4px 0 0;
@@ -454,6 +468,10 @@
     background: #ff0000;
 }
 
+.color_white {
+    color: white;
+}
+
 
 .bg_light_yellow {
     background: #fff2cc;
@@ -479,7 +497,31 @@
 }
 
 .ac_status_table .ant-table-tbody>tr:last-child {
-    background: #c6e0b4;
+    background: #ffd966 !important;
+}
+
+.ac_status_table .ant-table-tbody td {
+    width: 48%;
+}
+
+.current_bl_table .ant-table-tbody>tr>td,
+.current_bl_table .ant-table-thead>tr>th {
+    padding: 0 !important;
+}
+
+.current_bl_table .ant-table-title {
+    background   : #ddebf7;
+    padding      : 2px 2px;
+    margin-bottom: 0;
+    text-align   : center;
+}
+
+.current_bl_table h6 {
+    margin-bottom: 0px;
+}
+
+.current_bl_table .ant-table-tbody>tr:last-child {
+    background: #c6e0b4 !important;
 }
 
 .sale_info_table .ant-table-tbody>tr>td,
@@ -496,6 +538,9 @@
     border-bottom: 2px solid #535353;
     width        : fit-content;
     line-height  : 13px;
+}
+.border_color_white {
+    border: 1px solid white;
 }
 
 .p-0 {

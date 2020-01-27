@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Button, Form, Input, Select, InputNumber, Row, Col, Tag, Calendar, DatePicker, TimePicker, Modal } from 'antd';
+import { Button, Form, Input, Select, InputNumber, Row, Col, Tag, Calendar, DatePicker, TimePicker, Modal, Alert } from 'antd';
 import { checkValue, convertToLang, checkTimezoneValue, convertTimezoneValue } from '../../utils/commonUtils'
 
 import {
@@ -35,13 +35,13 @@ class SendMsgForm extends Component {
         ];
 
         this.weekDays = [
-            { key: 1, value: "Monday" },
-            { key: 2, value: "Tuesday" },
-            { key: 3, value: "Wednesday" },
-            { key: 4, value: "Thursday" },
-            { key: 5, value: "Friday" },
-            { key: 6, value: "Saturday" },
-            { key: 7, value: "Sunday" },
+            { key: 1, value: "Sunday" },
+            { key: 2, value: "Monday" },
+            { key: 3, value: "Tuesday" },
+            { key: 4, value: "Wednesday" },
+            { key: 5, value: "Thursday" },
+            { key: 6, value: "Friday" },
+            { key: 7, value: "Saturday" },
         ];
 
         this.monthNames = [
@@ -60,6 +60,7 @@ class SendMsgForm extends Component {
         ];
 
         this.monthDays = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+        let dealerTZ = checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
 
         this.state = {
             visible: false,
@@ -76,6 +77,7 @@ class SendMsgForm extends Component {
             repeat_duration: 'NONE',
             timer: '',
             monthDate: 0,
+            dealerTZ: dealerTZ
         }
     }
 
@@ -85,8 +87,13 @@ class SendMsgForm extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
 
             if (!err) {
+                let monthDate = values.monthDate ? values.monthDate : 0;
+                let weekDay = values.weekDay ? values.weekDay : 0;
+                let monthName = values.monthName ? values.monthName : 0;
 
                 if (this.props.selectedDevices && this.props.selectedDevices.length) {
+
+                    let dealerTZ = this.state.dealerTZ; // checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
                     let repeatVal = 'NONE';
                     let dateTimeVal = '';
 
@@ -100,15 +107,67 @@ class SendMsgForm extends Component {
                         // dateTimeVal = this.state.selected_dateTime;
                         repeatVal = this.state.repeat_duration;
 
-
+                        let currentDateIs = moment().tz(dealerTZ).format(TIMESTAMP_FORMAT);
                         // covert time to dateTime value
                         if (this.state.selected_Time) {
-                            let dealerTZ = checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
-
                             const [hours, minutes] = this.state.selected_Time.split(':');
-                            dateTimeVal = moment().tz(dealerTZ).set({ hours, minutes }).format('YYYY-MM-DD HH:mm:ss');
+                            // console.log("hours, minutes ", hours, minutes)
+
+                            if (repeatVal === "DAILY") { // set minutes, hrs
+                                dateTimeVal = moment().tz(dealerTZ).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+
+                                if (dateTimeVal < currentDateIs) {
+                                    // next same week day if current date passed
+                                    dateTimeVal = moment().tz(dealerTZ).add(1, 'days').set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                                }
+                            }
+                            else if (repeatVal === "WEEKLY") { // set minutes, hrs and day name of week 
+                                dateTimeVal = moment().tz(dealerTZ).day(weekDay).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+
+                                if (dateTimeVal < currentDateIs) {
+                                    // next same week day if current date passed
+                                    dateTimeVal = moment().tz(dealerTZ).day(weekDay + 7).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                                }
+                            }
+                            else if (repeatVal === "MONTHLY" || repeatVal === "3 MONTHS" || repeatVal === "6 MONTHS") { // set minutes, hrs and day of month 
+                                dateTimeVal = moment().tz(dealerTZ).set({ "date": monthDate, hours, minutes }).format(TIMESTAMP_FORMAT)
+
+                                if (dateTimeVal < currentDateIs) {
+                                    // set next months with same date if current date passed
+                                    if (repeatVal === "MONTHLY") {
+                                        dateTimeVal = moment().tz(dealerTZ).add(1, 'months').set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                                    }
+                                    else if (repeatVal === "3 MONTHS") {
+                                        dateTimeVal = moment().tz(dealerTZ).add(3, 'months').set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                                    }
+                                    else if (repeatVal === "6 MONTHS") {
+                                        dateTimeVal = moment().tz(dealerTZ).add(6, 'months').set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                                    }
+                                }
+                            }
+                            else if (repeatVal === "12 MONTHS") { // set minutes, hrs, day of month and name of month
+                                dateTimeVal = moment().tz(dealerTZ).set({ "month": monthName - 1, "date": monthDate, hours, minutes }).format(TIMESTAMP_FORMAT);
+                                // console.log("compare date: ", dateTimeVal < currentDateIs, dateTimeVal, currentDateIs, moment().month())
+
+                                if (dateTimeVal < currentDateIs) {
+                                    // set next year with same date if current date passed 
+                                    dateTimeVal = moment().tz(dealerTZ).add(1, 'years').set({ "date": monthDate, hours, minutes }).format(TIMESTAMP_FORMAT);
+                                }
+
+                            } else {
+                                dateTimeVal = moment().tz(dealerTZ).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                            }
+                            // console.log('current date without any set:: ', moment().tz(dealerTZ).format(TIMESTAMP_FORMAT))
+                            // console.log('set hrs minuts:: ', moment().tz(dealerTZ).set({ hours, minutes }).format(TIMESTAMP_FORMAT))
+                            // console.log('get week day number:: ', moment().tz(dealerTZ).weekday())
+                            // console.log('set hrs minuts and day name of week:: ', moment().tz(dealerTZ).day(weekDay).set({ hours, minutes }).format(TIMESTAMP_FORMAT))
+                            // console.log('set days:: ', moment().tz(dealerTZ).set("date", monthDate).format(TIMESTAMP_FORMAT))
+                            // console.log('set hrs, minuts & days:: ', moment().tz(dealerTZ).set({ "date": monthDate, hours, minutes }).format(TIMESTAMP_FORMAT))
                         }
                     }
+
+
+                    // console.log("dateTimeVal ", dateTimeVal);
 
                     let data = {
                         devices: this.props.selectedDevices,
@@ -118,17 +177,16 @@ class SendMsgForm extends Component {
                         timer: values.timer,
                         repeat: repeatVal,
                         dateTime: convertTimezoneValue(this.props.user.timezone, dateTimeVal, TIMESTAMP_FORMAT, true),
-                        weekDay: values.weekDay ? values.weekDay : 0,
-                        monthDate: values.monthDate ? values.monthDate : 0,
-                        monthName: values.monthName ? values.monthName : 0,
+                        weekDay,
+                        monthDate,
+                        monthName,
                         time: this.state.selected_Time,
                     }
-                    // console.log("data ", data);
-                    let dealerTZ = checkTimezoneValue(this.props.user.timezone, false);
+                    // console.log("submit data:: ", data);
                     this.refs.bulk_msg.handleBulkSendMsg(data, dealerTZ);
                 } else {
                     error({
-                        title: `Sorry, You have not any device to perform an action, to add devices please select dealers/users`,
+                        title: `Sorry, You have not selected any device to perform an action, to add devices please select dealers/users`,
                     });
                 }
             }
@@ -179,6 +237,7 @@ class SendMsgForm extends Component {
             });
             this.setState({ allUsers, allDealers })
         }
+        // console.log("nextProps  ", nextProps.dealerList , nextProps.users_list)
     }
 
     componentDidMount() {
@@ -186,9 +245,26 @@ class SendMsgForm extends Component {
         // this.props.getAllDealers();
         // this.props.getUserList();
 
+        // console.log("didmount ", this.props.dealerList, this.props.users_list)
+
+        let allDealers = [];
+        let allUsers = [];
+
+        if (this.props.users_list || this.props.dealerList) {
+            allDealers = this.props.dealerList.map((item) => {
+                return ({ key: item.dealer_id, label: item.dealer_name })
+            });
+
+            allUsers = this.props.users_list.map((item) => {
+                return ({ key: item.user_id, label: item.user_name })
+            });
+        }
+
         this.setState({
             filteredDevices: this.props.devices,
             dealerList: this.props.dealerList,
+            allDealers,
+            allUsers
         })
     }
 
@@ -333,7 +409,7 @@ class SendMsgForm extends Component {
     }
 
     repeatHandler = (e) => {
-        // console.log("e is: ", e);
+        // console.log("repeatHandler e is: ", e);
         this.setState({ repeat_duration: e });
     }
 
@@ -372,10 +448,31 @@ class SendMsgForm extends Component {
     }
 
     render() {
+        // console.log("this.state.allDealers ", this.state.allDealers)
         return (
             <div>
                 <Form onSubmit={this.handleSubmit}>
                     <p>(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")} </p>
+                    <Row>
+                        {/* <Col className="col-md-9 col-sm-9 col-xs-9">
+                        </Col> */}
+                        {/* <Col className="col-md-3 col-sm-3 col-xs-3">
+                            {(this.state.selectedDealers.length || this.state.selectedUsers.length) ?
+                                (this.state.filteredDevices.length) ? null :
+                                    <span style={{ color: 'red' }}>Devices not found against selected dealers/users!</span>
+                                :
+                                null
+                            }
+                        </Col> */}
+                        <Col className="col-md-12 col-sm-12 col-xs-12">
+                            {(this.state.selectedDealers.length || this.state.selectedUsers.length) ?
+                                (this.state.filteredDevices.length) ? null :
+                                    <Alert message="Devices not found against selected dealers/users!" type="warning" closable />
+                                :
+                                null
+                            }
+                        </Col>
+                    </Row>
 
                     <Row gutter={24} className="mt-4">
                         <Col className="col-md-12 col-sm-12 col-xs-12">
@@ -400,7 +497,7 @@ class SendMsgForm extends Component {
                                 >
                                     {(this.state.allDealers && this.state.allDealers.length > 0) ?
                                         <Select.Option key="allDealers" value="all">Select All</Select.Option>
-                                        : <Select.Option key="" value="">Data Not Found</Select.Option>
+                                        : <Select.Option key="" value="">Dealers not found</Select.Option>
                                     }
                                     {this.state.allDealers.map(item => <Select.Option key={item.key} value={item.key}>{item.label}</Select.Option>)}
                                 </Select>
@@ -433,7 +530,7 @@ class SendMsgForm extends Component {
                                 >
                                     {(this.state.allUsers && this.state.allUsers.length > 0) ?
                                         <Select.Option key="allUsers" value="all">Select All</Select.Option>
-                                        : <Select.Option key="" value="">Data Not Found</Select.Option>
+                                        : <Select.Option key="" value="">Users not found</Select.Option>
                                     }
                                     {this.state.allUsers.map(item => <Select.Option key={item.key} value={item.key} >{item.label}</Select.Option>)}
                                 </Select>
@@ -629,7 +726,7 @@ class SendMsgForm extends Component {
                                         wrapperCol={{ span: 16 }}
                                     >
                                         {this.props.form.getFieldDecorator('time', {
-                                            initialValue: moment('00:00', 'HH:mm'),
+                                            initialValue: '',// moment('00:00', 'HH:mm'),
                                             rules: [
                                                 {
                                                     required: true, message: convertToLang(this.props.translation[""], "Time field is required"),
@@ -641,7 +738,6 @@ class SendMsgForm extends Component {
                                                 placeholder={"Select time"}
                                                 format="HH:mm"
                                                 style={{ width: '50%' }}
-                                            // defaultValue={moment('00:00:00', 'HH:mm:ss')}
                                             />
                                         )}
                                     </Form.Item>
@@ -677,7 +773,7 @@ class SendMsgForm extends Component {
                                             format="YYYY-MM-DD HH:mm"
                                             disabledDate={this.disabledDate}
                                             disabledTime={this.disabledDateTime}
-                                            showTime={{ defaultValue: moment('00:00:00', 'HH:mm') }}
+                                            showTime={{ defaultValue: moment('00:00'), format: 'HH:mm' }}
                                         />
                                     )}
                                 </Form.Item>
@@ -685,6 +781,7 @@ class SendMsgForm extends Component {
                         </Row>
                         : null}
 
+                    {/* {this.state.filteredDevices && this.state.filteredDevices.length ? */}
                     <FilterDevices
                         devices={this.state.filteredDevices}
                         selectedDealers={this.state.selectedDealers}
@@ -706,7 +803,11 @@ class SendMsgForm extends Component {
                         selectedPolicy={this.state.selectedPolicy}
                         renderList={this.props.renderList}
                     />
-
+                    {/* :
+                        <div>
+                            Note: *To performe an action please select dealers/users to get their devices. <span style={{ color: 'red' }}>(Devices not found!)</span>
+                        </div>
+                    } */}
                     <Form.Item className="edit_ftr_btn"
                         wrapperCol={{
                             xs: { span: 24, offset: 0 },

@@ -3,10 +3,13 @@ import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col, Tag, Modal }
 import { convertToLang, checkValue, convertTimezoneValue, getWeekDay, getMonthName, checkTimezoneValue } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 import moment from 'moment';
+import ReadMoreAndLess from 'react-read-more-less';
+import CustomScrollbars from "../../../util/CustomScrollbars";
 import { userDevicesListColumns } from '../../utils/columnsUtils';
-import { TIMESTAMP_FORMAT_NOT_SEC, TIME_FORMAT_HM, SERVER_TIMEZONE } from '../../../constants/Application';
+import { TIMESTAMP_FORMAT_NOT_SEC, TIME_FORMAT_HM, SERVER_TIMEZONE, HOST_NAME } from '../../../constants/Application';
 import EditMsgModal from './EditMsgForm';
-
+import { Link } from "react-router-dom";
+import styles from './deviceMsg.css'
 
 export default class ListMsgs extends Component {
 
@@ -20,7 +23,8 @@ export default class ListMsgs extends Component {
             expandedRowKeys: [],
             visible: false,
             editRecord: null,
-            editModal: false
+            editModal: false,
+            // textLimit: 100
         };
         this.renderList = this.renderList.bind(this);
         this.confirm = Modal.confirm;
@@ -78,49 +82,35 @@ export default class ListMsgs extends Component {
         this.setState({ editModal: true, editRecord: data })
     }
 
+    // expandText = (id) => {
+    //     this.setState({ textLimit: this.state.textLimit + 100 })
+    // }
+
+    // handleLoadMoreText = (msg) => {
+    //     let updateMsg = msg;
+    //     let _this = this;
+    //     if (msg && msg.length > _this.state.textLimit) {
+    //         let random_id = Math.floor(Math.random() * 1000) + 1;
+    //         updateMsg = <p className={'read_more_' + random_id}>{updateMsg.substr(0, _this.state.textLimit)}... <a href='#' onClick={() => _this.expandText(random_id)}>Read more</a></p>
+    //     } else {
+    //         updateMsg = <p>{updateMsg}<a hre='#'></a></p>
+    //     }
+
+    //     return updateMsg
+    // }
+
+    // ReadMore = (e) => {
+    //     console.log("data: e ", e);
+    // }
+
     renderList(list) {
         // console.log("renderList: ", list);
         let bulkMsgs = [];
-
         list.map((item) => {
             let parseDevices = item.devices ? JSON.parse(item.devices) : [];
-            // let duration = item.repeat_duration ? item.repeat_duration : "NONE";
-            // console.log(item);
 
             // set default dateTime format
             let dateTimeFormat = TIMESTAMP_FORMAT_NOT_SEC;
-
-            // if (item.timer_status === "NOW" || item.timer_status === "DATE/TIME") {
-            //     duration = `One Time`
-            // }
-            // else if (item.timer_status === "REPEAT") {
-            //     // set dateTime format
-            //     dateTimeFormat = TIME_FORMAT_HM; // Display only hours and minutes
-
-            //     if (duration === "DAILY") {
-            //         duration = `Everyday`
-            //     }
-            //     else if (duration === "WEEKLY") {
-            //         duration = getWeekDay(item.week_day)
-            //     }
-            //     else if (duration === "MONTHLY") {
-            //         duration = `Every month on ${checkValue(item.month_date)} date`
-            //     }
-            //     else if (duration === "3 MONTHS") {
-            //         duration = `Every 3 months later on ${checkValue(item.month_date)} date`
-            //     }
-            //     else if (duration === "6 MONTHS") {
-            //         duration = `Every 6 months later on ${checkValue(item.month_date)} date`
-            //     }
-            //     else if (duration === "12 MONTHS") {
-            //         duration = `Every ${getMonthName(item.month_name)} on ${checkValue(item.month_date)} date`
-            //     } else {
-            //         duration = "N/A"
-            //     }
-            // } else {
-            //     duration = "N/A"
-            // }
-
             if (item.timer_status === "REPEAT") {
                 // set dateTime format
                 dateTimeFormat = TIME_FORMAT_HM; // Display only hours and minutes
@@ -132,13 +122,34 @@ export default class ListMsgs extends Component {
                 action: (
                     <div data-column="ACTION" style={{ display: "inline-flex" }}>
                         <Fragment>
-                            <Fragment><Button type="primary" size="small" onClick={() => this.handleEditModal(JSON.parse(JSON.stringify(item)))}>EDIT</Button></Fragment>
+                            {(HOST_NAME === 'localhost' || HOST_NAME === 'dev.lockmesh.com') ?
+                                (item.timer_status === "NOW" || item.timer_status === "DATE/TIME") ? null :
+                                    <Fragment>
+                                        <Button
+                                            type="primary"
+                                            size="small"
+                                            onClick={() => this.handleEditModal(JSON.parse(JSON.stringify(item)))}
+                                        >EDIT</Button>
+                                    </Fragment>
+                                : null
+                            }
                             <Fragment><Button type="danger" size="small" onClick={() => this.deleteMsg(item.id)}>DELETE</Button></Fragment>
                         </Fragment>
                     </div>
                 ),
                 send_to: parseDevices.length,
-                msg: checkValue(item.msg),
+                // msg: this.handleLoadMoreText(checkValue(item.msg)), // checkValue(item.msg),
+                msg: (
+                    <ReadMoreAndLess
+                        ref={this.ReadMore}
+                        className="read-more-content"
+                        charLimit={250}
+                        readMoreText=" Read more"
+                        readLessText=" Read less"
+                    >
+                        {checkValue(item.msg)}
+                    </ReadMoreAndLess>
+                ),
                 timer_status: item.timer_status ? item.timer_status : "N/A",
                 repeat: item.repeat_duration ? item.repeat_duration : "NONE",
                 // date_time: item.date_time ? item.date_time : "N/A",
@@ -199,8 +210,11 @@ export default class ListMsgs extends Component {
         return (
             <Fragment>
                 <Card>
+                    {/* <Card className='fix_msgList_card'>
+                        <hr className="fix_header_border" style={{ top: "56px" }} />
+                        <CustomScrollbars className="gx-popover-scroll "> */}
                     <Table
-                        className="gx-table-responsive"
+                        className="gx-table-responsive msgList"
                         rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
@@ -233,6 +247,7 @@ export default class ListMsgs extends Component {
                         scroll={{ x: true }}
                         rowKey="domain_id"
                     />
+                    {/* </CustomScrollbars> */}
                 </Card>
 
                 <EditMsgModal

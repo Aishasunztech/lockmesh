@@ -48,7 +48,8 @@ export default class BulkSendMsg extends Component {
 
 
         this.confirm({
-            title: `${convertToLang(this.props.translation[""], "Are you sure, you want to send message on these selected devices ")} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`,
+            // title: `${convertToLang(this.props.translation[""], "Are you sure, you want to send message on these selected devices ")} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`,
+            title: `${convertToLang(this.props.translation[""], "Are you sure, you want to send message on selected devices")} ?`,
             content: '',
             okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
             cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
