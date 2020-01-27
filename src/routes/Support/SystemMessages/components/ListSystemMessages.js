@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react'
+import moment from 'moment';
 import { Table, Button, Icon, Card, Modal } from "antd";
 import {
   checkValue,
@@ -75,37 +76,37 @@ export default class ListSystemMessages extends Component {
     }
 
 
-    try {
-      if (this.props.systemMessagesSearchValue.length !== prevProps.systemMessagesSearchValue.length) {
-
-
-        if (status) {
-
-          systemMessagesCopy  = list;
-          status              = false;
-
-        }
-
-        let foundUsers = componentSearchSystemMessages(systemMessagesCopy, this.props.searchSystemMessagesColumns, this.props.systemMessagesSearchValue);
-
-        if (foundUsers.length) {
-          this.setState({
-            systemMessages: foundUsers,
-          });
-        } else {
-          this.setState({
-            systemMessages: [],
-          });
-        }
-      } else {
-        status = true;
-      }
-    } catch (error) {
-
-    }
+    // try {
+    //   if (this.props.systemMessagesSearchValue.length !== prevProps.systemMessagesSearchValue.length) {
+    //
+    //
+    //     if (status) {
+    //
+    //       systemMessagesCopy  = list;
+    //       status              = false;
+    //
+    //     }
+    //
+    //     let foundUsers = componentSearchSystemMessages(systemMessagesCopy, this.props.searchSystemMessagesColumns, this.props.systemMessagesSearchValue);
+    //
+    //     if (foundUsers.length) {
+    //       this.setState({
+    //         systemMessages: foundUsers,
+    //       });
+    //     } else {
+    //       this.setState({
+    //         systemMessages: [],
+    //       });
+    //     }
+    //   } else {
+    //     status = true;
+    //   }
+    // } catch (error) {
+    //
+    // }
 
     if (this.state.viewMessage && this.props.user.type !== this.state.messageObject.sender_user_type && this.state.messageObject.type === 'Received'){
-      this.props.updateSupportSystemMessageNotification({systemMessageId: this.state.messageObject.id})
+      this.props.updateSupportSystemMessageNotification({systemMessageId: [this.state.messageObject.id]})
     }
   }
 
@@ -144,7 +145,7 @@ export default class ListSystemMessages extends Component {
         renderList.push(data)
       });
 
-      renderList.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+      renderList.sort((a, b) => moment(b.createdAt + " " + b.createdTime).format("DD-MM-YYYY HH:mm").localeCompare(moment(a.createdAt + " " + a.createdTime).format("DD-MM-YYYY HH:mm")));
 
       return renderList
     }else{
@@ -229,7 +230,7 @@ export default class ListSystemMessages extends Component {
               );
             }}
             onExpand={this.onExpandRow}
-            expandIconColumnIndex={1}
+            expandIconColumnIndex={2}
             expandIconAsCell={false}
             size="midddle"
             bordered
