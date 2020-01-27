@@ -1567,7 +1567,7 @@ function showConfirm(device, action, _this, msg, type, transfered = false) {
                     _this.props.getDevicesList();
                 }
                 else if (type === 'flagged') {
-                    action(device.device_id)
+                    action(device.usr_device_id)
                     // _this.props.activateDevice(device)
                 }
                 // if (type === 'unlink') {
