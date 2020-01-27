@@ -9,6 +9,7 @@ import {
     DEALER_ACCOUNT_STATUS,
     CD_PERMISSION_DOMAINS,
     SET_DEMOS_LIMIT,
+    DEALER_DOMAINS_LOADING,
 } from "../../constants/ActionTypes"
 // import { message } from 'antd';
 
@@ -156,6 +157,9 @@ export function changeDealerStatus(dealerId, dealerStatus) {
 export function connectDealerDomainPermission(id, dealers, action, statusAll = false, user, selectedDomains) {
     console.log('at connectDealerDomainPermission action ', id, dealers, action, statusAll)
     return (dispatch) => {
+        dispatch({
+            type: DEALER_DOMAINS_LOADING
+        });
         RestService.connectDealerDomainPermission(id, dealers, action, statusAll).then((response) => {
             if (RestService.checkAuth(response.data)) {
 

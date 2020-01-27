@@ -427,6 +427,7 @@ export default class DealerAction extends Component {
                     allDomainList={this.props.allDomainList}
                     authUser={this.props.authUser}
                     getDomains={this.props.getDomains}
+                    dealerDomainLoading={this.props.dealerDomainLoading}
                 // dealerDomains
                 />
 
