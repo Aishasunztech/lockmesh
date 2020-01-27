@@ -3,7 +3,7 @@ import { Col, Row, Icon, Card, Avatar, Badge, Modal } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Auxiliary from "util/Auxiliary";
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import AppFilter from '../../components/AppFilter';
 import NewDevice from '../../components/NewDevices';
 import { getStatus, componentSearch, titleCase, convertToLang } from '../utils/commonUtils';
@@ -412,7 +412,7 @@ function mapDispatchToProps(dispatch) {
         getCancelServiceRequests,
         acceptServiceRequest,
         rejectServiceRequest,
-        getTicketsNotifications,
+        getTicketsNotifications
     }, dispatch);
 }
 var mapStateToProps = ({ dashboard, auth, devices, sidebar, settings, dealers }) => {

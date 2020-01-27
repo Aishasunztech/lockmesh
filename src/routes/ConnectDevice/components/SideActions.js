@@ -6,7 +6,6 @@ import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip, Progress,
 import TableHistory from "./TableHistory";
 import SuspendDevice from '../../devices/components/SuspendDevice';
 import ActivateDevcie from '../../devices/components/ActivateDevice';
-
 import { componentSearch, convertToLang } from '../../utils/commonUtils';
 import EditDevice from '../../devices/components/editDevice';
 import FlagDevice from '../../ConnectDevice/components/flagDevice';

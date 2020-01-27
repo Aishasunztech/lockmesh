@@ -81,9 +81,16 @@ export default (state = initialState, action) => {
     }
 
     case UPDATE_SUPPORT_SYSTEM_MESSAGE_NOTIFICATION: {
+      let supportSystemMessagesNotifications;
+      if(action.payload.status){
+        supportSystemMessagesNotifications = state.supportSystemMessagesNotifications.filter(notification => !action.payload.seenId.includes(notification.system_message._id));
+      } else {
+        supportSystemMessagesNotifications = state.supportSystemMessagesNotifications;
+      }
 
       return {
         ...state,
+        supportSystemMessagesNotifications: [...supportSystemMessagesNotifications]
       };
     }
     case ADD_SUPPORT_SYSTEM_MESSAGE_NOTIFICATION: {

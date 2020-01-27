@@ -49,11 +49,11 @@ class SystemMessages extends Component {
 
   removeColumns = ({ user }, columns) => {
     if(user.type === ADMIN){
-      columns.splice(2,2);
+      columns.splice(3,2);
     } else if(user.type === SDEALER){
-      columns.splice(1, 2);
+      columns.splice(2, 2);
     } else if(user.type === DEALER){
-      columns.splice(3, 1);
+      columns.splice(4, 1);
     }
     return columns;
   };
@@ -83,7 +83,7 @@ class SystemMessages extends Component {
               subject: checkValue(item.subject),
               message: checkValue(item.message),
               createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "N/A",
-              createdTime: getOnlyTimeFromTimestamp(item.createdAt),
+              createdTime: getOnlyTimeFromTimestamp(item.createdAt)
             };
           });
         }
@@ -100,7 +100,7 @@ class SystemMessages extends Component {
             subject: checkValue(item.system_message.subject),
             message: checkValue(item.system_message.message),
             createdAt: getDateFromTimestamp(item.system_message.createdAt),
-            createdTime: getOnlyTimeFromTimestamp(item.system_message.createdAt),
+            createdTime: getOnlyTimeFromTimestamp(item.system_message.createdAt)
           };
         });
         break;
@@ -124,7 +124,7 @@ class SystemMessages extends Component {
               subject: checkValue(item.subject),
               message: checkValue(item.message),
               createdAt: item.createdAt ? getDateFromTimestamp(item.createdAt) : "N/A",
-              createdTime: getOnlyTimeFromTimestamp(item.createdAt),
+              createdTime: getOnlyTimeFromTimestamp(item.createdAt)
             };
           });
         }
@@ -139,7 +139,7 @@ class SystemMessages extends Component {
             subject: checkValue(item.system_message.subject),
             message: checkValue(item.system_message.message),
             createdAt: getDateFromTimestamp(item.system_message.createdAt),
-            createdTime: getOnlyTimeFromTimestamp(item.system_message.createdAt),
+            createdTime: getOnlyTimeFromTimestamp(item.system_message.createdAt)
           };
         });
         filteredSystemMessages = [...sent, ...received];
@@ -263,19 +263,13 @@ class SystemMessages extends Component {
           <div>
 
             <ListSystemMessages
-              supportSystemMessages={this.state.sentSupportSystemMessages}
-              getSupportSystemMessages={this.props.getSupportSystemMessages}
-              getReceivedSupportSystemMessages={this.props.getReceivedSupportSystemMessages}
-              receivedSupportSystemMessages={this.state.receivedSupportSystemMessages}
               filteredMessage={this.state.filteredMessages}
               updateSupportSystemMessageNotification={this.props.updateSupportSystemMessageNotification}
               columns={this.state.columns}
               dealerList={this.props.dealerList}
               user={this.props.user}
               translation={this.props.translation}
-              filterOption={this.props.filterOption}
               systemMessagesSearchValue={this.props.systemMessagesSearchValue}
-              searchSystemMessagesColumns={this.state.searchSystemMessagesColumns}
             />
 
           </div>

@@ -7,7 +7,7 @@ import Auxiliary from "util/Auxiliary";
 import UserProfile from "./UserProfile";
 import NewDevice from '../../components/NewDevices';
 import CreditsModal from '../../components/CreditsModal';
-
+import { updateSupportSystemMessageNotification } from '../../appRedux/actions/SupportSystemMessages';
 import { getNewDevicesList, } from "../../appRedux/actions/Common";
 import {
   getNewCashRequests,
@@ -232,6 +232,7 @@ class SidebarContent extends Component {
               requests={this.props.requests}
               acceptRequest={this.props.acceptRequest}
               rejectRequest={this.props.rejectRequest}
+              updateSupportSystemMessageNotification={this.props.updateSupportSystemMessageNotification}
               translation={this.props.translation}
               allDevices={this.props.allDevices}
               transferDeviceProfile={this.transferDeviceProfile}
@@ -448,7 +449,8 @@ export default connect(mapStateToProps, {
   rejectServiceRequest,
   getTicketsNotifications,
   getSupportSystemMessagesNotifications,
-  getAllToAllDealers
+  getAllToAllDealers,
+  updateSupportSystemMessageNotification
 }
 )(SidebarContent);
 
