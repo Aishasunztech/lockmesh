@@ -66,7 +66,8 @@ class FilterDevices extends Component {
       copySelectedDevices: [],
       callSelectedDeviceAction: true,
       allBulkDevices: [],
-      searchRemoveModal: []
+      searchRemoveModal: [],
+      disableDevicesBtns: true
     }
   }
 
@@ -228,27 +229,58 @@ class FilterDevices extends Component {
   // }
 
   showPermissionedDealersModal = (visible) => {
-    this.setState({
-      removeSelectedDealersModal: visible,
-      device_ids: [],
-      selectedRowKeys: []
-    })
+    let done = this.devicesNotFoundErrorMsg();
+    if (done) {
+      this.setState({
+        removeSelectedDealersModal: visible,
+        device_ids: [],
+        selectedRowKeys: []
+      })
+    }
+  }
+  devicesNotFoundErrorMsg = () => {
+    let response = false;
+    let devices = this.props.devices;
+    let dealers = this.props.selectedDealers;
+    let users = this.props.selectedUsers;
+
+    if (dealers.length || users.length) {
+      if (devices.length) {
+        response = true;
+      } else {
+        error({
+          title: `Devices not found against selected dealers/users!`,
+        });
+      }
+    } else {
+      error({
+        title: `Please select dealers/users to get their devices then perform this action`,
+      });
+    }
+
+    return response;
   }
 
   showDealersModal = (visible) => {
-    this.setState({
-      showDealersModal: visible,
-      device_ids: [],
-      selectedRowKeys: []
-    })
+    let done = this.devicesNotFoundErrorMsg();
+    if (done) {
+      this.setState({
+        showDealersModal: visible,
+        device_ids: [],
+        selectedRowKeys: []
+      })
+    }
   }
 
   addSelectedDealersModal = (visible) => {
-    this.setState({
-      addSelectedDealersModal: visible,
-      device_ids: [],
-      selectedRowKeys: []
-    })
+    let done = this.devicesNotFoundErrorMsg();
+    if (done) {
+      this.setState({
+        addSelectedDealersModal: visible,
+        device_ids: [],
+        selectedRowKeys: []
+      })
+    }
   }
 
   addSelectedDealers = () => {
@@ -274,18 +306,21 @@ class FilterDevices extends Component {
   }
 
   saveAllDealersConfirm = () => {
-    let _this = this;
-    confirm({
-      title: convertToLang(this.props.translation["Do you really Want to add all Devices?"], "Do you really Want to add all Devices?"),
-      okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
-      cancelText: convertToLang(this.props.translation[Button_No], "No"),
-      onOk() {
-        _this.saveAllDealers()
-      },
-      onCancel() {
-        // console.log('Cancel');
-      },
-    });
+    let done = this.devicesNotFoundErrorMsg();
+    if (done) {
+      let _this = this;
+      confirm({
+        title: convertToLang(this.props.translation["Do you really Want to add all Devices?"], "Do you really Want to add all Devices?"),
+        okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
+        cancelText: convertToLang(this.props.translation[Button_No], "No"),
+        onOk() {
+          _this.saveAllDealers()
+        },
+        onCancel() {
+          // console.log('Cancel');
+        },
+      });
+    }
   }
 
   saveAllDealers = () => {
@@ -519,18 +554,21 @@ class FilterDevices extends Component {
   }
 
   removeAllDealersConfirm = () => {
-    let _this = this;
-    confirm({
-      title: convertToLang(this.props.translation["Do you really Want to Remove all filtered devices?"], "Do you really Want to Remove all filtered devices?"),
-      okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
-      cancelText: convertToLang(this.props.translation[Button_No], "No"),
-      onOk() {
-        _this.removeAllDealers();
-      },
-      onCancel() {
-        console.log('Cancel');
-      },
-    });
+    let done = this.devicesNotFoundErrorMsg();
+    if (done) {
+      let _this = this;
+      confirm({
+        title: convertToLang(this.props.translation["Do you really Want to Remove all filtered devices?"], "Do you really Want to Remove all filtered devices?"),
+        okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
+        cancelText: convertToLang(this.props.translation[Button_No], "No"),
+        onOk() {
+          _this.removeAllDealers();
+        },
+        onCancel() {
+          console.log('Cancel');
+        },
+      });
+    }
   }
 
   removeAllDealers = () => {
@@ -667,46 +705,50 @@ class FilterDevices extends Component {
     // console.log("users :: ", users);
 
     if (action) {
-      if (devices.length) {
-        if (action === "SUSPEND DEVICES") {
-          this.refs.bulk_suspend.handleSuspendDevice(devices, dealers, users);
-        }
-        else if (action === "ACTIVATE DEVICES") {
-          this.refs.bulk_activate.handleActivateDevice(devices, dealers, users);
-        }
-        else if (action === "PUSH APPS") {
-          this.refs.bulk_push_apps.handleBulkPushApps(devices, dealers, users);
-        }
-        else if (action === "PULL APPS") {
-          this.refs.bulk_pull_apps.handleBulkPullApps(devices, dealers, users);
-        }
-        else if (action === "UNLINK DEVICES") {
-          this.refs.bulk_unlink.handleBulkUnlink(devices, dealers, users);
-        }
-        else if (action === "WIPE DEVICES") {
-          this.refs.bulk_wipe.handleBulkWipe(devices, dealers, users);
-        }
-        else if (action === "PUSH POLICY") {
-          if (this.props.selectedPolicy) {
-            this.refs.bulk_policy.handleBulkPolicy(devices, dealers, users, this.props.selectedPolicy);
-          } else {
-            error({
-              title: `Sorry, Policy not selected. Please try again`,
-            });
+      if (dealers.length || users.length) {
+        if (devices.length) {
+          if (action === "SUSPEND DEVICES") {
+            this.refs.bulk_suspend.handleSuspendDevice(devices, dealers, users);
           }
+          else if (action === "ACTIVATE DEVICES") {
+            this.refs.bulk_activate.handleActivateDevice(devices, dealers, users);
+          }
+          else if (action === "PUSH APPS") {
+            this.refs.bulk_push_apps.handleBulkPushApps(devices, dealers, users);
+          }
+          else if (action === "PULL APPS") {
+            this.refs.bulk_pull_apps.handleBulkPullApps(devices, dealers, users);
+          }
+          else if (action === "UNLINK DEVICES") {
+            this.refs.bulk_unlink.handleBulkUnlink(devices, dealers, users);
+          }
+          else if (action === "WIPE DEVICES") {
+            this.refs.bulk_wipe.handleBulkWipe(devices, dealers, users);
+          }
+          else if (action === "PUSH POLICY") {
+            if (this.props.selectedPolicy) {
+              this.refs.bulk_policy.handleBulkPolicy(devices, dealers, users, this.props.selectedPolicy);
+            } else {
+              error({
+                title: `Sorry, Policy not selected. Please try again`,
+              });
+            }
+          }
+          // this.setState({ disableDevicesBtns: false })
+        } else {
+          // this.setState({ disableDevicesBtns: true })
+          error({
+            title: `You have not selected any device against selected dealers/users!`,
+          });
         }
-
       } else {
         error({
-          title: `Sorry, You have not selected any device to perform an action`,
+          title: `Sorry, You have not selected any device to perform an action, to add devices please select dealers/users`,
         });
       }
 
     } else {
       this.props.setBulkData("Please select an action", "errorAction")
-      // error({
-      //   title: `Sorry, You have not selected any action`,
-      // });
     }
   }
 
@@ -736,9 +778,9 @@ class FilterDevices extends Component {
     // console.log("actionMsg ", this.props.actionMsg);
     // console.log('selected devices are: ', this.state.selectedDevices);
 
-    if (!this.props.devices || !this.props.devices.length){
-      return "Note: *To performe an action please select dealers/users to get their devices ";
-    }
+    // if (!this.props.devices || !this.props.devices.length){
+    //   return "Note: *To performe an action please select dealers/users to get their devices ";
+    // }
 
 
     return (
@@ -751,31 +793,31 @@ class FilterDevices extends Component {
           </Col>
           <Col className="gutter-row" sm={2} xs={2} md={2}>
             <div className="gutter-box">
-              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
+              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary" // disabled={this.state.disableDevicesBtns}
                 onClick={() => { this.showDealersModal(true) }}>{convertToLang(this.props.translation[Button_Add], "Add")}</Button>
             </div>
           </Col>
           <Col className="gutter-row" sm={3} xs={3} md={3}>
             <div className="gutter-box">
-              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
+              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary" // disabled={this.state.disableDevicesBtns}
                 onClick={() => { this.addSelectedDealersModal(true) }}>{convertToLang(this.props.translation[Button_AddExceptSelected], "Add Except Selected")}</Button>
             </div>
           </Col>
           <Col className="gutter-row" sm={2} xs={2} md={2}>
             <div className="gutter-box">
-              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
+              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary" // disabled={this.state.disableDevicesBtns}
                 onClick={() => { this.saveAllDealersConfirm() }}>{convertToLang(this.props.translation[Button_AddAll], "Add All")}</Button>
             </div>
           </Col>
           <Col className="gutter-row" sm={2} xs={2} md={2}>
             <div className="gutter-box">
-              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger"
+              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger" // disabled={this.state.disableDevicesBtns}
                 onClick={() => { this.removeAllDealersConfirm() }}>{convertToLang(this.props.translation[Button_RemoveAll], "Remove All")}</Button>
             </div>
           </Col>
           <Col className="gutter-row" sm={3} xs={3} md={3}>
             <div className="gutter-box">
-              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger"
+              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger" // disabled={this.state.disableDevicesBtns}
                 onClick={() => { this.showPermissionedDealersModal(true) }}>{convertToLang(this.props.translation[Button_RemoveExcept], "Remove Except")}</Button>
             </div>
           </Col>
@@ -807,7 +849,7 @@ class FilterDevices extends Component {
 
         </Row>
         {/* <span style={{ color: 'red' }}>{this.props.actionMsg ? (this.state.selectedDevices && this.state.selectedDevices.length) ? `${this.props.actionMsg}` : "Not selected any device to perform an action" : "Not selected any action"}</span> */}
-        <span style={{ color: 'red' }}>{this.props.actionMsg ? `${this.props.actionMsg}` : ""}</span>
+        {this.props.responseStatus ? "" : <span style={{ color: 'red' }}>{this.props.actionMsg ? `${this.props.actionMsg}` : ""}</span>}
         <Row gutter={24} style={{ marginBottom: '24px' }}>
           {
             this.props.spinloading ? <CircularProgress /> :

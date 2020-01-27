@@ -239,7 +239,11 @@ class BulkActivities extends Component {
         }
         // console.log("componentWillReceiveProps ", this.props.bulkAction, nextProps.bulkAction, this.props.bulkDealers, nextProps.bulkDealers, this.props.bulkUsers, nextProps.bulkUsers, nextProps.errorAction)
         if (this.props !== nextProps) {
-            console.log("ok");
+            // console.log("ok");
+            // let actionMsg = this.state.actionMsg;
+            // if (!nextProps.errorAction) {
+            //     actionMsg = '';
+            // }
             this.setState({
                 guestAllPushApps: nextProps.guestAllPushApps,
                 enableAllPushApps: nextProps.enableAllPushApps,
@@ -247,7 +251,8 @@ class BulkActivities extends Component {
                 selectedAction: nextProps.bulkAction,
                 selectedDealers: nextProps.bulkDealers,
                 selectedUsers: nextProps.bulkUsers,
-                errorAction: nextProps.errorAction
+                errorAction: nextProps.errorAction,
+                // actionMsg
             })
         }
         // else {
@@ -485,11 +490,12 @@ class BulkActivities extends Component {
     }
 
     handleChangeUser = (values) => {
-        console.log("values ", values);
+        // console.log("values ", values);
         // console.log("handleChangeUser values ", values, this.state.selectedUsers, this.props.users_list, this.state.allUsers);
         let checkAllUsers = this.state.checkAllSelectedUsers
 
         let selectAll = values.filter(e => e.key === "all");
+        // let selectedUsers = values.filter(e => e.key !== "all" && e.key !== "");
         let selectedUsers = values.filter(e => e.key !== "all");
 
 
@@ -505,9 +511,9 @@ class BulkActivities extends Component {
             selectedUsers = this.state.allUsers
             checkAllUsers = true;
         }
-        else {
-            selectedUsers = values.filter(e => e.key !== "all");
-        }
+        // else {
+        //     selectedUsers = values.filter(e => e.key !== "all");
+        // }
 
         let data = {
             dealers: this.state.selectedDealers,
@@ -749,7 +755,7 @@ class BulkActivities extends Component {
                     </div>
                 </Card>
                 <Card>
-                    <Row style={{ marginBottom: '10px' }}>
+                    {/* <Row style={{ marginBottom: '10px' }}>
                         <Col className="col-md-12 col-sm-12 col-xs-12">
                             {(this.state.selectedDealers.length || this.state.selectedUsers.length) ?
                                 (this.state.filteredDevices.length) ? null :
@@ -758,7 +764,7 @@ class BulkActivities extends Component {
                                 null
                             }
                         </Col>
-                    </Row>
+                    </Row> */}
                     <Row gutter={24} className="">
                         <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
                             <span className=""> {convertToLang(this.props.translation[""], "Select Action to be performed:")} </span>
@@ -809,7 +815,8 @@ class BulkActivities extends Component {
                             >
                                 {(this.state.allDealers && this.state.allDealers.length > 0) ?
                                     <Select.Option key="allDealers" value="all">Select All</Select.Option>
-                                    : <Select.Option key="" value="">Dealers not found</Select.Option>
+                                    : null
+                                    // <Select.Option key="" value="">Dealers not found</Select.Option>
                                 }
                                 {this.state.allDealers.map(item => <Select.Option key={item.key} value={item.key}>{item.label}</Select.Option>)}
                             </Select>
@@ -840,7 +847,8 @@ class BulkActivities extends Component {
                             >
                                 {(this.state.allUsers && this.state.allUsers.length > 0) ?
                                     <Select.Option key="allUsers" value="all">Select All</Select.Option>
-                                    : <Select.Option key="" value="">Users not found</Select.Option>
+                                    : null
+                                    // <Select.Option key="" value="">Users not found</Select.Option>
                                 }
                                 {this.state.allUsers.map(item => <Select.Option key={item.key} value={item.key} >{item.label}</Select.Option>)}
                             </Select>
@@ -853,6 +861,7 @@ class BulkActivities extends Component {
 
                     {/* {this.state.filteredDevices && this.state.filteredDevices.length ? */}
                     <FilterDevices
+                        responseStatus={this.props.responseStatus}
                         devices={this.state.filteredDevices}
                         selectedDealers={this.state.selectedDealers}
                         selectedUsers={this.state.selectedUsers}
@@ -1082,7 +1091,8 @@ const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users,
         bulkAction: bulkDevices.bulkAction,
         bulkDealers: bulkDevices.bulkDealers,
         bulkUsers: bulkDevices.bulkUsers,
-        errorAction: bulkDevices.errorAction
+        errorAction: bulkDevices.errorAction,
+        responseStatus: bulkDevices.responseStatus
     };
 }
 
