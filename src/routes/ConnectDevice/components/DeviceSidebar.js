@@ -210,11 +210,11 @@ export default class DeviceSidebar extends Component {
                 value: checkValue(device_details.activation_code)
             },
 
-            {
-                key: 11,
-                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_CLIENT_ID], "CLIENT-ID"))}:</a>),
-                value: checkValue(device_details.client_id)
-            },
+            // {
+            //     key: 11,
+            //     name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_CLIENT_ID], "CLIENT-ID"))}:</a>),
+            //     value: checkValue(device_details.client_id)
+            // },
             {
                 key: 12,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_ID], "DEALER-ID"))}:</a>),
