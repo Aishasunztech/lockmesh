@@ -95,7 +95,7 @@ export var initialSettings = {
     { "key": "transfered_to", "value": DEVICE_TRANSFERED },
     { "key": "name", "value": DEVICE_NAME },
     { "key": "account_email", "value": DEVICE_ACCOUNT_EMAIL },
-    { "key": "client_id", "value": DEVICE_CLIENT_ID },
+    // { "key": "client_id", "value": DEVICE_CLIENT_ID },
     { "key": "activation_code", "value": DEVICE_ACTIVATION_CODE },
     { "key": "pgp_email", "value": DEVICE_PGP_EMAIL },
     { "key": "sim_id", "value": DEVICE_SIM_ID },

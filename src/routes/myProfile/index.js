@@ -118,26 +118,23 @@ class Profile extends Component {
     }
 
     handleTableSorting = (pagination, query, sorter) => {
-        console.log('handleTableSorting ', sorter);
         let columns = this.state.loginHistoryColumns;
 
         columns.forEach(column => {
-            // if (column) {
-                if (Object.keys(sorter).length > 0) {
-                    if (column.dataIndex == sorter.field) {
-                        if (this.state.sorterKey == sorter.field) {
-                            column['sortOrder'] = sorter.order;
-                        } else {
-                            column['sortOrder'] = "ascend";
-                        }
+            if (Object.keys(sorter).length > 0) {
+                if (column.dataIndex == sorter.field) {
+                    if (this.state.sorterKey == sorter.field) {
+                        column['sortOrder'] = sorter.order;
                     } else {
-                        column['sortOrder'] = "";
+                        column['sortOrder'] = "ascend";
                     }
-                    this.setState({ sorterKey: sorter.field });
                 } else {
-                    if (this.state.sorterKey == column.dataIndex) column['sortOrder'] = "ascend";
+                    column['sortOrder'] = "";
                 }
-            // }
+                this.setState({ sorterKey: sorter.field });
+            } else {
+                if (this.state.sorterKey == column.dataIndex) column['sortOrder'] = "ascend";
+            }
         })
         this.setState({
             loginHistoryColumns: columns
@@ -431,10 +428,10 @@ class Profile extends Component {
                     onCancel={this.handleCancelHistory}
                     className="login_history"
                     centered
-                    // footer={false}
-                    //bodyStyle={{ height: 500, overflow: "overlay" }}
-                    okText={convertToLang(this.props.translation[""], "Load More History")}
-                    cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
+                    footer={false}
+                //bodyStyle={{ height: 500, overflow: "overlay" }}
+                // okText={convertToLang(this.props.translation[""], "Load More History")}
+                // cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     <Fragment>
                         {/* <div className="row">
