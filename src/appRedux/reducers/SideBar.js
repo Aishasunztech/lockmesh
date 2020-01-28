@@ -16,7 +16,9 @@ import {
   SET_CURRENT_SYSTEM_MESSAGE_ID,
   RESET_CURRENT_SYSTEM_MESSAGE_ID,
   SET_CURRENT_SUPPORT_TICKET_ID,
-  RESET_CURRENT_SUPPORT_TICKET_ID
+  RESET_CURRENT_SUPPORT_TICKET_ID,
+  MICRO_SERVICE_RUNNING,
+  MICRO_SERVICE_STOPPED
 } from "../../constants/ActionTypes";
 import { Modal, notification } from 'antd';
 
@@ -29,6 +31,7 @@ const initialSidebar = {
     user_credit: 0,
     due_credit: 0,
     admin: {},
+    microServiceRunning: false,
     credits_limit: 0,
     cancel_service_requests: [],
     ticketNotifications: [],
@@ -233,6 +236,18 @@ export default (state = initialSidebar, action) => {
         return {
           ...state,
           currentTicketId: null
+        };
+
+      case MICRO_SERVICE_RUNNING:
+        return {
+          ...state,
+          microServiceRunning: true
+        };
+
+      case MICRO_SERVICE_STOPPED:
+        return {
+          ...state,
+          microServiceRunning: false
         };
 
       default:

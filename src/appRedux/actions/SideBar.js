@@ -2,7 +2,8 @@ import {
   INVALID_TOKEN, NEW_REQUEST_LIST, REJECT_REQUEST, ACCEPT_REQUEST, USER_CREDITS, GET_CANCEL_REQUEST,
   ACCEPT_SERVICE_REQUEST, REJECT_SERVICES_REQUEST, NEW_NOTIFICATION_LIST, WINDOW_WIDTH, SET_ADMIN_FOR_SUPPORT_TICKETS,
   UPDATE_TICKET_NOTIFICATION_STATUS, SPIN_lOADING, SET_SUPPORT_PAGE, RESET_SUPPORT_PAGE, SET_CURRENT_SYSTEM_MESSAGE_ID,
-  RESET_CURRENT_SYSTEM_MESSAGE_ID, SET_CURRENT_SUPPORT_TICKET_ID, RESET_CURRENT_SUPPORT_TICKET_ID
+  RESET_CURRENT_SYSTEM_MESSAGE_ID, SET_CURRENT_SUPPORT_TICKET_ID, RESET_CURRENT_SUPPORT_TICKET_ID, MICRO_SERVICE_STOPPED,
+  MICRO_SERVICE_RUNNING
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -166,7 +167,6 @@ export function getCancelServiceRequests() {
     return (dispatch) => {
         RestService.getCancelServiceRequests().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                console.log(response.data.status);
                 if (response.data.status) {
                     dispatch({
                         type: GET_CANCEL_REQUEST,
@@ -265,5 +265,25 @@ export function resetCurrentSupportTicketId(){
     dispatch({
       type: RESET_CURRENT_SUPPORT_TICKET_ID
     });
+  }
+}
+
+export function checkMicrServiceStatus(){
+  return (dispatch) => {
+    RestService.checkSupportServiceRunning().then(response => {
+      if(response.status === 200){
+        dispatch({
+          type: MICRO_SERVICE_RUNNING
+        });
+      } else {
+        dispatch({
+          type: MICRO_SERVICE_STOPPED
+        });
+      }
+    }).catch(err => {
+      dispatch({
+        type: MICRO_SERVICE_STOPPED
+      });
+    })
   }
 }

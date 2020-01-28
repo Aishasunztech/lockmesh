@@ -69,6 +69,7 @@ class SidebarContent extends Component {
     this.state = {
       languageData: [],
       clicked: false,
+      microServiceRunning: props.hasOwnProperty('microServiceRunning') ? props.microServiceRunning : false
     }
   }
 
@@ -138,6 +139,14 @@ class SidebarContent extends Component {
     }
   }
 
+  componentDidUpdate(prevProps){
+    if(this.props !== prevProps){
+      if(this.props.hasOwnProperty('microServiceRunning')){
+        this.setState({microServiceRunning: this.props.microServiceRunning})
+      }
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     this.setState({
       languageData: nextProps.languageData
@@ -155,6 +164,10 @@ class SidebarContent extends Component {
 
     if (this.props.isSwitched !== nextProps.isSwitched) {
       this.props.getLanguage();
+    }
+
+    if(nextProps.hasOwnProperty('microServiceRunning')){
+      this.setState({microServiceRunning: nextProps.microServiceRunning})
     }
   }
 
@@ -210,6 +223,14 @@ class SidebarContent extends Component {
     });
   }
 
+  countNotifications(){
+    let adminNotifications = this.state.microServiceRunning ? this.props.ticketNotifications.length : 0 ;
+    let notAdminNotifications = this.state.microServiceRunning ? this.props.supportSystemMessagesNotifications.length + this.props.ticketNotifications.length : 0;
+    return (localStorage.getItem('type') !== ADMIN) ?
+      this.props.supportSystemMessagesNotifications.length + this.props.devices.length + this.props.requests.length + adminNotifications :
+      this.props.cancel_service_requests.length + notAdminNotifications ;
+  }
+
   render() {
     // console.log(addDevice)
     const { themeType, navStyle, pathname, authUser, translation } = this.props;
@@ -253,6 +274,7 @@ class SidebarContent extends Component {
               resetCurrentSystemMessageId={this.props.setCurrentSystemMessageId}
               setCurrentSupportTicketId={this.props.setCurrentSupportTicketId}
               resetCurrentSupportTicketId={this.props.resetCurrentSupportTicketId}
+              microServiceRunning={this.props.microServiceRunning}
             />
             <span className="font_14">
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}
@@ -279,7 +301,7 @@ class SidebarContent extends Component {
               {/* Notifications */}
               <li>
                 <a className="head-example">
-                  <Badge count={(localStorage.getItem('type') !== ADMIN) ? this.props.supportSystemMessagesNotifications.length + this.props.devices.length + this.props.requests.length + this.props.ticketNotifications.length : this.props.cancel_service_requests.length + this.props.supportSystemMessagesNotifications.length+ this.props.ticketNotifications.length}>
+                  <Badge count={this.countNotifications()}>
                     <i className="icon icon-notification notification_icn" onClick={() => this.showNotification()} />
                   </Badge>
                 </a>
@@ -431,6 +453,7 @@ const mapStateToProps = ({ settings, devices, sidebar, account, auth, dealers, S
     translation: translation,
     lng_id: translation["lng_id"],
     isSwitched: isSwitched,
+    microServiceRunning: sidebar.microServiceRunning,
     account_balance_status: auth.authUser.account_balance_status,
     account_balance_status_by: auth.authUser.account_balance_status_by,
     allDealers: dealers.allDealers,

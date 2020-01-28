@@ -1148,6 +1148,12 @@ const RestService = {
         return axios.post(BASE_URL + 'users/check-unique-pgp', { pgp_email: value }, RestService.getHeader());
     },
 
+
+    //check support system running
+    checkSupportServiceRunning: () => {
+      return axios.get(SUPPORT_URL);
+    },
+
     //support tickets
     //generate Support Ticket
     generateSupportTicket: (data) => {

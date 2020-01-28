@@ -106,10 +106,26 @@ class Support extends Component {
       this.tabBarContent.bind(this);
   }
 
+  componentDidMount(){
+    if(!this.props.microServiceRunning){
+      this.props.history.push('/invalid_page');
+    }
+  }
+
   componentDidUpdate(prevProps){
     if(this.props !== prevProps){
       let supportPage = this.props.supportPage !== '' ? this.props.supportPage : '1';
       this.setState({innerTabSelect: supportPage});
+
+      if(!this.props.microServiceRunning){
+        this.props.history.push('/invalid_page');
+      }
+    }
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps.microServiceRunning){
+      this.setState({microServiceRunning: nextProps.microServiceRunning});
     }
   }
 
@@ -205,6 +221,7 @@ function mapDispatchToProps(dispatch) {
 const mapStateToProps = ({ auth, sidebar }) => {
   return {
     user: auth.authUser,
+    microServiceRunning: sidebar.microServiceRunning,
     supportPage: sidebar.supportPage,
     currentTicket: sidebar.currentTicketId
   };
