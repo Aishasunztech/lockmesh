@@ -11,7 +11,7 @@ import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {ADMIN, DEALER, SDEALER} from "../../constants/Constants";
 import Chat from "./Chat/index";
-import { resetSupportPage } from "../../appRedux/actions";
+import { resetSupportPage, resetCurrentSupportTicketId, resetCurrentSystemMessageId, setSupportPage } from "../../appRedux/actions";
 
 const TabPane = Tabs.TabPane;
 
@@ -114,8 +114,16 @@ class Support extends Component {
   }
 
   componentWillUnmount(){
-    if(this.props.resetSupportPage){
-      this.props.resetSupportPage();
+    if(this.props.location && this.props.location.pathname && this.props.location.pathname !== '/support') {
+      if (this.props.resetSupportPage) {
+        this.props.resetSupportPage();
+      }
+      if (this.props.resetCurrentSupportTicketId) {
+        this.props.resetCurrentSupportTicketId();
+      }
+      if (this.props.resetCurrentSystemMessageId) {
+        this.props.resetCurrentSystemMessageId();
+      }
     }
   }
 
@@ -127,31 +135,7 @@ class Support extends Component {
 
 
   handleChangeCardTabs = (value) => {
-
-    switch (value) {
-      case '1':
-        this.setState({
-          innerTabSelect: '1'
-        });
-        break;
-
-      case '2':
-        this.setState({
-          innerTabSelect: '2'
-        });
-
-        break;
-      case "3":
-        this.setState({
-          innerTabSelect: '3'
-        });
-        break;
-      default:
-        this.setState({
-          innerTabSelect: '1'
-        });
-        break;
-    }
+    this.props.setSupportPage(value);
     if(this.refs && this.refs.supportTickets && this.refs.supportTickets && this.refs.supportTickets.getWrappedInstance()){
       if(value !== '2'){
         this.setState({onTicketDetailPage: false});
@@ -211,7 +195,10 @@ class Support extends Component {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    resetSupportPage
+    setSupportPage,
+    resetSupportPage,
+    resetCurrentSupportTicketId,
+    resetCurrentSystemMessageId,
   }, dispatch);
 }
 
@@ -219,8 +206,7 @@ const mapStateToProps = ({ auth, sidebar }) => {
   return {
     user: auth.authUser,
     supportPage: sidebar.supportPage,
-    currentMessageId: sidebar.currentMessageId,
-    currentTicketId: sidebar.currentTicketId
+    currentTicket: sidebar.currentTicketId
   };
 };
 

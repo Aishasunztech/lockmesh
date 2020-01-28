@@ -1,7 +1,8 @@
 import {
   INVALID_TOKEN, NEW_REQUEST_LIST, REJECT_REQUEST, ACCEPT_REQUEST, USER_CREDITS, GET_CANCEL_REQUEST,
   ACCEPT_SERVICE_REQUEST, REJECT_SERVICES_REQUEST, NEW_NOTIFICATION_LIST, WINDOW_WIDTH, SET_ADMIN_FOR_SUPPORT_TICKETS,
-  UPDATE_TICKET_NOTIFICATION_STATUS, SPIN_lOADING, SET_SUPPORT_PAGE, RESET_SUPPORT_PAGE
+  UPDATE_TICKET_NOTIFICATION_STATUS, SPIN_lOADING, SET_SUPPORT_PAGE, RESET_SUPPORT_PAGE, SET_CURRENT_SYSTEM_MESSAGE_ID,
+  RESET_CURRENT_SYSTEM_MESSAGE_ID, SET_CURRENT_SUPPORT_TICKET_ID, RESET_CURRENT_SUPPORT_TICKET_ID
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -229,6 +230,40 @@ export function resetSupportPage(){
   return (dispatch) => {
     dispatch({
       type: RESET_SUPPORT_PAGE
+    });
+  }
+}
+
+export function setCurrentSystemMessageId(message){
+  return (dispatch) => {
+    dispatch({
+      type: SET_CURRENT_SYSTEM_MESSAGE_ID,
+      payload: message
+    });
+  }
+}
+
+export function resetCurrentSystemMessageId(){
+  return (dispatch) => {
+    dispatch({
+      type: RESET_CURRENT_SYSTEM_MESSAGE_ID
+    });
+  }
+}
+
+export function setCurrentSupportTicketId(ticket){
+  return (dispatch) => {
+    dispatch({
+      type: SET_CURRENT_SUPPORT_TICKET_ID,
+      payload: ticket
+    });
+  }
+}
+
+export function resetCurrentSupportTicketId(){
+  return (dispatch) => {
+    dispatch({
+      type: RESET_CURRENT_SUPPORT_TICKET_ID
     });
   }
 }

@@ -9,7 +9,7 @@ import NewDevice from '../../components/NewDevices';
 import CreditsModal from '../../components/CreditsModal';
 import { updateSupportSystemMessageNotification } from '../../appRedux/actions/SupportSystemMessages';
 import { updateTicketNotifications } from '../../appRedux/actions';
-import { setSupportPage, resetSupportPage } from "../../appRedux/actions";
+import { setSupportPage, resetSupportPage, setCurrentSupportTicketId, resetCurrentSupportTicketId, setCurrentSystemMessageId, resetCurrentSystemMessageId } from "../../appRedux/actions";
 import { getNewDevicesList, } from "../../appRedux/actions/Common";
 import {
   getNewCashRequests,
@@ -249,6 +249,10 @@ class SidebarContent extends Component {
               updateTicketNotifications={this.props.updateTicketNotifications}
               setSupportPage={this.props.setSupportPage}
               resetSupportPage={this.props.resetSupportPage}
+              setCurrentSystemMessageId={this.props.setCurrentSystemMessageId}
+              resetCurrentSystemMessageId={this.props.setCurrentSystemMessageId}
+              setCurrentSupportTicketId={this.props.setCurrentSupportTicketId}
+              resetCurrentSupportTicketId={this.props.resetCurrentSupportTicketId}
             />
             <span className="font_14">
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}
@@ -463,7 +467,11 @@ export default connect(mapStateToProps, {
   updateSupportSystemMessageNotification,
   updateTicketNotifications,
   setSupportPage,
-  resetSupportPage
+  resetSupportPage,
+  setCurrentSystemMessageId,
+  resetCurrentSystemMessageId,
+  setCurrentSupportTicketId,
+  resetCurrentSupportTicketId
 }
 )(SidebarContent);
 

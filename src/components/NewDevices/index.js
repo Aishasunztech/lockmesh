@@ -3,7 +3,10 @@ import { Modal, Table, Button, Form, Row, Col, Icon, Checkbox } from 'antd';
 import { withRouter, Link, Redirect } from "react-router-dom";
 import AddDeviceModal from '../../routes/devices/components/AddDevice';
 import { ADMIN, ACTION, CREDITS, CREDITS_CASH_REQUESTS, ARE_YOU_SURE_YOU_WANT_TO_DECLINE_THIS_REQUEST, ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST, WARNING, DEVICE_UNLINKED } from '../../constants/Constants';
-import { convertToLang } from '../../routes/utils/commonUtils';
+import {
+  checkValue, convertToLang, getDateFromTimestamp,
+  getOnlyTimeFromTimestamp
+} from '../../routes/utils/commonUtils';
 import { Button_Ok, Button_Cancel, Button_Confirm, Button_Decline, Button_ACCEPT, Button_Transfer } from '../../constants/ButtonConstants';
 import { DEVICE_ID, DEVICE_SERIAL_NUMBER, DEVICE_IMEI_1, DEVICE_SIM_2, DEVICE_IMEI_2, DEVICE_REQUESTS, DEVICE_SIM_1 } from '../../constants/DeviceConstants';
 import { DEALER_NAME, DEALER_ID, DEALER_PIN } from '../../constants/DealerConstants';
@@ -42,7 +45,7 @@ export default class NewDevices extends Component {
               this.setState({selectedTicketNotifications: []});
               this.props.updateTicketNotifications({ticketIds: tickets});
             }}><Icon type="eye" /></Button>, dataIndex: 'selection', key: 'action', align: "center" },
-            { title: convertToLang(props.translation[""], "TICKET SUBJECT"), dataIndex: 'subject', key: 'ticket_subject', align: "center" },
+            { title: convertToLang(props.translation[""], "TICKET SUBJECT"), dataIndex: 'subject', width: 200, key: 'ticket_subject', align: "center" },
             { title: convertToLang(props.translation[""], "DEALER NAME"), dataIndex: 'dealer_name', key: 'dealer_name', align: "center" },
             { title: convertToLang(props.translation[""], "DEALER PIN"), dataIndex: 'dealer_pin', key: 'dealer_pin', align: "center" },
             { title: convertToLang(props.translation[""], "TYPE"), dataIndex: 'type', key: 'type', align: "center" },
@@ -74,6 +77,7 @@ export default class NewDevices extends Component {
             sectionVisible: true,
             flaggedDevicesModal: false,
             reqDevice: '',
+            dealers: [],
             redirect: false,
             showLInkRequest: false,
             selectedSystemMessages: [],
@@ -130,13 +134,21 @@ export default class NewDevices extends Component {
         this.setState({
             NewDevices: this.props.devices,
             NewRequests: this.props.requests
-        })
+        });
+
+        if(this.props.dealers){
+          this.setState({dealers: this.props.dealers});
+        }
     }
 
     componentDidUpdate(prevProps){
       if(prevProps !== this.props){
         this.setState({systemMessagesNotifications: this.props.supportSystemMessagesNotifications});
         this.setState({ticketNotifications: this.props.ticketNotifications});
+
+        if(this.props.dealers){
+          this.setState({dealers: this.props.dealers});
+        }
       }
     }
     componentWillReceiveProps(nextProps) {
@@ -153,6 +165,10 @@ export default class NewDevices extends Component {
 
         if(nextProps.ticketNotifications){
           this.setState({ticketNotifications: nextProps.ticketNotifications});
+        }
+
+        if(nextProps.dealers){
+          this.setState({dealers: nextProps.dealers});
         }
     }
     rejectDevice(device) {
@@ -240,19 +256,18 @@ export default class NewDevices extends Component {
     }
 
     renderTicketNotifications(list) {
+      let { setCurrentSupportTicketId, setSupportPage } = this.props;
 
         if (list && Array.isArray(list) && list.length > 0) {
           return list.map((notification) => {
             let dealer_name = 'N/A';
             let dealer_pin = 'N/A';
-            if(typeof this.props.allDealers !== 'undefined') {
-              let dealer = this.props.allDealers.find(dealer => dealer.dealer_id == notification.user_id);
-              if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_name')) {
-                dealer_name = dealer.dealer_name;
-              }
-              if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_type') && dealer.dealer_type !== 1 && dealer.hasOwnProperty('link_code')) {
-                dealer_pin = dealer.link_code;
-              }
+            let dealer = this.state.dealers.find(dealer => dealer.dealer_id == notification.user_id);
+            if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_name')) {
+              dealer_name = dealer.dealer_name;
+            }
+            if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_type') && dealer.dealer_type !== 1 && dealer.hasOwnProperty('link_code')) {
+              dealer_pin = dealer.link_code;
             }
             return {
                   selection: <Checkbox defaultChecked={false} checked={this.state.selectedTicketNotifications.some(item => item === notification._id)} onChange={(e) => this.updateTicketsSelection(e, notification._id)} />,
@@ -261,7 +276,11 @@ export default class NewDevices extends Component {
                   dealer_name: dealer_name,
                   dealer_pin: dealer_pin,
                   type: notification.type,
-                  subject: notification.ticket.subject,
+                  subject: <a href="javascript:void(0);" onClick={() => {
+                    setCurrentSupportTicketId(notification.ticket);
+                    setSupportPage('2');
+                    this.setPageState(true);
+                  }}>{notification.ticket.subject.length > 30 ? notification.ticket.subject.substr(0, 30) + '...' : notification.ticket.subject}</a>,
                   category: notification.ticket.category,
                   priority: notification.ticket.priority,
                   created_at: moment(notification.createdAt).format('YYYY/MM/DD hh:mm:ss'),
@@ -274,14 +293,34 @@ export default class NewDevices extends Component {
     }
 
     renderSupportSystemMessagesNotifications(list) {
+      let { setCurrentSystemMessageId } = this.props;
         if (list && Array.isArray(list) && list.length > 0) {
             return list.map((notification) => {
+              let subject = checkValue(notification.system_message.subject);
+              let subject2 = subject.length > 30 ? subject.substr(0, 30) + '...' : subject;
+              console.log(subject2);
                 return {
                     selection: <Checkbox defaultChecked={false} checked={this.state.selectedSystemMessages.some(item => item === notification.system_message._id)} onChange={(e) => this.updateSystemMessagesSelection(e, notification.system_message._id)} />,
                     id: notification.id,
                     key: notification.id,
                     sender: <span className="text-capitalize">{notification.sender_user_type}</span>,
-                    subject: notification.system_message.subject,
+                    subject: <a href="javascript:void(0);" onClick={() => {
+                      let sender = notification.system_message.sender_user_type.charAt(0).toUpperCase() + notification.system_message.sender_user_type.slice(1);
+                      let data = {
+                        id: notification.system_message._id,
+                        key: notification.system_message._id,
+                        rowKey: notification.system_message._id,
+                        type: 'Received',
+                        sender_user_type: notification.sender_user_type,
+                        sender: sender,
+                        subject: subject2,
+                        message: checkValue(notification.system_message.message),
+                        createdAt: getDateFromTimestamp(notification.system_message.createdAt),
+                        createdTime: getOnlyTimeFromTimestamp(notification.system_message.createdAt)
+                      }
+                      setCurrentSystemMessageId(data);
+                      this.setPageState(true);
+                  }}>{notification.system_message.subject}</a>,
                     created_at: moment(notification.createdAt).format('YYYY/MM/DD hh:mm:ss'),
                 }
             });
