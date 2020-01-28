@@ -129,13 +129,13 @@ class ConnectDealer extends Component {
 
     onChangeCurrency = (e, field) => {
 
+        let _this = this;
         if (e === 'USD') {
             this.setState({
                 currency: 'usd',
                 currency_price: null,
             })
         } else {
-            let _this = this;
             RestService.exchangeCurrency(e).then((response) => {
                 if (response.data.status) {
                     console.log(this.props.dealer.credits * response.data.currency_unit)
