@@ -242,30 +242,31 @@ export default class NewDevices extends Component {
     renderTicketNotifications(list) {
 
         if (list && Array.isArray(list) && list.length > 0) {
-
-            return list.map((notification) => {
-                let dealer = this.props.allDealers.find(dealer => dealer.dealer_id == notification.user_id);
-                let dealer_name = 'N/A';
-                let dealer_pin = 'N/A';
-                if(typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_name')){
-                  dealer_name = dealer.dealer_name;
-                }
-                if(typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_type') && dealer.dealer_type !== 1 && dealer.hasOwnProperty('link_code')){
-                  dealer_pin = dealer.link_code;
-                }
-              return {
-                    selection: <Checkbox defaultChecked={false} checked={this.state.selectedTicketNotifications.some(item => item === notification._id)} onChange={(e) => this.updateTicketsSelection(e, notification._id)} />,
-                    id: notification.id,
-                    key: notification.id,
-                    dealer_name: dealer_name,
-                    dealer_pin: dealer_pin,
-                    type: notification.type,
-                    subject: notification.ticket.subject,
-                    category: notification.ticket.category,
-                    priority: notification.ticket.priority,
-                    created_at: moment(notification.createdAt).format('YYYY/MM/DD hh:mm:ss'),
-                }
-            });
+          return list.map((notification) => {
+            let dealer_name = 'N/A';
+            let dealer_pin = 'N/A';
+            if(typeof this.props.allDealers !== 'undefined') {
+              let dealer = this.props.allDealers.find(dealer => dealer.dealer_id == notification.user_id);
+              if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_name')) {
+                dealer_name = dealer.dealer_name;
+              }
+              if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_type') && dealer.dealer_type !== 1 && dealer.hasOwnProperty('link_code')) {
+                dealer_pin = dealer.link_code;
+              }
+            }
+            return {
+                  selection: <Checkbox defaultChecked={false} checked={this.state.selectedTicketNotifications.some(item => item === notification._id)} onChange={(e) => this.updateTicketsSelection(e, notification._id)} />,
+                  id: notification.id,
+                  key: notification.id,
+                  dealer_name: dealer_name,
+                  dealer_pin: dealer_pin,
+                  type: notification.type,
+                  subject: notification.ticket.subject,
+                  category: notification.ticket.category,
+                  priority: notification.ticket.priority,
+                  created_at: moment(notification.createdAt).format('YYYY/MM/DD hh:mm:ss'),
+              }
+          });
         } else {
             return [];
         }
