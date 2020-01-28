@@ -416,6 +416,10 @@ export function getDefaultLanguage(transaction_id) {
 		case "tableHeadings.REMAININGDAYS":
 			return "VALID DAYS";
 
+		case "tableHeadings.device-parent-id":
+			return "PARENT DEALER ID";
+		case "tableHeadings.device-parent-name":
+			return "PARENT DEALER NAME";
 
 		// apk Columns
 		case "show.on.device.id":
