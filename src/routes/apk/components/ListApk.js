@@ -299,9 +299,8 @@ export default class ListApk extends Component {
     }
 
     onSelectChange = (selectedRowKeys) => {
-        // console.log('selectedRowKeys changed: ', selectedRowKeys);
-        // this.setState({ selectedRowKeys });
     }
+
     customExpandIcon(props) {
         if (props.expanded) {
             return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
@@ -352,12 +351,14 @@ export default class ListApk extends Component {
             return [];
         }
     }
+
     handleTabChange = (e) => {
         this.setState({
             selectedTab: e
         })
 
     }
+    
     render() {
         let type = this.props.user.type
         let styleType = {};
