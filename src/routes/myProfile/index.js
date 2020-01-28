@@ -25,10 +25,48 @@ import { IP_ADDRESS } from '../../constants/DeviceConstants';
 
 class Profile extends Component {
 
-    state = {
-        visible: false,
-        historyModel: false,
-        limitValue: 20
+    constructor(props) {
+        super(props);
+        var loginHistoryColumns = [
+            {
+                title: '#',
+                align: "center",
+                dataIndex: 'tableIndex',
+                key: "tableIndex",
+                className: '',
+                sorter: (a, b) => { return a.tableIndex - b.tableIndex },
+                sortDirections: ['ascend', 'descend'],
+
+            },
+            {
+                title: convertToLang(this.props.translation[IP_ADDRESS], "IP ADDRESS"),
+                align: "center",
+                dataIndex: 'imei',
+                key: "imei",
+                className: '',
+                sorter: (a, b) => { return a.imei.localeCompare(b.imei) },
+                sortDirections: ['ascend', 'descend'],
+
+            },
+            {
+                title: convertToLang(this.props.translation[Date_Text], "Date"),
+                align: "center",
+                dataIndex: 'changed_time',
+                key: "changed_time",
+                className: '',
+                sorter: (a, b) => { return a.changed_time.localeCompare(b.changed_time) },
+                sortDirections: ['ascend', 'descend'],
+                defaultSortOrder: "descend",
+            },
+        ]
+        this.state = {
+            loginHistoryColumns: loginHistoryColumns,
+            sorterKey: '',
+            sortOrder: 'ascend',
+            visible: false,
+            historyModel: false,
+            limitValue: 20
+        }
     }
     showModal1 = () => {
         this.setState({
@@ -78,6 +116,34 @@ class Profile extends Component {
     componentDidMount = () => {
         this.props.getLoginHistory(0, this.state.limitValue);
     }
+
+    handleTableSorting = (pagination, query, sorter) => {
+        console.log('handleTableSorting ', sorter);
+        let columns = this.state.loginHistoryColumns;
+
+        columns.forEach(column => {
+            // if (column) {
+                if (Object.keys(sorter).length > 0) {
+                    if (column.dataIndex == sorter.field) {
+                        if (this.state.sorterKey == sorter.field) {
+                            column['sortOrder'] = sorter.order;
+                        } else {
+                            column['sortOrder'] = "ascend";
+                        }
+                    } else {
+                        column['sortOrder'] = "";
+                    }
+                    this.setState({ sorterKey: sorter.field });
+                } else {
+                    if (this.state.sorterKey == column.dataIndex) column['sortOrder'] = "ascend";
+                }
+            // }
+        })
+        this.setState({
+            loginHistoryColumns: columns
+        });
+    }
+
     renderList = (history) => {
         let data = history.map((data, index) => {
             if (data.ip_address.substr(0, 7) === "::ffff:") {
@@ -391,41 +457,11 @@ class Profile extends Component {
                         <div className="">
                             <hr className="fix_header_border_login_history" />
                             <Table
-                                columns={[
-                                    {
-                                        title: '#',
-                                        align: "center",
-                                        dataIndex: 'tableIndex',
-                                        key: "tableIndex",
-                                        className: '',
-                                        sorter: (a, b) => { return a.tableIndex - b.tableIndex },
-                                        sortDirections: ['ascend', 'descend'],
-
-                                    },
-                                    {
-                                        title: convertToLang(this.props.translation[IP_ADDRESS], "IP ADDRESS"),
-                                        align: "center",
-                                        dataIndex: 'imei',
-                                        key: "imei",
-                                        className: '',
-                                        sorter: (a, b) => { return a.imei.localeCompare(b.imei) },
-                                        sortDirections: ['ascend', 'descend'],
-
-                                    },
-                                    {
-                                        title: convertToLang(this.props.translation[Date_Text], "Date"),
-                                        align: "center",
-                                        dataIndex: 'changed_time',
-                                        key: "changed_time",
-                                        className: '',
-                                        sorter: (a, b) => { return a.changed_time.localeCompare(b.changed_time) },
-                                        sortDirections: ['ascend', 'descend'],
-
-                                    },
-                                ]}
+                                columns={this.state.loginHistoryColumns}
                                 bordered
                                 dataSource={this.renderList(this.props.loginHistory)}
                                 pagination={false}
+                                onChange={this.handleTableSorting}
                             />
                         </div>
                     </Fragment>

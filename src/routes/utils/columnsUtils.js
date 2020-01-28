@@ -495,30 +495,30 @@ export function devicesColumns(translation, handleSearch) {
             ]
         },
 
-        {
-            title: (
-                <Input.Search
-                    name="client_id"
-                    key="client_id"
-                    id="client_id"
-                    className="search_heading client_id_w"
-                    onChange={handleSearch}
-                    autoComplete="new-password"
-                    placeholder={convertToLang(translation[DEVICE_CLIENT_ID], "CLIENT ID")}
-                />
-            ),
-            dataIndex: 'client_id',
-            children: [
-                {
-                    title: convertToLang(translation[DEVICE_CLIENT_ID], "CLIENT ID"),
-                    align: "center",
-                    dataIndex: 'client_id',
-                    key: 'client_id',
-                    sorter: (a, b) => { return a.client_id.localeCompare(b.client_id) },
-                    sortDirections: ['ascend', 'descend'],
-                }
-            ]
-        },
+        // {
+        //     title: (
+        //         <Input.Search
+        //             name="client_id"
+        //             key="client_id"
+        //             id="client_id"
+        //             className="search_heading client_id_w"
+        //             onChange={handleSearch}
+        //             autoComplete="new-password"
+        //             placeholder={convertToLang(translation[DEVICE_CLIENT_ID], "CLIENT ID")}
+        //         />
+        //     ),
+        //     dataIndex: 'client_id',
+        //     children: [
+        //         {
+        //             title: convertToLang(translation[DEVICE_CLIENT_ID], "CLIENT ID"),
+        //             align: "center",
+        //             dataIndex: 'client_id',
+        //             key: 'client_id',
+        //             sorter: (a, b) => { return a.client_id.localeCompare(b.client_id) },
+        //             sortDirections: ['ascend', 'descend'],
+        //         }
+        //     ]
+        // },
         {
             title: (
                 <Input.Search
