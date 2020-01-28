@@ -279,7 +279,7 @@ class Apk extends Component {
                                 </Col> */}
                                 <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                                     <div>
-                                        <a href="javascript:void(0);" onClick={() => this.showToolsModal()}>
+                                        <a href="#" onClick={() => this.showToolsModal()}>
                                             <Card className="manage_sec" style={{ borderRadius: 12 }}>
                                                 <div>
                                                     <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[APP_DOWNLOAD_TOOLS], "Download Tools")} </h2>
