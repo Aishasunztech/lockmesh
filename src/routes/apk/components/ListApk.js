@@ -1,20 +1,32 @@
+// Libraries
 import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col, Tag } from "antd";
-import { BASE_URL, DATE_FORMAT, TIMESTAMP_FORMAT } from '../../../constants/Application';
-import styles from './app.css';
-import CustomScrollbars from "../../../util/CustomScrollbars";
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-import {
-    convertToLang, convertTimezoneValue
-} from '../../utils/commonUtils'
+
+// Components
 import EditApk from './EditApk';
 import UpdateFeatureApk from './UpdateFeatureApk';
+import Permissions from '../../utils/Components/Permissions';
+
+// Helpers
+import {
+    convertToLang, convertTimezoneValue
+} from '../../utils/commonUtils';
+import CustomScrollbars from "../../../util/CustomScrollbars";
+
+// Styles
+import styles from './app.css';
+
+// Constants
+import { BASE_URL, DATE_FORMAT, TIMESTAMP_FORMAT } from '../../../constants/Application';
 import { Button_Edit, Button_Delete } from '../../../constants/ButtonConstants';
 import { ADMIN } from '../../../constants/Constants';
-import Permissions from '../../utils/Components/Permissions';
 import { Tab_All } from '../../../constants/TabConstants';
+import { FEATURED_APK_PACKAGES } from '../../../constants/ApkConstants'
+
 const TabPane = Tabs.TabPane;
+
 export default class ListApk extends Component {
     state = { visible: false }
 
@@ -119,7 +131,7 @@ export default class ListApk extends Component {
         let apkList = [];
         let data
         list.map((app) => {
-            if (app.package_name !== 'com.armorSec.android' && app.package_name !== 'ca.unlimitedwireless.mailpgp' && app.package_name !== 'com.rim.mobilefusion.client' && app.package_name !== 'com.secure.vpn') {
+            if (!FEATURED_APK_PACKAGES.includes(app.package_name)) {
                 let usedBy = [];
                 if (app.policies && app.policies.length) {
                     usedBy.push(<Tag color="green" key="Policies">
@@ -134,8 +146,7 @@ export default class ListApk extends Component {
                 if (!usedBy.length) {
                     usedBy.push(<Tag key="Not Used">Not Used</Tag>)
                 }
-                // console.log('app is: ', app)
-                // if (app.deleteable) {
+                
                 data = {
                     rowKey: app.apk_id,
                     id: app.apk_id,
@@ -210,70 +221,33 @@ export default class ListApk extends Component {
                 }
                 apkList.push(data)
 
-                // } else {
-                //     data = {
-                //         rowKey: app.apk_id,
-                //         id: app.apk_id,
-                //         statusAll: app.statusAll,
-                //         action: (
-                //             <Fragment>
-                //                 <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px", textTransform: "uppercase" }}
-                //                     onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], "EDIT")}</Button>
-                //                 {(app.permission_count === 0) ?
-                //                     <Button type="danger" className="mob_m_t" size="small" style={{ textTransform: "uppercase" }} onClick={(e) => {
-                //                         this.props.handleConfirmDelete(app.apk_id, app);
-                //                     }}>{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
-                //                     : null}
-                //             </Fragment>
-                //         ),
-                //         permission: <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
-                //             {/* {app.permission_count} */}
-                //             {(app.permission_count === "All" || this.props.totalDealers === app.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
-                //         </span>,
-                //         permissions: app.permissions,
-                //         apk_status: (<Switch size="small" disabled checked={(app.apk_status === "On") ? true : false} onChange={(e) => {
-                //             this.props.handleStatusChange(e, app.apk_id);
-                //         }} />),
-                //         apk: app.apk ? app.apk : 'N/A',
-                //         apk_name: app.apk_name ? app.apk_name : 'N/A',
-                //         apk_logo: (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
-                //         apk_size: app.size ? app.size : "N/A",
-                //         version: app.version,
-                //         policies: (app.policies === undefined || app.policies === null) ? [] : app.policies,
-                //         created_at: app.created_at,
-                //         updated_at: app.updated_at,
-                //         label: app.label ? app.label : 'N/A',
-                //         package_name: app.package_name ? app.package_name : 'N/A',
-                //     }
-                //     apkList.push(data)
-
-                // }
+                
             }
         });
         return apkList
     }
+
     renderFeaturedList(list) {
         let featureApk = []
         list.map((app) => {
-            // console.log(app);
-            if (app.package_name === 'com.armorSec.android' || app.package_name === 'ca.unlimitedwireless.mailpgp' || app.package_name === 'com.rim.mobilefusion.client' || app.package_name === 'com.secure.vpn') {
+            if (FEATURED_APK_PACKAGES.includes(app.package_name)) {
                 let data = {
-                    'rowKey': app.apk_id,
-                    'id': app.apk_id,
+                    rowKey: app.apk_id,
+                    id: app.apk_id,
                     statusAll: app.statusAll,
-                    'permission': <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
+                    permission: <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
                         {/* {app.permission_count} */}
                         {(app.permission_count === "All" || this.props.totalDealers === app.permission_count) ? convertToLang(this.props.translation[Tab_All], "All") : app.permission_count}
                     </span>,
-                    "permissions": app.permissions,
-                    'apk_name': app.apk_name,
-                    'apk_logo': (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
-                    'apk_version': app.version,
-                    'apk_size': app.size ? app.size : "N/A",
-                    'updated_at': convertTimezoneValue(this.props.user.timezone, app.updated_at, TIMESTAMP_FORMAT),
+                    permissions: app.permissions,
+                    apk_name: app.apk_name,
+                    apk_logo: (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
+                    apk_version: app.version,
+                    apk_size: app.size ? app.size : "N/A",
+                    updated_date: convertTimezoneValue(this.props.user.timezone, app.updated_at, TIMESTAMP_FORMAT),
                     // 'updated_date': app.updated_at,
-                    'package_name': app.package_name,
-                    'policies': (app.policies === undefined || app.policies === null) ? [] : app.policies,
+                    package_name: app.package_name,
+                    policies: (app.policies === undefined || app.policies === null) ? [] : app.policies,
                 }
                 featureApk.push(data)
             }
