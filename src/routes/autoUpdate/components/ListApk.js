@@ -127,10 +127,7 @@ export default class ListApk extends Component {
         });
     }
 
-    onSelectChange = (selectedRowKeys) => {
-        // console.log('selectedRowKeys changed: ', selectedRowKeys);
-        // this.setState({ selectedRowKeys });
-    }
+    
     customExpandIcon(props) {
         if (props.expanded) {
             return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
@@ -146,14 +143,11 @@ export default class ListApk extends Component {
 
     render() {
 
-        const rowSelection = {
-            onChange: this.onSelectChange,
-        };
+
 
         return (
             <Card>
                 <Table
-                    // rowSelection={rowSelection}
                     // expandableRowIcon={<Icon type="right" />
                     className="gx-table-responsive apklist_table"
                     size="small"
