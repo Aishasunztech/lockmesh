@@ -11,6 +11,7 @@ import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {ADMIN, DEALER, SDEALER} from "../../constants/Constants";
 import Chat from "./Chat/index";
+import { resetSupportPage } from "../../appRedux/actions";
 
 const TabPane = Tabs.TabPane;
 
@@ -21,7 +22,8 @@ class Support extends Component {
   constructor(props) {
     super(props);
 
-    let currentTabId = (this.props.location ? this.props.location.state ? this.props.location.state.page ? this.props.location.state.page : '1' : '1' : '1');
+    // let currentTabId = (this.props.location ? this.props.location.state ? this.props.location.state.page ? this.props.location.state.page : '1' : '1' : '1');
+    let currentTabId = props.supportPage ? props.supportPage !== '' ? props.supportPage : '1' : '1';
 
     this.state = {
       innerTabSelect: currentTabId,
@@ -102,6 +104,19 @@ class Support extends Component {
 
 
       this.tabBarContent.bind(this);
+  }
+
+  componentDidUpdate(prevProps){
+    if(this.props !== prevProps){
+      let supportPage = this.props.supportPage !== '' ? this.props.supportPage : '1';
+      this.setState({innerTabSelect: supportPage});
+    }
+  }
+
+  componentWillUnmount(){
+    if(this.props.resetSupportPage){
+      this.props.resetSupportPage();
+    }
   }
 
 
@@ -196,13 +211,16 @@ class Support extends Component {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-
+    resetSupportPage
   }, dispatch);
 }
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ auth, sidebar }) => {
   return {
     user: auth.authUser,
+    supportPage: sidebar.supportPage,
+    currentMessageId: sidebar.currentMessageId,
+    currentTicketId: sidebar.currentTicketId
   };
 };
 

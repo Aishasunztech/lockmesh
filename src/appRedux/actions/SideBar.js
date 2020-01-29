@@ -1,6 +1,7 @@
 import {
   INVALID_TOKEN, NEW_REQUEST_LIST, REJECT_REQUEST, ACCEPT_REQUEST, USER_CREDITS, GET_CANCEL_REQUEST,
-  ACCEPT_SERVICE_REQUEST, REJECT_SERVICES_REQUEST, NEW_NOTIFICATION_LIST, WINDOW_WIDTH, SET_ADMIN_FOR_SUPPORT_TICKETS
+  ACCEPT_SERVICE_REQUEST, REJECT_SERVICES_REQUEST, NEW_NOTIFICATION_LIST, WINDOW_WIDTH, SET_ADMIN_FOR_SUPPORT_TICKETS,
+  UPDATE_TICKET_NOTIFICATION_STATUS, SPIN_lOADING, SET_SUPPORT_PAGE, RESET_SUPPORT_PAGE
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -194,6 +195,40 @@ export function getAdmin(){
           type: INVALID_TOKEN
         })
       }
+    });
+  }
+}
+
+export function updateTicketNotifications(data){
+  return (dispatch) => {
+    dispatch({
+      type: SPIN_lOADING
+    });
+
+    RestService.updateTicketNotificationStatus(data).then(response => {
+      if(response.status && response.data.success){
+        dispatch({
+          type: UPDATE_TICKET_NOTIFICATION_STATUS,
+          payload: response.data
+        });
+      }
+    })
+  }
+}
+
+export function setSupportPage(page){
+  return (dispatch) => {
+    dispatch({
+      type: SET_SUPPORT_PAGE,
+      payload: page
+    });
+  }
+}
+
+export function resetSupportPage(){
+  return (dispatch) => {
+    dispatch({
+      type: RESET_SUPPORT_PAGE
     });
   }
 }

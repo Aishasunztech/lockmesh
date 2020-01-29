@@ -1,11 +1,14 @@
+// Libraries
 import React from "react";
 import ReactDOM from "react-dom";
 import { AppContainer } from 'react-hot-loader';
 import { disableReactDevTools } from '@fvilers/disable-react-devtools';
 
+// Components
 import NextApp from './NextApp';
 import registerServiceWorker from './registerServiceWorker';
 
+// Styles
 import { style } from './consoleStyle.js';
 
 function noop() { }

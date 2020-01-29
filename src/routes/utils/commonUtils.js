@@ -416,6 +416,10 @@ export function getDefaultLanguage(transaction_id) {
 		case "tableHeadings.REMAININGDAYS":
 			return "VALID DAYS";
 
+		case "tableHeadings.device-parent-id":
+			return "PARENT DEALER ID";
+		case "tableHeadings.device-parent-name":
+			return "PARENT DEALER NAME";
 
 		// apk Columns
 		case "show.on.device.id":
@@ -567,7 +571,7 @@ export function getMonthName(key) {
 	}
 }
 export function convertTimezoneValue(dealerTimezone, data, dateFormat, clientToServerTZ = false) { // dealerTimezone: timezone, data: date/time
-  let coverted_dateTime = "N/A";
+  let convertedDateTime = "N/A";
 
   if (data && data !== "N/A" && data !== "n/a" && data !== "0000-00-00 00:00:00") {
     let timeZones = moment.tz.names();
@@ -576,15 +580,15 @@ export function convertTimezoneValue(dealerTimezone, data, dateFormat, clientToS
       dealerTimezone = moment.tz.guess(); // get local time zone value e.g "Asia/Karachi"
     }
     if (clientToServerTZ) {
-      coverted_dateTime = moment.tz(data, dealerTimezone).tz(SERVER_TIMEZONE).format(dateFormat);
+      convertedDateTime = moment.tz(data, dealerTimezone).tz(SERVER_TIMEZONE).format(dateFormat);
     } else {
       // convert server time to client time
-      coverted_dateTime = moment.tz(data, SERVER_TIMEZONE).tz(dealerTimezone).format(dateFormat);
+      convertedDateTime = moment.tz(data, SERVER_TIMEZONE).tz(dealerTimezone).format(dateFormat);
     }
   }
 
-  // console.log("convertTimezoneValue ",data, SERVER_TIMEZONE,  dealerTimezone, coverted_dateTime)
-  return coverted_dateTime;
+  // console.log("convertTimezoneValue ",data, SERVER_TIMEZONE,  dealerTimezone, convertedDateTime)
+  return convertedDateTime;
 }
 
 export function handleMultipleSearch(e, copy_status, copyRequireSearchData, demoSearchValues, requireForSearch) {

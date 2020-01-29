@@ -48,7 +48,7 @@ import { APP_MANAGE_APKs } from '../../constants/AppConstants';
 
 
 var status = true;
-var coppyApks = [];
+var copyApks = [];
 
 class Apk extends Component {
 
@@ -66,7 +66,8 @@ class Apk extends Component {
             showUploadData: {},
             columns: columns,
             featureApkcolumns: featureApkcolumns,
-            listOf: "all"
+            listOf: "all",
+            apkSearchValue: ''
         }
 
         // this.columns = ;
@@ -108,7 +109,7 @@ class Apk extends Component {
     }
 
     // delete
-    handleConfirmDelete = (appId, appObject, usedBy=null) => {
+    handleConfirmDelete = (appId, appObject, usedBy = null) => {
         console.log(usedBy);
 
         if ((appObject.policies && appObject.policies.length) || appObject.permission_count != 0) {
@@ -147,47 +148,49 @@ class Apk extends Component {
 
 
     componentWillReceiveProps(nextProps) {
-        //  console.log('will recive props');
+        //  console.log('will receive props');
 
         if (this.props.apk_list !== nextProps.apk_list) {
+            console.log("will rec")
             // this.setState({
             //     apk_list: nextProps.apk_list,
             // })
             this.handleChange(this.state.listOf);
+
         }
     }
 
     handleCheckChange = (values) => {
-        console.log('hiii')
-        let dumydata = this.state.columns;
+        console.log('hi')
+        let dummyData = this.state.columns;
 
-        console.log('dumydata is: ', dumydata)
+        console.log('dummyData is: ', dummyData)
 
         if (values.length) {
             console.log('values are: ', values)
             this.state.columns.map((column, index) => {
 
-                if (dumydata[index].className !== 'row') {
-                    dumydata[index].className = 'hide';
+                if (dummyData[index].className !== 'row') {
+                    dummyData[index].className = 'hide';
                 }
 
-                // console.log('dumydata is: ', dumydata)
+                // console.log('dummyData is: ', dummyData)
                 // console.log('values are: ', values)
                 values.map((value) => {
                     if (column.dataIndex === value.key) {
                         if ((value.key === APK_PERMISSION && column.dataIndex === 'permission') || (value.key === APK_SHOW_ON_DEVICE && column.dataIndex === 'apk_status')) {
 
                             // if (column.title.props.children[0] === convertToLang(this.props.translation[value.key], value.key)) {
-                            //     dumydata[index].className = '';
+                            //     dummyData[index].className = '';
                             // }
                         } else {
                             // if (column.dataIndex === value.key) {
-                            dumydata[index].className = '';
+                            dummyData[index].className = '';
                         }
                     }
                     // else if (column.title.props.children !== undefined) {
                     //     if(column.title.props.children[0] === value){
-                    //         dumydata[index].className = '';
+                    //         dummyData[index].className = '';
                     //     }
                     // }
                 });
@@ -195,7 +198,7 @@ class Apk extends Component {
 
             });
 
-            this.setState({ columns: dumydata });
+            this.setState({ columns: dummyData });
 
         } else {
             const newState = this.state.columns.map((column) => {
@@ -221,31 +224,28 @@ class Apk extends Component {
 
     handleComponentSearch = (value) => {
         try {
-            if (value.length) {
+            let searchValue = value;
+            let resultApks = [];
 
-                if (status) {
-                    coppyApks = this.state.apk_list;
-                    status = false;
-                }
-                let foundApks = componentSearch(coppyApks, value);
+            if (status) {
+                copyApks = this.state.apk_list;
+                status = false;
+            }
+            if (value.length) {
+                let foundApks = componentSearch(copyApks, value);
                 if (foundApks.length) {
-                    this.setState({
-                        apk_list: foundApks,
-                    })
-                } else {
-                    this.setState({
-                        apk_list: []
-                    })
+                    resultApks = foundApks;
                 }
             } else {
                 status = true;
-
-                this.setState({
-                    apk_list: coppyApks,
-                })
+                resultApks = copyApks;
             }
+            this.setState({
+                apk_list: resultApks,
+                apkSearchValue: searchValue
+            })
         } catch (error) {
-            alert("hello");
+            // alert("hello");
         }
     }
 
@@ -255,44 +255,43 @@ class Apk extends Component {
 
         switch (value) {
             case 'active':
-                // this.state.listOf = value;
+                copyApks = this.filterList('On', this.props.apk_list);
                 this.setState({
-                    apk_list: this.filterList('On', this.props.apk_list),
+                    apk_list: copyApks,
                     listOf: "active"
-                    // column: this.columns,
-
                 })
 
                 break;
             case 'disabled':
+                copyApks = this.filterList('Off', this.props.apk_list);
                 this.setState({
-                    apk_list: this.filterList('Off', this.props.apk_list),
+                    apk_list: copyApks,
                     listOf: "disabled"
-                    // column: this.columns,
-
                 })
                 break;
 
             default:
+                copyApks = this.props.apk_list;
                 this.setState({
-                    apk_list: this.props.apk_list,
+                    apk_list: copyApks,
                     listOf: "all"
-                    // column: this.columns,
-
                 })
                 break;
+        }
+        if (this.state.apkSearchValue) {
+            this.handleComponentSearch(this.state.apkSearchValue);
         }
     }
 
     filterList = (type, dealers) => {
-        let dumyDealers = [];
+        let dummyDealers = [];
         dealers.filter(function (apk) {
             let dealerStatus = apk.apk_status;
             if (dealerStatus === type) {
-                dumyDealers.push(apk);
+                dummyDealers.push(apk);
             }
         });
-        return dumyDealers;
+        return dummyDealers;
     }
 
 
@@ -362,8 +361,6 @@ class Apk extends Component {
     }
 
     render() {
-
-        // console.log("this.state.apk_list ", this.state.apk_list);
         // console.log("this.props.apk_list ", this.props.apk_list);
         if (this.props.user.type === 'dealer') {
             this.state.columns[1].className = 'hide';

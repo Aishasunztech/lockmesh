@@ -129,13 +129,13 @@ class ConnectDealer extends Component {
 
     onChangeCurrency = (e, field) => {
 
+        let _this = this;
         if (e === 'USD') {
             this.setState({
                 currency: 'usd',
                 currency_price: null,
             })
         } else {
-            let _this = this;
             RestService.exchangeCurrency(e).then((response) => {
                 if (response.data.status) {
                     console.log(this.props.dealer.credits * response.data.currency_unit)
@@ -566,6 +566,7 @@ class ConnectDealer extends Component {
                                     getDealerSalesHistory={this.props.getDealerSalesHistory}
                                     changeDealerStatus={this.props.changeDealerStatus}
                                     domainPermission={this.props.domainPermission}
+                                    dealerDomainLoading={this.props.dealerDomainLoading}
                                 />
                             </Col>
                         </Row>
@@ -622,6 +623,7 @@ var mapStateToProps = ({ dealer_details, dealers, settings, auth, account }) => 
         isLoading: dealer_details.connectDealerLoading,
         authUser: auth.authUser,
         // dealers: dealers.textTransform
+        dealerDomainLoading: dealer_details.dealerDomainLoading
     };
 }
 

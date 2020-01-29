@@ -33,7 +33,9 @@ import {
     DEVICE_TYPE,
     DEVICE_VERSION,
     REMAINING_TERM_DAYS,
-    DEVICE_FIRMWAREINFO
+    DEVICE_FIRMWAREINFO,
+    DEVICE_PARENT_NAME,
+    DEVICE_PARENT_ID
 } from '../../constants/DeviceConstants';
 import {
     // DEVICE_ID,
@@ -495,30 +497,30 @@ export function devicesColumns(translation, handleSearch) {
             ]
         },
 
-        {
-            title: (
-                <Input.Search
-                    name="client_id"
-                    key="client_id"
-                    id="client_id"
-                    className="search_heading client_id_w"
-                    onChange={handleSearch}
-                    autoComplete="new-password"
-                    placeholder={convertToLang(translation[DEVICE_CLIENT_ID], "CLIENT ID")}
-                />
-            ),
-            dataIndex: 'client_id',
-            children: [
-                {
-                    title: convertToLang(translation[DEVICE_CLIENT_ID], "CLIENT ID"),
-                    align: "center",
-                    dataIndex: 'client_id',
-                    key: 'client_id',
-                    sorter: (a, b) => { return a.client_id.localeCompare(b.client_id) },
-                    sortDirections: ['ascend', 'descend'],
-                }
-            ]
-        },
+        // {
+        //     title: (
+        //         <Input.Search
+        //             name="client_id"
+        //             key="client_id"
+        //             id="client_id"
+        //             className="search_heading client_id_w"
+        //             onChange={handleSearch}
+        //             autoComplete="new-password"
+        //             placeholder={convertToLang(translation[DEVICE_CLIENT_ID], "CLIENT ID")}
+        //         />
+        //     ),
+        //     dataIndex: 'client_id',
+        //     children: [
+        //         {
+        //             title: convertToLang(translation[DEVICE_CLIENT_ID], "CLIENT ID"),
+        //             align: "center",
+        //             dataIndex: 'client_id',
+        //             key: 'client_id',
+        //             sorter: (a, b) => { return a.client_id.localeCompare(b.client_id) },
+        //             sortDirections: ['ascend', 'descend'],
+        //         }
+        //     ]
+        // },
         {
             title: (
                 <Input.Search
@@ -869,13 +871,13 @@ export function devicesColumns(translation, handleSearch) {
                     className="search_heading s_dealer_w"
                     onChange={handleSearch}
                     autoComplete="new-password"
-                    placeholder={convertToLang(translation[DEVICE_S_DEALER], "S DEALER")}
+                    placeholder={convertToLang(translation[DEVICE_PARENT_ID], "PARENT DEALER ID")}
                 />
             ),
             dataIndex: 's_dealer',
             children: [
                 {
-                    title: convertToLang(translation[DEVICE_S_DEALER], "S DEALER"),
+                    title: convertToLang(translation[DEVICE_PARENT_ID], "PARENT DEALER ID"),
                     align: "center",
                     dataIndex: 's_dealer',
                     key: 's_dealer',
@@ -893,13 +895,13 @@ export function devicesColumns(translation, handleSearch) {
                     className="search_heading s_dealer_name_w"
                     onChange={handleSearch}
                     autoComplete="new-password"
-                    placeholder={convertToLang(translation[DEVICE_S_DEALER_NAME], "S DEALER NAME")}
+                    placeholder={convertToLang(translation[DEVICE_PARENT_NAME], "PARENT DEALER NAME")}
                 />
             ),
             dataIndex: 's_dealer_name',
             children: [
                 {
-                    title: convertToLang(translation[DEVICE_S_DEALER_NAME], "S DEALER NAME"),
+                    title: convertToLang(translation[DEVICE_PARENT_NAME], "PARENT DEALER NAME"),
                     align: "center",
                     dataIndex: 's_dealer_name',
                     key: 's_dealer_name',
@@ -1464,16 +1466,17 @@ export function bulkDeviceHistoryColumns(translation) {
             sortDirections: ['ascend', 'descend'],
 
         },
+        // {
+        //     title: convertToLang(translation[DEVICE_STATUS], "STATUS"),
+        //     align: "center",
+        //     dataIndex: 'status',
+        //     key: 'status',
+        //     sorter: (a, b) => { return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
+
+        //     sortDirections: ['ascend', 'descend'],
+
+        // }, 
         {
-            title: convertToLang(translation[DEVICE_STATUS], "STATUS"),
-            align: "center",
-            dataIndex: 'status',
-            key: 'status',
-            sorter: (a, b) => { return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
-
-            sortDirections: ['ascend', 'descend'],
-
-        }, {
             title: convertToLang(translation[DEVICE_EXPIRY_DATE], "EXPIRY DATE"),
             align: "center",
             dataIndex: 'expiry_date',

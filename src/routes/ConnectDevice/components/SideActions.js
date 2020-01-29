@@ -578,28 +578,28 @@ class SideActions extends Component {
         this.showSaveProfileModal(false);
         this.props.getProfiles(this.props.device.device_id)
     }
-    transferDeviceProfile = (obj) => {
-        // console.log('at transferDeviceProfile')
-        let _this = this;
-        confirm({ // Are You Sure, You want to Transfer Flagged Device to this Requested Device ?
-            content: `Are you sure you want to Transfer, from ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
-            onOk() {
-                // console.log('OK');
-                _this.props.transferDeviceProfile(obj);
-                // {
-                //     reqDevice: device,
-                //     flagged_device: _this.props.device_details,
-                // }
-                // _this.setState({ DEVICE_TRANSFERED_DONE: new Date() })
+    // transferDeviceProfile = (obj) => {
+    //     // console.log('at transferDeviceProfile')
+    //     let _this = this;
+    //     confirm({ // Are You Sure, You want to Transfer Flagged Device to this Requested Device ?
+    //         content: `Are you sure you want to Transfer, from ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
+    //         onOk() {
+    //             // console.log('OK');
+    //             _this.props.transferDeviceProfile(obj);
+    //             // {
+    //             //     reqDevice: device,
+    //             //     flagged_device: _this.props.device_details,
+    //             // }
+    //             // _this.setState({ DEVICE_TRANSFERED_DONE: new Date() })
 
-            },
-            onCancel() {
-                // console.log('Cancel');
-            },
-            okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
-            cancelText: convertToLang(this.props.translation[Button_No], 'No'),
-        });
-    }
+    //         },
+    //         onCancel() {
+    //             // console.log('Cancel');
+    //         },
+    //         okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
+    //         cancelText: convertToLang(this.props.translation[Button_No], 'No'),
+    //     });
+    // }
 
     handleSimModule = (e) => {
         e.preventDefault();
@@ -1118,7 +1118,7 @@ class SideActions extends Component {
                                     ref='new_device'
                                     devices={this.props.devices}
                                     addDevice={this.props.addDevice}
-                                    transferDeviceProfile={this.transferDeviceProfile}
+                                    transferDeviceProfile={this.props.transferDeviceProfile}
                                     rejectDevice={this.props.rejectDevice}
                                     authUser={this.props.authUser}
                                     requests={this.props.requests}
