@@ -758,17 +758,13 @@ export default (state = initialState, action) => {
         }
 
         case TRANSFER_HISTORY: {
-            if (action.payload.status) {
+            // if (action.payload.status) {
                 return {
                     ...state,
                     transferHistoryList: action.payload.data,
                     // getHistory: new Date()
                 }
-            } else {
-                return {
-                    ...state,
-                }
-            }
+            // }
         }
 
         case SERVICES_HISTORY: {
