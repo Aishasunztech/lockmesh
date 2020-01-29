@@ -147,7 +147,7 @@ class Apk extends Component {
 
 
     componentWillReceiveProps(nextProps) {
-        //  console.log('will recive props');
+        //  console.log('will receive props');
 
         if (this.props.apk_list !== nextProps.apk_list) {
             // this.setState({
@@ -158,36 +158,36 @@ class Apk extends Component {
     }
 
     handleCheckChange = (values) => {
-        console.log('hiii')
-        let dumydata = this.state.columns;
+        console.log('hi')
+        let dummyData = this.state.columns;
 
-        console.log('dumydata is: ', dumydata)
+        console.log('dummyData is: ', dummyData)
 
         if (values.length) {
             console.log('values are: ', values)
             this.state.columns.map((column, index) => {
 
-                if (dumydata[index].className !== 'row') {
-                    dumydata[index].className = 'hide';
+                if (dummyData[index].className !== 'row') {
+                    dummyData[index].className = 'hide';
                 }
 
-                // console.log('dumydata is: ', dumydata)
+                // console.log('dummyData is: ', dummyData)
                 // console.log('values are: ', values)
                 values.map((value) => {
                     if (column.dataIndex === value.key) {
                         if ((value.key === APK_PERMISSION && column.dataIndex === 'permission') || (value.key === APK_SHOW_ON_DEVICE && column.dataIndex === 'apk_status')) {
 
                             // if (column.title.props.children[0] === convertToLang(this.props.translation[value.key], value.key)) {
-                            //     dumydata[index].className = '';
+                            //     dummyData[index].className = '';
                             // }
                         } else {
                             // if (column.dataIndex === value.key) {
-                            dumydata[index].className = '';
+                            dummyData[index].className = '';
                         }
                     }
                     // else if (column.title.props.children !== undefined) {
                     //     if(column.title.props.children[0] === value){
-                    //         dumydata[index].className = '';
+                    //         dummyData[index].className = '';
                     //     }
                     // }
                 });
@@ -195,7 +195,7 @@ class Apk extends Component {
 
             });
 
-            this.setState({ columns: dumydata });
+            this.setState({ columns: dummyData });
 
         } else {
             const newState = this.state.columns.map((column) => {
@@ -285,14 +285,14 @@ class Apk extends Component {
     }
 
     filterList = (type, dealers) => {
-        let dumyDealers = [];
+        let dummyDealers = [];
         dealers.filter(function (apk) {
             let dealerStatus = apk.apk_status;
             if (dealerStatus === type) {
-                dumyDealers.push(apk);
+                dummyDealers.push(apk);
             }
         });
-        return dumyDealers;
+        return dummyDealers;
     }
 
 
