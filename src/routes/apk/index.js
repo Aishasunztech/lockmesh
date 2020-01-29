@@ -66,7 +66,8 @@ class Apk extends Component {
             showUploadData: {},
             columns: columns,
             featureApkcolumns: featureApkcolumns,
-            listOf: "all"
+            listOf: "all",
+            apkSearchValue: ''
         }
 
         // this.columns = ;
@@ -108,7 +109,7 @@ class Apk extends Component {
     }
 
     // delete
-    handleConfirmDelete = (appId, appObject, usedBy=null) => {
+    handleConfirmDelete = (appId, appObject, usedBy = null) => {
         console.log(usedBy);
 
         if ((appObject.policies && appObject.policies.length) || appObject.permission_count != 0) {
@@ -150,10 +151,12 @@ class Apk extends Component {
         //  console.log('will recive props');
 
         if (this.props.apk_list !== nextProps.apk_list) {
+            console.log("will rec")
             // this.setState({
             //     apk_list: nextProps.apk_list,
             // })
             this.handleChange(this.state.listOf);
+
         }
     }
 
@@ -220,33 +223,31 @@ class Apk extends Component {
     }
 
     handleComponentSearch = (value) => {
+        console.log("search apk: ", value)
         try {
-            let copyApkList = this.props.apk_list ? this.props.apk_list : [];
-            if (value.length) {
+            let searchValue = value;
+            // let copyApkList = this.props.apk_list ? this.props.apk_list : [];
+            let resultApks = [];
 
-                // if (status) {
-                //     coppyApks = this.state.apk_list;
-                //     status = false;
-                // }
-                let foundApks = componentSearch(copyApkList, value);
+            if (status) {
+                coppyApks = this.state.apk_list;
+                status = false;
+            }
+            if (value.length) {
+                let foundApks = componentSearch(coppyApks, value);
                 if (foundApks.length) {
-                    this.setState({
-                        apk_list: foundApks,
-                    })
-                } else {
-                    this.setState({
-                        apk_list: []
-                    })
+                    resultApks = foundApks;
                 }
             } else {
                 status = true;
-
-                this.setState({
-                    apk_list: copyApkList,
-                })
+                resultApks = coppyApks;
             }
+            this.setState({
+                apk_list: resultApks,
+                apkSearchValue: searchValue
+            })
         } catch (error) {
-            alert("hello");
+            // alert("hello");
         }
     }
 
@@ -257,8 +258,11 @@ class Apk extends Component {
         switch (value) {
             case 'active':
                 // this.state.listOf = value;
+                // status = true;
+                coppyApks = this.filterList('On', this.props.apk_list);
+                // this.handleComponentSearch(this.state.apkSearchValue);
                 this.setState({
-                    apk_list: this.filterList('On', this.props.apk_list),
+                    apk_list: coppyApks,
                     listOf: "active"
                     // column: this.columns,
 
@@ -266,8 +270,11 @@ class Apk extends Component {
 
                 break;
             case 'disabled':
+                // status = true;
+                coppyApks = this.filterList('Off', this.props.apk_list);
+                // this.handleComponentSearch(this.state.apkSearchValue);
                 this.setState({
-                    apk_list: this.filterList('Off', this.props.apk_list),
+                    apk_list: coppyApks,
                     listOf: "disabled"
                     // column: this.columns,
 
@@ -275,13 +282,19 @@ class Apk extends Component {
                 break;
 
             default:
+                // status = true;
+                coppyApks = this.props.apk_list;
+                // this.handleComponentSearch(this.state.apkSearchValue);
                 this.setState({
-                    apk_list: this.props.apk_list,
+                    apk_list: coppyApks,
                     listOf: "all"
                     // column: this.columns,
 
                 })
                 break;
+        }
+        if (this.state.apkSearchValue) {
+            this.handleComponentSearch(this.state.apkSearchValue);
         }
     }
 
@@ -364,7 +377,7 @@ class Apk extends Component {
 
     render() {
 
-        // console.log("this.state.apk_list ", this.state.apk_list);
+        console.log("this.state.apk_list ", this.state.apk_list, this.props.apk_list, this.state.apkSearchValue);
         // console.log("this.props.apk_list ", this.props.apk_list);
         if (this.props.user.type === 'dealer') {
             this.state.columns[1].className = 'hide';
