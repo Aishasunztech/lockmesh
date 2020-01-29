@@ -18,11 +18,11 @@ class ChatUserList extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps){
-    this.setState({
-      typing: nextProps.typing
-    });
-  }
+  // componentWillReceiveProps(nextProps){
+  //   this.setState({
+  //     typing: nextProps.typing
+  //   });
+  // }
 
   render(){
     const {chatUsers, selectedSectionId, onSelectUser } = this.props;
