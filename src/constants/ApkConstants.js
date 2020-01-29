@@ -25,4 +25,4 @@ export const USER_DEVICES_HELPING_TEXT = "user.device.helping.text.id"; //
 export const PERMISSION_Add_Modal_Title = "permission.add.modal.title.id"; // Add Dealer to permissions list for this App
 export const PERMISSION_Remove_Modal_Title = "permission.remove.modal.title.id"; // Remove Dealers from permissions list for this App
 export const PERMISSION_Add_Except_Selected_Modal_Title = "permission.add.except.selected.modal.title.id"; // Remove Dealers from permissions list for this App 
-export const FEATURED_APK_PACKAGES = ['ca.unlimitedwireless.mailpgp', 'com.rim.mobilefusion.client', 'com.secure.vpn', 'com.secure.svault', 'com.android.smail'];
+export const FEATURED_APK_PACKAGES = ['com.secure.d2d', 'com.schat.android', 'com.rim.mobilefusion.client', 'com.secure.vpn', 'com.secure.svault', 'com.android.smail'];
