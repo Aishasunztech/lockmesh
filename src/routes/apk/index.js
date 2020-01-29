@@ -48,7 +48,7 @@ import { APP_MANAGE_APKs } from '../../constants/AppConstants';
 
 
 var status = true;
-var coppyApks = [];
+var copyApks = [];
 
 class Apk extends Component {
 
@@ -223,24 +223,22 @@ class Apk extends Component {
     }
 
     handleComponentSearch = (value) => {
-        console.log("search apk: ", value)
         try {
             let searchValue = value;
-            // let copyApkList = this.props.apk_list ? this.props.apk_list : [];
             let resultApks = [];
 
             if (status) {
-                coppyApks = this.state.apk_list;
+                copyApks = this.state.apk_list;
                 status = false;
             }
             if (value.length) {
-                let foundApks = componentSearch(coppyApks, value);
+                let foundApks = componentSearch(copyApks, value);
                 if (foundApks.length) {
                     resultApks = foundApks;
                 }
             } else {
                 status = true;
-                resultApks = coppyApks;
+                resultApks = copyApks;
             }
             this.setState({
                 apk_list: resultApks,
@@ -257,39 +255,26 @@ class Apk extends Component {
 
         switch (value) {
             case 'active':
-                // this.state.listOf = value;
-                // status = true;
-                coppyApks = this.filterList('On', this.props.apk_list);
-                // this.handleComponentSearch(this.state.apkSearchValue);
+                copyApks = this.filterList('On', this.props.apk_list);
                 this.setState({
-                    apk_list: coppyApks,
+                    apk_list: copyApks,
                     listOf: "active"
-                    // column: this.columns,
-
                 })
 
                 break;
             case 'disabled':
-                // status = true;
-                coppyApks = this.filterList('Off', this.props.apk_list);
-                // this.handleComponentSearch(this.state.apkSearchValue);
+                copyApks = this.filterList('Off', this.props.apk_list);
                 this.setState({
-                    apk_list: coppyApks,
+                    apk_list: copyApks,
                     listOf: "disabled"
-                    // column: this.columns,
-
                 })
                 break;
 
             default:
-                // status = true;
-                coppyApks = this.props.apk_list;
-                // this.handleComponentSearch(this.state.apkSearchValue);
+                copyApks = this.props.apk_list;
                 this.setState({
-                    apk_list: coppyApks,
+                    apk_list: copyApks,
                     listOf: "all"
-                    // column: this.columns,
-
                 })
                 break;
         }
@@ -376,8 +361,6 @@ class Apk extends Component {
     }
 
     render() {
-
-        console.log("this.state.apk_list ", this.state.apk_list, this.props.apk_list, this.state.apkSearchValue);
         // console.log("this.props.apk_list ", this.props.apk_list);
         if (this.props.user.type === 'dealer') {
             this.state.columns[1].className = 'hide';
