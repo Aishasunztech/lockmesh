@@ -1,19 +1,21 @@
 import React, { Component, Fragment } from 'react';
-import { Modal, Table, Button, Form, Row, Col, Icon, Checkbox } from 'antd';
+import { Modal, Table, Button, Form, Row, Col, Icon, Checkbox, Tabs } from 'antd';
 import { withRouter, Link, Redirect } from "react-router-dom";
 import AddDeviceModal from '../../routes/devices/components/AddDevice';
 import { ADMIN, ACTION, CREDITS, CREDITS_CASH_REQUESTS, ARE_YOU_SURE_YOU_WANT_TO_DECLINE_THIS_REQUEST, ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST, WARNING, DEVICE_UNLINKED } from '../../constants/Constants';
 import { convertToLang } from '../../routes/utils/commonUtils';
-import { Button_Ok, Button_Cancel, Button_Confirm, Button_Decline, Button_ACCEPT, Button_Transfer } from '../../constants/ButtonConstants';
+import { Button_Ok, Button_Cancel, Button_Confirm, Button_Decline, Button_ACCEPT, Button_Transfer, Button_Yes, Button_No } from '../../constants/ButtonConstants';
 import { DEVICE_ID, DEVICE_SERIAL_NUMBER, DEVICE_IMEI_1, DEVICE_SIM_2, DEVICE_IMEI_2, DEVICE_REQUESTS, DEVICE_SIM_1 } from '../../constants/DeviceConstants';
 import { DEALER_NAME, DEALER_ID, DEALER_PIN } from '../../constants/DealerConstants';
 const moment = require('moment')
 const confirm = Modal.confirm;
+const { TabPane } = Tabs;
 
 export default class NewDevices extends Component {
     constructor(props) {
         super(props);
         const columns = [
+            { title: "#", dataIndex: 'counter', key: 'counter', align: "center", render: (text, record, index) => ++index },
             { title: convertToLang(props.translation[ACTION], "Action"), dataIndex: 'action', key: 'action', align: "center" },
             { title: convertToLang(props.translation[DEVICE_ID], "DEVICE ID"), dataIndex: 'device_id', key: 'device_id', align: "center" },
             { title: convertToLang(props.translation[DEVICE_SERIAL_NUMBER], "SERIAL NUMBER"), dataIndex: 'serial_number', key: 'serial_number', align: "center" },
@@ -37,11 +39,13 @@ export default class NewDevices extends Component {
             { title: convertToLang(props.translation[""], "CREDITS TO REFUND"), dataIndex: 'credits_to_refund', key: 'credits_to_refund', align: "center" },
         ];
         const ticketNotificationColumns = [
-            { title: <Button size="small" type="primary" onClick={() => {
-              let tickets = this.state.selectedTicketNotifications;
-              this.setState({selectedTicketNotifications: []});
-              this.props.updateTicketNotifications({ticketIds: tickets});
-            }}><Icon type="eye" /></Button>, dataIndex: 'selection', key: 'action', align: "center" },
+            {
+                title: <Button size="small" type="primary" onClick={() => {
+                    let tickets = this.state.selectedTicketNotifications;
+                    this.setState({ selectedTicketNotifications: [] });
+                    this.props.updateTicketNotifications({ ticketIds: tickets });
+                }}><Icon type="eye" /></Button>, dataIndex: 'selection', key: 'action', align: "center"
+            },
             { title: convertToLang(props.translation[""], "TICKET SUBJECT"), dataIndex: 'subject', key: 'ticket_subject', align: "center" },
             { title: convertToLang(props.translation[""], "DEALER NAME"), dataIndex: 'dealer_name', key: 'dealer_name', align: "center" },
             { title: convertToLang(props.translation[""], "DEALER PIN"), dataIndex: 'dealer_pin', key: 'dealer_pin', align: "center" },
@@ -52,11 +56,13 @@ export default class NewDevices extends Component {
         ];
 
         const supportSystemMessages = [
-            { title: <Button size="small" type="primary" onClick={() => {
-              let selectedMessage = this.state.selectedSystemMessages;
-              this.setState({selectedSystemMessages: []});
-              this.props.updateSupportSystemMessageNotification({systemMessageId: selectedMessage});
-            }}><Icon type="eye" /></Button>, dataIndex: 'selection', key: 'action', align: "center" },
+            {
+                title: <Button size="small" type="primary" onClick={() => {
+                    let selectedMessage = this.state.selectedSystemMessages;
+                    this.setState({ selectedSystemMessages: [] });
+                    this.props.updateSupportSystemMessageNotification({ systemMessageId: selectedMessage });
+                }}><Icon type="eye" /></Button>, dataIndex: 'selection', key: 'action', align: "center"
+            },
             { title: convertToLang(props.translation[""], "SUBJECT"), dataIndex: 'subject', key: 'subject', align: "center" },
             { title: convertToLang(props.translation[""], "SENDER"), dataIndex: 'sender', key: 'sender', align: "center" },
             { title: convertToLang(props.translation[""], "CREATED AT"), dataIndex: 'created_at', key: 'created_at', align: "center" },
@@ -84,21 +90,21 @@ export default class NewDevices extends Component {
     }
 
     updateSystemMessagesSelection = (e, val) => {
-      let selectedMessages = this.state.selectedSystemMessages;
-      if(e.target.checked){
-        this.setState({selectedSystemMessages: [...selectedMessages, val]});
-      } else {
-        this.setState({selectedSystemMessages: selectedMessages.filter(message => message !== val)});
-      }
+        let selectedMessages = this.state.selectedSystemMessages;
+        if (e.target.checked) {
+            this.setState({ selectedSystemMessages: [...selectedMessages, val] });
+        } else {
+            this.setState({ selectedSystemMessages: selectedMessages.filter(message => message !== val) });
+        }
     }
 
     updateTicketsSelection = (e, val) => {
-      let selectedTickets = this.state.selectedTicketNotifications;
-      if(e.target.checked){
-        this.setState({selectedTicketNotifications: [...selectedTickets, val]});
-      } else {
-        this.setState({selectedTicketNotifications: selectedTickets.filter(ticket => ticket !== val)});
-      }
+        let selectedTickets = this.state.selectedTicketNotifications;
+        if (e.target.checked) {
+            this.setState({ selectedTicketNotifications: [...selectedTickets, val] });
+        } else {
+            this.setState({ selectedTicketNotifications: selectedTickets.filter(ticket => ticket !== val) });
+        }
     }
 
 
@@ -111,8 +117,8 @@ export default class NewDevices extends Component {
         });
     }
 
-    setPageState(data){
-      this.setState({redirect: data, visible: false});
+    setPageState(data) {
+        this.setState({ redirect: data, visible: false });
     }
 
     handleOk = (e) => {
@@ -133,11 +139,11 @@ export default class NewDevices extends Component {
         })
     }
 
-    componentDidUpdate(prevProps){
-      if(prevProps !== this.props){
-        this.setState({systemMessagesNotifications: this.props.supportSystemMessagesNotifications});
-        this.setState({ticketNotifications: this.props.ticketNotifications});
-      }
+    componentDidUpdate(prevProps) {
+        if (prevProps !== this.props) {
+            this.setState({ systemMessagesNotifications: this.props.supportSystemMessagesNotifications });
+            this.setState({ ticketNotifications: this.props.ticketNotifications });
+        }
     }
     componentWillReceiveProps(nextProps) {
         if (this.props.devices.length !== nextProps.devices.length || this.props.requests.length !== nextProps.requests.length) {
@@ -147,14 +153,31 @@ export default class NewDevices extends Component {
             });
         }
 
-        if(nextProps.supportSystemMessagesNotifications){
-          this.setState({systemMessagesNotifications: nextProps.supportSystemMessagesNotifications});
+        if (nextProps.supportSystemMessagesNotifications) {
+            this.setState({ systemMessagesNotifications: nextProps.supportSystemMessagesNotifications });
         }
 
-        if(nextProps.ticketNotifications){
-          this.setState({ticketNotifications: nextProps.ticketNotifications});
+        if (nextProps.ticketNotifications) {
+            this.setState({ ticketNotifications: nextProps.ticketNotifications });
         }
     }
+
+    handleTransferDeviceProfile = (obj) => {
+        // console.log('at req transferDeviceProfile', obj)
+        let _this = this;
+        Modal.confirm({
+            content: `Are you sure you want to Transfer, from ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
+            onOk() {
+                // console.log('OK');
+                _this.props.transferDeviceProfile(obj);
+                _this.setState({ flaggedDevicesModal: false, visible: false });
+            },
+            onCancel() { },
+            okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
+            cancelText: convertToLang(this.props.translation[Button_No], 'No'),
+        });
+    }
+
     rejectDevice(device) {
         this.props.rejectDevice(device);
     }
@@ -168,8 +191,8 @@ export default class NewDevices extends Component {
 
     transferDevice = (device, requestedDevice = false) => {
         let DEVICE_REQUEST_IS = (requestedDevice) ? requestedDevice : this.state.reqDevice;
-        this.props.transferDeviceProfile({ flagged_device: device, reqDevice: DEVICE_REQUEST_IS });
-        this.setState({ flaggedDevicesModal: false, visible: false })
+        this.handleTransferDeviceProfile({ flagged_device: device, reqDevice: DEVICE_REQUEST_IS });
+        // this.setState({ flaggedDevicesModal: false, visible: false })
     }
     rejectRequest(request) {
         showConfirm(this, convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_TO_DECLINE_THIS_REQUEST], "Are you sure you want to decline this request ?"), this.props.rejectRequest, request)
@@ -398,11 +421,11 @@ export default class NewDevices extends Component {
     render() {
         let flaggedDevices = this.filterList(this.props.allDevices)
         // console.log('check flaggedDevices ', flaggedDevices, 'requests', this.props.requests, 'NewDevices', this.props.devices)
-        if(this.state.redirect){
-          let page = this.state.supportPage;
-          this.setPageState(false);
-          window.history.replaceState({}, null);
-          return <Redirect to={{ pathname: '/support'}} />
+        if (this.state.redirect) {
+            let page = this.state.supportPage;
+            this.setPageState(false);
+            window.history.replaceState({}, null);
+            return <Redirect to={{ pathname: '/support' }} />
         }
         return (
             <div>
@@ -416,115 +439,127 @@ export default class NewDevices extends Component {
                 // okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
                 // cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
-                    {(this.props.authUser.type === ADMIN) ? null :
-                        <Fragment>
-                            <h1>{convertToLang(this.props.translation[DEVICE_REQUESTS], "DEVICE REQUESTS")}</h1>
-                            <Table
-                                bordered
-                                columns={this.state.columns}
-                                style={{ marginTop: 20 }}
-                                dataSource={this.renderList(this.state.NewDevices)}
-                                pagination={false}
+                    <Tabs tabPosition={'top'}>
 
-                            />
-                        </Fragment>
-                    }
-                    {(this.state.sectionVisible && this.props.authUser.type === ADMIN) ?
-                        <Fragment>
-                            <h1>{convertToLang(this.props.translation[""], "CANCEL SERVICES REQUESTS")}</h1>
-                            <Table
-                                bordered
-                                columns={this.state.cancelServiceColumns}
-                                style={{ marginTop: 20 }}
-                                dataSource={this.renderServiceRequestList(this.props.cancel_service_requests)}
-                                pagination={false}
+                        {(this.props.authUser.type === ADMIN) ? null :
+                            <TabPane tab={convertToLang(this.props.translation[DEVICE_REQUESTS], "DEVICE REQUESTS")} key="1">
+                                <Fragment>
+                                    {/* <h1>{convertToLang(this.props.translation[DEVICE_REQUESTS], "DEVICE REQUESTS")}</h1> */}
+                                    <Table
+                                        bordered
+                                        columns={this.state.columns}
+                                        style={{ marginTop: 20 }}
+                                        dataSource={this.renderList(this.state.NewDevices)}
+                                        pagination={false}
 
-                            />
-                        </Fragment>
-                        : null}
-                    <Fragment>
-                        <Row className="width_100" style={{display: "block", marginLeft: 0}}>
-                          <h1 style={{display: "inline"}}>{convertToLang(this.props.translation[""], "Ticket Notifications")}
-                            <Button type="primary" size="small" style={{float: "right", marginTop: '6px'}} onClick={() => {
-                              this.props.setSupportPage('2');
-                              if(window.location.pathname !== '/support'){
-                                this.setPageState(true);
-                              } else {
-                                this.setState({
-                                  visible: false
-                                });
-                              }
-                            }}>View Tickets</Button>
-                          </h1>
+                                    />
+                                </Fragment>
+                            </TabPane>
+                        }
+                        {(this.state.sectionVisible && this.props.authUser.type === ADMIN) ?
+                            <TabPane tab={convertToLang(this.props.translation[""], "CANCEL SERVICES REQUESTS")} key="2">
+                                <Fragment>
+                                    {/* <h1>{convertToLang(this.props.translation[""], "CANCEL SERVICES REQUESTS")}</h1> */}
+                                    <Table
+                                        bordered
+                                        columns={this.state.cancelServiceColumns}
+                                        style={{ marginTop: 20 }}
+                                        dataSource={this.renderServiceRequestList(this.props.cancel_service_requests)}
+                                        pagination={false}
 
-                        </Row>
-                        <Table
-                            bordered
-                            columns={this.state.ticketNotificationColumns}
-                            style={{ marginTop: 20 }}
-                            dataSource={this.renderTicketNotifications(this.state.ticketNotifications)}
-                            pagination={false}
+                                    />
+                                </Fragment>
+                            </TabPane>
+                            : null}
+                        <TabPane tab={convertToLang(this.props.translation[""], "Ticket Notifications")} key="3">
+                            <Fragment>
+                                <Row className="width_100" style={{ display: "block", marginLeft: 0 }}>
+                                    {/* <h1 style={{ display: "inline" }}>{convertToLang(this.props.translation[""], "Ticket Notifications")} */}
+                                    <Button type="primary" size="small" style={{ float: "right", marginTop: '6px' }} onClick={() => {
+                                        this.props.setSupportPage('2');
+                                        if (window.location.pathname !== '/support') {
+                                            this.setPageState(true);
+                                        } else {
+                                            this.setState({
+                                                visible: false
+                                            });
+                                        }
+                                    }}>View Tickets</Button>
+                                    {/* </h1> */}
 
-                        />
-                    </Fragment>
-                    {this.props.authUser.type !== ADMIN ?
-                        <Fragment>
-                          <Row className="width_100" style={{display: "block", marginLeft: 0}}>
-                            <h1>{convertToLang(this.props.translation[""], "System Message Notifications")}
+                                </Row>
+                                <Table
+                                    bordered
+                                    columns={this.state.ticketNotificationColumns}
+                                    style={{ marginTop: 20 }}
+                                    dataSource={this.renderTicketNotifications(this.state.ticketNotifications)}
+                                    pagination={false}
 
-                              <Button type="primary" size="small" style={{float: "right", marginTop: '6px'}} onClick={() => {
-                                this.props.setSupportPage('1');
-                                if(window.location.pathname !== '/support'){
-                                  this.setPageState(true);
-                                } else {
-                                  this.setState({
-                                    visible: false
-                                  });
-                                }
-                              }}>View System Messages</Button>
-                            </h1>
+                                />
+                            </Fragment>
+                        </TabPane>
+                        {this.props.authUser.type !== ADMIN ?
+                            <TabPane tab={convertToLang(this.props.translation[""], "System Message Notifications")} key="4">
+                                <Fragment>
+                                    <Row className="width_100" style={{ display: "block", marginLeft: 0 }}>
+                                        {/* <h1>{convertToLang(this.props.translation[""], "System Message Notifications")} */}
 
-                          </Row>
-                            <Table
-                                bordered
-                                columns={this.state.supportSystemMessages}
-                                style={{ marginTop: 20 }}
-                                dataSource={this.renderSupportSystemMessagesNotifications(this.state.systemMessagesNotifications)}
-                                pagination={false}
+                                        <Button type="primary" size="small" style={{ float: "right", marginTop: '6px' }} onClick={() => {
+                                            this.props.setSupportPage('1');
+                                            if (window.location.pathname !== '/support') {
+                                                this.setPageState(true);
+                                            } else {
+                                                this.setState({
+                                                    visible: false
+                                                });
+                                            }
+                                        }}>View System Messages</Button>
+                                        {/* </h1> */}
 
-                            />
-                        </Fragment>
-                        : ''}
+                                    </Row>
+                                    <Table
+                                        bordered
+                                        columns={this.state.supportSystemMessages}
+                                        style={{ marginTop: 20 }}
+                                        dataSource={this.renderSupportSystemMessagesNotifications(this.state.systemMessagesNotifications)}
+                                        pagination={false}
 
+                                    />
+                                </Fragment>
+                            </TabPane>
+                            : ''}
+                    </Tabs>
                 </Modal>
                 <AddDeviceModal ref='add_device_modal' translation={this.props.translation} />
 
-                {(this.state.sectionVisible || this.state.showLInkRequest) ?
-                    <Modal
-                        width={1000}
-                        maskClosable={false}
-                        visible={this.state.flaggedDevicesModal}
-                        // onOk={this.handleOk}
-                        footer={null}
-                        onCancel={() => this.setState({ flaggedDevicesModal: false })}
-                    // okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
-                    // cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
-                    >
-                        <Fragment>
-                            <h1>{convertToLang(this.props.translation["FLAGGED DEVICES"], "FLAGGED DEVICES")}</h1>
-                            <Table
-                                bordered
-                                columns={this.state.columns}
-                                style={{ marginTop: 20 }}
-                                dataSource={this.renderList(flaggedDevices, true)}
-                                pagination={false}
-                                scroll={{ x: true }}
-                            />
-                        </Fragment>
+                {
+                    (this.state.sectionVisible || this.state.showLInkRequest) ?
+                        <Modal
+                            width={1000}
+                            maskClosable={false}
+                            visible={this.state.flaggedDevicesModal}
+                            // onOk={this.handleOk}
+                            footer={null}
+                            onCancel={() => this.setState({ flaggedDevicesModal: false })}
+                        // okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
+                        // cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
+                        >
+                            <Fragment>
+                                <h1>{convertToLang(this.props.translation["FLAGGED DEVICES"], "FLAGGED DEVICES")}</h1>
+                                <Table
+                                    bordered
+                                    columns={this.state.columns}
+                                    style={{ marginTop: 20 }}
+                                    dataSource={this.renderList(flaggedDevices, true)}
+                                    pagination={false}
+                                    scroll={{ x: true }}
+                                />
+                            </Fragment>
 
-                    </Modal>
-                    : null}
-            </div>
+                        </Modal>
+                        : null
+                }
+            </div >
         )
     }
 }

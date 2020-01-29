@@ -125,7 +125,8 @@ class TransferHistory extends Component {
         // this.props.getUserList();
         // this.props.getDeaerUsers(this.props.device.dealer_id);
         // if (this.props.device.device_id) {
-        //     this.props.transferHistory(this.props.device.device_id);
+            // console.log("this.props.device.device_id ", this.props.device.device_id)
+            // this.props.transferHistory(this.props.device.device_id);
         // }
         this.setState({
             user_id: this.props.device.user_id
@@ -145,7 +146,7 @@ class TransferHistory extends Component {
         }
 
         if (this.props.getHistory != nextProps.getHistory) {
-            this.props.transferHistory(this.props.device.device_id);
+            nextProps.transferHistory(nextProps.device.device_id);
         }
 
         if (this.props.transferHistoryList != nextProps.transferHistoryList) {
@@ -327,7 +328,7 @@ class TransferHistory extends Component {
                             <Col span={8} className="gutter-row" justify="center" >
                                 <Button
                                     onClick={() => this.checkDeviceStatus("Device")}
-                                    disabled={(this.props.user.type === ADMIN) ? true : false}
+                                    // disabled={(this.props.user.type === ADMIN) ? true : false}
                                 >
                                     DEVICE TRANSFER
                                 </Button>
@@ -457,7 +458,7 @@ class TransferHistory extends Component {
 const WrappedUserList = Form.create({ name: 'transfer-user' })(TransferHistory);
 
 var mapStateToProps = ({ users, settings, device_details }) => {
-    // console.log('transferHistoryList users.dealer_users', users.dealer_users)
+    // console.log('transferHistoryList users.dealer_users', device_details.transferHistoryList)
 
     return {
         transferHistoryList: device_details.transferHistoryList,
