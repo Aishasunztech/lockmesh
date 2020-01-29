@@ -221,13 +221,14 @@ class Apk extends Component {
 
     handleComponentSearch = (value) => {
         try {
+            let copyApkList = this.props.apk_list ? this.props.apk_list : [];
             if (value.length) {
 
-                if (status) {
-                    coppyApks = this.state.apk_list;
-                    status = false;
-                }
-                let foundApks = componentSearch(coppyApks, value);
+                // if (status) {
+                //     coppyApks = this.state.apk_list;
+                //     status = false;
+                // }
+                let foundApks = componentSearch(copyApkList, value);
                 if (foundApks.length) {
                     this.setState({
                         apk_list: foundApks,
@@ -241,7 +242,7 @@ class Apk extends Component {
                 status = true;
 
                 this.setState({
-                    apk_list: coppyApks,
+                    apk_list: copyApkList,
                 })
             }
         } catch (error) {
