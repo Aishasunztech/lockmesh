@@ -16,7 +16,7 @@ class ViewMessage extends Component {
   render() {
     return (
       <div>
-        {this.props.messageObject.message}
+        {this.props.messageObject !== null ? this.props.messageObject.message : ''}
       </div>
     )
 

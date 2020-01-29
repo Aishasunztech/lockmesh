@@ -4,7 +4,7 @@ import { Drawer, Layout } from "antd";
 import styles from './sidebar.css';
 import SidebarContent from "./SidebarContent";
 import { toggleCollapsedSideNav, updateWindowWidth } from "appRedux/actions/Setting";
-import { generateSupportTicketEvent, systemMessageSocket, getAdmin, checkMicrServiceStatus } from "../../appRedux/actions";
+import { generateSupportTicketEvent, systemMessageSocket, getAdmin, checkMicrServiceStatus, supportLiveChatSocket } from "../../appRedux/actions";
 import {
 	NAV_STYLE_DRAWER,
 	NAV_STYLE_FIXED,
@@ -51,6 +51,7 @@ export class Sidebar extends Component {
     if ( nextProps.supportSystemSocket ) {
       this.props.generateSupportTicketEvent(nextProps.supportSystemSocket);
       this.props.systemMessageSocket(nextProps.supportSystemSocket);
+      this.props.supportLiveChatSocket(nextProps.supportSystemSocket);
     }
 
     if(nextProps.microServiceRunning){
@@ -89,7 +90,7 @@ export class Sidebar extends Component {
 				{
 					navStyle === NAV_STYLE_DRAWER || width < TAB_SIZE ?
 						<Drawer
-							ClassName={`gx-drawer-sidebar ${themeType !== THEME_TYPE_LITE ? 'gx-drawer-sidebar-dark' : null}`}
+							className={`gx-drawer-sidebar ${themeType !== THEME_TYPE_LITE ? 'gx-drawer-sidebar-dark' : null}`}
 							placement="left"
 							closable={false}
 							onClose={this.onToggleCollapsedNav.bind(this)}
@@ -111,4 +112,4 @@ const mapStateToProps = ({ settings, auth, socket, sidebar }) => {
 	const { supportSystemSocket } = socket;
 	return { themeType, navStyle, navCollapsed, width, locale, authUser, supportSystemSocket, microServiceRunning }
 };
-export default connect(mapStateToProps, { toggleCollapsedSideNav, updateWindowWidth, systemMessageSocket, generateSupportTicketEvent, getAdmin, checkMicrServiceStatus })(Sidebar);
+export default connect(mapStateToProps, { toggleCollapsedSideNav, updateWindowWidth, systemMessageSocket, generateSupportTicketEvent, getAdmin, checkMicrServiceStatus, supportLiveChatSocket })(Sidebar);

@@ -33,22 +33,17 @@ export default class ListSystemMessages extends Component {
     this.confirm = Modal.confirm;
   }
 
-  showModal = () => {
-    this.setState({
-      visible: true,
-    });
-  };
-
   handleOk = (e) => {
     this.setState({
-      visible: false,
+      viewMessage: false,
     });
   };
 
   handleCancel = (e) => {
     this.setState({
-      visible: false,
+      viewMessage: false
     });
+    this.props.resetCurrentSystemMessageId();
   };
 
   componentDidMount() {
@@ -81,7 +76,7 @@ export default class ListSystemMessages extends Component {
   }
 
   handleMessageModal = (data) => {
-    this.setState({ viewMessage: true, messageObject: data })
+    this.props.setCurrentSystemMessageId(data);
   };
 
   renderList() {
@@ -218,8 +213,8 @@ export default class ListSystemMessages extends Component {
           width={"700px"}
           maskClosable={false}
           visible={this.state.viewMessage}
-          onOk={() => this.setState({ viewMessage: false })}
-          onCancel={() => this.setState({ viewMessage: false })}
+          onOk={() => this.handleOk()}
+          onCancel={() => this.handleCancel()}
           footer={false}
         >
           <ViewMessage

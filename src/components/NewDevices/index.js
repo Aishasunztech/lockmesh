@@ -16,7 +16,6 @@ const confirm = Modal.confirm;
 export default class NewDevices extends Component {
     constructor(props) {
         super(props);
-        let microServiceRunning = props.hasOwnProperty('microServiceRunning') ? props.microServiceRunning : false;
         const columns = [
             { title: convertToLang(props.translation[ACTION], "Action"), dataIndex: 'action', key: 'action', align: "center" },
             { title: convertToLang(props.translation[DEVICE_ID], "DEVICE ID"), dataIndex: 'device_id', key: 'device_id', align: "center" },
@@ -84,8 +83,7 @@ export default class NewDevices extends Component {
             selectedSystemMessages: [],
             systemMessagesNotifications: [],
             selectedTicketNotifications: [],
-            ticketNotifications: [],
-            microServiceRunning: microServiceRunning
+            ticketNotifications: []
         }
     }
 
@@ -141,10 +139,6 @@ export default class NewDevices extends Component {
         if(this.props.dealers){
           this.setState({dealers: this.props.dealers});
         }
-
-        if(this.props.hasOwnProperty('microServiceRunning')){
-          this.setState({microServiceRunning: this.props.microServiceRunning})
-        }
     }
 
     componentDidUpdate(prevProps){
@@ -154,10 +148,6 @@ export default class NewDevices extends Component {
 
         if(this.props.dealers){
           this.setState({dealers: this.props.dealers});
-        }
-
-        if(this.props.hasOwnProperty('microServiceRunning')){
-          this.setState({microServiceRunning: this.props.microServiceRunning})
         }
       }
     }
@@ -179,11 +169,6 @@ export default class NewDevices extends Component {
 
         if(nextProps.dealers){
           this.setState({dealers: nextProps.dealers});
-        }
-
-        if(nextProps.hasOwnProperty('microServiceRunning')){
-          console.log('in this block here');
-          this.setState({microServiceRunning: nextProps.microServiceRunning})
         }
     }
     rejectDevice(device) {
@@ -308,7 +293,7 @@ export default class NewDevices extends Component {
     }
 
     renderSupportSystemMessagesNotifications(list) {
-      let { setCurrentSystemMessageId } = this.props;
+      let { setCurrentSystemMessageId, setSupportPage } = this.props;
         if (list && Array.isArray(list) && list.length > 0) {
             return list.map((notification) => {
                 return {
@@ -331,6 +316,7 @@ export default class NewDevices extends Component {
                         createdTime: getOnlyTimeFromTimestamp(notification.system_message.createdAt)
                       }
                       setCurrentSystemMessageId(data);
+                      setSupportPage('1');
                       this.setPageState(true);
                   }}>{checkValue(notification.system_message.subject).length > 30 ? checkValue(notification.system_message.subject).substr(0, 30) + "..." : checkValue(notification.system_message.subject)}</a>,
                     created_at: moment(notification.createdAt).format('YYYY/MM/DD hh:mm:ss'),
@@ -493,7 +479,7 @@ export default class NewDevices extends Component {
                             />
                         </Fragment>
                         : null}
-                    {this.state.microServiceRunning ? <Fragment>
+                    <Fragment>
                       <Row className="width_100" style={{display: "block", marginLeft: 0}}>
                         <h1 style={{display: "inline"}}>{convertToLang(this.props.translation[""], "Ticket Notifications")}
                           <Button type="primary" size="small" style={{float: "right", marginTop: '6px'}} onClick={() => {
@@ -517,8 +503,8 @@ export default class NewDevices extends Component {
                         pagination={false}
 
                       />
-                    </Fragment> : ''}
-                    {this.state.microServiceRunning && this.props.authUser.type !== ADMIN ?
+                    </Fragment>
+                    {this.props.authUser.type !== ADMIN ?
                         <Fragment>
                           <Row className="width_100" style={{display: "block", marginLeft: 0}}>
                             <h1>{convertToLang(this.props.translation[""], "System Message Notifications")}

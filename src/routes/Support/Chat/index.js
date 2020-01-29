@@ -11,6 +11,7 @@ import users from "./data/chatUsers";
 import SearchBox from "./components/SearchBox";
 import CircularProgress from "../../../components/CircularProgress/index";
 import {bindActionCreators} from "redux";
+import { SUPPORT_LIVE_CHAT_I_AM_TYPING, SUPPORT_LIVE_CHAT_I_STOPPED_TYPING } from "../../../constants/ActionTypes";
 
 import {connect} from "react-redux";
 import {
@@ -40,7 +41,7 @@ class Chat extends Component {
       list.user.dealer_name.toLowerCase().indexOf(userName.toLowerCase()) > -1
     );
   };
-  Communication = () => {
+    Communication = () => {
     const {message, selectedUser} = this.state;
     return <div className="gx-chat-main">
       <div className="gx-chat-main-header">
@@ -169,7 +170,24 @@ class Chat extends Component {
       </div>
     </div>
   };
+
+  _emitEvent = (e) => {
+    if(this.props.supportSocket && this.state.selectedConversation !== null && this.state.selectedUser !== null){
+      if(this.state.message.length > 0){
+        this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_AM_TYPING, {conversation: this.state.selectedConversation, user: this.state.selectedUser.dealer_id});
+      } else {
+        this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_STOPPED_TYPING, {conversation: this.state.selectedConversation, user: this.state.selectedUser.dealer_id});
+      }
+    }
+    if(e.key === 'Enter'){
+      if(this.props.supportSocket && this.state.selectedConversation !== null && this.state.selectedUser !== null){
+        this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_STOPPED_TYPING, {conversation: this.state.selectedConversation, user: this.state.selectedUser.dealer_id});
+      }
+    }
+  }
+
   _handleKeyPress = (e) => {
+    this._emitEvent(e);
     if (e.key === 'Enter') {
       this.submitComment();
     }
@@ -188,11 +206,14 @@ class Chat extends Component {
       this.props.getSupportLiveChatMessages({type: 'user', id: data.dealer_id});
     }
 
+    let selectedConversation = (data.hasOwnProperty('_id')) ? data._id : null;
+
     this.setState({
       loader: true,
       selectedSectionId: type === 'user'? data.dealer_id : data.user.dealer_id,
       drawerState: this.props.drawerState,
       selectedUser: type === 'user'? data : data.user,
+      selectedConversation: selectedConversation,
       conversation: []
     });
     setTimeout(() => {
@@ -228,6 +249,7 @@ class Chat extends Component {
       contactList: [],
       copyContactList: [],
       selectedUser: null,
+      selectedConversation: null,
       message: '',
       chatUsers: [],
       copyChatUsers: [],
@@ -320,9 +342,8 @@ class Chat extends Component {
 
   submitComment() {
 
-    if (this.state.message.length > 1) {
+    if (this.state.message.length > 0 && this.state.message.trim().length > 0) {
       let data = {
-        sender: this.props.user.id,
         receiver: this.state.selectedUser.dealer_id,
         message: this.state.message,
       };
@@ -375,13 +396,14 @@ class Chat extends Component {
   }
 }
 
-var mapStateToProps = ({ auth, SupportLiveChat, dealers, sidebar }) => {
+var mapStateToProps = ({ auth, SupportLiveChat, dealers, sidebar, socket }) => {
 
   return {
     contactList: dealers.dealers,
     dealerList: dealers.allDealers,
     admin: sidebar.admin,
     user: auth.authUser,
+    supportSocket: socket.supportSystemSocket,
     supportLiveChatConversations: SupportLiveChat.supportLiveChatConversations,
     supportLiveChatMessages: SupportLiveChat.supportLiveChatMessages,
   };

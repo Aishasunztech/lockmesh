@@ -136,20 +136,15 @@ class Mail extends PureComponent {
     }
   }
 
-  componentWillReceiveProps(props){
-    let { currentTicket, getSupportTicketReplies } = props;
-    currentTicket = currentTicket !== null ? currentTicket : null;
-    if(currentTicket !== null && getSupportTicketReplies){
-      getSupportTicketReplies(currentTicket._id);
-    }
-
-    this.setState({currentMail: currentTicket});
-  }
-
   componentDidUpdate(prevProps, prevState, snapshot) {
-
     let ticketsWithUser = [];
     let dealerData;
+
+    if(this.props !== prevProps){
+      let { currentTicket } = this.props;
+      currentTicket = currentTicket !== null ? currentTicket : null ;
+      this.setState({currentMail: currentTicket });
+    }
 
     if (this.state.supportTickets.length !== this.props.supportTickets.length && this.props.dealerList.length > 0) {
 
@@ -165,15 +160,6 @@ class Mail extends PureComponent {
         supportTickets: ticketsWithUser,
         filteredSupportTickets: ticketsWithUser,
       })
-    }
-
-    if(this.props !== prevProps){
-      let { currentTicket, getSupportTicketReplies } = this.props;
-      currentTicket = currentTicket !== null ? currentTicket : null ;
-      if(currentTicket !== null && getSupportTicketReplies){
-        getSupportTicketReplies(currentTicket._id);
-      }
-      this.setState({currentMail: currentTicket });
     }
 
 

@@ -271,15 +271,9 @@ export function resetCurrentSupportTicketId(){
 export function checkMicrServiceStatus(){
   return (dispatch) => {
     RestService.checkSupportServiceRunning().then(response => {
-      if(response.status === 200){
-        dispatch({
-          type: MICRO_SERVICE_RUNNING
-        });
-      } else {
-        dispatch({
-          type: MICRO_SERVICE_STOPPED
-        });
-      }
+      dispatch({
+        type: MICRO_SERVICE_RUNNING
+      });
     }).catch(err => {
       dispatch({
         type: MICRO_SERVICE_STOPPED

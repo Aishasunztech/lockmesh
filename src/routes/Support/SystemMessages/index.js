@@ -6,7 +6,7 @@ import {checkValue, convertToLang, getDateFromTimestamp, getOnlyTimeFromTimestam
 import ListSystemMessages from './components/ListSystemMessages';
 import SendMessage from './components/SendMessage';
 import {getAllDealers} from "../../../appRedux/actions/Dealers";
-import { resetCurrentSystemMessageId } from "../../../appRedux/actions";
+import { resetCurrentSystemMessageId, setCurrentSystemMessageId } from "../../../appRedux/actions";
 
 import {
   generateSupportSystemMessages,
@@ -282,6 +282,8 @@ class SystemMessages extends Component {
               translation={this.props.translation}
               currentMessage={this.props.currentMessage}
               systemMessagesSearchValue={this.props.systemMessagesSearchValue}
+              resetCurrentSystemMessageId={this.props.resetCurrentSystemMessageId}
+              setCurrentSystemMessageId={this.props.setCurrentSystemMessageId}
             />
 
           </div>
@@ -319,7 +321,9 @@ function mapDispatchToProps(dispatch) {
     generateSupportSystemMessages: generateSupportSystemMessages,
     getSupportSystemMessages: getSupportSystemMessages,
     getReceivedSupportSystemMessages: getReceivedSupportSystemMessages,
-    updateSupportSystemMessageNotification: updateSupportSystemMessageNotification
+    updateSupportSystemMessageNotification: updateSupportSystemMessageNotification,
+    resetCurrentSystemMessageId: resetCurrentSystemMessageId,
+    setCurrentSystemMessageId: setCurrentSystemMessageId,
   }, dispatch);
 }
 
