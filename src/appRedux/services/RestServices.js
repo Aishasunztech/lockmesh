@@ -51,7 +51,7 @@ const RestService = {
         });
 
         socket.on('reconnect_failed', () => {
-          console.info(socket, "6 attempt to connect again");
+            console.info(socket, "6 attempt to connect again");
         });
 
         return socket;
@@ -595,6 +595,11 @@ const RestService = {
     rejectDevice: (device) => {
         // console.log(device);
         return axios.put(BASE_URL + 'users/delete/' + device.device_id, device, RestService.getHeader());
+    },
+
+    relinkDevice: (id) => {
+        console.log(id);
+        return axios.put(BASE_URL + 'users/relink-device/' + id, {}, RestService.getHeader());
     },
 
 
@@ -1181,7 +1186,7 @@ const RestService = {
 
     //update support ticket notifications
     updateTicketNotificationStatus: (data) => {
-      return axios.post(SUPPORT_URL + 'tickets/update_notification', data, RestService.getHeader());
+        return axios.post(SUPPORT_URL + 'tickets/update_notification', data, RestService.getHeader());
     },
 
     //Support System Messages
