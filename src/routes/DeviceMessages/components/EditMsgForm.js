@@ -26,7 +26,7 @@ class EditMsgForm extends Component {
         super(props);
 
         this.durationList = [
-            { key: 'NONE', value: "NONE" },
+            // { key: 'NONE', value: "NONE" },
             { key: 'DAILY', value: "Daily" },
             { key: 'WEEKLY', value: "Weekly" },
             { key: 'MONTHLY', value: "Monthly" },
@@ -277,12 +277,12 @@ class EditMsgForm extends Component {
         this.setState({ [fieldName]: e });
     }
 
-    validateRepeater = async (rule, value, callback) => {
-        // console.log("values: ", value)
-        if (value === 'NONE') {
-            callback("Timer value should not be NONE")
-        }
-    }
+    // validateRepeater = async (rule, value, callback) => {
+    //     // console.log("values: ", value)
+    //     if (value === 'NONE') {
+    //         callback("Timer value should not be NONE")
+    //     }
+    // }
 
     range = (start, end) => {
         const result = [];
@@ -398,9 +398,9 @@ class EditMsgForm extends Component {
                                                 {
                                                     required: true, message: convertToLang(this.props.translation[""], "Repeat Message field is required"),
                                                 },
-                                                {
-                                                    validator: this.validateRepeater,
-                                                },
+                                                // {
+                                                //     validator: this.validateRepeater,
+                                                // },
                                             ],
                                         })(
                                             <Select
