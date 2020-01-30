@@ -237,12 +237,12 @@ export default class DeviceSidebar extends Component {
             {
                 key: 24,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_PARENT_ID], "PARENT DEALER ID"))}:</a>),
-                value: checkValue(device_details.prnt_dlr_id) // checkValue(device_details.s_dealer)
+                value: device_details.prnt_dlr_id ? device_details.prnt_dlr_id : 'N/A', // checkValue(device_details.prnt_dlr_id) // checkValue(device_details.s_dealer)
             },
             {
                 key: 25,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_PARENT_NAME], "PARENT DEALER NAME"))}:</a>),
-                value: checkValue(device_details.prnt_dlr_name) // checkValue(device_details.s_dealer_name)
+                value: device_details.prnt_dlr_name ? device_details.prnt_dlr_name : 'N/A', // checkValue(device_details.prnt_dlr_name) // checkValue(device_details.s_dealer_name)
             },
 
             {
