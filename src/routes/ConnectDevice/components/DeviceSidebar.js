@@ -29,8 +29,8 @@ import {
     DEVICE_START_DATE,
     DEVICE_EXPIRY_DATE,
     DEVICE_DEALER_NAME,
-    DEVICE_S_DEALER,
-    DEVICE_S_DEALER_NAME,
+    DEVICE_PARENT_ID,
+    DEVICE_PARENT_NAME,
     USER_ID,
     IP_ADDRESS,
     OFFLINE,
@@ -210,11 +210,11 @@ export default class DeviceSidebar extends Component {
                 value: checkValue(device_details.activation_code)
             },
 
-            {
-                key: 11,
-                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_CLIENT_ID], "CLIENT-ID"))}:</a>),
-                value: checkValue(device_details.client_id)
-            },
+            // {
+            //     key: 11,
+            //     name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_CLIENT_ID], "CLIENT-ID"))}:</a>),
+            //     value: checkValue(device_details.client_id)
+            // },
             {
                 key: 12,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_ID], "DEALER-ID"))}:</a>),
@@ -270,12 +270,12 @@ export default class DeviceSidebar extends Component {
 
             {
                 key: 24,
-                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_S_DEALER], "S-DEALER"))}:</a>),
+                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_PARENT_ID], "PARENT-DEALER-ID"))}:</a>),
                 value: checkValue(device_details.s_dealer)
             },
             {
                 key: 25,
-                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_S_DEALER_NAME], "S-DEALER NAME"))}:</a>),
+                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_PARENT_NAME], "PARENT-DEALER-NAME"))}:</a>),
                 value: checkValue(device_details.s_dealer_name)
             },
             {

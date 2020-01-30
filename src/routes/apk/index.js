@@ -48,7 +48,7 @@ import { APP_MANAGE_APKs } from '../../constants/AppConstants';
 
 
 var status = true;
-var coppyApks = [];
+var copyApks = [];
 
 class Apk extends Component {
 
@@ -66,7 +66,8 @@ class Apk extends Component {
             showUploadData: {},
             columns: columns,
             featureApkcolumns: featureApkcolumns,
-            listOf: "all"
+            listOf: "all",
+            apkSearchValue: ''
         }
 
         // this.columns = ;
@@ -108,7 +109,7 @@ class Apk extends Component {
     }
 
     // delete
-    handleConfirmDelete = (appId, appObject, usedBy=null) => {
+    handleConfirmDelete = (appId, appObject, usedBy = null) => {
         console.log(usedBy);
 
         if ((appObject.policies && appObject.policies.length) || appObject.permission_count != 0) {
@@ -150,10 +151,12 @@ class Apk extends Component {
         //  console.log('will receive props');
 
         if (this.props.apk_list !== nextProps.apk_list) {
+            console.log("will rec")
             // this.setState({
             //     apk_list: nextProps.apk_list,
             // })
             this.handleChange(this.state.listOf);
+
         }
     }
 
@@ -221,31 +224,28 @@ class Apk extends Component {
 
     handleComponentSearch = (value) => {
         try {
-            if (value.length) {
+            let searchValue = value;
+            let resultApks = [];
 
-                if (status) {
-                    coppyApks = this.state.apk_list;
-                    status = false;
-                }
-                let foundApks = componentSearch(coppyApks, value);
+            if (status) {
+                copyApks = this.state.apk_list;
+                status = false;
+            }
+            if (value.length) {
+                let foundApks = componentSearch(copyApks, value);
                 if (foundApks.length) {
-                    this.setState({
-                        apk_list: foundApks,
-                    })
-                } else {
-                    this.setState({
-                        apk_list: []
-                    })
+                    resultApks = foundApks;
                 }
             } else {
                 status = true;
-
-                this.setState({
-                    apk_list: coppyApks,
-                })
+                resultApks = copyApks;
             }
+            this.setState({
+                apk_list: resultApks,
+                apkSearchValue: searchValue
+            })
         } catch (error) {
-            alert("hello");
+            // alert("hello");
         }
     }
 
@@ -255,32 +255,31 @@ class Apk extends Component {
 
         switch (value) {
             case 'active':
-                // this.state.listOf = value;
+                copyApks = this.filterList('On', this.props.apk_list);
                 this.setState({
-                    apk_list: this.filterList('On', this.props.apk_list),
+                    apk_list: copyApks,
                     listOf: "active"
-                    // column: this.columns,
-
                 })
 
                 break;
             case 'disabled':
+                copyApks = this.filterList('Off', this.props.apk_list);
                 this.setState({
-                    apk_list: this.filterList('Off', this.props.apk_list),
+                    apk_list: copyApks,
                     listOf: "disabled"
-                    // column: this.columns,
-
                 })
                 break;
 
             default:
+                copyApks = this.props.apk_list;
                 this.setState({
-                    apk_list: this.props.apk_list,
+                    apk_list: copyApks,
                     listOf: "all"
-                    // column: this.columns,
-
                 })
                 break;
+        }
+        if (this.state.apkSearchValue) {
+            this.handleComponentSearch(this.state.apkSearchValue);
         }
     }
 
@@ -362,8 +361,6 @@ class Apk extends Component {
     }
 
     render() {
-
-        // console.log("this.state.apk_list ", this.state.apk_list);
         // console.log("this.props.apk_list ", this.props.apk_list);
         if (this.props.user.type === 'dealer') {
             this.state.columns[1].className = 'hide';
