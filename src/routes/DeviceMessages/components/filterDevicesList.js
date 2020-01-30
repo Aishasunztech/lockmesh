@@ -20,6 +20,7 @@ const FilterDevicesList = (props) => {
             columns={props.columns}
             hideDefaultSelections={props.hideDefaultSelections}
             pagination={false}
+            scroll={{ x: true }}
         />
     )
 

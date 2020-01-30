@@ -384,14 +384,14 @@ class ConnectDealer extends Component {
                 {
                     key: '1',
                     a:
-                        <div
+                        <div className="cursor_p"
                             onClick={() => this.refs.dealerOverDuePayments.showModal(this.props.dealer, dealer._0to21_dues_history)}
                         >
                             <span className="overdue_txt">0-21:</span>
                             <span className="overdue_values">{dealer._0to21_dues}</span>
                         </div>,
                     b:
-                        <div
+                        <div className="cursor_p"
                             onClick={() => this.refs.dealerOverDuePayments.showModal(this.props.dealer, dealer._21to30_dues_history)}
                         >
                             <span className="overdue_txt">21+:</span>
@@ -403,14 +403,14 @@ class ConnectDealer extends Component {
                     // a: <div><span className="overdue_txt">0-21:</span> <span className="overdue_values">{dealer._0to21_dues}</span></div>,
                     // b: <div><span className="overdue_txt">21+:</span> <span className="overdue_values">{dealer._21to30_dues}</span></div>,
                     a:
-                        <div
+                        <div className="cursor_p"
                             onClick={() => this.refs.dealerOverDuePayments.showModal(this.props.dealer, dealer._30to60_dues_history)}
                         >
                             <span className="overdue_txt">30+:</span>
                             <span className="overdue_values">{dealer._30to60_dues}</span>
                         </div>,
                     b:
-                        <div
+                        <div className="cursor_p"
                             onClick={() => this.refs.dealerOverDuePayments.showModal(this.props.dealer, dealer._60toOnward_history)}
                         >
                             <span className="overdue_txt">60+:</span>

@@ -470,8 +470,8 @@ class SendMsgForm extends Component {
         // console.log("this.state.selectedUsers ", this.state.selectedUsers)
         return (
             <div>
-                <Form onSubmit={this.handleSubmit}>
-                    <p>(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")} </p>
+                <Form onSubmit={this.handleSubmit} className="">
+                    {/* <p>(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")} </p> */}
                     {/* <Row> */}
                     {/* <Col className="col-md-9 col-sm-9 col-xs-9">
                         </Col> */}
@@ -493,13 +493,12 @@ class SendMsgForm extends Component {
                             }
                         </Col> */}
                     {/* </Row> */}
-
-                    <Row gutter={24} className="mt-4">
-                        <Col className="col-md-12 col-sm-12 col-xs-12">
+                    <Row gutter={16} className="mt-4">
+                        <Col className="col-md-6 col-sm-6 col-xs-12">
                             <Form.Item
                                 label={convertToLang(this.props.translation[""], "Select dealer/sdealers")}
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 16 }}
+                                labelCol={{ span: 24 }}
+                                wrapperCol={{ span: 24 }}
                             >
                                 <Select
                                     value={this.state.selectedDealers}
@@ -517,23 +516,22 @@ class SendMsgForm extends Component {
                                 >
                                     {(this.state.allDealers && this.state.allDealers.length > 0) ?
                                         <Select.Option key="allDealers" value="all">Select All</Select.Option>
-                                        : null 
+                                        : null
                                         // <Select.Option key="" value="">Dealers not found</Select.Option>
                                     }
                                     {this.state.allDealers.map(item => <Select.Option key={item.key} value={item.key}>{item.label}</Select.Option>)}
                                 </Select>
                             </Form.Item>
+                            {(this.state.selectedDealers && this.state.selectedDealers.length && !this.state.checkAllSelectedDealers) ?
+                                <p>Dealers/S-Dealers Selected: <span className="font_26">{this.state.selectedDealers.map((item, index) => <Tag key={index}>{item.label}</Tag>)}</span></p>
+                                : null}
                         </Col>
-                    </Row>
-                    {(this.state.selectedDealers && this.state.selectedDealers.length && !this.state.checkAllSelectedDealers) ?
-                        <p>Dealers/S-Dealers Selected: <span className="font_26">{this.state.selectedDealers.map((item, index) => <Tag key={index}>{item.label}</Tag>)}</span></p>
-                        : null}
-                    <Row gutter={24} className="mt-4">
-                        <Col className="col-md-12 col-sm-12 col-xs-12">
+
+                        <Col className="col-md-6 col-sm-6 col-xs-12">
                             <Form.Item
                                 label={convertToLang(this.props.translation[""], "Select Users")}
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 16 }}
+                                labelCol={{ span: 24 }}
+                                wrapperCol={{ span: 24 }}
                             >
                                 <Select
                                     value={this.state.selectedUsers}
@@ -557,41 +555,18 @@ class SendMsgForm extends Component {
                                     {this.state.allUsers.map(item => <Select.Option key={item.key} value={item.key} >{item.label}</Select.Option>)}
                                 </Select>
                             </Form.Item>
-                        </Col>
-                    </Row>
-                    {(this.state.selectedUsers && this.state.selectedUsers.length && !this.state.checkAllSelectedUsers) ?
-                        <p>Users Selected: <span className="font_26">{this.state.selectedUsers.map(item => <Tag>{item.label}</Tag>)}</span></p>
-                        : null}
-
-                    <Row gutter={24} className="mt-4">
-                        <Col className="col-md-12 col-sm-12 col-xs-12">
-                            <Form.Item
-                                label={convertToLang(this.props.translation[""], "Message")}
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 16 }}
-                            >
-                                {this.props.form.getFieldDecorator('msg_txt', {
-                                    initialValue: '',
-                                    rules: [
-                                        {
-                                            required: true, message: convertToLang(this.props.translation[""], "Message field is required"),
-                                        }
-                                    ],
-                                })(
-                                    <TextArea
-                                        autosize={{ minRows: 3, maxRows: 5 }}
-                                    />
-                                )}
-                            </Form.Item>
+                            {(this.state.selectedUsers && this.state.selectedUsers.length && !this.state.checkAllSelectedUsers) ?
+                                <p>Users Selected: <span className="font_26">{this.state.selectedUsers.map(item => <Tag>{item.label}</Tag>)}</span></p>
+                                : null}
                         </Col>
 
                     </Row>
-                    <Row gutter={24} className="mt-4">
-                        <Col className="col-md-12 col-sm-12 col-xs-12">
+                    <Row gutter={16} className="mt-4">
+                        <Col className="col-md-6 col-sm-6 col-xs-12">
                             <Form.Item
                                 label={convertToLang(this.props.translation[""], "Select Message Timer")}
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 16 }}
+                                labelCol={{ span: 24 }}
+                                wrapperCol={{ span: 24 }}
                             >
                                 {this.props.form.getFieldDecorator('timer', {
                                     initialValue: '',
@@ -614,15 +589,35 @@ class SendMsgForm extends Component {
                                 )}
                             </Form.Item>
                         </Col>
+                        <Col className="col-md-6 col-sm-6 col-xs-12">
+                            <Form.Item
+                                label={convertToLang(this.props.translation[""], "Message")}
+                                labelCol={{ span: 24 }}
+                                wrapperCol={{ span: 24 }}
+                            >
+                                {this.props.form.getFieldDecorator('msg_txt', {
+                                    initialValue: '',
+                                    rules: [
+                                        {
+                                            required: true, message: convertToLang(this.props.translation[""], "Message field is required"),
+                                        }
+                                    ],
+                                })(
+                                    <TextArea
+                                        autosize={{ minRows: 3, maxRows: 5 }}
+                                    />
+                                )}
+                            </Form.Item>
+                        </Col>
                     </Row>
 
-                    {this.state.timer === "REPEAT" ?
-                        <Row gutter={24} className="mt-4">
-                            <Col className="col-md-12 col-sm-12 col-xs-12">
+                    <Row gutter={16} className="mt-4">
+                        {this.state.timer === "REPEAT" ?
+                            <Col className="col-md-6 col-sm-6 col-xs-12">
                                 <Form.Item
                                     label={convertToLang(this.props.translation[""], "Select when to send Message")}
-                                    labelCol={{ span: 8 }}
-                                    wrapperCol={{ span: 16 }}
+                                    labelCol={{ span: 24 }}
+                                    wrapperCol={{ span: 24 }}
                                 >
                                     {this.props.form.getFieldDecorator('repeat', {
                                         initialValue: '',
@@ -646,18 +641,15 @@ class SendMsgForm extends Component {
                                     )}
                                 </Form.Item>
                             </Col>
-                        </Row>
-                        : null}
-
-                    {this.state.repeat_duration !== "NONE" && this.state.timer === "REPEAT" ?
-                        <Fragment>
-                            {this.state.repeat_duration === "WEEKLY" ?
-                                <Row gutter={24} className="mt-4">
-                                    <Col className="col-md-12 col-sm-12 col-xs-12">
+                            : null}
+                        {this.state.repeat_duration !== "NONE" && this.state.timer === "REPEAT" ?
+                            <Fragment>
+                                {this.state.repeat_duration === "WEEKLY" ?
+                                    <Col className="col-md-6 col-sm-6 col-xs-12">
                                         <Form.Item
                                             label={convertToLang(this.props.translation[""], "Select Day")}
-                                            labelCol={{ span: 8 }}
-                                            wrapperCol={{ span: 16 }}
+                                            labelCol={{ span: 24 }}
+                                            wrapperCol={{ span: 24 }}
                                         >
                                             {this.props.form.getFieldDecorator('weekDay', {
                                                 initialValue: '',
@@ -669,7 +661,7 @@ class SendMsgForm extends Component {
                                             })(
                                                 <Select
                                                     showSearch={false}
-                                                    style={{ width: '50%' }}
+                                                    style={{ width: '100%' }}
                                                     placeholder={convertToLang(this.props.translation[""], "Select Day")}
                                                 // onChange={this.handleStartDay}
                                                 >
@@ -678,16 +670,13 @@ class SendMsgForm extends Component {
                                             )}
                                         </Form.Item>
                                     </Col>
-                                </Row>
-                                : null}
-
-                            {this.state.repeat_duration === "12 MONTHS" ?
-                                <Row gutter={24} className="mt-4">
-                                    <Col className="col-md-12 col-sm-12 col-xs-12">
+                                    : null}
+                                {this.state.repeat_duration === "12 MONTHS" ?
+                                    <Col className="col-md-6 col-sm-6 col-xs-12">
                                         <Form.Item
                                             label={convertToLang(this.props.translation[""], "Select Month")}
-                                            labelCol={{ span: 8 }}
-                                            wrapperCol={{ span: 16 }}
+                                            labelCol={{ span: 24 }}
+                                            wrapperCol={{ span: 24 }}
                                         >
                                             {this.props.form.getFieldDecorator('monthName', {
                                                 initialValue: '',
@@ -699,7 +688,7 @@ class SendMsgForm extends Component {
                                             })(
                                                 <Select
                                                     showSearch={false}
-                                                    style={{ width: '50%' }}
+                                                    style={{ width: '100%' }}
                                                     placeholder={convertToLang(this.props.translation[""], "Select Month")}
                                                 // onChange={this.handleStartDay}
                                                 >
@@ -708,15 +697,13 @@ class SendMsgForm extends Component {
                                             )}
                                         </Form.Item>
                                     </Col>
-                                </Row>
-                                : null}
-                            {this.state.repeat_duration !== "DAILY" && this.state.repeat_duration !== "WEEKLY" ?
-                                <Row gutter={24} className="mt-4">
-                                    <Col className="col-md-12 col-sm-12 col-xs-12">
+                                    : null}
+                                {this.state.repeat_duration !== "DAILY" && this.state.repeat_duration !== "WEEKLY" ?
+                                    <Col className="col-md-6 col-sm-6 col-xs-12">
                                         <Form.Item
                                             label={convertToLang(this.props.translation[""], "Select date of month")}
-                                            labelCol={{ span: 8 }}
-                                            wrapperCol={{ span: 16 }}
+                                            labelCol={{ span: 24 }}
+                                            wrapperCol={{ span: 24 }}
                                         >
                                             {this.props.form.getFieldDecorator('monthDate', {
                                                 initialValue: "",
@@ -728,7 +715,7 @@ class SendMsgForm extends Component {
                                             })(
                                                 <Select
                                                     showSearch={false}
-                                                    style={{ width: '50%' }}
+                                                    style={{ width: '100%' }}
                                                     placeholder={convertToLang(this.props.translation[""], "Select date of month")}
                                                 // onChange={this.handleStartDay}
                                                 >
@@ -737,15 +724,15 @@ class SendMsgForm extends Component {
                                             )}
                                         </Form.Item>
                                     </Col>
-                                </Row>
-                                : null}
-                            {/* {this.state.repeat_duration === "DAILY" || this.state.repeat_duration === "WEEKLY" ? */}
-                            <Row gutter={24} className="mt-4">
-                                <Col className="col-md-12 col-sm-12 col-xs-12">
+                                    : null}
+
+                                {/* {this.state.repeat_duration === "DAILY" || this.state.repeat_duration === "WEEKLY" ? */}
+
+                                <Col className="col-md-6 col-sm-6 col-xs-12">
                                     <Form.Item
                                         label={convertToLang(this.props.translation[""], "Select Time")}
-                                        labelCol={{ span: 8 }}
-                                        wrapperCol={{ span: 16 }}
+                                        labelCol={{ span: 24 }}
+                                        wrapperCol={{ span: 24 }}
                                     >
                                         {this.props.form.getFieldDecorator('time', {
                                             initialValue: '',// moment('00:00', 'HH:mm'),
@@ -759,23 +746,22 @@ class SendMsgForm extends Component {
                                                 onChange={this.timeOnChange}
                                                 placeholder={"Select time"}
                                                 format="HH:mm"
-                                                style={{ width: '50%' }}
+                                                style={{ width: '100%' }}
                                             />
                                         )}
                                     </Form.Item>
                                 </Col>
-                            </Row>
-                            {/* : null } */}
-                        </Fragment>
-                        : null}
-
+                                {/* : null } */}
+                            </Fragment>
+                            : null}
+                    </Row>
                     {this.state.timer === "DATE/TIME" ?
-                        <Row gutter={24} className="mt-4">
-                            <Col className="col-md-12 col-sm-12 col-xs-12">
+                        <Row gutter={16} className="mt-4">
+                            <Col className="col-md-6 col-sm-6 col-xs-12">
                                 <Form.Item
                                     label={convertToLang(this.props.translation[""], "Choose Data/Time")}
-                                    labelCol={{ span: 8 }}
-                                    wrapperCol={{ span: 16 }}
+                                    labelCol={{ span: 24 }}
+                                    wrapperCol={{ span: 24 }}
                                 >
                                     {this.props.form.getFieldDecorator('date/time', {
                                         initialValue: '', // moment(new Date(), 'YYYY-MM-DD')
@@ -830,7 +816,7 @@ class SendMsgForm extends Component {
                             Note: *To performe an action please select dealers/users to get their devices. <span style={{ color: 'red' }}>(Devices not found!)</span>
                         </div>
                     } */}
-                    <Form.Item className="edit_ftr_btn"
+                    <Form.Item className="s_m_ftr_btn"
                         wrapperCol={{
                             xs: { span: 24, offset: 0 },
                             sm: { span: 24, offset: 0 },

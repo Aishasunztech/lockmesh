@@ -265,31 +265,31 @@ export default class NewDevices extends Component {
     renderTicketNotifications(list) {
 
         if (list && Array.isArray(list) && list.length > 0) {
-          return list.map((notification) => {
-            let dealer_name = 'N/A';
-            let dealer_pin = 'N/A';
-            if(typeof this.props.allDealers !== 'undefined') {
-              let dealer = this.props.allDealers.find(dealer => dealer.dealer_id == notification.user_id);
-              if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_name')) {
-                dealer_name = dealer.dealer_name;
-              }
-              if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_type') && dealer.dealer_type !== 1 && dealer.hasOwnProperty('link_code')) {
-                dealer_pin = dealer.link_code;
-              }
-            }
-            return {
-                  selection: <Checkbox defaultChecked={false} checked={this.state.selectedTicketNotifications.some(item => item === notification._id)} onChange={(e) => this.updateTicketsSelection(e, notification._id)} />,
-                  id: notification.id,
-                  key: notification.id,
-                  dealer_name: dealer_name,
-                  dealer_pin: dealer_pin,
-                  type: notification.type,
-                  subject: notification.ticket.subject,
-                  category: notification.ticket.category,
-                  priority: notification.ticket.priority,
-                  created_at: moment(notification.createdAt).format('YYYY/MM/DD hh:mm:ss'),
-              }
-          });
+            return list.map((notification) => {
+                let dealer_name = 'N/A';
+                let dealer_pin = 'N/A';
+                if (typeof this.props.allDealers !== 'undefined') {
+                    let dealer = this.props.allDealers.find(dealer => dealer.dealer_id == notification.user_id);
+                    if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_name')) {
+                        dealer_name = dealer.dealer_name;
+                    }
+                    if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_type') && dealer.dealer_type !== 1 && dealer.hasOwnProperty('link_code')) {
+                        dealer_pin = dealer.link_code;
+                    }
+                }
+                return {
+                    selection: <Checkbox defaultChecked={false} checked={this.state.selectedTicketNotifications.some(item => item === notification._id)} onChange={(e) => this.updateTicketsSelection(e, notification._id)} />,
+                    id: notification.id,
+                    key: notification.id,
+                    dealer_name: dealer_name,
+                    dealer_pin: dealer_pin,
+                    type: notification.type,
+                    subject: notification.ticket.subject,
+                    category: notification.ticket.category,
+                    priority: notification.ticket.priority,
+                    created_at: moment(notification.createdAt).format('YYYY/MM/DD hh:mm:ss'),
+                }
+            });
         } else {
             return [];
         }
@@ -440,7 +440,6 @@ export default class NewDevices extends Component {
                 // cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     <Tabs tabPosition={'top'}>
-
                         {(this.props.authUser.type === ADMIN) ? null :
                             <TabPane tab={convertToLang(this.props.translation[DEVICE_REQUESTS], "DEVICE REQUESTS")} key="1">
                                 <Fragment>
@@ -486,7 +485,6 @@ export default class NewDevices extends Component {
                                         }
                                     }}>View Tickets</Button>
                                     {/* </h1> */}
-
                                 </Row>
                                 <Table
                                     bordered
@@ -494,7 +492,6 @@ export default class NewDevices extends Component {
                                     style={{ marginTop: 20 }}
                                     dataSource={this.renderTicketNotifications(this.state.ticketNotifications)}
                                     pagination={false}
-
                                 />
                             </Fragment>
                         </TabPane>

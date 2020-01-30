@@ -663,7 +663,7 @@ class Permissions extends Component {
           onCancel={() => {
             this.showDealersModal(false)
           }}
-          bodyStyle={{ height: 500, overflow: "overlay" }}
+          bodyStyle={{ height: 400, overflow: "overlay" }}
         >
           <DealerList
             columns={this.state.addDealerColsInModal}
@@ -692,6 +692,7 @@ class Permissions extends Component {
           onCancel={() => {
             this.removeUnSelectedDealersModal(false)
           }}
+          bodyStyle={{ height: 400, overflow: "overlay" }}
         >
           <DealerList
             columns={this.state.addDealerColsInModal}
@@ -721,7 +722,7 @@ class Permissions extends Component {
           onCancel={() => {
             this.addSelectedDealersModal(false)
           }}
-          bodyStyle={{ height: 500, overflow: "overlay" }}
+          bodyStyle={{ height: 400, overflow: "overlay" }}
         >
           <DealerList
             columns={this.state.addDealerColsInModal}
