@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from 'react'
 import styles from './AppList';
-import { Card, Table, Icon, Button, Modal, Row, Col } from "antd";
+import { Card, Table, Icon, Button, Modal, Row, Col, Popconfirm, message, Popover } from "antd";
 import { getStatus, getColor, checkValue, titleCase, convertToLang, convertTimezoneValue } from '../../../routes/utils/commonUtils'
 import { Redirect, Link } from 'react-router-dom';
 import ResetPinModal from './ResetPinModal';
+import PasswordForm from './PasswordForm';
 import {
     DEVICE_ID,
     DEVICE_REMAINING_DAYS,
@@ -46,6 +47,7 @@ import { ADMIN } from '../../../constants/Constants';
 import moment from 'moment-timezone';
 import WipeDevice from "./wipeDevice";
 import { DATE_FORMAT, TIMESTAMP_FORMAT } from '../../../constants/Application';
+import { CHAT_ID_SETTINGS } from '../../../constants/ActionTypes';
 const confirm = Modal.confirm;
 let make_red = 'captilize';
 let chatId = '';
@@ -64,8 +66,42 @@ export default class DeviceSidebar extends Component {
             resetPinModal: false,
             user_id: '',
             dealer_id: '',
-            goToPage: '/dealer/dealer'
+            goToPage: '/dealer/dealer',
+            confirmChatIdModal: false,
+            pwdConfirmModal: false,
+            chatIdSettingsEnable: false,
+            chatIdActionType: ''
         };
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.chatIdSettingsEnable !== prevProps.chatIdSettingsEnable) {
+            let pwdConfirmModal = this.state.pwdConfirmModal;
+
+            if (this.props.chatIdSettingsEnable) {
+                pwdConfirmModal = false;
+
+                if (this.state.chatIdActionType === 'reset_pin') {
+                    this.refs.resetPinModel.showModel();
+                } else if (this.state.chatIdActionType === 'disable_pin') {
+                    this.showConfirmSChatStatus(this, 'disable', 'Do you want to disable pin verification?');
+                } else if (this.state.chatIdActionType === 'enable_pin') {
+                    this.showConfirmSChatStatus(this, 'enable', 'Do you want to enable pin verification?');
+                }
+            }
+            this.setState({
+                pwdConfirmModal,
+                chatIdActionType: '',
+                chatIdSettingsEnable: this.props.chatIdSettingsEnable
+            });
+        }
+    }
+
+    handleConfirmBoxChatId = (visible) => {
+        this.setState({
+            confirmChatIdModal: visible
+        })
+        // message.info('Clicked on Yes.');
     }
 
     renderDetailsData(device_details) {
@@ -105,84 +141,17 @@ export default class DeviceSidebar extends Component {
                 value: (device_details.remainTermDays > 0) ? device_details.remainTermDays : 0
             },
             {
+                key: 29,
+                name: (<a>{titleCase(convertToLang(this.props.translation["Last Online"], "Last Online"))}:</a>),
+                value: convertTimezoneValue(this.props.auth.authUser.timezone, device_details.lastOnline, TIMESTAMP_FORMAT),
+                // value: (device_details.lastOnline) ? moment(device_details.lastOnline).tz(convertTimezoneValue(this.props.auth.authUser.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
+                // value: checkValue(device_details.lastOnline)
+                // value: moment(device_details.lastOnline).format("MM/DD/YYYY HH:mm:ss")
+            },
+            {
                 key: 2,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_MODE], "MODE"))}:</a>),
                 value: device_details.online ? (device_details.online === "online") ? (<span style={{ color: "green" }}>{titleCase(convertToLang(this.props.translation[ONLINE], "Online"))}</span>) : (<span style={{ color: "red" }}>{titleCase(convertToLang(this.props.translation[OFFLINE], "Offline"))}</span>) : "N/A"
-            },
-            {
-                key: 10,
-                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_CHAT_ID], "CHAT ID"))}:</a>),
-                value: (chatId && chatId !== "N/A" ? <Fragment>
-                    <Row gutter={24} className="mb-4">
-                        <Col className="gutter-row" span={12}><div className="gutter-box">{chatId}</div></Col>
-                        <Col className="gutter-row" span={12}>
-                            <Button
-                                type="danger"
-                                size="small"
-                                style={{ width: '100%' }}
-                                // className="ml-12"
-                                onClick={() => this.refs.resetPinModel.showModel()}>
-                                {titleCase(convertToLang(this.props.translation[''], 'RESET PIN'))}
-                            </Button>
-                        </Col>
-                    </Row>
-                    <Row gutter={24}>
-                        <Col span={12}>
-                            <Button
-                                type="danger"
-                                size="small"
-                                style={{ width: '100%' }}
-                                // className="ml-12"
-                                onClick={() => this.showConfirmSChatStatus(this, 'disable', 'Do you want to disable pin verification?')}>
-                                {titleCase(convertToLang(this.props.translation[''], 'Disable Pin'))}
-                            </Button>
-                        </Col>
-                        <Col span={12}>
-                            <Button
-                                type="success"
-                                size="small"
-                                style={{ width: '100%' }}
-                                // className="ml-12"
-                                onClick={() => this.showConfirmSChatStatus(this, 'enable', 'Do you want to enable pin verification?')}>
-                                {titleCase(convertToLang(this.props.translation[''], 'Enable Pin'))}
-                            </Button>
-                        </Col>
-                    </Row>
-                </Fragment> : "N/A")
-            },
-            {
-                key: 8,
-                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_PGP_EMAIL], "PGP EMAIL"))}:</a>),
-                value: checkValue(device_details.pgp_email)
-            },
-            {
-                key: 16,
-                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_SIM_ID], "SIM ID"))}:</a>),
-                value: checkValue(device_details.sim_id)
-            },
-            {
-                key: 13,
-                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_NAME], "DEALER NAME"))}:</a>),
-                // value: (<span className="captilize">{(this.props.auth.authUser.type === ADMIN) ? <a onClick={() => { this.goToDealer(device_details) }}>{checkValue(device_details.dealer_name)}</a> : <a >{checkValue(device_details.dealer_name)}</a>}</span>)
-                value: (<span className="captilize">{(this.props.auth.authUser.type === ADMIN && device_details.dealer_id) ? <Link
-                    to={`/connect-dealer/${btoa(device_details.dealer_id.toString())}`.trim()}
-                >
-                    {checkValue(device_details.dealer_name)}</Link> : <a >{checkValue(device_details.dealer_name)}</a>}</span>)
-            },
-            {
-                key: 14,
-                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_PIN], "DEALER PIN"))}:</a>),
-                value: checkValue(device_details.link_code)
-            },
-            {
-                key: 7,
-                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_ACCOUNT_EMAIL], "ACCOUNT EMAIL"))}:</a>),
-                value: checkValue(device_details.account_email)
-            },
-            {
-                key: 3,
-                name: (<a >{titleCase(convertToLang(this.props.translation[DEVICE_FLAGGED], "FLAGGED"))}:</a>),
-                value: (device_details.flagged === '') ? "Not Flagged" : device_details.flagged
             },
             {
                 key: 4,
@@ -200,14 +169,135 @@ export default class DeviceSidebar extends Component {
                 value: <span >{checkValue(device_details.firmware_info)}</span>
             },
             {
+                key: 3,
+                name: (<a >{titleCase(convertToLang(this.props.translation[DEVICE_FLAGGED], "FLAGGED"))}:</a>),
+                value: (device_details.flagged === '') ? "Not Flagged" : device_details.flagged
+            },
+            {
                 key: 6,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_NAME], "DEVICE NAME"))}:</a>),
                 value: (<span className="captilize">{checkValue(device_details.name)}</span>)
             },
             {
+                key: 7,
+                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_ACCOUNT_EMAIL], "ACCOUNT EMAIL"))}:</a>),
+                value: checkValue(device_details.account_email)
+            },
+            {
                 key: 9,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_ACTIVATION_CODE], "ACTIVATION-CODE"))}:</a>),
                 value: checkValue(device_details.activation_code)
+            },
+            {
+                key: 8,
+                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_PGP_EMAIL], "PGP EMAIL"))}:</a>),
+                value: checkValue(device_details.pgp_email)
+            },
+            {
+                key: 16,
+                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_SIM_ID], "SIM ID"))}:</a>),
+                value: checkValue(device_details.sim_id)
+            },
+            {
+                key: 1222,
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[""], "SIM ID 2"))}:</a>),
+                value: checkValue(device_details.sim_id2)
+            },
+
+            {
+                key: 10,
+                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_CHAT_ID], "CHAT ID"))}:</a>),
+                value: (chatId && chatId !== "N/A" ? <Fragment>
+                    <div className="gutter-box">{chatId}
+
+                        <Popover
+                            // placement="rightTop"
+                            title={<div>Chat ID Settings <i className="fa fa-window-close" style={{ float: 'right', cursor: 'pointer' }} onClick={() => this.handleConfirmBoxChatId(false)} aria-hidden="true"></i> </div>}
+                            trigger="click"
+                            visible={this.state.confirmChatIdModal}
+                            onVisibleChange={this.handleVisibleChange}
+                            content={
+                                <Fragment>
+                                    <Row gutter={16}>
+                                        <Col className="gutter-row" span={8}>
+                                            <Button
+                                                type="danger"
+                                                size="small"
+                                                style={{ width: '100%' }}
+                                                // className="ml-12"
+                                                onClick={() => {
+                                                    // this.refs.resetPinModel.showModel();
+                                                    this.setState({
+                                                        confirmChatIdModal: false,
+                                                        pwdConfirmModal: true,
+                                                        chatIdActionType: 'reset_pin'
+                                                    })
+                                                }}>
+                                                {titleCase(convertToLang(this.props.translation[''], 'RESET PIN'))}
+                                            </Button>
+                                        </Col>
+                                        <Col className="gutter-row" span={8}>
+                                            <Button
+                                                type="danger"
+                                                size="small"
+                                                style={{ width: '100%' }}
+                                                // className="ml-12"
+                                                onClick={() => {
+                                                    // this.showConfirmSChatStatus(this, 'disable', 'Do you want to disable pin verification?');
+                                                    this.setState({
+                                                        confirmChatIdModal: false,
+                                                        pwdConfirmModal: true,
+                                                        chatIdActionType: 'disable_pin'
+                                                    })
+                                                }}>
+                                                {titleCase(convertToLang(this.props.translation[''], 'Disable Pin'))}
+                                            </Button>
+                                        </Col>
+                                        <Col className="gutter-row" span={8}>
+                                            <Button
+                                                type="success"
+                                                size="small"
+                                                style={{ width: '100%' }}
+                                                // className="ml-12"
+                                                onClick={() => {
+                                                    // this.showConfirmSChatStatus(this, 'enable', 'Do you want to enable pin verification?'); 
+                                                    this.setState({
+                                                        confirmChatIdModal: false,
+                                                        pwdConfirmModal: true,
+                                                        chatIdActionType: 'enable_pin'
+                                                    })
+                                                }}>
+                                                {titleCase(convertToLang(this.props.translation[''], 'Enable Pin'))}
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                </Fragment>
+                            }
+                        >
+                            <Button size='small' type='primary' className='ml-16' onClick={() => this.handleConfirmBoxChatId(!this.state.confirmChatIdModal)}> <Icon type="edit" /></Button>
+                        </Popover>
+                        {/* <Button size='small' type='primary' className='ml-16'> <i class="fa fa-pencil-square-o mb-0" aria-hidden="true"></i></Button> */}
+                    </div>
+                </Fragment> : "N/A")
+            },
+            {
+                key: 12,
+                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_ID], "DEALER-ID"))}:</a>),
+                value: checkValue(device_details.dealer_id)
+            },
+            {
+                key: 13,
+                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_NAME], "DEALER NAME"))}:</a>),
+                // value: (<span className="captilize">{(this.props.auth.authUser.type === ADMIN) ? <a onClick={() => { this.goToDealer(device_details) }}>{checkValue(device_details.dealer_name)}</a> : <a >{checkValue(device_details.dealer_name)}</a>}</span>)
+                value: (<span className="captilize">{(this.props.auth.authUser.type === ADMIN && device_details.dealer_id) ? <Link
+                    to={`/connect-dealer/${btoa(device_details.dealer_id.toString())}`.trim()}
+                >
+                    {checkValue(device_details.dealer_name)}</Link> : <a >{checkValue(device_details.dealer_name)}</a>}</span>)
+            },
+            {
+                key: 14,
+                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_PIN], "DEALER PIN"))}:</a>),
+                value: checkValue(device_details.link_code)
             },
 
             // {
@@ -216,21 +306,21 @@ export default class DeviceSidebar extends Component {
             //     value: checkValue(device_details.client_id)
             // },
             {
-                key: 12,
-                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_ID], "DEALER-ID"))}:</a>),
-                value: checkValue(device_details.dealer_id)
+                key: 24,
+                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_PARENT_ID], "PARENT DEALER ID"))}:</a>),
+                value: device_details.prnt_dlr_id ? device_details.prnt_dlr_id : 'N/A', // checkValue(device_details.prnt_dlr_id) // checkValue(device_details.s_dealer)
             },
+            {
+                key: 25,
+                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_PARENT_NAME], "PARENT DEALER NAME"))}:</a>),
+                value: device_details.prnt_dlr_name ? device_details.prnt_dlr_name : 'N/A', // checkValue(device_details.prnt_dlr_name) // checkValue(device_details.s_dealer_name)
+            },
+
             {
                 key: 15,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_MAC_ADDRESS], "MAC-ADDRESS"))}:</a>),
                 value: checkValue(device_details.mac_address)
             },
-            {
-                key: 1222,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[""], "SIM ID 2"))}:</a>),
-                value: checkValue(device_details.sim_id2)
-            },
-
             {
                 key: 17,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_IMEI_1], "IMEI-1"))}:</a>),
@@ -269,16 +359,6 @@ export default class DeviceSidebar extends Component {
             },
 
             {
-                key: 24,
-                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_PARENT_ID], "PARENT-DEALER-ID"))}:</a>),
-                value: checkValue(device_details.s_dealer)
-            },
-            {
-                key: 25,
-                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_PARENT_NAME], "PARENT-DEALER-NAME"))}:</a>),
-                value: checkValue(device_details.s_dealer_name)
-            },
-            {
                 key: 27,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_START_DATE], "START DATE"))}:</a>),
                 value: convertTimezoneValue(this.props.auth.authUser.timezone, device_details.start_date, DATE_FORMAT),
@@ -292,14 +372,7 @@ export default class DeviceSidebar extends Component {
                 // value: (device_details.expiry_date) ? moment(device_details.expiry_date).tz(convertTimezoneValue(this.props.auth.authUser.timezone)).format("YYYY/MM/DD") : 'N/A',
                 // value: checkValue(device_details.expiry_date)
             },
-            {
-                key: 29,
-                name: (<a>{titleCase(convertToLang(this.props.translation["Last Online"], "Last Online"))}:</a>),
-                value: convertTimezoneValue(this.props.auth.authUser.timezone, device_details.lastOnline, TIMESTAMP_FORMAT),
-                // value: (device_details.lastOnline) ? moment(device_details.lastOnline).tz(convertTimezoneValue(this.props.auth.authUser.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
-                // value: checkValue(device_details.lastOnline)
-                // value: moment(device_details.lastOnline).format("MM/DD/YYYY HH:mm:ss")
-            },
+
             {
                 key: 30,
                 name: (<a>{titleCase(convertToLang(this.props.translation["Note"], "Note"))}:</a>),
@@ -323,7 +396,7 @@ export default class DeviceSidebar extends Component {
     };
 
     showConfirmSChatStatus(_this, type, msg) {
-
+        this.props.closeChatIdSettingsEnable();
         confirm({
             title: convertToLang(_this.props.translation[''], msg),
             onOk() {
@@ -396,6 +469,11 @@ export default class DeviceSidebar extends Component {
         ]
     }
 
+    handlePwdConfirmModal = (visible) => {
+        this.setState({
+            pwdConfirmModal: visible
+        })
+    }
     render() {
         const { redirect } = this.state
         if (redirect && this.state.user_id !== '') {
@@ -428,7 +506,33 @@ export default class DeviceSidebar extends Component {
                     chatId={chatId}
                     resetChatPin={this.props.resetChatPin}
                     translation={this.props.translation}
+                    closeChatIdSettingsEnable={this.props.closeChatIdSettingsEnable}
                 />
+
+                <Modal
+                    maskClosable={false}
+                    style={{ top: 20 }}
+                    width="330px"
+                    className="push_app"
+                    title=""
+                    visible={this.state.pwdConfirmModal}
+                    footer={false}
+                    onOk={() => {
+                    }}
+                    onCancel={() => {
+                        this.handlePwdConfirmModal(false)
+                        this.refs.pswdForm.resetFields()
+                    }
+                    }
+                >
+                    <PasswordForm
+                        checkPass={this.props.checkPass}
+                        actionType={CHAT_ID_SETTINGS}
+                        handleCancel={this.handlePwdConfirmModal}
+                        translation={this.props.translation}
+                        ref='pswdForm'
+                    />
+                </Modal >
             </Card>
         )
     }

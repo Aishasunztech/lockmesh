@@ -69,7 +69,7 @@ export default (state = initialState, action) => {
 			}
 
 
-		case UNLINK_APK:
+		case UNLINK_APK: {
 
 			// console.log(UNLINK_APK);
 			if (action.response.status) {
@@ -77,16 +77,17 @@ export default (state = initialState, action) => {
 					title: action.response.msg,
 				});
 				state.apk_list = state.apk_list.filter(apk => apk.apk_id !== action.payload);
-
 			}
+
 			return {
 				...state,
 				isloading: false,
 				apk_list: state.apk_list,
 				options: state.options
 			}
+		}
 
-		case ADD_APK:
+		case ADD_APK: {
 			// console.log(ADD_APK);
 			let newApkList = state.apk_list
 			if (action.response.status) {
@@ -96,8 +97,7 @@ export default (state = initialState, action) => {
 				// console.log("INSERTED DATA", state.apk_list);
 				newApkList.push(action.payload)
 				// console.log("INSERTED DATA", state.apk_list);
-			}
-			else {
+			} else {
 				error({
 					title: action.response.msg,
 				});
@@ -106,7 +106,7 @@ export default (state = initialState, action) => {
 				...state,
 				apk_list: [...newApkList],
 			}
-
+		}
 		case EDIT_APK:
 			// console.log('action edit id');
 			// console.log(action.payload);
@@ -313,8 +313,8 @@ export default (state = initialState, action) => {
 							// 	state.apk_list[index].permissions = filterDealers;
 							// 	state.apk_list[index].permission_count = filterDealers.length;
 							// } else {
-								state.apk_list[index].permissions = allDealers;
-								state.apk_list[index].permission_count = allDealers.length;
+							state.apk_list[index].permissions = allDealers;
+							state.apk_list[index].permission_count = allDealers.length;
 							// }
 							state.apk_list[index].statusAll = false;
 						} else {

@@ -45,6 +45,7 @@ import {
   clearState,
   clearResyncFlag,
   changeSchatPinStatus,
+  closeChatIdSettingsEnable,
   resetDevice,
   deviceNotFound, resetChatPin
 } from "../../appRedux/actions/ConnectDevice";
@@ -618,6 +619,9 @@ class ConnectDevice extends Component {
                     auth={this.props.auth}
                     translation={this.props.translation}
                     history={this.props.history}
+                    checkPass={this.props.checkPass}
+                    chatIdSettingsEnable={this.props.chatIdSettingsEnable}
+                    closeChatIdSettingsEnable={this.props.closeChatIdSettingsEnable}
                   />
                 </Col>
                 <Col className="gutter-row action_group" span={8} xs={24} sm={24} md={24} lg={24} xl={8}>
@@ -805,6 +809,7 @@ function mapDispatchToProps(dispatch) {
     deviceNotFound: deviceNotFound,
     resetChatPin: resetChatPin,
     changeSchatPinStatus: changeSchatPinStatus,
+    closeChatIdSettingsEnable: closeChatIdSettingsEnable
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, auth, socket, settings }, ownProps) => {
@@ -852,6 +857,7 @@ var mapStateToProps = ({ routing, device_details, auth, socket, settings }, ownP
     isEncryptedPwd: device_details.isEncryptedPwd,
     isDuressPwd: device_details.isDuressPwd,
     controls: device_details.controls,
+    chatIdSettingsEnable: device_details.chatIdSettingsEnable,
 
     imei_list: device_details.imei_list,
     guestAllExt: device_details.guestAllExt,

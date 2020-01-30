@@ -4,7 +4,8 @@ import {
     PUSH_APPS,
     WIPE_DEVICE,
     PULL_APPS,
-    POLICY
+    POLICY,
+    CHAT_ID_SETTINGS
 } from "../../../constants/ActionTypes"
 import { PANEL_PASSWORD_MODAL, PLEASE_INPUT_YOUR_PASSWORD, ENTER_PASSWORD } from '../../../constants/DeviceConstants';
 import { convertToLang } from '../../utils/commonUtils';
@@ -44,6 +45,9 @@ class PassworForm extends Component {
                     // console.log("adddsadas");
                     this.props.checkPass({ password: values.pass });
                 }
+                else if (this.props.actionType === CHAT_ID_SETTINGS) {
+                    this.props.checkPass({ password: values.pass }, this.props.actionType);
+                }
             }
         });
         this.props.form.resetFields()
@@ -61,8 +65,8 @@ class PassworForm extends Component {
                         sm: { span: 24, offset: 0 },
                     }}
                 >
-                    <Markup content={convertToLang(this.props.translation[PANEL_PASSWORD_MODAL], 
-                    "<h4>PANEL PASSWORD <br />REQUIRED FOR<br /> THIS ACTION</h4>")} />
+                    <Markup content={convertToLang(this.props.translation[PANEL_PASSWORD_MODAL],
+                        "<h4>PANEL PASSWORD <br />REQUIRED FOR<br /> THIS ACTION</h4>")} />
                 </Form.Item>
 
                 <Form.Item
