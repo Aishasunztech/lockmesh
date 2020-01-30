@@ -75,7 +75,6 @@ export default class ListApk extends Component {
     renderList(list) {
 
         return list.map((app) => {
-            // if (app.deleteable) {
             return {
                 apk_id: app.apk_id,
                 action: (
@@ -104,46 +103,11 @@ export default class ListApk extends Component {
                 created_at: convertTimezoneValue(this.props.user.timezone, app.created_at, TIMESTAMP_FORMAT),
                 updated_at: convertTimezoneValue(this.props.user.timezone, app.updated_at, TIMESTAMP_FORMAT),
             }
-            // } else {
-            //     return {
-            //         'apk_id': app.apk_id,
-            //         'action': (
-            //             <Fragment>
-            //                 <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px" }}
-            //                     onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > EDIT</Button>
-
-            //             </Fragment>
-            //         ),
-            //         'permission': <span style={{ fontSize: 15, fontWeight: 400 }}>{app.permission_count}</span>,
-            //         "permissions": app.permissions,
-            //         'apk_status': (<Switch size="small" disabled defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
-            //             this.props.handleStatusChange(e, app.apk_id);
-            //         }} />),
-            //         'apk': app.apk ? app.apk : 'N/A',
-            //         'apk_name': app.apk_name ? app.apk_name : 'N/A',
-            //         'apk_logo': (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
-            //     }
-            // }
+           
         });
     }
 
-    
-    customExpandIcon(props) {
-        if (props.expanded) {
-            return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
-                props.onExpand(props.record, e);
-            }}><Icon type="caret-down" /></a>
-        } else {
-
-            return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
-                props.onExpand(props.record, e);
-            }}><Icon type="caret-right" /></a>
-        }
-    }
-
     render() {
-
-
 
         return (
             <Card>
