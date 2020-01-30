@@ -274,7 +274,7 @@ export default class DeviceSidebar extends Component {
                                 </Fragment>
                             }
                         >
-                            <Button size='small' type='primary' className='ml-16' onClick={() => this.handleConfirmBoxChatId(true)}> <Icon type="edit" /></Button>
+                            <Button size='small' type='primary' className='ml-16' onClick={() => this.handleConfirmBoxChatId(!this.state.confirmChatIdModal)}> <Icon type="edit" /></Button>
                         </Popover>
                         {/* <Button size='small' type='primary' className='ml-16'> <i class="fa fa-pencil-square-o mb-0" aria-hidden="true"></i></Button> */}
                     </div>
