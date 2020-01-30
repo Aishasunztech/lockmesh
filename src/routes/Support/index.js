@@ -193,7 +193,7 @@ class Support extends Component {
             <TabPane tab="TICKETS" key="2" forceRender={false}>
               <Ticket ref="supportTickets" updateOnTicketPage={this.updateOnTicketDetailPage.bind(this)} />
             </TabPane>
-            <TabPane tab="LIVE CHAT" key="3" forceRender={false}>
+            <TabPane tab="SUPPORT CHAT" key="3" forceRender={false}>
               <Chat />
             </TabPane>
 

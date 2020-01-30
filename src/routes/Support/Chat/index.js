@@ -112,7 +112,7 @@ class Chat extends Component {
               <Avatar id="avatar-button" src='/static/media/profile-image.c9452584.png'
                       className="gx-size-50"
                       alt=""/>
-              <span className="gx-status gx-online"/>
+              {/*<span className="gx-status gx-online"/>*/}
             </div>
           </div>
 
@@ -173,10 +173,14 @@ class Chat extends Component {
 
   _emitEvent = (e) => {
     if(this.props.supportSocket && this.state.selectedConversation !== null && this.state.selectedUser !== null){
-      if(this.state.message.length > 0){
+      if(this.state.message.length > 0 && !this.state.isTypingEventEmitted){
         this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_AM_TYPING, {conversation: this.state.selectedConversation, user: this.state.selectedUser.dealer_id});
+        this.setState({isTypingEventEmitted: true});
       } else {
-        this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_STOPPED_TYPING, {conversation: this.state.selectedConversation, user: this.state.selectedUser.dealer_id});
+        if(!this.state.message.length > 0){
+          this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_STOPPED_TYPING, {conversation: this.state.selectedConversation, user: this.state.selectedUser.dealer_id});
+          this.setState({isTypingEventEmitted: false});
+        }
       }
     }
     if(e.key === 'Enter'){
@@ -251,6 +255,7 @@ class Chat extends Component {
       selectedUser: null,
       selectedConversation: null,
       message: '',
+      isTypingEventEmitted: false,
       chatUsers: [],
       copyChatUsers: [],
       conversation: []
@@ -270,7 +275,7 @@ class Chat extends Component {
     if (prevProps !== this.props){
 
 
-      if (this.state.chatUsers.length !== this.props.supportLiveChatConversations.length && this.props.supportLiveChatConversations.length > 0 && this.props.dealerList.length > 0) {
+      if (this.state.chatUsers !== this.props.supportLiveChatConversations && this.props.supportLiveChatConversations.length > 0 && this.props.dealerList.length > 0) {
 
         this.props.supportLiveChatConversations.map((chatUsers) => {
 
@@ -351,6 +356,7 @@ class Chat extends Component {
       this.props.sendSupportLiveChatMessage(data);
       this.setState({
         message: '',
+        isTypingEventEmitted: false
       });
     }
   }

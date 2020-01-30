@@ -1,7 +1,8 @@
 import {
   SEND_SUPPORT_LIVE_CHAT_MESSAGE, SUPPORT_LIVE_CHAT_MESSAGE_RECEIVED,
   LOADING, GET_SUPPORT_LIVE_CHAT_CONVERSATION, GET_SUPPORT_LIVE_CHAT_MESSAGES,
-  SUPPORT_LIVE_CHAT_USER_TYPING, SUPPORT_LIVE_CHAT_USER_STOPPED_TYPING
+  SUPPORT_LIVE_CHAT_USER_TYPING, SUPPORT_LIVE_CHAT_USER_STOPPED_TYPING,
+  SUPPORT_LIVE_CHAT_MESSAGE_DELETED, SUPPORT_LIVE_CHAT_CONVERSATION_DELETED
 } from "../../constants/ActionTypes";
 
 import { message, Modal } from 'antd';
@@ -52,18 +53,18 @@ export default (state = initialState, action) => {
 
     case SUPPORT_LIVE_CHAT_MESSAGE_RECEIVED: {
       let supportLiveChatMessages = state.supportLiveChatMessages;
-      let supportLiveChatConversations = state.supportLiveChatConversations;
+      let supportLiveChatConversations = state.supportLiveChatConversations.filter(conversation => conversation._id !== action.payload.conversation._id);
 
-      if(!supportLiveChatConversations.some(conversation => conversation._id === action.payload.conversation._id)){
-        supportLiveChatConversations.push(action.payload.conversation);
-      }
+      // if(!supportLiveChatConversations.some(conversation => conversation._id === action.payload.conversation._id)){
+      //   supportLiveChatConversations.push(action.payload.conversation);
+      // }
 
       supportLiveChatMessages.push(action.payload.message);
 
       return {
         ...state,
-        supportLiveChatMessages: [...supportLiveChatMessages],
-        supportLiveChatConversations: [...supportLiveChatConversations]
+        supportLiveChatMessages: [...supportLiveChatMessages, action.payload.message],
+        supportLiveChatConversations: [action.payload.conversation, ...supportLiveChatConversations]
       };
     }
 
@@ -96,6 +97,22 @@ export default (state = initialState, action) => {
         ...state,
         typingConversations: typings
       };
+
+    // case SUPPORT_LIVE_CHAT_MESSAGE_DELETED:
+    //   let supportLiveChatConversations = state.supportLiveChatConversations.filter(conv => conv._id !== action.payload);
+    //
+    //   return {
+    //     ...state,
+    //     supportLiveChatConversations: supportLiveChatConversations
+    //   };
+
+    // case SUPPORT_LIVE_CHAT_CONVERSATION_DELETED:
+    //   let supportLiveChatConversations = state.supportLiveChatConversations.filter(conv => conv._id !== action.payload);
+    //
+    //   return {
+    //     ...state,
+    //     supportLiveChatConversations: supportLiveChatConversations
+    //   };
 
     default:
       return state;

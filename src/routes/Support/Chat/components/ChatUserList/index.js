@@ -18,18 +18,12 @@ class ChatUserList extends Component {
     }
   }
 
-  // componentWillReceiveProps(nextProps){
-  //   this.setState({
-  //     typing: nextProps.typing
-  //   });
-  // }
-
   render(){
     const {chatUsers, selectedSectionId, onSelectUser } = this.props;
     return (
       <div className="gx-chat-user">
         {chatUsers.map((chat, index) =>
-          <UserCell key={index} chat={chat} typing={this.state.typing} conversation={chat._id} selectedSectionId={selectedSectionId} onSelectUser={onSelectUser}/>
+          <UserCell key={index} chat={chat} typing={this.state.typing} selectedSectionId={selectedSectionId} onSelectUser={onSelectUser}/>
         )}
       </div>
     )
