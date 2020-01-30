@@ -11,7 +11,7 @@ import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {ADMIN, DEALER, SDEALER} from "../../constants/Constants";
 import Chat from "./Chat/index";
-import { resetSupportPage } from "../../appRedux/actions";
+import { resetSupportPage, resetCurrentSupportTicketId, resetCurrentSystemMessageId, setSupportPage } from "../../appRedux/actions";
 
 const TabPane = Tabs.TabPane;
 
@@ -106,16 +106,40 @@ class Support extends Component {
       this.tabBarContent.bind(this);
   }
 
+  componentDidMount(){
+    if(!this.props.microServiceRunning){
+      this.props.history.push('/invalid_page');
+    }
+  }
+
   componentDidUpdate(prevProps){
     if(this.props !== prevProps){
       let supportPage = this.props.supportPage !== '' ? this.props.supportPage : '1';
       this.setState({innerTabSelect: supportPage});
+
+      if(!this.props.microServiceRunning){
+        this.props.history.push('/invalid_page');
+      }
+    }
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps.microServiceRunning){
+      this.setState({microServiceRunning: nextProps.microServiceRunning});
     }
   }
 
   componentWillUnmount(){
-    if(this.props.resetSupportPage){
-      this.props.resetSupportPage();
+    if(this.props.location && this.props.location.pathname && this.props.location.pathname !== '/support') {
+      if (this.props.resetSupportPage) {
+        this.props.resetSupportPage();
+      }
+      if (this.props.resetCurrentSupportTicketId) {
+        this.props.resetCurrentSupportTicketId();
+      }
+      if (this.props.resetCurrentSystemMessageId) {
+        this.props.resetCurrentSystemMessageId();
+      }
     }
   }
 
@@ -127,31 +151,7 @@ class Support extends Component {
 
 
   handleChangeCardTabs = (value) => {
-
-    switch (value) {
-      case '1':
-        this.setState({
-          innerTabSelect: '1'
-        });
-        break;
-
-      case '2':
-        this.setState({
-          innerTabSelect: '2'
-        });
-
-        break;
-      case "3":
-        this.setState({
-          innerTabSelect: '3'
-        });
-        break;
-      default:
-        this.setState({
-          innerTabSelect: '1'
-        });
-        break;
-    }
+    this.props.setSupportPage(value);
     if(this.refs && this.refs.supportTickets && this.refs.supportTickets && this.refs.supportTickets.getWrappedInstance()){
       if(value !== '2'){
         this.setState({onTicketDetailPage: false});
@@ -193,7 +193,7 @@ class Support extends Component {
             <TabPane tab="TICKETS" key="2" forceRender={false}>
               <Ticket ref="supportTickets" updateOnTicketPage={this.updateOnTicketDetailPage.bind(this)} />
             </TabPane>
-            <TabPane tab="LIVE CHAT" key="3" forceRender={false}>
+            <TabPane tab="SUPPORT CHAT" key="3" forceRender={false}>
               <Chat />
             </TabPane>
 
@@ -211,16 +211,19 @@ class Support extends Component {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    resetSupportPage
+    setSupportPage,
+    resetSupportPage,
+    resetCurrentSupportTicketId,
+    resetCurrentSystemMessageId,
   }, dispatch);
 }
 
 const mapStateToProps = ({ auth, sidebar }) => {
   return {
     user: auth.authUser,
+    microServiceRunning: sidebar.microServiceRunning,
     supportPage: sidebar.supportPage,
-    currentMessageId: sidebar.currentMessageId,
-    currentTicketId: sidebar.currentTicketId
+    currentTicket: sidebar.currentTicketId
   };
 };
 

@@ -4,7 +4,7 @@ import { Drawer, Layout } from "antd";
 import styles from './sidebar.css';
 import SidebarContent from "./SidebarContent";
 import { toggleCollapsedSideNav, updateWindowWidth } from "appRedux/actions/Setting";
-import { generateSupportTicketEvent, systemMessageSocket, getAdmin } from "../../appRedux/actions";
+import { generateSupportTicketEvent, systemMessageSocket, getAdmin, checkMicrServiceStatus, supportLiveChatSocket } from "../../appRedux/actions";
 import {
 	NAV_STYLE_DRAWER,
 	NAV_STYLE_FIXED,
@@ -19,6 +19,13 @@ const { Sider } = Layout;
 
 export class Sidebar extends Component {
 
+  constructor(props){
+    super(props);
+    this.state = {
+      microServiceRunning: props.microServiceRunning
+    };
+  }
+
 	onToggleCollapsedNav = () => {
 		this.props.toggleCollapsedSideNav(!this.props.navCollapsed);
 	};
@@ -27,12 +34,28 @@ export class Sidebar extends Component {
 		window.addEventListener('resize', () => {
 			this.props.updateWindowWidth(window.innerWidth)
 		});
-	}
+    if(this.props.checkMicrServiceStatus){
+      this.props.checkMicrServiceStatus();
+    }
+  }
+
+  componentDidUpdate(prevProps){
+	  if(prevProps !== this.props){
+      if(this.props.checkMicrServiceStatus){
+        this.props.checkMicrServiceStatus();
+      };
+    }
+  }
 
 	componentWillReceiveProps(nextProps){
     if ( nextProps.supportSystemSocket ) {
       this.props.generateSupportTicketEvent(nextProps.supportSystemSocket);
       this.props.systemMessageSocket(nextProps.supportSystemSocket);
+      this.props.supportLiveChatSocket(nextProps.supportSystemSocket);
+    }
+
+    if(nextProps.microServiceRunning){
+      this.setState({microServiceRunning: nextProps.microServiceRunning});
     }
     nextProps.getAdmin();
   }
@@ -67,7 +90,7 @@ export class Sidebar extends Component {
 				{
 					navStyle === NAV_STYLE_DRAWER || width < TAB_SIZE ?
 						<Drawer
-							ClassName={`gx-drawer-sidebar ${themeType !== THEME_TYPE_LITE ? 'gx-drawer-sidebar-dark' : null}`}
+							className={`gx-drawer-sidebar ${themeType !== THEME_TYPE_LITE ? 'gx-drawer-sidebar-dark' : null}`}
 							placement="left"
 							closable={false}
 							onClose={this.onToggleCollapsedNav.bind(this)}
@@ -82,10 +105,11 @@ export class Sidebar extends Component {
 	}
 }
 
-const mapStateToProps = ({ settings, auth, socket }) => {
+const mapStateToProps = ({ settings, auth, socket, sidebar }) => {
 	const { themeType, navStyle, navCollapsed, width, locale } = settings;
 	const { authUser } = auth;
+	const { microServiceRunning } = sidebar;
 	const { supportSystemSocket } = socket;
-	return { themeType, navStyle, navCollapsed, width, locale, authUser, supportSystemSocket }
+	return { themeType, navStyle, navCollapsed, width, locale, authUser, supportSystemSocket, microServiceRunning }
 };
-export default connect(mapStateToProps, { toggleCollapsedSideNav, updateWindowWidth, systemMessageSocket, generateSupportTicketEvent, getAdmin })(Sidebar);
+export default connect(mapStateToProps, { toggleCollapsedSideNav, updateWindowWidth, systemMessageSocket, generateSupportTicketEvent, getAdmin, checkMicrServiceStatus, supportLiveChatSocket })(Sidebar);

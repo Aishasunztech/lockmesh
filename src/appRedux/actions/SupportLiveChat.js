@@ -3,8 +3,9 @@ import {
   INVALID_TOKEN,
   SPIN_lOADING, GET_SUPPORT_LIVE_CHAT_CONVERSATION, GET_SUPPORT_LIVE_CHAT_MESSAGES
 } from "../../constants/ActionTypes";
-
+import { Modal } from 'antd';
 import RestService from '../services/RestServices';
+const error = Modal.error;
 
 export function sendSupportLiveChatMessage(data) {
   return (dispatch) => {
@@ -14,10 +15,16 @@ export function sendSupportLiveChatMessage(data) {
 
     RestService.sendSupportLiveChatMessage(data).then((response) => {
       if (RestService.checkAuth(response.data)) {
-        dispatch({
-          type: SEND_SUPPORT_LIVE_CHAT_MESSAGE,
-          payload: response.data
-        });
+        if(response.data.status){
+          dispatch({
+            type: SEND_SUPPORT_LIVE_CHAT_MESSAGE,
+            payload: response.data
+          });
+        } else {
+          error({
+            title: response.data.msg
+          });
+        }
       } else {
         dispatch({
           type: INVALID_TOKEN
