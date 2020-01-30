@@ -34,30 +34,32 @@ export class Sidebar extends Component {
 		window.addEventListener('resize', () => {
 			this.props.updateWindowWidth(window.innerWidth)
 		});
-    if(this.props.checkMicrServiceStatus){
-      this.props.checkMicrServiceStatus();
-    }
+    // if(this.props.checkMicrServiceStatus){
+    //   this.props.checkMicrServiceStatus();
+    // }
   }
 
-  componentDidUpdate(prevProps){
-	  if(prevProps !== this.props){
-      if(this.props.checkMicrServiceStatus){
-        this.props.checkMicrServiceStatus();
-      };
-    }
-  }
+  // componentDidUpdate(prevProps){
+	//   if(prevProps !== this.props){
+  //     if(this.props.checkMicrServiceStatus){
+  //       this.props.checkMicrServiceStatus();
+  //     };
+  //   }
+  // }
 
 	componentWillReceiveProps(nextProps){
-    if ( nextProps.supportSystemSocket ) {
-      this.props.generateSupportTicketEvent(nextProps.supportSystemSocket);
-      this.props.systemMessageSocket(nextProps.supportSystemSocket);
-      this.props.supportLiveChatSocket(nextProps.supportSystemSocket);
+    if ( nextProps.microServiceRunning && nextProps.supportSystemSocket ) {
+      nextProps.generateSupportTicketEvent(nextProps.supportSystemSocket);
+      nextProps.systemMessageSocket(nextProps.supportSystemSocket);
+      nextProps.supportLiveChatSocket(nextProps.supportSystemSocket);
     }
 
     if(nextProps.microServiceRunning){
       this.setState({microServiceRunning: nextProps.microServiceRunning});
     }
-    nextProps.getAdmin();
+    if(Object.keys(nextProps.admin).length === 0){
+      nextProps.getAdmin();
+    }
   }
 
 	render() {
@@ -108,8 +110,8 @@ export class Sidebar extends Component {
 const mapStateToProps = ({ settings, auth, socket, sidebar }) => {
 	const { themeType, navStyle, navCollapsed, width, locale } = settings;
 	const { authUser } = auth;
-	const { microServiceRunning } = sidebar;
+	const { microServiceRunning, admin } = sidebar;
 	const { supportSystemSocket } = socket;
-	return { themeType, navStyle, navCollapsed, width, locale, authUser, supportSystemSocket, microServiceRunning }
+	return { themeType, navStyle, navCollapsed, width, locale, authUser, supportSystemSocket, microServiceRunning, admin }
 };
-export default connect(mapStateToProps, { toggleCollapsedSideNav, updateWindowWidth, systemMessageSocket, generateSupportTicketEvent, getAdmin, checkMicrServiceStatus, supportLiveChatSocket })(Sidebar);
+export default connect(mapStateToProps, { toggleCollapsedSideNav, updateWindowWidth, systemMessageSocket, generateSupportTicketEvent, getAdmin, checkMicrServiceStatus, supportLiveChatSocket})(Sidebar);

@@ -1,7 +1,8 @@
 import {
   SEND_SUPPORT_LIVE_CHAT_MESSAGE,
   INVALID_TOKEN,
-  SPIN_lOADING, GET_SUPPORT_LIVE_CHAT_CONVERSATION, GET_SUPPORT_LIVE_CHAT_MESSAGES
+  SPIN_lOADING, GET_SUPPORT_LIVE_CHAT_CONVERSATION,
+  GET_SUPPORT_LIVE_CHAT_MESSAGES
 } from "../../constants/ActionTypes";
 import { Modal } from 'antd';
 import RestService from '../services/RestServices';

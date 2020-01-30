@@ -9,7 +9,7 @@ import NewDevice from '../../components/NewDevices';
 import CreditsModal from '../../components/CreditsModal';
 import { updateSupportSystemMessageNotification } from '../../appRedux/actions/SupportSystemMessages';
 import { updateTicketNotifications } from '../../appRedux/actions';
-import { setSupportPage, resetSupportPage, setCurrentSupportTicketId, resetCurrentSupportTicketId, setCurrentSystemMessageId, resetCurrentSystemMessageId } from "../../appRedux/actions";
+import { setSupportPage, resetSupportPage, setCurrentSupportTicketId, resetCurrentSupportTicketId, setCurrentSystemMessageId, resetCurrentSystemMessageId, getSupportLiveChatNotifications } from "../../appRedux/actions";
 import { getNewDevicesList, } from "../../appRedux/actions/Common";
 import {
   getNewCashRequests,
@@ -111,8 +111,10 @@ class SidebarContent extends Component {
       this.props.getCancelServiceRequests()
       this.refs.new_device.showModal();
     }
-    this.props.getTicketsNotifications()
-    this.props.getSupportSystemMessagesNotifications()
+    if(this.props.microServiceRunning){
+      this.props.getTicketsNotifications();
+      this.props.getSupportSystemMessagesNotifications();
+    }
     // alert('its working');
   }
 
@@ -124,8 +126,11 @@ class SidebarContent extends Component {
     })
     this.props.getNewDevicesList();
     this.props.getNewCashRequests();
-    this.props.getTicketsNotifications()
-    this.props.getSupportSystemMessagesNotifications()
+    if(this.props.microServiceRunning){
+      this.props.getTicketsNotifications()
+      this.props.getSupportSystemMessagesNotifications()
+      this.props.getSupportLiveChatNotifications();
+    }
     this.props.getAllToAllDealers()
 
 
@@ -138,23 +143,31 @@ class SidebarContent extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      languageData: nextProps.languageData
-    })
+  componentDidUpdate(prevProps) {
+    if(this.props !== prevProps){
+      this.setState({
+        languageData: this.props.languageData
+      })
 
-    // console.log("this.props.pathname", this.props.pathname, "nextProps.pathname ", nextProps.pathname)
-    if (this.props.pathname !== nextProps.pathname) {
-      this.props.getNewDevicesList();
-      this.props.getNewCashRequests();
-      this.props.getUserCredit()
-      if (this.props.authUser.type == ADMIN) {
-        this.props.getCancelServiceRequests()
+      // console.log("this.props.pathname", this.props.pathname, "nextProps.pathname ", nextProps.pathname)
+      if (prevProps.pathname !== this.props.pathname) {
+        this.props.getNewDevicesList();
+        this.props.getNewCashRequests();
+        this.props.getUserCredit();
+        if (this.props.authUser.type == ADMIN) {
+          this.props.getCancelServiceRequests()
+        }
       }
-    }
 
-    if (this.props.isSwitched !== nextProps.isSwitched) {
-      this.props.getLanguage();
+      if (this.props.isSwitched !== prevProps.isSwitched) {
+        this.props.getLanguage();
+      }
+
+      if(this.props.microServiceRunning !== prevProps.microServiceRunning){
+        this.props.getTicketsNotifications();
+        this.props.getSupportSystemMessagesNotifications();
+        this.props.getSupportLiveChatNotifications();
+      }
     }
   }
 
@@ -253,6 +266,7 @@ class SidebarContent extends Component {
               resetCurrentSystemMessageId={this.props.setCurrentSystemMessageId}
               setCurrentSupportTicketId={this.props.setCurrentSupportTicketId}
               resetCurrentSupportTicketId={this.props.resetCurrentSupportTicketId}
+              supportChatNotifications={this.props.supportChatNotifications}
             />
             <span className="font_14">
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}
@@ -438,7 +452,9 @@ const mapStateToProps = ({ settings, devices, sidebar, account, auth, dealers, S
     socket: socket.socket,
     supportPage: sidebar.supportPage,
     currentTicketId: sidebar.currentTicketId,
-    currentMessageId: sidebar.currentMessageId
+    currentMessageId: sidebar.currentMessageId,
+    supportChatNotifications: sidebar.supportChatNotifications,
+    microServiceRunning: sidebar.microServiceRunning
   }
 };
 export default connect(mapStateToProps, {
@@ -471,7 +487,8 @@ export default connect(mapStateToProps, {
   setCurrentSystemMessageId,
   resetCurrentSystemMessageId,
   setCurrentSupportTicketId,
-  resetCurrentSupportTicketId
+  resetCurrentSupportTicketId,
+  getSupportLiveChatNotifications
 }
 )(SidebarContent);
 

@@ -2,8 +2,8 @@ import {
   INVALID_TOKEN, NEW_REQUEST_LIST, REJECT_REQUEST, ACCEPT_REQUEST, USER_CREDITS, GET_CANCEL_REQUEST,
   ACCEPT_SERVICE_REQUEST, REJECT_SERVICES_REQUEST, NEW_NOTIFICATION_LIST, WINDOW_WIDTH, SET_ADMIN_FOR_SUPPORT_TICKETS,
   UPDATE_TICKET_NOTIFICATION_STATUS, SPIN_lOADING, SET_SUPPORT_PAGE, RESET_SUPPORT_PAGE, SET_CURRENT_SYSTEM_MESSAGE_ID,
-  RESET_CURRENT_SYSTEM_MESSAGE_ID, SET_CURRENT_SUPPORT_TICKET_ID, RESET_CURRENT_SUPPORT_TICKET_ID, MICRO_SERVICE_STOPPED,
-  MICRO_SERVICE_RUNNING
+  RESET_CURRENT_SYSTEM_MESSAGE_ID, SET_CURRENT_SUPPORT_TICKET_ID, RESET_CURRENT_SUPPORT_TICKET_ID,
+  MICRO_SERVICE_STOPPED, MICRO_SERVICE_RUNNING, SUPPORT_LIVE_CHAT_NOTIFICATIONS
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -35,25 +35,19 @@ export function getNewCashRequests() {
     };
 }
 export function getTicketsNotifications() {
-
     return (dispatch) => {
-
-        RestService.getTicketsNotifications().then((response) => {
-          if (RestService.checkAuth(response.data)) {
-
-                if (response.data.status) {
-                    dispatch({
-                        type: NEW_NOTIFICATION_LIST,
-                        payload: response.data
-                    });
-                }
-
-            } else {
-                dispatch({
-                    type: INVALID_TOKEN
-                });
-            }
-        })
+      RestService.getTicketsNotifications().then((response) => {
+        if (response.data.status) {
+          dispatch({
+            type: NEW_NOTIFICATION_LIST,
+            payload: response.data
+          });
+        }
+        }).catch(err => {
+          dispatch({
+            type: INVALID_TOKEN
+          });
+      });
 
     };
 }
@@ -207,10 +201,16 @@ export function updateTicketNotifications(data){
     });
 
     RestService.updateTicketNotificationStatus(data).then(response => {
-      if(response.status && response.data.success){
+      if(RestService.checkAuth(response.data)){
+        if(response.data.status){
+          dispatch({
+            type: UPDATE_TICKET_NOTIFICATION_STATUS,
+            payload: response.data
+          });
+        }
+      } else {
         dispatch({
-          type: UPDATE_TICKET_NOTIFICATION_STATUS,
-          payload: response.data
+          type: INVALID_TOKEN
         });
       }
     })
@@ -278,6 +278,28 @@ export function checkMicrServiceStatus(){
       dispatch({
         type: MICRO_SERVICE_STOPPED
       });
+    })
+  }
+}
+
+export function getSupportLiveChatNotifications(){
+  return (dispatch) => {
+    dispatch({
+      type: SPIN_lOADING
+    });
+    RestService.getSupportLiveChatNotifications().then((response) => {
+      if(RestService.checkAuth(response.data)){
+        if(response.data.status){
+          dispatch({
+            type: 'SUPPORT_LIVE_CHAT_NOTIFICATIONS',
+            payload: response.data.count
+          })
+        }
+      } else {
+        dispatch({
+          type: INVALID_TOKEN
+        })
+      }
     })
   }
 }

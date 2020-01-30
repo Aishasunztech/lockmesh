@@ -265,6 +265,11 @@ class Chat extends Component {
   componentDidMount() {
     this.props.getAllToAllDealers();
     this.props.getSupportLiveChatConversation();
+
+    this.setState({
+      currentConversation: this.props.currentConversation,
+      currentUser: this.props.currentUser
+    });
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -341,6 +346,13 @@ class Chat extends Component {
         })
       }
 
+      if(this.props.currentConversation || this.props.currentUser){
+        this.setState({
+          currentConversation: this.props.currentConversation,
+          currentUser: this.props.currentUser
+        });
+      }
+
     }
 
   }
@@ -409,6 +421,8 @@ var mapStateToProps = ({ auth, SupportLiveChat, dealers, sidebar, socket }) => {
     dealerList: dealers.allDealers,
     admin: sidebar.admin,
     user: auth.authUser,
+    currentConversation: sidebar.currentConversation,
+    currentUser: sidebar.currentUser,
     supportSocket: socket.supportSystemSocket,
     supportLiveChatConversations: SupportLiveChat.supportLiveChatConversations,
     supportLiveChatMessages: SupportLiveChat.supportLiveChatMessages,

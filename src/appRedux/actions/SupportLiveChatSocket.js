@@ -1,6 +1,6 @@
 //==========> Connect Device events
 
-import { SUPPORT_LIVE_CHAT_MESSAGE_RECEIVED, SUPPORT_LIVE_CHAT_USER_TYPING, SUPPORT_LIVE_CHAT_USER_STOPPED_TYPING, SUPPORT_LIVE_CHAT_MESSAGE_DELETED, SUPPORT_LIVE_CHAT_CONVERSATION_DELETED } from "../../constants/ActionTypes";
+import { SUPPORT_LIVE_CHAT_MESSAGE_RECEIVED, SUPPORT_LIVE_CHAT_USER_TYPING, SUPPORT_LIVE_CHAT_USER_STOPPED_TYPING, SUPPORT_LIVE_CHAT_MESSAGE_DELETED, SUPPORT_LIVE_CHAT_CONVERSATION_DELETED, SUPPORT_LIVE_CHAT_NOTIFICATION_NEW_MESSAGE } from "../../constants/ActionTypes";
 
 export const supportLiveChatSocket = (socket) => {
 
@@ -11,6 +11,11 @@ export const supportLiveChatSocket = (socket) => {
         dispatch({
           type: SUPPORT_LIVE_CHAT_MESSAGE_RECEIVED,
           payload: response
+        });
+
+        dispatch({
+          type: SUPPORT_LIVE_CHAT_NOTIFICATION_NEW_MESSAGE,
+          payload: response.message
         });
       })
     }

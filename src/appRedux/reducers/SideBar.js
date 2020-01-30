@@ -18,7 +18,9 @@ import {
   SET_CURRENT_SUPPORT_TICKET_ID,
   RESET_CURRENT_SUPPORT_TICKET_ID,
   MICRO_SERVICE_RUNNING,
-  MICRO_SERVICE_STOPPED
+  MICRO_SERVICE_STOPPED,
+  SUPPORT_LIVE_CHAT_NOTIFICATIONS,
+  SUPPORT_LIVE_CHAT_NOTIFICATION_NEW_MESSAGE
 } from "../../constants/ActionTypes";
 import { Modal, notification } from 'antd';
 
@@ -35,9 +37,12 @@ const initialSidebar = {
     credits_limit: 0,
     cancel_service_requests: [],
     ticketNotifications: [],
+    supportChatNotifications: [],
     supportPage: '',
     currentMessageId: null,
-    currentTicketId: null
+    currentTicketId: null,
+    currentConversation: null,
+    currentUser: null,
 };
 
 export default (state = initialSidebar, action) => {
@@ -248,6 +253,38 @@ export default (state = initialSidebar, action) => {
         return {
           ...state,
           microServiceRunning: false
+        };
+
+      case SUPPORT_LIVE_CHAT_NOTIFICATIONS:
+        let chatNotification = action.payload.map(item => {
+          return {
+            conversation_id: item._id,
+            noOfUnreadMessages: item.count
+          };
+        });
+
+        return {
+          ...state,
+          supportChatNotifications: chatNotification
+        };
+
+      case SUPPORT_LIVE_CHAT_NOTIFICATION_NEW_MESSAGE:
+        let chatNotifications = state.supportChatNotifications.filter(notification => notification.conversation_id !== state.currentConversation);
+        chatNotifications.map(notification => {
+          if(notification.conversation_id === action.payload.sender){
+            notification.noOfUnreadMessages += 1;
+          }
+
+          return notification;
+        });
+
+        if(!chatNotification.some(notification => notification.conversation_id === action.payload.conversation_id)){
+          chatNotification.push({ conversation_id: action.payload.sender, noOfUnreadMessages: 1});
+        }
+
+        return  {
+          ...state,
+          supportChatNotifications: chatNotifications
         };
 
       default:

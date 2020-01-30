@@ -50,10 +50,6 @@ const RestService = {
             forceNew: false
         });
 
-        socket.on('reconnect_failed', () => {
-          console.info(socket, "6 attempt to connect again");
-        });
-
         return socket;
     },
     login: (user) => {
@@ -1231,5 +1227,10 @@ const RestService = {
     getSupportLiveChatMessages: (data) => {
       return axios.get(SUPPORT_URL + 'messages/get?type='+data.type+'&id='+data.id, RestService.getHeader());
     },
+
+    // Get Support Live Chat Notifications
+    getSupportLiveChatNotifications: () => {
+      return axios.get(SUPPORT_URL + 'messages/getNotifications', RestService.getHeader());
+    }
 };
 export default RestService;

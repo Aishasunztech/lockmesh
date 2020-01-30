@@ -69,12 +69,18 @@ export default class NewDevices extends Component {
             { title: convertToLang(props.translation[""], "CREATED AT"), dataIndex: 'created_at', key: 'created_at', align: "center" },
         ];
 
+        const supportChatColumns = [
+          { title: convertToLang(props.translation[""], "CONVERSATION"), dataIndex: 'conversation', key: 'conversation', align: 'center'},
+          { title: convertToLang(props.translation[""], "NoOfUnreadMessages"), dataIndex: "noOfUnreadMessages", key: 'noOfUnreadMessages', align: 'center'}
+        ];
+
         this.state = {
             columns: columns,
             columns1: columns1,
             cancelServiceColumns: cancelServiceColumns,
             ticketNotificationColumns: ticketNotificationColumns,
             supportSystemMessages: supportSystemMessages,
+            supportChatColumns: supportChatColumns,
             visible: false,
             NewDevices: [],
             NewRequests: [],
@@ -87,7 +93,8 @@ export default class NewDevices extends Component {
             selectedSystemMessages: [],
             systemMessagesNotifications: [],
             selectedTicketNotifications: [],
-            ticketNotifications: []
+            ticketNotifications: [],
+            supportChat: []
         }
     }
 
@@ -140,8 +147,8 @@ export default class NewDevices extends Component {
             NewRequests: this.props.requests
         });
 
-        if(this.props.dealers){
-          this.setState({dealers: this.props.dealers});
+        if(this.props.allDealers){
+          this.setState({dealers: this.props.allDealers});
         }
     }
 
@@ -149,9 +156,10 @@ export default class NewDevices extends Component {
       if(prevProps !== this.props){
         this.setState({systemMessagesNotifications: this.props.supportSystemMessagesNotifications});
         this.setState({ticketNotifications: this.props.ticketNotifications});
+        this.setState({supportChat: this.props.supportChatNotifications});
 
-        if(this.props.dealers){
-          this.setState({dealers: this.props.dealers});
+        if(this.props.allDealers){
+          this.setState({dealers: this.props.allDealers});
         }
       }
     }
@@ -171,8 +179,12 @@ export default class NewDevices extends Component {
             this.setState({ ticketNotifications: nextProps.ticketNotifications });
         }
 
-        if(nextProps.dealers){
-          this.setState({dealers: nextProps.dealers});
+        if(nextProps.supportChatNotifications){
+          this.setState({supportChat: nextProps.supportChatNotifications});
+        }
+
+        if(nextProps.allDealers){
+          this.setState({dealers: nextProps.allDealers});
         }
     }
 
@@ -217,7 +229,7 @@ export default class NewDevices extends Component {
     }
 
     acceptServiceRequest(request) {
-        console.log(this.props.acceptServiceRequest);
+        // console.log(this.props.acceptServiceRequest);
         showConfirm(this, convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST], "Are you sure you want to accept this request ?"), this.props.acceptServiceRequest, request)
     }
 
@@ -346,6 +358,32 @@ export default class NewDevices extends Component {
         } else {
             return [];
         }
+    }
+
+    renderSupportChatNotifications(list){
+      let { setSupportPage } = this.props;
+      if(list && Array.isArray(list) && list.length > 0){
+        return list.map((notification, index) => {
+          let dealer_name = 'N/A';
+          let dealer_pin = 'N/A';
+          let dealer = this.state.dealers.find(dealer => dealer.dealer_id == notification.conversation_id);
+          if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_name')) {
+            dealer_name = dealer.dealer_name;
+          }
+          if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_type') && dealer.dealer_type !== 1 && dealer.hasOwnProperty('link_code')) {
+            dealer_pin = dealer.link_code;
+          }
+          return {
+            key: index,
+            rowKey: index,
+            conversation: dealer_name + "("+ dealer_pin +")",
+            noOfUnreadMessages: notification.noOfUnreadMessages
+          }
+        })
+      } else {
+        return [];
+      }
+
     }
 
     renderServiceRequestList(list) {
@@ -506,7 +544,33 @@ export default class NewDevices extends Component {
                                 </Fragment>
                             </TabPane>
                             : null}
-                        <TabPane tab={convertToLang(this.props.translation[""], "Ticket Notifications")} key="3">
+                        <TabPane tab={convertToLang(this.props.translation[""], "Support Chat")} key="3">
+                          <Fragment>
+                            <Row className="width_100" style={{ display: "block", marginLeft: 0 }}>
+                              {/* <h1 style={{ display: "inline" }}>{convertToLang(this.props.translation[""], "Ticket Notifications")} */}
+                              <Button type="primary" size="small" style={{ float: "right", marginTop: '6px' }} onClick={() => {
+                                this.props.setSupportPage('3');
+                                if (window.location.pathname !== '/support') {
+                                  this.setPageState(true);
+                                } else {
+                                  this.setState({
+                                    visible: false
+                                  });
+                                }
+                              }}>View Messages</Button>
+                              {/* </h1> */}
+
+                            </Row>
+                            <Table
+                              bordered
+                              columns={this.state.supportChatColumns}
+                              style={{ marginTop: 20 }}
+                              dataSource={this.renderSupportChatNotifications(this.state.supportChat)}
+                              pagination={false}
+                            />
+                          </Fragment>
+                        </TabPane>
+                        <TabPane tab={convertToLang(this.props.translation[""], "Ticket Notifications")} key="4">
                             <Fragment>
                                 <Row className="width_100" style={{ display: "block", marginLeft: 0 }}>
                                     {/* <h1 style={{ display: "inline" }}>{convertToLang(this.props.translation[""], "Ticket Notifications")} */}
@@ -534,7 +598,7 @@ export default class NewDevices extends Component {
                             </Fragment>
                         </TabPane>
                         {this.props.authUser.type !== ADMIN ?
-                            <TabPane tab={convertToLang(this.props.translation[""], "System Message Notifications")} key="4">
+                            <TabPane tab={convertToLang(this.props.translation[""], "System Message Notifications")} key="5">
                                 <Fragment>
                                     <Row className="width_100" style={{ display: "block", marginLeft: 0 }}>
                                         {/* <h1>{convertToLang(this.props.translation[""], "System Message Notifications")} */}
