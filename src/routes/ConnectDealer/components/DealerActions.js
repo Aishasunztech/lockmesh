@@ -377,7 +377,6 @@ export default class DealerAction extends Component {
                                         showConfirm(this, dealer.dealer_id, this.props.undoDealer, 'UNDELETE')
                                 }
                             >
-                                <Icon type="lock" className="lock_icon" />
                                 {undo_button_text}
                             </Button>
                         </Col>
