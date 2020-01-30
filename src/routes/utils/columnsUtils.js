@@ -691,6 +691,56 @@ export function devicesColumns(translation, handleSearch) {
                 }
             ]
         },
+
+        {
+            title: (
+                <Input.Search
+                    name="s_dealer"
+                    key="s_dealer"
+                    id="s_dealer"
+                    className="search_heading s_dealer_w"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[DEVICE_PARENT_ID], "PARENT DEALER ID")}
+                />
+            ),
+            dataIndex: 's_dealer',
+            children: [
+                {
+                    title: convertToLang(translation[DEVICE_PARENT_ID], "PARENT DEALER ID"),
+                    align: "center",
+                    dataIndex: 's_dealer',
+                    key: 's_dealer',
+                    sorter: (a, b) => { return a.s_dealer.localeCompare(b.s_dealer) },
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="s_dealer_name"
+                    key="s_dealer_name"
+                    id="s_dealer_name"
+                    className="search_heading s_dealer_name_w"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[DEVICE_PARENT_NAME], "PARENT DEALER NAME")}
+                />
+            ),
+            dataIndex: 's_dealer_name',
+            children: [
+                {
+                    title: convertToLang(translation[DEVICE_PARENT_NAME], "PARENT DEALER NAME"),
+                    align: "center",
+                    dataIndex: 's_dealer_name',
+                    key: 's_dealer_name',
+                    sorter: (a, b) => { return a.s_dealer_name.localeCompare(b.s_dealer_name) },
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ]
+        },
+        
         {
             title: (
                 <Input.Search
@@ -862,54 +912,6 @@ export function devicesColumns(translation, handleSearch) {
             ]
         },
 
-        {
-            title: (
-                <Input.Search
-                    name="s_dealer"
-                    key="s_dealer"
-                    id="s_dealer"
-                    className="search_heading s_dealer_w"
-                    onChange={handleSearch}
-                    autoComplete="new-password"
-                    placeholder={convertToLang(translation[DEVICE_PARENT_ID], "PARENT DEALER ID")}
-                />
-            ),
-            dataIndex: 's_dealer',
-            children: [
-                {
-                    title: convertToLang(translation[DEVICE_PARENT_ID], "PARENT DEALER ID"),
-                    align: "center",
-                    dataIndex: 's_dealer',
-                    key: 's_dealer',
-                    sorter: (a, b) => { return a.s_dealer.localeCompare(b.s_dealer) },
-                    sortDirections: ['ascend', 'descend'],
-                }
-            ]
-        },
-        {
-            title: (
-                <Input.Search
-                    name="s_dealer_name"
-                    key="s_dealer_name"
-                    id="s_dealer_name"
-                    className="search_heading s_dealer_name_w"
-                    onChange={handleSearch}
-                    autoComplete="new-password"
-                    placeholder={convertToLang(translation[DEVICE_PARENT_NAME], "PARENT DEALER NAME")}
-                />
-            ),
-            dataIndex: 's_dealer_name',
-            children: [
-                {
-                    title: convertToLang(translation[DEVICE_PARENT_NAME], "PARENT DEALER NAME"),
-                    align: "center",
-                    dataIndex: 's_dealer_name',
-                    key: 's_dealer_name',
-                    sorter: (a, b) => { return a.s_dealer_name.localeCompare(b.s_dealer_name) },
-                    sortDirections: ['ascend', 'descend'],
-                }
-            ]
-        },
         {
             title: (
                 <Input.Search

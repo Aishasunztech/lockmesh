@@ -105,10 +105,69 @@ export default class DeviceSidebar extends Component {
                 value: (device_details.remainTermDays > 0) ? device_details.remainTermDays : 0
             },
             {
+                key: 29,
+                name: (<a>{titleCase(convertToLang(this.props.translation["Last Online"], "Last Online"))}:</a>),
+                value: convertTimezoneValue(this.props.auth.authUser.timezone, device_details.lastOnline, TIMESTAMP_FORMAT),
+                // value: (device_details.lastOnline) ? moment(device_details.lastOnline).tz(convertTimezoneValue(this.props.auth.authUser.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
+                // value: checkValue(device_details.lastOnline)
+                // value: moment(device_details.lastOnline).format("MM/DD/YYYY HH:mm:ss")
+            },
+            {
                 key: 2,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_MODE], "MODE"))}:</a>),
                 value: device_details.online ? (device_details.online === "online") ? (<span style={{ color: "green" }}>{titleCase(convertToLang(this.props.translation[ONLINE], "Online"))}</span>) : (<span style={{ color: "red" }}>{titleCase(convertToLang(this.props.translation[OFFLINE], "Offline"))}</span>) : "N/A"
             },
+            {
+                key: 4,
+                name: (<a >{titleCase(convertToLang(this.props.translation[DEVICE_TYPE], "TYPE"))}:</a>),
+                value: checkValue(device_details.type)
+            },
+            {
+                key: 533,
+                name: (<a >{titleCase(convertToLang(this.props.translation[DEVICE_VERSION], "VERSION"))}:</a>),
+                value: checkValue(device_details.version)
+            },
+            {
+                key: 5,
+                name: (<a >{titleCase(convertToLang(this.props.translation[DEVICE_FIRMWAREINFO], "FIRMWARE INFO"))}:</a>),
+                value: <span >{checkValue(device_details.firmware_info)}</span>
+            },
+            {
+                key: 3,
+                name: (<a >{titleCase(convertToLang(this.props.translation[DEVICE_FLAGGED], "FLAGGED"))}:</a>),
+                value: (device_details.flagged === '') ? "Not Flagged" : device_details.flagged
+            },
+            {
+                key: 6,
+                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_NAME], "DEVICE NAME"))}:</a>),
+                value: (<span className="captilize">{checkValue(device_details.name)}</span>)
+            },
+            {
+                key: 7,
+                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_ACCOUNT_EMAIL], "ACCOUNT EMAIL"))}:</a>),
+                value: checkValue(device_details.account_email)
+            },
+            {
+                key: 9,
+                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_ACTIVATION_CODE], "ACTIVATION-CODE"))}:</a>),
+                value: checkValue(device_details.activation_code)
+            },
+            {
+                key: 8,
+                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_PGP_EMAIL], "PGP EMAIL"))}:</a>),
+                value: checkValue(device_details.pgp_email)
+            },
+            {
+                key: 16,
+                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_SIM_ID], "SIM ID"))}:</a>),
+                value: checkValue(device_details.sim_id)
+            },
+            {
+                key: 1222,
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[""], "SIM ID 2"))}:</a>),
+                value: checkValue(device_details.sim_id2)
+            },
+
             {
                 key: 10,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_CHAT_ID], "CHAT ID"))}:</a>),
@@ -151,14 +210,9 @@ export default class DeviceSidebar extends Component {
                 </Fragment> : "N/A")
             },
             {
-                key: 8,
-                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_PGP_EMAIL], "PGP EMAIL"))}:</a>),
-                value: checkValue(device_details.pgp_email)
-            },
-            {
-                key: 16,
-                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_SIM_ID], "SIM ID"))}:</a>),
-                value: checkValue(device_details.sim_id)
+                key: 12,
+                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_ID], "DEALER-ID"))}:</a>),
+                value: checkValue(device_details.dealer_id)
             },
             {
                 key: 13,
@@ -174,41 +228,6 @@ export default class DeviceSidebar extends Component {
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_PIN], "DEALER PIN"))}:</a>),
                 value: checkValue(device_details.link_code)
             },
-            {
-                key: 7,
-                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_ACCOUNT_EMAIL], "ACCOUNT EMAIL"))}:</a>),
-                value: checkValue(device_details.account_email)
-            },
-            {
-                key: 3,
-                name: (<a >{titleCase(convertToLang(this.props.translation[DEVICE_FLAGGED], "FLAGGED"))}:</a>),
-                value: (device_details.flagged === '') ? "Not Flagged" : device_details.flagged
-            },
-            {
-                key: 4,
-                name: (<a >{titleCase(convertToLang(this.props.translation[DEVICE_TYPE], "TYPE"))}:</a>),
-                value: checkValue(device_details.type)
-            },
-            {
-                key: 533,
-                name: (<a >{titleCase(convertToLang(this.props.translation[DEVICE_VERSION], "VERSION"))}:</a>),
-                value: checkValue(device_details.version)
-            },
-            {
-                key: 5,
-                name: (<a >{titleCase(convertToLang(this.props.translation[DEVICE_FIRMWAREINFO], "FIRMWARE INFO"))}:</a>),
-                value: <span >{checkValue(device_details.firmware_info)}</span>
-            },
-            {
-                key: 6,
-                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_NAME], "DEVICE NAME"))}:</a>),
-                value: (<span className="captilize">{checkValue(device_details.name)}</span>)
-            },
-            {
-                key: 9,
-                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_ACTIVATION_CODE], "ACTIVATION-CODE"))}:</a>),
-                value: checkValue(device_details.activation_code)
-            },
 
             // {
             //     key: 11,
@@ -216,21 +235,21 @@ export default class DeviceSidebar extends Component {
             //     value: checkValue(device_details.client_id)
             // },
             {
-                key: 12,
-                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_ID], "DEALER-ID"))}:</a>),
-                value: checkValue(device_details.dealer_id)
+                key: 24,
+                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_PARENT_ID], "PARENT DEALER ID"))}:</a>),
+                value: device_details.prnt_dlr_id ? device_details.prnt_dlr_id : 'N/A', // checkValue(device_details.prnt_dlr_id) // checkValue(device_details.s_dealer)
             },
+            {
+                key: 25,
+                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_PARENT_NAME], "PARENT DEALER NAME"))}:</a>),
+                value: device_details.prnt_dlr_name ? device_details.prnt_dlr_name : 'N/A', // checkValue(device_details.prnt_dlr_name) // checkValue(device_details.s_dealer_name)
+            },
+
             {
                 key: 15,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_MAC_ADDRESS], "MAC-ADDRESS"))}:</a>),
                 value: checkValue(device_details.mac_address)
             },
-            {
-                key: 1222,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[""], "SIM ID 2"))}:</a>),
-                value: checkValue(device_details.sim_id2)
-            },
-
             {
                 key: 17,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_IMEI_1], "IMEI-1"))}:</a>),
@@ -269,16 +288,6 @@ export default class DeviceSidebar extends Component {
             },
 
             {
-                key: 24,
-                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_PARENT_ID], "PARENT-DEALER-ID"))}:</a>),
-                value: checkValue(device_details.s_dealer)
-            },
-            {
-                key: 25,
-                name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_PARENT_NAME], "PARENT-DEALER-NAME"))}:</a>),
-                value: checkValue(device_details.s_dealer_name)
-            },
-            {
                 key: 27,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_START_DATE], "START DATE"))}:</a>),
                 value: convertTimezoneValue(this.props.auth.authUser.timezone, device_details.start_date, DATE_FORMAT),
@@ -292,14 +301,7 @@ export default class DeviceSidebar extends Component {
                 // value: (device_details.expiry_date) ? moment(device_details.expiry_date).tz(convertTimezoneValue(this.props.auth.authUser.timezone)).format("YYYY/MM/DD") : 'N/A',
                 // value: checkValue(device_details.expiry_date)
             },
-            {
-                key: 29,
-                name: (<a>{titleCase(convertToLang(this.props.translation["Last Online"], "Last Online"))}:</a>),
-                value: convertTimezoneValue(this.props.auth.authUser.timezone, device_details.lastOnline, TIMESTAMP_FORMAT),
-                // value: (device_details.lastOnline) ? moment(device_details.lastOnline).tz(convertTimezoneValue(this.props.auth.authUser.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
-                // value: checkValue(device_details.lastOnline)
-                // value: moment(device_details.lastOnline).format("MM/DD/YYYY HH:mm:ss")
-            },
+
             {
                 key: 30,
                 name: (<a>{titleCase(convertToLang(this.props.translation["Note"], "Note"))}:</a>),
