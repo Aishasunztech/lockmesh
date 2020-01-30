@@ -440,7 +440,6 @@ export default class NewDevices extends Component {
                 // cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     <Tabs tabPosition={'top'}>
-
                         {(this.props.authUser.type === ADMIN) ? null :
                             <TabPane tab={convertToLang(this.props.translation[DEVICE_REQUESTS], "DEVICE REQUESTS")} key="1">
                                 <Fragment>
