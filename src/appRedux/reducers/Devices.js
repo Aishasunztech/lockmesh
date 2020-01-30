@@ -34,7 +34,8 @@ import {
     VALIDATE_ICCID,
     ADD_DATA_PLAN,
     RELINK_DEVICE,
-    REJECT_RELINK_DEVICE
+    REJECT_RELINK_DEVICE,
+    RESET_ADD_PRODUCT_PROPS
 } from "../../constants/ActionTypes";
 
 // import { convertToLang } from '../../routes/utils/commonUtils';
@@ -130,6 +131,8 @@ const initialState = {
     newDevices: [],
     product_prices: [],
     devicesForReport: [],
+    pgp_added: false,
+    chat_added: false
 };
 
 export default (state = initialState, action) => {
@@ -694,13 +697,15 @@ export default (state = initialState, action) => {
         case ADD_PRODUCT: {
             let pgp_emails = state.pgp_emails;
             let chat_ids = state.chat_ids;
-
+            let chat_added = false
+            let pgp_added = false
             if (action.payload.status) {
                 if (action.payload.type === 'chat_id') {
                     chat_ids.unshift(action.payload.product);
                     success({
                         title: "Chat ID has been generated successfully."
                     })
+                    chat_added = true
                     // console.log(chat_ids);
                 } else if (action.payload.type === 'pgp_email') {
                     pgp_emails.unshift(action.payload.product);
@@ -708,6 +713,7 @@ export default (state = initialState, action) => {
                     success({
                         title: "Pgp email has been generated successfully."
                     })
+                    pgp_added = true
                 }
                 else if (action.payload.type === 'sim_id') {
                     success({
@@ -723,9 +729,20 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 pgp_emails: [...pgp_emails],
-                chat_ids: [...chat_ids]
+                chat_ids: [...chat_ids],
+                chat_added: chat_added,
+                pgp_added: pgp_added
             }
         }
+
+        case RESET_ADD_PRODUCT_PROPS: {
+            return {
+                ...state,
+                chat_added: false,
+                pgp_added: false
+            }
+        }
+
 
         default:
             return state;

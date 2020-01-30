@@ -153,24 +153,24 @@ export function componentSearch(arr, search) {
 
 
 export function componentSearchSystemMessages(arr, keys, search) {
-  let foundDevices = [];
-  let obks = keys;
-  arr.map((el) => {
-    obks.some((obk) => {
-      if (obk) {
-        let temp = el[obk];
-        if (obk === 'dealer_id')
-          temp = temp.toString()
-        if ((typeof temp) === 'string') {
-          if (temp.toLowerCase().includes(search.toLowerCase())) {
-            foundDevices.push(el);
-            return true;
-          }
-        }
-      }
-    });
-  })
-  return foundDevices;
+	let foundDevices = [];
+	let obks = keys;
+	arr.map((el) => {
+		obks.some((obk) => {
+			if (obk) {
+				let temp = el[obk];
+				if (obk === 'dealer_id')
+					temp = temp.toString()
+				if ((typeof temp) === 'string') {
+					if (temp.toLowerCase().includes(search.toLowerCase())) {
+						foundDevices.push(el);
+						return true;
+					}
+				}
+			}
+		});
+	})
+	return foundDevices;
 }
 
 export function getFormattedDate(value) {
@@ -212,11 +212,11 @@ export function getDateFromTimestamp(value) {
 }
 
 export function getOnlyTimeFromTimestamp(value) {
-  return moment(value).format('HH:mm');
+	return moment(value).format('HH:mm');
 }
 
 export function getOnlyTimeAndDateTimestamp(value) {
-  return moment(value).format('DD-MM-YYYY HH:mm');
+	return moment(value).format('DD-MM-YYYY HH:mm');
 }
 
 export function convertTimestampToDate(value) {
@@ -316,7 +316,11 @@ export function getDevicesListActionBtns(user, device, status, allButtons) {
 		actionBtns.push(<Fragment>{allButtons.DeleteBtn}</Fragment>)
 	}
 	else if (status === DEVICE_PENDING_ACTIVATION && user.type !== ADMIN && device.link_code === user.dealer_pin) {
-		actionBtns.push(<Fragment> <Fragment>{allButtons.DeclineBtn}</Fragment><Fragment>{allButtons.AcceptBtn}</Fragment><Fragment>{allButtons.transferButton}</Fragment></Fragment>)
+		if (device.relink_status == 1) {
+			actionBtns.push(<Fragment> <Fragment>{allButtons.rejectRelinkBtn}</Fragment> <Fragment>{allButtons.relinkBtn}</Fragment></Fragment>)
+		} else {
+			actionBtns.push(<Fragment> <Fragment>{allButtons.DeclineBtn}</Fragment><Fragment>{allButtons.AcceptBtn}</Fragment><Fragment>{allButtons.transferButton}</Fragment></Fragment>)
+		}
 	}
 	// else if (status === DEVICE_PRE_ACTIVATION) {
 	//     actionBtns = false
@@ -497,20 +501,20 @@ export function getSelectedTZDetail(zone_name) {
 }
 
 export function checkTimezoneValue(zone_name, withGMT = true) {
-  let detail = 'N/A'; // Timezone not selected
-  let timeZones = moment.tz.names();
-  let foundZoneIndex = timeZones.findIndex(item => item.toLowerCase() === zone_name.toLowerCase());
+	let detail = 'N/A'; // Timezone not selected
+	let timeZones = moment.tz.names();
+	let foundZoneIndex = timeZones.findIndex(item => item.toLowerCase() === zone_name.toLowerCase());
 
-  if (foundZoneIndex !== -1) {
-    if (withGMT) {
-      detail = `(GMT${moment.tz(timeZones[foundZoneIndex]).format('Z')}) ${timeZones[foundZoneIndex]}`
-    } else {
-      detail = timeZones[foundZoneIndex];
-    }
-  } else {
-    if (!withGMT) detail = '';
-  }
-  return detail;
+	if (foundZoneIndex !== -1) {
+		if (withGMT) {
+			detail = `(GMT${moment.tz(timeZones[foundZoneIndex]).format('Z')}) ${timeZones[foundZoneIndex]}`
+		} else {
+			detail = timeZones[foundZoneIndex];
+		}
+	} else {
+		if (!withGMT) detail = '';
+	}
+	return detail;
 }
 
 
@@ -571,24 +575,24 @@ export function getMonthName(key) {
 	}
 }
 export function convertTimezoneValue(dealerTimezone, data, dateFormat, clientToServerTZ = false) { // dealerTimezone: timezone, data: date/time
-  let convertedDateTime = "N/A";
+	let convertedDateTime = "N/A";
 
-  if (data && data !== "N/A" && data !== "n/a" && data !== "0000-00-00 00:00:00") {
-    let timeZones = moment.tz.names();
-    let foundZoneIndex = timeZones.findIndex(item => item.toLowerCase() === dealerTimezone.toLowerCase());
-    if (foundZoneIndex === -1) {
-      dealerTimezone = moment.tz.guess(); // get local time zone value e.g "Asia/Karachi"
-    }
-    if (clientToServerTZ) {
-      convertedDateTime = moment.tz(data, dealerTimezone).tz(SERVER_TIMEZONE).format(dateFormat);
-    } else {
-      // convert server time to client time
-      convertedDateTime = moment.tz(data, SERVER_TIMEZONE).tz(dealerTimezone).format(dateFormat);
-    }
-  }
+	if (data && data !== "N/A" && data !== "n/a" && data !== "0000-00-00 00:00:00") {
+		let timeZones = moment.tz.names();
+		let foundZoneIndex = timeZones.findIndex(item => item.toLowerCase() === dealerTimezone.toLowerCase());
+		if (foundZoneIndex === -1) {
+			dealerTimezone = moment.tz.guess(); // get local time zone value e.g "Asia/Karachi"
+		}
+		if (clientToServerTZ) {
+			convertedDateTime = moment.tz(data, dealerTimezone).tz(SERVER_TIMEZONE).format(dateFormat);
+		} else {
+			// convert server time to client time
+			convertedDateTime = moment.tz(data, SERVER_TIMEZONE).tz(dealerTimezone).format(dateFormat);
+		}
+	}
 
-  // console.log("convertTimezoneValue ",data, SERVER_TIMEZONE,  dealerTimezone, convertedDateTime)
-  return convertedDateTime;
+	// console.log("convertTimezoneValue ",data, SERVER_TIMEZONE,  dealerTimezone, convertedDateTime)
+	return convertedDateTime;
 }
 
 export function handleMultipleSearch(e, copy_status, copyRequireSearchData, demoSearchValues, requireForSearch) {
@@ -926,8 +930,8 @@ export function formatMoney(amount, decimalCount = 2, decimal = ".", thousands =
 
 export function removeColumns(columnList, removeIndexes) {
 	return columnList.filter((column) => {
-		for(let i=0; i<removeIndexes.length; i++){
-			if(column.dataIndex !== removeIndexes[i]){
+		for (let i = 0; i < removeIndexes.length; i++) {
+			if (column.dataIndex !== removeIndexes[i]) {
 				return column;
 			}
 		}

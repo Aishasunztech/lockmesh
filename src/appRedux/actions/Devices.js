@@ -24,7 +24,8 @@ import {
     ADD_PRODUCT,
     ADD_DATA_PLAN,
     REJECT_RELINK_DEVICE,
-    RELINK_DEVICE
+    RELINK_DEVICE,
+    RESET_ADD_PRODUCT_PROPS
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -593,6 +594,14 @@ export const addProduct = (payload) => {
             }
         });
 
+    }
+}
+
+export const resetProductAddProps = (payload) => {
+    return (dispatch) => {
+        dispatch({
+            type: RESET_ADD_PRODUCT_PROPS,
+        })
     }
 }
 
