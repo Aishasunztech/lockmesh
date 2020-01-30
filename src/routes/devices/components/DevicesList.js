@@ -26,7 +26,8 @@ import {
     Value,
     ALERT_TO_SURE_DELETE_ALL_DEVICES,
     DEALER,
-    ACTION
+    ACTION,
+    WARNING
 } from '../../../constants/Constants'
 import {
     Button_Modify,
@@ -47,6 +48,7 @@ import {
     Button_ACCEPT,
     Button_Decline,
     Button_Transfer,
+    Button_Confirm,
 } from '../../../constants/ButtonConstants';
 
 import {
@@ -70,6 +72,22 @@ import { ARE_YOU_SURE_YOU_WANT_DELETE_THE_DEVICE, DO_YOU_REALLY_WANT_TO_UNFLAG_T
 import { TIMESTAMP_FORMAT, DATE_FORMAT } from '../../../constants/Application';
 
 const TabPane = Tabs.TabPane;
+
+function showConfirm(_this, msg, action, request) {
+    confirm({
+        title: convertToLang(_this.props.translation[WARNING], "WARNING!"),
+        content: msg,
+        okText: convertToLang(_this.props.translation[Button_Confirm], "Confirm"),
+        cancelText: convertToLang(_this.props.translation[Button_Cancel], "Cancel"),
+        onOk() {
+            action(request);
+        },
+        onCancel() {
+
+
+        },
+    });
+}
 class DevicesList extends Component {
 
     constructor(props) {
@@ -191,6 +209,12 @@ class DevicesList extends Component {
 
     }
 
+    relinkDevice(device) {
+        showConfirm(this, convertToLang(this.props.translation[""], "Are you sure you want to relink device with existing services on device ?"), this.props.relinkDevice, device.id)
+    }
+    rejectRelinkDevice(device) {
+        showConfirm(this, convertToLang(this.props.translation[""], "Are you sure you want to reject relink request ? This device will not get previous services if rejected."), this.props.rejectDevice, device)
+    }
 
     // renderList
     renderList(list) {
@@ -210,9 +234,11 @@ class DevicesList extends Component {
             let ActiveBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleActivateDevice(device)}> {convertToLang(this.props.translation[Button_Unsuspend], "UN-SUSPEND")}</Button>;
             let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px ', textTransform: 'uppercase' }} onClick={() => this.deleteUnlinkedDevice('unlink', device)} >{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
             let ConnectBtn = <Link to={`connect-device/${btoa(device.device_id)}`.trim()}><Button type="default" size="small" style={style}>  {convertToLang(this.props.translation[Button_Connect], "CONNECT")}</Button></Link>
-            let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
-            let AcceptBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.refs.add_device.showModal(device, this.props.addDevice) }}> {convertToLang(this.props.translation[Button_ACCEPT], "ACCEPT")} </Button>;
+            let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.refs.edit_device.showModal(device, this.props.editDevice); this.props.resetProductAddProps() }} >{text}</Button>
+            let AcceptBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.refs.add_device.showModal(device, this.props.addDevice); this.props.resetProductAddProps() }}> {convertToLang(this.props.translation[Button_ACCEPT], "ACCEPT")} </Button>;
             let DeclineBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.handleRejectDevice(device) }}>{convertToLang(this.props.translation[Button_Decline], "DECLINE")}</Button>
+            let relinkBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.relinkDevice(device) }}> {convertToLang(this.props.translation[Button_ACCEPT], "REJECT REQUEST")} </Button>;
+            let rejectRelinkBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.rejectRelinkDevice(device) }}>{convertToLang(this.props.translation[Button_Decline], "RELINK WITH SERVICES")}</Button>
             let DeleteBtnPreActive = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => this.deleteUnlinkedDevice('pre-active', device)}>{convertToLang(this.props.translation[Button_Delete], "DELETE")} </Button>
             let Unflagbtn = <Button
                 type="defualt"
@@ -232,6 +258,8 @@ class DevicesList extends Component {
                 DeclineBtn,
                 DeleteBtnPreActive,
                 Unflagbtn,
+                rejectRelinkBtn,
+                relinkBtn
             }
 
             let actionBtns = getDevicesListActionBtns(this.props.user, device, status, allButtons);
@@ -719,6 +747,7 @@ class DevicesList extends Component {
                     getChatIDs={this.props.getChatIDs}
                     getPgpEmails={this.props.getPgpEmails}
                     history={this.props.history}
+                    resetProductAddProps={this.props.resetProductAddProps}
                 />
                 <AddDevice ref="add_device"
                     translation={this.props.translation}
@@ -912,6 +941,11 @@ export default class Tab extends Component {
                         getSimIDs={this.props.getSimIDs}
                         getChatIDs={this.props.getChatIDs}
                         getPgpEmails={this.props.getPgpEmails}
+                        resetProductAddProps={this.props.resetProductAddProps}
+                        relinkDevice={this.props.relinkDevice}
+
+
+
                     />
                 </div>
             </Fragment>

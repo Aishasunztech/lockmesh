@@ -221,6 +221,13 @@ export default class NewDevices extends Component {
         }
     }
 
+    relinkDevice(device) {
+        showConfirm(this, convertToLang(this.props.translation[""], "Are you sure you want to relink device with existing services on device ?"), this.props.relinkDevice, device.id)
+    }
+    rejectRelinkDevice(device) {
+        showConfirm(this, convertToLang(this.props.translation[""], "Are you sure you want to reject relink request ? This device will not get previous services if rejected."), this.props.rejectDevice, device)
+    }
+
 
     filterList = (devices) => {
         let dumyDevices = [];
@@ -362,17 +369,25 @@ export default class NewDevices extends Component {
                 let declineButton = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.rejectDevice(device); }}>{convertToLang(this.props.translation[Button_Decline], "DECLINE")}</Button>;
                 let acceptButton = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.acceptDevice(device) }}> {convertToLang(this.props.translation[Button_ACCEPT], "ACCEPT")}</Button>;
 
+                let relinkDeviceButton = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.relinkDevice(device) }}> {convertToLang(this.props.translation[""], "RELINK WITH SERVICES")}</Button>;
+                let rejectRelinkDeviceButton = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.rejectRelinkDevice(device) }}> {convertToLang(this.props.translation[""], "REJECT REQUEST")}</Button>;
                 let actionButns;
                 if (this.state.sectionVisible) {
                     if (this.props.allDevices !== undefined) {
                         if (flagged) {
                             actionButns = (<Fragment>{transferButton}</Fragment>);
                         } else {
-                            actionButns = (<Fragment>
-                                <Fragment>{declineButton}</Fragment>
-                                <Fragment>{acceptButton}</Fragment>
-                                <Fragment>{transferButton}</Fragment>
-                            </Fragment>);
+                            actionButns = (device.relink_status === 1) ?
+                                <Fragment>
+                                    <Fragment>{rejectRelinkDeviceButton}</Fragment>
+                                    <Fragment>{relinkDeviceButton}</Fragment>
+                                </Fragment>
+                                :
+                                <Fragment>
+                                    <Fragment>{declineButton}</Fragment>
+                                    <Fragment>{acceptButton}</Fragment>
+                                    <Fragment>{transferButton}</Fragment>
+                                </Fragment>;
                         }
                     } else {
                         actionButns = (<Fragment>
@@ -387,11 +402,17 @@ export default class NewDevices extends Component {
                             actionButns = (<Fragment>{transferButton}</Fragment>);
                         }
                         else {
-                            actionButns = (<Fragment>
-                                <Fragment>{declineButton}</Fragment>
-                                <Fragment>{acceptButton}</Fragment>
-                                <Fragment>{transferButton}</Fragment>
-                            </Fragment>);
+                            actionButns = (device.relink_status === 1) ?
+                                <Fragment>
+                                    <Fragment>{rejectRelinkDeviceButton}</Fragment>
+                                    <Fragment>{relinkDeviceButton}</Fragment>
+                                </Fragment>
+                                :
+                                <Fragment>
+                                    <Fragment>{declineButton}</Fragment>
+                                    <Fragment>{acceptButton}</Fragment>
+                                    <Fragment>{transferButton}</Fragment>
+                                </Fragment>;;
                         }
                     } else {
                         actionButns = (<Fragment>{transferButton}</Fragment>);

@@ -51,7 +51,7 @@ const RestService = {
         });
 
         socket.on('reconnect_failed', () => {
-          console.info(socket, "6 attempt to connect again");
+            console.info(socket, "6 attempt to connect again");
         });
 
         return socket;
@@ -597,6 +597,11 @@ const RestService = {
         return axios.put(BASE_URL + 'users/delete/' + device.device_id, device, RestService.getHeader());
     },
 
+    relinkDevice: (id) => {
+        console.log(id);
+        return axios.put(BASE_URL + 'users/relink-device/' + id, {}, RestService.getHeader());
+    },
+
 
 
     // Undo For Dealer and Sub dealer
@@ -1045,7 +1050,7 @@ const RestService = {
 
     updateBulkMsg: (data, timezone) => {
         // delete data.data; // delete devices list
-        return axios.post(BASE_URL + 'users/update_bulk_msg', {data, timezone}, RestService.getHeader());
+        return axios.post(BASE_URL + 'users/update_bulk_msg', { data, timezone }, RestService.getHeader());
     },
 
     getBulkMsgsList: (timezone) => {
@@ -1181,7 +1186,7 @@ const RestService = {
 
     //update support ticket notifications
     updateTicketNotificationStatus: (data) => {
-      return axios.post(SUPPORT_URL + 'tickets/update_notification', data, RestService.getHeader());
+        return axios.post(SUPPORT_URL + 'tickets/update_notification', data, RestService.getHeader());
     },
 
     //Support System Messages
@@ -1213,17 +1218,17 @@ const RestService = {
 
     //send Support Live Chat Message
     sendSupportLiveChatMessage: (data) => {
-      return axios.post(SUPPORT_URL + 'messages/send', data, RestService.getHeader());
+        return axios.post(SUPPORT_URL + 'messages/send', data, RestService.getHeader());
     },
 
     //get Support Live Chat conversations
     getSupportLiveChatConversation: (data) => {
-      return axios.get(SUPPORT_URL + 'messages/conversations', RestService.getHeader());
+        return axios.get(SUPPORT_URL + 'messages/conversations', RestService.getHeader());
     },
 
     //get Support Live Chat Message
     getSupportLiveChatMessages: (data) => {
-      return axios.get(SUPPORT_URL + 'messages/get?type='+data.type+'&id='+data.id, RestService.getHeader());
+        return axios.get(SUPPORT_URL + 'messages/get?type=' + data.type + '&id=' + data.id, RestService.getHeader());
     },
 };
 export default RestService;

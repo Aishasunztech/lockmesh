@@ -53,7 +53,7 @@ import {
 
 import { logout } from "appRedux/actions/Auth";
 
-import { rejectDevice, addDevice, getDevicesList, } from '../../appRedux/actions/Devices';
+import { rejectDevice, addDevice, getDevicesList, relinkDevice } from '../../appRedux/actions/Devices';
 
 import { switchLanguage, getLanguage, getAll_Languages, toggleCollapsedSideNav } from "../../appRedux/actions/Setting";
 import { getAllToAllDealers } from "../../appRedux/actions/Dealers";
@@ -249,6 +249,7 @@ class SidebarContent extends Component {
               updateTicketNotifications={this.props.updateTicketNotifications}
               setSupportPage={this.props.setSupportPage}
               resetSupportPage={this.props.resetSupportPage}
+              relinkDevice={this.props.relinkDevice}
             />
             <span className="font_14">
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}
@@ -275,7 +276,7 @@ class SidebarContent extends Component {
               {/* Notifications */}
               <li>
                 <a className="head-example">
-                  <Badge count={(localStorage.getItem('type') !== ADMIN) ? this.props.supportSystemMessagesNotifications.length + this.props.devices.length + this.props.requests.length + this.props.ticketNotifications.length : this.props.cancel_service_requests.length + this.props.supportSystemMessagesNotifications.length+ this.props.ticketNotifications.length}>
+                  <Badge count={(localStorage.getItem('type') !== ADMIN) ? this.props.supportSystemMessagesNotifications.length + this.props.devices.length + this.props.requests.length + this.props.ticketNotifications.length : this.props.cancel_service_requests.length + this.props.supportSystemMessagesNotifications.length + this.props.ticketNotifications.length}>
                     <i className="icon icon-notification notification_icn" onClick={() => this.showNotification()} />
                   </Badge>
                 </a>
@@ -463,7 +464,8 @@ export default connect(mapStateToProps, {
   updateSupportSystemMessageNotification,
   updateTicketNotifications,
   setSupportPage,
-  resetSupportPage
+  resetSupportPage,
+  relinkDevice
 }
 )(SidebarContent);
 

@@ -32,7 +32,10 @@ import {
     ACCEPT_REQUEST,
     ADD_PRODUCT,
     VALIDATE_ICCID,
-    ADD_DATA_PLAN
+    ADD_DATA_PLAN,
+    RELINK_DEVICE,
+    REJECT_RELINK_DEVICE,
+    RESET_ADD_PRODUCT_PROPS
 } from "../../constants/ActionTypes";
 
 // import { convertToLang } from '../../routes/utils/commonUtils';
@@ -128,6 +131,8 @@ const initialState = {
     newDevices: [],
     product_prices: [],
     devicesForReport: [],
+    pgp_added: false,
+    chat_added: false
 };
 
 export default (state = initialState, action) => {
@@ -436,12 +441,14 @@ export default (state = initialState, action) => {
             let devicess = JSON.parse(JSON.stringify(state.devices))
             if (action.response.status) {
                 var device_id = action.payload.formData.device_id;
-                // console.log(state.devices, 'add device reducer', action.response)
+                console.log(state.devices, 'add device reducer', action.response)
                 let index = state.devices.findIndex(dev => dev.device_id == device_id)
-                // console.log(index, 'index is the');
+                console.log(index, 'index is the');
 
                 if (index > -1) {
                     devicess[index] = action.response.data[0]
+                } else {
+                    devicess.unshift(action.response.data[0])
                 }
                 var alldevices = state.newDevices;
 
@@ -471,6 +478,70 @@ export default (state = initialState, action) => {
                 // devices: action.payload,
             }
         }
+
+        case RELINK_DEVICE: {
+
+            var filteredNewDevices = state.newDevices;
+            let devicess = JSON.parse(JSON.stringify(state.devices))
+            if (action.response.status) {
+                var user_acc_id = action.user_acc_id;
+                console.log(state.devices, 'add device reducer')
+                let index = state.devices.findIndex(dev => dev.id == user_acc_id)
+                console.log(index, 'index is the', action.response.data);
+
+                if (index > -1) {
+                    devicess[index] = action.response.data
+                } else {
+                    devicess.unshift(action.response.data)
+                }
+
+                var alldevices = state.newDevices;
+
+                filteredNewDevices = alldevices.filter(device => device.id !== user_acc_id);
+
+                // console.log(filteredNewDevices, 'filtered new devices', alldevices)
+                success({
+                    title: action.response.msg,
+                });
+            }
+            else {
+                error({
+                    title: action.response.msg,
+                });
+            }
+
+            return {
+                ...state,
+                devices: devicess,
+                newDevices: filteredNewDevices,
+            }
+        }
+
+        // case REJECT_RELINK_DEVICE: {
+
+        //     let filteredDevices = state.devices;
+        //     let filteredNewDevices = state.newDevices;
+        //     if (action.response.status) {
+        //         //
+        //         var alldevices = state.devices;
+        //         var device_id = action.device.device_id;
+        //         filteredDevices = alldevices.filter(device => device.device_id !== device_id);
+        //         filteredNewDevices = filteredNewDevices.filter(device => device.device_id !== device_id);
+        //         success({
+        //             title: action.response.msg,
+        //         });
+        //     } else {
+        //         error({
+        //             title: action.response.msg,
+        //         });
+        //     }
+
+        //     return {
+        //         ...state,
+        //         devices: filteredDevices,
+        //         newDevices: filteredNewDevices,
+        //     }
+        // }
 
         case PRE_ACTIVATE_DEVICE:
             let devices = [...state.devices]
@@ -626,13 +697,15 @@ export default (state = initialState, action) => {
         case ADD_PRODUCT: {
             let pgp_emails = state.pgp_emails;
             let chat_ids = state.chat_ids;
-
+            let chat_added = false
+            let pgp_added = false
             if (action.payload.status) {
                 if (action.payload.type === 'chat_id') {
                     chat_ids.unshift(action.payload.product);
                     success({
                         title: "Chat ID has been generated successfully."
                     })
+                    chat_added = true
                     // console.log(chat_ids);
                 } else if (action.payload.type === 'pgp_email') {
                     pgp_emails.unshift(action.payload.product);
@@ -640,6 +713,7 @@ export default (state = initialState, action) => {
                     success({
                         title: "Pgp email has been generated successfully."
                     })
+                    pgp_added = true
                 }
                 else if (action.payload.type === 'sim_id') {
                     success({
@@ -655,9 +729,20 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 pgp_emails: [...pgp_emails],
-                chat_ids: [...chat_ids]
+                chat_ids: [...chat_ids],
+                chat_added: chat_added,
+                pgp_added: pgp_added
             }
         }
+
+        case RESET_ADD_PRODUCT_PROPS: {
+            return {
+                ...state,
+                chat_added: false,
+                pgp_added: false
+            }
+        }
+
 
         default:
             return state;

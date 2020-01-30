@@ -34,7 +34,8 @@ import {
     getInvoiceId,
     getDomains,
     addProduct,
-    addDataPlan
+    addDataPlan,
+    resetProductAddProps
 } from "../../../appRedux/actions";
 
 // Constants
@@ -335,19 +336,38 @@ class EditDevice extends Component {
 
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.isloading) {
-            this.setState({ addNewUserModal: true })
-        }
-        this.setState({ isloading: nextProps.isloading })
-        if (this.props.invoiceID !== nextProps.invoiceID) {
-            this.setState({ invoiceID: nextProps.invoiceID })
-        }
+
         if (this.props !== nextProps) {
-            this.setState({
+
+            let updateState = {
                 tabselect: this.props.device.finalStatus === DEVICE_PRE_ACTIVATION ? '0' : '1',
                 parent_packages: this.props.device.finalStatus === DEVICE_PRE_ACTIVATION ? this.filterList('trial', nextProps.parent_packages, 'pkg') : this.filterList('1 month', nextProps.parent_packages, 'pkg'),
                 product_prices: this.props.device.finalStatus === DEVICE_PRE_ACTIVATION ? [] : this.filterList('1 month', nextProps.product_prices, 'product'),
-            })
+            }
+
+            if (nextProps.isloading) {
+                updateState.addNewUserModal = true
+                // this.setState({ addNewUserModal: true })
+            }
+            updateState.isloading = nextProps.isloading
+            // this.setState({ isloading: nextProps.isloading })
+            if (this.props.invoiceID !== nextProps.invoiceID) {
+                updateState.invoiceID = nextProps.invoiceID
+                // this.setState({ invoiceID: nextProps.invoiceID })
+            }
+            if (this.props.pgp_added !== nextProps.pgp_added) {
+                if (nextProps.pgp_added) {
+                    updateState.pgp_email = this.props.pgp_emails[0].pgp_email
+                }
+            }
+            console.log(this.props.chat_added, nextProps.chat_added);
+            if (this.props.chat_added !== nextProps.chat_added) {
+                if (nextProps.chat_added) {
+                    updateState.chat_id = this.props.chat_ids[0].chat_id
+                }
+            }
+            console.log(updateState);
+            this.setState(updateState)
         }
         // if (!this.state.disablePgp && nextProps.pgp_emails.length) {
         //     this.setState({
@@ -515,6 +535,7 @@ class EditDevice extends Component {
             addNewUserValue: '',
             renewService: false
         });
+        this.props.resetProductAddProps()
     }
 
     createdDate = () => {
@@ -941,7 +962,7 @@ class EditDevice extends Component {
     renderDataLimitOptions = () => {
 
         let data_plan_term = this.state.term ? this.state.term : this.props.device.expiry_months
-        console.log(this.props.device.expiry_months);
+        // console.log(this.props.device.expiry_months);
         // console.log(this.props.device.expiry_months);
         return this.props.parent_packages.map((packageItem) => {
             // console.log(packageItem.pkg_term, this.state.term + ' month', packageItem.pkg_term == (this.state.term + ' month'))
@@ -1954,7 +1975,8 @@ function mapDispatchToProps(dispatch) {
         extendServices: extendServices,
         getDomains: getDomains,
         addProduct: addProduct,
-        addDataPlan: addDataPlan
+        addDataPlan: addDataPlan,
+        resetProductAddProps: resetProductAddProps
 
     }, dispatch);
 }
@@ -1968,6 +1990,8 @@ var mapStateToProps = ({ routing, devices, users, auth, settings, sidebar, accou
         sim_ids: devices.sim_ids,
         chat_ids: devices.chat_ids,
         pgp_emails: devices.pgp_emails,
+        pgp_added: devices.pgp_added,
+        chat_added: devices.chat_added,
         users_list: users.users_list,
         isloading: users.addUserFlag,
         translation: settings.translation,
