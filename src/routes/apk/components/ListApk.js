@@ -146,7 +146,7 @@ export default class ListApk extends Component {
                 if (!usedBy.length) {
                     usedBy.push(<Tag key="Not Used">Not Used</Tag>)
                 }
-                
+
                 data = {
                     rowKey: app.apk_id,
                     id: app.apk_id,
@@ -221,7 +221,7 @@ export default class ListApk extends Component {
                 }
                 apkList.push(data)
 
-                
+
             }
         });
         return apkList
@@ -260,34 +260,46 @@ export default class ListApk extends Component {
         // console.log(type);
         let appDetails = {};
         switch (type) {
-            case "PGP":
+            case "SMAIL": {
                 this.props.apk_list.map((app) => {
-                    if (app.package_name === 'ca.unlimitedwireless.mailpgp') {
+                    if (app.package_name === 'com.android.smail') {
                         appDetails = app
                     }
                 });
                 break;
-            case "CHAT":
+            }
+            case "SCHAT": {
                 this.props.apk_list.map((app) => {
-                    if (app.package_name === 'com.armorSec.android') {
+                    if (app.package_name === 'com.schat.android') {
                         appDetails = app
                     }
                 });
                 break;
-            case "UEM":
-                this.props.apk_list.map((app) => {
-                    if (app.package_name === 'com.rim.mobilefusion.client') {
-                        appDetails = app
-                    }
-                });
-                break;
-            case "VPN":
+            }
+            case "SVPN": {
                 this.props.apk_list.map((app) => {
                     if (app.package_name === 'com.secure.vpn') {
                         appDetails = app
                     }
                 });
                 break;
+            }
+            case "SVAULT": {
+                this.props.apk_list.map((app) => {
+                    if (app.package_name === 'com.secure.svault') {
+                        appDetails = app
+                    }
+                });
+                break;
+            }
+            case "D2D": {
+                this.props.apk_list.map((app) => {
+                    if (app.package_name === 'com.secure.d2d') {
+                        appDetails = app
+                    }
+                });
+                break;
+            }
             default:
                 break;
         }
@@ -358,7 +370,7 @@ export default class ListApk extends Component {
         })
 
     }
-    
+
     render() {
         let type = this.props.user.type
         let styleType = {};
@@ -386,48 +398,60 @@ export default class ListApk extends Component {
                 {(this.state.selectedTab == '1') ?
                     <div className="feat_btns">
                         <Row>
-                            <Col xs={24} sm={24} md={8} lg={8} xl={8} className="ver0tical_center">
+                            <Col xs={24} sm={24} md={4} lg={4} xl={4} className="ver0tical_center">
                                 <h2 className="mb-0">{convertToLang(this.props.translation["FEATURED APPS"], "FEATURED APPS")}</h2>
                             </Col>
                             {(this.props.user.type === ADMIN) ?
                                 <Fragment>
+
                                     <Col xs={12} sm={12} md={4} lg={4} xl={4} className="m_mt-16 b_p-8">
                                         <Button
                                             type="primary"
                                             style={{ width: '100%', padding: "0" }}
-                                            onClick={() => { this.updateFeaturedApk('CHAT') }}
+                                            onClick={() => { this.updateFeaturedApk('SMAIL') }}
                                         >
-                                            UPDATE CHAT APP</Button>
+                                            UPDATE SMAIL</Button>
                                     </Col>
+
                                     <Col xs={12} sm={12} md={4} lg={4} xl={4} className="m_mt-16 b_p-8">
                                         <Button
                                             type="primary"
                                             style={{ width: '100%', padding: "0" }}
-                                            onClick={() => { this.updateFeaturedApk('PGP') }}
+                                            onClick={() => { this.updateFeaturedApk('SCHAT') }}
                                         >
-                                            UPDATE PGP APP</Button>
+                                            UPDATE SCHAT</Button>
                                     </Col>
+
                                     <Col xs={12} sm={12} md={4} lg={4} xl={4} className="m_mt-16 b_p-8">
                                         <Button
                                             type="primary"
                                             style={{ width: '100%', padding: "0" }}
-                                            onClick={() => { this.updateFeaturedApk('UEM') }}
+                                            onClick={() => { this.updateFeaturedApk('D2D') }}
                                         >
-                                            UPDATE UEM APP</Button>
+                                            UPDATE D2D</Button>
                                     </Col>
+
                                     <Col xs={12} sm={12} md={4} lg={4} xl={4} className="m_mt-16 b_p-8">
                                         <Button
                                             type="primary"
                                             style={{ width: '100%', padding: "0" }}
-                                            onClick={() => { this.updateFeaturedApk('VPN') }}
+                                            onClick={() => { this.updateFeaturedApk('SVAULT') }}
                                         >
-                                            UPDATE VPN APP</Button>
+                                            UPDATE SVAULT</Button>
+                                    </Col>
+
+                                    <Col xs={12} sm={12} md={4} lg={4} xl={4} className="m_mt-16 b_p-8">
+                                        <Button
+                                            type="primary"
+                                            style={{ width: '100%', padding: "0" }}
+                                            onClick={() => { this.updateFeaturedApk('SVPN') }}
+                                        >
+                                            UPDATE SVPN</Button>
                                     </Col>
                                 </Fragment>
                                 : null}
                         </Row>
                         <Card className={`fix_card ${styleType1}`}>
-                            {/* <hr className="fix_header_border" style={{ top: "16px" }} /> */}
                             <CustomScrollbars className="gx-popover-scroll ">
                                 <Table
                                     className="gx-table-responsive apklist_table"
@@ -498,7 +522,7 @@ export default class ListApk extends Component {
                                     onExpand={this.onExpandRow}
                                     expandIconColumnIndex={0}
                                     expandIconAsCell={false}
-                                    size="midddle"
+                                    size="small"
                                     bordered
                                     // scroll={{ x: true }}
                                     columns={this.props.featureApkcolumns}

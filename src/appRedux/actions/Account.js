@@ -1,8 +1,6 @@
 import {
     APK_LIST,
     INVALID_TOKEN,
-    ADD_APK,
-    UNLINK_APK,
     // EDIT_APK,
     LOADING,
     IMPORT_CSV,

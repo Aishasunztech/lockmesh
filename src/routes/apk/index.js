@@ -1,29 +1,50 @@
+// Libraries
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Input, Icon, Modal, Select, Button, Tooltip, Popover, Avatar, Row, Col, Tag } from "antd";
 import { Link } from 'react-router-dom';
 import Highlighter from 'react-highlight-words';
-import { apkPermission } from "../../appRedux/actions/Apk";
+import { Input, Icon, Modal, Select, Button, Tooltip, Popover, Avatar, Row, Col, Tag } from "antd";
 // import {Route, Switch} from "react-router-dom";
+
+// Components
 // import Apk from "../../containers/ApkList"
 import CircularProgress from "components/CircularProgress/index";
-//import {getDevicesList} from '../../appRedux/actions/Devices';
-
-import { getApkList, changeAppStatus, deleteApk, editApk, addApk, resetUploadForm } from "../../appRedux/actions/Apk";
-import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
-import { getPolicies } from "../../appRedux/actions/Policy";
-// import {getDeviceList} from 
-
 import AppFilter from "../../components/AppFilter";
 import AddApk from '../addApk/index'
-
-import {
-    convertToLang
-} from '../utils/commonUtils'
-
-import { BASE_URL } from '../../constants/Application';
 import ListApk from './components/ListApk';
+
+// Actions
+//import {getDevicesList} from '../../appRedux/actions/Devices';
+import { 
+    getApkList, 
+    changeAppStatus, 
+    deleteApk, 
+    editApk, 
+    addApk, 
+    resetUploadForm, 
+    getDropdown, 
+    postDropdown, 
+    postPagination, 
+    getPagination, 
+    apkPermission, 
+    getPolicies 
+} from "../../appRedux/actions";
+
+// Helpers
+import {
+    convertToLang,
+    componentSearch, 
+    titleCase
+} from '../utils/commonUtils';
+
+import { 
+    apkColumns, 
+    featureApkColumns 
+} from "../utils/columnsUtils";
+
+// Constants
+import { BASE_URL } from '../../constants/Application';
 
 import {
     APK_SHOW_ON_DEVICE,
@@ -38,14 +59,11 @@ import {
     SHOW_APK
 } from '../../constants/ApkConstants';
 
-import { componentSearch, titleCase } from "../utils/commonUtils";
 import { ACTION, Alert_Delete_APK, SEARCH } from "../../constants/Constants";
 import { Button_Save, Button_Yes, Button_No } from "../../constants/ButtonConstants";
-import { apkColumns, featureApkColumns } from "../utils/columnsUtils";
 import { Tab_Active, Tab_All, Tab_Disabled } from "../../constants/TabConstants";
 import { APPS_PAGE_HEADING } from '../../constants/AppFilterConstants';
 import { APP_MANAGE_APKs } from '../../constants/AppConstants';
-
 
 var status = true;
 var copyApks = [];
