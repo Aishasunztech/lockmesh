@@ -207,7 +207,7 @@ export default class DeviceSidebar extends Component {
             {
                 key: 10,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_CHAT_ID], "CHAT ID"))}:</a>),
-                value: (true || chatId && chatId !== "N/A" ? <Fragment>
+                value: (chatId && chatId !== "N/A" ? <Fragment>
                     <div className="gutter-box">{chatId}
 
                         <Popover
