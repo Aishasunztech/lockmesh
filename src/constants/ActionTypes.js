@@ -215,6 +215,8 @@ export const PULL_APPS = 'PULL_APPS';
 export const UNDO_APPS = "UNDO_APPS";
 export const REDO_APPS = 'REDO_APPS';
 export const SHOW_PULL_APPS_MODAL = 'SHOW_PULL_APPS_MODAL';
+export const CHAT_ID_SETTINGS = 'CHAT_ID_SETTINGS';
+export const ENABLE_PWD_CONFIRM = 'ENABLE_PWD_CONFIRM';
 
 export const SAVE_POLICY = 'SAVE_POLICY';
 export const APPLY_POLICY = 'APPLY_POLICY';

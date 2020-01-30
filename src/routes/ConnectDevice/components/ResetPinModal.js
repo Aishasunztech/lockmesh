@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Modal, message, Radio, Button, Form, Input } from 'antd';
 import ResetPinForm from './ResetPinForm';
 
-export default class WipeDevice extends Component {
+export default class ResetPinModal extends Component {
 
   constructor(props) {
     super(props);
@@ -15,12 +15,14 @@ export default class WipeDevice extends Component {
     this.setState({
       visible: true,
     });
+    this.props.closeChatIdSettingsEnable();
   };
 
 
   handleCancel = () => {
     this.setState({ visible: false });
     this.refs.pswdForm.resetFields()
+    this.props.closeChatIdSettingsEnable();
   };
 
   render() {
