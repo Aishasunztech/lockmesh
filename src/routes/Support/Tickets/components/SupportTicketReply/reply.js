@@ -1,44 +1,53 @@
-import React from 'react';
-import { Form, Input, Button } from "antd";
+import React, { Component } from 'react';
 
-const { TextArea } = Input;
-
-const Reply = (props) => {
-
-  function handleSubmit(event){
-    event.preventDefault();
-    props.form.validateFields((error, values) => {
-      if(!error){
-        values.user       = props.user;
-        values.ticket_id  = props.ticket._id;
-
-        props.supportTicketReply(values);
-        props.form.resetFields();
-      }
-    })
+class Reply extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      description: ''
+    }
   }
 
-  return (
-    <div ref={props.formId}><Form autoComplete="new-password" onSubmit={handleSubmit}>
-    <Form.Item style={{padding: '24px'}} wrapperCol={{ span: 12 }}>
-      {props.form.getFieldDecorator('description', {
-        rules: [
-          {
-            required: true,
-            message: 'Description is required',
-          }
-        ],
-      })(
-        <TextArea placeholder='Reply' autosize={{ minRows: 5, maxRows: 5 }}/>
-      )}
-    </Form.Item>
-    <Form.Item wrapperCol={{ span: 12 }}>
-      <Button style={{float: 'right'}} type="primary" htmlType="submit" className="login-form-button">
-        Reply
-      </Button>
-    </Form.Item>
-    </Form></div>);
+  handleSubmit(){
+    if(this.state.description !== '' && this.state.description.trim().length !== ''){
+      let description = this.state.description;
+      let replyObject = {
+        description: description,
+        user: this.props.user,
+        ticket_id: this.props.supportTicket._id
+      }
 
-};
+      this.props.supportTicketReply(replyObject);
+      this.refs.ticket.value = '';
+      this.setState({description: ''});
+    }
+  }
 
-export default Form.create({'name': 'ticket_reply'})(Reply);
+  handleKeyDown(e){
+    this.setState({description: e.target.value});
+  }
+
+  render(){
+    return (
+      <div className="gx-chat-main-footer">
+        <div className="gx-flex-row gx-align-items-center" style={{maxHeight: 100}}>
+          <div className="gx-col">
+            <div className="gx-form-group">
+              <textarea
+                ref="ticket"
+                rows={5}
+                className="gx-border-0 ant-input"
+                placeholder="Description"
+                onKeyUp={(e) => this.handleKeyDown(e)}
+              />
+            </div>
+          </div>
+          <i className="button-ticket-reply-send gx-icon-btn icon icon-sent" onClick={() => this.handleSubmit()}/>
+        </div>
+      </div>
+    );
+  }
+}
+
+
+export default Reply;

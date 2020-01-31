@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Modal, Table, Button, Form, Row, Col, Icon, Checkbox, Tabs } from 'antd';
+import { Modal, Table, Button, Form, Row, Col, Icon, Checkbox, Tabs, Badge } from 'antd';
 import { withRouter, Link, Redirect } from "react-router-dom";
 import AddDeviceModal from '../../routes/devices/components/AddDevice';
 import { ADMIN, ACTION, CREDITS, CREDITS_CASH_REQUESTS, ARE_YOU_SURE_YOU_WANT_TO_DECLINE_THIS_REQUEST, ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST, WARNING, DEVICE_UNLINKED } from '../../constants/Constants';
@@ -70,8 +70,13 @@ export default class NewDevices extends Component {
         ];
 
         const supportChatColumns = [
-          { title: convertToLang(props.translation[""], "CONVERSATION"), dataIndex: 'conversation', key: 'conversation', align: 'center'},
-          { title: convertToLang(props.translation[""], "NoOfUnreadMessages"), dataIndex: "noOfUnreadMessages", key: 'noOfUnreadMessages', align: 'center'}
+          { title: <Button size="small" type="primary" onClick={() => {
+            let selectedChat = this.state.selectedChat;
+            this.props.markMessagesRead({conversations: selectedChat});
+            this.setState({ selectedChat: [] });
+            }}><Icon type="eye" /></Button>, dataIndex: 'action', key: 'action',  align: 'center'},
+          { title: convertToLang(props.translation[""], "User"), dataIndex: 'conversation', key: 'conversation', align: 'center'},
+          { title: convertToLang(props.translation[""], "No Of Unread Messages"), dataIndex: 'noOfUnreadMessages', key: 'noOfUnreadMessages', align: 'center'}
         ];
 
         this.state = {
@@ -94,7 +99,8 @@ export default class NewDevices extends Component {
             systemMessagesNotifications: [],
             selectedTicketNotifications: [],
             ticketNotifications: [],
-            supportChat: []
+            supportChat: [],
+            selectedChat: []
         }
     }
 
@@ -114,6 +120,15 @@ export default class NewDevices extends Component {
         } else {
             this.setState({ selectedTicketNotifications: selectedTickets.filter(ticket => ticket !== val) });
         }
+    }
+
+    updateChatSelection = (e, val) => {
+      let selectedChat = this.state.selectedChat;
+      if (e.target.checked) {
+        this.setState({ selectedChat: [...selectedChat, val] });
+      } else {
+        this.setState({ selectedChat: selectedChat.filter(chat => chat !== val) });
+      }
     }
 
 
@@ -299,7 +314,7 @@ export default class NewDevices extends Component {
             if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_name')) {
               dealer_name = dealer.dealer_name;
             }
-            if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_type') && dealer.dealer_type !== 1 && dealer.hasOwnProperty('link_code')) {
+            if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('type') && dealer.type !== ADMIN && dealer.hasOwnProperty('link_code')) {
               dealer_pin = dealer.link_code;
             }
             return {
@@ -361,23 +376,39 @@ export default class NewDevices extends Component {
     }
 
     renderSupportChatNotifications(list){
-      let { setSupportPage } = this.props;
+      let { setSupportPage, setCurrentConversation } = this.props;
       if(list && Array.isArray(list) && list.length > 0){
         return list.map((notification, index) => {
           let dealer_name = 'N/A';
           let dealer_pin = 'N/A';
-          let dealer = this.state.dealers.find(dealer => dealer.dealer_id == notification.conversation_id);
-          if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_name')) {
-            dealer_name = dealer.dealer_name;
+          let isAdmin = false;
+          let dealerObject = {};
+          let dealer = this.state.dealers.find(dealer => dealer.dealer_id == notification.sender);
+          if(typeof dealer !== 'undefined' && dealer.hasOwnProperty('type') && dealer.type === ADMIN){
+            isAdmin = true;
           }
-          if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_type') && dealer.dealer_type !== 1 && dealer.hasOwnProperty('link_code')) {
+
+          if(typeof dealer !== 'undefined'){
+            dealerObject = dealer;
+          }
+          if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_name')) {
+            dealer_name = dealer.dealer_name.charAt(0).toLocaleUpperCase() + dealer.dealer_name.substr(1);
+          }
+          if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('type') && dealer.type !== ADMIN && dealer.hasOwnProperty('link_code')) {
             dealer_pin = dealer.link_code;
           }
           return {
             key: index,
             rowKey: index,
-            conversation: dealer_name + "("+ dealer_pin +")",
-            noOfUnreadMessages: notification.noOfUnreadMessages
+            conversation: <a href="javascript:void(0);" onClick={() => {
+              setCurrentConversation(dealerObject, notification.conversation_id);
+              setSupportPage('3');
+              this.setPageState(true);
+            }}>{isAdmin ? `${dealer_name}` : `${dealer_name} (${dealer_pin})`}</a>,
+            noOfUnreadMessages: notification.noOfUnreadMessages,
+            user: dealerObject,
+            id: notification.conversation_id,
+            action: <Checkbox defaultChecked={false} checked={this.state.selectedChat.some(item => item === notification.conversation_id)} onChange={(e) => this.updateChatSelection(e, notification.conversation_id)} />
           }
         })
       } else {
@@ -515,7 +546,11 @@ export default class NewDevices extends Component {
                     <Tabs tabPosition={'top'}>
 
                         {(this.props.authUser.type === ADMIN) ? null :
-                            <TabPane tab={convertToLang(this.props.translation[DEVICE_REQUESTS], "DEVICE REQUESTS")} key="1">
+                            <TabPane tab={
+                              <Badge count={this.state && this.state.NewDevices && this.state.NewDevices.length}>
+                                {convertToLang(this.props.translation[DEVICE_REQUESTS], "DEVICE REQUESTS")}
+                              </Badge>
+                            } key="1">
                                 <Fragment>
                                     {/* <h1>{convertToLang(this.props.translation[DEVICE_REQUESTS], "DEVICE REQUESTS")}</h1> */}
                                     <Table
@@ -530,7 +565,11 @@ export default class NewDevices extends Component {
                             </TabPane>
                         }
                         {(this.state.sectionVisible && this.props.authUser.type === ADMIN) ?
-                            <TabPane tab={convertToLang(this.props.translation[""], "CANCEL SERVICES REQUESTS")} key="2">
+                            <TabPane tab={
+                              <Badge count={this.props && this.props.cancel_service_requests && this.props.cancel_service_requests.length}>
+                                {convertToLang(this.props.translation[""], "CANCEL SERVICES REQUESTS")}
+                              </Badge>
+                            } key="2">
                                 <Fragment>
                                     {/* <h1>{convertToLang(this.props.translation[""], "CANCEL SERVICES REQUESTS")}</h1> */}
                                     <Table
@@ -544,7 +583,11 @@ export default class NewDevices extends Component {
                                 </Fragment>
                             </TabPane>
                             : null}
-                        <TabPane tab={convertToLang(this.props.translation[""], "Support Chat")} key="3">
+                        {this.props.showSupport && <TabPane tab={
+                          <Badge count={this.state && this.state.supportChat && this.state.supportChat.length}>
+                            {convertToLang(this.props.translation[""], "Support Chat")}
+                          </Badge>
+                        } key="3">
                           <Fragment>
                             <Row className="width_100" style={{ display: "block", marginLeft: 0 }}>
                               {/* <h1 style={{ display: "inline" }}>{convertToLang(this.props.translation[""], "Ticket Notifications")} */}
@@ -569,8 +612,12 @@ export default class NewDevices extends Component {
                               pagination={false}
                             />
                           </Fragment>
-                        </TabPane>
-                        <TabPane tab={convertToLang(this.props.translation[""], "Ticket Notifications")} key="4">
+                        </TabPane>}
+                        {this.props.showSupport && <TabPane tab={
+                          <Badge count={this.state && this.state.ticketNotifications && this.state.ticketNotifications.length}>
+                            {convertToLang(this.props.translation[""], "Ticket Notifications")}
+                          </Badge>
+                        } key="4">
                             <Fragment>
                                 <Row className="width_100" style={{ display: "block", marginLeft: 0 }}>
                                     {/* <h1 style={{ display: "inline" }}>{convertToLang(this.props.translation[""], "Ticket Notifications")} */}
@@ -596,9 +643,13 @@ export default class NewDevices extends Component {
 
                                 />
                             </Fragment>
-                        </TabPane>
-                        {this.props.authUser.type !== ADMIN ?
-                            <TabPane tab={convertToLang(this.props.translation[""], "System Message Notifications")} key="5">
+                        </TabPane>}
+                        {this.props.showSupport && this.props.authUser.type !== ADMIN ?
+                            <TabPane tab={
+                              <Badge count={this.state && this.state.systemMessagesNotifications && this.state.systemMessagesNotifications.length}>
+                                {convertToLang(this.props.translation[""], "System Message Notifications")}
+                              </Badge>
+                                } key="5">
                                 <Fragment>
                                     <Row className="width_100" style={{ display: "block", marginLeft: 0 }}>
                                         {/* <h1>{convertToLang(this.props.translation[""], "System Message Notifications")} */}

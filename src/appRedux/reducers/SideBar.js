@@ -20,7 +20,9 @@ import {
   MICRO_SERVICE_RUNNING,
   MICRO_SERVICE_STOPPED,
   SUPPORT_LIVE_CHAT_NOTIFICATIONS,
-  SUPPORT_LIVE_CHAT_NOTIFICATION_NEW_MESSAGE
+  SUPPORT_LIVE_CHAT_NOTIFICATION_NEW_MESSAGE,
+  SUPPORT_LIVE_CHAT_RESET_CONVERSATION,
+  SUPPORT_LIVE_CHAT_SET_CONVERSATION, SUPPORT_LIVE_CHAT_READ_MESSAGES
 } from "../../constants/ActionTypes";
 import { Modal, notification } from 'antd';
 
@@ -41,8 +43,7 @@ const initialSidebar = {
     supportPage: '',
     currentMessageId: null,
     currentTicketId: null,
-    currentConversation: null,
-    currentUser: null,
+    currentConversation: null
 };
 
 export default (state = initialSidebar, action) => {
@@ -258,7 +259,8 @@ export default (state = initialSidebar, action) => {
       case SUPPORT_LIVE_CHAT_NOTIFICATIONS:
         let chatNotification = action.payload.map(item => {
           return {
-            conversation_id: item._id,
+            sender: item._id,
+            conversation_id: item.conversation_id,
             noOfUnreadMessages: item.count
           };
         });
@@ -269,22 +271,49 @@ export default (state = initialSidebar, action) => {
         };
 
       case SUPPORT_LIVE_CHAT_NOTIFICATION_NEW_MESSAGE:
-        let chatNotifications = state.supportChatNotifications.filter(notification => notification.conversation_id !== state.currentConversation);
+        console.log(action);
+        let currentConversation = state.currentConversation !== null ? state.currentConversation._id : null;
+        let chatNotifications = state.supportChatNotifications.filter(notification => notification.conversation_id !== currentConversation);
+
         chatNotifications.map(notification => {
-          if(notification.conversation_id === action.payload.sender){
+          if(notification.conversation_id === action.payload.conversation_id){
             notification.noOfUnreadMessages += 1;
           }
 
           return notification;
         });
 
-        if(!chatNotification.some(notification => notification.conversation_id === action.payload.conversation_id)){
-          chatNotification.push({ conversation_id: action.payload.sender, noOfUnreadMessages: 1});
+        console.log(!state.supportChatNotifications.some(notification => notification.conversation_id === action.payload.conversation_id));
+        console.log(currentConversation, currentConversation !== null);
+
+        if(!state.supportChatNotifications.some(notification => notification.conversation_id === action.payload.conversation_id) && currentConversation === null){
+          chatNotifications.push({ sender: action.payload.sender, conversation_id: action.payload.conversation_id, noOfUnreadMessages: 1});
         }
 
         return  {
           ...state,
           supportChatNotifications: chatNotifications
+        };
+
+      case SUPPORT_LIVE_CHAT_SET_CONVERSATION:
+        return {
+          ...state,
+          currentConversation: action.payload
+        };
+
+      case SUPPORT_LIVE_CHAT_READ_MESSAGES:
+        let chatNotificationsList = state.supportChatNotifications.filter(item => !action.payload.includes(item.conversation_id));
+
+
+        return {
+          ...state,
+          supportChatNotifications: chatNotificationsList
+        };
+
+      case SUPPORT_LIVE_CHAT_RESET_CONVERSATION:
+        return {
+          ...state,
+          currentConversation: null
         };
 
       default:

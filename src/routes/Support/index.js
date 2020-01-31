@@ -11,7 +11,7 @@ import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {ADMIN, DEALER, SDEALER} from "../../constants/Constants";
 import Chat from "./Chat/index";
-import { resetSupportPage, resetCurrentSupportTicketId, resetCurrentSystemMessageId, setSupportPage } from "../../appRedux/actions";
+import { resetSupportPage, resetCurrentSupportTicketId, resetCurrentSystemMessageId, setSupportPage, resetCurrentConversation } from "../../appRedux/actions";
 
 const TabPane = Tabs.TabPane;
 
@@ -107,9 +107,9 @@ class Support extends Component {
   }
 
   componentDidMount(){
-    if(!this.props.microServiceRunning){
-      this.props.history.push('/invalid_page');
-    }
+    // if(!this.props.microServiceRunning){
+    //   this.props.history.push('/invalid_page');
+    // }
   }
 
   componentDidUpdate(prevProps){
@@ -117,9 +117,9 @@ class Support extends Component {
       let supportPage = this.props.supportPage !== '' ? this.props.supportPage : '1';
       this.setState({innerTabSelect: supportPage});
 
-      if(!this.props.microServiceRunning){
-        this.props.history.push('/invalid_page');
-      }
+      // if(!this.props.microServiceRunning){
+      //   this.props.history.push('/invalid_page');
+      // }
     }
   }
 
@@ -157,6 +157,9 @@ class Support extends Component {
         this.setState({onTicketDetailPage: false});
         this.refs.supportTickets.getWrappedInstance().deSelectMail();
       }
+    }
+    if(value !== '3'){
+      this.props.resetCurrentConversation();
     }
   };
 
@@ -215,6 +218,7 @@ function mapDispatchToProps(dispatch) {
     resetSupportPage,
     resetCurrentSupportTicketId,
     resetCurrentSystemMessageId,
+    resetCurrentConversation
   }, dispatch);
 }
 

@@ -23,7 +23,7 @@ class ChatUserList extends Component {
     return (
       <div className="gx-chat-user">
         {chatUsers.map((chat, index) =>
-          <UserCell key={index} chat={chat} typing={this.state.typing} selectedSectionId={selectedSectionId} onSelectUser={onSelectUser}/>
+          <UserCell key={index} chat={chat} conversation={chat._id} typing={this.state.typing} selectedSectionId={selectedSectionId} onSelectUser={onSelectUser}/>
         )}
       </div>
     )

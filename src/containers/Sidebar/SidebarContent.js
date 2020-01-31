@@ -8,8 +8,8 @@ import UserProfile from "./UserProfile";
 import NewDevice from '../../components/NewDevices';
 import CreditsModal from '../../components/CreditsModal';
 import { updateSupportSystemMessageNotification } from '../../appRedux/actions/SupportSystemMessages';
-import { updateTicketNotifications } from '../../appRedux/actions';
-import { setSupportPage, resetSupportPage, setCurrentSupportTicketId, resetCurrentSupportTicketId, setCurrentSystemMessageId, resetCurrentSystemMessageId, getSupportLiveChatNotifications } from "../../appRedux/actions";
+import { updateTicketNotifications, markMessagesRead } from '../../appRedux/actions';
+import { setSupportPage, resetSupportPage, setCurrentSupportTicketId, resetCurrentSupportTicketId, setCurrentSystemMessageId, resetCurrentSystemMessageId, getSupportLiveChatNotifications, resetCurrentConversation, setCurrentConversation } from "../../appRedux/actions";
 import { getNewDevicesList, } from "../../appRedux/actions/Common";
 import {
   getNewCashRequests,
@@ -238,6 +238,7 @@ class SidebarContent extends Component {
             <UserProfile />
 
             <NewDevice
+              showSupport={true}
               ref='new_device'
               devices={this.props.devices}
               addDevice={this.props.addDevice}
@@ -267,6 +268,9 @@ class SidebarContent extends Component {
               setCurrentSupportTicketId={this.props.setCurrentSupportTicketId}
               resetCurrentSupportTicketId={this.props.resetCurrentSupportTicketId}
               supportChatNotifications={this.props.supportChatNotifications}
+              setCurrentConversation={this.props.setCurrentConversation}
+              resetCurrentConversation={this.props.resetCurrentConversation}
+              markMessagesRead={this.props.markMessagesRead}
             />
             <span className="font_14">
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}
@@ -293,7 +297,7 @@ class SidebarContent extends Component {
               {/* Notifications */}
               <li>
                 <a className="head-example">
-                  <Badge count={(localStorage.getItem('type') !== ADMIN) ? this.props.supportSystemMessagesNotifications.length + this.props.devices.length + this.props.requests.length + this.props.ticketNotifications.length : this.props.cancel_service_requests.length + this.props.supportSystemMessagesNotifications.length + this.props.ticketNotifications.length}>
+                  <Badge count={(localStorage.getItem('type') !== ADMIN) ? this.props.supportSystemMessagesNotifications.length + this.props.devices.length + this.props.requests.length + this.props.ticketNotifications.length + this.props.supportChatNotifications.length : this.props.cancel_service_requests.length + this.props.supportSystemMessagesNotifications.length + this.props.ticketNotifications.length + this.props.supportChatNotifications.length}>
                     <i className="icon icon-notification notification_icn" onClick={() => this.showNotification()} />
                   </Badge>
                 </a>
@@ -488,7 +492,10 @@ export default connect(mapStateToProps, {
   resetCurrentSystemMessageId,
   setCurrentSupportTicketId,
   resetCurrentSupportTicketId,
-  getSupportLiveChatNotifications
+  getSupportLiveChatNotifications,
+  setCurrentConversation,
+  resetCurrentConversation,
+  markMessagesRead
 }
 )(SidebarContent);
 

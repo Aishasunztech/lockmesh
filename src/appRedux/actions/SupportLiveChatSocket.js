@@ -39,22 +39,22 @@ export const supportLiveChatSocket = (socket) => {
       })
     }
 
-    if(socket && socket._callbacks['$' + SUPPORT_LIVE_CHAT_MESSAGE_DELETED] == undefined){
-      socket.on(SUPPORT_LIVE_CHAT_MESSAGE_DELETED, (data) => {
-        dispatch({
-          type: SUPPORT_LIVE_CHAT_MESSAGE_DELETED,
-          payload: data
-        })
-      })
-    }
-
-    if(socket && socket._callbacks['$' + SUPPORT_LIVE_CHAT_CONVERSATION_DELETED] == undefined){
-      socket.on(SUPPORT_LIVE_CHAT_CONVERSATION_DELETED, (data) => {
-        dispatch({
-          type: SUPPORT_LIVE_CHAT_CONVERSATION_DELETED,
-          payload: data
-        })
-      })
-    }
+    // if(socket && socket._callbacks['$' + SUPPORT_LIVE_CHAT_MESSAGE_DELETED] == undefined){
+    //   socket.on(SUPPORT_LIVE_CHAT_MESSAGE_DELETED, (data) => {
+    //     dispatch({
+    //       type: SUPPORT_LIVE_CHAT_MESSAGE_DELETED,
+    //       payload: data
+    //     })
+    //   })
+    // }
+    //
+    // if(socket && socket._callbacks['$' + SUPPORT_LIVE_CHAT_CONVERSATION_DELETED] == undefined){
+    //   socket.on(SUPPORT_LIVE_CHAT_CONVERSATION_DELETED, (data) => {
+    //     dispatch({
+    //       type: SUPPORT_LIVE_CHAT_CONVERSATION_DELETED,
+    //       payload: data
+    //     })
+    //   })
+    // }
   }
 };

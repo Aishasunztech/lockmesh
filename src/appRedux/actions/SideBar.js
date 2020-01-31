@@ -3,7 +3,8 @@ import {
   ACCEPT_SERVICE_REQUEST, REJECT_SERVICES_REQUEST, NEW_NOTIFICATION_LIST, WINDOW_WIDTH, SET_ADMIN_FOR_SUPPORT_TICKETS,
   UPDATE_TICKET_NOTIFICATION_STATUS, SPIN_lOADING, SET_SUPPORT_PAGE, RESET_SUPPORT_PAGE, SET_CURRENT_SYSTEM_MESSAGE_ID,
   RESET_CURRENT_SYSTEM_MESSAGE_ID, SET_CURRENT_SUPPORT_TICKET_ID, RESET_CURRENT_SUPPORT_TICKET_ID,
-  MICRO_SERVICE_STOPPED, MICRO_SERVICE_RUNNING, SUPPORT_LIVE_CHAT_NOTIFICATIONS
+  MICRO_SERVICE_STOPPED, MICRO_SERVICE_RUNNING, SUPPORT_LIVE_CHAT_NOTIFICATIONS, SUPPORT_LIVE_CHAT_SET_CONVERSATION,
+  SUPPORT_LIVE_CHAT_RESET_CONVERSATION, SUPPORT_LIVE_CHAT_READ_MESSAGES
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -301,5 +302,39 @@ export function getSupportLiveChatNotifications(){
         })
       }
     })
+  }
+}
+
+export function setCurrentConversation(user, conversation){
+  return (dispatch) => {
+    dispatch({
+      type: SUPPORT_LIVE_CHAT_SET_CONVERSATION,
+      payload: {user: user, _id: conversation}
+    });
+  }
+}
+
+export function markMessagesRead(conversations){
+  return (dispatch) => {
+    RestService.updateSupportLiveChatReadStatus(conversations).then(response => {
+      if(response.data.status){
+        dispatch({
+          type: SUPPORT_LIVE_CHAT_READ_MESSAGES,
+          payload: conversations.conversations
+        });
+      } else {
+        console.log(response);
+      }
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+}
+
+export function resetCurrentConversation(){
+  return (dispatch) => {
+    dispatch({
+      type: SUPPORT_LIVE_CHAT_RESET_CONVERSATION
+    });
   }
 }

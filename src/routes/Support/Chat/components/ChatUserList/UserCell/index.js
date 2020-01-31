@@ -1,10 +1,10 @@
 import React from "react";
 import {Avatar, Button, Icon, Modal} from "antd";
 
-const UserCell = ({ chat, selectedSectionId, onSelectUser, typing }) => {
-  let isTyping = typing.some(conv => conv === chat._id);
+const UserCell = ({ chat, conversation, selectedSectionId, onSelectUser, typing }) => {
+  let isTyping = typing.some(conv => conv === conversation);
   return (
-    <div className={`gx-chat-user-item ${selectedSectionId === chat._id ? 'active' : ''}`} onClick={() => {
+    <div className={`gx-chat-user-item ${conversation !== null && selectedSectionId === conversation ? 'active' : ''}`} onClick={() => {
         onSelectUser(chat, 'chat');
     }}>
       <div className="gx-chat-user-row">

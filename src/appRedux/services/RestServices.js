@@ -1231,6 +1231,11 @@ const RestService = {
     // Get Support Live Chat Notifications
     getSupportLiveChatNotifications: () => {
       return axios.get(SUPPORT_URL + 'messages/getNotifications', RestService.getHeader());
+    },
+
+    // read the chat message
+    updateSupportLiveChatReadStatus: (data) => {
+      return axios.put(SUPPORT_URL + 'messages/read', data, RestService.getHeader());
     }
 };
 export default RestService;

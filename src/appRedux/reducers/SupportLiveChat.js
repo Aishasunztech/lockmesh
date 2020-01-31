@@ -59,8 +59,6 @@ export default (state = initialState, action) => {
       //   supportLiveChatConversations.push(action.payload.conversation);
       // }
 
-      supportLiveChatMessages.push(action.payload.message);
-
       return {
         ...state,
         supportLiveChatMessages: [...supportLiveChatMessages, action.payload.message],
