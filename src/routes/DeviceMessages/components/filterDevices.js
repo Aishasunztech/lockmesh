@@ -833,27 +833,27 @@ class FilterDevices extends Component {
             />
           </div>
         </Row>
-        <Row gutter={16} style={{ marginBottom: '56px' }}>
+        <Row gutter={16}>
           {
             this.props.spinloading ? <CircularProgress /> :
               <Col className="gutter-row" span={24}>
-                {/* <Card className='fix_card fix_card_bulk_act'>
+                <Card className='fix_card fix_card_bulk_act'>
                   <hr className="fix_header_border" style={{ top: "56px" }} />
-                  <CustomScrollbars className="gx-popover-scroll "> */}
-                <Table
-                  id='scrolltablelist'
-                  ref='tablelist'
-                  className={"devices "}
-                  size="middle"
-                  bordered
-                  columns={this.state.selectedDevicesColumns}
-                  onChange={this.props.onChangeTableSorting}
-                  dataSource={this.props.renderList(this.state.selectedDevices)}
-                  pagination={false}
-                // scroll={{ y: true }}
-                />
-                {/* </CustomScrollbars>
-                </Card> */}
+                  <CustomScrollbars className="gx-popover-scroll ">
+                    <Table
+                      id='scrolltablelist'
+                      ref='tablelist'
+                      className={"devices "}
+                      size="middle"
+                      bordered
+                      columns={this.state.selectedDevicesColumns}
+                      onChange={this.props.onChangeTableSorting}
+                      dataSource={this.props.renderList(this.state.selectedDevices)}
+                      pagination={false}
+                    // scroll={{ y: true }}
+                    />
+                  </CustomScrollbars>
+                </Card>
               </Col>
           }
         </Row>

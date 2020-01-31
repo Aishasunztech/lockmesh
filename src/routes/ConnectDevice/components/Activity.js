@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Modal, message, Input, Table, Switch, Avatar } from 'antd';
+import { Modal, message, Input, Table, Switch, Avatar, Card } from 'antd';
 import { componentSearch, getFormattedDate, convertToLang } from '../../utils/commonUtils';
 import Moment from 'react-moment';
 import { SECURE_SETTING, DATE, PROFILE_NAME } from '../../../constants/Constants';
@@ -9,6 +9,7 @@ import styles from './Applist.css';
 import { POLICY_APP_NAME, POLICY_NAME, ACTIVITY } from '../../../constants/PolicyConstants';
 import { Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
 import { DEVICE_IMEI_1, DEVICE_IMEI_2, ACTIVITIES, DEVICE_ID } from '../../../constants/DeviceConstants';
+import CustomScrollbars from '../../../util/CustomScrollbars';
 
 var coppyActivities = [];
 var status = true;
@@ -224,189 +225,201 @@ export default class Activity extends Component {
                 <Modal
                     maskClosable={false}
                     visible={visible}
-                    title={<div>{convertToLang(this.props.translation[ACTIVITIES], "Activities")} <br /> <span>{convertToLang(this.props.translation[DEVICE_ID], "DEVICE ID: ")} {(this.props.device.id) ? this.props.device.device_id : ''}</span></div>}
+                    title=
+                    {
+                        <div className="pp_popup">
+                            <span> {convertToLang(this.props.translation[ACTIVITIES], "Activities")}</span>
+                            <Input.Search
+                                name="search"
+                                key="search"
+                                id="search"
+                                className="search_heading1"
+                                // className="search_heading1"
+                                onKeyUp={
+                                    (e) => {
+                                        this.handleComponentSearch(e)
+                                    }
+                                }
+                                placeholder="Search"
+                            />
+                            <br />
+                            <span>
+                                {convertToLang(this.props.translation[DEVICE_ID], "DEVICE ID: ")}
+                                {(this.props.device.id) ? this.props.device.device_id : ''}
+                            </span>
+                        </div>}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}
                     className="activities"
-                // className="edit_form"
                 >
-                    <Input.Search
-                        name="search"
-                        key="search"
-                        id="search"
-                        // className="search_heading1"
-                        onKeyUp={
-                            (e) => {
-                                this.handleComponentSearch(e)
-                            }
-                        }
-                        placeholder="Search"
-                    />
+                    <Card className='fix_card fix_card_activities'>
+                        <hr className="fix_header_border" style={{ top: "17px" }} />
+                        <CustomScrollbars className="gx-popover-scroll ">
+                            <Table
+                                columns={[
+                                    {
+                                        title: convertToLang(this.props.translation[ACTIVITY], "ACTIVITY"),
+                                        align: "center",
+                                        dataIndex: 'action_name',
+                                        key: "action_name",
+                                        className: '',
+                                        sorter: (a, b) => { return a.action_name.localeCompare(b.action_name) },
+                                        sortDirections: ['ascend', 'descend'],
 
-                    <Table
-                        columns={[
-                            {
-                                title: convertToLang(this.props.translation[ACTIVITY], "ACTIVITY"),
-                                align: "center",
-                                dataIndex: 'action_name',
-                                key: "action_name",
-                                className: '',
-                                sorter: (a, b) => { return a.action_name.localeCompare(b.action_name) },
-                                sortDirections: ['ascend', 'descend'],
+                                    },
+                                    {
+                                        title: convertToLang(this.props.translation[DATE], "DATE"),
+                                        align: "center",
+                                        dataIndex: 'created_at',
+                                        key: "created_at",
+                                        className: '',
+                                        sorter: (a, b) => { return new Date(a.created_at) - new Date(b.created_at) },
+                                        sortDirections: ['ascend', 'descend'],
+                                        defaultSortOrder: 'descend'
 
-                            },
-                            {
-                                title: convertToLang(this.props.translation[DATE], "DATE"),
-                                align: "center",
-                                dataIndex: 'created_at',
-                                key: "created_at",
-                                className: '',
-                                sorter: (a, b) => { return new Date(a.created_at) - new Date(b.created_at) },
-                                sortDirections: ['ascend', 'descend'],
-                                defaultSortOrder: 'descend'
-
-                            },
-                        ]}
-                        bordered
-                        rowClassName={(record, index) =>
-                            this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''
-                            // console.log(this.state.expandedRowKeys,'row is', record.key , 'check' , this.state.expandedRowKeys.includes(record.key))
-                            //  this.state.expandedRowKeys.includes(index) ? 'exp_row' : ''
-                        }
-                        onExpand={this.onExpandRow}
-                        dataSource={this.renderList()}
-                        expandedRowRender={record => {
-                            // console.log('recored', record)
-                            if (record.action_name === 'APPS PUSHED') {
-                                return (
-                                    <Table
-                                        style={{ margin: 0, padding: 0 }}
-                                        size='middle'
-                                        bordered={false}
-                                        columns={this.appsColumns}
-                                        align='center'
-                                        dataSource={
-                                            this.renderApps(JSON.parse(record.data.push_apps))
-                                        }
-                                        pagination={false}
-                                    />
-                                )
-                            } else if (record.action_name === 'APPS PULLED') {
-                                return (
-                                    <Table
-                                        style={{ margin: 0, padding: 0 }}
-                                        size='middle'
-                                        bordered={false}
-                                        columns={this.pullAppsColumns}
-                                        align='center'
-                                        dataSource={
-                                            this.renderApps(JSON.parse(record.data.pull_apps))
-                                        }
-                                        pagination={false}
-                                    />
-                                )
-                            } else if (record.action_name === 'IMEI CHANGED') {
-                                // console.log(record.data, 'expanded row is the')
-                                return (
-                                    <Table
-                                        style={{ margin: 0, padding: 0 }}
-                                        size='middle'
-                                        bordered={false}
-                                        columns={this.imeiColumns}
-                                        align='center'
-                                        dataSource={
-                                            [
-                                                {
-                                                    key: record.data.id,
-                                                    imei1: JSON.parse(record.data.imei).imei1,
-                                                    imei2: JSON.parse(record.data.imei).imei2
-
+                                    },
+                                ]}
+                                bordered
+                                rowClassName={(record, index) =>
+                                    this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''
+                                    // console.log(this.state.expandedRowKeys,'row is', record.key , 'check' , this.state.expandedRowKeys.includes(record.key))
+                                    //  this.state.expandedRowKeys.includes(index) ? 'exp_row' : ''
+                                }
+                                onExpand={this.onExpandRow}
+                                dataSource={this.renderList()}
+                                expandedRowRender={record => {
+                                    // console.log('recored', record)
+                                    if (record.action_name === 'APPS PUSHED') {
+                                        return (
+                                            <Table
+                                                style={{ margin: 0, padding: 0 }}
+                                                size='middle'
+                                                bordered={false}
+                                                columns={this.appsColumns}
+                                                align='center'
+                                                dataSource={
+                                                    this.renderApps(JSON.parse(record.data.push_apps))
                                                 }
-                                            ]
-                                        }
-                                        pagination={false}
-                                    />
-                                )
-                            } else if (record.action_name === 'POLICY APPLIED') {
-                                return (
-                                    <Table
-                                        style={{ margin: 0, padding: 0 }}
-                                        size='middle'
-                                        bordered={false}
-                                        columns={this.policyColumns}
-                                        align='center'
-                                        dataSource={[
-                                            {
-                                                key: record.data.id,
-                                                policy_name: '#' + record.data.policy_name
-                                            }
-                                        ]
-                                        }
-                                        pagination={false}
-                                    />
-                                )
-                            } else if (record.action_name === 'PROFILE APPLIED') {
-                                return (
-                                    <Table
-                                        style={{ margin: 0, padding: 0 }}
-                                        size='middle'
-                                        bordered={false}
-                                        columns={[{
-                                            title: convertToLang(this.props.translation[PROFILE_NAME], "PROFILE NAME"),
-                                            dataIndex: 'profile_name',
-                                            key: '1',
-                                            render: text => <a >{text}</a>,
-                                        }]}
-                                        align='center'
-                                        dataSource={[
-                                            {
-                                                key: record.data.id,
-                                                profile_name: record.data.profile_name
-                                            }
-                                        ]
-                                        }
-                                        pagination={false}
-                                    />
-                                )
-                            } else if (record.action_name === 'SETTING CHANGED') {
-                                let controls = JSON.parse(record.data.controls)
+                                                pagination={false}
+                                            />
+                                        )
+                                    } else if (record.action_name === 'APPS PULLED') {
+                                        return (
+                                            <Table
+                                                style={{ margin: 0, padding: 0 }}
+                                                size='middle'
+                                                bordered={false}
+                                                columns={this.pullAppsColumns}
+                                                align='center'
+                                                dataSource={
+                                                    this.renderApps(JSON.parse(record.data.pull_apps))
+                                                }
+                                                pagination={false}
+                                            />
+                                        )
+                                    } else if (record.action_name === 'IMEI CHANGED') {
+                                        // console.log(record.data, 'expanded row is the')
+                                        return (
+                                            <Table
+                                                style={{ margin: 0, padding: 0 }}
+                                                size='middle'
+                                                bordered={false}
+                                                columns={this.imeiColumns}
+                                                align='center'
+                                                dataSource={
+                                                    [
+                                                        {
+                                                            key: record.data.id,
+                                                            imei1: JSON.parse(record.data.imei).imei1,
+                                                            imei2: JSON.parse(record.data.imei).imei2
 
-                                let passwords = JSON.parse(record.data.passwords)
-                                return (
-                                    <DeviceSettings
-                                        app_list={JSON.parse(record.data.app_list)}
-                                        extensions={JSON.parse(record.data.permissions)}
-                                        extensionUniqueName={SECURE_SETTING}
-                                        isAdminPwd={passwords.admin_password !== null && passwords.admin_password !== 'null' ? true : false}
-                                        isDuressPwd={passwords.duress_password !== null && passwords.duress_password !== 'null' ? true : false}
-                                        isEncryptedPwd={passwords.encrypted_password !== null && passwords.encrypted_password !== 'null' ? true : false}
-                                        isGuestPwd={passwords.guest_password !== null && passwords.guest_password !== 'null' ? true : false}
-                                        controls={controls}
-                                        show_all_apps={true}
-                                        show_unchanged={true}
-                                        translation={this.props.translation}
-                                        showChangedControls={true}
-                                        auth={{ authUser: this.props.auth }}
+                                                        }
+                                                    ]
+                                                }
+                                                pagination={false}
+                                            />
+                                        )
+                                    } else if (record.action_name === 'POLICY APPLIED') {
+                                        return (
+                                            <Table
+                                                style={{ margin: 0, padding: 0 }}
+                                                size='middle'
+                                                bordered={false}
+                                                columns={this.policyColumns}
+                                                align='center'
+                                                dataSource={[
+                                                    {
+                                                        key: record.data.id,
+                                                        policy_name: '#' + record.data.policy_name
+                                                    }
+                                                ]
+                                                }
+                                                pagination={false}
+                                            />
+                                        )
+                                    } else if (record.action_name === 'PROFILE APPLIED') {
+                                        return (
+                                            <Table
+                                                style={{ margin: 0, padding: 0 }}
+                                                size='middle'
+                                                bordered={false}
+                                                columns={[{
+                                                    title: convertToLang(this.props.translation[PROFILE_NAME], "PROFILE NAME"),
+                                                    dataIndex: 'profile_name',
+                                                    key: '1',
+                                                    render: text => <a >{text}</a>,
+                                                }]}
+                                                align='center'
+                                                dataSource={[
+                                                    {
+                                                        key: record.data.id,
+                                                        profile_name: record.data.profile_name
+                                                    }
+                                                ]
+                                                }
+                                                pagination={false}
+                                            />
+                                        )
+                                    } else if (record.action_name === 'SETTING CHANGED') {
+                                        let controls = JSON.parse(record.data.controls)
 
-                                    />
-                                )
+                                        let passwords = JSON.parse(record.data.passwords)
+                                        return (
+                                            <DeviceSettings
+                                                app_list={JSON.parse(record.data.app_list)}
+                                                extensions={JSON.parse(record.data.permissions)}
+                                                extensionUniqueName={SECURE_SETTING}
+                                                isAdminPwd={passwords.admin_password !== null && passwords.admin_password !== 'null' ? true : false}
+                                                isDuressPwd={passwords.duress_password !== null && passwords.duress_password !== 'null' ? true : false}
+                                                isEncryptedPwd={passwords.encrypted_password !== null && passwords.encrypted_password !== 'null' ? true : false}
+                                                isGuestPwd={passwords.guest_password !== null && passwords.guest_password !== 'null' ? true : false}
+                                                controls={controls}
+                                                show_all_apps={true}
+                                                show_unchanged={true}
+                                                translation={this.props.translation}
+                                                showChangedControls={true}
+                                                auth={{ authUser: this.props.auth }}
 
-                            } else if (record.action_name === 'PASSWORD CHANGED') {
-                                // console.log( 'password recoerd i sthe ', JSON.parse(record.data.passwords));
+                                            />
+                                        )
 
-                                return (
-                                    <div>
-                                        <p style={{ margin: 'auto' }} >{this.renderPasswords(record)} is Changed</p>
-                                    </div>
-                                )
-                            }
+                                    } else if (record.action_name === 'PASSWORD CHANGED') {
+                                        // console.log( 'password recoerd i sthe ', JSON.parse(record.data.passwords));
 
-                        }}
-                        // scroll={{ y: 350 }}
-                        pagination={false}
-                    />
+                                        return (
+                                            <div>
+                                                <p style={{ margin: 'auto' }} >{this.renderPasswords(record)} is Changed</p>
+                                            </div>
+                                        )
+                                    }
 
+                                }}
+                                // scroll={{ y: 350 }}
+                                pagination={false}
+                            />
+                        </CustomScrollbars>
+                    </Card>
                 </Modal>
 
             </div>
