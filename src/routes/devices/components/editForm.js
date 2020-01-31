@@ -360,13 +360,13 @@ class EditDevice extends Component {
                     updateState.pgp_email = this.props.pgp_emails[0].pgp_email
                 }
             }
-            console.log(this.props.chat_added, nextProps.chat_added);
+            // console.log(this.props.chat_added, nextProps.chat_added);
             if (this.props.chat_added !== nextProps.chat_added) {
                 if (nextProps.chat_added) {
                     updateState.chat_id = this.props.chat_ids[0].chat_id
                 }
             }
-            console.log(updateState);
+            // console.log(updateState);
             this.setState(updateState)
         }
         // if (!this.state.disablePgp && nextProps.pgp_emails.length) {

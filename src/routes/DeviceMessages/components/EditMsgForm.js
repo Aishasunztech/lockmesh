@@ -329,7 +329,7 @@ class EditMsgForm extends Component {
             <div>
                 <Modal
                     title={convertToLang(this.props.translation[""], "Edit Setting to send Message on devices")}
-                    width={"600px"}
+                    width={"500px"}
                     maskClosable={false}
                     style={{ top: 20 }}
                     visible={this.props.editModal}
@@ -446,7 +446,7 @@ class EditMsgForm extends Component {
                                                     ],
                                                 })(
                                                     <Select
-                                                        style={{ width: '50%' }}
+                                                        style={{ width: '100%' }}
                                                         showSearch={false}
                                                         placeholder={convertToLang(this.props.translation[""], "Select Day")}
                                                         onChange={(e) => this.handleEditMsgRecord(e, 'week_day')}
@@ -477,7 +477,7 @@ class EditMsgForm extends Component {
                                                 })(
                                                     <Select
                                                         showSearch={false}
-                                                        style={{ width: '50%' }}
+                                                        style={{ width: '100%' }}
                                                         placeholder={convertToLang(this.props.translation[""], "Select Month")}
                                                         onChange={(e) => this.handleEditMsgRecord(e, 'month_name')}
                                                     >
@@ -507,7 +507,7 @@ class EditMsgForm extends Component {
                                                     <Select
                                                         setFieldsValue={this.state.monthDate}
                                                         showSearch={false}
-                                                        style={{ width: '50%' }}
+                                                        style={{ width: '100%' }}
                                                         placeholder={convertToLang(this.props.translation[""], "Select date of month")}
                                                         onChange={(e) => this.handleEditMsgRecord(e, 'month_date')}
                                                     >
@@ -537,7 +537,7 @@ class EditMsgForm extends Component {
                                                     onChange={this.timeOnChange}
                                                     placeholder={"Select time"}
                                                     format="HH:mm"
-                                                    style={{ width: '50%' }}
+                                                    style={{ width: '100%' }}
                                                 />
                                             )}
                                         </Form.Item>

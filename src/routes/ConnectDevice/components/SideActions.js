@@ -1044,14 +1044,14 @@ class SideActions extends Component {
                             <Button
                                 type="default"
                                 onClick={() => this.handleServicesModal(true)}
-                                style={{ width: "46%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }}
+                                style={{ width: "46%", marginBottom: 16, }}
                             >
-                                <Icon type="file" />
-                                {convertToLang(this.props.translation["ACCOUNT INFO"], "ACCOUNT INFO")}
+                                <Icon type="info-circle" />
+                                {convertToLang(this.props.translation["Account Info"], "Account Info")}
                             </Button>
 
                             <Modal
-                                title={convertToLang(this.props.translation["ACCOUNT INFO"], "ACCOUNT INFO")}
+                                title={convertToLang(this.props.translation["Account Info"], "Account Info")}
                                 maskClosable={false}
                                 width='850px'
                                 style={{ top: 20 }}
