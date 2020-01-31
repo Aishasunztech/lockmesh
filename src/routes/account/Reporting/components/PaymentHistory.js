@@ -395,7 +395,7 @@ class PaymentHistory extends Component {
                   dataSource={this.renderList(this.props.paymentHistoryReport)}
                   bordered
                   pagination={false}
-                // scroll={{x:true}}
+                  scroll={{ x: true }}
                 />
               </Fragment>
               : null}

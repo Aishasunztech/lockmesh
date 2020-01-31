@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from 'react'
 import styles from './AppList';
-import { Card, Table, Icon, Button, Modal, Row, Col } from "antd";
+import { Card, Table, Icon, Button, Modal, Row, Col, Popconfirm, message, Popover } from "antd";
 import { getStatus, getColor, checkValue, titleCase, convertToLang, convertTimezoneValue } from '../../../routes/utils/commonUtils'
 import { Redirect, Link } from 'react-router-dom';
 import ResetPinModal from './ResetPinModal';
+import PasswordForm from './PasswordForm';
 import {
     DEVICE_ID,
     DEVICE_REMAINING_DAYS,
@@ -46,6 +47,7 @@ import { ADMIN } from '../../../constants/Constants';
 import moment from 'moment-timezone';
 import WipeDevice from "./wipeDevice";
 import { DATE_FORMAT, TIMESTAMP_FORMAT } from '../../../constants/Application';
+import { CHAT_ID_SETTINGS } from '../../../constants/ActionTypes';
 const confirm = Modal.confirm;
 let make_red = 'captilize';
 let chatId = '';
@@ -64,8 +66,42 @@ export default class DeviceSidebar extends Component {
             resetPinModal: false,
             user_id: '',
             dealer_id: '',
-            goToPage: '/dealer/dealer'
+            goToPage: '/dealer/dealer',
+            confirmChatIdModal: false,
+            pwdConfirmModal: false,
+            chatIdSettingsEnable: false,
+            chatIdActionType: ''
         };
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.chatIdSettingsEnable !== prevProps.chatIdSettingsEnable) {
+            let pwdConfirmModal = this.state.pwdConfirmModal;
+
+            if (this.props.chatIdSettingsEnable) {
+                pwdConfirmModal = false;
+
+                if (this.state.chatIdActionType === 'reset_pin') {
+                    this.refs.resetPinModel.showModel();
+                } else if (this.state.chatIdActionType === 'disable_pin') {
+                    this.showConfirmSChatStatus(this, 'disable', 'Do you want to disable pin verification?');
+                } else if (this.state.chatIdActionType === 'enable_pin') {
+                    this.showConfirmSChatStatus(this, 'enable', 'Do you want to enable pin verification?');
+                }
+            }
+            this.setState({
+                pwdConfirmModal,
+                chatIdActionType: '',
+                chatIdSettingsEnable: this.props.chatIdSettingsEnable
+            });
+        }
+    }
+
+    handleConfirmBoxChatId = (visible) => {
+        this.setState({
+            confirmChatIdModal: visible
+        })
+        // message.info('Clicked on Yes.');
     }
 
     renderDetailsData(device_details) {
@@ -172,41 +208,78 @@ export default class DeviceSidebar extends Component {
                 key: 10,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_CHAT_ID], "CHAT ID"))}:</a>),
                 value: (chatId && chatId !== "N/A" ? <Fragment>
-                    <Row gutter={24} className="mb-4">
-                        <Col className="gutter-row" span={12}><div className="gutter-box">{chatId}</div></Col>
-                        <Col className="gutter-row" span={12}>
-                            <Button
-                                type="danger"
-                                size="small"
-                                style={{ width: '100%' }}
-                                // className="ml-12"
-                                onClick={() => this.refs.resetPinModel.showModel()}>
-                                {titleCase(convertToLang(this.props.translation[''], 'RESET PIN'))}
+                    <div className="gutter-box">{chatId}
+
+                        <Popover
+                            // placement="rightTop"
+                            title={<div>Chat ID Settings <i className="fa fa-window-close" style={{ float: 'right', cursor: 'pointer' }} onClick={() => this.handleConfirmBoxChatId(false)} aria-hidden="true"></i> </div>}
+                            trigger="click"
+                            visible={this.state.confirmChatIdModal}
+                            onVisibleChange={this.handleVisibleChange}
+                            content={
+                                <Fragment>
+                                    <Row gutter={16}>
+                                        <Col className="gutter-row" span={8}>
+                                            <Button
+                                                type="danger"
+                                                size="small"
+                                                style={{ width: '100%' }}
+                                                // className="ml-12"
+                                                onClick={() => {
+                                                    // this.refs.resetPinModel.showModel();
+                                                    this.setState({
+                                                        confirmChatIdModal: false,
+                                                        pwdConfirmModal: true,
+                                                        chatIdActionType: 'reset_pin'
+                                                    })
+                                                }}>
+                                                {titleCase(convertToLang(this.props.translation[''], 'RESET PIN'))}
+                                            </Button>
+                                        </Col>
+                                        <Col className="gutter-row" span={8}>
+                                            <Button
+                                                type="danger"
+                                                size="small"
+                                                style={{ width: '100%' }}
+                                                // className="ml-12"
+                                                onClick={() => {
+                                                    // this.showConfirmSChatStatus(this, 'disable', 'Do you want to disable pin verification?');
+                                                    this.setState({
+                                                        confirmChatIdModal: false,
+                                                        pwdConfirmModal: true,
+                                                        chatIdActionType: 'disable_pin'
+                                                    })
+                                                }}>
+                                                {titleCase(convertToLang(this.props.translation[''], 'Disable Pin'))}
+                                            </Button>
+                                        </Col>
+                                        <Col className="gutter-row" span={8}>
+                                            <Button
+                                                type="success"
+                                                size="small"
+                                                style={{ width: '100%' }}
+                                                // className="ml-12"
+                                                onClick={() => {
+                                                    // this.showConfirmSChatStatus(this, 'enable', 'Do you want to enable pin verification?'); 
+                                                    this.setState({
+                                                        confirmChatIdModal: false,
+                                                        pwdConfirmModal: true,
+                                                        chatIdActionType: 'enable_pin'
+                                                    })
+                                                }}>
+                                                {titleCase(convertToLang(this.props.translation[''], 'Enable Pin'))}
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                </Fragment>
+                            }
+                        >
+                            <Button size='small' type='primary' className='edit_btn_cp' onClick={() => this.handleConfirmBoxChatId(!this.state.confirmChatIdModal)}>
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </Button>
-                        </Col>
-                    </Row>
-                    <Row gutter={24}>
-                        <Col span={12}>
-                            <Button
-                                type="danger"
-                                size="small"
-                                style={{ width: '100%' }}
-                                // className="ml-12"
-                                onClick={() => this.showConfirmSChatStatus(this, 'disable', 'Do you want to disable pin verification?')}>
-                                {titleCase(convertToLang(this.props.translation[''], 'Disable Pin'))}
-                            </Button>
-                        </Col>
-                        <Col span={12}>
-                            <Button
-                                type="success"
-                                size="small"
-                                style={{ width: '100%' }}
-                                // className="ml-12"
-                                onClick={() => this.showConfirmSChatStatus(this, 'enable', 'Do you want to enable pin verification?')}>
-                                {titleCase(convertToLang(this.props.translation[''], 'Enable Pin'))}
-                            </Button>
-                        </Col>
-                    </Row>
+                        </Popover>
+                        {/* <Button size='small' type='primary' className='ml-16'> <i class="fa fa-pencil-square-o mb-0" aria-hidden="true"></i></Button> */}
+                    </div>
                 </Fragment> : "N/A")
             },
             {
@@ -325,7 +398,7 @@ export default class DeviceSidebar extends Component {
     };
 
     showConfirmSChatStatus(_this, type, msg) {
-
+        this.props.closeChatIdSettingsEnable();
         confirm({
             title: convertToLang(_this.props.translation[''], msg),
             onOk() {
@@ -398,6 +471,11 @@ export default class DeviceSidebar extends Component {
         ]
     }
 
+    handlePwdConfirmModal = (visible) => {
+        this.setState({
+            pwdConfirmModal: visible
+        })
+    }
     render() {
         const { redirect } = this.state
         if (redirect && this.state.user_id !== '') {
@@ -430,7 +508,33 @@ export default class DeviceSidebar extends Component {
                     chatId={chatId}
                     resetChatPin={this.props.resetChatPin}
                     translation={this.props.translation}
+                    closeChatIdSettingsEnable={this.props.closeChatIdSettingsEnable}
                 />
+
+                <Modal
+                    maskClosable={false}
+                    style={{ top: 20 }}
+                    width="330px"
+                    className="push_app"
+                    title=""
+                    visible={this.state.pwdConfirmModal}
+                    footer={false}
+                    onOk={() => {
+                    }}
+                    onCancel={() => {
+                        this.handlePwdConfirmModal(false)
+                        this.refs.pswdForm.resetFields()
+                    }
+                    }
+                >
+                    <PasswordForm
+                        checkPass={this.props.checkPass}
+                        actionType={CHAT_ID_SETTINGS}
+                        handleCancel={this.handlePwdConfirmModal}
+                        translation={this.props.translation}
+                        ref='pswdForm'
+                    />
+                </Modal >
             </Card>
         )
     }

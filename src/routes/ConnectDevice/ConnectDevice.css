@@ -291,6 +291,7 @@ th.device_info {
 
 .right_bar .anticon {
     margin-right: 8px;
+    vertical-align: sub;
 }
 
 .right_bar .search_dev_id .ant-card-body {

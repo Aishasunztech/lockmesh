@@ -798,16 +798,16 @@ class FilterDevices extends Component {
 
     return (
       <Fragment>
-        <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
+        <Row gutter={16} style={{ margin: '8px 0px 2px' }}>
           <h2 className="mr-24 ml-8">{convertToLang(this.props.translation["Select Devices:"], "Select Devices:")}</h2>
           <div className="mr-16">
             <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
               onClick={() => { this.showDealersModal(true) }}>{convertToLang(this.props.translation[Button_Add], "Add")}</Button>
           </div>
-          <div className="mr-16">
+          {/* <div className="mr-16">
             <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
               onClick={() => { this.addSelectedDealersModal(true) }}>{convertToLang(this.props.translation[Button_AddExceptSelected], "Add Except Selected")}</Button>
-          </div>
+          </div> */}
           <div className="mr-16">
             <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
               onClick={() => { this.saveAllDealersConfirm() }}>{convertToLang(this.props.translation[Button_AddAll], "Add All")}</Button>
@@ -816,48 +816,44 @@ class FilterDevices extends Component {
             <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger"
               onClick={() => { this.removeAllDealersConfirm() }}>{convertToLang(this.props.translation[Button_RemoveAll], "Remove All")}</Button>
           </div>
-          <div className="mr-16">
+          {/* <div className="mr-16">
             <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger"
               onClick={() => { this.showPermissionedDealersModal(true) }}>{convertToLang(this.props.translation[Button_RemoveExcept], "Remove Except")}</Button>
-          </div>
-
-          <Col className="gutter-row" sm={15} xs={15} md={15}>
-            <div className="gutter-box search_heading">
-              <Input.Search
-                placeholder="Search"
-                style={{ marginBottom: 0 }}
-                onKeyUp={
-                  (e) => {
-                    e.target.name = 'all';
-                    this.handleSearch(e, true)
-                  }
+          </div> */}
+          <div className="gutter-box search_heading mr-16">
+            <Input.Search
+              placeholder="Search"
+              style={{ marginBottom: 0 }}
+              onKeyUp={
+                (e) => {
+                  e.target.name = 'all';
+                  this.handleSearch(e, true)
                 }
-              />
-            </div>
-          </Col>
-
+              }
+            />
+          </div>
         </Row>
-        <Row gutter={24} style={{ marginBottom: '24px' }}>
+        <Row gutter={16}>
           {
             this.props.spinloading ? <CircularProgress /> :
               <Col className="gutter-row" span={24}>
-                {/* <Card className='fix_card fix_card_bulk_act'>
+                <Card className='fix_card fix_card_bulk_act'>
                   <hr className="fix_header_border" style={{ top: "56px" }} />
-                  <CustomScrollbars className="gx-popover-scroll "> */}
-                <Table
-                  id='scrolltablelist'
-                  ref='tablelist'
-                  className={"devices "}
-                  size="middle"
-                  bordered
-                  columns={this.state.selectedDevicesColumns}
-                  onChange={this.props.onChangeTableSorting}
-                  dataSource={this.props.renderList(this.state.selectedDevices)}
-                  pagination={false}
-                  scroll={{ x: true }}
-                />
-                {/* </CustomScrollbars>
-                </Card> */}
+                  <CustomScrollbars className="gx-popover-scroll ">
+                    <Table
+                      id='scrolltablelist'
+                      ref='tablelist'
+                      className={"devices "}
+                      size="middle"
+                      bordered
+                      columns={this.state.selectedDevicesColumns}
+                      onChange={this.props.onChangeTableSorting}
+                      dataSource={this.props.renderList(this.state.selectedDevices)}
+                      pagination={false}
+                    // scroll={{ y: true }}
+                    />
+                  </CustomScrollbars>
+                </Card>
               </Col>
           }
         </Row>
@@ -874,7 +870,7 @@ class FilterDevices extends Component {
           onCancel={() => {
             this.showDealersModal(false)
           }}
-          bodyStyle={{ height: 500, overflow: "overlay" }}
+          bodyStyle={{ height: 450, overflow: "overlay" }}
         >
           <FilterDevicesList
             devices={this.props.renderList(this.getUnSelectedDevices(this.state.allBulkDevices))}

@@ -30,6 +30,10 @@
   margin-bottom: 8px;
 }
 
+.reports_tab .ant-table-scroll {
+  height: 400px;
+}
+
 .manage_data {
   float: left;
   width: 6.2%;

@@ -53,7 +53,7 @@ import {
 
 import { logout } from "appRedux/actions/Auth";
 
-import { rejectDevice, addDevice, getDevicesList, } from '../../appRedux/actions/Devices';
+import { rejectDevice, addDevice, getDevicesList, relinkDevice } from '../../appRedux/actions/Devices';
 
 import { switchLanguage, getLanguage, getAll_Languages, toggleCollapsedSideNav } from "../../appRedux/actions/Setting";
 import { getAllToAllDealers } from "../../appRedux/actions/Dealers";
@@ -271,6 +271,7 @@ class SidebarContent extends Component {
               setCurrentConversation={this.props.setCurrentConversation}
               resetCurrentConversation={this.props.resetCurrentConversation}
               markMessagesRead={this.props.markMessagesRead}
+              relinkDevice={this.props.relinkDevice}
             />
             <span className="font_14">
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}
@@ -495,7 +496,8 @@ export default connect(mapStateToProps, {
   getSupportLiveChatNotifications,
   setCurrentConversation,
   resetCurrentConversation,
-  markMessagesRead
+  markMessagesRead,
+  relinkDevice
 }
 )(SidebarContent);
 
