@@ -123,9 +123,10 @@ export default class ListMsgs extends Component {
                     <div data-column="ACTION" style={{ display: "inline-flex" }}>
                         <Fragment>
                             {(HOST_NAME === 'localhost' || HOST_NAME === 'dev.lockmesh.com') ?
-                                (item.timer_status === "NOW" || item.timer_status === "DATE/TIME") ? null :
+                                (item.timer_status === "NOW") ? null :
                                     <Fragment>
                                         <Button
+                                            disabled={HOST_NAME === 'localhost' ? false : true}
                                             type="primary"
                                             size="small"
                                             onClick={() => this.handleEditModal(JSON.parse(JSON.stringify(item)))}
