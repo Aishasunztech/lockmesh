@@ -35,7 +35,7 @@ import {
 import { getUserList } from "../../appRedux/actions/Users";
 import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, componentSearch, titleCase, convertToLang, checkRemainTermDays, convertTimezoneValue } from '../utils/commonUtils'
 // import { ADMIN } from '../../constants/Constants';
-import { Button_Confirm, Button_Cancel, Button_Edit, Button_Ok } from '../../constants/ButtonConstants';
+import { Button_Confirm, Button_Cancel, Button_Edit, Button_Ok, Button_Remove } from '../../constants/ButtonConstants';
 import { devicesColumns, userDevicesListColumns } from '../utils/columnsUtils';
 
 import FilterDevices from './components/filterDevices';
@@ -446,6 +446,14 @@ class BulkActivities extends Component {
                 // key: device.device_id ? `${device.device_id}` : device.usr_device_id,
                 key: status == DEVICE_UNLINKED ? `${device.user_acc_id} ${device.created_at} ` : device.id,
                 counter: ++index,
+                action: (
+                    <Button size="small" type="danger" disabled
+                        onClick={() => {
+                            // this.removeSingleDevice(device.id)
+                        }}>
+                        Remove
+                    </Button>
+                ),
 
                 status: (<span style={color} > {status}</span>),
                 lastOnline: checkValue(device.lastOnline),

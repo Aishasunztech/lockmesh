@@ -140,7 +140,7 @@ class DeviceMessages extends Component {
                 })
             }
         } catch (error) {
-            alert("hello");
+            // alert("hello");
         }
     }
 
