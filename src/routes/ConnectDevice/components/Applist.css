@@ -61,12 +61,12 @@
     margin-bottom: 0 !important;
 }
 
-.p-25{
-  padding: 25px;
+.p-25 {
+    padding: 25px;
 }
 
 .m-0 {
-  margin: 0 !important;
+    margin: 0 !important;
 }
 
 .captilize {
@@ -195,9 +195,13 @@
 }
 
 .activities .ant-modal-body {
-    max-height: 540px;
+    height: 400px;
     overflow: overlay;
-    width: 100%;
+}
+
+.load_policy_popup .ant-modal-body {
+    height: 350px;
+    overflow: overlay;
 }
 
 .load_policy_popup .ant-modal-title {
@@ -260,7 +264,14 @@
     margin: 0;
 }
 
-
+.edit_btn_cp {
+    padding: 0 2px 0 4px;
+    font-size: 12px;
+    border-radius: 4px;
+    line-height: 19px !important;
+    height: 19px;
+    margin-left: 12px;
+}
 
 @media (max-width:1330px) and (min-width:1200px) {
     .sec_set_table .ant-table-tbody>tr>td {

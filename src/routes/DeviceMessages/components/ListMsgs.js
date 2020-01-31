@@ -209,47 +209,45 @@ export default class ListMsgs extends Component {
         // console.log("convertDateTime ", convertDateTime, "dealerTZ ", dealerTZ, "server timezone: ", SERVER_TIMEZONE);
         return (
             <Fragment>
-                <Card>
-                    {/* <Card className='fix_msgList_card'>
-                        <hr className="fix_header_border" style={{ top: "56px" }} />
-                        <CustomScrollbars className="gx-popover-scroll "> */}
-                    <Table
-                        className="gx-table-responsive msgList"
-                        rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
-                        expandIcon={(props) => this.customExpandIcon(props)}
-                        expandedRowRender={(record) => {
-                            // console.log("record ", record);
-                            return (
-                                <Fragment>
-                                    <Table
-                                        style={{ margin: 10 }}
-                                        size="middle"
-                                        bordered
-                                        columns={this.state.selectedDevicesColumns}
-                                        // onChange={this.props.onChangeTableSorting}
-                                        dataSource={this.props.renderDevicesList(record.devices)}
-                                        pagination={false}
-                                        scroll={{ x: true }}
-                                    />
-                                </Fragment>
-                            );
-                        }}
-                        onExpand={this.onExpandRow}
-                        expandIconColumnIndex={2}
-                        expandIconAsCell={false}
-                        size="midddle"
-                        bordered
-                        columns={this.state.columns}
-                        dataSource={this.renderList(this.props.bulkMsgs ? this.props.bulkMsgs : [])}
-                        // onChange={this.props.onChangeTableSorting}
-                        pagination={false
-                        }
-                        scroll={{ x: true }}
-                        rowKey="domain_id"
-                    />
-                    {/* </CustomScrollbars> */}
+                <Card className='fix_card fix_msgList_card'>
+                    <hr className="fix_header_border" style={{ top: "77px" }} />
+                    <CustomScrollbars className="gx-popover-scroll ">
+                        <Table
+                            className="gx-table-responsive msgList"
+                            rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
+                            expandIcon={(props) => this.customExpandIcon(props)}
+                            expandedRowRender={(record) => {
+                                // console.log("record ", record);
+                                return (
+                                    <Fragment>
+                                        <Table
+                                            style={{ margin: 10 }}
+                                            size="middle"
+                                            bordered
+                                            columns={this.state.selectedDevicesColumns}
+                                            // onChange={this.props.onChangeTableSorting}
+                                            dataSource={this.props.renderDevicesList(record.devices)}
+                                            pagination={false}
+                                            scroll={{ x: true }}
+                                        />
+                                    </Fragment>
+                                );
+                            }}
+                            onExpand={this.onExpandRow}
+                            expandIconColumnIndex={2}
+                            expandIconAsCell={false}
+                            size="midddle"
+                            bordered
+                            columns={this.state.columns}
+                            dataSource={this.renderList(this.props.bulkMsgs ? this.props.bulkMsgs : [])}
+                            // onChange={this.props.onChangeTableSorting}
+                            pagination={false
+                            }
+                            // scroll={{ x: true }}
+                            rowKey="domain_id"
+                        />
+                    </CustomScrollbars>
                 </Card>
-
                 <EditMsgModal
                     editModal={this.state.editModal}
                     handleEditMsgModal={this.handleEditMsgModal}
