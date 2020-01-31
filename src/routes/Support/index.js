@@ -151,12 +151,6 @@ class Support extends Component {
 
 
   handleChangeCardTabs = (value) => {
-<<<<<<< HEAD
-    this.props.setSupportPage(value);
-    if(this.refs && this.refs.supportTickets && this.refs.supportTickets && this.refs.supportTickets.getWrappedInstance()){
-      if(value !== '2'){
-        this.setState({onTicketDetailPage: false});
-=======
 
     switch (value) {
       case '1':
@@ -185,7 +179,6 @@ class Support extends Component {
     if (this.refs && this.refs.supportTickets && this.refs.supportTickets && this.refs.supportTickets.getWrappedInstance()) {
       if (value !== '2') {
         this.setState({ onTicketDetailPage: false });
->>>>>>> 43b7d5057d4b1f5ab26565a5c9afaa01115dbfc3
         this.refs.supportTickets.getWrappedInstance().deSelectMail();
       }
     }
