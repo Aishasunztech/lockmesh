@@ -468,9 +468,55 @@ export function getDefaultLanguage(transaction_id) {
 		default:
 			return transaction_id; // already translated language
 	}
+}
 
+export function getWeekDays() {
+	return [
+		{ key: 1, value: "Sunday" },
+		{ key: 2, value: "Monday" },
+		{ key: 3, value: "Tuesday" },
+		{ key: 4, value: "Wednesday" },
+		{ key: 5, value: "Thursday" },
+		{ key: 6, value: "Friday" },
+		{ key: 7, value: "Saturday" },
+	];
+}
+export function getMonthNames() {
+	return [
+		{ key: 1, value: "January" },
+		{ key: 2, value: "February" },
+		{ key: 3, value: "March" },
+		{ key: 4, value: "April" },
+		{ key: 5, value: "May" },
+		{ key: 6, value: "June" },
+		{ key: 7, value: "July" },
+		{ key: 8, value: "August" },
+		{ key: 9, value: "September" },
+		{ key: 10, value: "October" },
+		{ key: 11, value: "November" },
+		{ key: 12, value: "December" },
+	]
+}
 
+export function getDaysOfMonth(monthName = '') {
+	let monthDays = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+	//  January, March, May, July, August, October & December (all these months contain 31 days) Total # 07
+	//  April, June, September & November (all these months contain 30 days) Total # 04
 
+	if (monthName === 4 || monthName === 6 || monthName === 9 || monthName === 11) { // April, June, September & November
+		monthDays.pop(); // it will remove last index from array
+		// monthDays = monthDays.slice(0, -1); // it will remove last index from array
+	}
+	else if (monthName === 2) { // February
+		let currentYear = moment().format('YYYY');
+		let leepYear = (currentYear % 100 === 0) ? (currentYear % 400 === 0) : (currentYear % 4 === 0);
+		if (leepYear) {
+			monthDays = monthDays.slice(0, -2); // it will remove last 2 index from array
+		} else {
+			monthDays = monthDays.slice(0, -3); // it will remove last 3 index from array
+		}
+	}
+	return monthDays;
 }
 
 export function getTimezonesList() {
@@ -518,7 +564,7 @@ export function checkTimezoneValue(zone_name, withGMT = true) {
 }
 
 
-export function getWeekDay(key) {
+export function getWeekDayDescription(key) {
 
 	switch (key) {
 		case 1:

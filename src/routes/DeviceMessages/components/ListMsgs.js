@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col, Tag, Modal } from "antd";
-import { convertToLang, checkValue, convertTimezoneValue, getWeekDay, getMonthName, checkTimezoneValue } from '../../utils/commonUtils';
+import { convertToLang, checkValue, convertTimezoneValue, getWeekDayDescription, getMonthName, checkTimezoneValue } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 import moment from 'moment';
 import ReadMoreAndLess from 'react-read-more-less';
@@ -157,7 +157,7 @@ export default class ListMsgs extends Component {
                 date_time: moment(item.date_time).format(dateTimeFormat), // ? convertTimezoneValue(this.props.user.timezone, item.date_time, dateTimeFormat) : "N/A",
                 // date_time: item.timer_status === "DATE/TIME" ? convertTimezoneValue(this.props.user.timezone, item.date_time, TIMESTAMP_FORMAT_NOT_SEC) : (item.timer_status !== "NOW" && item.time) ? item.time : "N/A",
                 interval_description: item.interval_description,
-                // week_day: getWeekDay(item.week_day),
+                // week_day: getWeekDayDescription(item.week_day),
                 // month_date: item.month_date && item.month_date !== 0 ? `On every ${checkValue(item.month_date)} date of month` : "N/A",
                 // month_name: getMonthName(item.month_name),
                 devices: parseDevices,

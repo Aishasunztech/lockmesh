@@ -145,18 +145,6 @@ class DeviceMessages extends Component {
     }
 
 
-    filterList = (type, dealers) => {
-        let dumyDealers = [];
-        dealers.filter(function (apk) {
-            let dealerStatus = apk.apk_status;
-            if (dealerStatus === type) {
-                dumyDealers.push(apk);
-            }
-        });
-        return dumyDealers;
-    }
-
-
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
             this.setState({
