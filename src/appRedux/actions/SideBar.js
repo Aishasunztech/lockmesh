@@ -203,12 +203,10 @@ export function updateTicketNotifications(data){
 
     RestService.updateTicketNotificationStatus(data).then(response => {
       if(RestService.checkAuth(response.data)){
-        if(response.data.status){
           dispatch({
             type: UPDATE_TICKET_NOTIFICATION_STATUS,
             payload: response.data
           });
-        }
       } else {
         dispatch({
           type: INVALID_TOKEN
