@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Button, Form, Input, Select, InputNumber, Row, Col, Tag, Calendar, DatePicker, TimePicker, Modal, Alert } from 'antd';
-import { checkValue, convertToLang, checkTimezoneValue, convertTimezoneValue } from '../../utils/commonUtils'
+import { checkValue, convertToLang, checkTimezoneValue, convertTimezoneValue, getWeekDays, getMonthNames, getDaysOfMonth } from '../../utils/commonUtils'
 
 import {
     DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, User_Name_require, Only_alpha_numeric, Not_valid_Email, Email, Name, Required_Email
@@ -34,35 +34,38 @@ class SendMsgForm extends Component {
             { key: '12 MONTHS', value: "12 Months" },
         ];
 
-        this.weekDays = [
-            { key: 1, value: "Sunday" },
-            { key: 2, value: "Monday" },
-            { key: 3, value: "Tuesday" },
-            { key: 4, value: "Wednesday" },
-            { key: 5, value: "Thursday" },
-            { key: 6, value: "Friday" },
-            { key: 7, value: "Saturday" },
-        ];
+        // this.weekDays = [
+        //     { key: 1, value: "Sunday" },
+        //     { key: 2, value: "Monday" },
+        //     { key: 3, value: "Tuesday" },
+        //     { key: 4, value: "Wednesday" },
+        //     { key: 5, value: "Thursday" },
+        //     { key: 6, value: "Friday" },
+        //     { key: 7, value: "Saturday" },
+        // ];
 
-        this.monthNames = [
-            { key: 1, value: "January" },
-            { key: 2, value: "February" },
-            { key: 3, value: "March" },
-            { key: 4, value: "April" },
-            { key: 5, value: "May" },
-            { key: 6, value: "June" },
-            { key: 7, value: "July" },
-            { key: 8, value: "August" },
-            { key: 9, value: "September" },
-            { key: 10, value: "October" },
-            { key: 11, value: "November" },
-            { key: 12, value: "December" },
-        ];
+        // this.monthNames = [
+        //     { key: 1, value: "January" },
+        //     { key: 2, value: "February" },
+        //     { key: 3, value: "March" },
+        //     { key: 4, value: "April" },
+        //     { key: 5, value: "May" },
+        //     { key: 6, value: "June" },
+        //     { key: 7, value: "July" },
+        //     { key: 8, value: "August" },
+        //     { key: 9, value: "September" },
+        //     { key: 10, value: "October" },
+        //     { key: 11, value: "November" },
+        //     { key: 12, value: "December" },
+        // ];
 
-        this.monthDays = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+        // this.monthDays = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
         let dealerTZ = checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
 
         this.state = {
+            weekDays: getWeekDays(),
+            monthNames: getMonthNames(),
+            monthDays: getDaysOfMonth(),
             visible: false,
             filteredDevices: [],
             selectedDealers: [],
@@ -440,6 +443,12 @@ class SendMsgForm extends Component {
         return current && current < moment().endOf('day');
     }
 
+    handleDaysOfMonth = (monthName) => {
+        let getDays = getDaysOfMonth(monthName);
+        this.props.form.setFieldsValue({ ["monthDate"]: '' }); // reset days of month
+        this.setState({ monthDays: getDays, monthDate: 0 });
+    }
+
     disabledDateTime = () => {
         // return {
         //     disabledHours: () => this.range(0, 24).splice(4, 20),
@@ -447,7 +456,9 @@ class SendMsgForm extends Component {
         //     disabledSeconds: () => [55, 56],
         // };
     }
-
+    handleMonthDate = (e) => {
+        this.setState({ monthDate: e });
+    }
     // validateRepeater = async (rule, value, callback) => {
     //     // console.log("values: ", value)
     //     if (value === 'NONE') {
@@ -665,7 +676,7 @@ class SendMsgForm extends Component {
                                                     placeholder={convertToLang(this.props.translation[""], "Select Day")}
                                                 // onChange={this.handleStartDay}
                                                 >
-                                                    {this.weekDays.map((item) => <Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)}
+                                                    {this.state.weekDays.map((item) => <Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)}
                                                 </Select>
                                             )}
                                         </Form.Item>
@@ -690,9 +701,9 @@ class SendMsgForm extends Component {
                                                     showSearch={false}
                                                     style={{ width: '100%' }}
                                                     placeholder={convertToLang(this.props.translation[""], "Select Month")}
-                                                // onChange={this.handleStartDay}
+                                                    onChange={(e) => this.handleDaysOfMonth(e)}
                                                 >
-                                                    {this.monthNames.map((item) => <Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)}
+                                                    {this.state.monthNames.map((item) => <Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)}
                                                 </Select>
                                             )}
                                         </Form.Item>
@@ -714,12 +725,13 @@ class SendMsgForm extends Component {
                                                 ],
                                             })(
                                                 <Select
+                                                    setFieldsValue={this.state.monthDate}
                                                     showSearch={false}
                                                     style={{ width: '100%' }}
                                                     placeholder={convertToLang(this.props.translation[""], "Select date of month")}
-                                                // onChange={this.handleStartDay}
+                                                    onChange={this.handleMonthDate}
                                                 >
-                                                    {this.monthDays.map((item) => <Select.Option key={item} value={item}>{item}</Select.Option>)}
+                                                    {this.state.monthDays.map((item) => <Select.Option key={item} value={item}>{item}</Select.Option>)}
                                                 </Select>
                                             )}
                                         </Form.Item>

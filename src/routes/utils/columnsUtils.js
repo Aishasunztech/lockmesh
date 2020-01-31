@@ -1908,6 +1908,12 @@ export function dealerColsWithSearch(translation, searchBar = false, callBack = 
             render: (text, record, index) => ++index,
         },
         {
+            title: convertToLang(translation[DEALER_ACTION], "ACTION"),
+            dataIndex: 'action',
+            key: 'action',
+            className: '',
+        },
+        {
             title: convertToLang(translation[DEALER_ID], "DEALER ID"),
             dataIndex: 'dealer_id',
             key: 'dealer_id',
@@ -1965,13 +1971,7 @@ export function dealerColsWithSearch(translation, searchBar = false, callBack = 
             // },
             // sortDirections: ['ascend', 'descend'],
             className: '',
-        },
-        {
-            title: convertToLang(translation[DEALER_ACTION], "DEALER ACTION"),
-            dataIndex: 'action',
-            key: 'action',
-            className: '',
-        },
+        }
 
     ];
 

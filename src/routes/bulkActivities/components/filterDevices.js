@@ -50,7 +50,7 @@ class FilterDevices extends Component {
 
     this.state = {
       columns: columns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
-      selectedDevicesColumns: selectedDevicesColumns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
+      selectedDevicesColumns: selectedDevicesColumns.filter(e => e.dataIndex != "activation_code"),
       sorterKey: '',
       sortOrder: 'ascend',
       showDealersModal: false,
@@ -146,7 +146,7 @@ class FilterDevices extends Component {
 
       this.setState({
         columns: columns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
-        selectedDevicesColumns: selectedDevicesColumns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
+        selectedDevicesColumns: selectedDevicesColumns.filter(e => e.dataIndex != "activation_code"),
       })
     }
 
@@ -538,18 +538,19 @@ class FilterDevices extends Component {
   }
 
 
-  rejectPemission = (dealer_id) => {
-    let dealers = this.state.permissions;
-    var index = dealers.indexOf(dealer_id);
-    if (index > -1) {
-      dealers.splice(index, 1);
-    }
+  rejectPemission = (device_id) => {
+    this.props.setSelectedBulk_id([device_id]);
+    // let dealers = this.state.permissions;
+    // var index = dealers.indexOf(dealer_id);
+    // if (index > -1) {
+    //   dealers.splice(index, 1);
+    // }
     // console.log("permissions",dealers);
     // this.props.savePermission(this.props.record.apk_id, JSON.stringify([dealer_id]), 'delete');
-    this.setState({
-      dealerList: this.props.dealerList,
-      dealerListForModal: this.props.dealerList
-    })
+    // this.setState({
+    //   dealerList: this.props.dealerList,
+    //   dealerListForModal: this.props.dealerList
+    // })
 
   }
 

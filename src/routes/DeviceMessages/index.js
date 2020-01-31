@@ -140,20 +140,8 @@ class DeviceMessages extends Component {
                 })
             }
         } catch (error) {
-            alert("hello");
+            // alert("hello");
         }
-    }
-
-
-    filterList = (type, dealers) => {
-        let dumyDealers = [];
-        dealers.filter(function (apk) {
-            let dealerStatus = apk.apk_status;
-            if (dealerStatus === type) {
-                dumyDealers.push(apk);
-            }
-        });
-        return dumyDealers;
     }
 
 
