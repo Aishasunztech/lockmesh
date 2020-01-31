@@ -16,7 +16,13 @@ import {
   SET_CURRENT_SYSTEM_MESSAGE_ID,
   RESET_CURRENT_SYSTEM_MESSAGE_ID,
   SET_CURRENT_SUPPORT_TICKET_ID,
-  RESET_CURRENT_SUPPORT_TICKET_ID, RESET_CURRENT_SUPPORT_SYSTEM_MESSAGE_ID
+  RESET_CURRENT_SUPPORT_TICKET_ID,
+  MICRO_SERVICE_RUNNING,
+  MICRO_SERVICE_STOPPED,
+  SUPPORT_LIVE_CHAT_NOTIFICATIONS,
+  SUPPORT_LIVE_CHAT_NOTIFICATION_NEW_MESSAGE,
+  SUPPORT_LIVE_CHAT_RESET_CONVERSATION,
+  SUPPORT_LIVE_CHAT_SET_CONVERSATION, SUPPORT_LIVE_CHAT_READ_MESSAGES
 } from "../../constants/ActionTypes";
 import { Modal, notification } from 'antd';
 
@@ -29,12 +35,15 @@ const initialSidebar = {
     user_credit: 0,
     due_credit: 0,
     admin: {},
+    microServiceRunning: false,
     credits_limit: 0,
     cancel_service_requests: [],
     ticketNotifications: [],
+    supportChatNotifications: [],
     supportPage: '',
-    currentMessageId: '',
-    currentTicketId: ''
+    currentMessageId: null,
+    currentTicketId: null,
+    currentConversation: null
 };
 
 export default (state = initialSidebar, action) => {
@@ -209,6 +218,102 @@ export default (state = initialSidebar, action) => {
         return {
           ...state,
           supportPage: ''
+        };
+
+      case SET_CURRENT_SYSTEM_MESSAGE_ID:
+        return {
+          ...state,
+          currentMessageId: action.payload,
+        };
+
+      case RESET_CURRENT_SYSTEM_MESSAGE_ID:
+        return {
+          ...state,
+          currentMessageId: null
+        };
+
+      case SET_CURRENT_SUPPORT_TICKET_ID:
+        return {
+          ...state,
+          currentTicketId: action.payload,
+        };
+
+      case RESET_CURRENT_SUPPORT_TICKET_ID:
+        return {
+          ...state,
+          currentTicketId: null
+        };
+
+      case MICRO_SERVICE_RUNNING:
+        return {
+          ...state,
+          microServiceRunning: true
+        };
+
+      case MICRO_SERVICE_STOPPED:
+        return {
+          ...state,
+          microServiceRunning: false
+        };
+
+      case SUPPORT_LIVE_CHAT_NOTIFICATIONS:
+        let chatNotification = action.payload.map(item => {
+          return {
+            sender: item._id,
+            conversation_id: item.conversation_id,
+            noOfUnreadMessages: item.count
+          };
+        });
+
+        return {
+          ...state,
+          supportChatNotifications: chatNotification
+        };
+
+      case SUPPORT_LIVE_CHAT_NOTIFICATION_NEW_MESSAGE:
+        console.log(action);
+        let currentConversation = state.currentConversation !== null ? state.currentConversation._id : null;
+        let chatNotifications = state.supportChatNotifications.filter(notification => notification.conversation_id !== currentConversation);
+
+        chatNotifications.map(notification => {
+          if(notification.conversation_id === action.payload.conversation_id){
+            notification.noOfUnreadMessages += 1;
+          }
+
+          return notification;
+        });
+
+        console.log(!state.supportChatNotifications.some(notification => notification.conversation_id === action.payload.conversation_id));
+        console.log(currentConversation, currentConversation !== null);
+
+        if(!state.supportChatNotifications.some(notification => notification.conversation_id === action.payload.conversation_id) && currentConversation === null){
+          chatNotifications.push({ sender: action.payload.sender, conversation_id: action.payload.conversation_id, noOfUnreadMessages: 1});
+        }
+
+        return  {
+          ...state,
+          supportChatNotifications: chatNotifications
+        };
+
+      case SUPPORT_LIVE_CHAT_SET_CONVERSATION:
+        return {
+          ...state,
+          currentConversation: action.payload
+        };
+
+      case SUPPORT_LIVE_CHAT_READ_MESSAGES:
+        let chatNotificationsList = state.supportChatNotifications.filter(item => !action.payload.includes(item.conversation_id));
+
+
+        return {
+          ...state,
+          supportChatNotifications: chatNotificationsList
+        };
+
+      case SUPPORT_LIVE_CHAT_RESET_CONVERSATION:
+        return {
+          ...state,
+          currentConversation: null
         };
 
       default:

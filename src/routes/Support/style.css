@@ -52,3 +52,15 @@
 .float-left {
   float: left;
 }
+
+.text-area-height {
+  height: calc(100vh - 335px) !important;
+}
+
+.text-area-height.no-reply {
+  height: calc(100vh - 225px) !important;
+}
+
+.button-ticket-reply-send {
+  height: 100px !important;
+}

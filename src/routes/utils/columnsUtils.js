@@ -1477,7 +1477,7 @@ export function bulkDeviceHistoryColumns(translation) {
 
         //     sortDirections: ['ascend', 'descend'],
 
-        // }, 
+        // },
         {
             title: convertToLang(translation[DEVICE_EXPIRY_DATE], "EXPIRY DATE"),
             align: "center",
@@ -3961,7 +3961,7 @@ export function supportSystemMessage(translation, isModal = false) {
       title: "ACTION",
       dataIndex: 'action',
       align: 'center',
-      width: 150,
+      width: 100,
       className: '',
     },
     {
@@ -3969,12 +3969,12 @@ export function supportSystemMessage(translation, isModal = false) {
       dataIndex: 'receivers',
       className: '',
       key: 'receivers',
-      width: 200,
+      width: 100,
     },
 
     {
       title: convertToLang(translation[""], "TYPE"),
-      width: 200,
+      width: 100,
       dataIndex: 'type',
       key: 'type',
       sorter: (a, b) => { return a.type.localeCompare(b.type) },
@@ -3983,7 +3983,7 @@ export function supportSystemMessage(translation, isModal = false) {
 
     {
       title: convertToLang(translation[""], "SENDER"),
-      width: 200,
+      width: 100,
       dataIndex: 'sender',
       key: 'sender',
       sorter: (a, b) => { return a.sender.localeCompare(b.sender) },
@@ -3993,13 +3993,14 @@ export function supportSystemMessage(translation, isModal = false) {
     {
       title: convertToLang(translation[""], "SUBJECT"),
       dataIndex: 'subject',
+      width: 400,
       key: 'subject',
       sorter: (a, b) => { return a.subject.localeCompare(b.subject) },
       sortDirections: ['ascend', 'descend'],
     },
 
     {
-      width: 200,
+      width: 100,
       title: convertToLang(translation[""], "DATE"),
       dataIndex: 'createdAt',
       key: 'createdAt',
@@ -4008,7 +4009,7 @@ export function supportSystemMessage(translation, isModal = false) {
     },
 
     {
-      width: 200,
+      width: 100,
       title: convertToLang(translation[""], "TIME"),
       dataIndex: 'createdTime',
       key: 'createdTime',

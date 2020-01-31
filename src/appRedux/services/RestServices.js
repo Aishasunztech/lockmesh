@@ -1153,6 +1153,12 @@ const RestService = {
         return axios.post(BASE_URL + 'users/check-unique-pgp', { pgp_email: value }, RestService.getHeader());
     },
 
+
+    //check support system running
+    checkSupportServiceRunning: () => {
+      return axios.get(SUPPORT_URL);
+    },
+
     //support tickets
     //generate Support Ticket
     generateSupportTicket: (data) => {
@@ -1230,5 +1236,15 @@ const RestService = {
     getSupportLiveChatMessages: (data) => {
         return axios.get(SUPPORT_URL + 'messages/get?type=' + data.type + '&id=' + data.id, RestService.getHeader());
     },
+
+    // Get Support Live Chat Notifications
+    getSupportLiveChatNotifications: () => {
+      return axios.get(SUPPORT_URL + 'messages/getNotifications', RestService.getHeader());
+    },
+
+    // read the chat message
+    updateSupportLiveChatReadStatus: (data) => {
+      return axios.put(SUPPORT_URL + 'messages/read', data, RestService.getHeader());
+    }
 };
 export default RestService;

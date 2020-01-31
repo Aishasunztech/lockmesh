@@ -109,6 +109,7 @@ class Dashboard extends Component {
                 />
 
                 <NewDevice
+                    showSupport={false}
                     ref='new_device'
                     devices={this.props.devices}
                     addDevice={this.props.addDevice}
@@ -123,7 +124,7 @@ class Dashboard extends Component {
                     cancel_service_requests={this.props.cancel_service_requests}
                     rejectServiceRequest={this.props.rejectServiceRequest}
                     acceptServiceRequest={this.props.acceptServiceRequest}
-                    ticketNotifications={this.props.ticketNotifications}
+                    // ticketNotifications={this.props.ticketNotifications}
                     allDealers={this.props.allDealers}
                 />
 

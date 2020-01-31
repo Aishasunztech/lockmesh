@@ -13,8 +13,9 @@ import {
   deleteSupportTicket,
   getSupportTicketReplies,
   getAllToAllDealers,
-  setCurrentTicketId,
-  resetCurrentTicketId
+  setSupportPage,
+  setCurrentSupportTicketId,
+  resetCurrentSupportTicketId
 } from "../../../appRedux/actions";
 import { connect } from "react-redux";
 import {
@@ -101,11 +102,12 @@ class Mail extends PureComponent {
 
   constructor(props) {
     super(props);
+    let currentMail = props.currentTicket !== null ? props.currentTicket : null;
     this.state = {
       searchTicket: '',
       filter: 'all_all',
       alertMessage: '',
-      currentMail: null,
+      currentMail: currentMail,
       composeMail: false,
       filteredSupportTickets: [],
       supportTickets: [],
@@ -128,12 +130,21 @@ class Mail extends PureComponent {
   componentDidMount() {
     this.props.getDealerList();
     this.props.getSupportTickets(this.props.user);
+
+    if(this.state.currentMail !== null && this.props.getSupportTicketReplies){
+      this.props.getSupportTicketReplies(this.state.currentMail._id);
+    }
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-
     let ticketsWithUser = [];
     let dealerData;
+
+    if(this.props !== prevProps){
+      let { currentTicket } = this.props;
+      currentTicket = currentTicket !== null ? currentTicket : null ;
+      this.setState({currentMail: currentTicket });
+    }
 
     if (this.state.supportTickets.length !== this.props.supportTickets.length && this.props.dealerList.length > 0) {
 
@@ -195,7 +206,8 @@ class Mail extends PureComponent {
       currentMail: mail,
     });
     this.props.updateOnTicketPage(true);
-    this.props.setCurrentTicket(mail._id);
+    this.props.setCurrentTicket(mail);
+    this.props.setSupportPage('2');
   }
 
   deSelectMail() {
@@ -354,6 +366,8 @@ var mapStateToProps = ({ auth, SupportTickets, dealers, sidebar }) => {
     dealerList: dealers.allDealers,
     closeSupportTicketStatus: SupportTickets.closeSupportTicketStatus,
     supportTicketReplies: SupportTickets.supportTicketReplies,
+    currentSystemMessage: sidebar.currentMessageId,
+    currentTicket: sidebar.currentTicketId
   };
 };
 
@@ -366,8 +380,9 @@ function mapDispatchToProps(dispatch) {
     closeSupportTicket: closeSupportTicket,
     deleteSupportTicket: deleteSupportTicket,
     getSupportTicketReplies: getSupportTicketReplies,
-    setCurrentTicket: setCurrentTicketId,
-    resetCurrentTicket: resetCurrentTicketId
+    setCurrentTicket: setCurrentSupportTicketId,
+    resetCurrentTicket: resetCurrentSupportTicketId,
+    setSupportPage: setSupportPage
   }, dispatch);
 }
 

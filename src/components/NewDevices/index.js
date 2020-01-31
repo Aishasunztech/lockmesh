@@ -1,9 +1,12 @@
 import React, { Component, Fragment } from 'react';
-import { Modal, Table, Button, Form, Row, Col, Icon, Checkbox, Tabs } from 'antd';
+import { Modal, Table, Button, Form, Row, Col, Icon, Checkbox, Tabs, Badge } from 'antd';
 import { withRouter, Link, Redirect } from "react-router-dom";
 import AddDeviceModal from '../../routes/devices/components/AddDevice';
 import { ADMIN, ACTION, CREDITS, CREDITS_CASH_REQUESTS, ARE_YOU_SURE_YOU_WANT_TO_DECLINE_THIS_REQUEST, ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST, WARNING, DEVICE_UNLINKED } from '../../constants/Constants';
-import { convertToLang } from '../../routes/utils/commonUtils';
+import {
+  checkValue, convertToLang, getDateFromTimestamp,
+  getOnlyTimeFromTimestamp
+} from '../../routes/utils/commonUtils';
 import { Button_Ok, Button_Cancel, Button_Confirm, Button_Decline, Button_ACCEPT, Button_Transfer, Button_Yes, Button_No } from '../../constants/ButtonConstants';
 import { DEVICE_ID, DEVICE_SERIAL_NUMBER, DEVICE_IMEI_1, DEVICE_SIM_2, DEVICE_IMEI_2, DEVICE_REQUESTS, DEVICE_SIM_1 } from '../../constants/DeviceConstants';
 import { DEALER_NAME, DEALER_ID, DEALER_PIN } from '../../constants/DealerConstants';
@@ -39,14 +42,12 @@ export default class NewDevices extends Component {
             { title: convertToLang(props.translation[""], "CREDITS TO REFUND"), dataIndex: 'credits_to_refund', key: 'credits_to_refund', align: "center" },
         ];
         const ticketNotificationColumns = [
-            {
-                title: <Button size="small" type="primary" onClick={() => {
-                    let tickets = this.state.selectedTicketNotifications;
-                    this.setState({ selectedTicketNotifications: [] });
-                    this.props.updateTicketNotifications({ ticketIds: tickets });
-                }}><Icon type="eye" /></Button>, dataIndex: 'selection', key: 'action', align: "center"
-            },
-            { title: convertToLang(props.translation[""], "TICKET SUBJECT"), dataIndex: 'subject', key: 'ticket_subject', align: "center" },
+            { title: <Button size="small" type="primary" onClick={() => {
+              let tickets = this.state.selectedTicketNotifications;
+              this.setState({selectedTicketNotifications: []});
+              this.props.updateTicketNotifications({ticketIds: tickets});
+            }}><Icon type="eye" /></Button>, dataIndex: 'selection', key: 'action', align: "center" },
+            { title: convertToLang(props.translation[""], "TICKET SUBJECT"), dataIndex: 'subject', width: 200, key: 'ticket_subject', align: "center" },
             { title: convertToLang(props.translation[""], "DEALER NAME"), dataIndex: 'dealer_name', key: 'dealer_name', align: "center" },
             { title: convertToLang(props.translation[""], "DEALER PIN"), dataIndex: 'dealer_pin', key: 'dealer_pin', align: "center" },
             { title: convertToLang(props.translation[""], "TYPE"), dataIndex: 'type', key: 'type', align: "center" },
@@ -68,24 +69,38 @@ export default class NewDevices extends Component {
             { title: convertToLang(props.translation[""], "CREATED AT"), dataIndex: 'created_at', key: 'created_at', align: "center" },
         ];
 
+        const supportChatColumns = [
+          { title: <Button size="small" type="primary" onClick={() => {
+            let selectedChat = this.state.selectedChat;
+            this.props.markMessagesRead({conversations: selectedChat});
+            this.setState({ selectedChat: [] });
+            }}><Icon type="eye" /></Button>, dataIndex: 'action', key: 'action',  align: 'center'},
+          { title: convertToLang(props.translation[""], "User"), dataIndex: 'conversation', key: 'conversation', align: 'center'},
+          { title: convertToLang(props.translation[""], "No Of Unread Messages"), dataIndex: 'noOfUnreadMessages', key: 'noOfUnreadMessages', align: 'center'}
+        ];
+
         this.state = {
             columns: columns,
             columns1: columns1,
             cancelServiceColumns: cancelServiceColumns,
             ticketNotificationColumns: ticketNotificationColumns,
             supportSystemMessages: supportSystemMessages,
+            supportChatColumns: supportChatColumns,
             visible: false,
             NewDevices: [],
             NewRequests: [],
             sectionVisible: true,
             flaggedDevicesModal: false,
             reqDevice: '',
+            dealers: [],
             redirect: false,
             showLInkRequest: false,
             selectedSystemMessages: [],
             systemMessagesNotifications: [],
             selectedTicketNotifications: [],
-            ticketNotifications: []
+            ticketNotifications: [],
+            supportChat: [],
+            selectedChat: []
         }
     }
 
@@ -105,6 +120,15 @@ export default class NewDevices extends Component {
         } else {
             this.setState({ selectedTicketNotifications: selectedTickets.filter(ticket => ticket !== val) });
         }
+    }
+
+    updateChatSelection = (e, val) => {
+      let selectedChat = this.state.selectedChat;
+      if (e.target.checked) {
+        this.setState({ selectedChat: [...selectedChat, val] });
+      } else {
+        this.setState({ selectedChat: selectedChat.filter(chat => chat !== val) });
+      }
     }
 
 
@@ -136,14 +160,23 @@ export default class NewDevices extends Component {
         this.setState({
             NewDevices: this.props.devices,
             NewRequests: this.props.requests
-        })
+        });
+
+        if(this.props.allDealers){
+          this.setState({dealers: this.props.allDealers});
+        }
     }
 
-    componentDidUpdate(prevProps) {
-        if (prevProps !== this.props) {
-            this.setState({ systemMessagesNotifications: this.props.supportSystemMessagesNotifications });
-            this.setState({ ticketNotifications: this.props.ticketNotifications });
+    componentDidUpdate(prevProps){
+      if(prevProps !== this.props){
+        this.setState({systemMessagesNotifications: this.props.supportSystemMessagesNotifications});
+        this.setState({ticketNotifications: this.props.ticketNotifications});
+        this.setState({supportChat: this.props.supportChatNotifications});
+
+        if(this.props.allDealers){
+          this.setState({dealers: this.props.allDealers});
         }
+      }
     }
     componentWillReceiveProps(nextProps) {
         if (this.props.devices.length !== nextProps.devices.length || this.props.requests.length !== nextProps.requests.length) {
@@ -159,6 +192,14 @@ export default class NewDevices extends Component {
 
         if (nextProps.ticketNotifications) {
             this.setState({ ticketNotifications: nextProps.ticketNotifications });
+        }
+
+        if(nextProps.supportChatNotifications){
+          this.setState({supportChat: nextProps.supportChatNotifications});
+        }
+
+        if(nextProps.allDealers){
+          this.setState({dealers: nextProps.allDealers});
         }
     }
 
@@ -203,7 +244,7 @@ export default class NewDevices extends Component {
     }
 
     acceptServiceRequest(request) {
-        console.log(this.props.acceptServiceRequest);
+        // console.log(this.props.acceptServiceRequest);
         showConfirm(this, convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST], "Are you sure you want to accept this request ?"), this.props.acceptServiceRequest, request)
     }
 
@@ -270,33 +311,36 @@ export default class NewDevices extends Component {
     }
 
     renderTicketNotifications(list) {
+      let { setCurrentSupportTicketId, setSupportPage } = this.props;
 
         if (list && Array.isArray(list) && list.length > 0) {
-            return list.map((notification) => {
-                let dealer_name = 'N/A';
-                let dealer_pin = 'N/A';
-                if (typeof this.props.allDealers !== 'undefined') {
-                    let dealer = this.props.allDealers.find(dealer => dealer.dealer_id == notification.user_id);
-                    if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_name')) {
-                        dealer_name = dealer.dealer_name;
-                    }
-                    if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_type') && dealer.dealer_type !== 1 && dealer.hasOwnProperty('link_code')) {
-                        dealer_pin = dealer.link_code;
-                    }
-                }
-                return {
-                    selection: <Checkbox defaultChecked={false} checked={this.state.selectedTicketNotifications.some(item => item === notification._id)} onChange={(e) => this.updateTicketsSelection(e, notification._id)} />,
-                    id: notification.id,
-                    key: notification.id,
-                    dealer_name: dealer_name,
-                    dealer_pin: dealer_pin,
-                    type: notification.type,
-                    subject: notification.ticket.subject,
-                    category: notification.ticket.category,
-                    priority: notification.ticket.priority,
-                    created_at: moment(notification.createdAt).format('YYYY/MM/DD hh:mm:ss'),
-                }
-            });
+          return list.map((notification) => {
+            let dealer_name = 'N/A';
+            let dealer_pin = 'N/A';
+            let dealer = this.state.dealers.find(dealer => dealer.dealer_id == notification.user_id);
+            if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_name')) {
+              dealer_name = dealer.dealer_name;
+            }
+            if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('type') && dealer.type !== ADMIN && dealer.hasOwnProperty('link_code')) {
+              dealer_pin = dealer.link_code;
+            }
+            return {
+                  selection: <Checkbox defaultChecked={false} checked={this.state.selectedTicketNotifications.some(item => item === notification._id)} onChange={(e) => this.updateTicketsSelection(e, notification._id)} />,
+                  id: notification.id,
+                  key: notification.id,
+                  dealer_name: dealer_name,
+                  dealer_pin: dealer_pin,
+                  type: notification.type,
+                  subject: <a href="javascript:void(0);" onClick={() => {
+                    setCurrentSupportTicketId(notification.ticket);
+                    setSupportPage('2');
+                    this.setPageState(true);
+                  }}>{notification.ticket.subject.length > 30 ? notification.ticket.subject.substr(0, 30) + '...' : notification.ticket.subject}</a>,
+                  category: notification.ticket.category,
+                  priority: notification.ticket.priority,
+                  created_at: moment(notification.createdAt).format('YYYY/MM/DD hh:mm:ss'),
+              }
+          });
         } else {
             return [];
         }
@@ -304,6 +348,7 @@ export default class NewDevices extends Component {
     }
 
     renderSupportSystemMessagesNotifications(list) {
+      let { setCurrentSystemMessageId, setSupportPage } = this.props;
         if (list && Array.isArray(list) && list.length > 0) {
             return list.map((notification) => {
                 return {
@@ -311,13 +356,72 @@ export default class NewDevices extends Component {
                     id: notification.id,
                     key: notification.id,
                     sender: <span className="text-capitalize">{notification.sender_user_type}</span>,
-                    subject: notification.system_message.subject,
+                    subject: <a href="javascript:void(0);" onClick={() => {
+                      let sender = notification.system_message.sender_user_type.charAt(0).toUpperCase() + notification.system_message.sender_user_type.slice(1);
+                      let data = {
+                        id: notification.system_message._id,
+                        key: notification.system_message._id,
+                        rowKey: notification.system_message._id,
+                        type: 'Received',
+                        sender_user_type: notification.sender_user_type,
+                        sender: sender,
+                        subject: checkValue(notification.system_message.subject),
+                        message: checkValue(notification.system_message.message),
+                        createdAt: getDateFromTimestamp(notification.system_message.createdAt),
+                        createdTime: getOnlyTimeFromTimestamp(notification.system_message.createdAt)
+                      }
+                      setCurrentSystemMessageId(data);
+                      setSupportPage('1');
+                      this.setPageState(true);
+                  }}>{checkValue(notification.system_message.subject).length > 30 ? checkValue(notification.system_message.subject).substr(0, 30) + "..." : checkValue(notification.system_message.subject)}</a>,
                     created_at: moment(notification.createdAt).format('YYYY/MM/DD hh:mm:ss'),
                 }
             });
         } else {
             return [];
         }
+    }
+
+    renderSupportChatNotifications(list){
+      let { setSupportPage, setCurrentConversation } = this.props;
+      if(list && Array.isArray(list) && list.length > 0){
+        return list.map((notification, index) => {
+          let dealer_name = 'N/A';
+          let dealer_pin = 'N/A';
+          let isAdmin = false;
+          let dealerObject = {};
+          let dealer = this.state.dealers.find(dealer => dealer.dealer_id == notification.sender);
+          if(typeof dealer !== 'undefined' && dealer.hasOwnProperty('type') && dealer.type === ADMIN){
+            isAdmin = true;
+          }
+
+          if(typeof dealer !== 'undefined'){
+            dealerObject = dealer;
+          }
+          if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('dealer_name')) {
+            dealer_name = dealer.dealer_name.charAt(0).toLocaleUpperCase() + dealer.dealer_name.substr(1);
+          }
+          if (typeof dealer !== 'undefined' && dealer.hasOwnProperty('type') && dealer.type !== ADMIN && dealer.hasOwnProperty('link_code')) {
+            dealer_pin = dealer.link_code;
+          }
+          return {
+            key: index,
+            rowKey: index,
+            conversation: <a href="javascript:void(0);" onClick={() => {
+              setCurrentConversation(dealerObject, notification.conversation_id);
+              setSupportPage('3');
+              this.setPageState(true);
+            }}>{isAdmin ? `${dealer_name}` : `${dealer_name} (${dealer_pin})`}</a>,
+            noOfUnreadMessages: notification.noOfUnreadMessages,
+            user: dealerObject,
+            id: notification.conversation_id,
+            action: <Checkbox defaultChecked={false} checked={this.state.selectedChat.some(item => item === notification.conversation_id)} onChange={(e) => this.updateChatSelection(e, notification.conversation_id)} />
+          }
+        })
+      } else {
+        return [];
+      }
+
     }
 
     renderServiceRequestList(list) {
@@ -462,7 +566,11 @@ export default class NewDevices extends Component {
                 >
                     <Tabs tabPosition={'top'}>
                         {(this.props.authUser.type === ADMIN) ? null :
-                            <TabPane tab={convertToLang(this.props.translation[DEVICE_REQUESTS], "DEVICE REQUESTS")} key="1">
+                            <TabPane tab={
+                              <Badge count={this.state && this.state.NewDevices && this.state.NewDevices.length}>
+                                {convertToLang(this.props.translation[DEVICE_REQUESTS], "DEVICE REQUESTS")}
+                              </Badge>
+                            } key="1">
                                 <Fragment>
                                     {/* <h1>{convertToLang(this.props.translation[DEVICE_REQUESTS], "DEVICE REQUESTS")}</h1> */}
                                     <Table
@@ -477,7 +585,11 @@ export default class NewDevices extends Component {
                             </TabPane>
                         }
                         {(this.state.sectionVisible && this.props.authUser.type === ADMIN) ?
-                            <TabPane tab={convertToLang(this.props.translation[""], "CANCEL SERVICES REQUESTS")} key="2">
+                            <TabPane tab={
+                              <Badge count={this.props && this.props.cancel_service_requests && this.props.cancel_service_requests.length}>
+                                {convertToLang(this.props.translation[""], "CANCEL SERVICES REQUESTS")}
+                              </Badge>
+                            } key="2">
                                 <Fragment>
                                     {/* <h1>{convertToLang(this.props.translation[""], "CANCEL SERVICES REQUESTS")}</h1> */}
                                     <Table
@@ -491,7 +603,41 @@ export default class NewDevices extends Component {
                                 </Fragment>
                             </TabPane>
                             : null}
-                        <TabPane tab={convertToLang(this.props.translation[""], "Ticket Notifications")} key="3">
+                        {this.props.showSupport && <TabPane tab={
+                          <Badge count={this.state && this.state.supportChat && this.state.supportChat.length}>
+                            {convertToLang(this.props.translation[""], "Support Chat")}
+                          </Badge>
+                        } key="3">
+                          <Fragment>
+                            <Row className="width_100" style={{ display: "block", marginLeft: 0 }}>
+                              {/* <h1 style={{ display: "inline" }}>{convertToLang(this.props.translation[""], "Ticket Notifications")} */}
+                              <Button type="primary" size="small" style={{ float: "right", marginTop: '6px' }} onClick={() => {
+                                this.props.setSupportPage('3');
+                                if (window.location.pathname !== '/support') {
+                                  this.setPageState(true);
+                                } else {
+                                  this.setState({
+                                    visible: false
+                                  });
+                                }
+                              }}>View Messages</Button>
+                              {/* </h1> */}
+
+                            </Row>
+                            <Table
+                              bordered
+                              columns={this.state.supportChatColumns}
+                              style={{ marginTop: 20 }}
+                              dataSource={this.renderSupportChatNotifications(this.state.supportChat)}
+                              pagination={false}
+                            />
+                          </Fragment>
+                        </TabPane>}
+                        {this.props.showSupport && <TabPane tab={
+                          <Badge count={this.state && this.state.ticketNotifications && this.state.ticketNotifications.length}>
+                            {convertToLang(this.props.translation[""], "Ticket Notifications")}
+                          </Badge>
+                        } key="4">
                             <Fragment>
                                 <Row className="width_100" style={{ display: "block", marginLeft: 0 }}>
                                     {/* <h1 style={{ display: "inline" }}>{convertToLang(this.props.translation[""], "Ticket Notifications")} */}
@@ -515,9 +661,13 @@ export default class NewDevices extends Component {
                                     pagination={false}
                                 />
                             </Fragment>
-                        </TabPane>
-                        {this.props.authUser.type !== ADMIN ?
-                            <TabPane tab={convertToLang(this.props.translation[""], "System Message Notifications")} key="4">
+                        </TabPane>}
+                        {this.props.showSupport && this.props.authUser.type !== ADMIN ?
+                            <TabPane tab={
+                              <Badge count={this.state && this.state.systemMessagesNotifications && this.state.systemMessagesNotifications.length}>
+                                {convertToLang(this.props.translation[""], "System Message Notifications")}
+                              </Badge>
+                                } key="5">
                                 <Fragment>
                                     <Row className="width_100" style={{ display: "block", marginLeft: 0 }}>
                                         {/* <h1>{convertToLang(this.props.translation[""], "System Message Notifications")} */}
