@@ -218,6 +218,7 @@ class DevicesList extends Component {
 
     // renderList
     renderList(list) {
+        // console.log("devices list: ", list);
         return list.map((device, index) => {
             var status = device.finalStatus;
             const button_type = (status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ? "danger" : "dashed";
@@ -265,7 +266,7 @@ class DevicesList extends Component {
             let actionBtns = getDevicesListActionBtns(this.props.user, device, status, allButtons);
             return {
                 rowKey: index,
-                key: status == DEVICE_UNLINKED ? `${device.user_acc_id} ${device.created_at} ` : device.id,
+                key: status == DEVICE_UNLINKED ? `${device.user_acc_id} ${device.created_at} ${index}` : device.id,
                 // counter: ++index,
                 action: actionBtns,
                 status: (<span style={color} > {status}</span>),
