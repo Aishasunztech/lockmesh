@@ -214,8 +214,8 @@ export default class NewDevices extends Component {
                 _this.setState({ flaggedDevicesModal: false, visible: false });
             },
             onCancel() { },
-            okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
-            cancelText: convertToLang(this.props.translation[Button_No], 'No'),
+            okText: convertToLang(_this.props.translation[Button_Yes], 'Yes'),
+            cancelText: convertToLang(_this.props.translation[Button_No], 'No'),
         });
     }
 

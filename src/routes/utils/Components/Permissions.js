@@ -197,9 +197,9 @@ class Permissions extends Component {
   saveAllDealersConfirm = () => {
     let _this = this;
     confirm({
-      title: convertToLang(this.props.translation[Alert_Allow_Permission_Delaer], "Do you really Want to allow Permission for all Dealers?"),
-      okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
-      cancelText: convertToLang(this.props.translation[Button_No], "No"),
+      title: convertToLang(_this.props.translation[Alert_Allow_Permission_Delaer], "Do you really Want to allow Permission for all Dealers?"),
+      okText: convertToLang(_this.props.translation[Button_Yes], "Yes"),
+      cancelText: convertToLang(_this.props.translation[Button_No], "No"),
       onOk() {
         _this.saveAllDealers()
       },
@@ -396,9 +396,9 @@ class Permissions extends Component {
   removeAllDealersConfirm = () => {
     let _this = this;
     confirm({
-      title: convertToLang(this.props.translation[Alert_Remove_Permission_Delaer], "Do you really Want to Remove Permission for all Dealers?"),
-      okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
-      cancelText: convertToLang(this.props.translation[Button_No], "No"),
+      title: convertToLang(_this.props.translation[Alert_Remove_Permission_Delaer], "Do you really Want to Remove Permission for all Dealers?"),
+      okText: convertToLang(_this.props.translation[Button_Yes], "Yes"),
+      cancelText: convertToLang(_this.props.translation[Button_No], "No"),
       onOk() {
         _this.removeAllDealers();
       },
