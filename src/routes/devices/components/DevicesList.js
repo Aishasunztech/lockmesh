@@ -834,9 +834,9 @@ export default class Tab extends Component {
     unflagConfirm = (device) => {
         let _this = this;
         confirm({
-            title: convertToLang(this.props.translation[DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE], 'Do you really want to unflag the device ') + device.device_id,
-            okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
-            cancelText: convertToLang(this.props.translation[Button_No], 'No'),
+            title: convertToLang(_this.props.translation[DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE], 'Do you really want to unflag the device ') + device.device_id,
+            okText: convertToLang(_this.props.translation[Button_Yes], 'Yes'),
+            cancelText: convertToLang(_this.props.translation[Button_No], 'No'),
             onOk() {
                 _this.props.unflagged(device.usr_device_id)
                 // _this.props.activateDevice(device)
@@ -851,9 +851,9 @@ export default class Tab extends Component {
     unlinkConfirm = (device, transfered = false) => {
         let _this = this;
         confirm({
-            title: convertToLang(this.props.translation[""], "Do you really want to unlink the transfered device ") + device.device_id,
-            okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
-            cancelText: convertToLang(this.props.translation[Button_No], 'No'),
+            title: convertToLang(_this.props.translation[""], "Do you really want to unlink the transfered device ") + device.device_id,
+            okText: convertToLang(_this.props.translation[Button_Yes], 'Yes'),
+            cancelText: convertToLang(_this.props.translation[Button_No], 'No'),
             onOk() {
                 // console.log('unlinkConfirm ', device);
                 _this.props.unlinkDevice(device, transfered)

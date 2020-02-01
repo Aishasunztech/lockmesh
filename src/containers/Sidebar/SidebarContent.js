@@ -174,9 +174,9 @@ class SidebarContent extends Component {
   logout = () => {
     let _this = this;
     Modal.confirm({
-      title: convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_TO_LOGOUT], "Are you sure you want to logout?"),
-      okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
-      cancelText: convertToLang(this.props.translation[Button_No], "No"),
+      title: convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TO_LOGOUT], "Are you sure you want to logout?"),
+      okText: convertToLang(_this.props.translation[Button_Yes], "Yes"),
+      cancelText: convertToLang(_this.props.translation[Button_No], "No"),
 
       onOk() {
         _this.props.logout()
@@ -191,12 +191,12 @@ class SidebarContent extends Component {
   changeLng = (language) => {
     let _this = this;
 
-    this.setState({ clicked: false });
+    _this.setState({ clicked: false });
 
     Modal.confirm({
-      title: convertToLang(this.props.translation[Alert_Change_Language], "Are you sure you want to change the language?"),
-      okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
-      cancelText: convertToLang(this.props.translation[Button_No], "No"),
+      title: convertToLang(_this.props.translation[Alert_Change_Language], "Are you sure you want to change the language?"),
+      okText: convertToLang(_this.props.translation[Button_Yes], "Yes"),
+      cancelText: convertToLang(_this.props.translation[Button_No], "No"),
 
       onOk() {
         _this.props.switchLanguage(language)

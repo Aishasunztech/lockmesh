@@ -310,9 +310,9 @@ class FilterDevices extends Component {
     if (done) {
       let _this = this;
       confirm({
-        title: convertToLang(this.props.translation["Do you really Want to add all Devices?"], "Do you really Want to add all Devices?"),
-        okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
-        cancelText: convertToLang(this.props.translation[Button_No], "No"),
+        title: convertToLang(_this.props.translation["Do you really Want to add all Devices?"], "Do you really Want to add all Devices?"),
+        okText: convertToLang(_this.props.translation[Button_Yes], "Yes"),
+        cancelText: convertToLang(_this.props.translation[Button_No], "No"),
         onOk() {
           _this.saveAllDealers()
         },
@@ -559,9 +559,9 @@ class FilterDevices extends Component {
     if (done) {
       let _this = this;
       confirm({
-        title: convertToLang(this.props.translation["Do you really Want to Remove all filtered devices?"], "Do you really Want to Remove all filtered devices?"),
-        okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
-        cancelText: convertToLang(this.props.translation[Button_No], "No"),
+        title: convertToLang(_this.props.translation["Do you really Want to Remove all filtered devices?"], "Do you really Want to Remove all filtered devices?"),
+        okText: convertToLang(_this.props.translation[Button_Yes], "Yes"),
+        cancelText: convertToLang(_this.props.translation[Button_No], "No"),
         onOk() {
           _this.removeAllDealers();
         },
