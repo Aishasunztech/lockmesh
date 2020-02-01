@@ -307,8 +307,8 @@ class FilterDevices extends Component {
 
   saveAllDealersConfirm = () => {
     let done = this.devicesNotFoundErrorMsg();
+    let _this = this;
     if (done) {
-      let _this = this;
       confirm({
         title: convertToLang(_this.props.translation["Do you really Want to add all Devices?"], "Do you really Want to add all Devices?"),
         okText: convertToLang(_this.props.translation[Button_Yes], "Yes"),
@@ -556,8 +556,8 @@ class FilterDevices extends Component {
 
   removeAllDealersConfirm = () => {
     let done = this.devicesNotFoundErrorMsg();
+    let _this = this;
     if (done) {
-      let _this = this;
       confirm({
         title: convertToLang(_this.props.translation["Do you really Want to Remove all filtered devices?"], "Do you really Want to Remove all filtered devices?"),
         okText: convertToLang(_this.props.translation[Button_Yes], "Yes"),
