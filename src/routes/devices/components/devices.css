@@ -523,6 +523,14 @@
     padding-left: 0;
 }
 
+.overdue_table .bg_yellow:hover {
+    background: #ffff00 !important;
+}
+
+.overdue_table .bg_red:hover {
+    background: #ff0000 !important;
+}
+
 @media screen and (max-width: 991px) {
     .credit_popup {
         width: 85% !important;
