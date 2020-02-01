@@ -283,11 +283,11 @@ class ConnectDealer extends Component {
     }
 
     ac_st_title = () => {
-        return <h4 className="credit_modal_heading weight_600">{convertToLang(this.props.translation[""], "ACCOUNT STATUS")}</h4>
+        return <h4 className="credit_modal_heading">{convertToLang(this.props.translation[""], "ACCOUNT STATUS")}</h4>
     };
 
     renderAccountStatus = () => {
-        let statusBGC, statusDays;
+        let statusBGC, statusDays; 
         let account_status_paragraph = '';
         if (this.props.dealer.account_balance_status_by === 'due_credits') {
             if (this.props.dealer.account_balance_status === 'restricted' && this.props.overdueDetails._30to60 > 0) {
