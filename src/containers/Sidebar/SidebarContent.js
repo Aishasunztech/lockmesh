@@ -111,7 +111,7 @@ class SidebarContent extends Component {
       this.props.getCancelServiceRequests()
       this.refs.new_device.showModal();
     }
-    if(this.props.microServiceRunning){
+    if (this.props.microServiceRunning) {
       this.props.getTicketsNotifications();
       this.props.getSupportSystemMessagesNotifications();
     }
@@ -126,7 +126,7 @@ class SidebarContent extends Component {
     })
     this.props.getNewDevicesList();
     this.props.getNewCashRequests();
-    if(this.props.microServiceRunning){
+    if (this.props.microServiceRunning) {
       this.props.getTicketsNotifications()
       this.props.getSupportSystemMessagesNotifications()
       this.props.getSupportLiveChatNotifications();
@@ -144,7 +144,7 @@ class SidebarContent extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(this.props !== prevProps){
+    if (this.props !== prevProps) {
       this.setState({
         languageData: this.props.languageData
       })
@@ -163,7 +163,7 @@ class SidebarContent extends Component {
         this.props.getLanguage();
       }
 
-      if(this.props.microServiceRunning !== prevProps.microServiceRunning){
+      if (this.props.microServiceRunning !== prevProps.microServiceRunning) {
         this.props.getTicketsNotifications();
         this.props.getSupportSystemMessagesNotifications();
         this.props.getSupportLiveChatNotifications();
@@ -369,7 +369,7 @@ class SidebarContent extends Component {
                     {/* <i className="fa fa-mobile" aria-hidden="true"></i> */}
                   </i>
                   {/* <IntlMessages id="sidebar.devices" /> */}
-                  {convertToLang(translation[Sidebar_users_devices], "StandAlone Sims")}
+                  {convertToLang(translation[""], "Sims")}
                 </Link>
               </Menu.Item>
               <Menu.Item key="users">

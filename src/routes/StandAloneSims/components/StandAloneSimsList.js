@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 // import { connect } from "react-redux";
 // import { bindActionCreators } from "redux";
 import scrollIntoView from 'scroll-into-view';
-import { Card, Row, Col, List, Button, message, Table, Icon, Switch, Modal } from "antd";
+import { Card, Row, Col, List, Button, message, Table, Icon, Switch, Modal, Tabs } from "antd";
 
 import CustomScrollbars from "../../../util/CustomScrollbars";
 import { getFormattedDate, convertToLang, getDateTimeOfClientTimeZone, convertTimezoneValue } from '../../utils/commonUtils';
@@ -22,7 +22,7 @@ import { TIMESTAMP_FORMAT } from '../../../constants/Application';
 // import styles1 from './users_fixheader.css';
 
 const confirm = Modal.confirm
-
+const TabPane = Tabs.TabPane
 class UserList extends Component {
 
     constructor(props) {
@@ -32,7 +32,8 @@ class UserList extends Component {
             pagination: this.props.pagination,
             users: [],
             expandedRowKeys: [],
-            scrollStatus: true
+            scrollStatus: true,
+            tabselect: '1'
         }
     }
     handlePagination = (value) => {
@@ -45,6 +46,10 @@ class UserList extends Component {
     handleSearch2 = () => {
         // console.log('refs of all', this.refs)
 
+    }
+
+    callback = (key) => {
+        this.props.handleChangetab(key);
     }
 
     renderList(list) {
@@ -177,7 +182,7 @@ class UserList extends Component {
         }
     }
     render() {
-
+        let { translation } = this.props
         let type = this.props.user.type
         let styleType = "";
         if (type === ADMIN) {
@@ -188,22 +193,28 @@ class UserList extends Component {
         // console.log("render function this.state.expandedRowKeys: ", this.state.expandedRowKeys)
         return (
             <Fragment>
-                <Card className={`fix_card ${styleType}`}>
+                <div>
                     <hr className="fix_header_border" style={{ top: "59px" }} />
-                    <CustomScrollbars className="gx-popover-scroll">
-                        <Table
-                            className="users_list"
-                            size="middle"
-                            bordered
-                            columns={this.props.columns}
-                            onChange={this.props.onChangeTableSorting}
-                            dataSource={this.renderList(this.props.simsList)}
-                            pagination={false}
-                            ref='user_table'
-                            translation={this.props.translation}
-                        />
-                    </CustomScrollbars>
-                </Card>
+                    <Tabs type="card" className="dev_tabs" activeKey={this.props.tabSelect} onChange={this.callback}>
+                        <TabPane tab={<span>{convertToLang(translation[""], "All")}</span>} key="1" forceRender={true}>
+                        </TabPane>
+                        <TabPane tab={<span>{convertToLang(translation[""], "Device Sims")} </span>} key="2" forceRender={true}>
+                        </TabPane>
+                        <TabPane tab={<span>{convertToLang(translation[""], "Stand Alone Sims")}</span>} key="3" forceRender={true}>
+                        </TabPane>
+                    </Tabs>
+                    <Table
+                        className="users_list"
+                        size="middle"
+                        bordered
+                        columns={this.props.columns}
+                        onChange={this.props.onChangeTableSorting}
+                        dataSource={this.renderList(this.props.simsList)}
+                        pagination={false}
+                        ref='user_table'
+                        translation={this.props.translation}
+                    />
+                </div>
                 <AddUser ref='edit_user' translation={this.props.translation} />
             </Fragment>
         )
