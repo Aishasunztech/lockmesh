@@ -37,7 +37,7 @@ const initialSidebar = {
     user_credit: 0,
     due_credit: 0,
     admin: {},
-    microServiceRunning: false,
+    microServiceRunning: localStorage.getItem('isMicroServiceRunning') !== null && localStorage.getItem('isMicroServiceRunning').toLowerCase() === 'true',
     credits_limit: 0,
     cancel_service_requests: [],
     ticketNotifications: [],
@@ -247,12 +247,14 @@ export default (state = initialSidebar, action) => {
         };
 
       case MICRO_SERVICE_RUNNING:
+        localStorage.setItem('isMicroServiceRunning', true);
         return {
           ...state,
           microServiceRunning: true
         };
 
       case MICRO_SERVICE_STOPPED:
+        localStorage.setItem('isMicroServiceRunning', false);
         return {
           ...state,
           microServiceRunning: false

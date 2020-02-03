@@ -344,7 +344,8 @@ class Chat extends Component {
         admin.link_code     = '';
       }
 
-      if (this.props.user.type === SDEALER  && this.props.dealerList.length > 0){
+      if (this.props.user.type === SDEALER){
+        //   && this.props.dealerList.length > 0
 
         let dealer          = this.props.dealerList.find((dealer) => (dealer.dealer_id === this.props.user.connected_dealer ));
 
@@ -353,7 +354,8 @@ class Chat extends Component {
           copyContactList: [dealer, admin],
         })
 
-      }else if (this.props.user.type === DEALER && this.props.contactList.length > 0){
+      }else if (this.props.user.type === DEALER){
+        //  && this.props.contactList.length > 0
 
         this.setState({
           contactList: [...this.props.contactList, admin],
