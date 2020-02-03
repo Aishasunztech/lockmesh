@@ -129,13 +129,13 @@ class ConnectDealer extends Component {
 
     onChangeCurrency = (e, field) => {
 
+        let _this = this;
         if (e === 'USD') {
             this.setState({
                 currency: 'usd',
                 currency_price: null,
             })
         } else {
-            let _this = this;
             RestService.exchangeCurrency(e).then((response) => {
                 if (response.data.status) {
                     console.log(this.props.dealer.credits * response.data.currency_unit)
@@ -283,11 +283,11 @@ class ConnectDealer extends Component {
     }
 
     ac_st_title = () => {
-        return <h4 className="credit_modal_heading weight_600">{convertToLang(this.props.translation[""], "ACCOUNT STATUS")}</h4>
+        return <h4 className="credit_modal_heading">{convertToLang(this.props.translation[""], "ACCOUNT STATUS")}</h4>
     };
 
     renderAccountStatus = () => {
-        let statusBGC, statusDays;
+        let statusBGC, statusDays; 
         let account_status_paragraph = '';
         if (this.props.dealer.account_balance_status_by === 'due_credits') {
             if (this.props.dealer.account_balance_status === 'restricted' && this.props.overdueDetails._30to60 > 0) {
@@ -384,14 +384,14 @@ class ConnectDealer extends Component {
                 {
                     key: '1',
                     a:
-                        <div
+                        <div className="cursor_p"
                             onClick={() => this.refs.dealerOverDuePayments.showModal(this.props.dealer, dealer._0to21_dues_history)}
                         >
                             <span className="overdue_txt">0-21:</span>
                             <span className="overdue_values">{dealer._0to21_dues}</span>
                         </div>,
                     b:
-                        <div
+                        <div className="cursor_p"
                             onClick={() => this.refs.dealerOverDuePayments.showModal(this.props.dealer, dealer._21to30_dues_history)}
                         >
                             <span className="overdue_txt">21+:</span>
@@ -403,14 +403,14 @@ class ConnectDealer extends Component {
                     // a: <div><span className="overdue_txt">0-21:</span> <span className="overdue_values">{dealer._0to21_dues}</span></div>,
                     // b: <div><span className="overdue_txt">21+:</span> <span className="overdue_values">{dealer._21to30_dues}</span></div>,
                     a:
-                        <div
+                        <div className="cursor_p"
                             onClick={() => this.refs.dealerOverDuePayments.showModal(this.props.dealer, dealer._30to60_dues_history)}
                         >
                             <span className="overdue_txt">30+:</span>
                             <span className="overdue_values">{dealer._30to60_dues}</span>
                         </div>,
                     b:
-                        <div
+                        <div className="cursor_p"
                             onClick={() => this.refs.dealerOverDuePayments.showModal(this.props.dealer, dealer._60toOnward_history)}
                         >
                             <span className="overdue_txt">60+:</span>
@@ -566,6 +566,7 @@ class ConnectDealer extends Component {
                                     getDealerSalesHistory={this.props.getDealerSalesHistory}
                                     changeDealerStatus={this.props.changeDealerStatus}
                                     domainPermission={this.props.domainPermission}
+                                    dealerDomainLoading={this.props.dealerDomainLoading}
                                 />
                             </Col>
                         </Row>
@@ -622,6 +623,7 @@ var mapStateToProps = ({ dealer_details, dealers, settings, auth, account }) => 
         isLoading: dealer_details.connectDealerLoading,
         authUser: auth.authUser,
         // dealers: dealers.textTransform
+        dealerDomainLoading: dealer_details.dealerDomainLoading
     };
 }
 

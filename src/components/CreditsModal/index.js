@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Modal, Table, Button, Row, Col, Select } from 'antd';
+import { Modal, Table, Button, Row, Col, Select, Card } from 'antd';
 import { Link } from "react-router-dom";
 import PurchaseCredit from "../../routes/account/components/PurchaseCredit";
 import { convertToLang,  formatMoney } from '../../routes/utils/commonUtils';
@@ -174,10 +174,10 @@ class CreditIcon extends Component {
     return <div>
       <Row gutter="16">
         <Col span={12} className="credit_modal_heading bg_brown">
-          <h4 className="weight_600 mb-0 "><b> {convertToLang(this.props.translation[""], "ACCOUNT STATUS")} </b></h4>
+          <h4 className="mb-0 weight_600"> {convertToLang(this.props.translation[""], "ACCOUNT STATUS")} </h4>
         </Col>
         <Col span={12} className={"credit_modal_heading " + class_name}>
-          <h4 className=" weight_600  mb-0 ">
+          <h4 className=" weight_600 mb-0">
             {convertToLang(this.props.translation[""], (this.props.account_balance_status == 'active') ?
               <span className="">ACTIVE</span> : (this.props.account_balance_status === 'restricted') ?
                 <span> Restriction Level 1</span> :
@@ -194,7 +194,7 @@ class CreditIcon extends Component {
 
   overdue_title = () => {
     return <div className="credit_modal_heading">
-      <h4 className="weight_600">{convertToLang(this.props.translation[""], "OVERDUE")}
+      <h4 className="weight_600 mb-0">{convertToLang(this.props.translation[""], "OVERDUE")}
         <Link to={'/account/payment-overdue-history'}>
           <Button type="default" size="small" className="full_list_btn" onClick={() => this.handleCancel()}>Full List</Button>
         </Link>
@@ -204,7 +204,7 @@ class CreditIcon extends Component {
 
   pay_history_title = () => {
     return <div className="credit_modal_heading">
-      <h4 className="weight_600">{convertToLang(this.props.translation[""], "PAYMENT HISTORY")}
+      <h4 className="weight_600 mb-0">{convertToLang(this.props.translation[""], "PAYMENT HISTORY")}
         <Link to={'/account/credits-payment-history'}>
           <Button type="default" size="small" className="full_list_btn" onClick={() => this.handleCancel()}>Full List</Button>
         </Link>
@@ -297,7 +297,7 @@ class CreditIcon extends Component {
       return [
         {
           name: <h5 className={'ac_st_info'} >INFO</h5>,
-          value: <h5 className={"weight_600 mb-0 p-8 bg_brown" + statusBGC} >{account_status_paragraph} </h5>,
+          value: <h5 className={"mb-0 p-8 bg_brown " + statusBGC} >{account_status_paragraph} </h5>,
         }
       ];
     }
@@ -407,69 +407,71 @@ class CreditIcon extends Component {
           className="credit_popup"
         > */}
         <Fragment>
-          <Row>
-            <Col xs={24} sm={24} md={11} lg={11} xl={11} className="mb-16">
-              <Table
-                className="ac_status_table"
-                dataSource={this.renderAccountStatus()}
-                columns={this.a_s_columns}
-                pagination={false}
-                title={this.ac_st_title}
-                bordered
-                showHeader={false}
-              />
-              {/* <h6 className="mt-6"> {account_status_paragraph}</h6> */}
-            </Col>
-            <Col xs={24} sm={24} md={0} lg={1} xl={1}>
-            </Col>
-            <Col xs={24} sm={24} md={14} lg={12} xl={12}>
-              <Table
-                className="current_bl_table"
-                dataSource={this.renderCreditBalance()}
-                columns={this.cr_blnc_columns}
-                pagination={false}
-                title={this.cr_blnc_title}
-                bordered
-              />
-            </Col>
-          </Row>
-          <div>
+          <Card>
             <Row>
-              <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+              <Col xs={24} sm={24} md={11} lg={11} xl={11} className="mb-16">
                 <Table
-                  className="overdue_table"
-                  dataSource={this.renderOverData()}
-                  columns={this.overdue_columns}
+                  className="ac_status_table"
+                  dataSource={this.renderAccountStatus()}
+                  columns={this.a_s_columns}
                   pagination={false}
-                  title={this.overdue_title}
+                  title={this.ac_st_title}
                   bordered
-                  size="small"
-                  scroll={{ x: true }}
+                  showHeader={false}
+                />
+                {/* <h6 className="mt-6"> {account_status_paragraph}</h6> */}
+              </Col>
+              <Col xs={24} sm={24} md={0} lg={1} xl={1}>
+              </Col>
+              <Col xs={24} sm={24} md={14} lg={12} xl={12}>
+                <Table
+                  className="current_bl_table"
+                  dataSource={this.renderCreditBalance()}
+                  columns={this.cr_blnc_columns}
+                  pagination={false}
+                  title={this.cr_blnc_title}
+                  bordered
                 />
               </Col>
             </Row>
+            <div>
+              <Row>
+                <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                  <Table
+                    className="overdue_table"
+                    dataSource={this.renderOverData()}
+                    columns={this.overdue_columns}
+                    pagination={false}
+                    title={this.overdue_title}
+                    bordered
+                    size="small"
+                    scroll={{ x: true }}
+                  />
+                </Col>
+              </Row>
 
-          </div>
+            </div>
 
-          <div>
-            <Table
-              className="pay_history"
-              columns={this.paymentHistoryColumns}
-              dataSource={this.renderPaymentHistoryList(this.props.latestPaymentTransaction)}
-              bordered
-              title={this.pay_history_title}
-              pagination={false}
-              scroll={{ x: true }}
-            />
-          </div>
+            <div>
+              <Table
+                className="pay_history"
+                columns={this.paymentHistoryColumns}
+                dataSource={this.renderPaymentHistoryList(this.props.latestPaymentTransaction)}
+                bordered
+                title={this.pay_history_title}
+                pagination={false}
+                scroll={{ x: true }}
+              />
+            </div>
 
-          {/* <div className="edit_ftr_btn11">
+            {/* <div className="edit_ftr_btn11">
               <Button type="primary" onClick={() => {
                 this.setState({
                   visible: false
                 })
               }} >{convertToLang(this.props.translation[""], "OK")}</Button>
             </div> */}
+          </Card>
         </Fragment>
         {/* </Modal> */}
 

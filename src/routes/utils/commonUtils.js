@@ -153,24 +153,24 @@ export function componentSearch(arr, search) {
 
 
 export function componentSearchSystemMessages(arr, keys, search) {
-  let foundDevices = [];
-  let obks = keys;
-  arr.map((el) => {
-    obks.some((obk) => {
-      if (obk) {
-        let temp = el[obk];
-        if (obk === 'dealer_id')
-          temp = temp.toString()
-        if ((typeof temp) === 'string') {
-          if (temp.toLowerCase().includes(search.toLowerCase())) {
-            foundDevices.push(el);
-            return true;
-          }
-        }
-      }
-    });
-  })
-  return foundDevices;
+	let foundDevices = [];
+	let obks = keys;
+	arr.map((el) => {
+		obks.some((obk) => {
+			if (obk) {
+				let temp = el[obk];
+				if (obk === 'dealer_id')
+					temp = temp.toString()
+				if ((typeof temp) === 'string') {
+					if (temp.toLowerCase().includes(search.toLowerCase())) {
+						foundDevices.push(el);
+						return true;
+					}
+				}
+			}
+		});
+	})
+	return foundDevices;
 }
 
 export function getFormattedDate(value) {
@@ -212,7 +212,11 @@ export function getDateFromTimestamp(value) {
 }
 
 export function getOnlyTimeFromTimestamp(value) {
-  return moment(value).format('HH:mm');
+	return moment(value).format('HH:mm');
+}
+
+export function getOnlyTimeAndDateTimestamp(value) {
+	return moment(value).format('DD-MM-YYYY HH:mm');
 }
 
 export function convertTimestampToDate(value) {
@@ -312,7 +316,11 @@ export function getDevicesListActionBtns(user, device, status, allButtons) {
 		actionBtns.push(<Fragment>{allButtons.DeleteBtn}</Fragment>)
 	}
 	else if (status === DEVICE_PENDING_ACTIVATION && user.type !== ADMIN && device.link_code === user.dealer_pin) {
-		actionBtns.push(<Fragment> <Fragment>{allButtons.DeclineBtn}</Fragment><Fragment>{allButtons.AcceptBtn}</Fragment><Fragment>{allButtons.transferButton}</Fragment></Fragment>)
+		if (device.relink_status == 1) {
+			actionBtns.push(<Fragment> <Fragment>{allButtons.rejectRelinkBtn}</Fragment> <Fragment>{allButtons.relinkBtn}</Fragment></Fragment>)
+		} else {
+			actionBtns.push(<Fragment> <Fragment>{allButtons.DeclineBtn}</Fragment><Fragment>{allButtons.AcceptBtn}</Fragment><Fragment>{allButtons.transferButton}</Fragment></Fragment>)
+		}
 	}
 	// else if (status === DEVICE_PRE_ACTIVATION) {
 	//     actionBtns = false
@@ -412,6 +420,10 @@ export function getDefaultLanguage(transaction_id) {
 		case "tableHeadings.REMAININGDAYS":
 			return "VALID DAYS";
 
+		case "tableHeadings.device-parent-id":
+			return "PARENT DEALER ID";
+		case "tableHeadings.device-parent-name":
+			return "PARENT DEALER NAME";
 
 		// apk Columns
 		case "show.on.device.id":
@@ -456,9 +468,55 @@ export function getDefaultLanguage(transaction_id) {
 		default:
 			return transaction_id; // already translated language
 	}
+}
 
+export function getWeekDays() {
+	return [
+		{ key: 1, value: "Sunday" },
+		{ key: 2, value: "Monday" },
+		{ key: 3, value: "Tuesday" },
+		{ key: 4, value: "Wednesday" },
+		{ key: 5, value: "Thursday" },
+		{ key: 6, value: "Friday" },
+		{ key: 7, value: "Saturday" },
+	];
+}
+export function getMonthNames() {
+	return [
+		{ key: 1, value: "January" },
+		{ key: 2, value: "February" },
+		{ key: 3, value: "March" },
+		{ key: 4, value: "April" },
+		{ key: 5, value: "May" },
+		{ key: 6, value: "June" },
+		{ key: 7, value: "July" },
+		{ key: 8, value: "August" },
+		{ key: 9, value: "September" },
+		{ key: 10, value: "October" },
+		{ key: 11, value: "November" },
+		{ key: 12, value: "December" },
+	]
+}
 
+export function getDaysOfMonth(monthName = '') {
+	let monthDays = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+	//  January, March, May, July, August, October & December (all these months contain 31 days) Total # 07
+	//  April, June, September & November (all these months contain 30 days) Total # 04
 
+	if (monthName === 4 || monthName === 6 || monthName === 9 || monthName === 11) { // April, June, September & November
+		monthDays.pop(); // it will remove last index from array
+		// monthDays = monthDays.slice(0, -1); // it will remove last index from array
+	}
+	else if (monthName === 2) { // February
+		let currentYear = moment().format('YYYY');
+		let leepYear = (currentYear % 100 === 0) ? (currentYear % 400 === 0) : (currentYear % 4 === 0);
+		if (leepYear) {
+			monthDays = monthDays.slice(0, -2); // it will remove last 2 index from array
+		} else {
+			monthDays = monthDays.slice(0, -3); // it will remove last 3 index from array
+		}
+	}
+	return monthDays;
 }
 
 export function getTimezonesList() {
@@ -489,24 +547,24 @@ export function getSelectedTZDetail(zone_name) {
 }
 
 export function checkTimezoneValue(zone_name, withGMT = true) {
-  let detail = 'N/A'; // Timezone not selected
-  let timeZones = moment.tz.names();
-  let foundZoneIndex = timeZones.findIndex(item => item.toLowerCase() === zone_name.toLowerCase());
+	let detail = 'N/A'; // Timezone not selected
+	let timeZones = moment.tz.names();
+	let foundZoneIndex = timeZones.findIndex(item => item.toLowerCase() === zone_name.toLowerCase());
 
-  if (foundZoneIndex !== -1) {
-    if (withGMT) {
-      detail = `(GMT${moment.tz(timeZones[foundZoneIndex]).format('Z')}) ${timeZones[foundZoneIndex]}`
-    } else {
-      detail = timeZones[foundZoneIndex];
-    }
-  } else {
-    if (!withGMT) detail = '';
-  }
-  return detail;
+	if (foundZoneIndex !== -1) {
+		if (withGMT) {
+			detail = `(GMT${moment.tz(timeZones[foundZoneIndex]).format('Z')}) ${timeZones[foundZoneIndex]}`
+		} else {
+			detail = timeZones[foundZoneIndex];
+		}
+	} else {
+		if (!withGMT) detail = '';
+	}
+	return detail;
 }
 
 
-export function getWeekDay(key) {
+export function getWeekDayDescription(key) {
 
 	switch (key) {
 		case 1:
@@ -563,24 +621,24 @@ export function getMonthName(key) {
 	}
 }
 export function convertTimezoneValue(dealerTimezone, data, dateFormat, clientToServerTZ = false) { // dealerTimezone: timezone, data: date/time
-  let coverted_dateTime = "N/A";
+	let convertedDateTime = "N/A";
 
-  if (data && data !== "N/A" && data !== "n/a" && data !== "0000-00-00 00:00:00") {
-    let timeZones = moment.tz.names();
-    let foundZoneIndex = timeZones.findIndex(item => item.toLowerCase() === dealerTimezone.toLowerCase());
-    if (foundZoneIndex === -1) {
-      dealerTimezone = moment.tz.guess(); // get local time zone value e.g "Asia/Karachi"
-    }
-    if (clientToServerTZ) {
-      coverted_dateTime = moment.tz(data, dealerTimezone).tz(SERVER_TIMEZONE).format(dateFormat);
-    } else {
-      // convert server time to client time
-      coverted_dateTime = moment.tz(data, SERVER_TIMEZONE).tz(dealerTimezone).format(dateFormat);
-    }
-  }
+	if (data && data !== "N/A" && data !== "n/a" && data !== "0000-00-00 00:00:00") {
+		let timeZones = moment.tz.names();
+		let foundZoneIndex = timeZones.findIndex(item => item.toLowerCase() === dealerTimezone.toLowerCase());
+		if (foundZoneIndex === -1) {
+			dealerTimezone = moment.tz.guess(); // get local time zone value e.g "Asia/Karachi"
+		}
+		if (clientToServerTZ) {
+			convertedDateTime = moment.tz(data, dealerTimezone).tz(SERVER_TIMEZONE).format(dateFormat);
+		} else {
+			// convert server time to client time
+			convertedDateTime = moment.tz(data, SERVER_TIMEZONE).tz(dealerTimezone).format(dateFormat);
+		}
+	}
 
-  // console.log("convertTimezoneValue ",data, SERVER_TIMEZONE,  dealerTimezone, coverted_dateTime)
-  return coverted_dateTime;
+	// console.log("convertTimezoneValue ",data, SERVER_TIMEZONE,  dealerTimezone, convertedDateTime)
+	return convertedDateTime;
 }
 
 export function handleMultipleSearch(e, copy_status, copyRequireSearchData, demoSearchValues, requireForSearch) {
@@ -918,8 +976,8 @@ export function formatMoney(amount, decimalCount = 2, decimal = ".", thousands =
 
 export function removeColumns(columnList, removeIndexes) {
 	return columnList.filter((column) => {
-		for(let i=0; i<removeIndexes.length; i++){
-			if(column.dataIndex !== removeIndexes[i]){
+		for (let i = 0; i < removeIndexes.length; i++) {
+			if (column.dataIndex !== removeIndexes[i]) {
 				return column;
 			}
 		}

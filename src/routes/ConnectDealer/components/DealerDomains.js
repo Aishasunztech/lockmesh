@@ -32,7 +32,8 @@ export default class DealerDomains extends Component {
         this.state = {
             visible: false,
             dealer_id: null,
-            domains: []
+            domains: [],
+            domainLoading: false
         }
         this.columns = domainColumns(props.translation, this.handleSearch, true);
 
@@ -101,13 +102,17 @@ export default class DealerDomains extends Component {
     componentWillReceiveProps(nextProps) {
         if (this.props.domains.length !== nextProps.domains.length) {
             this.setState({
-                domains: nextProps.domains
+                domains: nextProps.domains,
+                domainLoading: nextProps.dealerDomainLoading
             })
         }
     }
     deleteDomain = id => {
         // this.props.deleteDomain(id);
         this.props.domainPermission([id], [this.state.dealer_id], 'delete', false, this.props.authUser, id);
+        let loadingCopy = Object.assign({}, this.state.domainLoading)
+        loadingCopy[`removebtn_` + id] = true
+        this.setState({ domainLoading: loadingCopy })
     }
     renderDealerDomainList = (list) => {
         if (list) {
@@ -125,6 +130,7 @@ export default class DealerDomains extends Component {
                         <Button
                             size="small"
                             type="danger"
+                            loading={this.state.domainLoading[`removebtn_` + item.id] ? true : false}
                             onClick={() => this.deleteDomain(item.id)}
                         // disabled
                         // disabled={removeBtnDisable}
@@ -187,6 +193,7 @@ export default class DealerDomains extends Component {
                     domainPermission={this.props.domainPermission}
                     authUser={this.props.authUser}
                     dealerId={this.state.dealer_id}
+                    dealerDomainLoading={this.props.dealerDomainLoading}
                 />
             </Fragment >
         )

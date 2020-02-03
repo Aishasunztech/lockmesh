@@ -12,6 +12,8 @@ import InsideHeader from "../Topbar/InsideHeader/index";
 import AboveHeader from "../Topbar/AboveHeader/index";
 import BelowHeader from "../Topbar/BelowHeader/index";
 import Topbar from "../Topbar/index";
+import { checkMicrServiceStatus } from "../../appRedux/actions";
+import { closeSupportSystemSocket, closeConnectPageSocketEvents, closeWebSocket } from '../../appRedux/actions/Socket';
 
 import Customizer from "./Customizer";
 
@@ -59,10 +61,9 @@ export class MainApp extends Component {
 	}
 
 	componentDidMount() {
-		if ((!this.props.supportSystemSocket || !this.props.supportSystemSocket.connected)) {
-			this.props.connectSupportSystemSocket();
-		}
-
+    if(!this.props.microServiceRunning){
+      this.props.checkMicrServiceStatus();
+    }
 		if ((!this.props.socket || !this.props.socket.connected)) {
 			this.props.connectSocket();
 		}
@@ -78,8 +79,26 @@ export class MainApp extends Component {
 		// }
 	}
 
-	componentWillUnmount() {
+	componentDidUpdate(prevProps){
+	  if(this.props !== prevProps){
+      if(this.props.microServiceRunning !== prevProps.microServiceRunning){
+        this.props.checkMicrServiceStatus();
+      }
 
+	    if (this.props.microServiceRunning && (!this.props.supportSystemSocket)) {
+        this.props.connectSupportSystemSocket();
+      }
+    }
+  }
+
+	componentWillUnmount() {
+	  if(this.props.microServiceRunning && this.props.supportSystemSocket !== null && this.props.supportSystemSocket.connected){
+	    this.props.closeSupportSystemSocket(this.props.supportSystemSocket);
+    }
+
+    if(this.props.socket && this.props.socket.connected){
+	    this.props.closeWebSocket(this.props.socket);
+    }
 	}
 
 	getContainerClass = (navStyle) => {
@@ -187,13 +206,14 @@ export class MainApp extends Component {
 	}
 }
 
-const mapStateToProps = ({ settings, socket }) => {
+const mapStateToProps = ({ settings, socket, sidebar }) => {
 
 	const { width, navStyle } = settings;
+	const { microServiceRunning } = sidebar;
 	const { supportSystemSocket } = socket;
 
-	return { width, navStyle, socket: socket.socket, supportSystemSocket: supportSystemSocket }
+	return { width, navStyle, socket: socket.socket, supportSystemSocket: supportSystemSocket, microServiceRunning }
 };
 
-export default connect(mapStateToProps, { connectSocket, connectSupportSystemSocket, hello_web, getNotification })(MainApp);
+export default connect(mapStateToProps, { connectSocket, connectSupportSystemSocket, hello_web, getNotification, closeSupportSystemSocket, closeConnectPageSocketEvents, closeWebSocket, checkMicrServiceStatus })(MainApp);
 

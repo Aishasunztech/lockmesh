@@ -11,7 +11,8 @@ import users from "./data/chatUsers";
 import SearchBox from "./components/SearchBox";
 import CircularProgress from "../../../components/CircularProgress/index";
 import {bindActionCreators} from "redux";
-
+import { SUPPORT_LIVE_CHAT_I_AM_TYPING, SUPPORT_LIVE_CHAT_I_STOPPED_TYPING } from "../../../constants/ActionTypes";
+import { setCurrentConversation, markMessagesRead } from "../../../appRedux/actions";
 import {connect} from "react-redux";
 import {
   getAllDealers,
@@ -19,7 +20,7 @@ import {
   getSupportLiveChatConversation, getSupportLiveChatMessages,
   sendSupportLiveChatMessage
 } from "../../../appRedux/actions";
-import {DEALER, SDEALER} from "../../../constants/Constants";
+import {ADMIN, DEALER, SDEALER} from "../../../constants/Constants";
 
 const TabPane = Tabs.TabPane;
 
@@ -40,7 +41,7 @@ class Chat extends Component {
       list.user.dealer_name.toLowerCase().indexOf(userName.toLowerCase()) > -1
     );
   };
-  Communication = () => {
+    Communication = () => {
     const {message, selectedUser} = this.state;
     return <div className="gx-chat-main">
       <div className="gx-chat-main-header">
@@ -71,6 +72,7 @@ class Chat extends Component {
         <Conversation
           conversationData={this.state.conversation}
           selectedUser={selectedUser}
+          user={this.props.user}
         />
       </CustomScrollbars>
 
@@ -110,7 +112,7 @@ class Chat extends Component {
               <Avatar id="avatar-button" src='/static/media/profile-image.c9452584.png'
                       className="gx-size-50"
                       alt=""/>
-              <span className="gx-status gx-online"/>
+              {/*<span className="gx-status gx-online"/>*/}
             </div>
           </div>
 
@@ -168,7 +170,28 @@ class Chat extends Component {
       </div>
     </div>
   };
+
+  _emitEvent = (e) => {
+    if(this.props.supportSocket && this.state.selectedConversation !== null && this.state.selectedUser !== null){
+      if(this.state.message.length > 0 && !this.state.isTypingEventEmitted){
+        this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_AM_TYPING, {conversation: this.state.selectedConversation, user: this.state.selectedUser.dealer_id});
+        this.setState({isTypingEventEmitted: true});
+      } else {
+        if(!this.state.message.length > 0){
+          this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_STOPPED_TYPING, {conversation: this.state.selectedConversation, user: this.state.selectedUser.dealer_id});
+          this.setState({isTypingEventEmitted: false});
+        }
+      }
+    }
+    if(e.key === 'Enter'){
+      if(this.props.supportSocket && this.state.selectedConversation !== null && this.state.selectedUser !== null){
+        this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_STOPPED_TYPING, {conversation: this.state.selectedConversation, user: this.state.selectedUser.dealer_id});
+      }
+    }
+  }
+
   _handleKeyPress = (e) => {
+    this._emitEvent(e);
     if (e.key === 'Enter') {
       this.submitComment();
     }
@@ -182,16 +205,25 @@ class Chat extends Component {
   onSelectUser = (data, type) => {
 
     if (type === 'chat'){
-      this.props.getSupportLiveChatMessages(data._id);
+      this.props.getSupportLiveChatMessages({type: 'conversation', id: data._id});
+      this.props.markMessagesRead({conversations: [data._id]});
+    }else{
+      // this.props.getSupportLiveChatMessages({type: 'user', id: data.dealer_id});
     }
 
-    this.setState({
-      loader: true,
-      selectedSectionId: type === 'user'? data.dealer_id : data.user.dealer_id,
-      drawerState: this.props.drawerState,
-      selectedUser: type === 'user'? data : data.user,
-      conversation: []
-    });
+    let selectedConversation = (data.hasOwnProperty('_id')) ? data._id : null;
+    let user = type === 'chat' ? data.user : data;
+
+    this.props.setCurrentConversation(user, selectedConversation);
+
+    // this.setState({
+    //   loader: true,
+    //   selectedSectionId: type === 'user'? data.dealer_id : data.user.dealer_id,
+    //   drawerState: this.props.drawerState,
+    //   selectedUser: type === 'user'? data : data.user,
+    //   selectedConversation: selectedConversation,
+    //   conversation: []
+    // });
     setTimeout(() => {
       this.setState({loader: false});
     }, 500);
@@ -212,8 +244,8 @@ class Chat extends Component {
       </div>)
   };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       loader: false,
       userNotFound: 'No user found',
@@ -225,7 +257,9 @@ class Chat extends Component {
       contactList: [],
       copyContactList: [],
       selectedUser: null,
+      selectedConversation: null,
       message: '',
+      isTypingEventEmitted: false,
       chatUsers: [],
       copyChatUsers: [],
       conversation: []
@@ -235,29 +269,63 @@ class Chat extends Component {
   componentDidMount() {
     this.props.getAllToAllDealers();
     this.props.getSupportLiveChatConversation();
+    let selectedConversation = null;
+    let selectedUser = null;
+    let dealerId = '';
+
+    if(this.props.currentConversation){
+      selectedConversation = this.props.currentConversation._id ? this.props.currentConversation._id : null;
+      selectedUser = this.props.currentConversation;
+      dealerId = this.props.currentConversation.user.dealer_id;
+    }
+
+    if(this.props.currentConversation && this.props.currentConversation._id !== null && this.state.conversation.length === 0){
+      this.props.getSupportLiveChatMessages({type: 'conversation', id: this.props.currentConversation._id});
+      this.props.markMessagesRead({conversations: [this.props.currentConversation._id]});
+    }
+
+    this.setState({
+      selectedSectionId: dealerId,
+      selectedConversation: selectedConversation,
+      selectedUser: selectedUser
+    });
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
 
     let chatUsersWithUser = [];
 
-    if (prevProps !== this.props && this.state.chatUsers.length !== this.props.supportLiveChatConversations.length && this.props.supportLiveChatConversations.length > 0 && this.props.dealerList.length > 0) {
-
-      this.props.supportLiveChatConversations.map((chatUsers, index) => {
-
-        chatUsers.user = this.props.dealerList.find((dealer) => (dealer.dealer_id === chatUsers.receiver || dealer.dealer_id === chatUsers.sender));
-
-        chatUsersWithUser.push(chatUsers)
-      });
-
-      this.setState({
-        chatUsers: chatUsersWithUser,
-        copyChatUsers: chatUsersWithUser,
-      })
-    }
-
 
     if (prevProps !== this.props){
+
+
+      if (this.state.chatUsers !== this.props.supportLiveChatConversations && this.props.supportLiveChatConversations.length > 0 && this.props.dealerList.length > 0) {
+
+        this.props.supportLiveChatConversations.map((chatUsers) => {
+
+          if (this.props.user.id === chatUsers.sender){
+            chatUsers.user = this.props.dealerList.find((dealer) => (dealer.dealer_id === chatUsers.receiver));
+          }else{
+            chatUsers.user = this.props.dealerList.find((dealer) => (dealer.dealer_id === chatUsers.sender));
+          }
+
+          if (chatUsers.user.type === ADMIN){
+            let adminObject           = chatUsers.user;
+            adminObject.dealer_name   = 'Admin';
+            adminObject.link_code     = '';
+            chatUsers.user            = adminObject;
+          }
+
+
+          chatUsersWithUser.push(chatUsers)
+        });
+
+        this.setState({
+          chatUsers: chatUsersWithUser,
+          copyChatUsers: chatUsersWithUser,
+        });
+
+      }
 
       let admin ;
       if (this.props.user.type === SDEALER || this.props.user.type === DEALER){
@@ -297,38 +365,50 @@ class Chat extends Component {
         })
       }
 
+      if(this.props.currentConversation !== prevProps.currentConversation){
+        if(this.props.currentConversation){
+          if(this.props.currentConversation._id === null){
+            this.setState({
+              selectedSectionId: this.props.currentConversation.user.dealer_id,
+              selectedConversation: this.props.currentConversation._id,
+              selectedUser: this.props.currentConversation,
+              conversation: []
+            });
+          } else {
+            this.props.markMessagesRead({conversations: [this.props.currentConversation._id]});
+            this.props.getSupportLiveChatMessages({type: 'conversation', id: this.props.currentConversation._id});
+            this.setState({
+              selectedSectionId: this.props.currentConversation.user.dealer_id,
+              selectedConversation: this.props.currentConversation._id,
+              selectedUser: this.props.currentConversation
+            });
+          }
+        } else if(this.props.currentConversation === null){
+          this.setState({
+            selectedSectionId: '',
+            selectedConversation: null,
+            selectedUser: null,
+            conversation: []
+          });
+        }
+      }
     }
 
   }
 
   submitComment() {
 
-    if (this.state.message !== '') {
+    if (this.state.message.length > 0 && this.state.message.trim().length > 0) {
       let data = {
-        sender: this.props.user.id,
-        receiver: this.state.selectedUser.dealer_id,
+        receiver: this.state.selectedUser.user.dealer_id,
         message: this.state.message,
       };
 
       this.props.sendSupportLiveChatMessage(data);
-      // const updatedConversation = this.state.conversation.conversationData.concat({
-      //   'type': 'sent',
-      //   'message': this.state.message,
-      //   'sentAt': Moment().format('hh:mm:ss A'),
-      // });
-      // this.setState({
-      //   conversation: {
-      //     ...this.state.conversation, conversationData: updatedConversation
-      //   },
-      //   message: '',
-      //   conversationList: this.state.conversationList.map(conversationData => {
-      //     if (conversationData.id === this.state.conversation.id) {
-      //       return {...this.state.conversation, conversationData: updatedConversation};
-      //     } else {
-      //       return conversationData;
-      //     }
-      //   })
-      // });
+      this.setState({
+        message: '',
+        isTypingEventEmitted: false
+      });
     }
   }
 
@@ -373,13 +453,15 @@ class Chat extends Component {
   }
 }
 
-var mapStateToProps = ({ auth, SupportLiveChat, dealers, sidebar }) => {
+var mapStateToProps = ({ auth, SupportLiveChat, dealers, sidebar, socket }) => {
 
   return {
     contactList: dealers.dealers,
     dealerList: dealers.allDealers,
     admin: sidebar.admin,
     user: auth.authUser,
+    currentConversation: sidebar.currentConversation,
+    supportSocket: socket.supportSystemSocket,
     supportLiveChatConversations: SupportLiveChat.supportLiveChatConversations,
     supportLiveChatMessages: SupportLiveChat.supportLiveChatMessages,
   };
@@ -392,6 +474,8 @@ function mapDispatchToProps(dispatch) {
     getSupportLiveChatConversation: getSupportLiveChatConversation,
     getSupportLiveChatMessages: getSupportLiveChatMessages,
     getAllToAllDealers: getAllToAllDealers,
+    setCurrentConversation: setCurrentConversation,
+    markMessagesRead: markMessagesRead
   }, dispatch);
 }
 

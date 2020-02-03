@@ -1,16 +1,17 @@
 import {
-    FINISHED_PUSH_APPS,
-    FINISHED_PULL_APPS,
-    IN_PROCESS,
-    FINISHED_POLICY,
-    FINISHED_POLICY_STEP,
-    FINISHED_IMEI,
-    SINGLE_APP_PUSHED,
-    GET_APP_JOBS,
-    SINGLE_APP_PULLED,
-    RECEIVE_SIM_DATA,
-    FINISHED_WIPE,
-    DEVICE_SYNCED
+  FINISHED_PUSH_APPS,
+  FINISHED_PULL_APPS,
+  IN_PROCESS,
+  FINISHED_POLICY,
+  FINISHED_POLICY_STEP,
+  FINISHED_IMEI,
+  SINGLE_APP_PUSHED,
+  GET_APP_JOBS,
+  SINGLE_APP_PULLED,
+  RECEIVE_SIM_DATA,
+  FINISHED_WIPE,
+  DEVICE_SYNCED, GENERATE_SUPPORT_TICKET, UPDATE_SUPPORT_TICKET_REPLY, SYSTEM_SUPPORT_MESSAGE_RECEIVED,
+  SUPPORT_LIVE_CHAT_MESSAGE_RECEIVED, SUPPORT_LIVE_CHAT_USER_TYPING, SUPPORT_LIVE_CHAT_USER_STOPPED_TYPING,
 } from "../../constants/ActionTypes";
 
 import {
@@ -31,7 +32,7 @@ import {
   ACK_UNINSTALLED_APPS,
   FINISH_WIPE,
   SEND_JOB_TO_PANEL,
-  FINISHED_BULK_PUSH_APPS, CONNECT_SUPPORT_SYSTEM_SOCKET
+  FINISHED_BULK_PUSH_APPS, CONNECT_SUPPORT_SYSTEM_SOCKET, DISCONNECT_SUPPORT_SYSTEM_SOCKET
 } from "../../constants/SocketConstants";
 
 import RestService from '../services/RestServices'
@@ -315,6 +316,20 @@ export function getAppJobQueue(deviceId) {
     };
 }
 
+export const closeWebSocket = (socket) => {
+  return (dispatch) => {
+    if(socket) {
+      socket.off();
+      socket.disconnect();
+    }
+
+    dispatch({
+      type: DISCONNECT_SOCKET,
+      payload: null
+    });
+  }
+};
+
 export const closeConnectPageSocketEvents = (socket, deviceId) => {
     return (dispatch) => {
         if (socket) {
@@ -382,9 +397,28 @@ export const hello_web = (socket) => {
     }
 }
 
-export const closeAllSocketEvents = (socket) => {
+export const closeSupportSystemSocket = (socket) => {
+  return (dispatch) => {
+    if (socket) {
 
-}
+      socket.off(GENERATE_SUPPORT_TICKET);
+      socket.off(UPDATE_SUPPORT_TICKET_REPLY);
+      socket.off(SYSTEM_SUPPORT_MESSAGE_RECEIVED);
+      socket.off(SUPPORT_LIVE_CHAT_MESSAGE_RECEIVED);
+      socket.off(SUPPORT_LIVE_CHAT_USER_TYPING);
+      socket.off(SUPPORT_LIVE_CHAT_USER_STOPPED_TYPING);
+
+      socket.disconnect();
+    } else {
+
+    }
+    dispatch({
+      type: DISCONNECT_SUPPORT_SYSTEM_SOCKET,
+      payload: null
+    });
+
+  }
+};
 
 
 

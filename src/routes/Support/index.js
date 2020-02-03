@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Card, Tabs, Form, Input, Select, Button} from "antd";
+import React, { Component } from 'react';
+import { Card, Tabs, Form, Input, Select, Button } from "antd";
 import AppFilter from "../../components/AppFilter";
 import Ticket from "./Tickets";
 import SystemMessages from "./SystemMessages";
@@ -7,10 +7,11 @@ import categories from "./Tickets/data/categories";
 import statuses from "./Tickets/data/statuses";
 import priorities from "./Tickets/data/priorities";
 import styles from './style.css'
-import {bindActionCreators} from "redux";
-import {connect} from "react-redux";
-import {ADMIN, DEALER, SDEALER} from "../../constants/Constants";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { ADMIN, DEALER, SDEALER } from "../../constants/Constants";
 import Chat from "./Chat/index";
+import { resetSupportPage, resetCurrentSupportTicketId, resetCurrentSystemMessageId, setSupportPage, resetCurrentConversation } from "../../appRedux/actions";
 
 const TabPane = Tabs.TabPane;
 
@@ -21,7 +22,8 @@ class Support extends Component {
   constructor(props) {
     super(props);
 
-    let currentTabId = (this.props.location ? this.props.location.state ? this.props.location.state.page ? this.props.location.state.page : '1' : '1' : '1');
+    // let currentTabId = (this.props.location ? this.props.location.state ? this.props.location.state.page ? this.props.location.state.page : '1' : '1' : '1');
+    let currentTabId = props.supportPage ? props.supportPage !== '' ? props.supportPage : '1' : '1';
 
     this.state = {
       innerTabSelect: currentTabId,
@@ -34,14 +36,14 @@ class Support extends Component {
 
       {this.props.user.type !== SDEALER ?
 
-        <Button type="primary" style={{float: "right"}} onClick={ () => { this.refs.systemMessages.getWrappedInstance().handleSendMsgButton(true)} } size="default" >Send New Message</Button>
+        <Button type="primary" style={{ float: "right" }} onClick={() => { this.refs.systemMessages.getWrappedInstance().handleSendMsgButton(true) }} size="default" >Send New Message</Button>
         : ''}
 
       {this.props.user.type === DEALER ?
         <Select
           key="system_messages_key"
-          style={{ width: '25%', marginRight: '1%', float: "right" }}
-          onChange={ (e) => { this.setState({filterOption: e})} }
+          className="support_sel_dd"
+          onChange={(e) => { this.refs.systemMessages.getWrappedInstance().filterMessages({ filter: e }) }}
           defaultValue="all"
         >
           <Select.Option value="all">All</Select.Option>
@@ -54,40 +56,40 @@ class Support extends Component {
         type="text"
         key="systemMessagesSearch"
         placeholder="Search"
-        style={{ width: '40%', marginRight: '1%', float: "right" }}
-        onChange={ (e) => {this.setState({systemMessagesSearchValue: e.target.value})} }
+        style={{ width: '220px', marginRight: '6px', float: "right", backgroundColor: '#dedede' }}
+        onChange={(e) => { this.refs.systemMessages.getWrappedInstance().filterMessages({ searchText: e.target.value }) }}
       />
-      </span>;
+    </span>;
 
 
     this.supportTicketOptions = <span>
 
 
       {this.props.user.type !== ADMIN ?
-        <Button type="primary" style={{float: "right"}} onClick={ () => { this.refs.supportTickets.getWrappedInstance().updateState({composeMail: true})} } size="default" >Generate New Ticket</Button>
-      : '' }
+        <Button type="primary" style={{ float: "right" }} onClick={() => { this.refs.supportTickets.getWrappedInstance().updateState({ composeMail: true }) }} size="default" >Generate New Ticket</Button>
+        : ''}
 
       <Select
         key="support_tickets_key"
-        style={{ width: '25%', marginRight: '1%', float: "right" }}
-        onChange={ (e) => { this.refs.supportTickets.getWrappedInstance().filterTickets({filter: e}); }}
+        className="support_sel_dd"
+        onChange={(e) => { this.refs.supportTickets.getWrappedInstance().filterTickets({ filter: e }); }}
         defaultValue="all_all"
       >
         <Select.Option value="all_all">All</Select.Option>
         <Select.OptGroup label="Status">
-        {statuses.filter(status => status.title !== 'all').map( (status, index) => {
-          return <Select.Option value={"status_"+status.title}>{status.title.charAt(0).toUpperCase() + status.title.substr(1)}</Select.Option>
-        }) }
+          {statuses.filter(status => status.title !== 'all').map((status, index) => {
+            return <Select.Option value={"status_" + status.title}>{status.title.charAt(0).toUpperCase() + status.title.substr(1)}</Select.Option>
+          })}
         </Select.OptGroup>
         <Select.OptGroup label="Type">
-        {categories.filter(category => category.title !== 'all').map( (category, index) => {
-          return <Select.Option value={"type_"+category.title}>{category.title.charAt(0).toUpperCase() + category.title.substr(1)}</Select.Option>
-        }) }
+          {categories.filter(category => category.title !== 'all').map((category, index) => {
+            return <Select.Option value={"type_" + category.title}>{category.title.charAt(0).toUpperCase() + category.title.substr(1)}</Select.Option>
+          })}
         </Select.OptGroup>
         <Select.OptGroup label="Priority">
-        {priorities.filter(priority => priority.title !== 'all').map( (priority, index) => {
-          return <Select.Option value={"priority_"+priority.title}>{priority.title.charAt(0).toUpperCase() + priority.title.substr(1)}</Select.Option>
-        }) }
+          {priorities.filter(priority => priority.title !== 'all').map((priority, index) => {
+            return <Select.Option value={"priority_" + priority.title}>{priority.title.charAt(0).toUpperCase() + priority.title.substr(1)}</Select.Option>
+          })}
         </Select.OptGroup>
       </Select>
 
@@ -95,18 +97,55 @@ class Support extends Component {
         type="text"
         key="tokenSearch"
         placeholder="Search"
-        style={{ width: '40%', marginRight: '1%', float: "right" }}
-        onChange={ (e) => {this.refs.supportTickets.getWrappedInstance().filterTickets({searchTicket: e.target.value})} }
+        style={{ width: '220px', marginRight: '6px', float: "right", backgroundColor: '#dedede' }}
+        onChange={(e) => { this.refs.supportTickets.getWrappedInstance().filterTickets({ searchTicket: e.target.value }) }}
       />
-      </span>;
+    </span>;
 
 
-      this.tabBarContent.bind(this);
+    this.tabBarContent.bind(this);
+  }
+
+  componentDidMount(){
+    // if(!this.props.microServiceRunning){
+    //   this.props.history.push('/invalid_page');
+    // }
+  }
+
+  componentDidUpdate(prevProps){
+    if(this.props !== prevProps){
+      let supportPage = this.props.supportPage !== '' ? this.props.supportPage : '1';
+      this.setState({innerTabSelect: supportPage});
+
+      if(!this.props.microServiceRunning){
+        this.props.history.push('/invalid_page');
+      }
+    }
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps.microServiceRunning){
+      this.setState({microServiceRunning: nextProps.microServiceRunning});
+    }
+  }
+
+  componentWillUnmount(){
+    if(this.props.location && this.props.location.pathname && this.props.location.pathname !== '/support') {
+      if (this.props.resetSupportPage) {
+        this.props.resetSupportPage();
+      }
+      if (this.props.resetCurrentSupportTicketId) {
+        this.props.resetCurrentSupportTicketId();
+      }
+      if (this.props.resetCurrentSystemMessageId) {
+        this.props.resetCurrentSystemMessageId();
+      }
+    }
   }
 
 
-  updateOnTicketDetailPage(value){
-    this.setState({onTicketDetailPage: value});
+  updateOnTicketDetailPage(value) {
+    this.setState({ onTicketDetailPage: value });
   }
 
 
@@ -137,15 +176,23 @@ class Support extends Component {
         });
         break;
     }
-
+    if (this.refs && this.refs.supportTickets && this.refs.supportTickets && this.refs.supportTickets.getWrappedInstance()) {
+      if (value !== '2') {
+        this.setState({ onTicketDetailPage: false });
+        this.refs.supportTickets.getWrappedInstance().deSelectMail();
+      }
+    }
+    if(value !== '3'){
+      this.props.resetCurrentConversation();
+    }
   };
 
-  tabBarContent(currentTab, onTicketPage){
+  tabBarContent(currentTab, onTicketPage) {
 
     let content = '';
-    if(currentTab === '1'){
+    if (currentTab === '1') {
       content = this.systemMessagesOptions;
-    } else if (currentTab === '2' && !onTicketPage){
+    } else if (currentTab === '2' && !onTicketPage) {
       content = this.supportTicketOptions;
     }
 
@@ -162,7 +209,7 @@ class Support extends Component {
         />
         <Card>
 
-          <Tabs tabBarExtraContent={ this.tabBarContent(this.state.innerTabSelect, this.state.onTicketDetailPage) } defaultActiveKey={this.state.innerTabSelect} activeKey={this.state.innerTabSelect} type="card" className="supportModuleMainTab" onChange={this.handleChangeCardTabs}>
+          <Tabs tabBarExtraContent={this.tabBarContent(this.state.innerTabSelect, this.state.onTicketDetailPage)} defaultActiveKey={this.state.innerTabSelect} activeKey={this.state.innerTabSelect} type="card" className="supportModuleMainTab" onChange={this.handleChangeCardTabs}>
             <TabPane tab="SYSTEM MESSAGES" key="1" forceRender={false}>
               <SystemMessages
                 ref="systemMessages"
@@ -173,7 +220,7 @@ class Support extends Component {
             <TabPane tab="TICKETS" key="2" forceRender={false}>
               <Ticket ref="supportTickets" updateOnTicketPage={this.updateOnTicketDetailPage.bind(this)} />
             </TabPane>
-            <TabPane tab="LIVE CHAT" key="3" forceRender={false}>
+            <TabPane tab="SUPPORT CHAT" key="3" forceRender={false}>
               <Chat />
             </TabPane>
 
@@ -191,14 +238,21 @@ class Support extends Component {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-
+    setSupportPage,
+    resetSupportPage,
+    resetCurrentSupportTicketId,
+    resetCurrentSystemMessageId,
+    resetCurrentConversation
   }, dispatch);
 }
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ auth, sidebar }) => {
   return {
     user: auth.authUser,
+    microServiceRunning: sidebar.microServiceRunning,
+    supportPage: sidebar.supportPage,
+    currentTicket: sidebar.currentTicketId
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps, null, {withRef: true})(Support);
+export default connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(Support);

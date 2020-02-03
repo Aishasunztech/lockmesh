@@ -129,9 +129,6 @@ export default (state = initialState, action) => {
     }
 
     case UPDATE_SUPPORT_TICKET_REPLY: {
-
-      console.log(action.payload.data);
-
       let replies = state.supportTicketReplies;
       if (action.payload.status) {
         replies = action.payload.data;
@@ -162,7 +159,6 @@ export default (state = initialState, action) => {
     }
 
     case CLOSE_SUPPORT_TICKET:{
-      console.log(action);
       let tickets = state.supportTickets;
       if (action.payload.status) {
         tickets.map(item => {
@@ -180,7 +176,6 @@ export default (state = initialState, action) => {
           title: action.payload.msg,
         });
       }
-      console.log(tickets);
 
       return {
         ...state,

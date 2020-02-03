@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react'
-import { Input, Modal, Select, Table } from "antd";
+import { Input, Modal, Select, Table, Card } from "antd";
+import CustomScrollbars from '../../../util/CustomScrollbars';
 
 
 
@@ -16,14 +17,19 @@ const DealerList = (props) => {
     };
     return (
         <Fragment>
-            <Table
-                bordered
-                rowSelection={rowSelection}
-                dataSource={props.dealers}
-                columns={props.columns}
-                onChange={this.handleTableChange}
-                hideDefaultSelections={props.hideDefaultSelections}
-            />
+            <Card className='fix_card'>
+                <hr className="fix_header_border" style={{ top: "56px" }} />
+                <CustomScrollbars className="gx-popover-scroll ">
+                    <Table
+                        bordered
+                        rowSelection={rowSelection}
+                        dataSource={props.dealers}
+                        columns={props.columns}
+                        onChange={this.handleTableChange}
+                        hideDefaultSelections={props.hideDefaultSelections}
+                    />
+                </CustomScrollbars>
+            </Card>
         </Fragment>
     )
 

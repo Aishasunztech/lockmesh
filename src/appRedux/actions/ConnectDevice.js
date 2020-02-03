@@ -72,7 +72,9 @@ import {
     GET_DEVICE_LIST,
     GET_DEVICE_BILLING_HISTORY,
     DEVICE_NOT_FOUND,
-    RESET_CHAT_PIN
+    RESET_CHAT_PIN,
+    CHAT_ID_SETTINGS,
+    ENABLE_PWD_CONFIRM
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -94,6 +96,12 @@ export function changePage(pageName) {
 export function clearState(pageName) {
     return {
         type: CLEAR_STATE,
+    }
+}
+
+export function closeChatIdSettingsEnable() {
+    return {
+        type: ENABLE_PWD_CONFIRM,
     }
 }
 
@@ -992,6 +1000,14 @@ export const checkPass = (user, actionType) => {
                             PasswordMatch: response.data,
                         }
                     })
+                } else if (actionType === CHAT_ID_SETTINGS) {
+                    dispatch({
+                        type: CHECKPASS,
+                        payload: {
+                            actionType: actionType,
+                            PasswordMatch: response.data,
+                        }
+                    })
                 } else {
                     dispatch({
                         type: INVALID_TOKEN
@@ -1426,38 +1442,38 @@ export const getDeviceBillingHistory = (device_id, dealer_id) => {
 }
 
 export const resetChatPin = (data) => {
-  return (dispatch) => {
-    RestService.resetChatPin(data).then((response) => {
-      if (RestService.checkAuth(response.data)) {
-        dispatch({
-          type: RESET_CHAT_PIN,
-          payload: response.data
+    return (dispatch) => {
+        RestService.resetChatPin(data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: RESET_CHAT_PIN,
+                    payload: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
         })
-      } else {
-        dispatch({
-          type: INVALID_TOKEN
-        })
-      }
-    })
-  }
+    }
 };
 
 
 export const changeSchatPinStatus = (data) => {
-  return (dispatch) => {
-    RestService.changeSchatPinStatus(data).then((response) => {
-      if (RestService.checkAuth(response.data)) {
-        dispatch({
-          type: CHANGE_SCHAT_ACCOUNT_STATUS,
-          payload: response.data
+    return (dispatch) => {
+        RestService.changeSchatPinStatus(data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: CHANGE_SCHAT_ACCOUNT_STATUS,
+                    payload: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
         })
-      } else {
-        dispatch({
-          type: INVALID_TOKEN
-        })
-      }
-    })
-  }
+    }
 }
 
 

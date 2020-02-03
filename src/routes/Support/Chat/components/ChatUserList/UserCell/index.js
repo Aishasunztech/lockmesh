@@ -1,10 +1,11 @@
 import React from "react";
-import {Avatar} from "antd";
+import {Avatar, Button, Icon, Modal} from "antd";
 
-const UserCell = ({chat, selectedSectionId, onSelectUser}) => {
+const UserCell = ({ chat, conversation, selectedSectionId, onSelectUser, typing }) => {
+  let isTyping = typing.some(conv => conv === conversation);
   return (
-    <div className={`gx-chat-user-item ${selectedSectionId === chat._id ? 'active' : ''}`} onClick={() => {
-      onSelectUser(chat, 'chat');
+    <div className={`gx-chat-user-item ${conversation !== null && selectedSectionId === conversation ? 'active' : ''}`} onClick={() => {
+        onSelectUser(chat, 'chat');
     }}>
       <div className="gx-chat-user-row">
         <div className="gx-chat-avatar">
@@ -16,6 +17,7 @@ const UserCell = ({chat, selectedSectionId, onSelectUser}) => {
         <div className="gx-chat-info">
           <span className="gx-name h4">{chat.user.dealer_name}</span>
           <div className="gx-chat-info-des gx-text-truncate">{chat.user.link_code}</div>
+          <small className="gx-chat-info-des gx-text-truncate">{isTyping ? 'is typing...' : ''}</small>
         </div>
 
         {/*{chat.unreadMessage > 0 ? <div className="gx-chat-date">*/}
@@ -23,7 +25,7 @@ const UserCell = ({chat, selectedSectionId, onSelectUser}) => {
         {/*</div> : null}*/}
       </div>
     </div>
-  )
-};
+  );
+}
 
 export default UserCell;

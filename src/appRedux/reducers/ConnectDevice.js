@@ -34,6 +34,7 @@ import {
     FLAG_DEVICE,
     UNFLAG_DEVICE,
     WIPE_DEVICE,
+    CHAT_ID_SETTINGS,
     CHECKPASS,
     GET_DEALER_APPS,
     HANDLE_CHECK_EXTENSION,
@@ -82,7 +83,8 @@ import {
     CANCEL_EXTENDED_SERVICE,
     GET_DEVICE_LIST,
     GET_DEVICE_BILLING_HISTORY,
-    DEVICE_NOT_FOUND
+    DEVICE_NOT_FOUND,
+    ENABLE_PWD_CONFIRM
 } from "../../constants/ActionTypes";
 
 import {
@@ -213,7 +215,8 @@ const initialState = {
     encryptedAllPushApps: false,
     servicesHistoryList: [],
     device_list: [],
-    device_billing_history: []
+    device_billing_history: [],
+    chatIdSettingsEnable: false
 };
 let pwdObject = { "admin_password": null, "guest_password": null, "encrypted_password": null, "duress_password": null }
 
@@ -222,6 +225,12 @@ export default (state = initialState, action) => {
 
     switch (action.type) {
 
+        case ENABLE_PWD_CONFIRM: {
+            return {
+                ...state,
+                chatIdSettingsEnable: false
+            }
+        }
         case CHANGE_PAGE: {
 
             let checkApplyBtn = handleApplyBtn(action.payload, state.undoControls, state.redoControls, state.undoExtensions, state.redoExtensions, state.undoApps, state.redoApps);
@@ -705,35 +714,35 @@ export default (state = initialState, action) => {
 
         case RESET_CHAT_PIN: {
 
-          if (action.payload.status) {
-            success({
-              title: action.payload.msg,
-            });
-          } else {
-            error({
-              title: action.payload.msg,
-            });
-          }
-          return {
-            ...state,
-          }
+            if (action.payload.status) {
+                success({
+                    title: action.payload.msg,
+                });
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+            return {
+                ...state,
+            }
         }
 
-      case CHANGE_SCHAT_ACCOUNT_STATUS: {
+        case CHANGE_SCHAT_ACCOUNT_STATUS: {
 
-        if (action.payload.status) {
-          success({
-            title: action.payload.msg,
-          });
-        } else {
-          error({
-            title: action.payload.msg,
-          });
+            if (action.payload.status) {
+                success({
+                    title: action.payload.msg,
+                });
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+            return {
+                ...state,
+            }
         }
-        return {
-          ...state,
-        }
-      }
 
 
         // Common Reducer: to display the message from server
@@ -758,17 +767,13 @@ export default (state = initialState, action) => {
         }
 
         case TRANSFER_HISTORY: {
-            if (action.payload.status) {
-                return {
-                    ...state,
-                    transferHistoryList: action.payload.data,
-                    // getHistory: new Date()
-                }
-            } else {
-                return {
-                    ...state,
-                }
+            // if (action.payload.status) {
+            return {
+                ...state,
+                transferHistoryList: action.payload.data,
+                // getHistory: new Date()
             }
+            // }
         }
 
         case SERVICES_HISTORY: {
@@ -938,6 +943,11 @@ export default (state = initialState, action) => {
                         wipeDevieStatus: new Date()
                     }
                     // showConfirm1(action.payload.device, "Do you really want to Wipe the device " + action.payload.device.device_id + "?")
+                } else if (action.payload.actionType === CHAT_ID_SETTINGS) {
+                    return {
+                        ...state,
+                        chatIdSettingsEnable: true
+                    }
                 }
                 else if (action.payload.actionType === POLICY) {
                     return {

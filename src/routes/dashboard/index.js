@@ -3,7 +3,7 @@ import { Col, Row, Icon, Card, Avatar, Badge, Modal } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Auxiliary from "util/Auxiliary";
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import AppFilter from '../../components/AppFilter';
 import NewDevice from '../../components/NewDevices';
 import { getStatus, componentSearch, titleCase, convertToLang } from '../utils/commonUtils';
@@ -53,20 +53,20 @@ class Dashboard extends Component {
         this.props.getNewDevicesList();
     }
 
-    transferDeviceProfile = (obj) => {
+    // transferDeviceProfile = (obj) => {
 
-        let _this = this;
-        Modal.confirm({
-            content: `Are you sure you want to Transfer, from ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
-            onOk() {
-                //
-                _this.props.transferDeviceProfile(obj);
-            },
-            onCancel() { },
-            okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
-            cancelText: convertToLang(this.props.translation[Button_No], 'No'),
-        });
-    }
+    //     let _this = this;
+    //     Modal.confirm({
+    //         content: `Are you sure you want to Transfer, from ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
+    //         onOk() {
+    //             //
+    //             _this.props.transferDeviceProfile(obj);
+    //         },
+    //         onCancel() { },
+    //         okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
+    //         cancelText: convertToLang(this.props.translation[Button_No], 'No'),
+    //     });
+    // }
 
 
     componentWillReceiveProps(nextProps) {
@@ -109,6 +109,7 @@ class Dashboard extends Component {
                 />
 
                 <NewDevice
+                    showSupport={false}
                     ref='new_device'
                     devices={this.props.devices}
                     addDevice={this.props.addDevice}
@@ -119,11 +120,11 @@ class Dashboard extends Component {
                     rejectRequest={this.props.rejectRequest}
                     translation={this.props.translation}
                     allDevices={this.props.allDevices}
-                    transferDeviceProfile={this.transferDeviceProfile}
+                    transferDeviceProfile={this.props.transferDeviceProfile}
                     cancel_service_requests={this.props.cancel_service_requests}
                     rejectServiceRequest={this.props.rejectServiceRequest}
                     acceptServiceRequest={this.props.acceptServiceRequest}
-                    ticketNotifications={this.props.ticketNotifications}
+                    // ticketNotifications={this.props.ticketNotifications}
                     allDealers={this.props.allDealers}
                 />
 
@@ -412,7 +413,7 @@ function mapDispatchToProps(dispatch) {
         getCancelServiceRequests,
         acceptServiceRequest,
         rejectServiceRequest,
-        getTicketsNotifications,
+        getTicketsNotifications
     }, dispatch);
 }
 var mapStateToProps = ({ dashboard, auth, devices, sidebar, settings, dealers }) => {

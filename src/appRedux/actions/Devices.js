@@ -22,7 +22,10 @@ import {
     BULK_DEVICES_LIST,
     GET_PARENT_HARDWARES,
     ADD_PRODUCT,
-    ADD_DATA_PLAN
+    ADD_DATA_PLAN,
+    REJECT_RELINK_DEVICE,
+    RELINK_DEVICE,
+    RESET_ADD_PRODUCT_PROPS
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -273,6 +276,44 @@ export function rejectDevice(device) {
                     type: REJECT_DEVICE,
                     response: response.data,
                     device: device,
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+    }
+}
+
+// export function rejectRelinkDevice(device) {
+//     return (dispatch) => {
+//         //
+//         RestService.rejectRelinkDevcie(device).then((response) => {
+//             if (RestService.checkAuth(response.data)) {
+//                 dispatch({
+//                     type: REJECT_RELINK_DEVICE,
+//                     response: response.data,
+//                     device: device,
+//                 })
+//             } else {
+//                 dispatch({
+//                     type: INVALID_TOKEN
+//                 })
+//             }
+//         });
+//     }
+// }
+
+export function relinkDevice(id) {
+    return (dispatch) => {
+        //
+        RestService.relinkDevice(id).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: RELINK_DEVICE,
+                    response: response.data,
+                    user_acc_id: id,
                 })
             } else {
                 dispatch({
@@ -553,6 +594,14 @@ export const addProduct = (payload) => {
             }
         });
 
+    }
+}
+
+export const resetProductAddProps = (payload) => {
+    return (dispatch) => {
+        dispatch({
+            type: RESET_ADD_PRODUCT_PROPS,
+        })
     }
 }
 
