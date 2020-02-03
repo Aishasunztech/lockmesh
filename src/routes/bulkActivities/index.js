@@ -425,8 +425,8 @@ class BulkActivities extends Component {
         })
     }
 
-    renderList(list, timezone) {
-        // console.log('renderList ', list)
+    renderHistoryDevicesList(list, timezone) {
+        // console.log('renderHistoryDevicesList ', list)
         return list.map((device, index) => {
 
             var status = device.finalStatus;
@@ -446,14 +446,6 @@ class BulkActivities extends Component {
                 // key: device.device_id ? `${device.device_id}` : device.usr_device_id,
                 key: status == DEVICE_UNLINKED ? `${device.user_acc_id} ${device.created_at} ` : device.id,
                 counter: ++index,
-                action: (
-                    <Button size="small" type="danger" disabled
-                        onClick={() => {
-                            // this.removeSingleDevice(device.id)
-                        }}>
-                        Remove
-                    </Button>
-                ),
 
                 status: (<span style={color} > {status}</span>),
                 lastOnline: checkValue(device.lastOnline),
@@ -880,7 +872,7 @@ class BulkActivities extends Component {
                         selectedPullAppsList={this.props.selectedPullAppsList}
                         applyPushApps={this.props.applyPushApps}
                         applyPullApps={this.props.applyPullApps}
-                        renderList={this.renderList}
+                        // renderList={this.renderList}
                         user={this.props.user}
                         translation={this.props.translation}
                         onChangeTableSorting={this.handleTableChange}
@@ -900,7 +892,7 @@ class BulkActivities extends Component {
                     historyModalShow={this.state.historyModalShow}
                     handleHistoryCancel={this.handleHistoryCancel}
                     history={this.props.history}
-                    renderList={this.renderList}
+                    renderList={this.renderHistoryDevicesList}
                     columns={this.state.columns.filter(e => e.dataIndex != "status")}
                     // onChangeTableSorting={this.handleTableChange}
                     translation={this.props.translation}

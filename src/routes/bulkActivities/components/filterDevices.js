@@ -14,7 +14,7 @@ import BulkPushAppsConfirmation from './bulkPushAppsConfirmation';
 import BulkPullAppsConfirmation from './bulkPullAppsConfirmation';
 import BulkWipeConfirmation from './bulkWipeConfirmation';
 import BulkPolicyConfirmation from './bulkPushPolicyConfirmation';
-import { checkValue, titleCase, convertToLang } from '../../utils/commonUtils'
+import { checkValue, titleCase, convertToLang, getColor, convertTimezoneValue } from '../../utils/commonUtils'
 
 import { bulkDevicesColumns, devicesColumns, userDevicesListColumns } from '../../utils/columnsUtils';
 
@@ -35,6 +35,7 @@ import {
 import { Button_Remove, Button_Add, Button_AddAll, Button_AddExceptSelected, Button_RemoveAll, Button_RemoveExcept, Button_Save, Button_Cancel, Button_DeleteExceptSelected, Button_Yes, Button_No, Button_Edit } from '../../../constants/ButtonConstants';
 import { handleWipePwdConfirmModal } from '../../../appRedux/actions/BulkDevices';
 import CustomScrollbars from '../../../util/CustomScrollbars';
+import { TIMESTAMP_FORMAT } from '../../../constants/Application';
 const confirm = Modal.confirm;
 const success = Modal.success
 const error = Modal.error
@@ -538,19 +539,18 @@ class FilterDevices extends Component {
   }
 
 
-  rejectPemission = (device_id) => {
-    this.props.setSelectedBulk_id([device_id]);
-    // let dealers = this.state.permissions;
-    // var index = dealers.indexOf(dealer_id);
-    // if (index > -1) {
-    //   dealers.splice(index, 1);
-    // }
-    // console.log("permissions",dealers);
-    // this.props.savePermission(this.props.record.apk_id, JSON.stringify([dealer_id]), 'delete');
-    // this.setState({
-    //   dealerList: this.props.dealerList,
-    //   dealerListForModal: this.props.dealerList
-    // })
+  removeSingleDevice = (device_id) => {
+    // console.log("removeSingleDevice ", device_id);
+
+    let permittedDevices = this.state.selectedDevices;
+    let selectedRows = [device_id];
+    var selectedDevices = permittedDevices.filter(e => !selectedRows.includes(e.id));
+
+    this.props.setSelectedBulkDevices(selectedDevices);
+    this.setState({
+      device_ids: [],
+      copySelectedDevices: selectedDevices
+    })
 
   }
 
@@ -667,7 +667,7 @@ class FilterDevices extends Component {
                   <Button size="small" type="danger" onClick={() => {
                     this.rejectPemission(dealer.dealer_id)
                   }}>
-                    {convertToLang(this.props.translation[Button_Remove], "Remove")}
+                    {convertToLang(this.props.translation[Button_Remove], "Remove")}ds
                   </Button>
                 </div>
               )
@@ -680,7 +680,77 @@ class FilterDevices extends Component {
     return (data);
   }
 
+  renderDevicesList(list, timezone) {
+    // console.log('renderList ', list)
+    return list.map((device, index) => {
 
+      var status = device.finalStatus;
+      // console.log("status ", status)
+
+      let color = getColor(status);
+      var style = { margin: '0', width: 'auto', textTransform: 'uppercase' }
+      // var text = convertToLang(this.props.translation[Button_Edit], "EDIT");
+
+      // if ((status === DEVICE_PENDING_ACTIVATION) || (status === DEVICE_UNLINKED)) {
+      //     style = { margin: '0 8px 0 0', width: 'auto', display: 'none', textTransform: 'uppercase' }
+      //     text = "ACTIVATE";
+      // }
+
+      return {
+        rowKey: index,
+        // key: device.device_id ? `${device.device_id}` : device.usr_device_id,
+        key: status == DEVICE_UNLINKED ? `${device.user_acc_id} ${device.created_at} ` : device.id,
+        counter: ++index,
+        action: (
+          <Button size="small" type="danger"
+            onClick={() => {
+              this.removeSingleDevice(device.id)
+            }}>
+            Remove
+                </Button>
+        ),
+
+        status: (<span style={color} > {status}</span>),
+        lastOnline: checkValue(device.lastOnline),
+        flagged: device.flagged,
+        type: checkValue(device.type),
+        version: checkValue(device.version),
+        device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
+        // device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
+        user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
+        validity: checkValue(device.validity),
+        transfered_to: checkValue((device.finalStatus == "Transfered") ? device.transfered_to : null),
+        name: checkValue(device.name),
+        activation_code: checkValue(device.activation_code),
+        account_email: checkValue(device.account_email),
+        pgp_email: checkValue(device.pgp_email),
+        chat_id: checkValue(device.chat_id),
+        client_id: checkValue(device.client_id),
+        dealer_id: checkValue(device.dealer_id),
+        dealer_pin: checkValue(device.link_code),
+        mac_address: checkValue(device.mac_address),
+        sim_id: checkValue(device.sim_id),
+        imei_1: checkValue(device.imei),
+        sim_1: checkValue(device.simno),
+        imei_2: checkValue(device.imei2),
+        sim_2: checkValue(device.simno2),
+        serial_number: checkValue(device.serial_number),
+        model: checkValue(device.model),
+        // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
+        // expiry_date: device.expiry_date ? `${new Date(device.expiry_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
+        dealer_name: <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a>,
+        // dealer_name: (this.props.user.type === ADMIN) ? <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a> : <a >{checkValue(device.dealer_name)}</a>,
+        // online: device.online === 'online' ? (<span style={{ color: "green" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) : (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
+        s_dealer: checkValue(device.s_dealer),
+        s_dealer_name: checkValue(device.s_dealer_name),
+        remainTermDays: device.remainTermDays,
+        start_date: convertTimezoneValue(timezone, device.start_date, TIMESTAMP_FORMAT),
+        expiry_date: convertTimezoneValue(timezone, device.expiry_date, TIMESTAMP_FORMAT),
+        // start_date: checkValue(device.start_date),
+        // expiry_date: checkValue(device.expiry_date),
+      }
+    });
+  }
 
   getUnSelectedDevices = (devices) => {
 
@@ -866,7 +936,7 @@ class FilterDevices extends Component {
                       bordered
                       columns={this.state.selectedDevicesColumns}
                       onChange={this.props.onChangeTableSorting}
-                      dataSource={this.props.renderList(this.actionRelatedDevice(this.state.selectedDevices), this.props.user.timezone)}
+                      dataSource={this.renderDevicesList(this.actionRelatedDevice(this.state.selectedDevices), this.props.user.timezone)}
                       pagination={false}
                     // scroll={{ x: true }}
                     />
@@ -890,7 +960,7 @@ class FilterDevices extends Component {
           }}
         >
           <FilterDevicesList
-            devices={this.props.renderList(this.getUnSelectedDevices(this.state.allBulkDevices), this.props.user.timezone)}
+            devices={this.renderDevicesList(this.getUnSelectedDevices(this.state.allBulkDevices), this.props.user.timezone)}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
@@ -921,7 +991,7 @@ class FilterDevices extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            devices={this.props.renderList(this.state.searchRemoveModal, this.props.user.timezone)}
+            devices={this.renderDevicesList(this.state.searchRemoveModal, this.props.user.timezone)}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
@@ -952,7 +1022,7 @@ class FilterDevices extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            devices={this.props.renderList(this.getUnSelectedDevices(this.state.allBulkDevices), this.props.user.timezone)}
+            devices={this.renderDevicesList(this.getUnSelectedDevices(this.state.allBulkDevices), this.props.user.timezone)}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
