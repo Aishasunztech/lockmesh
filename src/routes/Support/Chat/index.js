@@ -149,7 +149,7 @@ class Chat extends Component {
       <div className="gx-chat-sidenav-content">
 
         <Tabs className="gx-tabs-half" defaultActiveKey="1">
-          <TabPane label="Chat Users" tab="Chat Users" key="1">
+          <TabPane label="Chat History" tab="Chat History" key="1">
             <CustomScrollbars className="gx-chat-sidenav-scroll-tab-1">
               {this.state.chatUsers.length === 0 ?
                 <div className="gx-p-5">{this.state.userNotFound}</div>
