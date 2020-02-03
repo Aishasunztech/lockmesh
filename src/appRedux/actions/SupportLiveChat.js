@@ -2,7 +2,8 @@ import {
   SEND_SUPPORT_LIVE_CHAT_MESSAGE,
   INVALID_TOKEN,
   SPIN_lOADING, GET_SUPPORT_LIVE_CHAT_CONVERSATION,
-  GET_SUPPORT_LIVE_CHAT_MESSAGES
+  GET_SUPPORT_LIVE_CHAT_MESSAGES,
+  SUPPORT_LIVE_CHAT_SET_CONVERSATION_ON_MESSAGE_SENT
 } from "../../constants/ActionTypes";
 import { Modal } from 'antd';
 import RestService from '../services/RestServices';
@@ -20,6 +21,10 @@ export function sendSupportLiveChatMessage(data) {
           dispatch({
             type: SEND_SUPPORT_LIVE_CHAT_MESSAGE,
             payload: response.data
+          });
+          dispatch({
+            type: SUPPORT_LIVE_CHAT_SET_CONVERSATION_ON_MESSAGE_SENT,
+            payload: response.data.message
           });
         } else {
           error({

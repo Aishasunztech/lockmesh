@@ -22,7 +22,9 @@ import {
   SUPPORT_LIVE_CHAT_NOTIFICATIONS,
   SUPPORT_LIVE_CHAT_NOTIFICATION_NEW_MESSAGE,
   SUPPORT_LIVE_CHAT_RESET_CONVERSATION,
-  SUPPORT_LIVE_CHAT_SET_CONVERSATION, SUPPORT_LIVE_CHAT_READ_MESSAGES
+  SUPPORT_LIVE_CHAT_SET_CONVERSATION,
+  SUPPORT_LIVE_CHAT_READ_MESSAGES,
+  SUPPORT_LIVE_CHAT_SET_CONVERSATION_ON_MESSAGE_SENT
 } from "../../constants/ActionTypes";
 import { Modal, notification } from 'antd';
 
@@ -271,7 +273,6 @@ export default (state = initialSidebar, action) => {
         };
 
       case SUPPORT_LIVE_CHAT_NOTIFICATION_NEW_MESSAGE:
-        console.log(action);
         let currentConversation = state.currentConversation !== null ? state.currentConversation._id : null;
         let chatNotifications = state.supportChatNotifications.filter(notification => notification.conversation_id !== currentConversation);
 
@@ -283,8 +284,6 @@ export default (state = initialSidebar, action) => {
           return notification;
         });
 
-        console.log(!state.supportChatNotifications.some(notification => notification.conversation_id === action.payload.conversation_id));
-        console.log(currentConversation, currentConversation !== null);
 
         if(!state.supportChatNotifications.some(notification => notification.conversation_id === action.payload.conversation_id) && currentConversation === null){
           chatNotifications.push({ sender: action.payload.sender, conversation_id: action.payload.conversation_id, noOfUnreadMessages: 1});
@@ -314,6 +313,19 @@ export default (state = initialSidebar, action) => {
         return {
           ...state,
           currentConversation: null
+        };
+
+      case SUPPORT_LIVE_CHAT_SET_CONVERSATION_ON_MESSAGE_SENT:
+
+        let conversation = state.currentConversation;
+
+        if(conversation.hasOwnProperty('_id') && conversation._id === null){
+          conversation._id = action.payload.conversation_id;
+        }
+
+        return {
+          ...state,
+          currentConversation: conversation
         };
 
       default:
