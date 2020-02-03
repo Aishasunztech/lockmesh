@@ -853,7 +853,6 @@ class FilterDevices extends Component {
     //   return "Note: *To performe an action please select dealers/users to get their devices ";
     // }
 
-
     return (
       <Fragment>
         <Row gutter={16}>
@@ -892,7 +891,6 @@ class FilterDevices extends Component {
                 onClick={() => { this.showPermissionedDealersModal(true) }}>{convertToLang(this.props.translation[Button_RemoveExcept], "Remove Except")}</Button>
             </div>
           </Col>
-
           <Col className="gutter-row" sm={15} xs={15} md={15}>
             <div className="gutter-box search_heading">
               <Input.Search
@@ -917,7 +915,6 @@ class FilterDevices extends Component {
               </Button>
             </div>
           </Col>
-
         </Row>
         {/* <span style={{ color: 'red' }}>{this.props.actionMsg ? (this.state.selectedDevices && this.state.selectedDevices.length) ? `${this.props.actionMsg}` : "Not selected any device to perform an action" : "Not selected any action"}</span> */}
         {this.props.responseStatus ? "" : <span style={{ color: 'red' }}>{this.props.actionMsg ? `${this.props.actionMsg}` : ""}</span>}
