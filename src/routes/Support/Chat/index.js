@@ -443,7 +443,6 @@ class Chat extends Component {
   }
 
   render() {
-    console.log(this.state.selectedUser);
     const {loader} = this.state;
     return (
       <div className="gx-main-content">
