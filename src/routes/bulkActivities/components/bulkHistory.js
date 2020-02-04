@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Modal, message, Input, Table, Switch, Avatar } from 'antd';
+import { Modal, message, Input, Table, Switch, Avatar, Card } from 'antd';
 import { componentSearch, getFormattedDate, convertToLang, convertTimezoneValue } from '../../utils/commonUtils';
 import Moment from 'react-moment';
 import { SECURE_SETTING, DATE, PROFILE_NAME } from '../../../constants/Constants';
@@ -10,6 +10,7 @@ import { POLICY_APP_NAME, POLICY_NAME, ACTIVITY } from '../../../constants/Polic
 import { Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
 import { DEVICE_IMEI_1, DEVICE_IMEI_2, ACTIVITIES, DEVICE_ID } from '../../../constants/DeviceConstants';
 import { bulkDeviceHistoryColumns } from '../../utils/columnsUtils';
+import CustomScrollbars from '../../../util/CustomScrollbars';
 
 var copyActivities = [];
 var status = true;
@@ -207,7 +208,7 @@ export default class Activity extends Component {
         return (
             <div>
                 <Modal
-                    width="850px"
+                    width="750px"
                     maskClosable={false}
                     visible={this.props.historyModalShow}
                     title={
@@ -230,61 +231,65 @@ export default class Activity extends Component {
                     onOk={this.handleOk}
                     onCancel={this.props.handleHistoryCancel}
                     footer={null}
-                    className="activities"
-                // className="edit_form"
+                    bodyStyle={{ height: 400, overflow: 'overlay', width: '100%' }}
                 >
                     {this.props.history_loading ? <CircularProgress /> :
-                        <Table
-                            columns={[
-                                {
-                                    title: convertToLang(this.props.translation[ACTIVITY], "ACTIVITY"),
-                                    align: "center",
-                                    dataIndex: 'action',
-                                    key: "action",
-                                    className: '',
-                                    sorter: (a, b) => { return a.action.localeCompare(b.action) },
-                                    sortDirections: ['ascend', 'descend'],
+                        <Card className='fix_card fix_card_his_bulk'>
+                            <hr className="fix_header_border" style={{ top: "17px" }} />
+                            <CustomScrollbars className="gx-popover-scroll ">
+                                <Table
+                                    columns={[
+                                        {
+                                            title: convertToLang(this.props.translation[ACTIVITY], "ACTIVITY"),
+                                            align: "center",
+                                            dataIndex: 'action',
+                                            key: "action",
+                                            className: '',
+                                            sorter: (a, b) => { return a.action.localeCompare(b.action) },
+                                            sortDirections: ['ascend', 'descend'],
 
-                                },
-                                {
-                                    title: convertToLang(this.props.translation[DATE], "DATE"),
-                                    align: "center",
-                                    dataIndex: 'created_at',
-                                    key: "created_at",
-                                    className: '',
-                                    sorter: (a, b) => { return a.created_at.localeCompare(b.created_at) },
-                                    sortDirections: ['ascend', 'descend'],
-                                    defaultSortOrder: 'descend'
+                                        },
+                                        {
+                                            title: convertToLang(this.props.translation[DATE], "DATE"),
+                                            align: "center",
+                                            dataIndex: 'created_at',
+                                            key: "created_at",
+                                            className: '',
+                                            sorter: (a, b) => { return a.created_at.localeCompare(b.created_at) },
+                                            sortDirections: ['ascend', 'descend'],
+                                            defaultSortOrder: 'descend'
 
-                                },
-                            ]}
-                            onChange={this.props.onChangeTableSorting}
-                            bordered
-                            rowClassName={(record, index) =>
-                                this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''
-                            }
-                            onExpand={this.onExpandRow}
-                            dataSource={this.renderHistoryList(this.state.activities ? this.state.activities : [])}
-                            expandedRowRender={record => {
-                                // console.log('recored', record)
+                                        },
+                                    ]}
+                                    onChange={this.props.onChangeTableSorting}
+                                    bordered
+                                    rowClassName={(record, index) =>
+                                        this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''
+                                    }
+                                    onExpand={this.onExpandRow}
+                                    dataSource={this.renderHistoryList(this.state.activities ? this.state.activities : [])}
+                                    expandedRowRender={record => {
+                                        // console.log('recored', record)
 
-                                return (
-                                    <Table
-                                        style={{ margin: 0, padding: 0 }}
-                                        size='middle'
-                                        bordered={false}
-                                        columns={this.state.columns}
-                                        align='center'
-                                        dataSource={this.props.renderList(JSON.parse(record.data), this.props.user.timezone)}
-                                        pagination={false}
-                                        scroll={{ x: true }}
-                                    />
-                                )
+                                        return (
+                                            <Table
+                                                style={{ margin: 0, padding: 0 }}
+                                                size='middle'
+                                                bordered={false}
+                                                columns={this.state.columns}
+                                                align='center'
+                                                dataSource={this.props.renderList(JSON.parse(record.data), this.props.user.timezone)}
+                                                pagination={false}
+                                                scroll={{ x: true }}
+                                            />
+                                        )
 
-                            }}
-                            // scroll={{ y: 350 }}
-                            pagination={false}
-                        />
+                                    }}
+                                    // scroll={{ y: 350 }}
+                                    pagination={false}
+                                />
+                            </CustomScrollbars>
+                        </Card>
                     }
                 </Modal>
             </div>

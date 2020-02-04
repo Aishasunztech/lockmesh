@@ -278,7 +278,7 @@ class DeviceMessages extends Component {
                         getBulkDevicesList={this.props.getBulkDevicesList}
                         getAllDealers={this.props.getAllDealers}
                         getUserList={this.props.getUserList}
-                        renderList={this.renderDevicesList}
+                        // renderList={this.renderDevicesList}
                         translation={this.props.translation}
                     />
 

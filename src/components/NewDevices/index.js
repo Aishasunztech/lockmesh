@@ -555,7 +555,7 @@ export default class NewDevices extends Component {
         return (
             <div>
                 <Modal
-                    width={1000}
+                    width={800}
                     maskClosable={false}
                     visible={this.state.visible}
                     // onOk={this.handleOk}
@@ -579,7 +579,7 @@ export default class NewDevices extends Component {
                                         style={{ marginTop: 20 }}
                                         dataSource={this.renderList(this.state.NewDevices)}
                                         pagination={false}
-
+                                        scroll={{x: true}}
                                     />
                                 </Fragment>
                             </TabPane>
@@ -598,7 +598,7 @@ export default class NewDevices extends Component {
                                         style={{ marginTop: 20 }}
                                         dataSource={this.renderServiceRequestList(this.props.cancel_service_requests)}
                                         pagination={false}
-
+                                        scroll={{x: true}}
                                     />
                                 </Fragment>
                             </TabPane>
@@ -630,6 +630,7 @@ export default class NewDevices extends Component {
                               style={{ marginTop: 20 }}
                               dataSource={this.renderSupportChatNotifications(this.state.supportChat)}
                               pagination={false}
+                              scroll={{x: true}}
                             />
                           </Fragment>
                         </TabPane>}
@@ -659,6 +660,7 @@ export default class NewDevices extends Component {
                                     style={{ marginTop: 20 }}
                                     dataSource={this.renderTicketNotifications(this.state.ticketNotifications)}
                                     pagination={false}
+                                    scroll={{x: true}}
                                 />
                             </Fragment>
                         </TabPane>}
@@ -691,7 +693,7 @@ export default class NewDevices extends Component {
                                         style={{ marginTop: 20 }}
                                         dataSource={this.renderSupportSystemMessagesNotifications(this.state.systemMessagesNotifications)}
                                         pagination={false}
-
+                                        scroll={{x: true}}
                                     />
                                 </Fragment>
                             </TabPane>

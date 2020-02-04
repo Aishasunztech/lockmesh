@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Modal, message, Input, Table, Switch, Avatar, Card } from 'antd';
-import { componentSearch, getFormattedDate, convertToLang } from '../../utils/commonUtils';
+import { componentSearch, getFormattedDate, convertToLang, checkValue } from '../../utils/commonUtils';
 import Moment from 'react-moment';
 import { SECURE_SETTING, DATE, PROFILE_NAME } from '../../../constants/Constants';
 import DeviceSettings from './DeviceSettings';
@@ -210,6 +210,11 @@ export default class Activity extends Component {
                     key: index,
                     action_name: row.action_name.toUpperCase() === 'PASSWORD' ? 'PASSWORD CHANGED' : row.action_name.toUpperCase(),
                     created_at: getFormattedDate(row.created_at),
+                    action_by: checkValue(row.action_by),
+                    // action_by: (<span className="captilize">{(this.props.auth.authUser.type === ADMIN && row.dealer_id) ? <Link
+                    //     to={`/connect-dealer/${btoa(row.dealer_id.toString())}`.trim()}
+                    // >
+                    //     {checkValue(row.action_by)}</Link> : <a >{checkValue(row.action_by)}</a>}</span>),
                     data: row.data
                 }
             })
@@ -265,6 +270,15 @@ export default class Activity extends Component {
                                         key: "action_name",
                                         className: '',
                                         sorter: (a, b) => { return a.action_name.localeCompare(b.action_name) },
+                                        sortDirections: ['ascend', 'descend'],
+                                    },
+                                    {
+                                        title: convertToLang(this.props.translation[""], "ACTION BY"),
+                                        align: "center",
+                                        dataIndex: 'action_by',
+                                        key: "action_by",
+                                        className: '',
+                                        sorter: (a, b) => { return a.action_by.localeCompare(b.action_by) },
                                         sortDirections: ['ascend', 'descend'],
 
                                     },
