@@ -26,7 +26,8 @@ import {
     Value,
     ALERT_TO_SURE_DELETE_ALL_DEVICES,
     DEALER,
-    ACTION
+    ACTION,
+    WARNING
 } from '../../../constants/Constants'
 import {
     Button_Modify,
@@ -47,6 +48,7 @@ import {
     Button_ACCEPT,
     Button_Decline,
     Button_Transfer,
+    Button_Confirm,
 } from '../../../constants/ButtonConstants';
 
 import {
@@ -70,6 +72,22 @@ import { ARE_YOU_SURE_YOU_WANT_DELETE_THE_DEVICE, DO_YOU_REALLY_WANT_TO_UNFLAG_T
 import { TIMESTAMP_FORMAT, DATE_FORMAT } from '../../../constants/Application';
 
 const TabPane = Tabs.TabPane;
+
+function showConfirm(_this, msg, action, request) {
+    confirm({
+        title: convertToLang(_this.props.translation[WARNING], "WARNING!"),
+        content: msg,
+        okText: convertToLang(_this.props.translation[Button_Confirm], "Confirm"),
+        cancelText: convertToLang(_this.props.translation[Button_Cancel], "Cancel"),
+        onOk() {
+            action(request);
+        },
+        onCancel() {
+
+
+        },
+    });
+}
 class DevicesList extends Component {
 
     constructor(props) {
@@ -191,9 +209,16 @@ class DevicesList extends Component {
 
     }
 
+    relinkDevice(device) {
+        showConfirm(this, convertToLang(this.props.translation[""], "Are you sure you want to relink device with existing services on device ?"), this.props.relinkDevice, device.id)
+    }
+    rejectRelinkDevice(device) {
+        showConfirm(this, convertToLang(this.props.translation[""], "Are you sure you want to reject relink request ? This device will not get previous services if rejected."), this.props.rejectDevice, device)
+    }
 
     // renderList
     renderList(list) {
+        // console.log("devices list: ", list);
         return list.map((device, index) => {
             var status = device.finalStatus;
             const button_type = (status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ? "danger" : "dashed";
@@ -210,9 +235,11 @@ class DevicesList extends Component {
             let ActiveBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleActivateDevice(device)}> {convertToLang(this.props.translation[Button_Unsuspend], "UN-SUSPEND")}</Button>;
             let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px ', textTransform: 'uppercase' }} onClick={() => this.deleteUnlinkedDevice('unlink', device)} >{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
             let ConnectBtn = <Link to={`connect-device/${btoa(device.device_id)}`.trim()}><Button type="default" size="small" style={style}>  {convertToLang(this.props.translation[Button_Connect], "CONNECT")}</Button></Link>
-            let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
-            let AcceptBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.refs.add_device.showModal(device, this.props.addDevice) }}> {convertToLang(this.props.translation[Button_ACCEPT], "ACCEPT")} </Button>;
+            let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.refs.edit_device.showModal(device, this.props.editDevice); this.props.resetProductAddProps() }} >{text}</Button>
+            let AcceptBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.refs.add_device.showModal(device, this.props.addDevice); this.props.resetProductAddProps() }}> {convertToLang(this.props.translation[Button_ACCEPT], "ACCEPT")} </Button>;
             let DeclineBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.handleRejectDevice(device) }}>{convertToLang(this.props.translation[Button_Decline], "DECLINE")}</Button>
+            let relinkBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.relinkDevice(device) }}> {convertToLang(this.props.translation[Button_ACCEPT], "REJECT REQUEST")} </Button>;
+            let rejectRelinkBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.rejectRelinkDevice(device) }}>{convertToLang(this.props.translation[Button_Decline], "RELINK WITH SERVICES")}</Button>
             let DeleteBtnPreActive = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => this.deleteUnlinkedDevice('pre-active', device)}>{convertToLang(this.props.translation[Button_Delete], "DELETE")} </Button>
             let Unflagbtn = <Button
                 type="defualt"
@@ -232,12 +259,14 @@ class DevicesList extends Component {
                 DeclineBtn,
                 DeleteBtnPreActive,
                 Unflagbtn,
+                rejectRelinkBtn,
+                relinkBtn
             }
 
             let actionBtns = getDevicesListActionBtns(this.props.user, device, status, allButtons);
             return {
                 rowKey: index,
-                key: status == DEVICE_UNLINKED ? `${device.user_acc_id} ${device.created_at} ` : device.id,
+                key: status == DEVICE_UNLINKED ? `${device.user_acc_id} ${device.created_at} ${index}` : device.id,
                 // counter: ++index,
                 action: actionBtns,
                 status: (<span style={color} > {status}</span>),
@@ -269,8 +298,8 @@ class DevicesList extends Component {
                 model: checkValue(device.model),
                 dealer_name: (this.props.user.type === ADMIN) ? <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a> : <a >{checkValue(device.dealer_name)}</a>,
                 online: device.online === 'online' ? (<span style={{ color: "green" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) : (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
-                s_dealer: checkValue(device.s_dealer),
-                s_dealer_name: checkValue(device.s_dealer_name),
+                s_dealer: device.prnt_dlr_id ? device.prnt_dlr_id : 'N/A', // checkValue(device.prnt_dlr_id), // checkValue(device.s_dealer), 
+                s_dealer_name: device.prnt_dlr_name ? device.prnt_dlr_name : 'N/A', // checkValue(device.prnt_dlr_name), // checkValue(device.s_dealer_name),
                 remainTermDays: (Number(device.remainTermDays) > 0) ? device.remainTermDays : 0,
                 start_date: (status !== DEVICE_PRE_ACTIVATION) ? convertTimezoneValue(this.props.user.timezone, device.start_date, DATE_FORMAT) : "N/A",
                 expiry_date: (status !== DEVICE_PRE_ACTIVATION) ? convertTimezoneValue(this.props.user.timezone, device.expiry_date, DATE_FORMAT) : "N/A",
@@ -316,6 +345,18 @@ class DevicesList extends Component {
             }
             // console.log('object of ', arr);
             this.confirmDelete(type, arr, title);
+        } else {
+            if (type === 'unlink') {
+                Modal.error({
+                    title: 'There is no unlink device selected to remove',
+                    content: 'Please Select a device to perform this action.',
+                });
+            } else if (type === 'pre-active') {
+                Modal.error({
+                    title: 'There is no pre-active device selected to remove',
+                    content: 'Please Select a device to perform this action.',
+                });
+            }
         }
         //  console.log('DELETE ALL 1', this.state.selectedRows);
 
@@ -719,6 +760,7 @@ class DevicesList extends Component {
                     getChatIDs={this.props.getChatIDs}
                     getPgpEmails={this.props.getPgpEmails}
                     history={this.props.history}
+                    resetProductAddProps={this.props.resetProductAddProps}
                 />
                 <AddDevice ref="add_device"
                     translation={this.props.translation}
@@ -804,11 +846,11 @@ export default class Tab extends Component {
     unflagConfirm = (device) => {
         let _this = this;
         confirm({
-            title: convertToLang(this.props.translation[DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE], 'Do you really want to unflag the device ') + device.device_id,
-            okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
-            cancelText: convertToLang(this.props.translation[Button_No], 'No'),
+            title: convertToLang(_this.props.translation[DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE], 'Do you really want to unflag the device ') + device.device_id,
+            okText: convertToLang(_this.props.translation[Button_Yes], 'Yes'),
+            cancelText: convertToLang(_this.props.translation[Button_No], 'No'),
             onOk() {
-                _this.props.unflagged(device.device_id)
+                _this.props.unflagged(device.usr_device_id)
                 // _this.props.activateDevice(device)
                 // console.log('OK');
             },
@@ -821,9 +863,9 @@ export default class Tab extends Component {
     unlinkConfirm = (device, transfered = false) => {
         let _this = this;
         confirm({
-            title: convertToLang(this.props.translation[""], "Do you really want to unlink the transfered device ") + device.device_id,
-            okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
-            cancelText: convertToLang(this.props.translation[Button_No], 'No'),
+            title: convertToLang(_this.props.translation[""], "Do you really want to unlink the transfered device ") + device.device_id,
+            okText: convertToLang(_this.props.translation[Button_Yes], 'Yes'),
+            cancelText: convertToLang(_this.props.translation[Button_No], 'No'),
             onOk() {
                 // console.log('unlinkConfirm ', device);
                 _this.props.unlinkDevice(device, transfered)
@@ -912,6 +954,11 @@ export default class Tab extends Component {
                         getSimIDs={this.props.getSimIDs}
                         getChatIDs={this.props.getChatIDs}
                         getPgpEmails={this.props.getPgpEmails}
+                        resetProductAddProps={this.props.resetProductAddProps}
+                        relinkDevice={this.props.relinkDevice}
+
+
+
                     />
                 </div>
             </Fragment>

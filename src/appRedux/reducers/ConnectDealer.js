@@ -14,7 +14,8 @@ import {
     CONNECT_DEALER_LOADING,
     DEALER_ACCOUNT_STATUS,
     SET_DEMOS_LIMIT,
-    CD_PERMISSION_DOMAINS
+    CD_PERMISSION_DOMAINS,
+    DEALER_DOMAINS_LOADING
 } from "../../constants/ActionTypes";
 
 // import { Button_Cancel } from '../../constants/ButtonConstants';
@@ -34,7 +35,8 @@ const initialState = {
     paymentHistory: [],
     salesHistory: [],
     domains: [],
-    connectDealerLoading: false
+    connectDealerLoading: false,
+    dealerDomainLoading: false
 };
 
 export default (state = initialState, action) => {
@@ -251,10 +253,17 @@ export default (state = initialState, action) => {
             }
         }
 
+        case DEALER_DOMAINS_LOADING: {
+            return {
+                ...state,
+                dealerDomainLoading: true
+            }
+        }
+
         case CD_PERMISSION_DOMAINS: {
             // console.log("action.selectedDomains ", action.selectedDomains, state.domains);
             let dealerDomains = state.domains;
-
+            // let domainLoading = false;
             if (action.payload.status) {
                 success({
                     title: action.payload.msg
@@ -276,7 +285,8 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isloading: false,
-                domains: dealerDomains
+                domains: dealerDomains,
+                dealerDomainLoading: false // domainLoading
             }
         }
 

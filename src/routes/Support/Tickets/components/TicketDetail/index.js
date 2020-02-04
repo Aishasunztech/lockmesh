@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from 'antd';
 import SupportTicketReply from '../SupportTicketReply/index'
+import Reply from '../SupportTicketReply/reply';
 import CustomScrollbars from 'util/CustomScrollbars'
 import { getDateFromTimestamp } from "../../../../utils/commonUtils";
 class TicketDetail extends React.Component {
@@ -32,7 +33,7 @@ class TicketDetail extends React.Component {
 
     return (
       <div className="gx-module-detail gx-mail-detail">
-        <CustomScrollbars className="gx-module-content-scroll">
+        <CustomScrollbars className={"text-area-height" + (supportTicket.status === 'open' && closeSupportTicketStatus === false ? "" : " no-reply")}>
           <div className="gx-mail-detail-inner">
             <div className="gx-mail-header">
               <div className="gx-mail-header-content gx-col gx-pl-0">
@@ -51,14 +52,14 @@ class TicketDetail extends React.Component {
                     {supportTicket.status === 'open' && closeSupportTicketStatus === false?
                       <Button type="primary" size="small" onClick={() => {
                         this.addReply();
-                      }}>Add Reply</Button>
+                      }}>Reply</Button>
                       : ''
                     }
 
                     {supportTicket.status === 'open' && closeSupportTicketStatus === false?
                       <Button type="danger" size="small" onClick={() => {
                         onCloseTicket(supportTicket);
-                      }}>Close This Ticket</Button>
+                      }}>Close Ticket</Button>
                       : ''
                     }
                   </div>
@@ -123,12 +124,7 @@ class TicketDetail extends React.Component {
         </CustomScrollbars>
 
         {supportTicket.status === 'open' && closeSupportTicketStatus === false?
-          <SupportTicketReply open={this.state.replyTicket}
-                              user={this.props.user}
-                              supportTicketReply={this.props.supportTicketReply}
-                              supportTicket={this.props.supportTicket}
-                              onClose={this.handleRequestClose.bind(this)}
-          />
+          <Reply user={this.props.user} supportTicketReply={this.props.supportTicketReply} supportTicket={this.props.supportTicket} />
           : ''
         }
 

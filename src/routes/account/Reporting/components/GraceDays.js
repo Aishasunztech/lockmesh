@@ -322,21 +322,19 @@ class Invoice extends Component {
             {(this.state.reportCard) ?
               <Fragment>
                 <Row>
-                  <Col xs={14} sm={14} md={14} lg={14} xl={14}>
+                  <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                     <h3>Invoice Report</h3>
                   </Col>
-                  <Col xs={10} sm={10} md={10} lg={10} xl={10}>
-                    <div className="pull-right">
-                      <Button className="mb-8" type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, '', fileName, this.state.reportFormData) }}>Download PDF</Button>
-                      <Button className="mb-8" type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName) }}>Download Excel</Button>
-                    </div>
+                  <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                    <Button className="mb-8" type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, '', fileName, this.state.reportFormData) }}>Download PDF</Button>
+                    <Button className="mb-8" type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName) }}>Download Excel</Button>
                   </Col>
                 </Row>
                 <Table
                   columns={this.columns}
                   dataSource={this.renderList(this.props.graceDaysReportReport)}
                   bordered
-                  scroll={{ x: true, y: true }}
+                  scroll={{ x: true }}
                   pagination={false}
                 />
               </Fragment>

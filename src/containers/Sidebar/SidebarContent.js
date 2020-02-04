@@ -8,6 +8,8 @@ import UserProfile from "./UserProfile";
 import NewDevice from '../../components/NewDevices';
 import CreditsModal from '../../components/CreditsModal';
 import { updateSupportSystemMessageNotification } from '../../appRedux/actions/SupportSystemMessages';
+import { updateTicketNotifications, markMessagesRead } from '../../appRedux/actions';
+import { setSupportPage, resetSupportPage, setCurrentSupportTicketId, resetCurrentSupportTicketId, setCurrentSystemMessageId, resetCurrentSystemMessageId, getSupportLiveChatNotifications, resetCurrentConversation, setCurrentConversation } from "../../appRedux/actions";
 import { getNewDevicesList, } from "../../appRedux/actions/Common";
 import {
   getNewCashRequests,
@@ -49,10 +51,9 @@ import {
   Sidebar_clients,
 } from '../../constants/SidebarConstants'
 
-
 import { logout } from "appRedux/actions/Auth";
 
-import { rejectDevice, addDevice, getDevicesList, } from '../../appRedux/actions/Devices';
+import { rejectDevice, addDevice, getDevicesList, relinkDevice } from '../../appRedux/actions/Devices';
 
 import { switchLanguage, getLanguage, getAll_Languages, toggleCollapsedSideNav } from "../../appRedux/actions/Setting";
 import { getAllToAllDealers } from "../../appRedux/actions/Dealers";
@@ -67,7 +68,7 @@ class SidebarContent extends Component {
     super(props);
     this.state = {
       languageData: [],
-      clicked: false,
+      clicked: false
     }
   }
 
@@ -110,8 +111,10 @@ class SidebarContent extends Component {
       this.props.getCancelServiceRequests()
       this.refs.new_device.showModal();
     }
-    this.props.getTicketsNotifications()
-    this.props.getSupportSystemMessagesNotifications()
+    if(this.props.microServiceRunning){
+      this.props.getTicketsNotifications();
+      this.props.getSupportSystemMessagesNotifications();
+    }
     // alert('its working');
   }
 
@@ -123,8 +126,11 @@ class SidebarContent extends Component {
     })
     this.props.getNewDevicesList();
     this.props.getNewCashRequests();
-    this.props.getTicketsNotifications()
-    this.props.getSupportSystemMessagesNotifications()
+    if(this.props.microServiceRunning){
+      this.props.getTicketsNotifications()
+      this.props.getSupportSystemMessagesNotifications()
+      this.props.getSupportLiveChatNotifications();
+    }
     this.props.getAllToAllDealers()
 
 
@@ -137,32 +143,40 @@ class SidebarContent extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      languageData: nextProps.languageData
-    })
+  componentDidUpdate(prevProps) {
+    if(this.props !== prevProps){
+      this.setState({
+        languageData: this.props.languageData
+      })
 
-    // console.log("this.props.pathname", this.props.pathname, "nextProps.pathname ", nextProps.pathname)
-    if (this.props.pathname !== nextProps.pathname) {
-      this.props.getNewDevicesList();
-      this.props.getNewCashRequests();
-      this.props.getUserCredit()
-      if (this.props.authUser.type == ADMIN) {
-        this.props.getCancelServiceRequests()
+      // console.log("this.props.pathname", this.props.pathname, "nextProps.pathname ", nextProps.pathname)
+      if (prevProps.pathname !== this.props.pathname) {
+        this.props.getNewDevicesList();
+        this.props.getNewCashRequests();
+        this.props.getUserCredit();
+        if (this.props.authUser.type == ADMIN) {
+          this.props.getCancelServiceRequests()
+        }
       }
-    }
 
-    if (this.props.isSwitched !== nextProps.isSwitched) {
-      this.props.getLanguage();
+      if (this.props.isSwitched !== prevProps.isSwitched) {
+        this.props.getLanguage();
+      }
+
+      if(this.props.microServiceRunning !== prevProps.microServiceRunning){
+        this.props.getTicketsNotifications();
+        this.props.getSupportSystemMessagesNotifications();
+        this.props.getSupportLiveChatNotifications();
+      }
     }
   }
 
   logout = () => {
     let _this = this;
     Modal.confirm({
-      title: convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_TO_LOGOUT], "Are you sure you want to logout?"),
-      okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
-      cancelText: convertToLang(this.props.translation[Button_No], "No"),
+      title: convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TO_LOGOUT], "Are you sure you want to logout?"),
+      okText: convertToLang(_this.props.translation[Button_Yes], "Yes"),
+      cancelText: convertToLang(_this.props.translation[Button_No], "No"),
 
       onOk() {
         _this.props.logout()
@@ -177,12 +191,12 @@ class SidebarContent extends Component {
   changeLng = (language) => {
     let _this = this;
 
-    this.setState({ clicked: false });
+    _this.setState({ clicked: false });
 
     Modal.confirm({
-      title: convertToLang(this.props.translation[Alert_Change_Language], "Are you sure you want to change the language?"),
-      okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
-      cancelText: convertToLang(this.props.translation[Button_No], "No"),
+      title: convertToLang(_this.props.translation[Alert_Change_Language], "Are you sure you want to change the language?"),
+      okText: convertToLang(_this.props.translation[Button_Yes], "Yes"),
+      cancelText: convertToLang(_this.props.translation[Button_No], "No"),
 
       onOk() {
         _this.props.switchLanguage(language)
@@ -194,20 +208,20 @@ class SidebarContent extends Component {
     })
   }
 
-  transferDeviceProfile = (obj) => {
-    // console.log('at req transferDeviceProfile', obj)
-    let _this = this;
-    Modal.confirm({
-      content: `Are you sure you want to Transfer, from ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
-      onOk() {
-        // console.log('OK');
-        _this.props.transferDeviceProfile(obj);
-      },
-      onCancel() { },
-      okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
-      cancelText: convertToLang(this.props.translation[Button_No], 'No'),
-    });
-  }
+  // transferDeviceProfile = (obj) => {
+  //   // console.log('at req transferDeviceProfile', obj)
+  //   let _this = this;
+  //   Modal.confirm({
+  //     content: `Are you sure you want to Transfer, from ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
+  //     onOk() {
+  //       // console.log('OK');
+  //       _this.props.transferDeviceProfile(obj);
+  //     },
+  //     onCancel() { },
+  //     okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
+  //     cancelText: convertToLang(this.props.translation[Button_No], 'No'),
+  //   });
+  // }
 
   render() {
     // console.log(addDevice)
@@ -224,6 +238,7 @@ class SidebarContent extends Component {
             <UserProfile />
 
             <NewDevice
+              showSupport={true}
               ref='new_device'
               devices={this.props.devices}
               addDevice={this.props.addDevice}
@@ -235,13 +250,28 @@ class SidebarContent extends Component {
               updateSupportSystemMessageNotification={this.props.updateSupportSystemMessageNotification}
               translation={this.props.translation}
               allDevices={this.props.allDevices}
-              transferDeviceProfile={this.transferDeviceProfile}
+              transferDeviceProfile={this.props.transferDeviceProfile}
               cancel_service_requests={this.props.cancel_service_requests}
               rejectServiceRequest={this.props.rejectServiceRequest}
               acceptServiceRequest={this.props.acceptServiceRequest}
               ticketNotifications={this.props.ticketNotifications}
               allDealers={this.props.allDealers}
+              supportPage={this.props.supportPage}
+              currentMessageId={this.props.currentMessageId}
+              currentTicketId={this.props.currentTicketId}
               supportSystemMessagesNotifications={this.props.supportSystemMessagesNotifications}
+              updateTicketNotifications={this.props.updateTicketNotifications}
+              setSupportPage={this.props.setSupportPage}
+              resetSupportPage={this.props.resetSupportPage}
+              setCurrentSystemMessageId={this.props.setCurrentSystemMessageId}
+              resetCurrentSystemMessageId={this.props.setCurrentSystemMessageId}
+              setCurrentSupportTicketId={this.props.setCurrentSupportTicketId}
+              resetCurrentSupportTicketId={this.props.resetCurrentSupportTicketId}
+              supportChatNotifications={this.props.supportChatNotifications}
+              setCurrentConversation={this.props.setCurrentConversation}
+              resetCurrentConversation={this.props.resetCurrentConversation}
+              markMessagesRead={this.props.markMessagesRead}
+              relinkDevice={this.props.relinkDevice}
             />
             <span className="font_14">
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}
@@ -268,7 +298,7 @@ class SidebarContent extends Component {
               {/* Notifications */}
               <li>
                 <a className="head-example">
-                  <Badge count={(localStorage.getItem('type') !== ADMIN) ? this.props.supportSystemMessagesNotifications.length + this.props.devices.length + this.props.requests.length + this.props.ticketNotifications.length : this.props.cancel_service_requests.length + this.props.supportSystemMessagesNotifications.length+ this.props.ticketNotifications.length}>
+                  <Badge count={(localStorage.getItem('type') !== ADMIN) ? this.props.supportSystemMessagesNotifications.length + this.props.devices.length + this.props.requests.length + this.props.ticketNotifications.length + this.props.supportChatNotifications.length : this.props.cancel_service_requests.length + this.props.supportSystemMessagesNotifications.length + this.props.ticketNotifications.length + this.props.supportChatNotifications.length}>
                     <i className="icon icon-notification notification_icn" onClick={() => this.showNotification()} />
                   </Badge>
                 </a>
@@ -424,7 +454,12 @@ const mapStateToProps = ({ settings, devices, sidebar, account, auth, dealers, S
     account_balance_status_by: auth.authUser.account_balance_status_by,
     allDealers: dealers.allDealers,
     supportSystemMessagesNotifications: SupportSystemMessages.supportSystemMessagesNotifications,
-    socket: socket.socket
+    socket: socket.socket,
+    supportPage: sidebar.supportPage,
+    currentTicketId: sidebar.currentTicketId,
+    currentMessageId: sidebar.currentMessageId,
+    supportChatNotifications: sidebar.supportChatNotifications,
+    microServiceRunning: sidebar.microServiceRunning
   }
 };
 export default connect(mapStateToProps, {
@@ -450,7 +485,19 @@ export default connect(mapStateToProps, {
   getTicketsNotifications,
   getSupportSystemMessagesNotifications,
   getAllToAllDealers,
-  updateSupportSystemMessageNotification
+  updateSupportSystemMessageNotification,
+  updateTicketNotifications,
+  setSupportPage,
+  resetSupportPage,
+  setCurrentSystemMessageId,
+  resetCurrentSystemMessageId,
+  setCurrentSupportTicketId,
+  resetCurrentSupportTicketId,
+  getSupportLiveChatNotifications,
+  setCurrentConversation,
+  resetCurrentConversation,
+  markMessagesRead,
+  relinkDevice
 }
 )(SidebarContent);
 

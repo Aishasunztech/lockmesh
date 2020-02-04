@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Button, Form, Input, Select, InputNumber, Row, Col, Tag, Calendar, DatePicker, TimePicker, Modal, Alert } from 'antd';
-import { checkValue, convertToLang, checkTimezoneValue, convertTimezoneValue } from '../../utils/commonUtils'
+import { checkValue, convertToLang, checkTimezoneValue, convertTimezoneValue, getWeekDays, getMonthNames, getDaysOfMonth } from '../../utils/commonUtils'
 
 import {
     DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, User_Name_require, Only_alpha_numeric, Not_valid_Email, Email, Name, Required_Email
@@ -25,7 +25,7 @@ class SendMsgForm extends Component {
         super(props);
 
         this.durationList = [
-            { key: 'NONE', value: "NONE" },
+            // { key: 'NONE', value: "NONE" },
             { key: 'DAILY', value: "Daily" },
             { key: 'WEEKLY', value: "Weekly" },
             { key: 'MONTHLY', value: "Monthly" },
@@ -34,35 +34,38 @@ class SendMsgForm extends Component {
             { key: '12 MONTHS', value: "12 Months" },
         ];
 
-        this.weekDays = [
-            { key: 1, value: "Sunday" },
-            { key: 2, value: "Monday" },
-            { key: 3, value: "Tuesday" },
-            { key: 4, value: "Wednesday" },
-            { key: 5, value: "Thursday" },
-            { key: 6, value: "Friday" },
-            { key: 7, value: "Saturday" },
-        ];
+        // this.weekDays = [
+        //     { key: 1, value: "Sunday" },
+        //     { key: 2, value: "Monday" },
+        //     { key: 3, value: "Tuesday" },
+        //     { key: 4, value: "Wednesday" },
+        //     { key: 5, value: "Thursday" },
+        //     { key: 6, value: "Friday" },
+        //     { key: 7, value: "Saturday" },
+        // ];
 
-        this.monthNames = [
-            { key: 1, value: "January" },
-            { key: 2, value: "February" },
-            { key: 3, value: "March" },
-            { key: 4, value: "April" },
-            { key: 5, value: "May" },
-            { key: 6, value: "June" },
-            { key: 7, value: "July" },
-            { key: 8, value: "August" },
-            { key: 9, value: "September" },
-            { key: 10, value: "October" },
-            { key: 11, value: "November" },
-            { key: 12, value: "December" },
-        ];
+        // this.monthNames = [
+        //     { key: 1, value: "January" },
+        //     { key: 2, value: "February" },
+        //     { key: 3, value: "March" },
+        //     { key: 4, value: "April" },
+        //     { key: 5, value: "May" },
+        //     { key: 6, value: "June" },
+        //     { key: 7, value: "July" },
+        //     { key: 8, value: "August" },
+        //     { key: 9, value: "September" },
+        //     { key: 10, value: "October" },
+        //     { key: 11, value: "November" },
+        //     { key: 12, value: "December" },
+        // ];
 
-        this.monthDays = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+        // this.monthDays = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
         let dealerTZ = checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
 
         this.state = {
+            weekDays: getWeekDays(),
+            monthNames: getMonthNames(),
+            monthDays: getDaysOfMonth(),
             visible: false,
             filteredDevices: [],
             selectedDealers: [],
@@ -77,7 +80,8 @@ class SendMsgForm extends Component {
             repeat_duration: 'NONE',
             timer: '',
             monthDate: 0,
-            dealerTZ: dealerTZ
+            dealerTZ: dealerTZ,
+            displayError: false
         }
     }
 
@@ -91,99 +95,105 @@ class SendMsgForm extends Component {
                 let weekDay = values.weekDay ? values.weekDay : 0;
                 let monthName = values.monthName ? values.monthName : 0;
 
-                if (this.props.selectedDevices && this.props.selectedDevices.length) {
+                if (this.state.selectedDealers.length || this.state.selectedUsers.length) {
+                    if (this.props.selectedDevices && this.props.selectedDevices.length) {
 
-                    let dealerTZ = this.state.dealerTZ; // checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
-                    let repeatVal = 'NONE';
-                    let dateTimeVal = '';
+                        let dealerTZ = this.state.dealerTZ; // checkTimezoneValue(this.props.user.timezone, false); // withGMT = false
+                        let repeatVal = 'NONE';
+                        let dateTimeVal = '';
 
-                    if (this.state.timer === "NOW") {
-                        // dateTimeVal = '' //moment().format('YYYY-MM-DD HH:mm:ss');
-                        // repeatVal = "NONE";
-                    } else if (this.state.timer === "DATE/TIME") {
-                        dateTimeVal = this.state.selected_dateTime;
-                        // repeatVal = "NONE";
-                    } else if (this.state.timer === "REPEAT") {
-                        // dateTimeVal = this.state.selected_dateTime;
-                        repeatVal = this.state.repeat_duration;
+                        if (this.state.timer === "NOW") {
+                            // dateTimeVal = '' //moment().format('YYYY-MM-DD HH:mm:ss');
+                            // repeatVal = "NONE";
+                        } else if (this.state.timer === "DATE/TIME") {
+                            dateTimeVal = this.state.selected_dateTime;
+                            // repeatVal = "NONE";
+                        } else if (this.state.timer === "REPEAT") {
+                            // dateTimeVal = this.state.selected_dateTime;
+                            repeatVal = this.state.repeat_duration;
 
-                        let currentDateIs = moment().tz(dealerTZ).format(TIMESTAMP_FORMAT);
-                        // covert time to dateTime value
-                        if (this.state.selected_Time) {
-                            const [hours, minutes] = this.state.selected_Time.split(':');
-                            // console.log("hours, minutes ", hours, minutes)
+                            let currentDateIs = moment().tz(dealerTZ).format(TIMESTAMP_FORMAT);
+                            // covert time to dateTime value
+                            if (this.state.selected_Time) {
+                                const [hours, minutes] = this.state.selected_Time.split(':');
+                                // console.log("hours, minutes ", hours, minutes)
 
-                            if (repeatVal === "DAILY") { // set minutes, hrs
-                                dateTimeVal = moment().tz(dealerTZ).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                                if (repeatVal === "DAILY") { // set minutes, hrs
+                                    dateTimeVal = moment().tz(dealerTZ).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
 
-                                if (dateTimeVal < currentDateIs) {
-                                    // next same week day if current date passed
-                                    dateTimeVal = moment().tz(dealerTZ).add(1, 'days').set({ hours, minutes }).format(TIMESTAMP_FORMAT);
-                                }
-                            }
-                            else if (repeatVal === "WEEKLY") { // set minutes, hrs and day name of week 
-                                dateTimeVal = moment().tz(dealerTZ).day(weekDay).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
-
-                                if (dateTimeVal < currentDateIs) {
-                                    // next same week day if current date passed
-                                    dateTimeVal = moment().tz(dealerTZ).day(weekDay + 7).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
-                                }
-                            }
-                            else if (repeatVal === "MONTHLY" || repeatVal === "3 MONTHS" || repeatVal === "6 MONTHS") { // set minutes, hrs and day of month 
-                                dateTimeVal = moment().tz(dealerTZ).set({ "date": monthDate, hours, minutes }).format(TIMESTAMP_FORMAT)
-
-                                if (dateTimeVal < currentDateIs) {
-                                    // set next months with same date if current date passed
-                                    if (repeatVal === "MONTHLY") {
-                                        dateTimeVal = moment().tz(dealerTZ).add(1, 'months').set({ hours, minutes }).format(TIMESTAMP_FORMAT);
-                                    }
-                                    else if (repeatVal === "3 MONTHS") {
-                                        dateTimeVal = moment().tz(dealerTZ).add(3, 'months').set({ hours, minutes }).format(TIMESTAMP_FORMAT);
-                                    }
-                                    else if (repeatVal === "6 MONTHS") {
-                                        dateTimeVal = moment().tz(dealerTZ).add(6, 'months').set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                                    if (dateTimeVal < currentDateIs) {
+                                        // next same week day if current date passed
+                                        dateTimeVal = moment().tz(dealerTZ).add(1, 'days').set({ hours, minutes }).format(TIMESTAMP_FORMAT);
                                     }
                                 }
-                            }
-                            else if (repeatVal === "12 MONTHS") { // set minutes, hrs, day of month and name of month
-                                dateTimeVal = moment().tz(dealerTZ).set({ "month": monthName - 1, "date": monthDate, hours, minutes }).format(TIMESTAMP_FORMAT);
-                                // console.log("compare date: ", dateTimeVal < currentDateIs, dateTimeVal, currentDateIs, moment().month())
+                                else if (repeatVal === "WEEKLY") { // set minutes, hrs and day name of week 
+                                    dateTimeVal = moment().tz(dealerTZ).day(weekDay).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
 
-                                if (dateTimeVal < currentDateIs) {
-                                    // set next year with same date if current date passed 
-                                    dateTimeVal = moment().tz(dealerTZ).add(1, 'years').set({ "date": monthDate, hours, minutes }).format(TIMESTAMP_FORMAT);
+                                    if (dateTimeVal < currentDateIs) {
+                                        // next same week day if current date passed
+                                        dateTimeVal = moment().tz(dealerTZ).day(weekDay + 7).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                                    }
                                 }
+                                else if (repeatVal === "MONTHLY" || repeatVal === "3 MONTHS" || repeatVal === "6 MONTHS") { // set minutes, hrs and day of month 
+                                    dateTimeVal = moment().tz(dealerTZ).set({ "date": monthDate, hours, minutes }).format(TIMESTAMP_FORMAT)
 
-                            } else {
-                                dateTimeVal = moment().tz(dealerTZ).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                                    if (dateTimeVal < currentDateIs) {
+                                        // set next months with same date if current date passed
+                                        if (repeatVal === "MONTHLY") {
+                                            dateTimeVal = moment().tz(dealerTZ).add(1, 'months').set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                                        }
+                                        else if (repeatVal === "3 MONTHS") {
+                                            dateTimeVal = moment().tz(dealerTZ).add(3, 'months').set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                                        }
+                                        else if (repeatVal === "6 MONTHS") {
+                                            dateTimeVal = moment().tz(dealerTZ).add(6, 'months').set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                                        }
+                                    }
+                                }
+                                else if (repeatVal === "12 MONTHS") { // set minutes, hrs, day of month and name of month
+                                    dateTimeVal = moment().tz(dealerTZ).set({ "month": monthName - 1, "date": monthDate, hours, minutes }).format(TIMESTAMP_FORMAT);
+                                    // console.log("compare date: ", dateTimeVal < currentDateIs, dateTimeVal, currentDateIs, moment().month())
+
+                                    if (dateTimeVal < currentDateIs) {
+                                        // set next year with same date if current date passed 
+                                        dateTimeVal = moment().tz(dealerTZ).add(1, 'years').set({ "date": monthDate, hours, minutes }).format(TIMESTAMP_FORMAT);
+                                    }
+
+                                } else {
+                                    dateTimeVal = moment().tz(dealerTZ).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
+                                }
+                                // console.log('current date without any set:: ', moment().tz(dealerTZ).format(TIMESTAMP_FORMAT))
+                                // console.log('set hrs minuts:: ', moment().tz(dealerTZ).set({ hours, minutes }).format(TIMESTAMP_FORMAT))
+                                // console.log('get week day number:: ', moment().tz(dealerTZ).weekday())
+                                // console.log('set hrs minuts and day name of week:: ', moment().tz(dealerTZ).day(weekDay).set({ hours, minutes }).format(TIMESTAMP_FORMAT))
+                                // console.log('set days:: ', moment().tz(dealerTZ).set("date", monthDate).format(TIMESTAMP_FORMAT))
+                                // console.log('set hrs, minuts & days:: ', moment().tz(dealerTZ).set({ "date": monthDate, hours, minutes }).format(TIMESTAMP_FORMAT))
                             }
-                            // console.log('current date without any set:: ', moment().tz(dealerTZ).format(TIMESTAMP_FORMAT))
-                            // console.log('set hrs minuts:: ', moment().tz(dealerTZ).set({ hours, minutes }).format(TIMESTAMP_FORMAT))
-                            // console.log('get week day number:: ', moment().tz(dealerTZ).weekday())
-                            // console.log('set hrs minuts and day name of week:: ', moment().tz(dealerTZ).day(weekDay).set({ hours, minutes }).format(TIMESTAMP_FORMAT))
-                            // console.log('set days:: ', moment().tz(dealerTZ).set("date", monthDate).format(TIMESTAMP_FORMAT))
-                            // console.log('set hrs, minuts & days:: ', moment().tz(dealerTZ).set({ "date": monthDate, hours, minutes }).format(TIMESTAMP_FORMAT))
                         }
+
+
+                        // console.log("dateTimeVal ", dateTimeVal);
+
+                        let data = {
+                            devices: this.props.selectedDevices,
+                            dealers: this.state.selectedDealers,
+                            users: this.state.selectedUsers,
+                            msg: values.msg_txt,
+                            timer: values.timer,
+                            repeat: repeatVal,
+                            dateTime: convertTimezoneValue(this.props.user.timezone, dateTimeVal, TIMESTAMP_FORMAT, true),
+                            weekDay,
+                            monthDate,
+                            monthName,
+                            time: this.state.selected_Time,
+                        }
+                        // console.log("submit data:: ", data);
+                        this.refs.bulk_msg.handleBulkSendMsg(data, dealerTZ);
+                    } else {
+                        error({
+                            title: `You have not selected any device against selected dealers/users!`,
+                        });
                     }
-
-
-                    // console.log("dateTimeVal ", dateTimeVal);
-
-                    let data = {
-                        devices: this.props.selectedDevices,
-                        dealers: this.state.selectedDealers,
-                        users: this.state.selectedUsers,
-                        msg: values.msg_txt,
-                        timer: values.timer,
-                        repeat: repeatVal,
-                        dateTime: convertTimezoneValue(this.props.user.timezone, dateTimeVal, TIMESTAMP_FORMAT, true),
-                        weekDay,
-                        monthDate,
-                        monthName,
-                        time: this.state.selected_Time,
-                    }
-                    // console.log("submit data:: ", data);
-                    this.refs.bulk_msg.handleBulkSendMsg(data, dealerTZ);
                 } else {
                     error({
                         title: `Sorry, You have not selected any device to perform an action, to add devices please select dealers/users`,
@@ -321,6 +331,7 @@ class SendMsgForm extends Component {
     handleChangeUser = (values) => {
         let checkAllUsers = this.state.checkAllSelectedUsers
         let selectAll = values.filter(e => e.key === "all");
+        // let selectedUsers = values.filter(e => e.key !== "all" && e.key !== "");
         let selectedUsers = values.filter(e => e.key !== "all");
 
         if (selectAll.length > 0) {
@@ -335,9 +346,9 @@ class SendMsgForm extends Component {
             selectedUsers = this.state.allUsers
             checkAllUsers = true;
         }
-        else {
-            selectedUsers = values.filter(e => e.key !== "all");
-        }
+        // else {
+        //     selectedUsers = values.filter(e => e.key !== "all");
+        // }
 
         let data = {
             dealers: this.state.selectedDealers,
@@ -432,6 +443,12 @@ class SendMsgForm extends Component {
         return current && current < moment().endOf('day');
     }
 
+    handleDaysOfMonth = (monthName) => {
+        let getDays = getDaysOfMonth(monthName);
+        this.props.form.setFieldsValue({ ["monthDate"]: '' }); // reset days of month
+        this.setState({ monthDays: getDays, monthDate: 0 });
+    }
+
     disabledDateTime = () => {
         // return {
         //     disabledHours: () => this.range(0, 24).splice(4, 20),
@@ -439,24 +456,37 @@ class SendMsgForm extends Component {
         //     disabledSeconds: () => [55, 56],
         // };
     }
-
-    validateRepeater = async (rule, value, callback) => {
-        // console.log("values: ", value)
-        if (value === 'NONE') {
-            callback("Timer value should not be NONE")
-        }
+    handleMonthDate = (e) => {
+        this.setState({ monthDate: e });
     }
+    // validateRepeater = async (rule, value, callback) => {
+    //     // console.log("values: ", value)
+    //     if (value === 'NONE') {
+    //         callback("Timer value should not be NONE")
+    //     }
+    // }
+
+    // displayError = () => {
+
+    //     let displayError = false;
+    //     if (this.state.selectedDealers.length || this.state.selectedUsers.length) {
+    //         displayError = true;
+    //     }
+    //     console.log("hj", displayError, this.state.selectedDealers.length, this.state.selectedUsers.length);
+    //     this.setState({ displayError });
+    //     // return displayError;
+    // }
 
     render() {
-        // console.log("this.state.allDealers ", this.state.allDealers)
+        // console.log("this.state.selectedUsers ", this.state.selectedUsers)
         return (
             <div>
-                <Form onSubmit={this.handleSubmit}>
-                    <p>(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")} </p>
-                    <Row>
-                        {/* <Col className="col-md-9 col-sm-9 col-xs-9">
+                <Form onSubmit={this.handleSubmit} className="">
+                    {/* <p>(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")} </p> */}
+                    {/* <Row> */}
+                    {/* <Col className="col-md-9 col-sm-9 col-xs-9">
                         </Col> */}
-                        {/* <Col className="col-md-3 col-sm-3 col-xs-3">
+                    {/* <Col className="col-md-3 col-sm-3 col-xs-3">
                             {(this.state.selectedDealers.length || this.state.selectedUsers.length) ?
                                 (this.state.filteredDevices.length) ? null :
                                     <span style={{ color: 'red' }}>Devices not found against selected dealers/users!</span>
@@ -464,22 +494,22 @@ class SendMsgForm extends Component {
                                 null
                             }
                         </Col> */}
-                        <Col className="col-md-12 col-sm-12 col-xs-12">
-                            {(this.state.selectedDealers.length || this.state.selectedUsers.length) ?
-                                (this.state.filteredDevices.length) ? null :
-                                    <Alert message="Devices not found against selected dealers/users!" type="warning" closable />
-                                :
-                                null
+                    {/* <Col className="col-md-12 col-sm-12 col-xs-12">
+                            {
+                                (this.state.displayError) ?
+                                    (this.state.filteredDevices.length) ? null :
+                                        <Alert message="Devices not found against selected dealers/users!" type="warning" closable />
+                                    :
+                                    null
                             }
-                        </Col>
-                    </Row>
-
-                    <Row gutter={24} className="mt-4">
-                        <Col className="col-md-12 col-sm-12 col-xs-12">
+                        </Col> */}
+                    {/* </Row> */}
+                    <Row gutter={16} className="mt-4">
+                        <Col className="col-md-6 col-sm-6 col-xs-12">
                             <Form.Item
                                 label={convertToLang(this.props.translation[""], "Select dealer/sdealers")}
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 16 }}
+                                labelCol={{ span: 24 }}
+                                wrapperCol={{ span: 24 }}
                             >
                                 <Select
                                     value={this.state.selectedDealers}
@@ -497,22 +527,22 @@ class SendMsgForm extends Component {
                                 >
                                     {(this.state.allDealers && this.state.allDealers.length > 0) ?
                                         <Select.Option key="allDealers" value="all">Select All</Select.Option>
-                                        : <Select.Option key="" value="">Dealers not found</Select.Option>
+                                        : null
+                                        // <Select.Option key="" value="">Dealers not found</Select.Option>
                                     }
                                     {this.state.allDealers.map(item => <Select.Option key={item.key} value={item.key}>{item.label}</Select.Option>)}
                                 </Select>
                             </Form.Item>
+                            {(this.state.selectedDealers && this.state.selectedDealers.length && !this.state.checkAllSelectedDealers) ?
+                                <p>Dealers/S-Dealers Selected: <span className="font_26">{this.state.selectedDealers.map((item, index) => <Tag key={index}>{item.label}</Tag>)}</span></p>
+                                : null}
                         </Col>
-                    </Row>
-                    {(this.state.selectedDealers && this.state.selectedDealers.length && !this.state.checkAllSelectedDealers) ?
-                        <p>Dealers/S-Dealers Selected: <span className="font_26">{this.state.selectedDealers.map((item, index) => <Tag key={index}>{item.label}</Tag>)}</span></p>
-                        : null}
-                    <Row gutter={24} className="mt-4">
-                        <Col className="col-md-12 col-sm-12 col-xs-12">
+
+                        <Col className="col-md-6 col-sm-6 col-xs-12">
                             <Form.Item
                                 label={convertToLang(this.props.translation[""], "Select Users")}
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 16 }}
+                                labelCol={{ span: 24 }}
+                                wrapperCol={{ span: 24 }}
                             >
                                 <Select
                                     value={this.state.selectedUsers}
@@ -530,46 +560,24 @@ class SendMsgForm extends Component {
                                 >
                                     {(this.state.allUsers && this.state.allUsers.length > 0) ?
                                         <Select.Option key="allUsers" value="all">Select All</Select.Option>
-                                        : <Select.Option key="" value="">Users not found</Select.Option>
+                                        : null
+                                        // <Select.Option key="" value="">Users not found</Select.Option>
                                     }
                                     {this.state.allUsers.map(item => <Select.Option key={item.key} value={item.key} >{item.label}</Select.Option>)}
                                 </Select>
                             </Form.Item>
-                        </Col>
-                    </Row>
-                    {(this.state.selectedUsers && this.state.selectedUsers.length && !this.state.checkAllSelectedUsers) ?
-                        <p>Users Selected: <span className="font_26">{this.state.selectedUsers.map(item => <Tag>{item.label}</Tag>)}</span></p>
-                        : null}
-
-                    <Row gutter={24} className="mt-4">
-                        <Col className="col-md-12 col-sm-12 col-xs-12">
-                            <Form.Item
-                                label={convertToLang(this.props.translation[""], "Message")}
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 16 }}
-                            >
-                                {this.props.form.getFieldDecorator('msg_txt', {
-                                    initialValue: '',
-                                    rules: [
-                                        {
-                                            required: true, message: convertToLang(this.props.translation[""], "Message field is required"),
-                                        }
-                                    ],
-                                })(
-                                    <TextArea
-                                        autosize={{ minRows: 3, maxRows: 5 }}
-                                    />
-                                )}
-                            </Form.Item>
+                            {(this.state.selectedUsers && this.state.selectedUsers.length && !this.state.checkAllSelectedUsers) ?
+                                <p>Users Selected: <span className="font_26">{this.state.selectedUsers.map(item => <Tag>{item.label}</Tag>)}</span></p>
+                                : null}
                         </Col>
 
                     </Row>
-                    <Row gutter={24} className="mt-4">
-                        <Col className="col-md-12 col-sm-12 col-xs-12">
+                    <Row gutter={16} className="mt-4">
+                        <Col className="col-md-6 col-sm-6 col-xs-12">
                             <Form.Item
                                 label={convertToLang(this.props.translation[""], "Select Message Timer")}
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 16 }}
+                                labelCol={{ span: 24 }}
+                                wrapperCol={{ span: 24 }}
                             >
                                 {this.props.form.getFieldDecorator('timer', {
                                     initialValue: '',
@@ -592,15 +600,35 @@ class SendMsgForm extends Component {
                                 )}
                             </Form.Item>
                         </Col>
+                        <Col className="col-md-6 col-sm-6 col-xs-12">
+                            <Form.Item
+                                label={convertToLang(this.props.translation[""], "Message")}
+                                labelCol={{ span: 24 }}
+                                wrapperCol={{ span: 24 }}
+                            >
+                                {this.props.form.getFieldDecorator('msg_txt', {
+                                    initialValue: '',
+                                    rules: [
+                                        {
+                                            required: true, message: convertToLang(this.props.translation[""], "Message field is required"),
+                                        }
+                                    ],
+                                })(
+                                    <TextArea
+                                        autosize={{ minRows: 3, maxRows: 5 }}
+                                    />
+                                )}
+                            </Form.Item>
+                        </Col>
                     </Row>
 
-                    {this.state.timer === "REPEAT" ?
-                        <Row gutter={24} className="mt-4">
-                            <Col className="col-md-12 col-sm-12 col-xs-12">
+                    <Row gutter={16} className="mt-4">
+                        {this.state.timer === "REPEAT" ?
+                            <Col className="col-md-6 col-sm-6 col-xs-12">
                                 <Form.Item
                                     label={convertToLang(this.props.translation[""], "Select when to send Message")}
-                                    labelCol={{ span: 8 }}
-                                    wrapperCol={{ span: 16 }}
+                                    labelCol={{ span: 24 }}
+                                    wrapperCol={{ span: 24 }}
                                 >
                                     {this.props.form.getFieldDecorator('repeat', {
                                         initialValue: '',
@@ -608,9 +636,9 @@ class SendMsgForm extends Component {
                                             {
                                                 required: true, message: convertToLang(this.props.translation[""], "Repeat Message field is required"),
                                             },
-                                            {
-                                                validator: this.validateRepeater,
-                                            },
+                                            // {
+                                            //     validator: this.validateRepeater,
+                                            // },
                                         ],
                                     })(
                                         <Select
@@ -624,18 +652,15 @@ class SendMsgForm extends Component {
                                     )}
                                 </Form.Item>
                             </Col>
-                        </Row>
-                        : null}
-
-                    {this.state.repeat_duration !== "NONE" && this.state.timer === "REPEAT" ?
-                        <Fragment>
-                            {this.state.repeat_duration === "WEEKLY" ?
-                                <Row gutter={24} className="mt-4">
-                                    <Col className="col-md-12 col-sm-12 col-xs-12">
+                            : null}
+                        {this.state.repeat_duration !== "NONE" && this.state.timer === "REPEAT" ?
+                            <Fragment>
+                                {this.state.repeat_duration === "WEEKLY" ?
+                                    <Col className="col-md-6 col-sm-6 col-xs-12">
                                         <Form.Item
                                             label={convertToLang(this.props.translation[""], "Select Day")}
-                                            labelCol={{ span: 8 }}
-                                            wrapperCol={{ span: 16 }}
+                                            labelCol={{ span: 24 }}
+                                            wrapperCol={{ span: 24 }}
                                         >
                                             {this.props.form.getFieldDecorator('weekDay', {
                                                 initialValue: '',
@@ -647,25 +672,22 @@ class SendMsgForm extends Component {
                                             })(
                                                 <Select
                                                     showSearch={false}
-                                                    style={{ width: '50%' }}
+                                                    style={{ width: '100%' }}
                                                     placeholder={convertToLang(this.props.translation[""], "Select Day")}
                                                 // onChange={this.handleStartDay}
                                                 >
-                                                    {this.weekDays.map((item) => <Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)}
+                                                    {this.state.weekDays.map((item) => <Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)}
                                                 </Select>
                                             )}
                                         </Form.Item>
                                     </Col>
-                                </Row>
-                                : null}
-
-                            {this.state.repeat_duration === "12 MONTHS" ?
-                                <Row gutter={24} className="mt-4">
-                                    <Col className="col-md-12 col-sm-12 col-xs-12">
+                                    : null}
+                                {this.state.repeat_duration === "12 MONTHS" ?
+                                    <Col className="col-md-6 col-sm-6 col-xs-12">
                                         <Form.Item
                                             label={convertToLang(this.props.translation[""], "Select Month")}
-                                            labelCol={{ span: 8 }}
-                                            wrapperCol={{ span: 16 }}
+                                            labelCol={{ span: 24 }}
+                                            wrapperCol={{ span: 24 }}
                                         >
                                             {this.props.form.getFieldDecorator('monthName', {
                                                 initialValue: '',
@@ -677,24 +699,22 @@ class SendMsgForm extends Component {
                                             })(
                                                 <Select
                                                     showSearch={false}
-                                                    style={{ width: '50%' }}
+                                                    style={{ width: '100%' }}
                                                     placeholder={convertToLang(this.props.translation[""], "Select Month")}
-                                                // onChange={this.handleStartDay}
+                                                    onChange={(e) => this.handleDaysOfMonth(e)}
                                                 >
-                                                    {this.monthNames.map((item) => <Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)}
+                                                    {this.state.monthNames.map((item) => <Select.Option key={item.key} value={item.key}>{item.value}</Select.Option>)}
                                                 </Select>
                                             )}
                                         </Form.Item>
                                     </Col>
-                                </Row>
-                                : null}
-                            {this.state.repeat_duration !== "DAILY" && this.state.repeat_duration !== "WEEKLY" ?
-                                <Row gutter={24} className="mt-4">
-                                    <Col className="col-md-12 col-sm-12 col-xs-12">
+                                    : null}
+                                {this.state.repeat_duration !== "DAILY" && this.state.repeat_duration !== "WEEKLY" ?
+                                    <Col className="col-md-6 col-sm-6 col-xs-12">
                                         <Form.Item
                                             label={convertToLang(this.props.translation[""], "Select date of month")}
-                                            labelCol={{ span: 8 }}
-                                            wrapperCol={{ span: 16 }}
+                                            labelCol={{ span: 24 }}
+                                            wrapperCol={{ span: 24 }}
                                         >
                                             {this.props.form.getFieldDecorator('monthDate', {
                                                 initialValue: "",
@@ -705,25 +725,26 @@ class SendMsgForm extends Component {
                                                 ],
                                             })(
                                                 <Select
+                                                    setFieldsValue={this.state.monthDate}
                                                     showSearch={false}
-                                                    style={{ width: '50%' }}
+                                                    style={{ width: '100%' }}
                                                     placeholder={convertToLang(this.props.translation[""], "Select date of month")}
-                                                // onChange={this.handleStartDay}
+                                                    onChange={this.handleMonthDate}
                                                 >
-                                                    {this.monthDays.map((item) => <Select.Option key={item} value={item}>{item}</Select.Option>)}
+                                                    {this.state.monthDays.map((item) => <Select.Option key={item} value={item}>{item}</Select.Option>)}
                                                 </Select>
                                             )}
                                         </Form.Item>
                                     </Col>
-                                </Row>
-                                : null}
-                            {/* {this.state.repeat_duration === "DAILY" || this.state.repeat_duration === "WEEKLY" ? */}
-                            <Row gutter={24} className="mt-4">
-                                <Col className="col-md-12 col-sm-12 col-xs-12">
+                                    : null}
+
+                                {/* {this.state.repeat_duration === "DAILY" || this.state.repeat_duration === "WEEKLY" ? */}
+
+                                <Col className="col-md-6 col-sm-6 col-xs-12">
                                     <Form.Item
                                         label={convertToLang(this.props.translation[""], "Select Time")}
-                                        labelCol={{ span: 8 }}
-                                        wrapperCol={{ span: 16 }}
+                                        labelCol={{ span: 24 }}
+                                        wrapperCol={{ span: 24 }}
                                     >
                                         {this.props.form.getFieldDecorator('time', {
                                             initialValue: '',// moment('00:00', 'HH:mm'),
@@ -737,23 +758,22 @@ class SendMsgForm extends Component {
                                                 onChange={this.timeOnChange}
                                                 placeholder={"Select time"}
                                                 format="HH:mm"
-                                                style={{ width: '50%' }}
+                                                style={{ width: '100%' }}
                                             />
                                         )}
                                     </Form.Item>
                                 </Col>
-                            </Row>
-                            {/* : null } */}
-                        </Fragment>
-                        : null}
-
+                                {/* : null } */}
+                            </Fragment>
+                            : null}
+                    </Row>
                     {this.state.timer === "DATE/TIME" ?
-                        <Row gutter={24} className="mt-4">
-                            <Col className="col-md-12 col-sm-12 col-xs-12">
+                        <Row gutter={16} className="mt-4">
+                            <Col className="col-md-6 col-sm-6 col-xs-12">
                                 <Form.Item
                                     label={convertToLang(this.props.translation[""], "Choose Data/Time")}
-                                    labelCol={{ span: 8 }}
-                                    wrapperCol={{ span: 16 }}
+                                    labelCol={{ span: 24 }}
+                                    wrapperCol={{ span: 24 }}
                                 >
                                     {this.props.form.getFieldDecorator('date/time', {
                                         initialValue: '', // moment(new Date(), 'YYYY-MM-DD')
@@ -808,7 +828,7 @@ class SendMsgForm extends Component {
                             Note: *To performe an action please select dealers/users to get their devices. <span style={{ color: 'red' }}>(Devices not found!)</span>
                         </div>
                     } */}
-                    <Form.Item className="edit_ftr_btn"
+                    <Form.Item className="s_m_ftr_btn"
                         wrapperCol={{
                             xs: { span: 24, offset: 0 },
                             sm: { span: 24, offset: 0 },

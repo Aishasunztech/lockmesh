@@ -24,6 +24,7 @@ const initialState = {
     bulkSelectedPushApps: [],
     bulkSelectedPullApps: [],
     bulkResponseModal: false,
+    responseStatus: false,
     failed_device_ids: [],
     queue_device_ids: [],
     pushed_device_ids: [],
@@ -191,6 +192,8 @@ export default (state = initialState, action) => {
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "suspend",
 
+                responseStatus: action.payload.status,
+
                 selectedDevices: [],
                 bulkDevices: [],
                 bulkAction: '',
@@ -254,6 +257,7 @@ export default (state = initialState, action) => {
                 expire_device_ids: [...state.expire_device_ids],
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "active",
+                responseStatus: action.payload.status,
 
                 selectedDevices: [],
                 bulkDevices: [],
@@ -300,7 +304,8 @@ export default (state = initialState, action) => {
                 pushed_device_ids: [...state.pushed_device_ids],
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "push",
-
+                responseStatus: action.payload.status,
+                
                 // bulkSelectedPushApps: []
                 selectedDevices: [],
                 bulkDevices: [],
@@ -372,6 +377,7 @@ export default (state = initialState, action) => {
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "pull",
 
+                responseStatus: action.payload.status,
                 // bulkSelectedPullApps: []
                 selectedDevices: [],
                 bulkDevices: [],
@@ -432,6 +438,7 @@ export default (state = initialState, action) => {
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "unlink",
 
+                responseStatus: action.payload.status,
                 selectedDevices: [],
                 bulkDevices: [],
                 bulkAction: '',
@@ -476,6 +483,12 @@ export default (state = initialState, action) => {
                     showResponseModal = true;
                 }
 
+                state.bulkDevices = [];
+                state.bulkAction = '';
+                state.bulkDealers = [];
+                state.bulkUsers = [];
+                state.errorAction = '';
+
             } else {
                 // wipePassMsg = action.payload.wipePassNotMatch ? action.payload.ms : false;
                 wipeModal = action.payload.wipePassNotMatch ? action.payload.wipePassNotMatch : false;
@@ -498,12 +511,13 @@ export default (state = initialState, action) => {
                 selectedDevices: selectedBulkDevices,
                 // wipePassMsg,
                 bulkWipePassModal: wipeModal,
-
-                bulkDevices: [],
-                bulkAction: '',
-                bulkDealers: [],
-                bulkUsers: [],
-                errorAction: ''
+                responseStatus: action.payload.status,
+                
+                bulkDevices: state.bulkDevices,
+                bulkAction: state.bulkAction,
+                bulkDealers: state.bulkDealers,
+                bulkUsers: state.bulkUsers,
+                errorAction: state.errorAction,
             }
         }
 
@@ -542,6 +556,8 @@ export default (state = initialState, action) => {
                 pushed_device_ids: [...state.pushed_device_ids],
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "policy",
+
+                responseStatus: action.payload.status,
 
                 selectedDevices: [],
                 bulkDevices: [],

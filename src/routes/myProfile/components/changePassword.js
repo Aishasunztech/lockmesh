@@ -114,7 +114,7 @@ export default class ChangePassword extends Component {
                             wrapperCol={{ span: 12 }}
                         >
 
-                            <Input type='password' autoComplete="new-password" value={this.state.curntpwd} onChange={(event) => this.setState({ curntpwd: event.target.value })} placeholder={convertToLang(this.props.translation[ENTER_CURRENT_PASSWORD], "Enter Current Password")} />
+                            <Input.Password type='password' autoComplete="new-password" value={this.state.curntpwd} onChange={(event) => this.setState({ curntpwd: event.target.value })} placeholder={convertToLang(this.props.translation[ENTER_CURRENT_PASSWORD], "Enter Current Password")} />
 
                         </Form.Item>
 
@@ -126,7 +126,7 @@ export default class ChangePassword extends Component {
                             help={this.state.help}
 
                         >
-                            <Input type='password' autoComplete="new-password" placeholder={convertToLang(this.props.translation[ENTER_NEW_PASSWORD], "Enter New Password")} value={this.state.newPassword} onChange={(event) => this.setState({ newPassword: event.target.value })} />
+                            <Input.Password type='password' autoComplete="new-password" placeholder={convertToLang(this.props.translation[ENTER_NEW_PASSWORD], "Enter New Password")} value={this.state.newPassword} onChange={(event) => this.setState({ newPassword: event.target.value })} />
 
                         </Form.Item>
 
@@ -138,7 +138,7 @@ export default class ChangePassword extends Component {
                             help={this.state.help}
 
                         >
-                            <Input type='password' autoComplete="new-password" placeholder={convertToLang(this.props.translation[CONFIRM_NEW_PASSWORD], "Confirm New Password")} value={this.state.confirmPassword} onChange={(event) => this.setState({ confirmPassword: event.target.value })} />
+                            <Input.Password type='password' autoComplete="new-password" placeholder={convertToLang(this.props.translation[CONFIRM_NEW_PASSWORD], "Confirm New Password")} value={this.state.confirmPassword} onChange={(event) => this.setState({ confirmPassword: event.target.value })} />
 
                         </Form.Item>
 

@@ -17,13 +17,15 @@ export default class ListSystemMessages extends Component {
   constructor(props) {
     super(props);
     let receiversColumns = supportSystemMessagesReceiversColumns(props.translation, this.handleSearch);
+    let currentMessage = props.currentMessage !== null ? props.currentMessage : null ;
+    let viewMessage = currentMessage !== null ? true : false;
     this.state = {
       receiversColumns: receiversColumns,
       columns: [],
       expandedRowKeys: [],
       visible: false,
-      messageObject: null,
-      viewMessage: false,
+      messageObject: currentMessage,
+      viewMessage: viewMessage,
       systemMessages: props.filteredMessage
     };
 
@@ -31,22 +33,17 @@ export default class ListSystemMessages extends Component {
     this.confirm = Modal.confirm;
   }
 
-  showModal = () => {
-    this.setState({
-      visible: true,
-    });
-  };
-
   handleOk = (e) => {
     this.setState({
-      visible: false,
+      viewMessage: false,
     });
   };
 
   handleCancel = (e) => {
     this.setState({
-      visible: false,
+      viewMessage: false
     });
+    this.props.resetCurrentSystemMessageId();
   };
 
   componentDidMount() {
@@ -56,62 +53,30 @@ export default class ListSystemMessages extends Component {
 
     if (this.props !== prevProps) {
 
-      // let sentMessages    = this.props.supportSystemMessages ? this.props.supportSystemMessages : [];
-      // let receiveMessages = this.props.receivedSupportSystemMessages ? this.props.receivedSupportSystemMessages : [];
-      //
-      // if (this.props.filterOption === 'all'){
-      //   list        = [...sentMessages , ...receiveMessages];
-      // } else if(this.props.filterOption === 'received'){
-      //   list        = receiveMessages;
-      // }else{
-      //   list        = sentMessages;
-      // }
-      //
-      // this.setState({
-      //   columns: this.props.columns,
-      //   systemMessages: list,
-      // });
+      if(this.props.currentMessage){
+        let currentMessage = this.props.currentMessage !== null ? this.props.currentMessage : null ;
+        let viewMessage = currentMessage !== null ? true : false ;
+
+        this.setState({ messageObject: currentMessage, viewMessage: viewMessage });
+      }
 
       this.setState({columns: this.props.columns, systemMessages: this.props.filteredMessage});
     }
-
-
-    // try {
-    //   if (this.props.systemMessagesSearchValue.length !== prevProps.systemMessagesSearchValue.length) {
-    //
-    //
-    //     if (status) {
-    //
-    //       systemMessagesCopy  = list;
-    //       status              = false;
-    //
-    //     }
-    //
-    //     let foundUsers = componentSearchSystemMessages(systemMessagesCopy, this.props.searchSystemMessagesColumns, this.props.systemMessagesSearchValue);
-    //
-    //     if (foundUsers.length) {
-    //       this.setState({
-    //         systemMessages: foundUsers,
-    //       });
-    //     } else {
-    //       this.setState({
-    //         systemMessages: [],
-    //       });
-    //     }
-    //   } else {
-    //     status = true;
-    //   }
-    // } catch (error) {
-    //
-    // }
 
     if (this.state.viewMessage && this.props.user.type !== this.state.messageObject.sender_user_type && this.state.messageObject.type === 'Received'){
       this.props.updateSupportSystemMessageNotification({systemMessageId: [this.state.messageObject.id]})
     }
   }
 
+  componentWillReceiveProps(props){
+    let currentMessage = props.currentMessage !== null ? props.currentMessage : null ;
+    let viewMessage = currentMessage !== null ? true : false;
+
+    this.setState({messageObject: currentMessage, viewMessage: viewMessage });
+  }
+
   handleMessageModal = (data) => {
-    this.setState({ viewMessage: true, messageObject: data })
+    this.props.setCurrentSystemMessageId(data);
   };
 
   renderList() {
@@ -128,6 +93,7 @@ export default class ListSystemMessages extends Component {
           receiver_ids: item.receiver_ids,
           receivers: item.type === 'Sent' ? item.receiver_ids.length : '--',
           type: item.type,
+          sender_user_type: item.sender_user_type,
           sender: item.sender === "" ? "--" : item.sender,
           subject: checkValue(item.subject),
           createdAt: item.createdAt,
@@ -247,8 +213,8 @@ export default class ListSystemMessages extends Component {
           width={"700px"}
           maskClosable={false}
           visible={this.state.viewMessage}
-          onOk={() => this.setState({ viewMessage: false })}
-          onCancel={() => this.setState({ viewMessage: false })}
+          onOk={() => this.handleOk()}
+          onCancel={() => this.handleCancel()}
           footer={false}
         >
           <ViewMessage

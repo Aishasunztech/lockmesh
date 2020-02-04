@@ -16,7 +16,9 @@ import {
     deleteUnlinkDevice,
     getSimIDs,
     getChatIDs,
-    getPGPEmails
+    getPGPEmails,
+    resetProductAddProps,
+    relinkDevice
 } from "../../appRedux/actions/Devices";
 
 import {
@@ -168,20 +170,20 @@ class Devices extends Component {
         alert('Its working')
     }
 
-    transferDeviceProfile = (obj) => {
-        // 
-        let _this = this;
-        Modal.confirm({
-            content: `Are you sure you want to Transfer, from ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
-            onOk() {
-                // 
-                _this.props.transferDeviceProfile(obj);
-            },
-            onCancel() { },
-            okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
-            cancelText: convertToLang(this.props.translation[Button_No], 'No'),
-        });
-    }
+    // transferDeviceProfile = (obj) => {
+    //     // 
+    //     let _this = this;
+    //     Modal.confirm({
+    //         content: `Are you sure you want to Transfer, from ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
+    //         onOk() {
+    //             // 
+    //             _this.props.transferDeviceProfile(obj);
+    //         },
+    //         onCancel() { },
+    //         okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
+    //         cancelText: convertToLang(this.props.translation[Button_No], 'No'),
+    //     });
+    // }
 
     filterList = (type, devices) => {
         let dumyDevices = [];
@@ -296,14 +298,14 @@ class Devices extends Component {
             }
 
             // if (indexTransfered > -1) {
-                let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
+            let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
             if (value === DEVICE_TRANSFERED) {
                 isCheckedColumn = this.props.selectedOptions.findIndex((item) => { return item.key === "transfered_to" }); // item.key === "transfered_to"
                 if (indexTransfered >= 0 && indexTransfered !== undefined && isCheckedColumn !== -1) {
                     this.state.columns[indexTransfered].className = '';
                     this.state.columns[indexTransfered].children[0].className = '';
                 }
-            } 
+            }
             // else {
             //     this.state.columns[indexTransfered].className = 'hide';
             //     this.state.columns[indexTransfered].children[0].className = 'hide';
@@ -523,7 +525,7 @@ class Devices extends Component {
         }
         else if (value === '10') {
             let indexFlagged = this.state.columns.findIndex(k => k.dataIndex === 'flagged');
-            
+
 
             if (indexFlagged > -1) {
                 this.state.columns.splice(2, 0, this.state.columns.splice(indexFlagged, 1)[0]);
@@ -1016,7 +1018,7 @@ class Devices extends Component {
 
                                 // provide page heading if you need
                                 pageHeading={convertToLang(this.props.translation[Sidebar_users_devices], "Users & Devices")}
-                                
+
                                 // column selection Dropdown props
                                 handleFilterOptions={this.handleFilterOptions}
                                 selectedOptions={this.props.selectedOptions}
@@ -1043,7 +1045,7 @@ class Devices extends Component {
                                 translation={this.state.translation}
                             />
                             <DevicesList
-                                transferDeviceProfile={this.transferDeviceProfile}
+                                transferDeviceProfile={this.props.transferDeviceProfile}
                                 onChangeTableSorting={this.handleTableChange}
                                 devices={this.state.devices}
                                 allDevices={this.state.allDevices}
@@ -1080,12 +1082,16 @@ class Devices extends Component {
                                 getSimIDs={this.props.getSimIDs}
                                 getChatIDs={this.props.getChatIDs}
                                 getPgpEmails={this.props.getPgpEmails}
+                                resetProductAddProps={this.props.resetProductAddProps}
+                                relinkDevice={this.props.relinkDevice}
+
                             />
+
                             <ShowMsg
                                 msg={this.props.msg}
                                 showMsg={this.props.showMsg}
                             />
-                            <AddDevice ref="add_device" translation={this.state.translation} />
+                            <AddDevice ref="add_device" translation={this.state.translation} resetProductAddProps={this.props.resetProductAddProps} />
                         </Fragment>
                 }
             </Fragment>
@@ -1222,7 +1228,10 @@ function mapDispatchToProps(dispatch) {
         getSimIDs: getSimIDs,
         getChatIDs: getChatIDs,
         getPgpEmails: getPGPEmails,
-        transferDeviceProfile: transferDeviceProfile
+        transferDeviceProfile: transferDeviceProfile,
+        resetProductAddProps: resetProductAddProps,
+        relinkDevice
+
     }, dispatch);
 }
 

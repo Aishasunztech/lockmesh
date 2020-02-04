@@ -17,7 +17,7 @@ export default class EditDevice extends Component {
     }
 
     showModal = (device, func) => {
-        
+
         this.setState({
             device: device,
             visible: true,
@@ -51,8 +51,9 @@ export default class EditDevice extends Component {
         this.refs.editForm.getWrappedInstance().resetFields();
         this.setState({
             visible: false
-
         });
+        this.props.resetProductAddProps()
+
     }
     render() {
         const { visible, loading } = this.state;
@@ -84,7 +85,7 @@ export default class EditDevice extends Component {
                         editDeviceFunc={this.state.func}
                         handleCancel={this.handleCancel}
                         history={this.props.history}
-                        // translation={this.props.translation}
+                    // translation={this.props.translation}
                     />
 
                 </Modal>

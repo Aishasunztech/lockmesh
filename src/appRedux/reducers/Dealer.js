@@ -242,11 +242,19 @@ export default (state = initialState, action) => {
             if (action.response.status) {
 
                 let objIndex4 = state.dealers.findIndex((obj => obj.dealer_id === action.payload.formData.dealer_id));
+                let objIndex5 = state.allDealers.findIndex((obj2 => obj2.dealer_id === action.payload.formData.dealer_id));
                 if (objIndex4 !== undefined) {
                     state.dealers[objIndex4].dealer_name = action.payload.formData.name;
                     if (action.response.alreadyAvailable === false) {
                         state.dealers[objIndex4].dealer_email = action.payload.formData.email;
                     }
+                }
+
+                if(objIndex5 !== undefined){
+                  state.allDealers[objIndex5].dealer_name = action.payload.formData.name;
+                  if(action.response.alreadyAvailable === false){
+                    state.allDealers[objIndex5].dealer_email = action.payload.formData.email;
+                  }
                 }
 
                 if (action.response.alreadyAvailable === false) {
@@ -269,6 +277,7 @@ export default (state = initialState, action) => {
                 dealers: [...state.dealers],
                 selectedOptions: [...state.selectedOptions],
                 isloading: false,
+                allDealers: [...state.allDealers],
                 action: action.payload,
             }
 
@@ -295,6 +304,7 @@ export default (state = initialState, action) => {
 
                 if (action.response.added_dealer && action.response.added_dealer.length) {
                     state.dealers.unshift(action.response.added_dealer[0])
+                    state.allDealers.unshift(action.response.added_dealer[0]);
                 }
 
                 success({
@@ -320,7 +330,8 @@ export default (state = initialState, action) => {
                 dealers: [...state.dealers],
                 // options: [...state.options],
                 dealerModal: visibleModal,
-                addBtnLoading: false
+              allDealers: [...state.allDealers],
+              addBtnLoading: false
 
             }
         }
@@ -333,7 +344,7 @@ export default (state = initialState, action) => {
         }
 
         case GET_PAGINATION: {
-            
+
             return {
                 ...state,
                 DisplayPages: action.payload

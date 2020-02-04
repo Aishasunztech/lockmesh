@@ -99,8 +99,8 @@ class BulkWipe extends Component {
         this.confirm({
             title: title,
             content: '',
-            okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
-            cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
+            okText: convertToLang(_this.props.translation[Button_Ok], "Ok"),
+            cancelText: convertToLang(_this.props.translation[Button_Cancel], "Cancel"),
             onOk: (() => {
                 _this.props.handleWipePwdConfirmModal(true);
                 _this.setState({ wipe_data: data })

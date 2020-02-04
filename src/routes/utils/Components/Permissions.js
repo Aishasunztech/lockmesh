@@ -197,9 +197,9 @@ class Permissions extends Component {
   saveAllDealersConfirm = () => {
     let _this = this;
     confirm({
-      title: convertToLang(this.props.translation[Alert_Allow_Permission_Delaer], "Do you really Want to allow Permission for all Dealers?"),
-      okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
-      cancelText: convertToLang(this.props.translation[Button_No], "No"),
+      title: convertToLang(_this.props.translation[Alert_Allow_Permission_Delaer], "Do you really Want to allow Permission for all Dealers?"),
+      okText: convertToLang(_this.props.translation[Button_Yes], "Yes"),
+      cancelText: convertToLang(_this.props.translation[Button_No], "No"),
       onOk() {
         _this.saveAllDealers()
       },
@@ -396,9 +396,9 @@ class Permissions extends Component {
   removeAllDealersConfirm = () => {
     let _this = this;
     confirm({
-      title: convertToLang(this.props.translation[Alert_Remove_Permission_Delaer], "Do you really Want to Remove Permission for all Dealers?"),
-      okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
-      cancelText: convertToLang(this.props.translation[Button_No], "No"),
+      title: convertToLang(_this.props.translation[Alert_Remove_Permission_Delaer], "Do you really Want to Remove Permission for all Dealers?"),
+      okText: convertToLang(_this.props.translation[Button_Yes], "Yes"),
+      cancelText: convertToLang(_this.props.translation[Button_No], "No"),
       onOk() {
         _this.removeAllDealers();
       },
@@ -663,7 +663,7 @@ class Permissions extends Component {
           onCancel={() => {
             this.showDealersModal(false)
           }}
-          bodyStyle={{ height: 500, overflow: "overlay" }}
+          bodyStyle={{ height: 400, overflow: "overlay" }}
         >
           <DealerList
             columns={this.state.addDealerColsInModal}
@@ -692,6 +692,7 @@ class Permissions extends Component {
           onCancel={() => {
             this.removeUnSelectedDealersModal(false)
           }}
+          bodyStyle={{ height: 400, overflow: "overlay" }}
         >
           <DealerList
             columns={this.state.addDealerColsInModal}
@@ -721,7 +722,7 @@ class Permissions extends Component {
           onCancel={() => {
             this.addSelectedDealersModal(false)
           }}
-          bodyStyle={{ height: 500, overflow: "overlay" }}
+          bodyStyle={{ height: 400, overflow: "overlay" }}
         >
           <DealerList
             columns={this.state.addDealerColsInModal}

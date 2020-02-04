@@ -781,14 +781,12 @@ class ProductInventory extends Component {
             {(this.state.reportCard) ?
               <Fragment>
                 <Row>
-                  <Col xs={14} sm={14} md={12} lg={12} xl={12}>
+                  <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                     <h3>Product Inventory Report</h3>
                   </Col>
-                  <Col xs={10} sm={10} md={12} lg={12} xl={12}>
-                    <div className="pull-right">
+                  <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                       <Button className="mb-8" type="dotted" icon="download" size="small" onClick={this.createPDFReport}>Download PDF</Button>
                       <Button className="mb-8" type="primary" icon="download" size="small" onClick={this.createExcelReport}>Download Excel</Button>
-                    </div>
                   </Col>
                 </Row>
                 <Tabs defaultActiveKey="1" activeKey={this.state.innerTabSelect} type="card" className="" onChange={this.handleChangeCardTabs}>
@@ -820,7 +818,7 @@ class ProductInventory extends Component {
                   columns={this.state.columns}
                   rowKey='row_key'
                   align='center'
-                  scroll={{ x: true, y: true }}
+                  scroll={{ x: true }}
                   pagination={false}
                   dataSource={this.renderList(this.props.productReport)}
                 />

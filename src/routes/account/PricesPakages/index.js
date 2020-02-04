@@ -815,6 +815,7 @@ class Prices extends Component {
                                                     package={record}
                                                     savePermission={this.props.packagePermission}
                                                     translation={this.props.translation}
+                                                    auth = {this.props.auth}
 
                                                 />
 

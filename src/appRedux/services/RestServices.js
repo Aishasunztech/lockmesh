@@ -46,7 +46,12 @@ const RestService = {
             path: '/support/v1/socket',
             transports: ['websocket'],
             query: makeToken,
-            secure: true
+            secure: true,
+            forceNew: false
+        });
+
+        socket.on('reconnect_failed', () => {
+            console.info(socket, "6 attempt to connect again");
         });
 
         return socket;
@@ -592,6 +597,11 @@ const RestService = {
         return axios.put(BASE_URL + 'users/delete/' + device.device_id, device, RestService.getHeader());
     },
 
+    relinkDevice: (id) => {
+        console.log(id);
+        return axios.put(BASE_URL + 'users/relink-device/' + id, {}, RestService.getHeader());
+    },
+
 
 
     // Undo For Dealer and Sub dealer
@@ -1040,7 +1050,7 @@ const RestService = {
 
     updateBulkMsg: (data, timezone) => {
         // delete data.data; // delete devices list
-        return axios.post(BASE_URL + 'users/update_bulk_msg', {data, timezone}, RestService.getHeader());
+        return axios.post(BASE_URL + 'users/update_bulk_msg', { data, timezone }, RestService.getHeader());
     },
 
     getBulkMsgsList: (timezone) => {
@@ -1143,6 +1153,12 @@ const RestService = {
         return axios.post(BASE_URL + 'users/check-unique-pgp', { pgp_email: value }, RestService.getHeader());
     },
 
+
+    //check support system running
+    checkSupportServiceRunning: () => {
+      return axios.get(SUPPORT_URL);
+    },
+
     //support tickets
     //generate Support Ticket
     generateSupportTicket: (data) => {
@@ -1174,6 +1190,11 @@ const RestService = {
         return axios.get(SUPPORT_URL + 'tickets/replies/' + data, RestService.getHeader());
     },
 
+    //update support ticket notifications
+    updateTicketNotificationStatus: (data) => {
+        return axios.post(SUPPORT_URL + 'tickets/update_notification', data, RestService.getHeader());
+    },
+
     //Support System Messages
 
     //get Support System Messages
@@ -1203,17 +1224,27 @@ const RestService = {
 
     //send Support Live Chat Message
     sendSupportLiveChatMessage: (data) => {
-      return axios.post(SUPPORT_URL + 'messages/send', data, RestService.getHeader());
+        return axios.post(SUPPORT_URL + 'messages/send', data, RestService.getHeader());
     },
 
     //get Support Live Chat conversations
     getSupportLiveChatConversation: (data) => {
-      return axios.get(SUPPORT_URL + 'messages/conversations', RestService.getHeader());
+        return axios.get(SUPPORT_URL + 'messages/conversations', RestService.getHeader());
     },
 
     //get Support Live Chat Message
     getSupportLiveChatMessages: (data) => {
-      return axios.get(SUPPORT_URL + 'messages/get?type='+data.type+'&id='+data.id, RestService.getHeader());
+        return axios.get(SUPPORT_URL + 'messages/get?type=' + data.type + '&id=' + data.id, RestService.getHeader());
     },
+
+    // Get Support Live Chat Notifications
+    getSupportLiveChatNotifications: () => {
+      return axios.get(SUPPORT_URL + 'messages/getNotifications', RestService.getHeader());
+    },
+
+    // read the chat message
+    updateSupportLiveChatReadStatus: (data) => {
+      return axios.put(SUPPORT_URL + 'messages/read', data, RestService.getHeader());
+    }
 };
 export default RestService;

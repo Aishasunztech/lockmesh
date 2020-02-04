@@ -129,9 +129,6 @@ export default (state = initialState, action) => {
     }
 
     case UPDATE_SUPPORT_TICKET_REPLY: {
-
-      console.log(action.payload.data);
-
       let replies = state.supportTicketReplies;
       if (action.payload.status) {
         replies = action.payload.data;

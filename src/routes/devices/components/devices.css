@@ -444,10 +444,13 @@
 }
 
 .overdue_table .ant-table-thead>tr>th,
-.overdue_table .ant-table-tbody>tr>td,
+.overdue_table .ant-table-tbody>tr>td {
+    padding: 4px 0 !important;
+}
+
 .pay_history .ant-table-thead>tr>th,
 .pay_history .ant-table-tbody>tr>td {
-    padding: 4px 0 !important;
+    padding: 6px 6px !important;
 }
 
 .pay_history .ant-table.ant-table-bordered .ant-table-title {
@@ -461,11 +464,11 @@
     width: 32px;
     height: 20px;
     letter-spacing: 1px;
-    font-size: 11px!important;
+    font-size: 11px !important;
     font-weight: 100;
-    background-color: #5b9bd5!important;
-    border: 1px solid #41719c!important;
-    color: #fff!important;
+    background-color: #5b9bd5 !important;
+    border: 1px solid #41719c !important;
+    color: #fff !important;
 }
 
 .ac_status_table .ant-table.ant-table-bordered .ant-table-title {
@@ -518,6 +521,14 @@
 
 .val_days .ant-col-12.ant-form-item-control-wrapper {
     padding-left: 0;
+}
+
+.overdue_table .bg_yellow:hover {
+    background: #ffff00 !important;
+}
+
+.overdue_table .bg_red:hover {
+    background: #ff0000 !important;
 }
 
 @media screen and (max-width: 991px) {
