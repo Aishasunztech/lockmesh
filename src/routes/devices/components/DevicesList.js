@@ -345,6 +345,18 @@ class DevicesList extends Component {
             }
             // console.log('object of ', arr);
             this.confirmDelete(type, arr, title);
+        } else {
+            if (type === 'unlink') {
+                Modal.error({
+                    title: 'There is no unlink device selected to remove',
+                    content: 'Please Select a device to perform this action.',
+                });
+            } else if (type === 'pre-active') {
+                Modal.error({
+                    title: 'There is no pre-active device selected to remove',
+                    content: 'Please Select a device to perform this action.',
+                });
+            }
         }
         //  console.log('DELETE ALL 1', this.state.selectedRows);
 
