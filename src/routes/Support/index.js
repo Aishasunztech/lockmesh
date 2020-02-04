@@ -140,6 +140,9 @@ class Support extends Component {
       if (this.props.resetCurrentSystemMessageId) {
         this.props.resetCurrentSystemMessageId();
       }
+      if(this.props.resetCurrentConversation){
+        this.props.resetCurrentConversation();
+      }
     }
   }
 
