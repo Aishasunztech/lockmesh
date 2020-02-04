@@ -126,7 +126,7 @@ class PolicyList extends Component {
     renderList(list) {
 
         return list.map((policy, index) => {
-            console.log("policy ", policy)
+            // console.log("policy ", policy)
             return {
                 key: policy.id,
                 rowKey: policy.id,
