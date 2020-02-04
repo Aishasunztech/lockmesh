@@ -3,7 +3,7 @@ import { Button } from 'antd';
 import SupportTicketReply from '../SupportTicketReply/index'
 import Reply from '../SupportTicketReply/reply';
 import CustomScrollbars from 'util/CustomScrollbars'
-import { getDateFromTimestamp } from "../../../../utils/commonUtils";
+import { getDateFromTimestamp, getFormattedDate } from "../../../../utils/commonUtils";
 class TicketDetail extends React.Component {
 
   constructor(props){
@@ -108,7 +108,7 @@ class TicketDetail extends React.Component {
                       <div className="gx-module-list-content">
                         <div className="gx-mail-user-des">
                           <span className="gx-sender-name">{(reply.user_type === 'admin') ? 'Admin' : reply.user.dealer_name +' ('+reply.user.link_code+')' }</span>
-                          <div className="gx-time">{getDateFromTimestamp(reply.createdAt)}</div>
+                          <div className="gx-time">{getFormattedDate(reply.createdAt)}</div>
                         </div>
                         <div className="gx-message">
                           <p style={{textAlign: 'justify'}}>{reply.description.split("\n").map((i,k) => <span key={k}>{i}<br /></span>)}</p>
