@@ -1,21 +1,29 @@
-import React from "react";
+import React, { Component } from "react";
 
 import ReceivedMessageCell from "./ReceivedMessageCell/index";
 import SentMessageCell from "./SentMessageCell/index";
 
-const Conversation = ({conversationData, selectedUser, user}) => {
+class Conversation extends Component {
 
-  return (
-    <div className="gx-chat-main-content">
-      { conversationData !== undefined && conversationData.map((conversation, index) =>
-        conversation.sender === user.dealerId ?
+  constructor(props){
+    super(props);
+  }
+
+  render(){
+    const { conversationData, selectedUser, user } = this.props;
+    return (
+      <div className="gx-chat-main-content">
+        { conversationData !== undefined && conversationData.map((conversation, index) =>
+          conversation.sender === user.dealerId ?
             <SentMessageCell key={index} conversation={conversation}/> :
             <ReceivedMessageCell key={index} conversation={conversation} user={selectedUser}/>
 
 
-      )}
-    </div>
-  )
+        )}
+      </div>
+    )
+  }
+
 };
 
 export default Conversation;
