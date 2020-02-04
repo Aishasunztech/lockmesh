@@ -19,17 +19,18 @@ class ChatUserList extends Component {
   }
 
   render(){
-    const {chatUsers, selectedSectionId, onSelectUser, notifications } = this.props;
-    let noOfReceivedMessages = 0;
+    const {chatUsers, selectedSectionId, onSelectUser, notifications, messages } = this.props;
     return (
       <div className="gx-chat-user">
         {chatUsers.map((chat, index) => {
+          let noOfReceivedMessages = 0;
           notifications.map(noti => {
             if(noti.sender === chat.user.dealer_id){
               noOfReceivedMessages = noti.noOfUnreadMessages;
             }
           });
-            return <UserCell key={index} noOfReceivedMessages={noOfReceivedMessages} chat={chat} conversation={chat._id} typing={this.state.typing}
+          let msgs = messages.filter(msg => msg.conversation_id === chat._id);
+            return <UserCell key={index} noOfReceivedMessages={noOfReceivedMessages} msgs={msgs} chat={chat} conversation={chat._id} typing={this.state.typing}
                       selectedSectionId={selectedSectionId} onSelectUser={onSelectUser}/>
           }
         )}
@@ -39,11 +40,12 @@ class ChatUserList extends Component {
 };
 
 const mapStateToProps = ({ SupportLiveChat, sidebar }) => {
-  const { typingConversations } = SupportLiveChat;
+  const { typingConversations, supportLiveChatMessages } = SupportLiveChat;
   const { supportChatNotifications } = sidebar;
   return {
     typing: typingConversations,
-    notifications: supportChatNotifications
+    notifications: supportChatNotifications,
+    messages: supportLiveChatMessages
   }
 }
 

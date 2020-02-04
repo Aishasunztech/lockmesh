@@ -1,10 +1,10 @@
 import React from "react";
 import {Avatar, Button, Icon, Modal, Badge} from "antd";
 
-const UserCell = ({ chat, conversation, selectedSectionId, onSelectUser, typing, noOfReceivedMessages }) => {
+const UserCell = ({ chat, conversation, selectedSectionId, onSelectUser, typing, noOfReceivedMessages, msgs }) => {
   let isTyping = typing.some(conv => conv === conversation);
   return (
-    <div className={`gx-chat-user-item ${conversation !== null && selectedSectionId === conversation ? 'active' : ''}`} onClick={() => {
+    <div className={`gx-chat-user-item ${chat.hasOwnProperty('user') && chat.user.hasOwnProperty('dealer_id') && selectedSectionId === chat.user.dealer_id ? 'active' : ''}`} onClick={() => {
         onSelectUser(chat, 'chat');
     }}>
       <Badge count={noOfReceivedMessages}>
@@ -16,8 +16,8 @@ const UserCell = ({ chat, conversation, selectedSectionId, onSelectUser, typing,
           </div>
 
           <div className="gx-chat-info">
-            <span className="gx-name h4">{chat.user.dealer_name}</span>
-            <div className="gx-chat-info-des gx-text-truncate">{chat.user.link_code}</div>
+            <span className="gx-name h4">{chat.user.dealer_name} {chat.user.link_code !== '' ? `(${chat.user.link_code})`: ''}</span>
+            {/*<div className="gx-chat-info-des gx-text-truncate">{chat.user.link_code}</div>*/}
             <small className="gx-chat-info-des gx-text-truncate">{isTyping ? 'is typing...' : ''}</small>
           </div>
 
