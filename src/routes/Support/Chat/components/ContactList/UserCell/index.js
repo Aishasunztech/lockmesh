@@ -14,8 +14,8 @@ const UserCell = ({onSelectUser, selectedSectionId, user}) => {
           </div>
         </div>
         <div className="gx-chat-contact-col">
-          <div className="h4 gx-name">{user.dealer_name}</div>
-          <div className="gx-chat-info-des gx-text-truncate">{user.link_code}</div>
+          <div className="h4 gx-name">{user.dealer_name} {user.link_code !== '' ? `(${user.link_code})` : ''}</div>
+          {/*<div className="gx-chat-info-des gx-text-truncate">{user.link_code}</div>*/}
         </div>
       </div>
     </div>
