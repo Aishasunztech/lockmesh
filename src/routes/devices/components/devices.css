@@ -422,10 +422,10 @@
     border-bottom: 1px solid #e8e8e8;
 }
 
-.overdue_table .ant-table-content {
+/* .overdue_table .ant-table-content {
     width: 85%;
     float: right;
-}
+} */
 
 /* .overdue_table tbody.ant-table-tbody {
     border-left: 1px solid #e8e8e8;
