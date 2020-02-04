@@ -313,12 +313,18 @@ class Mail extends PureComponent {
   }
 
   renderTickets(filteredSupportTickets){
+    let columns = this.supportTableColumns(this.props.user.type === ADMIN);
+    if(!filteredSupportTickets.some(item => item.status === 'closed') && this.props.user.type === ADMIN){
+      if(columns[0].hasOwnProperty('title') && columns[0].title.toLowerCase() === 'actions'){
+        columns = columns.slice(1);
+      }
+    }
     const { currentMail } = this.state;
     return currentMail === null ? (<Table
       className="gx-table-responsive"
       size="midddle"
       bordered
-      columns={this.supportTableColumns(this.props.user.type === ADMIN)}
+      columns={columns}
       dataSource={this.createSupportTicketsTableData(filteredSupportTickets)}
       pagination={false}
       scroll={{ x: true }}
