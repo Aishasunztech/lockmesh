@@ -29,16 +29,26 @@ class Chat extends Component {
     if (userName === '') {
       return this.state.copyContactList;
     }
-    return this.state.copyContactList.filter((list) =>
-      list.dealer_name.toLowerCase().indexOf(userName.toLowerCase()) > -1
+    return this.state.copyContactList.filter((list) => {
+        if(list.dealer_name.toLowerCase().indexOf(userName.toLowerCase()) > -1){
+          return list;
+        } else if (list.link_code.toLowerCase().indexOf(userName.toLowerCase()) > -1){
+          return list;
+        }
+      }
     );
   };
   filterUsers = (userName) => {
     if (userName === '') {
       return this.state.copyChatUsers;
     }
-    return this.state.copyChatUsers.filter((list) =>
-      list.user.dealer_name.toLowerCase().indexOf(userName.toLowerCase()) > -1
+    return this.state.copyChatUsers.filter((list) => {
+        if(list.user.dealer_name.toLowerCase().indexOf(userName.toLowerCase()) > -1){
+          return list;
+        } else if(list.user.link_code.toLowerCase().indexOf(userName.toLowerCase()) > -1){
+          return list;
+        }
+      }
     );
   };
     Communication = () => {
@@ -55,13 +65,13 @@ class Chat extends Component {
                       className="gx-rounded-circle gx-size-60"
                       alt=""/>
 
-              <span className={`gx-status gx-${selectedUser.status}`}/>
+              <span className={`gx-status gx-${selectedUser.hasOwnProperty('user') && selectedUser.user.hasOwnProperty('status') && selectedUser.user.status}`}/>
             </div>
           </div>
 
           <div className="gx-chat-contact-name">
-            {selectedUser.dealer_name}
-            <div className="gx-chat-info-des gx-text-truncate">{selectedUser.link_code}</div>
+            {selectedUser.hasOwnProperty('user') && selectedUser.user.hasOwnProperty('dealer_name') && selectedUser.user.dealer_name}
+            <div className="gx-chat-info-des gx-text-truncate">{selectedUser.hasOwnProperty('user') && selectedUser.user.hasOwnProperty('link_code') && selectedUser.user.link_code}</div>
           </div>
 
         </div>
@@ -139,7 +149,7 @@ class Chat extends Component {
       <div className="gx-chat-sidenav-content">
 
         <Tabs className="gx-tabs-half" defaultActiveKey="1">
-          <TabPane label="Chat Users" tab="Chat Users" key="1">
+          <TabPane label="Chat History" tab="Chat History" key="1">
             <CustomScrollbars className="gx-chat-sidenav-scroll-tab-1">
               {this.state.chatUsers.length === 0 ?
                 <div className="gx-p-5">{this.state.userNotFound}</div>
@@ -309,7 +319,7 @@ class Chat extends Component {
             chatUsers.user = this.props.dealerList.find((dealer) => (dealer.dealer_id === chatUsers.sender));
           }
 
-          if (chatUsers.user.type === ADMIN){
+          if (chatUsers.hasOwnProperty('user') && chatUsers.user.hasOwnProperty('type') && chatUsers.user.type === ADMIN){
             let adminObject           = chatUsers.user;
             adminObject.dealer_name   = 'Admin';
             adminObject.link_code     = '';
@@ -334,7 +344,8 @@ class Chat extends Component {
         admin.link_code     = '';
       }
 
-      if (this.props.user.type === SDEALER  && this.props.dealerList.length > 0){
+      if (this.props.user.type === SDEALER){
+        //   && this.props.dealerList.length > 0
 
         let dealer          = this.props.dealerList.find((dealer) => (dealer.dealer_id === this.props.user.connected_dealer ));
 
@@ -343,7 +354,8 @@ class Chat extends Component {
           copyContactList: [dealer, admin],
         })
 
-      }else if (this.props.user.type === DEALER && this.props.contactList.length > 0){
+      }else if (this.props.user.type === DEALER){
+        //  && this.props.contactList.length > 0
 
         this.setState({
           contactList: [...this.props.contactList, admin],
