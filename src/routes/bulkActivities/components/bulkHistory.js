@@ -233,7 +233,7 @@ export default class Activity extends Component {
                     footer={null}
                     bodyStyle={{ height: 400, overflow: 'overlay', width: '100%' }}
                 >
-                    {this.props.history_loading ? <CircularProgress /> :
+                    {/* {this.props.history_loading ? <CircularProgress /> : */}
                         <Card className='fix_card fix_card_his_bulk'>
                             <hr className="fix_header_border" style={{ top: "17px" }} />
                             <CustomScrollbars className="gx-popover-scroll ">
@@ -290,7 +290,7 @@ export default class Activity extends Component {
                                 />
                             </CustomScrollbars>
                         </Card>
-                    }
+                    {/* } */}
                 </Modal>
             </div>
         )
