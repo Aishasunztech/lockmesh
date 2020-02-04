@@ -20,8 +20,6 @@ class ChatUserList extends Component {
 
   render(){
     const {chatUsers, selectedSectionId, onSelectUser, notifications } = this.props;
-    console.log(chatUsers);
-
     let noOfReceivedMessages = 0;
     return (
       <div className="gx-chat-user">

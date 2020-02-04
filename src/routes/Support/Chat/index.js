@@ -51,6 +51,18 @@ class Chat extends Component {
       }
     );
   };
+
+  onScroll = (e) => {
+    if(e.srcElement.scrollHeight === e.srcElement.scrollTop + e.srcElement.clientHeight){
+      if(this.state.isScrolledUp) {
+        this.setState({isScrolledUp: false});
+      }
+    } else {
+      if(!this.state.isScrolledUp){
+        this.setState({isScrolledUp: true});
+      }
+    }
+  };
     Communication = () => {
     const {message, selectedUser} = this.state;
     return <div className="gx-chat-main">
@@ -78,7 +90,7 @@ class Chat extends Component {
 
       </div>
 
-      <CustomScrollbars className="gx-chat-list-scroll">
+      <CustomScrollbars className="gx-chat-list-scroll" id="chatScroll" onScroll={(e) => this.onScroll(e)}>
         <Conversation
           conversationData={this.state.conversation}
           selectedUser={selectedUser}
@@ -182,20 +194,20 @@ class Chat extends Component {
   };
 
   _emitEvent = (e) => {
-    if(this.props.supportSocket && this.state.selectedConversation !== null && this.state.selectedUser !== null){
+    if(this.props.supportSocket && this.state.selectedConversation !== null && this.state.selectedUser !== null && this.state.selectedUser.hasOwnProperty('user')){
       if(this.state.message.length > 0 && !this.state.isTypingEventEmitted){
-        this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_AM_TYPING, {conversation: this.state.selectedConversation, user: this.state.selectedUser.dealer_id});
+        this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_AM_TYPING, {conversation: this.state.selectedConversation, user: this.state.selectedUser.user.dealer_id});
         this.setState({isTypingEventEmitted: true});
       } else {
         if(!this.state.message.length > 0){
-          this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_STOPPED_TYPING, {conversation: this.state.selectedConversation, user: this.state.selectedUser.dealer_id});
+          this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_STOPPED_TYPING, {conversation: this.state.selectedConversation, user: this.state.selectedUser.user.dealer_id});
           this.setState({isTypingEventEmitted: false});
         }
       }
     }
     if(e.key === 'Enter'){
-      if(this.props.supportSocket && this.state.selectedConversation !== null && this.state.selectedUser !== null){
-        this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_STOPPED_TYPING, {conversation: this.state.selectedConversation, user: this.state.selectedUser.dealer_id});
+      if(this.props.supportSocket && this.state.selectedConversation !== null && this.state.selectedUser !== null && this.state.selectedUser.hasOwnProperty('user')){
+        this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_STOPPED_TYPING, {conversation: this.state.selectedConversation, user: this.state.selectedUser.user.dealer_id});
       }
     }
   }
@@ -256,6 +268,7 @@ class Chat extends Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       loader: false,
       userNotFound: 'No user found',
@@ -272,7 +285,8 @@ class Chat extends Component {
       isTypingEventEmitted: false,
       chatUsers: [],
       copyChatUsers: [],
-      conversation: []
+      conversation: [],
+      isScrolledUp: false
     }
   }
 
@@ -282,6 +296,14 @@ class Chat extends Component {
     let selectedConversation = null;
     let selectedUser = null;
     let dealerId = '';
+
+    if(!this.state.isScrolledUp){
+      if(document.getElementById('chatScroll')){
+        if(document.getElementById('chatScroll').children.length){
+          document.getElementById('chatScroll').children[0].scrollTop = document.getElementById('chatScroll').children[0].scrollHeight;
+        }
+      }
+    }
 
     if(this.props.currentConversation){
       selectedConversation = this.props.currentConversation._id ? this.props.currentConversation._id : null;
@@ -305,9 +327,15 @@ class Chat extends Component {
 
     let chatUsersWithUser = [];
 
+    if(!this.state.isScrolledUp){
+      if(document.getElementById('chatScroll')){
+        if(document.getElementById('chatScroll').children.length){
+          document.getElementById('chatScroll').children[0].scrollTop = document.getElementById('chatScroll').children[0].scrollHeight;
+        }
+      }
+    }
 
     if (prevProps !== this.props){
-
 
       if (this.state.chatUsers !== this.props.supportLiveChatConversations && this.props.supportLiveChatConversations.length > 0 && this.props.dealerList.length > 0) {
 
@@ -402,6 +430,18 @@ class Chat extends Component {
             selectedUser: null,
             conversation: []
           });
+        }
+      }
+
+      if(this.props.supportLiveChatMessages !== prevProps.supportLiveChatMessages){
+        if(this.props.currentConversation !== null && this.props.currentConversation._id !== null){
+          if(this.props.supportLiveChatMessages.length){
+            let lastItemNo = this.props.supportLiveChatMessages.length;
+            let lastItem = this.props.supportLiveChatMessages[lastItemNo-1];
+            if(lastItem !== undefined && lastItem.hasOwnProperty('receiver') && lastItem.receiver === this.props.user.dealerId && lastItem.hasOwnProperty('is_read') && lastItem.is_read === false ){
+              this.props.markMessagesRead({conversations: [this.props.currentConversation._id]});
+            }
+          }
         }
       }
     }
