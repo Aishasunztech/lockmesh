@@ -90,9 +90,9 @@ export function bulkActivateDevice(devices) {
 export function getbulkHistory() {
 
     return (dispatch) => {
-        dispatch({
-            type: BULK_HISTORY_LOADING,
-        });
+        // dispatch({
+        //     type: BULK_HISTORY_LOADING,
+        // });
         RestService.getbulkHistory().then((response) => {
             if (RestService.checkAuth(response.data)) {
                 // console.log('response', response.data);
