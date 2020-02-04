@@ -139,7 +139,7 @@ class AccountBalanceInfo extends Component {
                             <AppFilter
                                 isAddButton={false}
                                 translation={this.props.translation}
-                                pageHeading={convertToLang(this.props.translation[""], "ACCOUNT BALANCE INFO")}
+                                pageHeading={convertToLang(this.props.translation[""], "Account Balance Info")}
                             />
                             <CreditsModal
                                 ref='credits_modal'
