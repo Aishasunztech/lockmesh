@@ -1,3 +1,4 @@
+// Libraries
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import Highlighter from 'react-highlight-words';
@@ -5,6 +6,14 @@ import { Input, Button, Icon, Select, Modal } from "antd";
 
 import { bindActionCreators } from "redux";
 
+// Components
+import AppFilter from '../../components/AppFilter';
+import DevicesList from './components/DevicesList';
+import CircularProgress from "components/CircularProgress/index";
+import AddDevice from './components/AddDevice';
+import ShowMsg from './components/ShowMsg';
+
+// Actions
 import {
     getDevicesList,
     suspendDevice,
@@ -18,9 +27,29 @@ import {
     getChatIDs,
     getPGPEmails,
     resetProductAddProps,
-    relinkDevice
-} from "../../appRedux/actions/Devices";
+    relinkDevice,
+    unflagged, 
+    unlinkDevice, 
+    transferDeviceProfile,
+    getDropdown,
+    postDropdown
+} from "../../appRedux/actions";
 
+// Helpers
+import {
+    getStatus,
+    componentSearch,
+    titleCase,
+    dealerColsWithSearch,
+    convertToLang,
+    checkValue,
+    handleMultipleSearch,
+    filterData_RelatedToMultipleSearch
+} from '../utils/commonUtils';
+
+import { devicesColumns } from '../utils/columnsUtils';
+
+// Constants
 import {
     DEVICE_ACTIVATED,
     DEVICE_EXPIRED,
@@ -33,6 +62,7 @@ import {
     DEVICE_TRANSFERED,
     DEVICE_FLAGGED,
     DEALER,
+    
 } from '../../constants/Constants'
 
 import {
@@ -69,33 +99,7 @@ import {
     DEVICE_REMAINING_DAYS,
 } from '../../constants/DeviceConstants';
 
-import {
-    getDropdown,
-    postDropdown,
-    postPagination,
-    getPagination
-} from '../../appRedux/actions/Common';
 
-import { unflagged, unlinkDevice, transferDeviceProfile } from '../../appRedux/actions/ConnectDevice';
-
-
-import AppFilter from '../../components/AppFilter';
-import DevicesList from './components/DevicesList';
-import ShowMsg from './components/ShowMsg';
-// import Column from "antd/lib/table/Column";
-import {
-    getStatus,
-    componentSearch,
-    titleCase,
-    dealerColsWithSearch,
-    convertToLang,
-    checkValue,
-    handleMultipleSearch,
-    filterData_RelatedToMultipleSearch
-} from '../utils/commonUtils';
-import CircularProgress from "components/CircularProgress/index";
-import AddDevice from './components/AddDevice';
-import { devicesColumns } from '../utils/columnsUtils';
 import { Sidebar_devices, Sidebar_users_devices } from "../../constants/SidebarConstants";
 const confirm = Modal.confirm
 
@@ -867,12 +871,13 @@ class Devices extends Component {
         //  alert(value);
         //  
         this.refs.devcieList.handlePagination(value);
-        this.props.postPagination(value, 'devices');
+        // this.props.postPagination(value, 'devices');
     }
+
     componentDidMount() {
         this.props.getDevicesList();
         this.props.getDropdown('devices');
-        this.props.getPagination('devices');
+        // this.props.getPagination('devices');
     }
 
 
@@ -1223,8 +1228,8 @@ function mapDispatchToProps(dispatch) {
         rejectDevice: rejectDevice,
         addDevice: addDevice,
         preActiveDevice: preActiveDevice,
-        postPagination: postPagination,
-        getPagination: getPagination,
+        // postPagination: postPagination,
+        // getPagination: getPagination,
         deleteUnlinkDevice: deleteUnlinkDevice,
         unflagged: unflagged,
         unlinkDevice: unlinkDevice,
