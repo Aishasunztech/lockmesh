@@ -84,7 +84,7 @@ export default class DevicesList extends Component {
                     />
                 ),
                 email: checkValue(agent.email),
-                created_at: convertTimezoneValue(this.props.user.timezone, agent.created_at, TIMESTAMP_FORMAT),
+                created_at: convertTimezoneValue(this.props.user.timezone, agent.created_at),
                 // created_at: checkValue(agent.created_at),
             }
         });

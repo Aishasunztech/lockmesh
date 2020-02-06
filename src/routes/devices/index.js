@@ -470,13 +470,14 @@ class Devices extends Component {
  */
 
     handleChangetab = (value) => {
-
+        // console.log("tab value: ", value);
         // this.handleCheckChange(this.props.selectedOptions);
         // 
         // 
         // let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
         let indxAction = this.state.columns.findIndex(k => k.dataIndex == 'action');
-        if (value == '5' && this.props.user.type == ADMIN) {
+        // if (value == '5' && this.props.user.type == ADMIN) {
+        if (value === '5') {
             //  indx = this.state.columns.findIndex(k => k.dataIndex =='action');
             if (indxAction >= 0) { this.state.columns.splice(indxAction, 1) }
             //    
@@ -498,15 +499,17 @@ class Devices extends Component {
         }
         let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex === 'activation_code');
 
-        if (value === '5' && (this.props.user.type !== ADMIN)) {
-            this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >DELETE SELECTED</Button>;
-        }
-        else if (value === '2' && (this.props.user.type === ADMIN)) {
+        // if (value === '5' && (this.props.user.type !== ADMIN)) {
+        //     this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >DELETE SELECTED</Button>;
+        // }
+        // else 
+        if (value === '2' && (this.props.user.type === ADMIN)) {
             this.state.columns.splice(indxAction, 1)
         }
         else if (value === '3') {
             let isCheckedColumn = this.props.selectedOptions.findIndex((item) => { return item.key === "validity" });
             let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
+            // if (indxAction >= 0 && (this.props.user.type !== ADMIN)) {
             if (indxAction >= 0 && (this.props.user.type !== ADMIN)) {
                 this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >DELETE SELECTED</Button>
             }
