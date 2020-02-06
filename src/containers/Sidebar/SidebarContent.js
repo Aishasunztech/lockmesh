@@ -7,9 +7,22 @@ import Auxiliary from "util/Auxiliary";
 import UserProfile from "./UserProfile";
 import NewDevice from '../../components/NewDevices';
 import CreditsModal from '../../components/CreditsModal';
-import { updateSupportSystemMessageNotification } from '../../appRedux/actions/SupportSystemMessages';
-import { updateTicketNotifications, markMessagesRead } from '../../appRedux/actions';
-import { setSupportPage, resetSupportPage, setCurrentSupportTicketId, resetCurrentSupportTicketId, setCurrentSystemMessageId, resetCurrentSystemMessageId, getSupportLiveChatNotifications, resetCurrentConversation, setCurrentConversation } from "../../appRedux/actions";
+import {
+  setSupportPage,
+  resetSupportPage,
+  setCurrentSupportTicketId,
+  resetCurrentSupportTicketId,
+  setCurrentTicketId,
+  resetCurrentTicketId,
+  setCurrentSystemMessageId,
+  resetCurrentSystemMessageId,
+  getSupportLiveChatNotifications,
+  resetCurrentConversation,
+  setCurrentConversation,
+  updateTicketNotifications,
+  markMessagesRead,
+  updateSupportSystemMessageNotification
+} from "../../appRedux/actions";
 import { getNewDevicesList, } from "../../appRedux/actions/Common";
 import {
   getNewCashRequests,
@@ -266,7 +279,7 @@ class SidebarContent extends Component {
               setCurrentSystemMessageId={this.props.setCurrentSystemMessageId}
               resetCurrentSystemMessageId={this.props.setCurrentSystemMessageId}
               setCurrentSupportTicketId={this.props.setCurrentSupportTicketId}
-              resetCurrentSupportTicketId={this.props.resetCurrentSupportTicketId}
+              setCurrentTicketId={this.props.setCurrentTicketId}
               supportChatNotifications={this.props.supportChatNotifications}
               setCurrentConversation={this.props.setCurrentConversation}
               resetCurrentConversation={this.props.resetCurrentConversation}
@@ -497,7 +510,9 @@ export default connect(mapStateToProps, {
   setCurrentConversation,
   resetCurrentConversation,
   markMessagesRead,
-  relinkDevice
+  relinkDevice,
+  setCurrentTicketId,
+  resetCurrentTicketId
 }
 )(SidebarContent);
 
