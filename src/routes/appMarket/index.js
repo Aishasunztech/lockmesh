@@ -6,9 +6,18 @@ import CircularProgress from "components/CircularProgress";
 //import {getDevicesList} from '../../appRedux/actions/Devices';
 import { BASE_URL } from '../../constants/Application';
 
-import { getApkList, changeAppStatus, deleteApk, editApk } from "../../appRedux/actions/Apk";
-import { transferApps, getMarketApps, handleUninstall, removeSMapps } from "../../appRedux/actions/AppMarket";
-import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
+import { 
+    getDropdown, 
+    postDropdown, 
+    getApkList, 
+    changeAppStatus, 
+    deleteApk, 
+    editApk,
+    transferApps, 
+    getMarketApps, 
+    handleUninstall, 
+    removeSMapps
+} from '../../appRedux/actions';
 import { ADMIN, DEALER } from "../../constants/Constants";
 import AppMarketList from './appMarketList';
 import Markup from 'interweave';
@@ -712,8 +721,6 @@ function mapDispatchToProps(dispatch) {
         editApk: editApk,
         getDropdown: getDropdown,
         postDropdown: postDropdown,
-        postPagination: postPagination,
-        getPagination: getPagination,
         transferApps: transferApps,
         removeSMapps: removeSMapps,
         getMarketApps: getMarketApps,

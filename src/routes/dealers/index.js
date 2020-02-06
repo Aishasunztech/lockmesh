@@ -19,8 +19,6 @@ import {
     editDealer,
     getDropdown,
     postDropdown,
-    postPagination,
-    getPagination,
     handleAddDealerModalAction
 } from "../../appRedux/actions";
 
@@ -377,7 +375,7 @@ class Dealers extends Component {
 
     handlePagination = (value) => {
         this.refs.dealerList.handlePagination(value);
-        this.props.postPagination(value, this.state.dealer_type);
+        // this.props.postPagination(value, this.state.dealer_type);
     }
 
     handleChangetab = (value) => {
@@ -475,7 +473,7 @@ class Dealers extends Component {
         this.props.getDealerList(dealer_type);
         // this.props.getDevicesList();
         this.props.getDropdown(dealer_type);
-        this.props.getPagination(dealer_type);
+        // this.props.getPagination(dealer_type);
 
         this.setState({
             expandedRowsKeys: (this.props.location.state) ? [this.props.location.state.id] : []
@@ -708,8 +706,8 @@ function mapDispatchToProps(dispatch) {
         editDealer: editDealer,
         getDropdown: getDropdown,
         postDropdown: postDropdown,
-        postPagination: postPagination,
-        getPagination: getPagination,
+        // postPagination: postPagination,
+        // getPagination: getPagination,
         handleAddDealerModalAction: handleAddDealerModalAction
     }, dispatch);
 }
