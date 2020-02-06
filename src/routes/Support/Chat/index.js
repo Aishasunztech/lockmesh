@@ -21,7 +21,7 @@ import {
   sendSupportLiveChatMessage
 } from "../../../appRedux/actions";
 import {ADMIN, DEALER, SDEALER} from "../../../constants/Constants";
-
+const { TextArea } = Input;
 const TabPane = Tabs.TabPane;
 
 class Chat extends Component {
@@ -89,8 +89,8 @@ class Chat extends Component {
           </div>
 
           <div className="gx-chat-contact-name">
-            {selectedUser.hasOwnProperty('user') && selectedUser.user.hasOwnProperty('dealer_name') && selectedUser.user.dealer_name}
-            <div className="gx-chat-info-des gx-text-truncate">{selectedUser.hasOwnProperty('user') && selectedUser.user.hasOwnProperty('link_code') && selectedUser.user.link_code}</div>
+            {selectedUser.hasOwnProperty('user') && selectedUser.user.hasOwnProperty('dealer_name') && selectedUser.user.dealer_name} {selectedUser.hasOwnProperty('user') && selectedUser.user.hasOwnProperty('link_code') && selectedUser.user.type === ADMIN ? "" : `(${selectedUser.user.link_code})`}
+            {/*<div className="gx-chat-info-des gx-text-truncate">{selectedUser.hasOwnProperty('user') && selectedUser.user.hasOwnProperty('link_code') && selectedUser.user.link_code}</div>*/}
           </div>
 
         </div>
@@ -109,9 +109,9 @@ class Chat extends Component {
         <div className="gx-flex-row gx-align-items-center" style={{maxHeight: 51}}>
           <div className="gx-col">
             <div className="gx-form-group">
-              <textarea
+              <TextArea
                 id="required" className="gx-border-0 ant-input gx-chat-textarea"
-                onKeyUp={this._handleKeyPress.bind(this)}
+                onKeyDown={this._handleKeyPress.bind(this)}
                 onChange={this.updateMessageValue.bind(this)}
                 value={message}
                 required={true}
@@ -212,18 +212,20 @@ class Chat extends Component {
         }
       }
     }
-    if(e.key === 'Enter'){
-      if(this.props.supportSocket && this.state.selectedConversation !== null && this.state.selectedUser !== null && this.state.selectedUser.hasOwnProperty('user')){
-        this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_STOPPED_TYPING, {conversation: this.state.selectedConversation, user: this.state.selectedUser.user.dealer_id});
-      }
-    }
   }
 
   _handleKeyPress = (e) => {
-    this._emitEvent(e);
-    if (e.key === 'Enter') {
+    if(e.keyCode === 13 && !e.shiftKey){
+      e.preventDefault();
+      if(this.props.supportSocket && this.state.selectedConversation !== null && this.state.selectedUser !== null && this.state.selectedUser.hasOwnProperty('user')){
+        this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_STOPPED_TYPING, {conversation: this.state.selectedConversation, user: this.state.selectedUser.user.dealer_id});
+      }
       this.submitComment();
     }
+    // this._emitEvent(e);
+    // if (e.key === 'Enter') {
+    //   this.submitComment();
+    // }
   };
 
   handleChange = (event, value) => {
