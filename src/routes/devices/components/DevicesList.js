@@ -479,20 +479,21 @@ class DevicesList extends Component {
         }
 
         let rowSelection;
-        if (this.props.tabselect === '5' && this.props.user.type !== ADMIN) {
-            rowSelection = {
-                onChange: (selectedRowKeys, selectedRows) => {
-                    this.setState({ selectedRows: selectedRows, selectedRowKeys: selectedRowKeys })
-                    // console.log(`selectedRowKeys 5: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-                },
-                getCheckboxProps: record => ({
-                    disabled: record.name === 'Disabled User', // Column configuration not to be checked
-                    name: record.name,
-                }),
-                //  columnTitle: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
-            };
-        }
-        else if (this.props.tabselect === '3' && this.props.user.type !== ADMIN) {
+        // if (this.props.tabselect === '5' && this.props.user.type !== ADMIN) {
+        //     rowSelection = {
+        //         onChange: (selectedRowKeys, selectedRows) => {
+        //             this.setState({ selectedRows: selectedRows, selectedRowKeys: selectedRowKeys })
+        //             // console.log(`selectedRowKeys 5: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+        //         },
+        //         getCheckboxProps: record => ({
+        //             disabled: record.name === 'Disabled User', // Column configuration not to be checked
+        //             name: record.name,
+        //         }),
+        //         //  columnTitle: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
+        //     };
+        // }
+        // else 
+        if (this.props.tabselect === '3' && this.props.user.type !== ADMIN) {
             rowSelection = {
                 onChange: (selectedRowKeys, selectedRows) => {
                     this.setState({ selectedRows: selectedRows, selectedRowKeys: selectedRowKeys })

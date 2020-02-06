@@ -85,13 +85,13 @@ export default class ListMsgs extends Component {
         let editDateTime = data.date_time;
         let currentDateTime = moment().tz(this.state.dealerTZ).format(TIMESTAMP_FORMAT);
         // console.log("edit data is: ", data.date_time, " current date: ", moment().tz(this.state.dealerTZ).format(TIMESTAMP_FORMAT), currentDateTime > editDateTime)
-        if (currentDateTime < editDateTime) {
-            this.setState({ editModal: true, editRecord: data })
-        } else {
+        if (currentDateTime > editDateTime && data.timer_status === "DATE/TIME" ) {
             Modal.warning({
                 title: 'This message time is passed',
                 content: 'You are not allowed to change this message settings.'
             });
+        } else {
+            this.setState({ editModal: true, editRecord: data })
         }
     }
 
