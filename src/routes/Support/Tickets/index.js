@@ -14,7 +14,9 @@ import {
   getSupportTicketReplies,
   getAllToAllDealers,
   setSupportPage,
+  setCurrentTicketId,
   setCurrentSupportTicketId,
+  resetCurrentTicketId,
   resetCurrentSupportTicketId
 } from "../../../appRedux/actions";
 import { connect } from "react-redux";
@@ -143,6 +145,9 @@ class Mail extends PureComponent {
     if(this.props !== prevProps){
       let { currentTicket } = this.props;
       currentTicket = currentTicket !== null ? currentTicket : null ;
+      if(this.props.currentTicket !== prevProps.currentTicket && currentTicket !== null && currentTicket.hasOwnProperty('_id') && this.props.getSupportTicketReplies){
+        this.props.getSupportTicketReplies(currentTicket._id);
+      }
       this.setState({currentMail: currentTicket });
     }
 
@@ -206,7 +211,8 @@ class Mail extends PureComponent {
       currentMail: mail,
     });
     this.props.updateOnTicketPage(true);
-    this.props.setCurrentTicket(mail);
+    this.props.setCurrentSupportTicketId(mail);
+    this.props.setCurrentTicketId(mail._id);
     this.props.setSupportPage('2');
   }
 
@@ -214,7 +220,8 @@ class Mail extends PureComponent {
     this.setState({
       currentMail: null
     });
-    this.props.resetCurrentTicket();
+    this.props.resetCurrentSupportTicketId();
+    this.props.resetCurrentTicketId();
   }
 
   createSupportTicketsTableData(tickets){
@@ -338,7 +345,8 @@ class Mail extends PureComponent {
       closeSupportTicketStatus={this.props.closeSupportTicketStatus}
       supportTicketReplies={this.state.supportTicketReplies}
       updateState={this.updateState.bind(this)}
-      resetCurrentTicket={this.props.resetCurrentTicket}
+      resetCurrentTicketId={this.props.resetCurrentTicketId}
+      resetCurrentSupportTicketId={this.props.resetCurrentSupportTicketId}
     />;
   }
 
@@ -386,8 +394,10 @@ function mapDispatchToProps(dispatch) {
     closeSupportTicket: closeSupportTicket,
     deleteSupportTicket: deleteSupportTicket,
     getSupportTicketReplies: getSupportTicketReplies,
-    setCurrentTicket: setCurrentSupportTicketId,
-    resetCurrentTicket: resetCurrentSupportTicketId,
+    setCurrentTicketId: setCurrentTicketId,
+    resetCurrentTicketId: resetCurrentTicketId,
+    setCurrentSupportTicketId: setCurrentSupportTicketId,
+    resetCurrentSupportTicketId: resetCurrentSupportTicketId,
     setSupportPage: setSupportPage
   }, dispatch);
 }
