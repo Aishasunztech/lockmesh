@@ -754,7 +754,10 @@ class Devices extends Component {
 
                 });
             });
-
+            // console.log("this.props.user ", this.props.user);
+            if (this.props.user.type === ADMIN) {
+                dumydata = dumydata.filter(item => item.dataIndex !== 'activation_code');
+            }
             this.setState({ columns: dumydata, selectedOptions: values });
         } else {
 

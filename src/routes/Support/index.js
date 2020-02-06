@@ -140,6 +140,9 @@ class Support extends Component {
       if (this.props.resetCurrentSystemMessageId) {
         this.props.resetCurrentSystemMessageId();
       }
+      if(this.props.resetCurrentConversation){
+        this.props.resetCurrentConversation();
+      }
     }
   }
 
@@ -154,26 +157,18 @@ class Support extends Component {
 
     switch (value) {
       case '1':
-        this.setState({
-          innerTabSelect: '1'
-        });
+        this.props.setSupportPage('1');
         break;
 
       case '2':
-        this.setState({
-          innerTabSelect: '2'
-        });
+        this.props.setSupportPage('2');
 
         break;
       case "3":
-        this.setState({
-          innerTabSelect: '3'
-        });
+        this.props.setSupportPage('3');
         break;
       default:
-        this.setState({
-          innerTabSelect: '1'
-        });
+        this.props.setSupportPage('1');
         break;
     }
     if (this.refs && this.refs.supportTickets && this.refs.supportTickets && this.refs.supportTickets.getWrappedInstance()) {
@@ -184,6 +179,9 @@ class Support extends Component {
     }
     if(value !== '3'){
       this.props.resetCurrentConversation();
+    }
+    if(value !== '1'){
+      this.props.resetCurrentSystemMessageId();
     }
   };
 

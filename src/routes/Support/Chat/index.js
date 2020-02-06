@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {Avatar, Button, Drawer, Input, Tabs} from "antd";
 import CustomScrollbars from "util/CustomScrollbars";
 import Moment from "moment";
-
+import './chat.css';
 import ChatUserList from "./components/ChatUserList";
 import Conversation from "./components/Conversation/index";
 import ContactList from "./components/ContactList/index";
@@ -12,7 +12,7 @@ import SearchBox from "./components/SearchBox";
 import CircularProgress from "../../../components/CircularProgress/index";
 import {bindActionCreators} from "redux";
 import { SUPPORT_LIVE_CHAT_I_AM_TYPING, SUPPORT_LIVE_CHAT_I_STOPPED_TYPING } from "../../../constants/ActionTypes";
-import { setCurrentConversation, markMessagesRead } from "../../../appRedux/actions";
+import { setCurrentConversation, markMessagesRead, resetCurrentConversation } from "../../../appRedux/actions";
 import {connect} from "react-redux";
 import {
   getAllDealers,
@@ -29,24 +29,53 @@ class Chat extends Component {
     if (userName === '') {
       return this.state.copyContactList;
     }
-    return this.state.copyContactList.filter((list) =>
-      list.dealer_name.toLowerCase().indexOf(userName.toLowerCase()) > -1
+    return this.state.copyContactList.filter((list) => {
+        if(list.dealer_name.toLowerCase().indexOf(userName.toLowerCase()) > -1){
+          return list;
+        } else if (list.link_code.toLowerCase().indexOf(userName.toLowerCase()) > -1){
+          return list;
+        }
+      }
     );
   };
   filterUsers = (userName) => {
     if (userName === '') {
       return this.state.copyChatUsers;
     }
-    return this.state.copyChatUsers.filter((list) =>
-      list.user.dealer_name.toLowerCase().indexOf(userName.toLowerCase()) > -1
+    return this.state.copyChatUsers.filter((list) => {
+        if(list.user.dealer_name.toLowerCase().indexOf(userName.toLowerCase()) > -1){
+          return list;
+        } else if(list.user.link_code.toLowerCase().indexOf(userName.toLowerCase()) > -1){
+          return list;
+        }
+      }
     );
+  };
+
+  resetDrawer = () => {
+    this.props.resetCurrentConversation();
+    // this.setState({
+    //   drawerState: true
+    // });
+  };
+
+  onScroll = (e) => {
+    if(e.srcElement.scrollHeight === e.srcElement.scrollTop + e.srcElement.clientHeight){
+      if(this.state.isScrolledUp) {
+        this.setState({isScrolledUp: false});
+      }
+    } else {
+      if(!this.state.isScrolledUp){
+        this.setState({isScrolledUp: true});
+      }
+    }
   };
     Communication = () => {
     const {message, selectedUser} = this.state;
     return <div className="gx-chat-main">
       <div className="gx-chat-main-header">
-        <span className="gx-d-block gx-d-lg-none gx-chat-btn"><i className="gx-icon-btn icon icon-chat"
-                                                                 onClick={this.onToggleDrawer.bind(this)}/></span>
+        <span className="gx-chat-btn support-chat-small"><i className="gx-icon-btn icon icon-arrow-left"
+                                                                 onClick={this.resetDrawer.bind(this)}/></span>
         <div className="gx-chat-main-header-info">
 
           <div className="gx-chat-avatar gx-mr-2">
@@ -55,20 +84,20 @@ class Chat extends Component {
                       className="gx-rounded-circle gx-size-60"
                       alt=""/>
 
-              <span className={`gx-status gx-${selectedUser.status}`}/>
+              <span className={`gx-status gx-${selectedUser.hasOwnProperty('user') && selectedUser.user.hasOwnProperty('status') && selectedUser.user.status}`}/>
             </div>
           </div>
 
           <div className="gx-chat-contact-name">
-            {selectedUser.dealer_name}
-            <div className="gx-chat-info-des gx-text-truncate">{selectedUser.link_code}</div>
+            {selectedUser.hasOwnProperty('user') && selectedUser.user.hasOwnProperty('dealer_name') && selectedUser.user.dealer_name}
+            <div className="gx-chat-info-des gx-text-truncate">{selectedUser.hasOwnProperty('user') && selectedUser.user.hasOwnProperty('link_code') && selectedUser.user.link_code}</div>
           </div>
 
         </div>
 
       </div>
 
-      <CustomScrollbars className="gx-chat-list-scroll">
+      <CustomScrollbars className="gx-chat-list-scroll support-chat-list-scroll" id="chatScroll" onScroll={(e) => this.onScroll(e)}>
         <Conversation
           conversationData={this.state.conversation}
           selectedUser={selectedUser}
@@ -139,8 +168,8 @@ class Chat extends Component {
       <div className="gx-chat-sidenav-content">
 
         <Tabs className="gx-tabs-half" defaultActiveKey="1">
-          <TabPane label="Chat Users" tab="Chat Users" key="1">
-            <CustomScrollbars className="gx-chat-sidenav-scroll-tab-1">
+          <TabPane label="Chat History" tab="Chat History" key="1">
+            <CustomScrollbars className="gx-chat-sidenav-scroll-tab-1 gx-support-chat-list-scroll">
               {this.state.chatUsers.length === 0 ?
                 <div className="gx-p-5">{this.state.userNotFound}</div>
                 :
@@ -152,7 +181,7 @@ class Chat extends Component {
             </CustomScrollbars>
           </TabPane>
           <TabPane label="Contacts List" tab="Contacts List" key="2">
-            <CustomScrollbars className="gx-chat-sidenav-scroll-tab-2">
+            <CustomScrollbars className="gx-chat-sidenav-scroll-tab-2 gx-support-chat-list-scroll">
               {
                 this.state.contactList.length === 0 ?
                   <div className="gx-p-5">{this.state.userNotFound}</div>
@@ -172,20 +201,20 @@ class Chat extends Component {
   };
 
   _emitEvent = (e) => {
-    if(this.props.supportSocket && this.state.selectedConversation !== null && this.state.selectedUser !== null){
+    if(this.props.supportSocket && this.state.selectedConversation !== null && this.state.selectedUser !== null && this.state.selectedUser.hasOwnProperty('user')){
       if(this.state.message.length > 0 && !this.state.isTypingEventEmitted){
-        this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_AM_TYPING, {conversation: this.state.selectedConversation, user: this.state.selectedUser.dealer_id});
+        this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_AM_TYPING, {conversation: this.state.selectedConversation, user: this.state.selectedUser.user.dealer_id});
         this.setState({isTypingEventEmitted: true});
       } else {
         if(!this.state.message.length > 0){
-          this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_STOPPED_TYPING, {conversation: this.state.selectedConversation, user: this.state.selectedUser.dealer_id});
+          this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_STOPPED_TYPING, {conversation: this.state.selectedConversation, user: this.state.selectedUser.user.dealer_id});
           this.setState({isTypingEventEmitted: false});
         }
       }
     }
     if(e.key === 'Enter'){
-      if(this.props.supportSocket && this.state.selectedConversation !== null && this.state.selectedUser !== null){
-        this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_STOPPED_TYPING, {conversation: this.state.selectedConversation, user: this.state.selectedUser.dealer_id});
+      if(this.props.supportSocket && this.state.selectedConversation !== null && this.state.selectedUser !== null && this.state.selectedUser.hasOwnProperty('user')){
+        this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_STOPPED_TYPING, {conversation: this.state.selectedConversation, user: this.state.selectedUser.user.dealer_id});
       }
     }
   }
@@ -206,7 +235,7 @@ class Chat extends Component {
 
     if (type === 'chat'){
       this.props.getSupportLiveChatMessages({type: 'conversation', id: data._id});
-      this.props.markMessagesRead({conversations: [data._id]});
+      // this.props.markMessagesRead({conversations: [data._id]});
     }else{
       // this.props.getSupportLiveChatMessages({type: 'user', id: data.dealer_id});
     }
@@ -216,14 +245,14 @@ class Chat extends Component {
 
     this.props.setCurrentConversation(user, selectedConversation);
 
-    // this.setState({
-    //   loader: true,
+    this.setState({
+      loader: true,
     //   selectedSectionId: type === 'user'? data.dealer_id : data.user.dealer_id,
-    //   drawerState: this.props.drawerState,
+      drawerState: false,
     //   selectedUser: type === 'user'? data : data.user,
     //   selectedConversation: selectedConversation,
     //   conversation: []
-    // });
+    });
     setTimeout(() => {
       this.setState({loader: false});
     }, 500);
@@ -233,7 +262,7 @@ class Chat extends Component {
     return (
       <div className="gx-chat-box">
         {this.state.selectedUser === null ?
-          <div className="gx-comment-box">
+          <div className="gx-comment-box support-comment-box">
             <div className="gx-fs-80"><i className="icon icon-chat gx-text-muted"/></div>
             <h1 className="gx-text-muted">Select User to start Chat</h1>
             <Button className="gx-d-block gx-d-lg-none" type="primary"
@@ -246,6 +275,7 @@ class Chat extends Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       loader: false,
       userNotFound: 'No user found',
@@ -262,7 +292,8 @@ class Chat extends Component {
       isTypingEventEmitted: false,
       chatUsers: [],
       copyChatUsers: [],
-      conversation: []
+      conversation: [],
+      isScrolledUp: false
     }
   }
 
@@ -272,6 +303,14 @@ class Chat extends Component {
     let selectedConversation = null;
     let selectedUser = null;
     let dealerId = '';
+
+    if(!this.state.isScrolledUp){
+      if(document.getElementById('chatScroll')){
+        if(document.getElementById('chatScroll').children.length){
+          document.getElementById('chatScroll').children[0].scrollTop = document.getElementById('chatScroll').children[0].scrollHeight;
+        }
+      }
+    }
 
     if(this.props.currentConversation){
       selectedConversation = this.props.currentConversation._id ? this.props.currentConversation._id : null;
@@ -295,9 +334,15 @@ class Chat extends Component {
 
     let chatUsersWithUser = [];
 
+    if(!this.state.isScrolledUp){
+      if(document.getElementById('chatScroll')){
+        if(document.getElementById('chatScroll').children.length){
+          document.getElementById('chatScroll').children[0].scrollTop = document.getElementById('chatScroll').children[0].scrollHeight;
+        }
+      }
+    }
 
     if (prevProps !== this.props){
-
 
       if (this.state.chatUsers !== this.props.supportLiveChatConversations && this.props.supportLiveChatConversations.length > 0 && this.props.dealerList.length > 0) {
 
@@ -309,7 +354,7 @@ class Chat extends Component {
             chatUsers.user = this.props.dealerList.find((dealer) => (dealer.dealer_id === chatUsers.sender));
           }
 
-          if (chatUsers.user.type === ADMIN){
+          if (chatUsers.hasOwnProperty('user') && chatUsers.user.hasOwnProperty('type') && chatUsers.user.type === ADMIN){
             let adminObject           = chatUsers.user;
             adminObject.dealer_name   = 'Admin';
             adminObject.link_code     = '';
@@ -334,7 +379,8 @@ class Chat extends Component {
         admin.link_code     = '';
       }
 
-      if (this.props.user.type === SDEALER  && this.props.dealerList.length > 0){
+      if (this.props.user.type === SDEALER){
+        //   && this.props.dealerList.length > 0
 
         let dealer          = this.props.dealerList.find((dealer) => (dealer.dealer_id === this.props.user.connected_dealer ));
 
@@ -343,7 +389,8 @@ class Chat extends Component {
           copyContactList: [dealer, admin],
         })
 
-      }else if (this.props.user.type === DEALER && this.props.contactList.length > 0){
+      }else if (this.props.user.type === DEALER){
+        //  && this.props.contactList.length > 0
 
         this.setState({
           contactList: [...this.props.contactList, admin],
@@ -392,6 +439,18 @@ class Chat extends Component {
           });
         }
       }
+
+      if(this.props.supportLiveChatMessages !== prevProps.supportLiveChatMessages){
+        if(this.props.currentConversation !== null && this.props.currentConversation._id !== null){
+          if(this.props.supportLiveChatMessages.length){
+            let lastItemNo = this.props.supportLiveChatMessages.length;
+            let lastItem = this.props.supportLiveChatMessages[lastItemNo-1];
+            if(lastItem !== undefined && lastItem.hasOwnProperty('receiver') && lastItem.receiver === this.props.user.dealerId && lastItem.hasOwnProperty('is_read') && lastItem.is_read === false ){
+              this.props.markMessagesRead({conversations: [this.props.currentConversation._id]});
+            }
+          }
+        }
+      }
     }
 
   }
@@ -433,11 +492,28 @@ class Chat extends Component {
   }
 
   render() {
-    const {loader} = this.state;
+    const {loader, drawerState} = this.state;
     return (
-      <div className="gx-main-content">
+      <div className="gx-main-content support-chat-content">
         <div className="gx-app-module gx-chat-module m-0">
+          <div className="gx-d-block gx-d-lg-none">
+            <Drawer
+              placement="left"
+              closable={false}
+              visible={drawerState}
+              onClose={this.onToggleDrawer.bind(this)}>
+              {this.ChatUsers()}
+            </Drawer>
+
+          </div>
+
           <div className="gx-chat-module-box">
+            {this.props.currentConversation === null && <div className="gx-chat-module-box-header">
+                <span className="gx-drawer-btn gx-d-flex gx-d-lg-none">
+                  <i className="icon icon-menu gx-icon-btn" aria-label="Menu"
+                     onClick={this.onToggleDrawer.bind(this)} />
+                </span>
+            </div>}
             <div className="gx-chat-sidenav gx-d-none gx-d-lg-flex">
               {this.ChatUsers()}
             </div>
@@ -475,7 +551,8 @@ function mapDispatchToProps(dispatch) {
     getSupportLiveChatMessages: getSupportLiveChatMessages,
     getAllToAllDealers: getAllToAllDealers,
     setCurrentConversation: setCurrentConversation,
-    markMessagesRead: markMessagesRead
+    markMessagesRead: markMessagesRead,
+    resetCurrentConversation: resetCurrentConversation
   }, dispatch);
 }
 

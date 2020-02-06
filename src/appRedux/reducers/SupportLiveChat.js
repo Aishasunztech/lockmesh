@@ -31,12 +31,12 @@ export default (state = initialState, action) => {
       let supportLiveChatMessages = state.supportLiveChatMessages;
       let supportLiveChatConversations = state.supportLiveChatConversations;
 
-      if(!supportLiveChatConversations.some(conversation => conversation._id === action.payload.conversation._id)){
-        supportLiveChatConversations.push(action.payload.conversation);
-      }
-
       if (action.payload.status) {
         supportLiveChatMessages.push(action.payload.message);
+
+        if(!supportLiveChatConversations.some(conversation => conversation._id === action.payload.conversation._id)){
+          supportLiveChatConversations.unshift(action.payload.conversation);
+        }
       }
       else {
         error({

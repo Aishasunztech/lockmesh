@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Button, Card, Tag, Form, Input, Popconfirm, Empty, Icon } from "antd";
+import { Table, Button, Card, Tag, Form, Input, Popconfirm, Empty, Icon, Tabs, Modal } from "antd";
 import { Redirect } from 'react-router-dom';
 import styles from './devices.css'
 import CustomScrollbars from "../../../util/CustomScrollbars";
@@ -10,7 +10,7 @@ import ActivateDevcie from './ActivateDevice';
 import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, convertToLang, checkRemainTermDays, convertTimezoneValue, getDevicesListActionBtns } from '../../utils/commonUtils'
 import EditDevice from './editDevice';
 import AddDevice from './AddDevice';
-import { Tabs, Modal } from 'antd';
+
 // import moment from 'moment';
 import moment from 'moment-timezone';
 import {
@@ -345,6 +345,18 @@ class DevicesList extends Component {
             }
             // console.log('object of ', arr);
             this.confirmDelete(type, arr, title);
+        } else {
+            if (type === 'unlink') {
+                Modal.error({
+                    title: 'There is no unlink device selected to remove',
+                    content: 'Please Select a device to perform this action.',
+                });
+            } else if (type === 'pre-active') {
+                Modal.error({
+                    title: 'There is no pre-active device selected to remove',
+                    content: 'Please Select a device to perform this action.',
+                });
+            }
         }
         //  console.log('DELETE ALL 1', this.state.selectedRows);
 

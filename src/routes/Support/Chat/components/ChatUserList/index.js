@@ -19,21 +19,33 @@ class ChatUserList extends Component {
   }
 
   render(){
-    const {chatUsers, selectedSectionId, onSelectUser } = this.props;
+    const {chatUsers, selectedSectionId, onSelectUser, notifications, messages } = this.props;
     return (
       <div className="gx-chat-user">
-        {chatUsers.map((chat, index) =>
-          <UserCell key={index} chat={chat} conversation={chat._id} typing={this.state.typing} selectedSectionId={selectedSectionId} onSelectUser={onSelectUser}/>
+        {chatUsers.map((chat, index) => {
+          let noOfReceivedMessages = 0;
+          notifications.map(noti => {
+            if(noti.sender === chat.user.dealer_id){
+              noOfReceivedMessages = noti.noOfUnreadMessages;
+            }
+          });
+          let msgs = messages.filter(msg => msg.conversation_id === chat._id);
+            return <UserCell key={index} noOfReceivedMessages={noOfReceivedMessages} msgs={msgs} chat={chat} conversation={chat._id} typing={this.state.typing}
+                      selectedSectionId={selectedSectionId} onSelectUser={onSelectUser}/>
+          }
         )}
       </div>
     )
   }
 };
 
-const mapStateToProps = ({ SupportLiveChat }) => {
-  const { typingConversations } = SupportLiveChat;
+const mapStateToProps = ({ SupportLiveChat, sidebar }) => {
+  const { typingConversations, supportLiveChatMessages } = SupportLiveChat;
+  const { supportChatNotifications } = sidebar;
   return {
-    typing: typingConversations
+    typing: typingConversations,
+    notifications: supportChatNotifications,
+    messages: supportLiveChatMessages
   }
 }
 
