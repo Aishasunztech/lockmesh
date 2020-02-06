@@ -15,6 +15,7 @@ import {
 } from "../../appRedux/actions/StandAloneSims";
 import {
     getParentPackages,
+    getAllSimIDs
 } from "../../appRedux/actions/Devices";
 
 import { StandAloneSimsColumns, deviceSimsColumns } from '../utils/columnsUtils';
@@ -34,29 +35,31 @@ class StandAloneSims extends Component {
             orignalColumns: columns,
             columns: columns,
             standAlonePackages: [],
-            tabSelect: '1'
+            tabSelect: '1',
+            simsList: props.simsList
         }
     }
 
     componentDidMount() {
-        this.props.getStandaloneSimsList();
         this.props.getParentPackages()
+        this.props.getStandaloneSimsList()
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.parent_packages.length !== nextProps.parent_packages.length) {
-            let standAlonePackages = nextProps.parent_packages.filter(item => item.package_type === 'standalone_sim')
-            this.setState({
-                standAlonePackages: standAlonePackages
-            })
-        }
+
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.translation !== prevProps.translation) {
-            this.setState({
-                columns: StandAloneSimsColumns(this.props.translation, this.handleSearch)
-            });
+        if (this.props !== prevProps) {
+            let updateState = {}
+            if (this.props.translation !== prevProps.translation) {
+                updateState.columns = StandAloneSimsColumns(this.props.translation, this.handleSearch)
+            }
+            // console.log(this.props.simsList.length, prevProps.simsList.length);
+            if (this.props.simsList.length !== prevProps.simsList.length) {
+                updateState.simsList = this.props.simsList
+            }
+            this.setState(updateState)
         }
     }
 
@@ -103,16 +106,19 @@ class StandAloneSims extends Component {
 
     handleChangetab = (tabSelect) => {
         let columns = [...this.state.orignalColumns]
-
+        let simsList = this.props.simsList
         if (tabSelect == 2) {
             columns.splice(5, 1)
+            simsList = this.props.simsList.filter(item => item.type == 'device')
         } else if (tabSelect == 3) {
             columns.splice(2, 1)
+            simsList = this.props.simsList.filter(item => item.type == 'standalone')
         }
 
         this.setState({
             tabSelect: tabSelect,
-            columns: columns
+            columns: columns,
+            simsList: simsList
         })
     }
 
@@ -164,7 +170,7 @@ class StandAloneSims extends Component {
                 <SimsList
                     onChangeTableSorting={this.handleTableChange}
                     columns={this.state.columns}
-                    standAloneSimsList={this.props.standAloneSimsList}
+                    simsList={this.state.simsList}
                     pagination={this.props.DisplayPages}
                     ref="userList"
                     translation={this.props.translation}
@@ -181,18 +187,18 @@ class StandAloneSims extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getStandaloneSimsList,
-        getParentPackages
+        getParentPackages,
+        getAllSimIDs
     }, dispatch);
 
 }
 var mapStateToProps = ({ auth, settings, standAloneSims, devices }) => {
-    console.log(devices);
+    // console.log(devices);
     return {
         user: auth.authUser,
         translation: settings.translation,
-        standAloneSimsList: standAloneSims.standAloneSimsList,
+        simsList: standAloneSims.standAloneSimsList,
         parent_packages: devices.parent_packages,
-        device_sims: standAloneSims.device_sims
     };
 }
 

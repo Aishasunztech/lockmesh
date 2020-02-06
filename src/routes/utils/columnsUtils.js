@@ -1267,6 +1267,52 @@ export function StandAloneSimsColumns(translation, handleSearch) {
         {
             title: (
                 <Input.Search
+                    name="start_date"
+                    key="start_date"
+                    id="start_date"
+                    className="search_heading email_w"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[""], "START DATE")}
+                />
+            ),
+            dataIndex: 'start_date',
+            className: 'row',
+            children: [{
+                title: convertToLang(translation[""], "START DATE"),
+                dataIndex: 'start_date',
+                align: "center",
+                key: 'start_date',
+                sorter: (a, b) => { return a.start_date.localeCompare(b.start_date.toString()) },
+                sortDirections: ['ascend', 'descend'],
+            }]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="expiry_date"
+                    key="expiry_date"
+                    id="expiry_date"
+                    className="search_heading email_w"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[""], "EXPIRY DATE")}
+                />
+            ),
+            dataIndex: 'expiry_date',
+            className: 'row',
+            children: [{
+                title: convertToLang(translation[""], "EXPIRY DATE"),
+                dataIndex: 'expiry_date',
+                align: "center",
+                key: 'expiry_date',
+                sorter: (a, b) => { return a.expiry_date.localeCompare(b.expiry_date.toString()) },
+                sortDirections: ['ascend', 'descend'],
+            }]
+        },
+        {
+            title: (
+                <Input.Search
                     name="created_at"
                     key="created_at"
                     id="created_at"

@@ -12,10 +12,11 @@ import {
     Button_Delete,
     Button_Edit,
     Button_Undo,
+    Button_Active,
 } from '../../../constants/ButtonConstants';
 import moment from 'moment-timezone';
 import { EDIT_USER, DELETE_USER, DO_YOU_WANT_TO_DELETE_USER, UNDO, DO_YOU_WANT_TO_UNDO_USER } from '../../../constants/UserConstants';
-import { ADMIN } from '../../../constants/Constants';
+import { ADMIN, sim } from '../../../constants/Constants';
 
 import styles from './standAloneSim.css';
 import { TIMESTAMP_FORMAT } from '../../../constants/Application';
@@ -23,7 +24,7 @@ import { TIMESTAMP_FORMAT } from '../../../constants/Application';
 
 const confirm = Modal.confirm
 const TabPane = Tabs.TabPane
-class UserList extends Component {
+class SimList extends Component {
 
     constructor(props) {
         super(props)
@@ -35,12 +36,6 @@ class UserList extends Component {
             scrollStatus: true,
             tabselect: '1'
         }
-    }
-    handlePagination = (value) => {
-        var x = Number(value)
-        this.setState({
-            pagination: x,
-        });
     }
 
     handleSearch2 = () => {
@@ -56,55 +51,58 @@ class UserList extends Component {
         // console.log(list);
         if (list) {
             let user_list = list
-            return user_list.map((user, index) => {
+            return user_list.map((sim, index) => {
                 // this.state.expandTabSelected[index]='1';
                 // this.state.expandedByCustom[index]=false;
                 return {
-                    key: `${user.user_id}`,
-                    rowKey: `${user.user_id}`,
+                    key: `${sim.sim_id}`,
+                    rowKey: `${sim.sim_id}`,
                     counter: ++index,
-                    action: (
+                    action:
                         <Fragment>
                             <div>
+                                {(sim.activated) ?
+                                    <Button
+                                        type="danger"
+                                        size="small"
+                                        style={{ textTransform: 'uppercase' }}
+                                        onClick={() => { }}
+                                    >
+                                        {convertToLang(this.props.translation[""], "DISABLE")}
+                                    </Button>
+                                    :
+                                    <Button
+                                        type="primary"
+                                        size="small"
+                                        style={{ textTransform: 'uppercase' }}
+                                        onClick={() => { }}
+                                    >
+                                        {convertToLang(this.props.translation[Button_Active], "ACTIVATE")}
+                                    </Button>
+                                }
                                 <Button
-                                    type="primary"
+                                    type=""
                                     size="small"
                                     style={{ textTransform: 'uppercase' }}
-                                    onClick={() => this.refs.edit_user.showModal(this.props.editUser, user, convertToLang(this.props.translation[EDIT_USER], "Edit User"))}
+                                    onClick={() => { }}
                                 >
-                                    {convertToLang(this.props.translation[Button_Edit], "EDIT")}
+                                    {convertToLang(this.props.translation[""], "RESET")}
                                 </Button>
-                                {(user.devicesList.length === 0) ?
-                                    (user.del_status == 0) ?
-                                        <Button
-                                            type="danger"
-                                            size="small"
-                                            style={{ textTransform: 'uppercase' }}
-                                            onClick={() => showConfirm(this.props.deleteUser, user.user_id, convertToLang(this.props.translation[DO_YOU_WANT_TO_DELETE_USER], "Do you want to DELETE user "), 'DELETE USER')}
-                                        >
-                                            {convertToLang(this.props.translation[Button_Delete], "DELETE")}
-                                        </Button>
-                                        : <Button
-                                            type="dashed"
-                                            size="small"
-                                            style={{ textTransform: 'uppercase' }}
-                                            onClick={() => showConfirm(this.props.undoDeleteUser, user.user_id, convertToLang(this.props.translation[UNDO], "Do you want to UNDELETE user "), 'UNDO')}
-                                        >
-                                            {convertToLang(this.props.translation[Button_Undo], "UNDELETE")}
-                                        </Button>
-                                    : null
-                                }
                             </div>
                         </Fragment>
-                    )
                     ,
-                    user_id: user.user_id,
-                    devices: (user.devicesList) ? user.devicesList.length : 0,
-                    devicesList: user.devicesList,
-                    user_name: user.user_name,
-                    email: user.email,
-                    tokens: 'N/A',
-                    created_at: convertTimezoneValue(this.props.user.timezone, user.created_at, TIMESTAMP_FORMAT),
+                    device_id: sim.device_id,
+                    status: sim.activated ? 'ACTIVE' : 'DISABLED',
+                    sim_iccid: sim.sim_id,
+                    term: sim.term,
+                    start_date: sim.start_date,
+                    expiry_date: sim.expiry_date,
+                    // devices: (user.devicesList) ? user.devicesList.length : 0,
+                    // devicesList: user.devicesList,
+                    // user_name: user.user_name,
+                    // email: user.email,
+                    // tokens: 'N/A',
+                    created_at: convertTimezoneValue(this.props.user.timezone, sim.created_at, TIMESTAMP_FORMAT),
                     // created_at: (user.created_at) ? moment(user.created_at).tz(convertTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
                     // created_at: getFormattedDate(user.created_at)
                 }
@@ -117,18 +115,6 @@ class UserList extends Component {
 
     }
 
-    customExpandIcon(props) {
-        if (props.expanded) {
-            return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
-                props.onExpand(props.record, e);
-            }}><Icon type="caret-down" /> </a>
-        } else {
-
-            return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
-                props.onExpand(props.record, e);
-            }}><Icon type="caret-right" /></a>
-        }
-    }
     componentDidMount() {
         this.setState({
             users: this.props.users,
@@ -137,31 +123,6 @@ class UserList extends Component {
         // this.handleScroll()
     }
 
-    onExpandRow = (expanded, record) => {
-        console.log(expanded, 'data is expanded', record);
-        if (expanded) {
-            if (!this.state.expandedRowKeys.includes(record.rowKey)) {
-                this.state.expandedRowKeys.push(record.rowKey);
-                this.setState({ expandedRowKeys: this.state.expandedRowKeys })
-            }
-        } else if (!expanded) {
-            if (this.state.expandedRowKeys.includes(record.rowKey)) {
-                let list = this.state.expandedRowKeys.filter(item => item !== record.rowKey)
-                this.setState({ expandedRowKeys: list })
-            }
-        }
-    }
-
-    handleScroll = () => {
-        if (this.props.location.state) {
-            scrollIntoView(document.querySelector('.exp_row'), {
-                align: {
-                    top: 0,
-                    left: 0
-                },
-            });
-        }
-    }
 
     componentDidUpdate(prevProps) {
 
@@ -181,6 +142,7 @@ class UserList extends Component {
             })
         }
     }
+
     render() {
         let { translation } = this.props
         let type = this.props.user.type
@@ -235,7 +197,7 @@ class UserList extends Component {
 // }
 
 // export default connect(mapStateToProps, mapDispatchToProps)(PolicyList);
-export default UserList;
+export default SimList;
 
 
 function showConfirm(action, user_id, msg, buttonText) {
