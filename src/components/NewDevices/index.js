@@ -311,7 +311,7 @@ export default class NewDevices extends Component {
     }
 
     renderTicketNotifications(list) {
-      let { setCurrentSupportTicketId, setSupportPage } = this.props;
+      let { setCurrentSupportTicketId, setCurrentTicketId, setSupportPage } = this.props;
 
         if (list && Array.isArray(list) && list.length > 0) {
           return list.map((notification) => {
@@ -333,6 +333,7 @@ export default class NewDevices extends Component {
                   type: notification.type,
                   subject: <a href="javascript:void(0);" onClick={() => {
                     setCurrentSupportTicketId(notification.ticket);
+                    setCurrentTicketId(notification.ticket._id);
                     setSupportPage('2');
                     this.setPageState(true);
                   }}>{notification.ticket.subject.length > 30 ? notification.ticket.subject.substr(0, 30) + '...' : notification.ticket.subject}</a>,

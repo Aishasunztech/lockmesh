@@ -119,7 +119,6 @@ export default (state = initialState, action) => {
     }
 
     case GET_SUPPORT_TICKET_REPLY:{
-
       // let ticketId = action.payload.data.replies.filter(a => );
 
       return {

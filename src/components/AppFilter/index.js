@@ -179,6 +179,7 @@ class AppFilter extends Component {
                                         includeSelectAll={true}
                                         onChange={values => this.setDropdowns(values)}
                                         dropdownHeight={300}
+                                        caseSensitiveFilter={false}
                                         renderSelectAll={({
                                             filtered,
                                             tabIndex,
@@ -228,6 +229,13 @@ class AppFilter extends Component {
                                             );
                                         }
                                         }
+
+                                        // Filter Options
+                                        // includeFilter={true}
+                                        // onFiltered={(e)=> {
+                                        //     console.log(e)
+                                        // }}
+
                                     />
                                     <Icon type="down" className="down_icon" />
                                 </Fragment>

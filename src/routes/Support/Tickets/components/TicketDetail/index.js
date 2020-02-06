@@ -41,7 +41,8 @@ class TicketDetail extends React.Component {
                   <span className="display-float right10"><i className="icon icon-arrow-left gx-icon-btn" onClick={() => {
                     updateState({ currentMail: null });
                     this.props.updateOnTicketPage(false);
-                    this.props.resetCurrentTicket();
+                    this.props.resetCurrentTicketId();
+                    this.props.resetCurrentSupportTicketId();
                   }} />
                   </span>
                   <span className="display-float">Subject: {supportTicket.subject}<br />
@@ -49,12 +50,12 @@ class TicketDetail extends React.Component {
                 </div>
                 {/*<div className="top10">*/}
                   <div className="float-left" >
-                    {supportTicket.status === 'open' && closeSupportTicketStatus === false?
-                      <Button type="primary" size="small" onClick={() => {
-                        this.addReply();
-                      }}>Reply</Button>
-                      : ''
-                    }
+                    {/*{supportTicket.status === 'open' && closeSupportTicketStatus === false?*/}
+                      {/*<Button type="primary" size="small" onClick={() => {*/}
+                        {/*this.addReply();*/}
+                      {/*}}>Reply</Button>*/}
+                      {/*: ''*/}
+                    {/*}*/}
 
                     {supportTicket.status === 'open' && closeSupportTicketStatus === false?
                       <Button type="danger" size="small" onClick={() => {

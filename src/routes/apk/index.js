@@ -24,9 +24,7 @@ import {
     addApk, 
     resetUploadForm, 
     getDropdown, 
-    postDropdown, 
-    postPagination, 
-    getPagination, 
+    postDropdown,
     apkPermission, 
     getPolicies 
 } from "../../appRedux/actions";
@@ -237,7 +235,6 @@ class Apk extends Component {
 
     handlePagination = (value) => {
         this.refs.listApk.handlePagination(value);
-        // this.props.postPagination(value, 'apk');
     }
 
     handleComponentSearch = (value) => {
@@ -338,7 +335,6 @@ class Apk extends Component {
         // this.props.getDevicesList();
         //  console.log('apk did mount', this.props.getDropdown('apk'));
         this.props.getDropdown('apk');
-        // this.props.getPagination('apk')
     }
     componentDidMount() {
         // alert("hello213");
@@ -560,8 +556,6 @@ function mapDispatchToProps(dispatch) {
         editApk: editApk,
         getDropdown: getDropdown,
         postDropdown: postDropdown,
-        postPagination: postPagination,
-        getPagination: getPagination,
         addApk: addApk,
         resetUploadForm: resetUploadForm,
         getPolicies: getPolicies,
