@@ -270,7 +270,7 @@ class DevicesList extends Component {
                 // counter: ++index,
                 action: actionBtns,
                 status: (<span style={color} > {status}</span>),
-                lastOnline: convertTimezoneValue(this.props.user.timezone, device.lastOnline, TIMESTAMP_FORMAT),
+                lastOnline: convertTimezoneValue(this.props.user.timezone, device.lastOnline),
                 flagged: device.flagged,
                 type: checkValue(device.type),
                 version: checkValue(device.version),
@@ -301,8 +301,8 @@ class DevicesList extends Component {
                 s_dealer: device.prnt_dlr_id ? device.prnt_dlr_id : 'N/A', // checkValue(device.prnt_dlr_id), // checkValue(device.s_dealer), 
                 s_dealer_name: device.prnt_dlr_name ? device.prnt_dlr_name : 'N/A', // checkValue(device.prnt_dlr_name), // checkValue(device.s_dealer_name),
                 remainTermDays: (Number(device.remainTermDays) > 0) ? device.remainTermDays : 0,
-                start_date: (status !== DEVICE_PRE_ACTIVATION) ? convertTimezoneValue(this.props.user.timezone, device.start_date, DATE_FORMAT) : "N/A",
-                expiry_date: (status !== DEVICE_PRE_ACTIVATION) ? convertTimezoneValue(this.props.user.timezone, device.expiry_date, DATE_FORMAT) : "N/A",
+                start_date: (status !== DEVICE_PRE_ACTIVATION) ? convertTimezoneValue(this.props.user.timezone, device.start_date, false, DATE_FORMAT) : "N/A",
+                expiry_date: (status !== DEVICE_PRE_ACTIVATION) ? convertTimezoneValue(this.props.user.timezone, device.expiry_date, false, DATE_FORMAT) : "N/A",
             }
         });
     }

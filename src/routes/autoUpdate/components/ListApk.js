@@ -100,8 +100,8 @@ export default class ListApk extends Component {
                 label: app.label,
                 package_name: app.package_name,
                 version: app.version,
-                created_at: convertTimezoneValue(this.props.user.timezone, app.created_at, TIMESTAMP_FORMAT),
-                updated_at: convertTimezoneValue(this.props.user.timezone, app.updated_at, TIMESTAMP_FORMAT),
+                created_at: convertTimezoneValue(this.props.user.timezone, app.created_at),
+                updated_at: convertTimezoneValue(this.props.user.timezone, app.updated_at),
             }
            
         });

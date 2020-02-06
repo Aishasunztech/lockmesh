@@ -744,8 +744,8 @@ class FilterDevices extends Component {
         s_dealer: checkValue(device.s_dealer),
         s_dealer_name: checkValue(device.s_dealer_name),
         remainTermDays: device.remainTermDays,
-        start_date: convertTimezoneValue(timezone, device.start_date, TIMESTAMP_FORMAT),
-        expiry_date: convertTimezoneValue(timezone, device.expiry_date, TIMESTAMP_FORMAT),
+        start_date: convertTimezoneValue(timezone, device.start_date),
+        expiry_date: convertTimezoneValue(timezone, device.expiry_date),
         // start_date: checkValue(device.start_date),
         // expiry_date: checkValue(device.expiry_date),
       }

@@ -202,7 +202,7 @@ class EditMsgForm extends Component {
                     msg: values.msg_txt,
                     timer_status: timerVal,
                     repeat_duration: repeatVal,
-                    date_time: convertTimezoneValue(this.props.user.timezone, dateTimeVal, TIMESTAMP_FORMAT, true), // convert time from client timezone to server timezone
+                    date_time: convertTimezoneValue(this.props.user.timezone, dateTimeVal, true), // convert time from client timezone to server timezone
                     week_day: weekDay,
                     month_date: monthDate,
                     month_name: monthName,

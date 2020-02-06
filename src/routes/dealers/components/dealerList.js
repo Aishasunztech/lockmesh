@@ -289,7 +289,7 @@ class DealerList extends Component {
                 connected_devices: dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
                 dealer_credits: dealer.dealer_credits ? dealer.dealer_credits : 0,
                 devicesList: dealer.devicesList,
-                last_login: convertTimezoneValue(this.props.user.timezone, dealer.last_login, TIMESTAMP_FORMAT),
+                last_login: convertTimezoneValue(this.props.user.timezone, dealer.last_login),
                 // last_login: dealer.last_login ? dealer.last_login : 'N/A'
 
             })
