@@ -11,20 +11,20 @@ import {
 
 
 import {
-    getStandaloneSimsList,
+    getStandaloneSimsList, changeSimStatus
 } from "../../appRedux/actions/StandAloneSims";
 import {
     getParentPackages,
     getAllSimIDs
 } from "../../appRedux/actions/Devices";
 
-import { StandAloneSimsColumns, deviceSimsColumns } from '../utils/columnsUtils';
+import { StandAloneSimsColumns } from '../utils/columnsUtils';
 
 import AddSim from './components/AddStandAloneSims';
 import { ADMIN } from '../../constants/Constants';
 import { Tabs } from 'antd';
 
-var copyUsers = [];
+var copySimList = [];
 var status = true;
 
 class StandAloneSims extends Component {
@@ -36,7 +36,8 @@ class StandAloneSims extends Component {
             columns: columns,
             standAlonePackages: [],
             tabSelect: '1',
-            simsList: props.simsList
+            simsList: props.simsList,
+            SearchValues: []
         }
     }
 
@@ -72,11 +73,11 @@ class StandAloneSims extends Component {
 
                 if (status) {
                     // 
-                    copyUsers = this.state.users;
+                    copySimList = this.state.simsList;
                     status = false;
                 }
                 // 
-                let foundUsers = componentSearch(copyUsers, value);
+                let foundUsers = componentSearch(copySimList, value);
                 // 
                 if (foundUsers.length) {
                     this.setState({
@@ -91,7 +92,7 @@ class StandAloneSims extends Component {
                 status = true;
 
                 this.setState({
-                    users: copyUsers,
+                    users: copySimList,
                 })
             }
         } catch (error) {
@@ -129,15 +130,15 @@ class StandAloneSims extends Component {
 
         this.state.SearchValues[e.target.name] = { key: e.target.name, value: e.target.value };
 
-        let response = handleMultipleSearch(e, status, copyUsers, this.state.SearchValues, this.state.users)
+        let response = handleMultipleSearch(e, status, copySimList, this.state.SearchValues, this.state.simsList)
 
 
         this.setState({
-            users: response.demoData,
+            simsList: response.demoData,
             SearchValues: response.SearchValues
         });
         status = response.copy_status;
-        copyUsers = response.copyRequireSearchData;
+        copySimList = response.copyRequireSearchData;
     }
 
     render() {
@@ -177,6 +178,7 @@ class StandAloneSims extends Component {
                     user={this.props.user}
                     handleChangetab={this.handleChangetab}
                     tabSelect={this.state.tabSelect}
+                    changeSimStatus={this.props.changeSimStatus}
                 />
                 {/* <UserList/> */}
             </Fragment>
@@ -188,7 +190,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getStandaloneSimsList,
         getParentPackages,
-        getAllSimIDs
+        getAllSimIDs,
+        changeSimStatus
     }, dispatch);
 
 }

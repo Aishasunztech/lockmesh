@@ -122,7 +122,6 @@ const RestService = {
         } else {
             return true;
         }
-
     },
     twoFactorAuth: (isEnable) => {
         return axios.post(BASE_URL + 'users/two_factor_auth', { isEnable: isEnable }, RestService.getHeader())
@@ -1156,7 +1155,7 @@ const RestService = {
 
     //check support system running
     checkSupportServiceRunning: () => {
-      return axios.get(SUPPORT_URL);
+        return axios.get(SUPPORT_URL);
     },
 
     //support tickets
@@ -1223,9 +1222,17 @@ const RestService = {
     },
 
     //SIMS MODULE
-    //GET SIMS List
+    //GET SIMS List 
     getStandaloneSimsList: () => {
         return axios.get(BASE_URL + 'users/get-standalone-sims',
+            RestService.getHeader()
+        )
+    },
+    //CHANGE SIM STATUS ON TWILLIO
+
+    changeSimStatus: (id, type) => {
+        return axios.put(BASE_URL + 'users/change_sim_status',
+            { id, type },
             RestService.getHeader()
         )
     },
@@ -1248,12 +1255,12 @@ const RestService = {
 
     // Get Support Live Chat Notifications
     getSupportLiveChatNotifications: () => {
-      return axios.get(SUPPORT_URL + 'messages/getNotifications', RestService.getHeader());
+        return axios.get(SUPPORT_URL + 'messages/getNotifications', RestService.getHeader());
     },
 
     // read the chat message
     updateSupportLiveChatReadStatus: (data) => {
-      return axios.put(SUPPORT_URL + 'messages/read', data, RestService.getHeader());
+        return axios.put(SUPPORT_URL + 'messages/read', data, RestService.getHeader());
     }
 };
 export default RestService;

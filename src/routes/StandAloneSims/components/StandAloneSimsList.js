@@ -47,13 +47,18 @@ class SimList extends Component {
         this.props.handleChangetab(key);
     }
 
+    changeSimStatus = (sim, type) => {
+        showConfirm(this.props.changeSimStatus, sim, `Are You sure you want to ${type} Sim ID  ${sim.sim_id} ?`, type)
+    }
+
     renderList(list) {
         // console.log(list);
-        if (list) {
+        if (list && Array.isArray(list) && list.length) {
             let user_list = list
             return user_list.map((sim, index) => {
                 // this.state.expandTabSelected[index]='1';
                 // this.state.expandedByCustom[index]=false;
+                // console.log(sim);
                 return {
                     key: `${sim.sim_id}`,
                     rowKey: `${sim.sim_id}`,
@@ -61,12 +66,12 @@ class SimList extends Component {
                     action:
                         <Fragment>
                             <div>
-                                {(sim.activated) ?
+                                {(sim.sim_status == 'active') ?
                                     <Button
                                         type="danger"
                                         size="small"
                                         style={{ textTransform: 'uppercase' }}
-                                        onClick={() => { }}
+                                        onClick={() => { this.changeSimStatus(sim, 'disable') }}
                                     >
                                         {convertToLang(this.props.translation[""], "DISABLE")}
                                     </Button>
@@ -75,28 +80,29 @@ class SimList extends Component {
                                         type="primary"
                                         size="small"
                                         style={{ textTransform: 'uppercase' }}
-                                        onClick={() => { }}
+                                        onClick={() => { this.changeSimStatus(sim, 'activate') }}
+
                                     >
                                         {convertToLang(this.props.translation[Button_Active], "ACTIVATE")}
                                     </Button>
                                 }
-                                <Button
+                                {/* <Button
                                     type=""
                                     size="small"
                                     style={{ textTransform: 'uppercase' }}
                                     onClick={() => { }}
                                 >
                                     {convertToLang(this.props.translation[""], "RESET")}
-                                </Button>
+                                </Button> */}
                             </div>
                         </Fragment>
                     ,
-                    device_id: sim.device_id,
-                    status: sim.activated ? 'ACTIVE' : 'DISABLED',
+                    device_id: sim.device_id ? sim.device_id : 'N/A',
+                    status: sim.sim_status === 'active' ? 'ACTIVE' : 'DISABLED',
                     sim_iccid: sim.sim_id,
-                    term: sim.term,
-                    start_date: sim.start_date,
-                    expiry_date: sim.expiry_date,
+                    term: sim.term ? sim.term : 'N/A',
+                    start_date: sim.start_date ? sim.start_date : 'N/A',
+                    expiry_date: sim.expiry_date ? sim.expiry_date : 'N/A',
                     // devices: (user.devicesList) ? user.devicesList.length : 0,
                     // devicesList: user.devicesList,
                     // user_name: user.user_name,
@@ -111,8 +117,6 @@ class SimList extends Component {
         } else {
             return []
         }
-
-
     }
 
     componentDidMount() {
@@ -200,13 +204,13 @@ class SimList extends Component {
 export default SimList;
 
 
-function showConfirm(action, user_id, msg, buttonText) {
+function showConfirm(action, sim, msg, type) {
     confirm({
-        title: msg + user_id,
-        okText: buttonText,
+        title: msg,
+        okText: "Confirm",
         // cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
         onOk() {
-            action(user_id)
+            action(sim.id, type)
         },
         onCancel() { },
     })
