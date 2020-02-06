@@ -6,7 +6,7 @@ import moment from 'moment';
 import ReadMoreAndLess from 'react-read-more-less';
 import CustomScrollbars from "../../../util/CustomScrollbars";
 import { userDevicesListColumns } from '../../utils/columnsUtils';
-import { TIMESTAMP_FORMAT_NOT_SEC, TIME_FORMAT_HM, SERVER_TIMEZONE, HOST_NAME } from '../../../constants/Application';
+import { TIMESTAMP_FORMAT_NOT_SEC, TIME_FORMAT_HM, SERVER_TIMEZONE, HOST_NAME, TIMESTAMP_FORMAT } from '../../../constants/Application';
 import EditMsgModal from './EditMsgForm';
 import { Link } from "react-router-dom";
 import styles from './deviceMsg.css'
@@ -16,6 +16,7 @@ export default class ListMsgs extends Component {
     constructor(props) {
         super(props);
         let selectedDevicesColumns = userDevicesListColumns(props.translation, this.handleSearch);
+        let dealerTZ = checkTimezoneValue(props.user.timezone, false);
         this.state = {
             selectedDevicesColumns: selectedDevicesColumns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
             searchText: '',
@@ -24,6 +25,7 @@ export default class ListMsgs extends Component {
             visible: false,
             editRecord: null,
             editModal: false,
+            dealerTZ: dealerTZ
             // textLimit: 100
         };
         this.renderList = this.renderList.bind(this);
@@ -79,7 +81,18 @@ export default class ListMsgs extends Component {
     }
 
     handleEditModal = (data) => {
-        this.setState({ editModal: true, editRecord: data })
+        // console.log("edit data: ", data);
+        let editDateTime = data.date_time;
+        let currentDateTime = moment().tz(this.state.dealerTZ).format(TIMESTAMP_FORMAT);
+        // console.log("edit data is: ", data.date_time, " current date: ", moment().tz(this.state.dealerTZ).format(TIMESTAMP_FORMAT), currentDateTime > editDateTime)
+        if (currentDateTime < editDateTime) {
+            this.setState({ editModal: true, editRecord: data })
+        } else {
+            Modal.warning({
+                title: 'This message time is passed',
+                content: 'You are not allowed to change this message settings.'
+            });
+        }
     }
 
     // expandText = (id) => {
