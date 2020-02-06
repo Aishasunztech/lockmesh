@@ -122,18 +122,18 @@ export default class ListMsgs extends Component {
                 action: (
                     <div data-column="ACTION" style={{ display: "inline-flex" }}>
                         <Fragment>
-                            {(HOST_NAME === 'localhost' || HOST_NAME === 'dev.lockmesh.com') ?
-                                (item.timer_status === "NOW") ? null :
-                                    <Fragment>
-                                        <Button
-                                            disabled={HOST_NAME === 'localhost' ? false : true}
-                                            type="primary"
-                                            size="small"
-                                            onClick={() => this.handleEditModal(JSON.parse(JSON.stringify(item)))}
-                                        >EDIT</Button>
-                                    </Fragment>
-                                : null
-                            }
+                            {/* {(HOST_NAME === 'localhost' || HOST_NAME === 'dev.lockmesh.com') ? */}
+                            {(!item.timer_status || item.timer_status === "NOW") ? null : // edit button hide if timer_status is NOW or not defined
+                                <Fragment>
+                                    <Button
+                                        // disabled={HOST_NAME === 'localhost' ? false : true}
+                                        type="primary"
+                                        size="small"
+                                        onClick={() => this.handleEditModal(JSON.parse(JSON.stringify(item)))}
+                                    >EDIT</Button>
+                                </Fragment>}
+                            {/* : null
+                            } */}
                             <Fragment><Button type="danger" size="small" onClick={() => this.deleteMsg(item.id)}>DELETE</Button></Fragment>
                         </Fragment>
                     </div>
