@@ -171,7 +171,7 @@ class DealerList extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.row_key)) {
-                let list = this.state.expandedRowKeys.filter(item => item !== record.row_key)
+                let list = checkIsArray(this.state.expandedRowKeys).filter(item => item !== record.row_key)
                 this.setState({ expandedRowKeys: list })
             }
         }

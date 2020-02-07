@@ -392,7 +392,7 @@ export default (state = initialState, action) => {
 
                 var alldevices = state.newDevices;
                 var device_id = action.payload.formData.device_id;
-                filteredDevices = alldevices.filter(device => device.device_id !== device_id);
+                filteredDevices = checkIsArray(alldevices).filter(device => device.device_id !== device_id);
 
                 success({
                     title: action.response.msg,
@@ -454,7 +454,7 @@ export default (state = initialState, action) => {
                 }
                 var alldevices = state.newDevices;
 
-                filteredNewDevices = alldevices.filter(device => device.device_id !== device_id);
+                filteredNewDevices = checkIsArray(alldevices).filter(device => device.device_id !== device_id);
 
                 let randerData = [
                     {
@@ -572,7 +572,7 @@ export default (state = initialState, action) => {
 
                 var alldevices = state.newDevices;
 
-                filteredNewDevices = alldevices.filter(device => device.id !== user_acc_id);
+                filteredNewDevices = checkIsArray(alldevices).filter(device => device.id !== user_acc_id);
 
                 // console.log(filteredNewDevices, 'filtered new devices', alldevices)
                 success({
@@ -795,8 +795,8 @@ export default (state = initialState, action) => {
                 //
                 var alldevices = state.devices;
                 var device_id = action.device.device_id;
-                filteredDevices = alldevices.filter(device => device.device_id !== device_id);
-                filteredNewDevices = filteredNewDevices.filter(device => device.device_id !== device_id);
+                filteredDevices = checkIsArray(alldevices).filter(device => device.device_id !== device_id);
+                filteredNewDevices = checkIsArray(filteredNewDevices).filter(device => device.device_id !== device_id);
                 success({
                     title: action.response.msg,
                 });

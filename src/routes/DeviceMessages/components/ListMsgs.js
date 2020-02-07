@@ -18,7 +18,7 @@ export default class ListMsgs extends Component {
         let selectedDevicesColumns = userDevicesListColumns(props.translation, this.handleSearch);
         let dealerTZ = checkTimezoneValue(props.user.timezone, false);
         this.state = {
-            selectedDevicesColumns: selectedDevicesColumns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
+            selectedDevicesColumns: checkIsArray(selectedDevicesColumns).filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
             searchText: '',
             columns: [],
             expandedRowKeys: [],
@@ -85,7 +85,7 @@ export default class ListMsgs extends Component {
         let editDateTime = data.date_time;
         let currentDateTime = moment().tz(this.state.dealerTZ).format(TIMESTAMP_FORMAT);
         // console.log("edit data is: ", data.date_time, " current date: ", moment().tz(this.state.dealerTZ).format(TIMESTAMP_FORMAT), currentDateTime > editDateTime)
-        if (currentDateTime > editDateTime && data.timer_status === "DATE/TIME" ) {
+        if (currentDateTime > editDateTime && data.timer_status === "DATE/TIME") {
             Modal.warning({
                 title: 'This message time is passed',
                 content: 'You are not allowed to change this message settings.'
@@ -206,7 +206,7 @@ export default class ListMsgs extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.rowKey)) {
-                let list = this.state.expandedRowKeys.filter(item => item !== record.rowKey)
+                let list = checkIsArray(this.state.expandedRowKeys).filter(item => item !== record.rowKey)
                 this.setState({ expandedRowKeys: list })
             }
         }

@@ -157,7 +157,7 @@ class EditPolicy extends Component {
             // showing updated Policy Push Apps
             // this.props.apk_list
 
-            checkIsArray( this.props.push_apps).map((apk) => {
+            checkIsArray(this.props.push_apps).map((apk) => {
                 let index = editAblePolicy.push_apps.findIndex(app => app.apk_id === apk.apk_id)
                 if (index && index !== -1) {
 
@@ -219,7 +219,7 @@ class EditPolicy extends Component {
             if (this.props.editAblePolicy.length) {
                 let editAblePolicy = this.props.editAblePolicy.find(item => item.id === this.props.editAblePolicyId)
 
-                checkIsArray( this.props.push_apps).map((apk) => {
+                checkIsArray(this.props.push_apps).map((apk) => {
                     let index = editAblePolicy.push_apps.findIndex(app => app.apk_id === apk.apk_id)
                     if (index && index !== -1) {
 

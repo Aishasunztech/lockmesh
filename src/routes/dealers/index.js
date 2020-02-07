@@ -159,7 +159,7 @@ class Dealers extends Component {
     filterList = (type, dealers) => {
         let dummyDealers = [];
         if (dealers && dealers.length) {
-            dealers.filter(function (dealer) {
+            checkIsArray(dealers).filter(function (dealer) {
                 let dealerStatus = getDealerStatus(dealer.unlink_status, dealer.account_status);
                 if (dealerStatus === type) {
                     dummyDealers.push(dealer);
@@ -504,8 +504,8 @@ class Dealers extends Component {
         } else if ((window.location.pathname.split("/").pop() === 'dealer') && ((this.state.columns.length > 9) || (this.state.options.length > 7))) {
             // alert('if dealer')
             status = true;
-            this.state.columns = this.state.columns.filter(lst => lst.title !== convertToLang(this.props.translation[Parent_Dealer_ID], "PARENT DEALER ID"));
-            this.state.columns = this.state.columns.filter(lst => lst.title !== convertToLang(this.props.translation[Parent_Dealer], "PARENT DEALER"));
+            this.state.columns = checkIsArray(this.state.columns).filter(lst => lst.title !== convertToLang(this.props.translation[Parent_Dealer_ID], "PARENT DEALER ID"));
+            this.state.columns = checkIsArray(this.state.columns).filter(lst => lst.title !== convertToLang(this.props.translation[Parent_Dealer], "PARENT DEALER"));
             this.state.options = this.state.options.slice(0, 7);
         }
 

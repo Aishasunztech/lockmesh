@@ -30,7 +30,7 @@ class Chat extends Component {
     if (userName === '') {
       return this.state.copyContactList;
     }
-    return this.state.copyContactList.filter((list) => {
+    return checkIsArray(this.state.copyContactList).filter((list) => {
       if (list.dealer_name.toLowerCase().indexOf(userName.toLowerCase()) > -1) {
         return list;
       } else if (list.link_code.toLowerCase().indexOf(userName.toLowerCase()) > -1) {
@@ -43,7 +43,7 @@ class Chat extends Component {
     if (userName === '') {
       return this.state.copyChatUsers;
     }
-    return this.state.copyChatUsers.filter((list) => {
+    return checkIsArray(this.state.copyChatUsers).filter((list) => {
       if (list.user.dealer_name.toLowerCase().indexOf(userName.toLowerCase()) > -1) {
         return list;
       } else if (list.user.link_code.toLowerCase().indexOf(userName.toLowerCase()) > -1) {

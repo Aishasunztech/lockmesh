@@ -50,8 +50,8 @@ class FilterDevices extends Component {
     let selectedDevicesColumns = userDevicesListColumns(props.translation, this.handleSearch);
 
     this.state = {
-      columns: columns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
-      selectedDevicesColumns: selectedDevicesColumns.filter(e => e.dataIndex != "activation_code"),
+      columns: checkIsArray(columns).filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
+      selectedDevicesColumns: checkIsArray(selectedDevicesColumns).filter(e => e.dataIndex != "activation_code"),
       sorterKey: '',
       sortOrder: 'ascend',
       showDealersModal: false,
@@ -146,8 +146,8 @@ class FilterDevices extends Component {
       let selectedDevicesColumns = userDevicesListColumns(nextProps.translation, this.handleSearch);
 
       this.setState({
-        columns: columns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
-        selectedDevicesColumns: selectedDevicesColumns.filter(e => e.dataIndex != "activation_code"),
+        columns: checkIsArray(columns).filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
+        selectedDevicesColumns: checkIsArray(selectedDevicesColumns).filter(e => e.dataIndex != "activation_code"),
       })
     }
 
@@ -591,7 +591,7 @@ class FilterDevices extends Component {
 
     let permittedDevices = this.state.selectedDevices;
     let selectedRows = this.state.selectedRowKeys;
-    var selectedDevices = permittedDevices.filter(e => selectedRows.includes(e.id));
+    var selectedDevices = checkIsArray(permittedDevices).filter(e => selectedRows.includes(e.id));
 
     this.props.setSelectedBulkDevices(selectedDevices);
     this.setState({
@@ -757,7 +757,7 @@ class FilterDevices extends Component {
     // console.log('this.state.selectedDevices filter ', this.state.selectedDevices)
     if (this.state.selectedDevices.length > 0) {
       let selectedIDs = checkIsArray(this.state.selectedDevices).map((item) => item.id);
-      let fDevices = devices.filter(e => !selectedIDs.includes(e.id));
+      let fDevices = checkIsArray(devices).filter(e => !selectedIDs.includes(e.id));
       return fDevices;
     } else {
       return devices
@@ -829,16 +829,16 @@ class FilterDevices extends Component {
     let updateSelectedDevices = devices;
 
     if (action === "SUSPEND DEVICES") {
-      updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED)
+      updateSelectedDevices = checkIsArray(devices).filter((device) => device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED)
     } else if (action === "ACTIVATE DEVICES") {
-      updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED)
+      updateSelectedDevices = checkIsArray(devices).filter((device) => device.finalStatus == DEVICE_SUSPENDED)
     }
     else if (action === "PUSH APPS" || action === "PULL APPS" || action === "UNLINK DEVICES" || action === "PUSH POLICY") {
-      updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED || device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED || device.finalStatus == DEVICE_EXPIRED)
+      updateSelectedDevices = checkIsArray(devices).filter((device) => device.finalStatus == DEVICE_SUSPENDED || device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED || device.finalStatus == DEVICE_EXPIRED)
     }
     else if (action === "WIPE DEVICES") {
       // updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED || device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED || device.finalStatus == DEVICE_EXPIRED || device.finalStatus == DEVICE_UNLINKED || device.finalStatus == DEVICE_TRANSFERED)
-      updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED || device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED || device.finalStatus == DEVICE_EXPIRED || device.finalStatus == DEVICE_TRANSFERED)
+      updateSelectedDevices = checkIsArray(devices).filter((device) => device.finalStatus == DEVICE_SUSPENDED || device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED || device.finalStatus == DEVICE_EXPIRED || device.finalStatus == DEVICE_TRANSFERED)
     }
 
     this.state.selectedDevices = updateSelectedDevices

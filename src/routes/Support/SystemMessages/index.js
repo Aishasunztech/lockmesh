@@ -151,7 +151,7 @@ class SystemMessages extends Component {
         break;
     }
 
-    let filteredMessages = filteredSystemMessages.filter(message => {
+    let filteredMessages = checkIsArray(filteredSystemMessages).filter(message => {
       if (message.subject.toLowerCase().indexOf(searchText.toLowerCase()) > -1) {
         return message;
       } else if (message.createdAt.toLowerCase().indexOf(searchText.toLowerCase()) > -1) {

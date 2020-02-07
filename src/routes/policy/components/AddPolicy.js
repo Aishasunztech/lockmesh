@@ -248,10 +248,10 @@ class AddPolicy extends Component {
                 return {
                     rowKey: sysPermission.setting_name,
                     name: sysPermission.setting_name,
-                    action: <Switch checked={(sysPermission.setting_status === 1 || sysPermission.setting_status === true)?true: false} onClick={(e) => this.props.handleCheckSystemPermission(e, sysPermission.setting_name)} size="small" />
+                    action: <Switch checked={(sysPermission.setting_status === 1 || sysPermission.setting_status === true) ? true : false} onClick={(e) => this.props.handleCheckSystemPermission(e, sysPermission.setting_name)} size="small" />
                 }
             })
-        
+
         }
 
     }
@@ -373,7 +373,7 @@ class AddPolicy extends Component {
                             key="2"
                         >
                             <AppList
-                                apk_list={this.state.appPermissions.filter(item => item.uniqueName !== "com.android.settingsSettings")}
+                                apk_list={checkIsArray(this.state.appPermissions).filter(item => item.uniqueName !== "com.android.settingsSettings")}
                                 dataLength={this.state.appPermissions.length}
                                 handleCheckAllAppPolicy={this.handleCheckAllAppPolicy}
                                 handleCheckApp={this.handleCheckApp}
