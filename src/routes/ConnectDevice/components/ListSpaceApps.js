@@ -12,7 +12,7 @@ import { Table, Switch, Avatar, Row, Col, Button, Modal } from "antd";
 import AppDropdown from "./AppDropdown";
 import { POLICY_APP_NAME } from '../../../constants/PolicyConstants';
 import { Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { Button_LoadProfile, Button_On, Button_Off } from '../../../constants/ButtonConstants';
 import { appsColumns } from '../../utils/columnsUtils';
 import AppList from './AppList';
@@ -103,7 +103,7 @@ class ListSpaceApps extends Component {
                 </div>
                 <div style={{ height: 335, overflow: 'overlay', borderTop: '1px solid #e8e8e8' }}>
                     <Row className="m-0">
-                        {this.state.app_list.map(app => {
+                        {checkIsArray(this.state.app_list).map(app => {
                             if (!app.extension && app.visible) {
                                 if (this.props.type === "guest") {
                                     if (app.guest === true || app.guest === 1) {

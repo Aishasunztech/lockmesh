@@ -4,12 +4,12 @@ import { BASE_URL } from '../../../constants/Application';
 import { APK } from '../../../constants/ApkConstants';
 import { POLICY_APP_NAME } from '../../../constants/PolicyConstants';
 import { Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 
 
 const renderApps = (apk_list) => {
     let app_list = []
-     apk_list.map((app) => {
+    checkIsArray(apk_list).map((app) => {
         if (app.system_app !== 1 && app.system_app !== true && app.package_name) {
             app_list.push( {
                 key: (app.app_id) ? app.app_id : 'N/A',

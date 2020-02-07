@@ -93,8 +93,8 @@ class SettingAppPermissions extends Component {
     let extensions = this.state.extensions;
     console.log("render list extension", extensions);
 
-    if (extensions.length) {
-      return extensions.map((ext, index) => {
+    // if (extensions.length) {
+      return checkIsArray(extensions).map((ext, index) => {
         return {
           key: ext.app_id,
           name: (
@@ -123,7 +123,7 @@ class SettingAppPermissions extends Component {
         }
       })
 
-    }
+    // }
   }
   render() {
     const { secureSetting, isExtension } = this.props;

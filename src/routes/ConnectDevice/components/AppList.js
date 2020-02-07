@@ -12,7 +12,7 @@ import { Table, Switch, Avatar } from "antd";
 import AppDropdown from "./AppDropdown";
 import { POLICY_APP_NAME } from '../../../constants/PolicyConstants';
 import { Guest, ENCRYPTED, ENABLE, Show_Hide } from '../../../constants/TabConstants';
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { Button_LoadProfile, Button_On, Button_Off } from '../../../constants/ButtonConstants';
 import { appsColumns } from '../../utils/columnsUtils';
 import { APK_APP_NAME } from '../../../constants/ApkConstants';
@@ -84,7 +84,7 @@ class AppList extends Component {
 
         let appList = [];
 
-        this.state.app_list.map(app => {
+        checkIsArray(this.state.app_list).map(app => {
             // console.log(app);
             if (!app.extension && app.visible) {
                 appList.push(
