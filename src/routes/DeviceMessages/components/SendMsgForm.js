@@ -181,7 +181,7 @@ class SendMsgForm extends Component {
                             msg: values.msg_txt,
                             timer: values.timer,
                             repeat: repeatVal,
-                            dateTime: convertTimezoneValue(this.props.user.timezone, dateTimeVal, TIMESTAMP_FORMAT, true),
+                            dateTime: convertTimezoneValue(this.props.user.timezone, dateTimeVal, true),
                             weekDay,
                             monthDate,
                             monthName,

@@ -6,7 +6,7 @@ import XLSX from 'xlsx';
 import axios from 'axios';
 import jsPDFautotable from 'jspdf-autotable';
 
-import { BASE_URL, TIME_ZONE, SERVER_TIMEZONE } from '../../constants/Application';
+import { BASE_URL, TIME_ZONE, SERVER_TIMEZONE, TIMESTAMP_FORMAT } from '../../constants/Application';
 import {
 	DEVICE_ACTIVATED,
 	DEVICE_EXPIRED,
@@ -620,7 +620,7 @@ export function getMonthName(key) {
 			return "N/A";
 	}
 }
-export function convertTimezoneValue(dealerTimezone, data, dateFormat, clientToServerTZ = false) { // dealerTimezone: timezone, data: date/time
+export function convertTimezoneValue(dealerTimezone, data, clientToServerTZ = false, dateFormat = TIMESTAMP_FORMAT) { // dealerTimezone: timezone, data: date/time
 	let convertedDateTime = "N/A";
 
 	if (data && data !== "N/A" && data !== "n/a" && data !== "0000-00-00 00:00:00") {
@@ -629,7 +629,7 @@ export function convertTimezoneValue(dealerTimezone, data, dateFormat, clientToS
 		if (foundZoneIndex === -1) {
 			dealerTimezone = moment.tz.guess(); // get local time zone value e.g "Asia/Karachi"
 		}
-		if (clientToServerTZ) {
+		if (typeof clientToServerTZ === "boolean" && clientToServerTZ) {
 			convertedDateTime = moment.tz(data, dealerTimezone).tz(SERVER_TIMEZONE).format(dateFormat);
 		} else {
 			// convert server time to client time

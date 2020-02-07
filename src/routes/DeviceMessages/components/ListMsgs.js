@@ -6,7 +6,7 @@ import moment from 'moment';
 import ReadMoreAndLess from 'react-read-more-less';
 import CustomScrollbars from "../../../util/CustomScrollbars";
 import { userDevicesListColumns } from '../../utils/columnsUtils';
-import { TIMESTAMP_FORMAT_NOT_SEC, TIME_FORMAT_HM, SERVER_TIMEZONE, HOST_NAME } from '../../../constants/Application';
+import { TIMESTAMP_FORMAT_NOT_SEC, TIME_FORMAT_HM, SERVER_TIMEZONE, HOST_NAME, TIMESTAMP_FORMAT } from '../../../constants/Application';
 import EditMsgModal from './EditMsgForm';
 import { Link } from "react-router-dom";
 import styles from './deviceMsg.css'
@@ -16,6 +16,7 @@ export default class ListMsgs extends Component {
     constructor(props) {
         super(props);
         let selectedDevicesColumns = userDevicesListColumns(props.translation, this.handleSearch);
+        let dealerTZ = checkTimezoneValue(props.user.timezone, false);
         this.state = {
             selectedDevicesColumns: selectedDevicesColumns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
             searchText: '',
@@ -24,6 +25,7 @@ export default class ListMsgs extends Component {
             visible: false,
             editRecord: null,
             editModal: false,
+            dealerTZ: dealerTZ
             // textLimit: 100
         };
         this.renderList = this.renderList.bind(this);
@@ -79,7 +81,18 @@ export default class ListMsgs extends Component {
     }
 
     handleEditModal = (data) => {
-        this.setState({ editModal: true, editRecord: data })
+        // console.log("edit data: ", data);
+        let editDateTime = data.date_time;
+        let currentDateTime = moment().tz(this.state.dealerTZ).format(TIMESTAMP_FORMAT);
+        // console.log("edit data is: ", data.date_time, " current date: ", moment().tz(this.state.dealerTZ).format(TIMESTAMP_FORMAT), currentDateTime > editDateTime)
+        if (currentDateTime > editDateTime && data.timer_status === "DATE/TIME" ) {
+            Modal.warning({
+                title: 'This message time is passed',
+                content: 'You are not allowed to change this message settings.'
+            });
+        } else {
+            this.setState({ editModal: true, editRecord: data })
+        }
     }
 
     // expandText = (id) => {
@@ -122,18 +135,18 @@ export default class ListMsgs extends Component {
                 action: (
                     <div data-column="ACTION" style={{ display: "inline-flex" }}>
                         <Fragment>
-                            {(HOST_NAME === 'localhost' || HOST_NAME === 'dev.lockmesh.com') ?
-                                (item.timer_status === "NOW") ? null :
-                                    <Fragment>
-                                        <Button
-                                            disabled={HOST_NAME === 'localhost' ? false : true}
-                                            type="primary"
-                                            size="small"
-                                            onClick={() => this.handleEditModal(JSON.parse(JSON.stringify(item)))}
-                                        >EDIT</Button>
-                                    </Fragment>
-                                : null
-                            }
+                            {/* {(HOST_NAME === 'localhost' || HOST_NAME === 'dev.lockmesh.com') ? */}
+                            {(!item.timer_status || item.timer_status === "NOW") ? null : // edit button hide if timer_status is NOW or not defined
+                                <Fragment>
+                                    <Button
+                                        // disabled={HOST_NAME === 'localhost' ? false : true}
+                                        type="primary"
+                                        size="small"
+                                        onClick={() => this.handleEditModal(JSON.parse(JSON.stringify(item)))}
+                                    >EDIT</Button>
+                                </Fragment>}
+                            {/* : null
+                            } */}
                             <Fragment><Button type="danger" size="small" onClick={() => this.deleteMsg(item.id)}>DELETE</Button></Fragment>
                         </Fragment>
                     </div>

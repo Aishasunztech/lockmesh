@@ -143,7 +143,7 @@ export default class DeviceSidebar extends Component {
             {
                 key: 29,
                 name: (<a>{titleCase(convertToLang(this.props.translation["Last Online"], "Last Online"))}:</a>),
-                value: convertTimezoneValue(this.props.auth.authUser.timezone, device_details.lastOnline, TIMESTAMP_FORMAT),
+                value: convertTimezoneValue(this.props.auth.authUser.timezone, device_details.lastOnline),
                 // value: (device_details.lastOnline) ? moment(device_details.lastOnline).tz(convertTimezoneValue(this.props.auth.authUser.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
                 // value: checkValue(device_details.lastOnline)
                 // value: moment(device_details.lastOnline).format("MM/DD/YYYY HH:mm:ss")
@@ -363,14 +363,14 @@ export default class DeviceSidebar extends Component {
             {
                 key: 27,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_START_DATE], "START DATE"))}:</a>),
-                value: convertTimezoneValue(this.props.auth.authUser.timezone, device_details.start_date, DATE_FORMAT),
+                value: convertTimezoneValue(this.props.auth.authUser.timezone, device_details.start_date, false, DATE_FORMAT),
                 // value: (device_details.start_date) ? moment(device_details.start_date).tz(convertTimezoneValue(this.props.auth.authUser.timezone)).format("YYYY/MM/DD") : 'N/A',
                 // value: checkValue(device_details.start_date)
             },
             {
                 key: 28,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_EXPIRY_DATE], "EXPIRY DATE"))}:</a>),
-                value: convertTimezoneValue(this.props.auth.authUser.timezone, device_details.expiry_date, DATE_FORMAT),
+                value: convertTimezoneValue(this.props.auth.authUser.timezone, device_details.expiry_date, false, DATE_FORMAT),
                 // value: (device_details.expiry_date) ? moment(device_details.expiry_date).tz(convertTimezoneValue(this.props.auth.authUser.timezone)).format("YYYY/MM/DD") : 'N/A',
                 // value: checkValue(device_details.expiry_date)
             },

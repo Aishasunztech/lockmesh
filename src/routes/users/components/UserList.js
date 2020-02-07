@@ -104,7 +104,7 @@ class UserList extends Component {
                 user_name: user.user_name,
                 email: user.email,
                 tokens: 'N/A',
-                created_at: convertTimezoneValue(this.props.user.timezone, user.created_at, TIMESTAMP_FORMAT),
+                created_at: convertTimezoneValue(this.props.user.timezone, user.created_at),
                 // created_at: (user.created_at) ? moment(user.created_at).tz(convertTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
                 // created_at: getFormattedDate(user.created_at)
             }

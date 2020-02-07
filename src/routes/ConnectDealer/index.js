@@ -264,14 +264,14 @@ class ConnectDealer extends Component {
                 {
                     key: '10',
                     name: <a>Last Login</a>,
-                    value: convertTimezoneValue(this.props.authUser.timezone, dealer.last_login, TIMESTAMP_FORMAT),
+                    value: convertTimezoneValue(this.props.authUser.timezone, dealer.last_login),
                     // value: (dealer.last_login) ? moment(dealer.last_login).tz(convertTimezoneValue(this.props.authUser.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
                     // value: (dealer.last_login) ? dealer.last_login : 'N/A',
                 },
                 {
                     key: '11',
                     name: <a>Start Date</a>,
-                    value: convertTimezoneValue(this.props.authUser.timezone, dealer.created, TIMESTAMP_FORMAT),
+                    value: convertTimezoneValue(this.props.authUser.timezone, dealer.created),
                     // value: (dealer.created) ? moment(dealer.created).tz(convertTimezoneValue(this.props.authUser.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
                     // value: this.props.dealer.created,
                 },

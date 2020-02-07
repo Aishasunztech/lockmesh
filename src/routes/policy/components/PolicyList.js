@@ -201,8 +201,8 @@ class PolicyList extends Component {
                     />
                 ),
                 created_by: policy.created_by,
-                created_date: convertTimezoneValue(this.props.user.timezone, policy.created_date, TIMESTAMP_FORMAT),
-                last_edited: convertTimezoneValue(this.props.user.timezone, policy.last_edited, TIMESTAMP_FORMAT),
+                created_date: convertTimezoneValue(this.props.user.timezone, policy.created_date),
+                last_edited: convertTimezoneValue(this.props.user.timezone, policy.last_edited),
                 // created_date: (policy.created_date && policy.created_date != "N/A") ? moment(policy.created_date).tz(convertTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
                 // last_edited: (policy.last_edited && policy.last_edited != "N/A") ? moment(policy.last_edited).tz(convertTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
                 // created_date: moment(policy.created_date).format("YYYY/MM/DD hh:mm:ss"),

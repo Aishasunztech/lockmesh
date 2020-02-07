@@ -192,7 +192,7 @@ export default class BulkActivity extends Component {
                 return {
                     key: index,
                     action: row.action.toUpperCase(),
-                    created_at: convertTimezoneValue(this.props.user.timezone, row.created_at, TIMESTAMP_FORMAT),
+                    created_at: convertTimezoneValue(this.props.user.timezone, row.created_at),
                     // created_at: getFormattedDate(row.created_at),
                     allData: row
                 }
