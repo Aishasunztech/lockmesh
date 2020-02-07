@@ -376,10 +376,10 @@ export function getChatIDs() {
     }
 }
 
-export function getPGPEmails() {
+export function getPGPEmails(user_acc_id, dealer_id) {
     return (dispatch) => {
         // alert("hello");
-        RestService.getPGPEmails().then((response) => {
+        RestService.getPGPEmails(user_acc_id, dealer_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 //
                 dispatch({

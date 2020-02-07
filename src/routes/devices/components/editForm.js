@@ -295,7 +295,7 @@ class EditDevice extends Component {
     componentDidMount() {
         this.props.getSimIDs();
         this.props.getChatIDs();
-        this.props.getPGPEmails();
+        this.props.getPGPEmails(this.props.device.id, this.props.device.dealer_id);
         this.props.getUserList();
         this.props.getParentPackages()
         this.props.getProductPrices()
@@ -1782,7 +1782,7 @@ class EditDevice extends Component {
                     ref="addPGPEmailModal"
                     translation={this.props.translation}
                     wrappedComponentRef={(form) => this.addPGPEmailModal = form}
-
+                    device={this.props.device}
                     // actions
                     getDomains={this.props.getDomains}
                     addProduct={this.props.addProduct}
@@ -1982,7 +1982,7 @@ function mapDispatchToProps(dispatch) {
 }
 var mapStateToProps = ({ routing, devices, users, auth, settings, sidebar, account }) => {
     // 
-
+    // console.log(devices.pgp_emails);
     return {
         invoiceID: users.invoiceID,
         user: auth.authUser,

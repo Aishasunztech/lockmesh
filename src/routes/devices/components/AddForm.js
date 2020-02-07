@@ -250,7 +250,7 @@ class AddDevice extends Component {
         this.props.getPolicies();
         this.props.getSimIDs();
         this.props.getChatIDs();
-        this.props.getPGPEmails();
+        this.props.getPGPEmails(this.props.device.id, this.props.device.dealer_id);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -283,9 +283,9 @@ class AddDevice extends Component {
 
     handleReset = () => {
 
-        this.props.getSimIDs();
-        this.props.getChatIDs();
-        this.props.getPGPEmails();
+        // this.props.getSimIDs();
+        // this.props.getChatIDs();
+        // this.props.getPGPEmails();
         // this.props.getUserList();
         this.props.form.resetFields();
     }

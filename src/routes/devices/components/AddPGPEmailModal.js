@@ -302,6 +302,8 @@ function generatePgp(_this, values) {
                 //     payload.auto_generated = true
                 // } else {
                 payload.product_data.username = values.username
+                payload.user_acc_id = _this.props.device.id
+                payload.dealer_id = _this.props.device.dealer_id
                 // }
                 _this.props.addProduct(payload);
                 _this.props.form.resetFields()
