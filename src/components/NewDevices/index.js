@@ -288,7 +288,7 @@ export default class NewDevices extends Component {
 
     renderList1(list) {
         if (list && Array.isArray(list) && list.length > 0) {
-            return list.map((request) => {
+            return checkIsArray(list).map((request) => {
                 return {
                     key: request.id ? `${request.id}` : "N/A",
                     action: <div>  <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.rejectRequest(request); }}>{convertToLang(this.props.translation[Button_Decline], "DECLINE")}</Button>
@@ -315,7 +315,7 @@ export default class NewDevices extends Component {
       let { setCurrentSupportTicketId, setCurrentTicketId, setSupportPage } = this.props;
 
         if (list && Array.isArray(list) && list.length > 0) {
-          return list.map((notification) => {
+          return checkIsArray(list).map((notification) => {
             let dealer_name = 'N/A';
             let dealer_pin = 'N/A';
             let dealer = this.state.dealers.find(dealer => dealer.dealer_id == notification.user_id);
@@ -352,7 +352,7 @@ export default class NewDevices extends Component {
     renderSupportSystemMessagesNotifications(list) {
       let { setCurrentSystemMessageId, setSupportPage } = this.props;
         if (list && Array.isArray(list) && list.length > 0) {
-            return list.map((notification) => {
+            return checkIsArray(list).map((notification) => {
                 return {
                     selection: <Checkbox defaultChecked={false} checked={this.state.selectedSystemMessages.some(item => item === notification.system_message._id)} onChange={(e) => this.updateSystemMessagesSelection(e, notification.system_message._id)} />,
                     id: notification.id,
@@ -387,7 +387,7 @@ export default class NewDevices extends Component {
     renderSupportChatNotifications(list){
       let { setSupportPage, setCurrentConversation } = this.props;
       if(list && Array.isArray(list) && list.length > 0){
-        return list.map((notification, index) => {
+        return checkIsArray(list).map((notification, index) => {
           let dealer_name = 'N/A';
           let dealer_pin = 'N/A';
           let isAdmin = false;
@@ -428,7 +428,7 @@ export default class NewDevices extends Component {
 
     renderServiceRequestList(list) {
         if (list && Array.isArray(list) && list.length > 0) {
-            return list.map((request) => {
+            return checkIsArray(list).map((request) => {
 
                 return {
                     key: request.id,
@@ -462,7 +462,7 @@ export default class NewDevices extends Component {
 
     renderList(list, flagged = false) {
         if (list && Array.isArray(list) && list.length > 0) {
-            return list.map((device) => {
+            return checkIsArray(list).map((device) => {
 
                 let transferButton;
                 if (this.state.sectionVisible || this.state.showLInkRequest) {

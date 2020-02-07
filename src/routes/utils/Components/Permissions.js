@@ -172,7 +172,7 @@ class Permissions extends Component {
   }
 
   getPermissionIds = (data) => {
-    return data.map((item) => item.dealer_id)
+    return checkIsArray(data).map((item) => item.dealer_id)
   }
 
   addSelectedDealers = () => {
@@ -180,9 +180,9 @@ class Permissions extends Component {
     let selectedRows = this.state.selectedRowKeys;
     // var dList = this.state.dealerList; arfan
     var dList = this.state.dealerListForModal;
-    var add_ids = dList.filter(e => !permissions.includes(e.dealer_id));
-    var addUnSelected = add_ids.filter(e => !selectedRows.includes(e.dealer_id));
-    var addUnSelected_IDs = addUnSelected.map(v => v.dealer_id);
+    var add_ids = checkIsArray(dList).filter(e => !permissions.includes(e.dealer_id));
+    var addUnSelected = checkIsArray(add_ids).filter(e => !selectedRows.includes(e.dealer_id));
+    var addUnSelected_IDs = checkIsArray(addUnSelected).map(v => v.dealer_id);
     // permissions = [...permissions, ...addUnSelected_IDs];
 
     this.setState({
@@ -211,7 +211,7 @@ class Permissions extends Component {
 
   saveAllDealers = () => {
     let dealer_ids = []
-    this.props.dealerList.map((dealer) => {
+    checkIsArray(this.props.dealerList).map((dealer) => {
       dealer_ids.push(dealer.dealer_id);
     });
     // this.setState({ permissions: dealer_ids })
@@ -294,7 +294,7 @@ class Permissions extends Component {
 
         // set permission by value only one time
         if (updateDealers) {
-          this.state.permissions.map((prm) => {
+          checkIsArray(this.state.permissions).map((prm) => {
             if (prm.dealer_id === data.dealer_id) {
               if (prm.dealer_type === "dealer") {
                 data["permission_by"] = this.props.user.name;
@@ -431,7 +431,7 @@ class Permissions extends Component {
   removeUnSelectedDealers = () => {
     let permittedDealers = this.getPermissionIds(this.state.permissions);
     let selectedRows = this.state.selectedRowKeys;
-    var remove_ids = permittedDealers.filter(e => !selectedRows.includes(e));
+    var remove_ids = checkIsArray(permittedDealers).filter(e => !selectedRows.includes(e));
 
     this.setState({
       removeUnSelectedDealersModal: false,
@@ -468,11 +468,11 @@ class Permissions extends Component {
     let data = [];
     // console.log(list);
     // console.log("this.state.permissions: ", this.state.permissions);
-    list.map((dealer) => {
+    checkIsArray(list).map((dealer) => {
       let is_included = false;
       let permitData = {};
 
-      this.state.permissions.map((prm) => {
+      checkIsArray(this.state.permissions).map((prm) => {
         if (prm.dealer_id == dealer.dealer_id) {
           permitData = prm;
           is_included = true;
@@ -574,7 +574,7 @@ class Permissions extends Component {
     if (this.props.user.type === "dealer") {
       // console.log("this.props.record.permissions ", this.props.record.permissions)
       let allPermissions = this.props.record.permissions;
-      checkPermissins = allPermissions.filter((item) => item.dealer_type !== "admin");
+      checkPermissins = checkIsArray(allPermissions).filter((item) => item.dealer_type !== "admin");
       if (checkPermissins.length) {
         removeAllBtn = false;
       } else {

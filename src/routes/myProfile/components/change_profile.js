@@ -364,7 +364,7 @@ class EditForm extends Component {
                             placeholder={convertToLang(this.props.translation[""], "Select Country")}
                             optionFilterProp="children"
                         >
-                            {countryList.map((Item) => {
+                            {checkIsArray(countryList).map((Item) => {
                                 return <Select.Option key={Item} value={Item}>{Item}</Select.Option>
                             })}
                         </Select>,

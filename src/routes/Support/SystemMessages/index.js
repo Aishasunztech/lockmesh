@@ -1,11 +1,11 @@
-import React, {Component} from 'react'
-import {connect} from "react-redux";
-import {bindActionCreators} from "redux";
-import {Card, Modal, Tabs} from "antd";
-import {checkValue, convertToLang, getDateFromTimestamp, getOnlyTimeFromTimestamp} from '../../utils/commonUtils'
+import React, { Component } from 'react'
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { Card, Modal, Tabs } from "antd";
+import { checkValue, convertToLang, getDateFromTimestamp, getOnlyTimeFromTimestamp } from '../../utils/commonUtils'
 import ListSystemMessages from './components/ListSystemMessages';
 import SendMessage from './components/SendMessage';
-import {getAllDealers} from "../../../appRedux/actions/Dealers";
+import { getAllDealers } from "../../../appRedux/actions/Dealers";
 import { resetCurrentSystemMessageId, setCurrentSystemMessageId } from "../../../appRedux/actions";
 
 import {
@@ -14,18 +14,18 @@ import {
   getSupportSystemMessages,
   updateSupportSystemMessageNotification
 } from "../../../appRedux/actions/SupportSystemMessages";
-import { supportSystemMessage} from "../../utils/columnsUtils";
-import {ADMIN, DEALER, SDEALER} from "../../../constants/Constants";
+import { supportSystemMessage } from "../../utils/columnsUtils";
+import { ADMIN, DEALER, SDEALER } from "../../../constants/Constants";
 
-const TabPane           = Tabs.TabPane;
-var copySystemMessages  = [];
+const TabPane = Tabs.TabPane;
+var copySystemMessages = [];
 
 class SystemMessages extends Component {
 
   constructor(props) {
     super(props);
-    var columns  = supportSystemMessage(props.translation);
-    columns      = this.removeColumns(props, columns);
+    var columns = supportSystemMessage(props.translation);
+    columns = this.removeColumns(props, columns);
 
     this.state = {
       columns: columns,
@@ -44,16 +44,16 @@ class SystemMessages extends Component {
     this.confirm = Modal.confirm;
   }
 
-  filterMessages(obj){
+  filterMessages(obj) {
     this.setState(obj, this.filter);
   }
 
   removeColumns = ({ user }, columns) => {
-    if(user.type === ADMIN){
-      columns.splice(3,2);
-    } else if(user.type === SDEALER){
+    if (user.type === ADMIN) {
+      columns.splice(3, 2);
+    } else if (user.type === SDEALER) {
       columns.splice(2, 2);
-    } else if(user.type === DEALER){
+    } else if (user.type === DEALER) {
       columns.splice(4, 1);
     }
     return columns;
@@ -64,15 +64,15 @@ class SystemMessages extends Component {
     let searchText = this.state.searchText;
     let filteredSystemMessages = [];
 
-    switch (filter){
+    switch (filter) {
       case 'sent':
-        if(this.props.dealerList.length > 0){
-          filteredSystemMessages = this.state.sentMessages.map((item) => {
+        if (this.props.dealerList.length > 0) {
+          filteredSystemMessages = checkIsArray(this.state.sentMessages).map((item) => {
             let sender = '';
-            if (this.props.user.type === ADMIN){
-              let dealer  = item.sender_user_type === ADMIN ? ADMIN : this.props.dealerList.find(dealer => dealer.dealer_id === item.sender_id) ;
-              sender      = item.sender_user_type === ADMIN ? ADMIN : dealer.dealer_name;
-              sender      = sender.charAt(0).toUpperCase() + sender.slice(1);
+            if (this.props.user.type === ADMIN) {
+              let dealer = item.sender_user_type === ADMIN ? ADMIN : this.props.dealerList.find(dealer => dealer.dealer_id === item.sender_id);
+              sender = item.sender_user_type === ADMIN ? ADMIN : dealer.dealer_name;
+              sender = sender.charAt(0).toUpperCase() + sender.slice(1);
             }
             return {
               id: item._id,
@@ -90,8 +90,8 @@ class SystemMessages extends Component {
           });
         }
         break;
-      case 'received' :
-        filteredSystemMessages = this.state.receivedMessages.map((item) => {
+      case 'received':
+        filteredSystemMessages = checkIsArray(this.state.receivedMessages).map((item) => {
           let sender = item.system_message.sender_user_type.charAt(0).toUpperCase() + item.system_message.sender_user_type.slice(1);
           return {
             id: item.system_message._id,
@@ -109,13 +109,13 @@ class SystemMessages extends Component {
         break;
       default:
         let sent = [];
-        if(this.props.dealerList.length > 0){
-          sent = this.state.sentMessages.map((item) => {
+        if (this.props.dealerList.length > 0) {
+          sent = checkIsArray(this.state.sentMessages).map((item) => {
             let sender = '';
-            if (this.props.user.type === ADMIN){
-              let dealer  = item.sender_user_type === ADMIN ? ADMIN : this.props.dealerList.find(dealer => dealer.dealer_id === item.sender_id) ;
-              sender      = item.sender_user_type === ADMIN ? ADMIN : dealer.dealer_name;
-              sender      = sender.charAt(0).toUpperCase() + sender.slice(1);
+            if (this.props.user.type === ADMIN) {
+              let dealer = item.sender_user_type === ADMIN ? ADMIN : this.props.dealerList.find(dealer => dealer.dealer_id === item.sender_id);
+              sender = item.sender_user_type === ADMIN ? ADMIN : dealer.dealer_name;
+              sender = sender.charAt(0).toUpperCase() + sender.slice(1);
             }
             return {
               id: item._id,
@@ -132,7 +132,7 @@ class SystemMessages extends Component {
             };
           });
         }
-        let received = this.state.receivedMessages.map((item) => {
+        let received = checkIsArray(this.state.receivedMessages).map((item) => {
           let sender = item.system_message.sender_user_type.charAt(0).toUpperCase() + item.system_message.sender_user_type.slice(1);
           return {
             id: item.system_message._id,
@@ -152,40 +152,40 @@ class SystemMessages extends Component {
     }
 
     let filteredMessages = filteredSystemMessages.filter(message => {
-      if(message.subject.toLowerCase().indexOf(searchText.toLowerCase()) > -1){
+      if (message.subject.toLowerCase().indexOf(searchText.toLowerCase()) > -1) {
         return message;
-      } else if(message.createdAt.toLowerCase().indexOf(searchText.toLowerCase()) > -1){
+      } else if (message.createdAt.toLowerCase().indexOf(searchText.toLowerCase()) > -1) {
         return message;
-      } else if(message.createdTime.toLowerCase().indexOf(searchText.toLowerCase()) > -1){
+      } else if (message.createdTime.toLowerCase().indexOf(searchText.toLowerCase()) > -1) {
         return message;
       }
 
-      if(this.props.user.type === DEALER){
-        if(message.type.toLowerCase().indexOf(searchText.toLowerCase()) > -1){
+      if (this.props.user.type === DEALER) {
+        if (message.type.toLowerCase().indexOf(searchText.toLowerCase()) > -1) {
           return message;
         }
       }
     });
 
-    this.setState({filteredMessages: filteredMessages});
+    this.setState({ filteredMessages: filteredMessages });
   }
 
   componentDidMount() {
     let searchSystemMessagesColumnsArray = [];
     this.props.getAllDealers();
-    if (this.props.user.type === SDEALER){
-      searchSystemMessagesColumnsArray = ['sender', 'subject' ,'createdAt','createdTime'];
+    if (this.props.user.type === SDEALER) {
+      searchSystemMessagesColumnsArray = ['sender', 'subject', 'createdAt', 'createdTime'];
       this.props.getReceivedSupportSystemMessages();
-    }else if (this.props.user.type === ADMIN){
-      searchSystemMessagesColumnsArray = ['subject' ,'createdAt','createdTime'];
+    } else if (this.props.user.type === ADMIN) {
+      searchSystemMessagesColumnsArray = ['subject', 'createdAt', 'createdTime'];
       this.props.getSupportSystemMessages();
-    }else{
-      searchSystemMessagesColumnsArray = ['sender', 'type', 'subject' ,'createdAt','createdTime'];
+    } else {
+      searchSystemMessagesColumnsArray = ['sender', 'type', 'subject', 'createdAt', 'createdTime'];
       this.props.getSupportSystemMessages();
       this.props.getReceivedSupportSystemMessages();
     }
 
-    this.setState({searchSystemMessagesColumns: searchSystemMessagesColumnsArray})
+    this.setState({ searchSystemMessagesColumns: searchSystemMessagesColumnsArray })
   }
 
   // componentDidUpdate(prevProps, prevState, snapshot) {
@@ -253,12 +253,12 @@ class SystemMessages extends Component {
   //   }
   // }
 
-  componentWillReceiveProps(prevProps){
-    this.setState({sentMessages: prevProps.sentSupportSystemMessages, receivedMessages: prevProps.receivedSupportSystemMessages}, this.filter);
+  componentWillReceiveProps(prevProps) {
+    this.setState({ sentMessages: prevProps.sentSupportSystemMessages, receivedMessages: prevProps.receivedSupportSystemMessages }, this.filter);
   }
 
-  componentWillUnmount(){
-    if(this.props.resetCurrentSystemMessageId){
+  componentWillUnmount() {
+    if (this.props.resetCurrentSystemMessageId) {
       this.props.resetCurrentSystemMessageId();
     }
   }
@@ -339,4 +339,4 @@ const mapStateToProps = ({ account, auth, settings, dealers, SupportSystemMessag
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps, null, {withRef: true})(SystemMessages);
+export default connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(SystemMessages);

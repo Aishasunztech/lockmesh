@@ -51,12 +51,12 @@ class UserList extends Component {
     renderList(list) {
         // console.log(list);
 
-        let user_list = list.filter((data) => {
+        let user_list = checkIsArray(list).filter((data) => {
             // if (data.type === "policy") {
             return data
             // }
         })
-        return user_list.map((user, index) => {
+        return checkIsArray(user_list).map((user, index) => {
             // this.state.expandTabSelected[index]='1';
             // this.state.expandedByCustom[index]=false;
             return {
@@ -141,7 +141,7 @@ class UserList extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.rowKey)) {
-                let list = this.state.expandedRowKeys.filter(item => item !== record.rowKey)
+                let list = checkIsArray(this.state.expandedRowKeys).filter(item => item !== record.rowKey)
                 this.setState({ expandedRowKeys: list })
             }
         }

@@ -157,7 +157,7 @@ class EditPolicy extends Component {
             // showing updated Policy Push Apps
             // this.props.apk_list
 
-            this.props.push_apps.map((apk) => {
+            checkIsArray( this.props.push_apps).map((apk) => {
                 let index = editAblePolicy.push_apps.findIndex(app => app.apk_id === apk.apk_id)
                 if (index && index !== -1) {
 
@@ -219,7 +219,7 @@ class EditPolicy extends Component {
             if (this.props.editAblePolicy.length) {
                 let editAblePolicy = this.props.editAblePolicy.find(item => item.id === this.props.editAblePolicyId)
 
-                this.props.push_apps.map((apk) => {
+                checkIsArray( this.props.push_apps).map((apk) => {
                     let index = editAblePolicy.push_apps.findIndex(app => app.apk_id === apk.apk_id)
                     if (index && index !== -1) {
 
@@ -312,7 +312,7 @@ class EditPolicy extends Component {
             let featuredApps = []
             let apps = []
             let allApks = []
-            data.map((item, index) => {
+            checkIsArray(data).map((item, index) => {
                 if (item.package_name === 'com.armorSec.android' || item.package_name === 'ca.unlimitedwireless.mailpgp' || item.package_name === 'com.rim.mobilefusion.client') {
                     featuredApps.push(item);
                     // allApks.splice(index, 1)
@@ -322,7 +322,7 @@ class EditPolicy extends Component {
             })
 
             allApks = [...featuredApps, ...apps]
-            return allApks.map(app => {
+            return checkIsArray(allApks).map(app => {
                 let app_id = (app.apk_id !== undefined) ? app.apk_id : app.id;
                 let label = (app.apk_name !== undefined) ? app.apk_name : app.label;
                 let icon = (app.logo !== undefined) ? app.logo : app.icon;
@@ -349,7 +349,7 @@ class EditPolicy extends Component {
         const { controls } = this.state.editAblePolicy;
 
         if (controls) {
-            return controls.map(control => {
+            return checkIsArray(controls).map(control => {
                 return {
                     rowKey: control.setting_name,
                     name: control.setting_name,
@@ -559,7 +559,7 @@ class EditPolicy extends Component {
                         <TabPane tab={convertToLang(this.props.translation[APPLICATION_PERMISION], "Application Permission")} key="2">
                             <AppList
                                 dataLength={this.state.editAblePolicy.app_list.length}
-                                apk_list={this.state.editAblePolicy.app_list.filter(item => item.uniqueName !== "com.android.settingsSettings")}
+                                apk_list={checkIsArray(this.state.editAblePolicy.app_list).filter(item => item.uniqueName !== "com.android.settingsSettings")}
                                 handleEditPolicy={this.props.handleEditPolicy}
                                 handleCheckAll={this.props.handleCheckAll}
                                 removeAppsFromPolicies={this.props.removeAppsFromPolicies}

@@ -43,7 +43,7 @@ class Support extends Component {
         <Select
           key="system_messages_key"
           className="support_sel_dd"
-          onChange={(e) => { this.refs.systemMessages.getWrappedInstance().filterMessages({ filter: e }) }}
+          onChange={(e) => { checkIsArray(this.refs.systemMessages.getWrappedInstance()).filterMessages({ filter: e }) }}
           defaultValue="all"
         >
           <Select.Option value="all">All</Select.Option>
@@ -57,7 +57,7 @@ class Support extends Component {
         key="systemMessagesSearch"
         placeholder="Search"
         style={{ width: '220px', marginRight: '6px', float: "right", backgroundColor: '#dedede' }}
-        onChange={(e) => { this.refs.systemMessages.getWrappedInstance().filterMessages({ searchText: e.target.value }) }}
+        onChange={(e) => { checkIsArray(this.refs.systemMessages.getWrappedInstance()).filterMessages({ searchText: e.target.value }) }}
       />
     </span>;
 
@@ -72,22 +72,22 @@ class Support extends Component {
       <Select
         key="support_tickets_key"
         className="support_sel_dd"
-        onChange={(e) => { this.refs.supportTickets.getWrappedInstance().filterTickets({ filter: e }); }}
+        onChange={(e) => { checkIsArray(this.refs.supportTickets.getWrappedInstance()).filterTickets({ filter: e }); }}
         defaultValue="all_all"
       >
         <Select.Option value="all_all">All</Select.Option>
         <Select.OptGroup label="Status">
-          {statuses.filter(status => status.title !== 'all').map((status, index) => {
+          {checkIsArray(statuses).filter(checkIsArray(status => status.title !== 'all')).map((status, index) => {
             return <Select.Option value={"status_" + status.title}>{status.title.charAt(0).toUpperCase() + status.title.substr(1)}</Select.Option>
           })}
         </Select.OptGroup>
         <Select.OptGroup label="Type">
-          {categories.filter(category => category.title !== 'all').map((category, index) => {
+          {checkIsArray(categories).filter(category => checkIsArray(category.title !== 'all')).map((category, index) => {
             return <Select.Option value={"type_" + category.title}>{category.title.charAt(0).toUpperCase() + category.title.substr(1)}</Select.Option>
           })}
         </Select.OptGroup>
         <Select.OptGroup label="Priority">
-          {priorities.filter(priority => priority.title !== 'all').map((priority, index) => {
+          {checkIsArray(priorities).filter(checkIsArray(priority => checkIsArray(priority.title !== 'all'))).map((priority, index) => {
             return <Select.Option value={"priority_" + priority.title}>{priority.title.charAt(0).toUpperCase() + priority.title.substr(1)}</Select.Option>
           })}
         </Select.OptGroup>
@@ -98,7 +98,7 @@ class Support extends Component {
         key="tokenSearch"
         placeholder="Search"
         style={{ width: '220px', marginRight: '6px', float: "right", backgroundColor: '#dedede' }}
-        onChange={(e) => { this.refs.supportTickets.getWrappedInstance().filterTickets({ searchTicket: e.target.value }) }}
+        onChange={(e) => { checkIsArray(this.refs.supportTickets.getWrappedInstance()).filterTickets({ searchTicket: e.target.value }) }}
       />
     </span>;
 
@@ -106,31 +106,31 @@ class Support extends Component {
     this.tabBarContent.bind(this);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     // if(!this.props.microServiceRunning){
     //   this.props.history.push('/invalid_page');
     // }
   }
 
-  componentDidUpdate(prevProps){
-    if(this.props !== prevProps){
+  componentDidUpdate(prevProps) {
+    if (this.props !== prevProps) {
       let supportPage = this.props.supportPage !== '' ? this.props.supportPage : '1';
-      this.setState({innerTabSelect: supportPage});
+      this.setState({ innerTabSelect: supportPage });
 
-      if(!this.props.microServiceRunning){
+      if (!this.props.microServiceRunning) {
         this.props.history.push('/invalid_page');
       }
     }
   }
 
-  componentWillReceiveProps(nextProps){
-    if(nextProps.microServiceRunning){
-      this.setState({microServiceRunning: nextProps.microServiceRunning});
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.microServiceRunning) {
+      this.setState({ microServiceRunning: nextProps.microServiceRunning });
     }
   }
 
-  componentWillUnmount(){
-    if(this.props.location && this.props.location.pathname && this.props.location.pathname !== '/support') {
+  componentWillUnmount() {
+    if (this.props.location && this.props.location.pathname && this.props.location.pathname !== '/support') {
       if (this.props.resetSupportPage) {
         this.props.resetSupportPage();
       }
@@ -140,7 +140,7 @@ class Support extends Component {
       if (this.props.resetCurrentSystemMessageId) {
         this.props.resetCurrentSystemMessageId();
       }
-      if(this.props.resetCurrentConversation){
+      if (this.props.resetCurrentConversation) {
         this.props.resetCurrentConversation();
       }
     }
@@ -177,10 +177,10 @@ class Support extends Component {
         this.refs.supportTickets.getWrappedInstance().deSelectMail();
       }
     }
-    if(value !== '3'){
+    if (value !== '3') {
       this.props.resetCurrentConversation();
     }
-    if(value !== '1'){
+    if (value !== '1') {
       this.props.resetCurrentSystemMessageId();
     }
   };

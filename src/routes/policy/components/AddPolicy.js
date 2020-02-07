@@ -244,7 +244,7 @@ class AddPolicy extends Component {
 
         if (this.state.systemPermissions) {
 
-            return this.state.systemPermissions.map(sysPermission => {
+            return checkIsArray(this.state.systemPermissions).map(sysPermission => {
                 return {
                     rowKey: sysPermission.setting_name,
                     name: sysPermission.setting_name,

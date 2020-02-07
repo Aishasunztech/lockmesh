@@ -3,36 +3,36 @@ import { connect } from 'react-redux';
 import UserCell from "./UserCell/index";
 
 class ChatUserList extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       typing: props.typing
     };
   }
 
-  componentDidUpdate(prevProps){
-    if(this.props !== prevProps){
+  componentDidUpdate(prevProps) {
+    if (this.props !== prevProps) {
       this.setState({
         typing: this.props.typing
       });
     }
   }
 
-  render(){
-    const {chatUsers, selectedSectionId, onSelectUser, notifications, messages } = this.props;
+  render() {
+    const { chatUsers, selectedSectionId, onSelectUser, notifications, messages } = this.props;
     return (
       <div className="gx-chat-user">
-        {chatUsers.map((chat, index) => {
+        {checkIsArray(chatUsers).map((chat, index) => {
           let noOfReceivedMessages = 0;
-          notifications.map(noti => {
-            if(noti.sender === chat.user.dealer_id){
+          checkIsArray(notifications).map(noti => {
+            if (noti.sender === chat.user.dealer_id) {
               noOfReceivedMessages = noti.noOfUnreadMessages;
             }
           });
-          let msgs = messages.filter(msg => msg.conversation_id === chat._id);
-            return <UserCell key={index} noOfReceivedMessages={noOfReceivedMessages} msgs={msgs} chat={chat} conversation={chat._id} typing={this.state.typing}
-                      selectedSectionId={selectedSectionId} onSelectUser={onSelectUser}/>
-          }
+          let msgs = checkIsArray(messages).filter(msg => msg.conversation_id === chat._id);
+          return <UserCell key={index} noOfReceivedMessages={noOfReceivedMessages} msgs={msgs} chat={chat} conversation={chat._id} typing={this.state.typing}
+            selectedSectionId={selectedSectionId} onSelectUser={onSelectUser} />
+        }
         )}
       </div>
     )

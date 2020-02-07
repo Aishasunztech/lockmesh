@@ -133,7 +133,7 @@ export function getDealerStatus(unlink_status, account_status) {
 export function componentSearch(arr, search) {
 	let foundDevices = [];
 	let obks = Object.keys(arr[0]);
-	arr.map((el) => {
+	checkIsArray(arr).map((el) => {
 		obks.some((obk) => {
 			if (obk) {
 				let temp = el[obk];
@@ -155,7 +155,7 @@ export function componentSearch(arr, search) {
 export function componentSearchSystemMessages(arr, keys, search) {
 	let foundDevices = [];
 	let obks = keys;
-	arr.map((el) => {
+	checkIsArray(arr).map((el) => {
 		obks.some((obk) => {
 			if (obk) {
 				let temp = el[obk];
@@ -233,10 +233,10 @@ export function initCap(str) {
 }
 export function titleCase(str) {
 	var wordsArray = str.toLowerCase().split(/\s+/);
-	var upperCased = wordsArray.map(function (word) {
+	var upperCased = checkIsArray(wordsArray).map(function (word) {
 		var dashWords = word.split("-");
 		if (dashWords.length > 1) {
-			return dashWords.map((dWord, index) => {
+			return checkIsArray(dashWords).map((dWord, index) => {
 				var char = (++index !== dashWords.length) ? "-" : "";
 				return dWord.charAt(0).toUpperCase() + dWord.substr(1) + char;
 			})
@@ -303,7 +303,7 @@ export function getDevicesListActionBtns(user, device, status, allButtons) {
 	else if (device.flagged !== 'Not flagged' && device.transfer_status === 0 && status === "Flagged") {
 		actionBtns.push(<Fragment><Fragment>{allButtons.Unflagbtn}</Fragment><Fragment>{allButtons.ConnectBtn}</Fragment></Fragment>)
 	}
-	else if (device.flagged !== 'Not flagged' && device.transfer_status === 1 && status === "Transfered") {
+	else if (device.flagged !== 'Not flagged' && device.transfer_status === 1 && status === "Transferred") {
 		actionBtns.push(<Fragment><Fragment>{allButtons.Unflagbtn}</Fragment><Fragment>{allButtons.ConnectBtn}</Fragment></Fragment>)
 	}
 	else if (status === DEVICE_SUSPENDED) {
@@ -792,7 +792,7 @@ export function findAndRemove_duplicate_in_array(arra1) {
 		}
 	}
 
-	let removeDuplicateIds = arra1.filter((item) => !duplicateIds.includes(item));
+	let removeDuplicateIds = checkIsArray(arra1).filter((item) => !duplicateIds.includes(item));
 	return ([...removeDuplicateIds, ...duplicateIds]);
 
 }
@@ -983,7 +983,7 @@ export function formatMoney(amount, decimalCount = 2, decimal = ".", thousands =
  */
 
 export function removeColumns(columnList, removeIndexes) {
-	return columnList.filter((column) => {
+	return checkIsArray(columnList).filter((column) => {
 		for (let i = 0; i < removeIndexes.length; i++) {
 			if (column.dataIndex !== removeIndexes[i]) {
 				return column;

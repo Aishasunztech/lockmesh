@@ -101,13 +101,13 @@ class RightSidebar extends Component {
     let taskList = [];
 
     if (data.length) {
-      data.map((item, index) => {
+      checkIsArray(data).map((item, index) => {
         // if (item.status === type) {
         taskList.push(item);
         // }
       })
     }
-    return taskList.map((task) => {
+    return checkIsArray(taskList).map((task) => {
       let color = '';
       let status = '';
       switch (task.status) {

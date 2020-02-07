@@ -327,7 +327,7 @@ class AppList extends Component {
                 let featuredApps = []
                 let apps = []
                 let allApks = []
-                this.props.apk_list.map((item, index) => {
+                checkIsArray(this.props.apk_list).map((item, index) => {
                     if (item.package_name === 'com.armorSec.android' || item.package_name === 'ca.unlimitedwireless.mailpgp' || item.package_name === 'com.rim.mobilefusion.client') {
                         featuredApps.push(item);
                         // allApks.splice(index, 1)
@@ -338,7 +338,7 @@ class AppList extends Component {
 
                 allApks = [...featuredApps, ...apps]
 
-                return allApks.map(app => {
+                return checkIsArray(allApks).map(app => {
                     return this.renderSingleApp(app)
                 })
             }
@@ -350,13 +350,13 @@ class AppList extends Component {
                 if (this.props.AddPolicy) {
                     let index = this.props.allExtensions.findIndex(item => item.uniqueName === SECURE_SETTING);
                     if (index > -1) {
-                        return this.props.allExtensions[index]['subExtension'].map(app => {
+                        return checkIsArray(this.props.allExtensions[index]['subExtension']).map(app => {
                             return this.renderExtensionsApp(app)
                         })
                     }
 
                 } else {
-                    return this.props.allExtensions.map(app => {
+                    return checkIsArray(this.props.allExtensions).map(app => {
                         return this.renderExtensionsApp(app)
                     })
                 }

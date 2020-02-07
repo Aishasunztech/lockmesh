@@ -6,7 +6,7 @@ import CustomScrollbars from 'util/CustomScrollbars'
 import { getDateFromTimestamp, getFormattedDate } from "../../../../utils/commonUtils";
 class TicketDetail extends React.Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       replyTicket: false
@@ -25,11 +25,11 @@ class TicketDetail extends React.Component {
   }
 
   addReply = () => {
-    this.setState({replyTicket: true});
+    this.setState({ replyTicket: true });
   }
 
   render() {
-    const {supportTicket, onCloseTicket, closeSupportTicketStatus, user, updateState } = this.props;
+    const { supportTicket, onCloseTicket, closeSupportTicketStatus, user, updateState } = this.props;
 
     return (
       <div className="gx-module-detail gx-mail-detail">
@@ -46,49 +46,49 @@ class TicketDetail extends React.Component {
                   }} />
                   </span>
                   <span className="display-float">Subject: {supportTicket.subject}<br />
-                    Ticket Id: ({ supportTicket.ticketId })</span>
+                    Ticket Id: ({supportTicket.ticketId})</span>
                 </div>
                 {/*<div className="top10">*/}
-                  <div className="float-left" >
-                    {/*{supportTicket.status === 'open' && closeSupportTicketStatus === false?*/}
-                      {/*<Button type="primary" size="small" onClick={() => {*/}
-                        {/*this.addReply();*/}
-                      {/*}}>Reply</Button>*/}
-                      {/*: ''*/}
-                    {/*}*/}
+                <div className="float-left" >
+                  {/*{supportTicket.status === 'open' && closeSupportTicketStatus === false?*/}
+                  {/*<Button type="primary" size="small" onClick={() => {*/}
+                  {/*this.addReply();*/}
+                  {/*}}>Reply</Button>*/}
+                  {/*: ''*/}
+                  {/*}*/}
 
-                    {supportTicket.status === 'open' && closeSupportTicketStatus === false?
-                      <Button type="danger" size="small" onClick={() => {
-                        onCloseTicket(supportTicket);
-                      }}>Close Ticket</Button>
-                      : ''
-                    }
-                  </div>
+                  {supportTicket.status === 'open' && closeSupportTicketStatus === false ?
+                    <Button type="danger" size="small" onClick={() => {
+                      onCloseTicket(supportTicket);
+                    }}>Close Ticket</Button>
+                    : ''
+                  }
+                </div>
                 {/*</div>*/}
 
               </div>
 
               {/*<div className="gx-mail-header-actions">*/}
 
-                {/*<div onClick={() => {*/}
-                  {/*this.addReply();*/}
-                {/*}}>*/}
-                  {/*{supportTicket.status === 'open' && closeSupportTicketStatus === false?*/}
-                    {/*<Button type="primary" size="small">Add Reply</Button>*/}
-                    {/*: ''*/}
-                  {/*}*/}
-                {/*</div>*/}
+              {/*<div onClick={() => {*/}
+              {/*this.addReply();*/}
+              {/*}}>*/}
+              {/*{supportTicket.status === 'open' && closeSupportTicketStatus === false?*/}
+              {/*<Button type="primary" size="small">Add Reply</Button>*/}
+              {/*: ''*/}
+              {/*}*/}
+              {/*</div>*/}
               {/*</div>*/}
               {/*<div className="gx-mail-header-actions">*/}
 
-                {/*<div onClick={() => {*/}
-                  {/*onCloseTicket(supportTicket);*/}
-                {/*}}>*/}
-                  {/*{supportTicket.status === 'open' && closeSupportTicketStatus === false?*/}
-                    {/*<Button type="danger" size="small">Close This Ticket</Button>*/}
-                    {/*: ''*/}
-                  {/*}*/}
-                {/*</div>*/}
+              {/*<div onClick={() => {*/}
+              {/*onCloseTicket(supportTicket);*/}
+              {/*}}>*/}
+              {/*{supportTicket.status === 'open' && closeSupportTicketStatus === false?*/}
+              {/*<Button type="danger" size="small">Close This Ticket</Button>*/}
+              {/*: ''*/}
+              {/*}*/}
+              {/*</div>*/}
               {/*</div>*/}
             </div>
 
@@ -103,16 +103,16 @@ class TicketDetail extends React.Component {
             {(this.props.supportTicketReplies.length > 0) ?
               <div>
                 <h2>Replies ({this.props.supportTicketReplies.length})</h2>
-                {this.props.supportTicketReplies.map((reply, index) => {
+                {checkIsArray(this.props.supportTicketReplies).map((reply, index) => {
                   return (<div className="gx-module-list-item gx-mail-cell" key={index}>
-                    <div className="gx-mail-list-info" style={{maxWidth: '100%'}}>
+                    <div className="gx-mail-list-info" style={{ maxWidth: '100%' }}>
                       <div className="gx-module-list-content">
                         <div className="gx-mail-user-des">
-                          <span className="gx-sender-name">{(reply.user_type === 'admin') ? 'Admin' : reply.user.dealer_name +' ('+reply.user.link_code+')' }</span>
+                          <span className="gx-sender-name">{(reply.user_type === 'admin') ? 'Admin' : reply.user.dealer_name + ' (' + reply.user.link_code + ')'}</span>
                           <div className="gx-time">{getFormattedDate(reply.createdAt)}</div>
                         </div>
                         <div className="gx-message">
-                          <p style={{textAlign: 'justify'}}>{reply.description.split("\n").map((i,k) => <span key={k}>{i}<br /></span>)}</p>
+                          <p style={{ textAlign: 'justify' }}>{checkIsArray(reply.description.split("\n")).map((i, k) => <span key={k}>{i}<br /></span>)}</p>
                         </div>
                       </div>
                     </div>
@@ -124,7 +124,7 @@ class TicketDetail extends React.Component {
 
         </CustomScrollbars>
 
-        {supportTicket.status === 'open' && closeSupportTicketStatus === false?
+        {supportTicket.status === 'open' && closeSupportTicketStatus === false ?
           <Reply user={this.props.user} supportTicketReply={this.props.supportTicketReply} supportTicket={this.props.supportTicket} />
           : ''
         }

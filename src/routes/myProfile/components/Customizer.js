@@ -165,7 +165,7 @@ class Customizer extends Component {
   };
 
   getCustomizerContent = () => {
-    const colorPickers = Object.keys(this.state.vars).map(varName => this.getColorPicker(varName));
+    const colorPickers = Object.keys(checkIsArray(this.state.vars)).map(varName => this.getColorPicker(varName));
     const { themeType, layoutType, navStyle, colorSelection } = this.props;
 
     if (themeType === THEME_TYPE_DARK) {
@@ -350,7 +350,7 @@ class Customizer extends Component {
           <img src={require('assets/images/layouts/vertical no header.png')} alt='vertical no header' />
         </span>
       </li>
-      
+
     </ul>
   };
 

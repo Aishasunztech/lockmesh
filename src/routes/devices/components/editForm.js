@@ -1384,7 +1384,7 @@ class EditDevice extends Component {
                                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                             disabled={this.state.disableChat}
                                         >
-                                            {this.props.chat_ids.map((chat_id, index) => {
+                                            {checkIsArray(this.props.chat_ids).map((chat_id, index) => {
                                                 return (<Select.Option key={index} value={chat_id.chat_id}>{chat_id.chat_id}</Select.Option>)
                                             })}
                                         </Select>

@@ -115,7 +115,7 @@ export default class ListDomain extends Component {
         // console.log("renderList: ", list);
         let domainList = [];
         let data
-        list.map((app) => {
+        checkIsArray(list).map((app) => {
             // let parseDealers = JSON.parse(app.dealers);
 
             data = {
@@ -138,7 +138,7 @@ export default class ListDomain extends Component {
                 statusAll: app.statusAll,
                 name: app.name ? app.name : 'N/A',
                 dealer_type: app.dealer_type,
-                
+
                 created_at: app.created_at,
                 updated_at: app.updated_at
             }

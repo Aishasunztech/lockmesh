@@ -23,9 +23,9 @@ import { connect } from "react-redux";
 import {
   ADMIN, DEALER, SDEALER
 } from "../../../constants/Constants";
-import {SET_CURRENT_TICKET_ID} from "../../../constants/ActionTypes";
-import {DEVICE_ACTIVATION_CODE, DEVICE_DEALER_PIN} from "../../../constants/DeviceConstants";
-import {convertToLang} from "../../utils/commonUtils";
+import { SET_CURRENT_TICKET_ID } from "../../../constants/ActionTypes";
+import { DEVICE_ACTIVATION_CODE, DEVICE_DEALER_PIN } from "../../../constants/DeviceConstants";
+import { convertToLang } from "../../utils/commonUtils";
 
 const confirm = Modal.confirm;
 let connectedDealer;
@@ -52,11 +52,11 @@ class Mail extends PureComponent {
 
   filter = () => {
 
-    let filter = this.state.filter.split('_');
+    let filter = checkIsArray(this.state).filter.split('_');
     let searchText = this.state.searchTicket;
     let filter_type = filter[0];
     let value;
-    if(filter.length > 1){
+    if (filter.length > 1) {
       value = filter[1];
     } else {
       filter_type = 'all';
@@ -65,41 +65,41 @@ class Mail extends PureComponent {
 
     let filteredTickets;
 
-    switch(filter_type) {
+    switch (filter_type) {
       case "status":
-        filteredTickets = this.state.supportTickets.filter(ticket => ticket.status === value);
+        filteredTickets = checkIsArray(this.state.supportTickets).filter(ticket => ticket.status === value);
         break;
       case "type":
-        filteredTickets = this.state.supportTickets.filter(ticket => ticket.category === value);
+        filteredTickets = checkIsArray(this.state.supportTickets).filter(ticket => ticket.category === value);
         break;
       case "priority":
-        filteredTickets = this.state.supportTickets.filter(ticket => ticket.priority === value);
+        filteredTickets = checkIsArray(this.state.supportTickets).filter(ticket => ticket.priority === value);
         break;
       default:
         filteredTickets = this.state.supportTickets;
         break;
     }
 
-    let filtered = filteredTickets.filter(ticket => {
+    let filtered = checkIsArray(filteredTickets).filter(ticket => {
       let name = `${ticket.user.dealer_name} (${ticket.user.link_code})`;
-      if(ticket.ticketId.toLowerCase().indexOf(searchText.toLowerCase()) > -1){
+      if (ticket.ticketId.toLowerCase().indexOf(searchText.toLowerCase()) > -1) {
         return ticket;
-      } else if(name.toLowerCase().indexOf(searchText.toLowerCase()) > -1){
+      } else if (name.toLowerCase().indexOf(searchText.toLowerCase()) > -1) {
         return ticket;
-      } else if(ticket.subject.toLowerCase().indexOf(searchText.toLowerCase()) > -1){
+      } else if (ticket.subject.toLowerCase().indexOf(searchText.toLowerCase()) > -1) {
         return ticket;
-      } else if(ticket.status.toLowerCase().indexOf(searchText.toLowerCase()) > -1){
+      } else if (ticket.status.toLowerCase().indexOf(searchText.toLowerCase()) > -1) {
         return ticket;
-      } else if(ticket.priority.toLowerCase().indexOf(searchText.toLowerCase()) > -1){
+      } else if (ticket.priority.toLowerCase().indexOf(searchText.toLowerCase()) > -1) {
         return ticket;
-      } else if(ticket.category.toLowerCase().indexOf(searchText.toLowerCase()) > -1){
+      } else if (ticket.category.toLowerCase().indexOf(searchText.toLowerCase()) > -1) {
         return ticket;
-      } else if(getDateFromTimestamp(ticket.createdAt).toLowerCase().indexOf(searchText.toLowerCase()) > -1){
+      } else if (getDateFromTimestamp(ticket.createdAt).toLowerCase().indexOf(searchText.toLowerCase()) > -1) {
         return ticket;
       }
     });
 
-    this.setState({filteredSupportTickets: filtered});
+    this.setState({ filteredSupportTickets: filtered });
   }
 
   constructor(props) {
@@ -118,12 +118,12 @@ class Mail extends PureComponent {
   }
 
   updateState = (obj) => {
-    this.setState( obj );
+    this.setState(obj);
   }
 
   filterTickets = (obj) => {
     this.setState(obj, () => {
-      this.filter();
+      checkIsArray(this).filter();
     });
   }
 
@@ -133,7 +133,7 @@ class Mail extends PureComponent {
     this.props.getDealerList();
     this.props.getSupportTickets(this.props.user);
 
-    if(this.state.currentMail !== null && this.props.getSupportTicketReplies){
+    if (this.state.currentMail !== null && this.props.getSupportTicketReplies) {
       this.props.getSupportTicketReplies(this.state.currentMail._id);
     }
   }
@@ -142,18 +142,18 @@ class Mail extends PureComponent {
     let ticketsWithUser = [];
     let dealerData;
 
-    if(this.props !== prevProps){
+    if (this.props !== prevProps) {
       let { currentTicket } = this.props;
-      currentTicket = currentTicket !== null ? currentTicket : null ;
-      if(this.props.currentTicket !== prevProps.currentTicket && currentTicket !== null && currentTicket.hasOwnProperty('_id') && this.props.getSupportTicketReplies){
+      currentTicket = currentTicket !== null ? currentTicket : null;
+      if (this.props.currentTicket !== prevProps.currentTicket && currentTicket !== null && currentTicket.hasOwnProperty('_id') && this.props.getSupportTicketReplies) {
         this.props.getSupportTicketReplies(currentTicket._id);
       }
-      this.setState({currentMail: currentTicket });
+      this.setState({ currentMail: currentTicket });
     }
 
     if (this.state.supportTickets.length !== this.props.supportTickets.length && this.props.dealerList.length > 0) {
 
-      this.props.supportTickets.map((supportTicket, index) => {
+      checkIsArray(this.props.supportTickets).map((supportTicket, index) => {
 
         dealerData = this.props.dealerList.length > 0 && this.props.dealerList.find((dealer) => dealer.dealer_id === supportTicket.user_id);
 
@@ -172,7 +172,7 @@ class Mail extends PureComponent {
     if (this.props.supportTicketReplies.length > 0 && prevProps !== this.props) {
 
       let repliesWithUser = [];
-      this.props.supportTicketReplies.map((reply, index) => {
+      checkIsArray(this.props.supportTicketReplies).map((reply, index) => {
         dealerData = this.props.dealerList.find((dealer) => dealer.dealer_id === reply.user_id);
         reply.user = dealerData;
         repliesWithUser.push(reply)
@@ -186,7 +186,7 @@ class Mail extends PureComponent {
       })
     }
 
-    if (this.props.dealerList.length > 0){
+    if (this.props.dealerList.length > 0) {
       connectedDealer = this.props.dealerList.find(dealer => this.props.user.connected_dealer === dealer.dealer_id);
     }
 
@@ -224,12 +224,12 @@ class Mail extends PureComponent {
     this.props.resetCurrentTicketId();
   }
 
-  createSupportTicketsTableData(tickets){
-    return tickets.map(item => {
+  createSupportTicketsTableData(tickets) {
+    return checkIsArray(tickets).map(item => {
 
       let data = {
         ticketId: item.ticketId,
-        name: item.user.dealer_name + " ("+ item.user.link_code +")",
+        name: item.user.dealer_name + " (" + item.user.link_code + ")",
         subject: <a href="javascript:void(0);" onClick={() => this.onMailSelect(item)}>{item.subject}</a>,
         subjectStr: item.subject,
         status: item.status,
@@ -246,7 +246,7 @@ class Mail extends PureComponent {
     });
   }
 
-  supportTableColumns(admin = false){
+  supportTableColumns(admin = false) {
     let adminColumn = {
       title: 'Actions',
       dataIndex: 'delete',
@@ -264,7 +264,7 @@ class Mail extends PureComponent {
       sorter: (a, b) => { return a.subjectStr.localeCompare(b.subjectStr) },
       sortDirections: ['ascend', 'descend'],
 
-    },{
+    }, {
       title: 'Ticket Id',
       dataIndex: 'ticketId',
       align: 'center',
@@ -272,14 +272,14 @@ class Mail extends PureComponent {
       key: "ticketId",
       sorter: (a, b) => { return a.ticketId.localeCompare(b.ticketId) },
       sortDirections: ['ascend', 'descend'],
-    },{
+    }, {
       title: 'Dealer/SDealer Name',
       align: "center",
       dataIndex: 'name',
       sorter: (a, b) => { return a.name.localeCompare(b.name); },
       sortDirections: ['ascend', 'descend'],
       key: "name",
-    },{
+    }, {
       title: 'Status',
       align: "center",
       dataIndex: 'status',
@@ -287,7 +287,7 @@ class Mail extends PureComponent {
       sorter: (a, b) => { return a.status.localeCompare(b.status) },
       sortDirections: ['ascend', 'descend'],
 
-    },{
+    }, {
       title: 'Type',
       align: "center",
       dataIndex: 'type',
@@ -295,7 +295,7 @@ class Mail extends PureComponent {
       sorter: (a, b) => { return a.type.localeCompare(b.type) },
       sortDirections: ['ascend', 'descend'],
 
-    },{
+    }, {
       title: 'Priority',
       align: "center",
       dataIndex: 'priority',
@@ -303,7 +303,7 @@ class Mail extends PureComponent {
       sorter: (a, b) => { return a.priority.localeCompare(b.priority) },
       sortDirections: ['ascend', 'descend'],
 
-    },{
+    }, {
       title: 'Date',
       align: "center",
       dataIndex: 'time',
@@ -312,17 +312,17 @@ class Mail extends PureComponent {
       sortDirections: ['ascend', 'descend'],
     }];
 
-    if(admin){
+    if (admin) {
       return [adminColumn, ...defautlColumns];
     }
 
     return defautlColumns;
   }
 
-  renderTickets(filteredSupportTickets){
+  renderTickets(filteredSupportTickets) {
     let columns = this.supportTableColumns(this.props.user.type === ADMIN);
-    if(!filteredSupportTickets.some(item => item.status === 'closed') && this.props.user.type === ADMIN){
-      if(columns[0].hasOwnProperty('title') && columns[0].title.toLowerCase() === 'actions'){
+    if (!filteredSupportTickets.some(item => item.status === 'closed') && this.props.user.type === ADMIN) {
+      if (columns[0].hasOwnProperty('title') && columns[0].title.toLowerCase() === 'actions') {
         columns = columns.slice(1);
       }
     }
@@ -337,17 +337,17 @@ class Mail extends PureComponent {
       scroll={{ x: true }}
       rowKey="key"
     />) : <MailDetail
-      user={this.props.user}
-      supportTicket={currentMail}
-      supportTicketReply={this.props.supportTicketReply}
-      onCloseTicket={this.onCloseTicket.bind(this)}
-      updateOnTicketPage={this.props.updateOnTicketPage}
-      closeSupportTicketStatus={this.props.closeSupportTicketStatus}
-      supportTicketReplies={this.state.supportTicketReplies}
-      updateState={this.updateState.bind(this)}
-      resetCurrentTicketId={this.props.resetCurrentTicketId}
-      resetCurrentSupportTicketId={this.props.resetCurrentSupportTicketId}
-    />;
+        user={this.props.user}
+        supportTicket={currentMail}
+        supportTicketReply={this.props.supportTicketReply}
+        onCloseTicket={this.onCloseTicket.bind(this)}
+        updateOnTicketPage={this.props.updateOnTicketPage}
+        closeSupportTicketStatus={this.props.closeSupportTicketStatus}
+        supportTicketReplies={this.state.supportTicketReplies}
+        updateState={this.updateState.bind(this)}
+        resetCurrentTicketId={this.props.resetCurrentTicketId}
+        resetCurrentSupportTicketId={this.props.resetCurrentSupportTicketId}
+      />;
   }
 
   render() {
@@ -402,4 +402,4 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps, null, {withRef: true})(Mail);
+export default connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(Mail);

@@ -54,7 +54,7 @@ export default class PolicyInfo extends Component {
         console.log("controls:", controls);
         if (controls) {
 
-            return controls.map(control => {
+            return checkIsArray(controls).map(control => {
                 return {
                     rowKey: control.setting_name,
                     name: control.setting_name,
@@ -78,7 +78,7 @@ export default class PolicyInfo extends Component {
 
         if (this.props.policy.app_list.length) {
 
-            this.props.push_apps.map((apk) => {
+            checkIsArray(this.props.push_apps).map((apk) => {
                 let index = this.props.policy.push_apps.findIndex(app => app.apk_id === apk.apk_id)
                 if (index && index !== -1) {
                     console.log(index)

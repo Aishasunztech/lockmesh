@@ -125,7 +125,7 @@ class PolicyList extends Component {
 
     renderList(list) {
 
-        return list.map((policy, index) => {
+        return checkIsArray(list).map((policy, index) => {
             // console.log("policy ", policy)
             return {
                 key: policy.id,
@@ -264,7 +264,7 @@ class PolicyList extends Component {
     }
 
     componentDidMount() {
-        this.props.policies.map((policy, index) => {
+        checkIsArray(this.props.policies).map((policy, index) => {
             this.state.expandTabSelected[index] = '1';
             // this.state.expandedByCustom[index] = false;
         });
@@ -281,7 +281,7 @@ class PolicyList extends Component {
 
     componentWillReceiveProps(preProps) {
         if (preProps.policies.length !== this.props.policies.length) {
-            this.props.policies.map((policy, index) => {
+            checkIsArray(this.props.policies).map((policy, index) => {
                 this.state.expandTabSelected[index] = '1';
                 // this.state.expandedByCustom[index] = false
             });

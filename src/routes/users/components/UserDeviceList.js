@@ -245,7 +245,7 @@ class UserDeviceList extends Component {
     }
 
     renderDevices(list) {
-        return list.map((device, index) => {
+        return checkIsArray(list).map((device, index) => {
             var status = device.finalStatus;
             const button_type = (status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ? "danger" : "dashed";
             let color = getColor(status);

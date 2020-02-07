@@ -15,7 +15,7 @@ const MailListItem = ({ supportTicket, onMailSelect, onMailChecked, user }) => {
         let element = /excludeCheckBoxClickOnMainRow/.test(e.target.classList.value);
         let directParent = /excludeCheckBoxClickOnMainRow/.test(e.target.parentNode.classList.value);
         let directdirectParent = /excludeCheckBoxClickOnMainRow/.test(e.target.parentNode.parentNode.classList.value);
-        if(element || directParent || directdirectParent){
+        if (element || directParent || directdirectParent) {
         } else {
           onMailSelect(supportTicket);
         }
@@ -28,20 +28,20 @@ const MailListItem = ({ supportTicket, onMailSelect, onMailChecked, user }) => {
                   {(user.type === ADMIN && supportTicket.status === 'closed') ?
                     <Checkbox color="primary" className="gx-icon-btn selectCheckBox"
 
-                              onClick={(event) => {
-                                event.stopPropagation();
-                                onMailChecked(supportTicket)
-                              }}
-                              value="SelectMail"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        onMailChecked(supportTicket)
+                      }}
+                      value="SelectMail"
                     />
                     :
                     <Checkbox color="primary" className="gx-icon-btn selectCheckBox" disabled={true} style={{ visibility: 'hidden' }}
 
-                              onClick={(event) => {
-                                event.stopPropagation();
-                                onMailChecked(supportTicket)
-                              }}
-                              value="SelectMail"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        onMailChecked(supportTicket)
+                      }}
+                      value="SelectMail"
                     />
                   }
                 </div>
@@ -57,7 +57,7 @@ const MailListItem = ({ supportTicket, onMailSelect, onMailChecked, user }) => {
               </Col>
               <Col span="2">
                 <span className="gx-labels">
-                  {statuses.map((status, index) => {
+                  {checkIsArray(statuses).map((status, index) => {
                     return (supportTicket.status).includes(status.title) &&
                       <div key={index} className={`gx-badge gx-text-white gx-bg-${status.title === 'open' ? 'green' : 'red'} text-capitalize`}>{status.title}</div>
                   })}
@@ -65,7 +65,7 @@ const MailListItem = ({ supportTicket, onMailSelect, onMailChecked, user }) => {
               </Col>
               <Col span="2">
                 <span className="gx-labels">
-                  {categories.map((category, index) => {
+                  {checkIsArray(categories).map((category, index) => {
                     return (supportTicket.category).includes(category.title) &&
                       <div key={index} className={`gx-badge gx-text-white gx-bg-blue text-capitalize`}>{category.title}</div>
                   })}
@@ -73,7 +73,7 @@ const MailListItem = ({ supportTicket, onMailSelect, onMailChecked, user }) => {
               </Col>
               <Col span="2">
                 <span className="gx-labels">
-                  {priorities.map((priority, index) => {
+                  {checkIsArray(priorities).map((priority, index) => {
                     return (supportTicket.priority).includes(priority.title) &&
                       <div key={index} className={`gx-badge gx-text-white gx-bg-purple text-capitalize`}>{priority.title}</div>
                   })}

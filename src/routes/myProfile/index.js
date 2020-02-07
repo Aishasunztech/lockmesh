@@ -142,7 +142,7 @@ class Profile extends Component {
     }
 
     renderList = (history) => {
-        let data = history.map((data, index) => {
+        let data = checkIsArray(history).map((data, index) => {
             if (data.ip_address.substr(0, 7) === "::ffff:") {
                 data.ip_address = data.ip_address.substr(7)
             }

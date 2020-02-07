@@ -96,7 +96,7 @@ export default class ChangeTimeZone extends Component {
                         placeholder={convertToLang(this.props.translation[""], "Select Timezone...")}
                         onChange={this.handleTimezone}
                     >
-                        {tz_data.map(item => <Select.Option key={item.zoneName} value={item.zoneName} >{`${item.tzOffset} ${item.zoneName}`}</Select.Option>)}
+                        {checkIsArray(tz_data).map(item => <Select.Option key={item.zoneName} value={item.zoneName} >{`${item.tzOffset} ${item.zoneName}`}</Select.Option>)}
                     </Select>
                 </Modal>
             </div>
