@@ -1,5 +1,5 @@
 import {
-    INVALID_TOKEN, STAND_ALONE_LIST,
+    INVALID_TOKEN, STAND_ALONE_LIST, CHANGE_SIM_STATUS
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -34,12 +34,11 @@ export function changeSimStatus(id, type) {
             // console.log(response.data);
             if (RestService.checkAuth(response.data)) {
                 // console.log(response.data)
-                if (response.data.status) {
-                    dispatch({
-                        type: STAND_ALONE_LIST,
-                        payload: response.data.data,
-                    });
-                }
+                dispatch({
+                    type: CHANGE_SIM_STATUS,
+                    payload: response.data,
+                    data: { id, type }
+                });
             } else {
                 dispatch({
                     type: INVALID_TOKEN

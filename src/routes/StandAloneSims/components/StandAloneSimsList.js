@@ -71,9 +71,9 @@ class SimList extends Component {
                                         type="danger"
                                         size="small"
                                         style={{ textTransform: 'uppercase' }}
-                                        onClick={() => { this.changeSimStatus(sim, 'disable') }}
+                                        onClick={() => { this.changeSimStatus(sim, 'suspend') }}
                                     >
-                                        {convertToLang(this.props.translation[""], "DISABLE")}
+                                        {convertToLang(this.props.translation[""], "SUSPEND")}
                                     </Button>
                                     :
                                     <Button
@@ -98,7 +98,7 @@ class SimList extends Component {
                         </Fragment>
                     ,
                     device_id: sim.device_id ? sim.device_id : 'N/A',
-                    status: sim.sim_status === 'active' ? 'ACTIVE' : 'DISABLED',
+                    status: sim.sim_status == 'active' ? 'ACTIVE' : 'SUSPENDED',
                     sim_iccid: sim.sim_id,
                     term: sim.term ? sim.term : 'N/A',
                     start_date: sim.start_date ? sim.start_date : 'N/A',

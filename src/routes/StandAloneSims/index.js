@@ -57,7 +57,7 @@ class StandAloneSims extends Component {
                 updateState.columns = StandAloneSimsColumns(this.props.translation, this.handleSearch)
             }
             // console.log(this.props.simsList.length, prevProps.simsList.length);
-            if (this.props.simsList.length !== prevProps.simsList.length) {
+            if (this.props.simsList !== prevProps.simsList) {
                 updateState.simsList = this.props.simsList
             }
             this.setState(updateState)
