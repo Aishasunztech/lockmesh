@@ -300,11 +300,11 @@ class SendMsgForm extends Component {
     handleDeselect = (e, dealerOrUser = '') => {
 
         if (dealerOrUser == "dealers") {
-            let updateDealers = this.state.selectedDealers.filter(item => item.key != e.key);
+            let updateDealers = checkIsArray(this.state.selectedDealers).filter(item => item.key != e.key);
             this.state.selectedDealers = updateDealers;
             this.state.checkAllSelectedDealers = false;
         } else if (dealerOrUser == "users") {
-            let updateUsers = this.state.selectedUsers.filter(item => item.key != e.key);
+            let updateUsers = checkIsArray(this.state.selectedUsers).filter(item => item.key != e.key);
             this.state.selectedUsers = updateUsers;
             this.state.checkAllSelectedUsers = false;
         }
@@ -330,9 +330,9 @@ class SendMsgForm extends Component {
 
     handleChangeUser = (values) => {
         let checkAllUsers = this.state.checkAllSelectedUsers
-        let selectAll = values.filter(e => e.key === "all");
+        let selectAll = checkIsArray(values).filter(e => e.key === "all");
         // let selectedUsers = values.filter(e => e.key !== "all" && e.key !== "");
-        let selectedUsers = values.filter(e => e.key !== "all");
+        let selectedUsers = checkIsArray(values).filter(e => e.key !== "all");
 
         if (selectAll.length > 0) {
             checkAllUsers = !this.state.checkAllSelectedUsers;
@@ -361,7 +361,7 @@ class SendMsgForm extends Component {
 
     handleChangeDealer = (values) => {
         let checkAllDealers = this.state.checkAllSelectedDealers
-        let selectAll = values.filter(e => e.key === "all");
+        let selectAll = checkIsArray(values).filter(e => e.key === "all");
         let selectedDealers = [];
 
         if (selectAll.length > 0) {
@@ -377,7 +377,7 @@ class SendMsgForm extends Component {
             checkAllDealers = true;
         }
         else {
-            selectedDealers = values.filter(e => e.key !== "all");
+            selectedDealers = checkIsArray(values).filter(e => e.key !== "all");
         }
 
 

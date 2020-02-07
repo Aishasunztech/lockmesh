@@ -342,7 +342,7 @@ class ManageData extends Component {
 
     filterList = (type, dealers) => {
         let dumyDealers = [];
-        dealers.filter(function (dealer) {
+        checkIsArray(dealers).filter(function (dealer) {
             let dealerStatus = getDealerStatus(dealer.unlink_status, dealer.account_status);
             if (dealerStatus === type) {
                 dumyDealers.push(dealer);

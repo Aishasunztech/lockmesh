@@ -32,7 +32,7 @@ class SendMessage extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
 
       let dealerData = [];
-      dealerData = this.props.dealerList.filter(dealer => this.state.selectedDealers.find(item => item.key === dealer.dealer_id));
+      dealerData = checkIsArray(this.props.dealerList).filter(dealer => this.state.selectedDealers.find(item => item.key === dealer.dealer_id));
 
       if (!err) {
         values.receivers = dealerData;
@@ -62,7 +62,7 @@ class SendMessage extends Component {
   handleDeselect = (e, dealerOrUser = '') => {
 
     if (dealerOrUser == "dealers") {
-      let updateDealers = this.state.selectedDealers.filter(item => item.key != e.key);
+      let updateDealers = checkIsArray(this.state.selectedDealers).filter(item => item.key != e.key);
       this.state.selectedDealers = updateDealers;
       this.state.checkAllSelectedDealers = false;
     }
@@ -89,7 +89,7 @@ class SendMessage extends Component {
   handleChangeDealer = (values, option) => {
 
     let checkAllDealers = this.state.checkAllSelectedDealers;
-    let selectAll = values.filter(e => e.key === "all");
+    let selectAll = checkIsArray(values).filter(e => e.key === "all");
     let selectedDealers = [];
 
     if (selectAll.length > 0) {
@@ -105,7 +105,7 @@ class SendMessage extends Component {
       checkAllDealers = true;
     }
     else {
-      selectedDealers = values.filter(e => e.key !== "all");
+      selectedDealers = checkIsArray(values).filter(e => e.key !== "all");
     }
 
 

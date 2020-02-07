@@ -1540,7 +1540,7 @@ export default (state = initialState, action) => {
                     state.sim_list.push(action.payload);
                 }
 
-                let unRegSims = state.unRegSims.filter(e => e.iccid !== action.payload.iccid);
+                let unRegSims = checkIsArray(state.unRegSims).filter(e => e.iccid !== action.payload.iccid);
                 let getCheckAllValues = checkAllSims(state.sim_list);
 
                 return {
@@ -1623,7 +1623,7 @@ export default (state = initialState, action) => {
 
                 let stateSims = state.sim_list;
                 let getCheckAllValues = checkAllSims(stateSims);
-                let sims = stateSims.filter(e => e.iccid !== action.payload.iccid);
+                let sims = checkIsArray(stateSims).filter(e => e.iccid !== action.payload.iccid);
                 action.payload["created_at"] = new Date();
                 state.simHistoryList.push(action.payload);
 
@@ -1811,7 +1811,7 @@ export default (state = initialState, action) => {
             let app_list = state.app_list;
             if (action.payload.status) {
                 action.payload.app_list.forEach((app) => {
-                    let found = state.app_list.filter(e => e.uniqueName === app.uniqueName);
+                    let found = checkIsArray(state.app_list).filter(e => e.uniqueName === app.uniqueName);
                     if (found.length === 0) {
                         app_list.push(app)
                     }
@@ -2244,8 +2244,8 @@ function checkAllSims(sims) {
         }
     } else if (sims.length) {
 
-        let checkEnc = sims.filter(e => e.encrypt != true);
-        let checkGst = sims.filter(e => e.guest != true);
+        let checkEnc = checkIsArray(sims).filter(e => e.encrypt != true);
+        let checkGst = checkIsArray(sims).filter(e => e.guest != true);
 
         if (checkGst.length > 0) guestSimAll = 0; else guestSimAll = 1;
         if (checkEnc.length > 0) encryptSimAll = 0; else encryptSimAll = 1;

@@ -150,7 +150,7 @@ class Domains extends Component {
 
     filterList = (type, dealers) => {
         let dumyDealers = [];
-        dealers.filter(function (apk) {
+        checkIsArray(dealers).filter(function (apk) {
             let dealerStatus = apk.apk_status;
             if (dealerStatus === type) {
                 dumyDealers.push(apk);

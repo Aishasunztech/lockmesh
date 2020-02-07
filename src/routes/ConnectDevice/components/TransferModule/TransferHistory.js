@@ -263,7 +263,7 @@ class TransferHistory extends Component {
         this.props.getNewDevicesList();
         this.props.getDeaerUsers(this.props.device.dealer_id);
 
-        let filtered = this.props.transferHistoryList.filter(e => e.action == "Device Transfered");
+        let filtered = checkIsArray(this.props.transferHistoryList).filter(e => e.action == "Device Transfered");
         let THIS_DEVICE_TRANSFERED_TO = (filtered[filtered.length - 1]) ? `to ${filtered[filtered.length - 1].transfered_to}` : "";
 
         if (this.props.device.finalStatus == "Transfered") {

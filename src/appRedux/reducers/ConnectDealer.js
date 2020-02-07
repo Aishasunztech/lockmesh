@@ -274,7 +274,7 @@ export default (state = initialState, action) => {
                     dealerDomains = state.domains.concat(action.selectedDomains)
                 }
                 else if (action.formData.action == "delete") {
-                    dealerDomains = state.domains.filter(item => item.id !== action.selectedDomains)
+                    dealerDomains = checkIsArray(state.domains).filter(item => item.id !== action.selectedDomains)
                 }
             } else {
                 error({
