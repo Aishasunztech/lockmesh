@@ -11,7 +11,7 @@ const SentMessageCell = ({conversation}) => {
 
       <div className="gx-bubble-block">
         <div className="gx-bubble">
-          <div className="gx-message">{conversation.message}</div>
+          <div className="gx-message">{conversation.message.split("\n").map((i, k) => <span key={k}>{i}<br /></span>)}</div>
           <div className="gx-time gx-text-muted gx-text-right gx-mt-2">{getOnlyTimeAndDateTimestamp(conversation.createdAt)}</div>
         </div>
       </div>
