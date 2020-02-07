@@ -12,7 +12,7 @@ import { BASE_URL } from '../../../constants/Application';
 
 import ExtensionDropdown from './ExtensionDropdown';
 import { ENABLE, ENCRYPT, Guest, ENCRYPTED, IN_APP_MENU_DISPLAY } from '../../../constants/TabConstants';
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { SECURE_SETTING_PERMISSION, NOT_AVAILABLE, SECURE_SETTINGS, SECURE_SETTING } from '../../../constants/Constants';
 
 

@@ -7,7 +7,7 @@ import DealerList from "./DealerList";
 import { Redirect } from 'react-router-dom';
 import CircularProgress from "components/CircularProgress";
 
-import { titleCase, convertToLang, checkValue } from '../commonUtils';
+import { titleCase, convertToLang, checkValue, checkIsArray } from '../commonUtils';
 import { dealerColsWithSearch } from '../columnsUtils';
 import { Button_Remove, Button_Add, Button_AddAll, Button_AddExceptSelected, Button_RemoveAll, Button_RemoveExcept, Button_Save, Button_Cancel, Button_DeleteExceptSelected, Button_Yes, Button_No } from '../../../constants/ButtonConstants';
 import { Permission_List, PERMISSION_Add_Modal_Title, PERMISSION_Remove_Modal_Title, PERMISSION_Add_Except_Selected_Modal_Title } from '../../../constants/ApkConstants';
@@ -53,7 +53,7 @@ class Permissions extends Component {
     let columns = this.state.addDealerColsInModal;
     // console.log('columns are: ', columns);
 
-    columns.forEach(column => {
+    checkIsArray(columns).forEach(column => {
       if (column.children) {
         if (Object.keys(sorter).length > 0) {
           if (column.dataIndex == sorter.field) {
@@ -81,7 +81,7 @@ class Permissions extends Component {
     let columns = this.state.listDealerCols;
     // console.log('columns are: ', columns);
 
-    columns.forEach(column => {
+    checkIsArray(columns).forEach(column => {
       // if (column.children) {
       if (Object.keys(sorter).length > 0) {
         if (column.dataIndex == sorter.field) {
@@ -245,7 +245,7 @@ class Permissions extends Component {
   onSelectChange = (selectedRowKeys, selectedRows) => {
     // console.log(selectedRowKeys, 'selected', selectedRows);
     let dealer_ids = []
-    selectedRows.forEach(row => {
+    checkIsArray(selectedRows).forEach(row => {
       // console.log("selected row", row)
       dealer_ids.push(row.dealer_id);
     });
@@ -260,7 +260,7 @@ class Permissions extends Component {
     let demoData = [];
 
     if (value.length) {
-      originalData.forEach((data) => {
+      checkIsArray(originalData).forEach((data) => {
         if (data[fieldName] !== undefined) {
           if ((typeof data[fieldName]) === 'string') {
 
@@ -290,7 +290,7 @@ class Permissions extends Component {
     let demoData = [];
 
     if (value.length) {
-      originalData.forEach((data, index) => {
+      checkIsArray(originalData).forEach((data, index) => {
 
         // set permission by value only one time
         if (updateDealers) {
