@@ -669,14 +669,14 @@ export function handleMultipleSearch(e, copy_status, copyRequireSearchData, demo
 	if (targetValue.length || Object.keys(demoSearchValues).length) {
 		demoSearchValues[targetName] = { key: targetName, value: targetValue };
 
-		copyRequireSearchData.forEach((obj) => {
+		checkIsArray(copyRequireSearchData).forEach((obj) => {
 			// console.log('device is: ', device);
 			// if (obj[targetName] !== undefined) {
 
 			let searchRecords = 0;
 
 			if (searchColsAre > 0) {
-				Object.values(demoSearchValues).forEach((data) => {
+				checkIsArray(Object.values(demoSearchValues)).forEach((data) => {
 
 					if (obj[data.key] !== undefined && obj[data.key] !== null) {
 						if (data.value == "") {
@@ -738,7 +738,7 @@ export function filterData_RelatedToMultipleSearch(devices, SearchValues) {
 	let searchColsAre = Object.keys(SearchValues).length;
 
 	if (searchColsAre) {
-		devices.forEach((device) => {
+		checkIsArray(devices).forEach((device) => {
 			let searchDevices = 0;
 
 			for (let search of searchData) {
@@ -780,7 +780,7 @@ export function findAndRemove_duplicate_in_array(arra1) {
 	var object = {};
 	var duplicateIds = [];
 
-	arra1.forEach(function (item) {
+	checkIsArray(arra1).forEach(function (item) {
 		if (!object[item])
 			object[item] = 0;
 		object[item] += 1;

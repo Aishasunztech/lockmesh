@@ -42,7 +42,7 @@ import {
     DEVICE_TRIAL,
     ADMIN
 } from '../../../constants/Constants'
-import { getStatus, componentSearch, titleCase, checkValue, getColor, convertToLang } from '../../utils/commonUtils';
+import { getStatus, componentSearch, titleCase, checkValue, getColor, convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { userDevicesListColumns } from '../../utils/columnsUtils';
 import { Button_Connect } from '../../../constants/ButtonConstants';
 import { Appfilter_SearchDevices } from '../../../constants/AppFilterConstants';
@@ -80,7 +80,7 @@ class UserDeviceList extends Component {
         console.log('check sorter func: ', sorter)
         let columns = this.state.listdeviceCols;
 
-        columns.forEach(column => {
+        checkIsArray(columns).forEach(column => {
             if (column.children) {
                 if (Object.keys(sorter).length > 0) {
                     if (column.dataIndex == sorter.field) {
@@ -130,7 +130,7 @@ class UserDeviceList extends Component {
         let demoData = [];
 
         if (value.length) {
-            originalData.forEach((data) => {
+            checkIsArray(originalData).forEach((data) => {
                 if (data[fieldName] !== undefined) {
                     if ((typeof data[fieldName]) === 'string') {
 
@@ -160,7 +160,7 @@ class UserDeviceList extends Component {
         let demoData = [];
 
         if (value.length) {
-            originalData.forEach((data) => {
+            checkIsArray(originalData).forEach((data) => {
                 if (
                     data['dealer_id'].toString().toUpperCase().includes(value.toUpperCase())
                 ) {
@@ -212,7 +212,7 @@ class UserDeviceList extends Component {
             // console.log("keyname", e.target.name);
             // console.log("value", e.target.value);
             // console.log(this.state.devices);
-            coppyDevices.forEach((device) => {
+            checkIsArray(coppyDevices).forEach((device) => {
                 // console.log("device", device);
 
                 if (device[e.target.name] !== undefined) {
