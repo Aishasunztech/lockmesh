@@ -641,6 +641,14 @@ export function convertTimezoneValue(dealerTimezone, data, clientToServerTZ = fa
 	return convertedDateTime;
 }
 
+export function checkIsArray(data) {
+	if (data && Array.isArray(data) && data.length) {
+		return data;
+	} else {
+		return [];
+	}
+}
+
 export function handleMultipleSearch(e, copy_status, copyRequireSearchData, demoSearchValues, requireForSearch) {
 	// handleMultipleSearch(e, this.state.copy_status, copyDevices, this.state.SearchValues, this.state.filteredDevices)
 

@@ -134,7 +134,7 @@ export default class DealerSalesHistory extends Component {
 
         let data = [];
         if (list) {
-            list.map((item, index) => {
+            checkIsArray(list).map((item, index) => {
                 data.push({
                     key: index,
                     count: ++index,

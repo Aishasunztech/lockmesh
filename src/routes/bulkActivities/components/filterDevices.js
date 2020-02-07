@@ -14,7 +14,7 @@ import BulkPushAppsConfirmation from './bulkPushAppsConfirmation';
 import BulkPullAppsConfirmation from './bulkPullAppsConfirmation';
 import BulkWipeConfirmation from './bulkWipeConfirmation';
 import BulkPolicyConfirmation from './bulkPushPolicyConfirmation';
-import { checkValue, titleCase, convertToLang, getColor, convertTimezoneValue } from '../../utils/commonUtils'
+import { checkValue, titleCase, convertToLang, getColor, convertTimezoneValue, checkIsArray } from '../../utils/commonUtils'
 
 import { bulkDevicesColumns, devicesColumns, userDevicesListColumns } from '../../utils/columnsUtils';
 
@@ -289,7 +289,7 @@ class FilterDevices extends Component {
     let unSelectedDevices = this.getUnSelectedDevices(this.props.devices);
 
     if (this.state.selectedRowKeys.length) {
-      unSelectedDevices.map((device) => {
+      checkIsArray(unSelectedDevices).map((device) => {
         if (!this.state.selectedRowKeys.includes(device.id)) {
           selectedDevices.push(device);
         }
@@ -337,7 +337,7 @@ class FilterDevices extends Component {
     // console.log("dealer ids", this.state.device_ids);
     let selectedDevices = this.state.selectedDevices;
     if (this.state.selectedRowKeys.length) {
-      this.props.devices.map((device) => {
+      checkIsArray(this.props.devices).map((device) => {
         if (this.state.selectedRowKeys.includes(device.id)) {
           selectedDevices.push(device);
         }
@@ -482,7 +482,7 @@ class FilterDevices extends Component {
       // console.log(this.state.devices);
       copyDevices.forEach((device) => {
         if (e.target.name === 'all') {
-          Object.keys(device).map(key => {
+          checkIsArray(Object.keys(device)).map(key => {
 
             if (device[key] !== undefined && key != 'status' && key != 'account_status') {
               if ((typeof device[key]) === 'string') {
@@ -626,7 +626,7 @@ class FilterDevices extends Component {
     let data = [];
     // console.log(list);
     let is_included
-    list.map((dealer) => {
+    checkIsArray(list).map((dealer) => {
       // console.log('object recrd', dealer);
       if (this.state.permissions) {
         is_included = this.state.permissions.includes(dealer.dealer_id);
@@ -682,7 +682,7 @@ class FilterDevices extends Component {
 
   renderDevicesList(list, timezone) {
     // console.log('renderList ', list)
-    return list.map((device, index) => {
+    return checkIsArray(list).map((device, index) => {
 
       var status = device.finalStatus;
       // console.log("status ", status)
@@ -756,7 +756,7 @@ class FilterDevices extends Component {
 
     // console.log('this.state.selectedDevices filter ', this.state.selectedDevices)
     if (this.state.selectedDevices.length > 0) {
-      let selectedIDs = this.state.selectedDevices.map((item) => item.id);
+      let selectedIDs = checkIsArray(this.state.selectedDevices).map((item) => item.id);
       let fDevices = devices.filter(e => !selectedIDs.includes(e.id));
       return fDevices;
     } else {

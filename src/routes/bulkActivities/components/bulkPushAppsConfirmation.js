@@ -1,7 +1,7 @@
 import { Modal } from 'antd';
 
 import React, { Component } from 'react'
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 import { Markup } from 'interweave';
 
@@ -19,16 +19,16 @@ export default class BulkPushApps extends Component {
         let dealer_ids = [];
         let user_ids = [];
 
-        devices.forEach((item) => {
+        checkIsArray(devices).forEach((item) => {
             if (item.device_id) {
                 // selectedDevices.push({ device_id: item.usr_device_id, usrAccId: item.id });
                 selectedDevices.push({ device_id: item.device_id, usrAccId: item.id, usr_device_id: item.usr_device_id });
             }
         });
-        dealers.forEach((item) => {
+        checkIsArray(dealers).forEach((item) => {
             dealer_ids.push(item.key);
         });
-        users.forEach((item) => {
+        checkIsArray(users).forEach((item) => {
             user_ids.push(item.key);
         });
 
@@ -43,7 +43,7 @@ export default class BulkPushApps extends Component {
 
         if (this.props.selectedPushAppsList && this.props.selectedPushAppsList.length) {
             const title =
-                <Markup content={`${convertToLang(this.props.translation[""], `Are you sure, you want to push (${this.props.selectedPushAppsList.map(item => ` ${item.apk_name}`)}) apps into selected devices`)} ?`} ></Markup>
+                <Markup content={`${convertToLang(this.props.translation[""], `Are you sure, you want to push (${checkIsArray(this.props.selectedPushAppsList).map(item => ` ${item.apk_name}`)}) apps into selected devices`)} ?`} ></Markup>
                 // <Markup content={`${convertToLang(this.props.translation[""], `Are you sure, you want to push (${this.props.selectedPushAppsList.map(item => ` ${item.apk_name}`)}) apps into these devices `)} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`} ></Markup>
             // `${convertToLang(this.props.translation[""], `Are you sure, you want to push ${this.props.selectedPushAppsList ? <div style={{textDecoration: 'underline'}}>{this.props.selectedPushAppsList.map(item => ` ${item.apk_name}`)}</div> : "selected"} apps into these devices `)} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`;
 

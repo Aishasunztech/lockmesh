@@ -6,7 +6,7 @@ import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Div
 import AllDomainsModal from './AllDomainsModal';
 
 // Helpers
-import { convertToLang, formatMoney } from '../../utils/commonUtils'
+import { convertToLang, formatMoney, checkIsArray } from '../../utils/commonUtils'
 import { domainColumns } from "../../utils/columnsUtils";
 // import { getColor, isBase64, convertToLang } from "../utils/commonUtils"
 // import { getDealerDetails, editDealer } from '../../appRedux/actions'
@@ -60,7 +60,7 @@ export default class DealerDomains extends Component {
     searchField = (originalData, fieldName, value) => {
         let demoData = [];
         if (value.length) {
-            originalData.forEach((data) => {
+            checkIsArray(originalData).forEach((data) => {
                 // console.log(data);
                 if (data[fieldName] !== undefined) {
                     if ((typeof data[fieldName]) === 'string') {
@@ -115,8 +115,8 @@ export default class DealerDomains extends Component {
         this.setState({ domainLoading: loadingCopy })
     }
     renderDealerDomainList = (list) => {
-        if (list) {
-            return list.map((item, index) => {
+        // if (list) {
+            return checkIsArray(list).map((item, index) => {
 
                 // let removeBtnDisable = false;
                 // if (this.props.authUser.id !== item.permission_by) {
@@ -143,9 +143,9 @@ export default class DealerDomains extends Component {
 
                 }
             })
-        } else {
-            return []
-        }
+        // } else {
+        //     return []
+        // }
     };
     render() {
         const { visible } = this.state;

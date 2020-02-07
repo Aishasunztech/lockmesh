@@ -14,7 +14,7 @@ import ModifyPrice from './components/ModifyPrice';
 import { sim, chat, pgp, vpn, DEALER, ADMIN, SDEALER } from '../../../constants/Constants';
 import AppFilter from '../../../components/AppFilter/index';
 import PricesList from './components/pricesList';
-import { componentSearch, getDealerStatus, titleCase, convertToLang } from '../../utils/commonUtils';
+import { componentSearch, getDealerStatus, titleCase, convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { Tab_All } from '../../../constants/TabConstants';
 import {
     TAB_SIM_ID,
@@ -398,7 +398,7 @@ class Prices extends Component {
 
         if (e.target.value.length) {
 
-            packagesCopy.forEach((dealer) => {
+            checkIsArray(packagesCopy).forEach((dealer) => {
 
                 if (dealer[e.target.name] !== undefined) {
                     if ((typeof dealer[e.target.name]) === 'string') {
@@ -538,11 +538,11 @@ class Prices extends Component {
                 } else if (this.state.packageListTab === '2') {
                     packages_type = 'data_plan';
                 }
-                let packages = this.state.packages.filter(packageItem => packageItem.package_type === packages_type);
+                let packages = checkIsArray(this.state.packages).filter(packageItem => packageItem.package_type === packages_type);
                 let DeleteBtn = null;
                 let EditBtn = null;
                 let ModifyBtn = null;
-                return packages.map((item, index) => {
+                return checkIsArray(packages).map((item, index) => {
                     let customStyle = {}
                     if (item.pkg_term === "trial") {
                         customStyle = { display: 'none' }
@@ -602,8 +602,8 @@ class Prices extends Component {
                 })
             }
         } else if (type === "hardware") {
-            if (this.state.hardwares) {
-                return this.state.hardwares.map((item, index) => {
+            // if (this.state.hardwares) {
+                return checkIsArray(this.state.hardwares).map((item, index) => {
                     return {
                         key: item.id,
                         sr: ++index,
@@ -614,7 +614,7 @@ class Prices extends Component {
                         retail_price: item.retail_price
                     }
                 })
-            }
+            // }
         } else {
             return [];
         }

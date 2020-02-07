@@ -30,7 +30,7 @@ import {
     PERMISSION_DOMAINS,
 } from "../../constants/ActionTypes";
 import { message, Modal } from "antd";
-import { findAndRemove_duplicate_in_array, removeDuplicateObjects } from "../../routes/utils/commonUtils";
+import { findAndRemove_duplicate_in_array, removeDuplicateObjects, checkIsArray } from "../../routes/utils/commonUtils";
 
 const success = Modal.success
 const error = Modal.error
@@ -393,7 +393,7 @@ export default (state = initialState, action) => {
         //         if (action.formData.action == "save") {
 
         //             if (index !== -1) {
-        //                 newDealers = newDealers.map((item) => {
+        //                 newDealers = checkIsArray(newDealers).map((item) => {
         //                     return {
         //                         dealer_id: item,
         //                         dealer_type: user.type,
@@ -420,15 +420,15 @@ export default (state = initialState, action) => {
 
         //             if (index !== -1) {
         //                 if (!action.formData.statusAll) {
-        //                     let allDealers = oldDealers.filter((item) => !newDealers.includes(item.dealer_id));
+        //                     let allDealers = checkIsArray(oldDealers).filter((item) => !newDealers.includes(item.dealer_id));
         //                     state.packages[index].dealer_permission = allDealers;
         //                     state.packages[index].permission_count = allDealers.length;
         //                 } else {
         //                     if (user && user.type === "dealer") {
-        //                         state.packages[index].dealer_permission = oldDealers.filter((item) => item.dealer_type == "admin")
+        //                         state.packages[index].dealer_permission = checkIsArray(oldDealers).filter((item) => item.dealer_type == "admin")
         //                     }
         //                     else if (user && user.type === "sdealer") {
-        //                         state.packages[index].dealer_permission = oldDealers.filter((item) => item.dealer_type == "dealer")
+        //                         state.packages[index].dealer_permission = checkIsArray(oldDealers).filter((item) => item.dealer_type == "dealer")
         //                     }
         //                     else {
         //                         state.packages[index].dealer_permission = [];
@@ -468,7 +468,7 @@ export default (state = initialState, action) => {
                 if (action.formData.action == "save") {
 
                     if (index !== -1) {
-                        newDealers = newDealers.map((item) => {
+                        newDealers = checkIsArray(newDealers).map((item) => {
                             return {
                                 dealer_id: item,
                                 dealer_type: user.type,
@@ -490,8 +490,8 @@ export default (state = initialState, action) => {
                             if (user.type !== "admin") {
 
                                 let finalDealers = [];
-                                let deleteIds = oldDealers.map((dlr) => dlr.dealer_id);
-                                newDealers.forEach((item) => {
+                                let deleteIds = checkIsArray(oldDealers).map((dlr) => dlr.dealer_id);
+                                checkIsArray(newDealers).forEach((item) => {
                                     if (deleteIds.includes(item.dealer_id)) {
                                         let indexIs = oldDealers.findIndex((e) => e.dealer_id === item.dealer_id);
                                         finalDealers.push(oldDealers[indexIs]);
@@ -512,11 +512,11 @@ export default (state = initialState, action) => {
 
                     if (index !== -1) {
                         if (!action.formData.statusAll) {
-                            let allDealers = oldDealers.filter((item) => !newDealers.includes(item.dealer_id));
+                            let allDealers = checkIsArray(oldDealers).filter((item) => !newDealers.includes(item.dealer_id));
                             // state.packages[index].dealer_permission = allDealers;
                             // state.packages[index].permission_count = allDealers.length;
                             // if (user && user.type !== "admin") {
-                            //     let filterDealers = allDealers.filter((item) => item.dealer_type === "admin");
+                            //     let filterDealers = checkIsArray(allDealers).filter((item) => item.dealer_type === "admin");
                             //     state.packages[index].dealer_permission = filterDealers;
                             //     state.packages[index].permission_count = filterDealers.length;
                             // } else {
@@ -527,12 +527,12 @@ export default (state = initialState, action) => {
                         } else {
                             let allDealers = [];
                             if (user && user.type === "dealer") {
-                                allDealers = oldDealers.filter((item) => item.dealer_type == "admin");
+                                allDealers = checkIsArray(oldDealers).filter((item) => item.dealer_type == "admin");
                                 state.packages[index].dealer_permission = allDealers;
                                 state.packages[index].permission_count = allDealers.length;
                             }
                             else if (user && user.type === "sdealer") {
-                                allDealers = oldDealers.filter((item) => item.dealer_type == "dealer");
+                                allDealers = checkIsArray(oldDealers).filter((item) => item.dealer_type == "dealer");
                                 state.packages[index].dealer_permission = allDealers;
                                 state.packages[index].permission_count = allDealers.length;
                             }
@@ -652,7 +652,7 @@ export default (state = initialState, action) => {
                 // Save permission for new dealers
                 if (action.formData.action == "save") {
                     if (index !== -1) {
-                        newDealers = newDealers.map((item) => {
+                        newDealers = checkIsArray(newDealers).map((item) => {
                             return {
                                 dealer_id: item,
                                 dealer_type: user.type,
@@ -674,8 +674,8 @@ export default (state = initialState, action) => {
                             if (user.type !== "admin") {
 
                                 let finalDealers = [];
-                                let deleteIds = oldDealers.map((dlr) => dlr.dealer_id);
-                                newDealers.forEach((item) => {
+                                let deleteIds = checkIsArray(oldDealers).map((dlr) => dlr.dealer_id);
+                                checkIsArray(newDealers).forEach((item) => {
                                     if (deleteIds.includes(item.dealer_id)) {
                                         let indexIs = oldDealers.findIndex((e) => e.dealer_id === item.dealer_id);
                                         finalDealers.push(oldDealers[indexIs]);
@@ -696,9 +696,9 @@ export default (state = initialState, action) => {
 
                     if (index !== -1) {
                         if (!action.formData.statusAll) {
-                            let allDealers = oldDealers.filter((item) => !newDealers.includes(item.dealer_id));
+                            let allDealers = checkIsArray(oldDealers).filter((item) => !newDealers.includes(item.dealer_id));
                             // if (user && user.type !== "admin") {
-                            //     let filterDealers = allDealers.filter((item) => item.dealer_type === "admin");
+                            //     let filterDealers = checkIsArray(allDealers).filter((item) => item.dealer_type === "admin");
                             //     state.domainList[index].dealers = JSON.stringify(filterDealers);
                             //     state.domainList[index].permission_count = filterDealers.length;
                             // } else {
@@ -708,7 +708,7 @@ export default (state = initialState, action) => {
                             state.domainList[index].statusAll = false;
                         } else {
                             if (user && user.type !== "admin") {
-                                let filterDealers = oldDealers.filter((item) => item.dealer_type === "admin")
+                                let filterDealers = checkIsArray(oldDealers).filter((item) => item.dealer_type === "admin")
                                 state.domainList[index].dealers = JSON.stringify(filterDealers)  //'[]';
                                 state.domainList[index].permission_count = filterDealers.length;
                             } else {

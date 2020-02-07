@@ -16,7 +16,7 @@ import {
     Button_SET_PRICE,
     Button_Save
 } from '../../../constants/ButtonConstants'
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 
 
 const { TabPane } = Tabs;
@@ -72,13 +72,13 @@ export default class PricingModal extends Component {
             let data = this.props.prices;
             let errors = 0;
             for (let key in data) {
-                Object.values(data[key]).map(value => {
+                checkIsArray(Object.values(data[key])).map(value => {
 
                     if (value < 1) {
                         errors++;
                     }
                 })
-                if (Object.values(data[key]).length < 4) {
+                if (checkIsArray(Object.values(data[key])).length < 4) {
                     errors++;
                 }
             }
