@@ -9,7 +9,7 @@ import { ADMIN, DEALER } from '../../../constants/Constants';
 import scrollIntoView from 'scroll-into-view';
 
 import DealerDevicesList from '../../users/components/UserDeviceList';
-import { convertToLang, convertTimezoneValue } from '../../utils/commonUtils'
+import { convertToLang, convertTimezoneValue, checkIsArray } from '../../utils/commonUtils'
 import { Redirect } from 'react-router-dom';
 import CustomScrollbars from "../../../util/CustomScrollbars";
 import {

@@ -6,6 +6,7 @@ import {
 } from "../../constants/ActionTypes";
 
 import { message, Modal } from 'antd';
+import { checkIsArray } from "../../routes/utils/commonUtils";
 const success = Modal.success;
 const error = Modal.error;
 const initialState = {

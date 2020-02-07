@@ -13,7 +13,7 @@ import {
     // , 
     // SYSTEM_CONTROLS, NOT_AVAILABLE, MANAGE_PASSWORD, MAIN_MENU, APPS,
 } from '../../../constants/Constants';
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { Button_Apply } from '../../../constants/ButtonConstants';
 import { HISTORY_DATE } from '../../../constants/DeviceConstants';
 

@@ -76,7 +76,7 @@ import SettingStates from './InitialStates';
 import React from 'react';
 import { message, Modal, Row, Col, Table } from 'antd';
 import { DEVICE_PRE_ACTIVATION, DEVICE_UNLINKED } from "../../constants/Constants";
-import { convertToLang } from "../../routes/utils/commonUtils";
+import { convertToLang, checkIsArray } from "../../routes/utils/commonUtils";
 
 var { translation } = SettingStates;
 

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col, Tag, Modal } from "antd";
-import { convertToLang, checkValue, convertTimezoneValue, getWeekDayDescription, getMonthName, checkTimezoneValue } from '../../utils/commonUtils';
+import { convertToLang, checkValue, convertTimezoneValue, getWeekDayDescription, getMonthName, checkTimezoneValue, checkIsArray } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 import moment from 'moment';
 import ReadMoreAndLess from 'react-read-more-less';
@@ -18,7 +18,7 @@ export default class ListMsgs extends Component {
         let selectedDevicesColumns = userDevicesListColumns(props.translation, this.handleSearch);
         let dealerTZ = checkTimezoneValue(props.user.timezone, false);
         this.state = {
-            selectedDevicesColumns: checkIsArray(selectedDevicesColumns).filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
+            selectedDevicesColumns: selectedDevicesColumns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
             searchText: '',
             columns: [],
             expandedRowKeys: [],

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { Modal, message, Input, Table, Switch, Avatar, Button, Card, Row, Col, Select, Spin, Form } from 'antd';
-import { componentSearch, getFormattedDate, convertToLang, checkValue } from '../../../utils/commonUtils';
+import { componentSearch, getFormattedDate, convertToLang, checkValue, checkIsArray } from '../../../utils/commonUtils';
 import Moment from 'react-moment';
 import { SECURE_SETTING, DATE, PROFILE_NAME, SEARCH, ADMIN } from '../../../../constants/Constants';
 import { BASE_URL } from '../../../../constants/Application';

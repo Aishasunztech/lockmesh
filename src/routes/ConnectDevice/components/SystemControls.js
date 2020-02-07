@@ -5,7 +5,7 @@ import { SYSTEM_PERMISSION, NOT_AVAILABLE, ADMIN, ANDROID_SETTING_PERMISSION } f
 
 
 import { Main_SETTINGS } from '../../../constants/Constants';
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 
 export default class SystemControls extends Component {
   constructor(props) {
