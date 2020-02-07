@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import { Button, Modal, Table } from "antd";
 import ComposeMail from "./components/Compose/index";
 import MailDetail from "./components/TicketDetail/index";
-import { getDateFromTimestamp } from "../../utils/commonUtils";
+import { getDateFromTimestamp, checkIsArray } from "../../utils/commonUtils";
 import { bindActionCreators } from "redux";
 import {
   generateSupportTicket,

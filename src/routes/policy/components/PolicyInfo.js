@@ -4,7 +4,7 @@ import { BASE_URL } from '../../../constants/Application';
 import Permissions from "../../utils/Components/Permissions";
 import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, Main_SETTINGS, APPLICATION_PERMISION, POLICY_DETAILS, SYSTEM_CONTROLS_UNIQUE, SECURE_SETTING, APPS } from '../../../constants/Constants';
 import AppList from "./AppList";
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { Tab_POLICY_SELECTED_APPS, Tab_POLICY_Dealer_PERMISSIONS, Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
 import { POLICY_NAME, NAME, POLICY_ACTION, POLICY_NOTE, POLICY_COMMAND } from '../../../constants/PolicyConstants';
 import { SPA_APPS } from '../../../constants/AppConstants';

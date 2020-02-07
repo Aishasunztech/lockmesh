@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import UserCell from "./UserCell/index";
+import { checkIsArray } from "../../../../utils/commonUtils";
 
 class ChatUserList extends Component {
   constructor(props) {

@@ -3,7 +3,7 @@ import { Button } from 'antd';
 import SupportTicketReply from '../SupportTicketReply/index'
 import Reply from '../SupportTicketReply/reply';
 import CustomScrollbars from 'util/CustomScrollbars'
-import { getDateFromTimestamp, getFormattedDate } from "../../../../utils/commonUtils";
+import { getDateFromTimestamp, getFormattedDate, checkIsArray } from "../../../../utils/commonUtils";
 class TicketDetail extends React.Component {
 
   constructor(props) {

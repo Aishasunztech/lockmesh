@@ -264,7 +264,7 @@ export default class PushPullApps extends Component {
         let allSelectedApps = this.state.selectedPushApps;
         let data = [];
 
-        selectedRows.forEach(el => {
+        checkIsArray(selectedRows).forEach(el => {
             let index = allSelectedApps.findIndex(item => item.key == el.key)
             if (index !== -1) {
                 data.push(allSelectedApps[index])

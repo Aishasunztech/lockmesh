@@ -1,6 +1,6 @@
 import React from "react";
 import { Input, Button, Icon, Select, Popover } from "antd";
-import { titleCase, convertToLang } from './commonUtils';
+import { titleCase, convertToLang, checkIsArray } from './commonUtils';
 import { Markup } from 'interweave';
 import {
     DEVICE_ID,

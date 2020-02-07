@@ -20,7 +20,7 @@ import {
 } from "../../../appRedux/actions";
 
 // Helpers 
-import { componentSearch, getDealerStatus, titleCase, convertToLang } from '../../utils/commonUtils';
+import { componentSearch, getDealerStatus, titleCase, convertToLang, checkIsArray } from '../../utils/commonUtils';
 
 // constants
 import {
@@ -511,7 +511,7 @@ class ManageData extends Component {
         // console.log("devices", copyInnerContent);
 
         if (e.target.value.length) {
-            copyInnerContent.forEach((item) => {
+            checkIsArray(copyInnerContent).forEach((item) => {
 
                 if (item[e.target.name] !== undefined) {
                     if ((typeof item[e.target.name]) === 'string') {

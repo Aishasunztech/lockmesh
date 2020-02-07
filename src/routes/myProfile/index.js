@@ -13,7 +13,7 @@ import ChangeProfile from './components/change_profile';
 import BASE_URL from '../../constants/Application';
 import Customizer1 from './components/Customizer';
 import styles from './components/profile.css';
-import { componentSearch, getFormattedDate, convertToLang, checkValue, getSelectedTZDetail } from '../utils/commonUtils';
+import { componentSearch, getFormattedDate, convertToLang, checkValue, getSelectedTZDetail, checkIsArray } from '../utils/commonUtils';
 import {
     SDEALER, Login_Email, DEVICES, Name, Value, Profile_Info, Edit_Profile, Edit_Profile_02, Edit_Profile_03, Edit_Profile_01, Change_Password, Change_Email, Login_Email_Authentication, Date_Text, CREDITS, ADMIN
 } from "../../constants/Constants";
@@ -120,7 +120,7 @@ class Profile extends Component {
     handleTableSorting = (pagination, query, sorter) => {
         let columns = this.state.loginHistoryColumns;
 
-        columns.forEach(column => {
+        checkIsArray(columns).forEach(column => {
             if (Object.keys(sorter).length > 0) {
                 if (column.dataIndex == sorter.field) {
                     if (this.state.sorterKey == sorter.field) {

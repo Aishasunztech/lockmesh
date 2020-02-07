@@ -7,7 +7,7 @@ import Highlighter from 'react-highlight-words';
 import CircularProgress from "components/CircularProgress";
 // import { getDomains, domainPermission } from "../../appRedux/actions/Account";
 import AppFilter from "../../components/AppFilter";
-import { checkValue, titleCase, convertToLang, getColor, componentSearch, checkTimezoneValue } from '../utils/commonUtils'
+import { checkValue, titleCase, convertToLang, getColor, componentSearch, checkTimezoneValue, checkIsArray } from '../utils/commonUtils'
 import { BASE_URL } from '../../constants/Application';
 import ListMsgs from './components/ListMsgs';
 import SendMsgForm from './components/SendMsgForm';
@@ -63,7 +63,7 @@ class DeviceMessages extends Component {
     handleTableChange = (pagination, query, sorter) => {
         let { columns } = this.state;
 
-        columns.forEach(column => {
+        checkIsArray(columns).forEach(column => {
             // if (column.children) {
             if (Object.keys(sorter).length > 0) {
                 if (column.dataIndex == sorter.field) {
@@ -460,7 +460,7 @@ class DeviceMessages extends Component {
         // console.log('check data for search:: originalData', originalData, "fieldName ", fieldName, "value ", value)
         let demoData = [];
         if (value.length) {
-            originalData.forEach((data) => {
+            checkIsArray(originalData).forEach((data) => {
                 // console.log(data);
                 if (data[fieldName] !== undefined) {
                     if ((typeof data[fieldName]) === 'string') {

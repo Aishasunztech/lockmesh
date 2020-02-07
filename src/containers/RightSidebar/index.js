@@ -5,6 +5,7 @@ import Auxiliary from "../../util/Auxiliary";
 import CustomScrollbars from "../../util/CustomScrollbars";
 import {getSocketProcesses, getNotification } from '../../appRedux/actions';
 import styles from './rightSidebar.css'
+import { checkIsArray } from "../../routes/utils/commonUtils";
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
 

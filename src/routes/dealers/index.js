@@ -6,7 +6,7 @@ import { Input, Modal, Select, Button } from "antd";
 import { isArray } from "util";
 
 // helpers
-import { componentSearch, getDealerStatus, titleCase, convertToLang, handleMultipleSearch, filterData_RelatedToMultipleSearch } from '../utils/commonUtils';
+import { componentSearch, getDealerStatus, titleCase, convertToLang, handleMultipleSearch, filterData_RelatedToMultipleSearch, checkIsArray } from '../utils/commonUtils';
 
 // actions
 import {
@@ -108,7 +108,7 @@ class Dealers extends Component {
         // console.log('check sorter func: ', sorter)
         let { columns } = this.state;
 
-        columns.forEach(column => {
+        checkIsArray(columns).forEach(column => {
             if (column.children) {
                 if (Object.keys(sorter).length > 0) {
                     if (column.dataIndex == sorter.field) {

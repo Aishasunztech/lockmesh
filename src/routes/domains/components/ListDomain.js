@@ -12,7 +12,7 @@ import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col } from "antd"
 // import { ADMIN } from '../../../constants/Constants';
 import Permissions from '../../utils/Components/Permissions';
 import { Tab_All } from '../../../constants/TabConstants';
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 // const TabPane = Tabs.TabPane;
 export default class ListDomain extends Component {
     state = { visible: false }

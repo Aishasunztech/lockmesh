@@ -21,6 +21,7 @@ import {
   sendSupportLiveChatMessage
 } from "../../../appRedux/actions";
 import { ADMIN, DEALER, SDEALER } from "../../../constants/Constants";
+import { checkIsArray } from "../../utils/commonUtils";
 
 const TabPane = Tabs.TabPane;
 

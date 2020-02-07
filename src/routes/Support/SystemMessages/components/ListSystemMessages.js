@@ -4,7 +4,8 @@ import { Table, Button, Icon, Card, Modal } from "antd";
 import {
   checkValue,
   convertToLang,
-  componentSearchSystemMessages
+  componentSearchSystemMessages,
+  checkIsArray
 } from '../../../utils/commonUtils';
 import { supportSystemMessagesReceiversColumns } from '../../../utils/columnsUtils';
 import ViewMessage from './ViewMessage'

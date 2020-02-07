@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Card, Modal, Tabs } from "antd";
-import { checkValue, convertToLang, getDateFromTimestamp, getOnlyTimeFromTimestamp } from '../../utils/commonUtils'
+import { checkValue, convertToLang, getDateFromTimestamp, getOnlyTimeFromTimestamp, checkIsArray } from '../../utils/commonUtils'
 import ListSystemMessages from './components/ListSystemMessages';
 import SendMessage from './components/SendMessage';
 import { getAllDealers } from "../../../appRedux/actions/Dealers";

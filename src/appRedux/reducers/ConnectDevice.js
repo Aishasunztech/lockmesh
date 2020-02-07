@@ -93,6 +93,7 @@ import {
 
 import { message, Modal, Alert, Icon } from 'antd';
 import { ACK_UNINSTALLED_APPS, ACK_INSTALLED_APPS, ACK_SETTING_APPLIED, SEND_ONLINE_OFFLINE_STATUS } from '../../constants/SocketConstants';
+import { checkIsArray } from '../../routes/utils/commonUtils';
 // import { Button_Cancel } from '../../constants/ButtonConstants';
 // import { convertToLang } from '../../routes/utils/commonUtils';
 // import { WIPE_DEVICE_DESCRIPTION } from '../../constants/DeviceConstants';
@@ -1189,7 +1190,7 @@ export default (state = initialState, action) => {
             let changedExtensions = JSON.parse(JSON.stringify(state.extensions));
             // console.log("changedExtensions: ", changedExtensions, action.payload);
 
-            changedExtensions.forEach(extension => {
+            checkIsArray(changedExtensions).forEach(extension => {
                 if (extension.app_id === action.payload.app_id) {
                     // console.log(extension, extension[action.payload.key]);
                     extension[action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
@@ -1236,7 +1237,7 @@ export default (state = initialState, action) => {
             let changedExtensions = JSON.parse(JSON.stringify(state.extensions));
             state[action.payload.keyAll] = action.payload.value;
 
-            changedExtensions.forEach(extension => {
+            checkIsArray(changedExtensions).forEach(extension => {
                 extension[action.payload.key] = action.payload.value === true ? 1 : 0;
                 extension.isChanged = true;
 
@@ -1335,7 +1336,7 @@ export default (state = initialState, action) => {
         }
         case HANDLE_CHECK_APP: {
             let changedApps = JSON.parse(JSON.stringify(state.app_list));
-            changedApps.forEach(app => {
+            checkIsArray(changedApps).forEach(app => {
                 if (app.app_id === action.payload.app_id) {
                     app.isChanged = true;
                     app[action.payload.key] = action.payload.value;
@@ -1364,7 +1365,7 @@ export default (state = initialState, action) => {
 
         case HANDLE_CHECK_ALL: {
             let applications = JSON.parse(JSON.stringify(state.app_list));
-            applications.forEach(app => {
+            checkIsArray(applications).forEach(app => {
                 if (!app.extension && app.visible) {
                     // console.log(app[action.payload.key], 'kkkkkk', 'guest')
                     app.isChanged = true;
@@ -1810,7 +1811,7 @@ export default (state = initialState, action) => {
             // console.log("add app in app_list")
             let app_list = state.app_list;
             if (action.payload.status) {
-                action.payload.app_list.forEach((app) => {
+                checkIsArray(action.payload.app_list).forEach((app) => {
                     let found = state.app_list.filter(e => e.uniqueName === app.uniqueName);
                     if (found.length === 0) {
                         app_list.push(app)
@@ -1829,9 +1830,9 @@ export default (state = initialState, action) => {
         case ACK_UNINSTALLED_APPS: {
             let app_list = state.app_list;
             if (action.payload.status) {
-                action.payload.app_list.forEach((app) => {
+                checkIsArray(action.payload.app_list).forEach((app) => {
                     let index = 0;
-                    app_list.forEach((apk, i) => {
+                    checkIsArray(app_list).forEach((apk, i) => {
                         if (apk.package_name === app.packageName) {
                             index = i;
                         }
@@ -2103,7 +2104,7 @@ function handleCheckedAll(applications) {
     let encryptedAll = false;
     let enableAll = false;
 
-    applications.forEach(app => {
+    checkIsArray(applications).forEach(app => {
         if (!app.extension && app.visible) {
             applicationLength = applicationLength + 1;
             if (app.guest === true || app.guest === 1) {
@@ -2148,7 +2149,7 @@ function handleCheckedAllExts(extensions) {
     let guestAll = false;
     let encryptedAll = false;
 
-    extensions.forEach(app => {
+    checkIsArray(extensions).forEach(app => {
         if (app.guest === true || app.guest === 1) {
             ++guestCount;
         }
@@ -2189,7 +2190,7 @@ function getCheckedAllPushApp(apkList) {
     let encryptedAll = false;
     let enableAll = false;
 
-    apkList.forEach(app => {
+    checkIsArray(apkList).forEach(app => {
         if (app.guest === true || app.guest === 1) {
             guestCount = guestCount + 1;
         }

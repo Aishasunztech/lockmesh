@@ -5,7 +5,7 @@ import scrollIntoView from 'scroll-into-view';
 import { Card, Row, Col, List, Button, message, Table, Icon, Switch, Modal } from "antd";
 
 import CustomScrollbars from "../../../util/CustomScrollbars";
-import { getFormattedDate, convertToLang, getDateTimeOfClientTimeZone, convertTimezoneValue } from '../../utils/commonUtils';
+import { getFormattedDate, convertToLang, getDateTimeOfClientTimeZone, convertTimezoneValue, checkIsArray } from '../../utils/commonUtils';
 
 import UserDeviceList from './UserDeviceList'
 import AddUser from './AddUser';

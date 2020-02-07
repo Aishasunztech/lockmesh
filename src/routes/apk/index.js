@@ -102,7 +102,7 @@ class Apk extends Component {
     handleTableChange = (pagination, query, sorter) => {
         let { columns } = this.state;
 
-        columns.forEach(column => {
+        checkIsArray(columns).forEach(column => {
             // if (column.children) {
             if (Object.keys(sorter).length > 0) {
                 if (column.dataIndex == sorter.field) {

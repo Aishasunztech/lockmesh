@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Button, Form, Input, Select, InputNumber, Row, Col, Tag, Calendar, DatePicker, TimePicker, Modal } from 'antd';
-import { checkValue, convertToLang } from '../../../utils/commonUtils'
+import { checkValue, convertToLang, checkIsArray } from '../../../utils/commonUtils'
 import { Button_Cancel, Button_submit } from '../../../../constants/ButtonConstants';
 import { Required_Fields } from '../../../../constants/DeviceConstants';
 import moment from 'moment';

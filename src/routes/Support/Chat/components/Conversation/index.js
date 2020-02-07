@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 import ReceivedMessageCell from "./ReceivedMessageCell/index";
 import SentMessageCell from "./SentMessageCell/index";
+import { checkIsArray } from "../../../../utils/commonUtils";
 
 class Conversation extends Component {
 

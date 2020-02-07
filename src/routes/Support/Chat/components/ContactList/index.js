@@ -1,5 +1,6 @@
 import React from "react";
 import UserCell from "./UserCell/index";
+import { checkIsArray } from "../../../../utils/commonUtils";
 
 const ContactList = ({ onSelectUser, selectedSectionId, contactList }) => {
   return (

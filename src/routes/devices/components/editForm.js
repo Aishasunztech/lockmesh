@@ -17,7 +17,7 @@ import Services from './Services';
 import Invoice from './invoice';
 
 // Helpers
-import { checkValue, convertToLang } from '../../utils/commonUtils'
+import { checkValue, convertToLang, checkIsArray } from '../../utils/commonUtils'
 import RestService from '../../../appRedux/services/RestServices';
 import { inventorySales, refundServiceColumns } from '../../utils/columnsUtils';
 

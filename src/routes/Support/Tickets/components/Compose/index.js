@@ -4,6 +4,7 @@ import Moment from "moment";
 import categories from "../../data/categories";
 import priorities from "../../data/priorities";
 import { ADMIN_ID, SDEALER } from "../../../../../constants/Constants";
+import { checkIsArray } from "../../../../utils/commonUtils";
 const { TextArea } = Input;
 
 class ComposeTicket extends React.Component {

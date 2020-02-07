@@ -24,7 +24,7 @@ import {
     NAME
 } from '../../../constants/PolicyConstants';
 import { Button_Save, Button_Cancel, Button_AddApps, Button_Add } from '../../../constants/ButtonConstants';
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { Tab_POLICY_SELECTED_APPS, Guest, ENCRYPTED, ENABLE, Tab_SECURE_SETTING } from '../../../constants/TabConstants';
 import { SPA_APPS } from '../../../constants/AppConstants';
 
@@ -500,7 +500,7 @@ class EditPolicy extends Component {
 
         let pushedApps = [];
         if (this.state.editAblePolicy && this.state.editAblePolicy.push_apps) {
-            apps.forEach(app => {
+            checkIsArray(apps).forEach(app => {
                 let index = this.state.editAblePolicy.push_apps.findIndex(item => item.apk_id === app.apk_id);
                 // console.log("index ", index);
                 if (index === -1) {

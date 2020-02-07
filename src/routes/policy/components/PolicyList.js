@@ -7,7 +7,7 @@ import CustomScrollbars from "../../../util/CustomScrollbars";
 import PolicyInfo from './PolicyInfo';
 import { flagged } from '../../../appRedux/actions/ConnectDevice';
 import { ADMIN } from '../../../constants/Constants';
-import { convertToLang, getFormattedDate, convertTimezoneValue } from '../../utils/commonUtils';
+import { convertToLang, getFormattedDate, convertTimezoneValue, checkIsArray } from '../../utils/commonUtils';
 import styles from './policy.css';
 import { Button_Save, Button_Yes, Button_No, Button_Edit, Button_Delete, Button_Save_Changes, Button_Cancel } from '../../../constants/ButtonConstants';
 import { POLICY } from '../../../constants/ActionTypes';

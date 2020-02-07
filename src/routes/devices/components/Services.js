@@ -7,7 +7,7 @@ import { withRouter, Redirect, Link } from 'react-router-dom';
 import { Markup } from 'interweave';
 
 import AddUser from '../../users/components/AddUser';
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 import CustomScrollbars from "../../../util/CustomScrollbars";
 import { Button_Cancel, Button_submit, Button_Add_User } from '../../../constants/ButtonConstants';
 import { SINGLE_DEVICE, DUPLICATE_DEVICES, Required_Fields, USER_ID, DEVICE_ID, USER_ID_IS_REQUIRED, SELECT_PGP_EMAILS, DEVICE_Select_CHAT_ID, SELECT_USER_ID, DEVICE_CLIENT_ID, DEVICE_Select_SIM_ID, DEVICE_MODE, DEVICE_MODEL, Device_Note, Device_Valid_For, Device_Valid_days_Required, DUPLICATE_DEVICES_REQUIRED, DEVICE_IMEI_1, DEVICE_SIM_1, DEVICE_IMEI_2, DEVICE_SIM_2 } from '../../../constants/DeviceConstants';

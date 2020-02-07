@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import { ADMIN, DEALER, SDEALER } from "../../constants/Constants";
 import Chat from "./Chat/index";
 import { resetSupportPage, resetCurrentSupportTicketId, resetCurrentSystemMessageId, setSupportPage, resetCurrentConversation } from "../../appRedux/actions";
+import { checkIsArray } from '../utils/commonUtils';
 
 const TabPane = Tabs.TabPane;
 

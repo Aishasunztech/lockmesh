@@ -78,7 +78,7 @@ class FilterDevices extends Component {
     let columns = this.state.columns;
     // console.log('columns are: ', columns);
 
-    columns.forEach(column => {
+    checkIsArray(columns).forEach(column => {
       if (column.children) {
         if (Object.keys(sorter).length > 0) {
           if (column.dataIndex == sorter.field) {
@@ -106,7 +106,7 @@ class FilterDevices extends Component {
     let columns = this.state.columns;
     // console.log('columns are: ', columns);
 
-    columns.forEach(column => {
+    checkIsArray(columns).forEach(column => {
       // if (column.children) {
       if (Object.keys(sorter).length > 0) {
         if (column.dataIndex == sorter.field) {
@@ -358,7 +358,7 @@ class FilterDevices extends Component {
   onSelectChange = (selectedRowKeys, selectedRows) => {
     // console.log(selectedRowKeys, 'selected', selectedRows);
     let device_ids = []
-    selectedRows.forEach(row => {
+    checkIsArray(selectedRows).forEach(row => {
       // console.log("selected row", row)
       device_ids.push(row.id);
     });
@@ -373,7 +373,7 @@ class FilterDevices extends Component {
     let demoData = [];
 
     if (value.length) {
-      originalData.forEach((data) => {
+      checkIsArray(originalData).forEach((data) => {
         if (data[fieldName] !== undefined) {
           if ((typeof data[fieldName]) === 'string') {
 
@@ -403,7 +403,7 @@ class FilterDevices extends Component {
     let demoData = [];
 
     if (value.length) {
-      originalData.forEach((data) => {
+      checkIsArray(originalData).forEach((data) => {
         if (data['dealer_id'].toString().toUpperCase().includes(value.toUpperCase())) {
           demoData.push(data);
         }
@@ -480,7 +480,7 @@ class FilterDevices extends Component {
 
     if (e.target.value.length) {
       // console.log(this.state.devices);
-      copyDevices.forEach((device) => {
+      checkIsArray(copyDevices).forEach((device) => {
         if (e.target.name === 'all') {
           checkIsArray(Object.keys(device)).map(key => {
 

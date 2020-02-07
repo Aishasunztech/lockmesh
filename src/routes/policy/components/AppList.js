@@ -6,7 +6,7 @@ import {
     handleCheckAll
 } from "../../../appRedux/actions/ConnectDevice";
 import { SECURE_SETTING, Enable_ALL, Encrypted_ALL, GUEST_ALL, SECURE_SETTING_PERMISSION } from '../../../constants/Constants';
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 
 import { BASE_URL } from '../../../constants/Application';
 
