@@ -17,6 +17,7 @@ import {
 } from '../../../../constants/TabConstants';
 import { isArray } from "util";
 import WhiteLabelPricing from './WhiteLabelPricing';
+import { checkIsArray } from '../../../utils/commonUtils';
 let packagesCopy = [];
 
 export default class Prices extends Component {
@@ -39,7 +40,7 @@ export default class Prices extends Component {
 
         if (e.target.value.length && this.state.packagesCopy) {
 
-            packagesCopy.forEach((dealer) => {
+            checkIsArray(packagesCopy).forEach((dealer) => {
                 if (dealer[e.target.name] !== undefined) {
                     if ((typeof dealer[e.target.name]) === 'string') {
                         if (dealer[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
@@ -98,21 +99,21 @@ export default class Prices extends Component {
     }
 
     renderList = () => {
-        if (this.state.packages) {
-            return this.state.packages.map((item, index) => {
-                return {
-                    rowKey: index,
-                    key: item.id,
-                    sr: ++index,
-                    pkg_name: item.pkg_name,
-                    pkg_price: "$" + item.pkg_price,
-                    pkg_term: item.pkg_term,
-                    pkg_expiry: item.pkg_expiry
-                }
-            })
-        } else {
-            return [];
-        }
+        // if (this.state.packages) {
+        return checkIsArray(this.state.packages).map((item, index) => {
+            return {
+                rowKey: index,
+                key: item.id,
+                sr: ++index,
+                pkg_name: item.pkg_name,
+                pkg_price: "$" + item.pkg_price,
+                pkg_term: item.pkg_term,
+                pkg_expiry: item.pkg_expiry
+            }
+        })
+        // } else {
+        //     return [];
+        // }
     }
 
     render() {

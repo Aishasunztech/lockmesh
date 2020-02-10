@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal } from "antd";
 // import { BASE_URL } from '../../../constants/Application';
 // import EditDealer from './editDealer';
-import { convertToLang, convertTimezoneValue } from '../../../utils/commonUtils';
+import { convertToLang, convertTimezoneValue, checkIsArray } from '../../../utils/commonUtils';
 
 import { Tabs } from 'antd';
 import {
@@ -57,9 +57,9 @@ class AccountList extends Component {
     renderList(list) {
         data = [];
         if (this.props.tabselect !== 'all') {
-            list = list.filter(e => e.used == this.props.tabselect);
+            list = checkIsArray(list).filter(e => e.used == this.props.tabselect);
         }
-        list.map((item, index) => {
+        checkIsArray(list).map((item, index) => {
             // let label;
             // if (item.whitelabel_id === 1) { label = "Lockmesh" } else if (item.whitelabel_id === 2) { label = "Titan Locker" } else { label = "N/A" }
             data.push({

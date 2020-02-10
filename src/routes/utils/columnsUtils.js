@@ -1,6 +1,6 @@
 import React from "react";
 import { Input, Button, Icon, Select, Popover } from "antd";
-import { titleCase, convertToLang } from './commonUtils';
+import { titleCase, convertToLang, checkIsArray } from './commonUtils';
 import { Markup } from 'interweave';
 import {
     DEVICE_ID,
@@ -1976,7 +1976,7 @@ export function dealerColsWithSearch(translation, searchBar = false, callBack = 
     ];
 
     if (searchBar) {
-        var result = searchInput.map((item, index) => {
+        var result = checkIsArray(searchInput).map((item, index) => {
             let flag = true;
             for (var i in child) {
                 if (child[i].dataIndex == item.dataIndex) {

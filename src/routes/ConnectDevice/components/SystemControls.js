@@ -5,7 +5,7 @@ import { SYSTEM_PERMISSION, NOT_AVAILABLE, ADMIN, ANDROID_SETTING_PERMISSION } f
 
 
 import { Main_SETTINGS } from '../../../constants/Constants';
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 
 export default class SystemControls extends Component {
   constructor(props) {
@@ -77,7 +77,7 @@ export default class SystemControls extends Component {
 
     let setting = [];
     if (this.state.app_list && this.state.app_list.length) {
-      setting = this.state.app_list.filter(item => item.uniqueName === Main_SETTINGS)
+      setting = checkIsArray(this.state.app_list).filter(item => item.uniqueName === Main_SETTINGS)
     }
 
 

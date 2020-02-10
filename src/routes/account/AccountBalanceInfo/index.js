@@ -17,7 +17,7 @@ import {
 } from "../../../appRedux/actions";
 
 // Helpers 
-import { componentSearch, titleCase, convertToLang } from '../../utils/commonUtils';
+import { componentSearch, titleCase, convertToLang, checkIsArray } from '../../utils/commonUtils';
 
 
 
@@ -87,7 +87,7 @@ class AccountBalanceInfo extends Component {
         // console.log("devices", copyInnerContent);
 
         if (e.target.value.length) {
-            copyInnerContent.forEach((item) => {
+            checkIsArray(copyInnerContent).forEach((item) => {
 
                 if (item[e.target.name] !== undefined) {
                     if ((typeof item[e.target.name]) === 'string') {

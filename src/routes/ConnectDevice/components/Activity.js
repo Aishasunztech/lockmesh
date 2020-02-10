@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Modal, message, Input, Table, Switch, Avatar, Card } from 'antd';
-import { componentSearch, getFormattedDate, convertToLang, checkValue } from '../../utils/commonUtils';
+import { componentSearch, getFormattedDate, convertToLang, checkValue, checkIsArray } from '../../utils/commonUtils';
 import Moment from 'react-moment';
 import { SECURE_SETTING, DATE, PROFILE_NAME } from '../../../constants/Constants';
 import DeviceSettings from './DeviceSettings';
@@ -134,7 +134,7 @@ export default class Activity extends Component {
 
     renderApps = (apps) => {
 
-        return apps.map(app => {
+        return checkIsArray(apps).map(app => {
             console.log(app, `${BASE_URL}users/getFile/${(app.logo) ? `${app.logo}` : `icon_${app.package_name}${app.label}`}`);
             return ({
                 key: app.apk_id,
@@ -183,7 +183,7 @@ export default class Activity extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.key)) {
-                let list = this.state.expandedRowKeys.filter(item => item !== record.key)
+                let list = checkIsArray(this.state.expandedRowKeys).filter(item => item !== record.key)
                 this.setState({ expandedRowKeys: list })
             }
         }
@@ -203,8 +203,8 @@ export default class Activity extends Component {
 
     renderList = () => {
         let data = this.state.activities;
-        if (data.length) {
-            return data.map((row, index) => {
+        // if (data.length) {
+            return checkIsArray(data).map((row, index) => {
                 // console.log(row.data);
                 return {
                     key: index,
@@ -218,7 +218,7 @@ export default class Activity extends Component {
                     data: row.data
                 }
             })
-        }
+        // }
     }
     render() {
 

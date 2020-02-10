@@ -12,7 +12,7 @@ import { BASE_URL } from '../../../constants/Application';
 
 import ExtensionDropdown from './ExtensionDropdown';
 import { ENABLE, ENCRYPT, Guest, ENCRYPTED, IN_APP_MENU_DISPLAY } from '../../../constants/TabConstants';
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { SECURE_SETTING_PERMISSION, NOT_AVAILABLE, SECURE_SETTINGS, SECURE_SETTING } from '../../../constants/Constants';
 
 
@@ -93,8 +93,8 @@ class SettingAppPermissions extends Component {
     let extensions = this.state.extensions;
     console.log("render list extension", extensions);
 
-    if (extensions.length) {
-      return extensions.map((ext, index) => {
+    // if (extensions.length) {
+      return checkIsArray(extensions).map((ext, index) => {
         return {
           key: ext.app_id,
           name: (
@@ -123,7 +123,7 @@ class SettingAppPermissions extends Component {
         }
       })
 
-    }
+    // }
   }
   render() {
     const { secureSetting, isExtension } = this.props;

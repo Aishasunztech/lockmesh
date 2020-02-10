@@ -17,7 +17,7 @@ import Services from './Services';
 import Invoice from './invoice';
 
 // Helpers
-import { checkValue, convertToLang } from '../../utils/commonUtils'
+import { checkValue, convertToLang, checkIsArray } from '../../utils/commonUtils'
 import RestService from '../../../appRedux/services/RestServices';
 import { inventorySales, refundServiceColumns } from '../../utils/columnsUtils';
 
@@ -188,7 +188,7 @@ class EditDevice extends Component {
                 }
                 else if (this.state.services) {
                     let product_prices = this.filterList(this.state.term + ' month', this.props.product_prices, 'product');
-                    let sim_id_price = product_prices.filter((item) => {
+                    let sim_id_price = checkIsArray(product_prices).filter((item) => {
                         if (item.price_for === 'sim_id') {
                             return item
                         }
@@ -545,7 +545,7 @@ class EditDevice extends Component {
     filterList = (type, list, listType) => {
         let dummyPackages = [];
         if (list.length) {
-            list.filter(function (item) {
+            checkIsArray(list).filter(function (item) {
                 let packageTerm;
                 if (listType === 'pkg') {
                     packageTerm = item.pkg_term
@@ -1384,7 +1384,7 @@ class EditDevice extends Component {
                                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                             disabled={this.state.disableChat}
                                         >
-                                            {this.props.chat_ids.map((chat_id, index) => {
+                                            {checkIsArray(this.props.chat_ids).map((chat_id, index) => {
                                                 return (<Select.Option key={index} value={chat_id.chat_id}>{chat_id.chat_id}</Select.Option>)
                                             })}
                                         </Select>

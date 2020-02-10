@@ -43,7 +43,7 @@ import { getSupportSystemMessagesNotifications } from "../../appRedux/actions";
 
 import { transferDeviceProfile } from "../../appRedux/actions/ConnectDevice";
 
-import { convertToLang } from '../../routes/utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../routes/utils/commonUtils';
 
 import {
   NAV_STYLE_NO_HEADER_EXPANDED_SIDEBAR,
@@ -91,7 +91,7 @@ class SidebarContent extends Component {
 
   languageMenu = () => (
     <ul className="gx-sub-popover">
-      {this.state.languageData.map(language =>
+      {checkIsArray(this.state.languageData).map(language =>
         <li className={`gx-media gx-pointer ${(language.id == this.props.lng_id) ? "noClick" : ""}`} key={JSON.stringify(language)} onClick={(e) => this.changeLng(language)}>
           <i className={`flag flag-24 gx-mr-2 flag-${language.icon}`} />
           <span className="gx-language-text">{language.name}</span>

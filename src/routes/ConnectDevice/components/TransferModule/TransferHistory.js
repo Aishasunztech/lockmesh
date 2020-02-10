@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { Modal, message, Input, Table, Switch, Avatar, Button, Card, Row, Col, Select, Spin, Form } from 'antd';
-import { componentSearch, getFormattedDate, convertToLang, checkValue } from '../../../utils/commonUtils';
+import { componentSearch, getFormattedDate, convertToLang, checkValue, checkIsArray } from '../../../utils/commonUtils';
 import Moment from 'react-moment';
 import { SECURE_SETTING, DATE, PROFILE_NAME, SEARCH, ADMIN } from '../../../../constants/Constants';
 import { BASE_URL } from '../../../../constants/Application';
@@ -263,7 +263,7 @@ class TransferHistory extends Component {
         this.props.getNewDevicesList();
         this.props.getDeaerUsers(this.props.device.dealer_id);
 
-        let filtered = this.props.transferHistoryList.filter(e => e.action == "Device Transfered");
+        let filtered = checkIsArray(this.props.transferHistoryList).filter(e => e.action == "Device Transfered");
         let THIS_DEVICE_TRANSFERED_TO = (filtered[filtered.length - 1]) ? `to ${filtered[filtered.length - 1].transfered_to}` : "";
 
         if (this.props.device.finalStatus == "Transfered") {

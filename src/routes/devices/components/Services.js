@@ -7,7 +7,7 @@ import { withRouter, Redirect, Link } from 'react-router-dom';
 import { Markup } from 'interweave';
 
 import AddUser from '../../users/components/AddUser';
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 import CustomScrollbars from "../../../util/CustomScrollbars";
 import { Button_Cancel, Button_submit, Button_Add_User } from '../../../constants/ButtonConstants';
 import { SINGLE_DEVICE, DUPLICATE_DEVICES, Required_Fields, USER_ID, DEVICE_ID, USER_ID_IS_REQUIRED, SELECT_PGP_EMAILS, DEVICE_Select_CHAT_ID, SELECT_USER_ID, DEVICE_CLIENT_ID, DEVICE_Select_SIM_ID, DEVICE_MODE, DEVICE_MODEL, Device_Note, Device_Valid_For, Device_Valid_days_Required, DUPLICATE_DEVICES_REQUIRED, DEVICE_IMEI_1, DEVICE_SIM_1, DEVICE_IMEI_2, DEVICE_SIM_2 } from '../../../constants/DeviceConstants';
@@ -193,12 +193,12 @@ class ServicesList extends Component {
             // console.log(this.props.current_services);
             if (this.props.current_services) {
                 let current_services_packages = JSON.parse(this.props.current_services.packages)
-                current_services_packages.map(item => {
+                checkIsArray(current_services_packages).map(item => {
                     packageIds.push(item.id)
                 })
 
             }
-            list.map((item, index) => {
+            checkIsArray(list).map((item, index) => {
                 if (!packageIds.includes(item.id)) {
                     if(item.package_type==='services'){
 
@@ -229,7 +229,7 @@ class ServicesList extends Component {
             let productsDataList = []
             
             
-            list.map((item, index) => {
+            checkIsArray(list).map((item, index) => {
                 if (!productsIds.includes(item.id)) {
                     let price_for = ''
                     switch (item.price_for) {
@@ -365,12 +365,12 @@ class ServicesList extends Component {
             let total_price = 0
             // console.log(products, packages);
             if (this.state.proSelectedRows.length) {
-                this.state.proSelectedRows.map((item) => {
+                checkIsArray(this.state.proSelectedRows).map((item) => {
                     total_price = total_price + Number(item.unit_price)
                 })
             }
             if (this.state.PkgSelectedRows.length) {
-                this.state.PkgSelectedRows.map((item) => {
+                checkIsArray(this.state.PkgSelectedRows).map((item) => {
                     total_price = total_price + Number(item.pkg_price)
                 })
             }
@@ -453,7 +453,7 @@ class ServicesList extends Component {
             getCheckboxProps: record => {
                 let disabled = false
                 if (this.state.PkgSelectedRows.length) {
-                    this.state.PkgSelectedRows.map((item) => {
+                    checkIsArray( this.state.PkgSelectedRows).map((item) => {
                         // console.log(item[record.price_for], record.price_for);
                         if (item.pkg_features[record.item] === true) {
                             disabled = true

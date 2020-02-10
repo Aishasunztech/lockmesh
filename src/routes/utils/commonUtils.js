@@ -133,7 +133,7 @@ export function getDealerStatus(unlink_status, account_status) {
 export function componentSearch(arr, search) {
 	let foundDevices = [];
 	let obks = Object.keys(arr[0]);
-	arr.map((el) => {
+	checkIsArray(arr).map((el) => {
 		obks.some((obk) => {
 			if (obk) {
 				let temp = el[obk];
@@ -155,7 +155,7 @@ export function componentSearch(arr, search) {
 export function componentSearchSystemMessages(arr, keys, search) {
 	let foundDevices = [];
 	let obks = keys;
-	arr.map((el) => {
+	checkIsArray(arr).map((el) => {
 		obks.some((obk) => {
 			if (obk) {
 				let temp = el[obk];
@@ -233,10 +233,10 @@ export function initCap(str) {
 }
 export function titleCase(str) {
 	var wordsArray = str.toLowerCase().split(/\s+/);
-	var upperCased = wordsArray.map(function (word) {
+	var upperCased = checkIsArray(wordsArray).map(function (word) {
 		var dashWords = word.split("-");
 		if (dashWords.length > 1) {
-			return dashWords.map((dWord, index) => {
+			return checkIsArray(dashWords).map((dWord, index) => {
 				var char = (++index !== dashWords.length) ? "-" : "";
 				return dWord.charAt(0).toUpperCase() + dWord.substr(1) + char;
 			})
@@ -303,7 +303,7 @@ export function getDevicesListActionBtns(user, device, status, allButtons) {
 	else if (device.flagged !== 'Not flagged' && device.transfer_status === 0 && status === "Flagged") {
 		actionBtns.push(<Fragment><Fragment>{allButtons.Unflagbtn}</Fragment><Fragment>{allButtons.ConnectBtn}</Fragment></Fragment>)
 	}
-	else if (device.flagged !== 'Not flagged' && device.transfer_status === 1 && status === "Transfered") {
+	else if (device.flagged !== 'Not flagged' && device.transfer_status === 1 && status === "Transferred") {
 		actionBtns.push(<Fragment><Fragment>{allButtons.Unflagbtn}</Fragment><Fragment>{allButtons.ConnectBtn}</Fragment></Fragment>)
 	}
 	else if (status === DEVICE_SUSPENDED) {
@@ -641,6 +641,14 @@ export function convertTimezoneValue(dealerTimezone, data, clientToServerTZ = fa
 	return convertedDateTime;
 }
 
+export function checkIsArray(data) {
+	if (data && Array.isArray(data) && data.length) {
+		return data;
+	} else {
+		return [];
+	}
+}
+
 export function handleMultipleSearch(e, copy_status, copyRequireSearchData, demoSearchValues, requireForSearch) {
 	// handleMultipleSearch(e, this.state.copy_status, copyDevices, this.state.SearchValues, this.state.filteredDevices)
 
@@ -661,14 +669,14 @@ export function handleMultipleSearch(e, copy_status, copyRequireSearchData, demo
 	if (targetValue.length || Object.keys(demoSearchValues).length) {
 		demoSearchValues[targetName] = { key: targetName, value: targetValue };
 
-		copyRequireSearchData.forEach((obj) => {
+		checkIsArray(copyRequireSearchData).forEach((obj) => {
 			// console.log('device is: ', device);
 			// if (obj[targetName] !== undefined) {
 
 			let searchRecords = 0;
 
 			if (searchColsAre > 0) {
-				Object.values(demoSearchValues).forEach((data) => {
+				checkIsArray(Object.values(demoSearchValues)).forEach((data) => {
 
 					if (obj[data.key] !== undefined && obj[data.key] !== null) {
 						if (data.value == "") {
@@ -730,7 +738,7 @@ export function filterData_RelatedToMultipleSearch(devices, SearchValues) {
 	let searchColsAre = Object.keys(SearchValues).length;
 
 	if (searchColsAre) {
-		devices.forEach((device) => {
+		checkIsArray(devices).forEach((device) => {
 			let searchDevices = 0;
 
 			for (let search of searchData) {
@@ -772,7 +780,7 @@ export function findAndRemove_duplicate_in_array(arra1) {
 	var object = {};
 	var duplicateIds = [];
 
-	arra1.forEach(function (item) {
+	checkIsArray(arra1).forEach(function (item) {
 		if (!object[item])
 			object[item] = 0;
 		object[item] += 1;
@@ -784,7 +792,7 @@ export function findAndRemove_duplicate_in_array(arra1) {
 		}
 	}
 
-	let removeDuplicateIds = arra1.filter((item) => !duplicateIds.includes(item));
+	let removeDuplicateIds = checkIsArray(arra1).filter((item) => !duplicateIds.includes(item));
 	return ([...removeDuplicateIds, ...duplicateIds]);
 
 }
@@ -975,7 +983,7 @@ export function formatMoney(amount, decimalCount = 2, decimal = ".", thousands =
  */
 
 export function removeColumns(columnList, removeIndexes) {
-	return columnList.filter((column) => {
+	return checkIsArray(columnList).filter((column) => {
 		for (let i = 0; i < removeIndexes.length; i++) {
 			if (column.dataIndex !== removeIndexes[i]) {
 				return column;

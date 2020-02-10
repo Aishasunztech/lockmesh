@@ -16,7 +16,7 @@ import Invoice from './invoice';
 import AddPGPEmailModal from './AddPGPEmailModal';
 
 // helpers
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { inventorySales } from '../../utils/columnsUtils';
 import RestService from '../../../appRedux/services/RestServices'
 
@@ -130,7 +130,7 @@ class AddDevice extends Component {
                     }
 
                     let product_prices = this.filterList(this.state.term + ' month', this.props.product_prices, 'product');
-                    let sim_id_price = product_prices.filter((item) => {
+                    let sim_id_price = checkIsArray(product_prices).filter((item) => {
                         if (item.price_for === 'sim_id') {
                             return item
                         }
@@ -622,7 +622,7 @@ class AddDevice extends Component {
     filterList = (type, list, listType) => {
         let dummyPackages = [];
         if (list.length) {
-            list.filter(function (item) {
+            checkIsArray(list).filter(function (item) {
                 let packageTerm;
                 if (listType === 'pkg') {
                     packageTerm = item.pkg_term

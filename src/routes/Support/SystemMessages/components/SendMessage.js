@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Button, Form, Input, Select, InputNumber, Row, Col, Tag, Calendar, DatePicker, TimePicker, Modal } from 'antd';
-import { checkValue, convertToLang } from '../../../utils/commonUtils'
+import { checkValue, convertToLang, checkIsArray } from '../../../utils/commonUtils'
 import { Button_Cancel, Button_submit } from '../../../../constants/ButtonConstants';
 import { Required_Fields } from '../../../../constants/DeviceConstants';
 import moment from 'moment';
@@ -32,9 +32,9 @@ class SendMessage extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
 
       let dealerData = [];
-      dealerData  = this.props.dealerList.filter(dealer => this.state.selectedDealers.find(item => item.key === dealer.dealer_id));
+      dealerData = checkIsArray(this.props.dealerList).filter(dealer => this.state.selectedDealers.find(item => item.key === dealer.dealer_id));
 
-      if (!err){
+      if (!err) {
         values.receivers = dealerData;
         this.props.generateSupportSystemMessages(values);
         this.handleCancel();
@@ -46,8 +46,8 @@ class SendMessage extends Component {
   componentDidMount() {
 
     if (this.props.dealerList.length > 0) {
-      let allDealers = this.props.dealerList.map((item) => {
-        return ({ key: item.dealer_id, id: item.dealer_id, label: item.dealer_name, email: item.email  })
+      let allDealers = checkIsArray(this.props.dealerList).map((item) => {
+        return ({ key: item.dealer_id, id: item.dealer_id, label: item.dealer_name, email: item.email })
       });
 
       this.setState({
@@ -62,7 +62,7 @@ class SendMessage extends Component {
   handleDeselect = (e, dealerOrUser = '') => {
 
     if (dealerOrUser == "dealers") {
-      let updateDealers = this.state.selectedDealers.filter(item => item.key != e.key);
+      let updateDealers = checkIsArray(this.state.selectedDealers).filter(item => item.key != e.key);
       this.state.selectedDealers = updateDealers;
       this.state.checkAllSelectedDealers = false;
     }
@@ -89,7 +89,7 @@ class SendMessage extends Component {
   handleChangeDealer = (values, option) => {
 
     let checkAllDealers = this.state.checkAllSelectedDealers;
-    let selectAll = values.filter(e => e.key === "all");
+    let selectAll = checkIsArray(values).filter(e => e.key === "all");
     let selectedDealers = [];
 
     if (selectAll.length > 0) {
@@ -105,7 +105,7 @@ class SendMessage extends Component {
       checkAllDealers = true;
     }
     else {
-      selectedDealers = values.filter(e => e.key !== "all");
+      selectedDealers = checkIsArray(values).filter(e => e.key !== "all");
     }
 
 
@@ -172,14 +172,14 @@ class SendMessage extends Component {
                       <Select.Option key="allDealers" value="all">Select All</Select.Option>
                       : <Select.Option key="" value="">Dealers not found</Select.Option>
                     }
-                    {this.state.allDealers.map(item => <Select.Option key={item.key} value={item.key} >{item.label}</Select.Option>)}
+                    {checkIsArray(this.state.allDealers).map(item => <Select.Option key={item.key} value={item.key} >{item.label}</Select.Option>)}
                   </Select>
                 )}
               </Form.Item>
             </Col>
           </Row>
           {(this.state.selectedDealers && this.state.selectedDealers.length && !this.state.checkAllSelectedDealers) ?
-            <div><h5>Dealers/S-Dealers Selected: <span className="font_26">{this.state.selectedDealers.map((item, index) => <Tag key={index}>{item.label}</Tag>)}</span></h5></div>
+            <div><h5>Dealers/S-Dealers Selected: <span className="font_26">{checkIsArray(this.state.selectedDealers).map((item, index) => <Tag key={index}>{item.label}</Tag>)}</span></h5></div>
             : null}
 
           <Row gutter={24} className="mt-4">
@@ -231,10 +231,10 @@ class SendMessage extends Component {
 
 
           <Form.Item className="edit_ftr_btn"
-                     wrapperCol={{
-                       xs: { span: 24, offset: 0 },
-                       sm: { span: 24, offset: 0 },
-                     }}
+            wrapperCol={{
+              xs: { span: 24, offset: 0 },
+              sm: { span: 24, offset: 0 },
+            }}
           >
             <Button type="button" onClick={this.handleCancel}> {convertToLang(this.props.translation[Button_Cancel], "Cancel")} </Button>
             <Button type="primary" htmlType="submit"> {convertToLang(this.props.translation[""], "Send")} </Button>

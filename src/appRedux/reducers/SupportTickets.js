@@ -13,6 +13,7 @@ import {
 } from "../../constants/ActionTypes";
 
 import { message, Modal } from 'antd';
+import { checkIsArray } from "../../routes/utils/commonUtils";
 const success = Modal.success;
 const error   = Modal.error;
 const initialState = {
@@ -160,7 +161,7 @@ export default (state = initialState, action) => {
     case CLOSE_SUPPORT_TICKET:{
       let tickets = state.supportTickets;
       if (action.payload.status) {
-        tickets.map(item => {
+        checkIsArray(tickets).map(item => {
           if(item._id === action.payload.data){
             item.status = 'closed'
           }
@@ -187,7 +188,7 @@ export default (state = initialState, action) => {
       let updatedTickets    = [];
       if (action.payload.status) {
         let deletedIds        = action.payload.deletedIds;
-        updatedTickets        = state.supportTickets.filter(supportTicket => !deletedIds.includes(supportTicket._id));
+        updatedTickets        = checkIsArray(state.supportTickets).filter(supportTicket => !deletedIds.includes(supportTicket._id));
         success({
           title: action.payload.msg,
         });

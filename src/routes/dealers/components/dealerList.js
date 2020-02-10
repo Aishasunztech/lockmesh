@@ -9,7 +9,7 @@ import { ADMIN, DEALER } from '../../../constants/Constants';
 import scrollIntoView from 'scroll-into-view';
 
 import DealerDevicesList from '../../users/components/UserDeviceList';
-import { convertToLang, convertTimezoneValue } from '../../utils/commonUtils'
+import { convertToLang, convertTimezoneValue, checkIsArray } from '../../utils/commonUtils'
 import { Redirect } from 'react-router-dom';
 import CustomScrollbars from "../../../util/CustomScrollbars";
 import {
@@ -171,7 +171,7 @@ class DealerList extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.row_key)) {
-                let list = this.state.expandedRowKeys.filter(item => item !== record.row_key)
+                let list = checkIsArray(this.state.expandedRowKeys).filter(item => item !== record.row_key)
                 this.setState({ expandedRowKeys: list })
             }
         }
