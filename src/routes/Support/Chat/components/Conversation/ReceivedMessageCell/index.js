@@ -4,7 +4,7 @@ import {getOnlyTimeAndDateTimestamp} from "../../../../../utils/commonUtils";
 
 const ReceivedMessageCell = ({conversation, user}) => {
   return (
-    <div className="gx-chat-item">
+    <div className="gx-chat-item" id={conversation._id}>
 
       <Avatar className="gx-size-40 gx-align-self-end" src="/static/media/profile-image.c9452584.png"
               alt=""/>

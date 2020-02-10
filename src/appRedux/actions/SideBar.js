@@ -44,12 +44,7 @@ export function getTicketsNotifications() {
             payload: response.data
           });
         }
-        }).catch(err => {
-          dispatch({
-            type: INVALID_TOKEN
-          });
       });
-
     };
 }
 export function getUserCredit() {

@@ -17,8 +17,10 @@ import {connect} from "react-redux";
 import {
   getAllDealers,
   getAllToAllDealers,
-  getSupportLiveChatConversation, getSupportLiveChatMessages,
-  sendSupportLiveChatMessage
+  getSupportLiveChatConversation,
+  getSupportLiveChatMessages,
+  sendSupportLiveChatMessage,
+  getSupportLiveChatPreviousMessages
 } from "../../../appRedux/actions";
 import {ADMIN, DEALER, SDEALER} from "../../../constants/Constants";
 const { TextArea } = Input;
@@ -59,12 +61,25 @@ class Chat extends Component {
     // });
   };
 
+  fetchMessages(){}
+
   onScroll = (e) => {
+    let { currentConversation } = this.props;
     if(e.srcElement.scrollHeight === e.srcElement.scrollTop + e.srcElement.clientHeight){
       if(this.state.isScrolledUp) {
         this.setState({isScrolledUp: false});
       }
     } else {
+      if(e.srcElement.scrollTop === 0){
+        if(this.state.conversation.length){
+          if(this.state.lastId !== this.state.conversation[0]._id){
+            let convId = (currentConversation !== null) ? currentConversation.hasOwnProperty('_id') && currentConversation._id !== null ? currentConversation._id : '' : '';
+            let lastId = this.state.conversation[0]._id;
+            this.props.getSupportLiveChatPreviousMessages({type: 'conversation', id: convId, last: this.state.conversation[0]._id});
+            this.setState({lastId: lastId});
+          }
+        }
+      }
       if(!this.state.isScrolledUp){
         this.setState({isScrolledUp: true});
       }
@@ -295,7 +310,8 @@ class Chat extends Component {
       chatUsers: [],
       copyChatUsers: [],
       conversation: [],
-      isScrolledUp: false
+      isScrolledUp: false,
+      lastId: ''
     }
   }
 
@@ -345,6 +361,15 @@ class Chat extends Component {
     }
 
     if (prevProps !== this.props){
+
+      let { lastId } = this.state;
+      if(lastId !== ''){
+        if(document.getElementById(lastId)){
+          setTimeout(function(){
+            document.getElementById(lastId).scrollIntoView();
+          }, 50);
+        }
+      }
 
       if (this.state.chatUsers !== this.props.supportLiveChatConversations && this.props.supportLiveChatConversations.length > 0 && this.props.dealerList.length > 0) {
 
@@ -494,7 +519,7 @@ class Chat extends Component {
   }
 
   render() {
-    const {loader, drawerState} = this.state;
+    const {loader, drawerState, conversation} = this.state;
     return (
       <div className="gx-main-content support-chat-content">
         <div className="gx-app-module gx-chat-module m-0">
@@ -551,6 +576,7 @@ function mapDispatchToProps(dispatch) {
     sendSupportLiveChatMessage: sendSupportLiveChatMessage,
     getSupportLiveChatConversation: getSupportLiveChatConversation,
     getSupportLiveChatMessages: getSupportLiveChatMessages,
+    getSupportLiveChatPreviousMessages: getSupportLiveChatPreviousMessages,
     getAllToAllDealers: getAllToAllDealers,
     setCurrentConversation: setCurrentConversation,
     markMessagesRead: markMessagesRead,

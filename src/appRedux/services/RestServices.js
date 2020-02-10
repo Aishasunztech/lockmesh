@@ -3,17 +3,25 @@ import { BASE_URL, SOCKET_BASE_URL, SUPERADMIN_URL, SUPPORT_URL, SUPPORT_SOCKET_
 import io from "socket.io-client";
 import SupportSystemSocketIO from "socket.io-client";
 
+axios.interceptors.request.use(function(config){
+  config.startTime = new Date().getTime();
+  return config;
+})
+
 axios.interceptors.response.use(function (response) {
   // Any status code that lie within the range of 2xx cause this function to trigger
   // Do something with response data
-//   console.log(response);
+  // let responseTime = new Date().getTime() - response.config.startTime;
+  // console.log("response time: ", responseTime);
   return response;
-}, function (error) {
+}
+, function (error) {
   // Any status codes that falls outside the range of 2xx cause this function to trigger
   // Do something with response error
-  // return Promise.reject(error);
-  console.error(error);
-});
+  // return [];
+  return Promise.reject(error);
+}
+);
 
 const RestService = {
 
@@ -1247,6 +1255,11 @@ const RestService = {
     //get Support Live Chat Message
     getSupportLiveChatMessages: (data) => {
         return axios.get(SUPPORT_URL + 'messages/get?type=' + data.type + '&id=' + data.id, RestService.getHeader());
+    },
+
+    //get Support Live Chat Previous Message
+    getSupportLiveChatPreviousMessages: (data) => {
+      return axios.get(SUPPORT_URL + 'messages/get?type=' + data.type + '&id=' + data.id + '&last=' + data.last, RestService.getHeader());
     },
 
     // Get Support Live Chat Notifications

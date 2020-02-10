@@ -22,7 +22,8 @@ export class Sidebar extends Component {
   constructor(props){
     super(props);
     this.state = {
-      microServiceRunning: props.microServiceRunning
+      microServiceRunning: props.microServiceRunning,
+      isMicroServiceChecked: false
     };
   }
 
@@ -34,21 +35,23 @@ export class Sidebar extends Component {
 		window.addEventListener('resize', () => {
 			this.props.updateWindowWidth(window.innerWidth)
 		});
-    // if(this.props.checkMicrServiceStatus){
-    //   this.props.checkMicrServiceStatus();
-    // }
+    if(this.props.checkMicrServiceStatus){
+      this.props.checkMicrServiceStatus();
+      this.setState({isMicroServiceChecked: true});
+    }
   }
 
-  // componentDidUpdate(prevProps){
-	//   if(prevProps !== this.props){
-  //     if(this.props.checkMicrServiceStatus){
-  //       this.props.checkMicrServiceStatus();
-  //     };
-  //   }
-  // }
+  componentDidUpdate(prevProps){
+	  if(prevProps !== this.props){
+      if(!this.state.isMicroServiceChecked && !this.state.microServiceRunning && this.props.checkMicrServiceStatus){
+        this.props.checkMicrServiceStatus();
+        this.setState({isMicroServiceChecked: true})
+      };
+    }
+  }
 
 	componentWillReceiveProps(nextProps){
-    if ( nextProps.microServiceRunning && nextProps.supportSystemSocket ) {
+    if ( this.state.isMicroServiceChecked && nextProps.microServiceRunning && nextProps.supportSystemSocket ) {
       nextProps.generateSupportTicketEvent(nextProps.supportSystemSocket);
       nextProps.systemMessageSocket(nextProps.supportSystemSocket);
       nextProps.supportLiveChatSocket(nextProps.supportSystemSocket);
