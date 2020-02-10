@@ -151,8 +151,8 @@ class StandAloneSims extends Component {
                     addButtonText={convertToLang(this.props.translation[""], "Add StandAlone Sim")}
                     // selectedOptions={this.props.selectedOptions}
                     // options={this.state.options}
+                    isAddButton={false}
                     // isAddButton={this.props.user.type !== ADMIN}
-                    isAddButton={this.props.user.type !== ADMIN}
                     isAddSimButton={true}
                     // AddPolicyModel={true}
                     handleAddSimModal={this.handleAddSimModal}
