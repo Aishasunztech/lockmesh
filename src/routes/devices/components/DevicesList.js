@@ -7,7 +7,7 @@ import CustomScrollbars from "../../../util/CustomScrollbars";
 import { Link } from "react-router-dom";
 import SuspendDevice from './SuspendDevice';
 import ActivateDevcie from './ActivateDevice';
-import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, convertToLang, checkRemainTermDays, convertTimezoneValue, getDevicesListActionBtns } from '../../utils/commonUtils'
+import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, convertToLang, checkRemainTermDays, convertTimezoneValue, getDevicesListActionBtns, checkIsArray } from '../../utils/commonUtils'
 import EditDevice from './editDevice';
 import AddDevice from './AddDevice';
 
@@ -270,7 +270,7 @@ class DevicesList extends Component {
                 // counter: ++index,
                 action: actionBtns,
                 status: (<span style={color} > {status}</span>),
-                lastOnline: convertTimezoneValue(this.props.user.timezone, device.lastOnline, TIMESTAMP_FORMAT),
+                lastOnline: convertTimezoneValue(this.props.user.timezone, device.lastOnline),
                 flagged: device.flagged,
                 type: checkValue(device.type),
                 version: checkValue(device.version),
@@ -301,8 +301,8 @@ class DevicesList extends Component {
                 s_dealer: device.prnt_dlr_id ? device.prnt_dlr_id : 'N/A', // checkValue(device.prnt_dlr_id), // checkValue(device.s_dealer), 
                 s_dealer_name: device.prnt_dlr_name ? device.prnt_dlr_name : 'N/A', // checkValue(device.prnt_dlr_name), // checkValue(device.s_dealer_name),
                 remainTermDays: (Number(device.remainTermDays) > 0) ? device.remainTermDays : 0,
-                start_date: (status !== DEVICE_PRE_ACTIVATION) ? convertTimezoneValue(this.props.user.timezone, device.start_date, DATE_FORMAT) : "N/A",
-                expiry_date: (status !== DEVICE_PRE_ACTIVATION) ? convertTimezoneValue(this.props.user.timezone, device.expiry_date, DATE_FORMAT) : "N/A",
+                start_date: (status !== DEVICE_PRE_ACTIVATION) ? convertTimezoneValue(this.props.user.timezone, device.start_date, false, DATE_FORMAT) : "N/A",
+                expiry_date: (status !== DEVICE_PRE_ACTIVATION) ? convertTimezoneValue(this.props.user.timezone, device.expiry_date, false, DATE_FORMAT) : "N/A",
             }
         });
     }
@@ -413,7 +413,7 @@ class DevicesList extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.key)) {
-                let list = this.state.expandedRowKeys.filter(item => item !== record.key)
+                let list = checkIsArray(this.state.expandedRowKeys).filter(item => item !== record.key)
                 this.setState({ expandedRowKeys: list })
             }
         }
@@ -479,20 +479,21 @@ class DevicesList extends Component {
         }
 
         let rowSelection;
-        if (this.props.tabselect === '5' && this.props.user.type !== ADMIN) {
-            rowSelection = {
-                onChange: (selectedRowKeys, selectedRows) => {
-                    this.setState({ selectedRows: selectedRows, selectedRowKeys: selectedRowKeys })
-                    // console.log(`selectedRowKeys 5: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-                },
-                getCheckboxProps: record => ({
-                    disabled: record.name === 'Disabled User', // Column configuration not to be checked
-                    name: record.name,
-                }),
-                //  columnTitle: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
-            };
-        }
-        else if (this.props.tabselect === '3' && this.props.user.type !== ADMIN) {
+        // if (this.props.tabselect === '5' && this.props.user.type !== ADMIN) {
+        //     rowSelection = {
+        //         onChange: (selectedRowKeys, selectedRows) => {
+        //             this.setState({ selectedRows: selectedRows, selectedRowKeys: selectedRowKeys })
+        //             // console.log(`selectedRowKeys 5: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+        //         },
+        //         getCheckboxProps: record => ({
+        //             disabled: record.name === 'Disabled User', // Column configuration not to be checked
+        //             name: record.name,
+        //         }),
+        //         //  columnTitle: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
+        //     };
+        // }
+        // else 
+        if (this.props.tabselect === '3' && this.props.user.type !== ADMIN) {
             rowSelection = {
                 onChange: (selectedRowKeys, selectedRows) => {
                     this.setState({ selectedRows: selectedRows, selectedRowKeys: selectedRowKeys })

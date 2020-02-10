@@ -6,7 +6,7 @@ import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip, Progress,
 import TableHistory from "./TableHistory";
 import SuspendDevice from '../../devices/components/SuspendDevice';
 import ActivateDevcie from '../../devices/components/ActivateDevice';
-import { componentSearch, convertToLang } from '../../utils/commonUtils';
+import { componentSearch, convertToLang, checkIsArray } from '../../utils/commonUtils';
 import EditDevice from '../../devices/components/editDevice';
 import FlagDevice from '../../ConnectDevice/components/flagDevice';
 import WipeDevice from '../../ConnectDevice/components/wipeDevice';
@@ -820,7 +820,7 @@ class SideActions extends Component {
     handleSearch = (value) => {
         let searchedDevices = [];
         // console.log("searchedValue: ",value)
-        searchedDevices = this.props.device_list.filter((device) => device.device_id.toLowerCase().includes(value.toLowerCase()));
+        searchedDevices = checkIsArray(this.props.device_list).filter((device) => device.device_id.toLowerCase().includes(value.toLowerCase()));
         // console.log(searchedDevices);
         let index = this.props.device_list.findIndex((device) => device.device_id.toLowerCase() === value.toLowerCase());
         let states = {
@@ -890,7 +890,7 @@ class SideActions extends Component {
                                 className="global-search"
                                 size="large"
                                 style={{ width: '100%' }}
-                                dataSource={device_list.map((item, index) => {
+                                dataSource={checkIsArray(device_list).map((item, index) => {
                                     return (<Option key={index} value={item.device_id}>{item.device_id + ' (' + item.finalStatus + ')'}</Option>)
                                 })}
                                 onSelect={this.handleDeviceChange}

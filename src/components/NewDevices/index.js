@@ -5,7 +5,8 @@ import AddDeviceModal from '../../routes/devices/components/AddDevice';
 import { ADMIN, ACTION, CREDITS, CREDITS_CASH_REQUESTS, ARE_YOU_SURE_YOU_WANT_TO_DECLINE_THIS_REQUEST, ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST, WARNING, DEVICE_UNLINKED } from '../../constants/Constants';
 import {
   checkValue, convertToLang, getDateFromTimestamp,
-  getOnlyTimeFromTimestamp
+  getOnlyTimeFromTimestamp,
+  checkIsArray
 } from '../../routes/utils/commonUtils';
 import { Button_Ok, Button_Cancel, Button_Confirm, Button_Decline, Button_ACCEPT, Button_Transfer, Button_Yes, Button_No } from '../../constants/ButtonConstants';
 import { DEVICE_ID, DEVICE_SERIAL_NUMBER, DEVICE_IMEI_1, DEVICE_SIM_2, DEVICE_IMEI_2, DEVICE_REQUESTS, DEVICE_SIM_1 } from '../../constants/DeviceConstants';
@@ -109,7 +110,7 @@ export default class NewDevices extends Component {
         if (e.target.checked) {
             this.setState({ selectedSystemMessages: [...selectedMessages, val] });
         } else {
-            this.setState({ selectedSystemMessages: selectedMessages.filter(message => message !== val) });
+            this.setState({ selectedSystemMessages: checkIsArray(selectedMessages).filter(message => message !== val) });
         }
     }
 
@@ -118,7 +119,7 @@ export default class NewDevices extends Component {
         if (e.target.checked) {
             this.setState({ selectedTicketNotifications: [...selectedTickets, val] });
         } else {
-            this.setState({ selectedTicketNotifications: selectedTickets.filter(ticket => ticket !== val) });
+            this.setState({ selectedTicketNotifications: checkIsArray(selectedTickets).filter(ticket => ticket !== val) });
         }
     }
 
@@ -127,7 +128,7 @@ export default class NewDevices extends Component {
       if (e.target.checked) {
         this.setState({ selectedChat: [...selectedChat, val] });
       } else {
-        this.setState({ selectedChat: selectedChat.filter(chat => chat !== val) });
+        this.setState({ selectedChat: checkIsArray(selectedChat).filter(chat => chat !== val) });
       }
     }
 
@@ -273,7 +274,7 @@ export default class NewDevices extends Component {
     filterList = (devices) => {
         let dumyDevices = [];
         if (devices !== undefined) {
-            devices.filter(function (device) {
+            checkIsArray(devices).filter(function (device) {
                 if (device.finalStatus !== DEVICE_UNLINKED) {
                     let deviceStatus = device.flagged;
                     if ((deviceStatus === 'Defective' || deviceStatus === 'Lost' || deviceStatus === 'Stolen' || deviceStatus === 'Other') && (device.finalStatus === "Flagged")) {
@@ -287,7 +288,7 @@ export default class NewDevices extends Component {
 
     renderList1(list) {
         if (list && Array.isArray(list) && list.length > 0) {
-            return list.map((request) => {
+            return checkIsArray(list).map((request) => {
                 return {
                     key: request.id ? `${request.id}` : "N/A",
                     action: <div>  <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.rejectRequest(request); }}>{convertToLang(this.props.translation[Button_Decline], "DECLINE")}</Button>
@@ -311,10 +312,10 @@ export default class NewDevices extends Component {
     }
 
     renderTicketNotifications(list) {
-      let { setCurrentSupportTicketId, setSupportPage } = this.props;
+      let { setCurrentSupportTicketId, setCurrentTicketId, setSupportPage } = this.props;
 
         if (list && Array.isArray(list) && list.length > 0) {
-          return list.map((notification) => {
+          return checkIsArray(list).map((notification) => {
             let dealer_name = 'N/A';
             let dealer_pin = 'N/A';
             let dealer = this.state.dealers.find(dealer => dealer.dealer_id == notification.user_id);
@@ -333,6 +334,7 @@ export default class NewDevices extends Component {
                   type: notification.type,
                   subject: <a href="javascript:void(0);" onClick={() => {
                     setCurrentSupportTicketId(notification.ticket);
+                    setCurrentTicketId(notification.ticket._id);
                     setSupportPage('2');
                     this.setPageState(true);
                   }}>{notification.ticket.subject.length > 30 ? notification.ticket.subject.substr(0, 30) + '...' : notification.ticket.subject}</a>,
@@ -350,7 +352,7 @@ export default class NewDevices extends Component {
     renderSupportSystemMessagesNotifications(list) {
       let { setCurrentSystemMessageId, setSupportPage } = this.props;
         if (list && Array.isArray(list) && list.length > 0) {
-            return list.map((notification) => {
+            return checkIsArray(list).map((notification) => {
                 return {
                     selection: <Checkbox defaultChecked={false} checked={this.state.selectedSystemMessages.some(item => item === notification.system_message._id)} onChange={(e) => this.updateSystemMessagesSelection(e, notification.system_message._id)} />,
                     id: notification.id,
@@ -385,7 +387,7 @@ export default class NewDevices extends Component {
     renderSupportChatNotifications(list){
       let { setSupportPage, setCurrentConversation } = this.props;
       if(list && Array.isArray(list) && list.length > 0){
-        return list.map((notification, index) => {
+        return checkIsArray(list).map((notification, index) => {
           let dealer_name = 'N/A';
           let dealer_pin = 'N/A';
           let isAdmin = false;
@@ -426,7 +428,7 @@ export default class NewDevices extends Component {
 
     renderServiceRequestList(list) {
         if (list && Array.isArray(list) && list.length > 0) {
-            return list.map((request) => {
+            return checkIsArray(list).map((request) => {
 
                 return {
                     key: request.id,
@@ -460,7 +462,7 @@ export default class NewDevices extends Component {
 
     renderList(list, flagged = false) {
         if (list && Array.isArray(list) && list.length > 0) {
-            return list.map((device) => {
+            return checkIsArray(list).map((device) => {
 
                 let transferButton;
                 if (this.state.sectionVisible || this.state.showLInkRequest) {

@@ -11,7 +11,7 @@ import Permissions from '../../utils/Components/Permissions';
 
 // Helpers
 import {
-    convertToLang, convertTimezoneValue
+    convertToLang, convertTimezoneValue, checkIsArray
 } from '../../utils/commonUtils';
 import CustomScrollbars from "../../../util/CustomScrollbars";
 
@@ -94,13 +94,13 @@ export default class ListApk extends Component {
 
         if (values.length) {
 
-            this.state.columns.map((column, index) => {
+            checkIsArray(this.state.columns).map((column, index) => {
 
                 if (dumydata[index].className !== 'row') {
                     dumydata[index].className = 'hide';
                 }
 
-                values.map((value) => {
+                checkIsArray(values).map((value) => {
                     if (column.title === value) {
                         dumydata[index].className = '';
                     }
@@ -111,7 +111,7 @@ export default class ListApk extends Component {
             this.setState({ columns: dumydata });
 
         } else {
-            const newState = this.state.columns.map((column) => {
+            const newState = checkIsArray(this.state.columns).map((column) => {
                 if (column.className === 'row') {
                     return column;
                 } else {
@@ -130,7 +130,7 @@ export default class ListApk extends Component {
     renderList = (list) => {
         let apkList = [];
         let data
-        list.map((app) => {
+        checkIsArray(list).map((app) => {
             if (!FEATURED_APK_PACKAGES.includes(app.package_name)) {
                 let usedBy = [];
                 if (app.policies && app.policies.length) {
@@ -212,8 +212,8 @@ export default class ListApk extends Component {
                     version: app.version,
                     used_by: <Fragment>{usedBy}</Fragment>,
                     policies: (app.policies === undefined || app.policies === null) ? [] : app.policies,
-                    created_at: convertTimezoneValue(this.props.user.timezone, app.created_at, TIMESTAMP_FORMAT),
-                    updated_at: convertTimezoneValue(this.props.user.timezone, app.updated_at, TIMESTAMP_FORMAT),
+                    created_at: convertTimezoneValue(this.props.user.timezone, app.created_at),
+                    updated_at: convertTimezoneValue(this.props.user.timezone, app.updated_at),
                     // created_at: (app.created_at && app.created_at != "N/A") ? moment(app.created_at).tz(convertTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
                     // updated_at: (app.updated_at && app.updated_at != "N/A") ? moment(app.updated_at).tz(convertTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
                     // created_at: app.created_at,
@@ -229,7 +229,7 @@ export default class ListApk extends Component {
 
     renderFeaturedList(list) {
         let featureApk = []
-        list.map((app) => {
+        checkIsArray(list).map((app) => {
             if (FEATURED_APK_PACKAGES.includes(app.package_name)) {
                 let data = {
                     rowKey: app.apk_id,
@@ -244,7 +244,7 @@ export default class ListApk extends Component {
                     apk_logo: (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
                     apk_version: app.version,
                     apk_size: app.size ? app.size : "N/A",
-                    updated_date: convertTimezoneValue(this.props.user.timezone, app.updated_at, TIMESTAMP_FORMAT),
+                    updated_date: convertTimezoneValue(this.props.user.timezone, app.updated_at),
                     // 'updated_date': app.updated_at,
                     package_name: app.package_name,
                     policies: (app.policies === undefined || app.policies === null) ? [] : app.policies,
@@ -261,7 +261,7 @@ export default class ListApk extends Component {
         let appDetails = {};
         switch (type) {
             case "SMAIL": {
-                this.props.apk_list.map((app) => {
+                checkIsArray(this.props.apk_list).map((app) => {
                     if (app.package_name === 'com.android.smail') {
                         appDetails = app
                     }
@@ -269,7 +269,7 @@ export default class ListApk extends Component {
                 break;
             }
             case "SCHAT": {
-                this.props.apk_list.map((app) => {
+                checkIsArray(this.props.apk_list).map((app) => {
                     if (app.package_name === 'com.schat.android') {
                         appDetails = app
                     }
@@ -277,7 +277,7 @@ export default class ListApk extends Component {
                 break;
             }
             case "SVPN": {
-                this.props.apk_list.map((app) => {
+                checkIsArray(this.props.apk_list).map((app) => {
                     if (app.package_name === 'com.secure.vpn') {
                         appDetails = app
                     }
@@ -285,7 +285,7 @@ export default class ListApk extends Component {
                 break;
             }
             case "SVAULT": {
-                this.props.apk_list.map((app) => {
+                checkIsArray(this.props.apk_list).map((app) => {
                     if (app.package_name === 'com.secure.svault') {
                         appDetails = app
                     }
@@ -293,7 +293,7 @@ export default class ListApk extends Component {
                 break;
             }
             case "D2D": {
-                this.props.apk_list.map((app) => {
+                checkIsArray(this.props.apk_list).map((app) => {
                     if (app.package_name === 'com.secure.d2d') {
                         appDetails = app
                     }
@@ -335,7 +335,7 @@ export default class ListApk extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.rowKey)) {
-                let list = this.state.expandedRowKeys.filter(item => item !== record.rowKey)
+                let list = checkIsArray(this.state.expandedRowKeys).filter(item => item !== record.rowKey)
                 this.setState({ expandedRowKeys: list })
             }
         }
@@ -345,7 +345,7 @@ export default class ListApk extends Component {
         console.log(record, 'all policies');
 
         if (record.policies !== undefined && record.policies !== null) {
-            return record.policies.map((policy, index) => {
+            return checkIsArray(record.policies).map((policy, index) => {
                 return {
                     key: index,
                     id: policy.id,

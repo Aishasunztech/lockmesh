@@ -17,6 +17,7 @@ import {
     CD_PERMISSION_DOMAINS,
     DEALER_DOMAINS_LOADING
 } from "../../constants/ActionTypes";
+import { checkIsArray } from '../../routes/utils/commonUtils';
 
 // import { Button_Cancel } from '../../constants/ButtonConstants';
 // import { convertToLang } from '../../routes/utils/commonUtils';
@@ -274,7 +275,7 @@ export default (state = initialState, action) => {
                     dealerDomains = state.domains.concat(action.selectedDomains)
                 }
                 else if (action.formData.action == "delete") {
-                    dealerDomains = state.domains.filter(item => item.id !== action.selectedDomains)
+                    dealerDomains = checkIsArray(state.domains).filter(item => item.id !== action.selectedDomains)
                 }
             } else {
                 error({

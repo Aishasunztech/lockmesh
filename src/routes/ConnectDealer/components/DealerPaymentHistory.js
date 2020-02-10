@@ -6,7 +6,7 @@ import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Div
 // import EditDealer from '../../dealers/components/editDealer';
 
 // Helpers
-import { convertToLang, formatMoney, removeColumns } from '../../utils/commonUtils'
+import { convertToLang, formatMoney, removeColumns, checkIsArray } from '../../utils/commonUtils'
 
 export default class DealerPaymentHistory extends Component {
 
@@ -85,8 +85,8 @@ export default class DealerPaymentHistory extends Component {
     }
     renderPaymentHistoryList = (list) => {
 
-        if (list) {
-            return list.map((item, index) => {
+        // if (list) {
+            return checkIsArray(list).map((item, index) => {
                 return {
                     rowKey: item.id,
                     key: ++index,
@@ -97,7 +97,7 @@ export default class DealerPaymentHistory extends Component {
                     total_credits: item.credits,
                 }
             })
-        }
+        // }
     };
     render() {
         const { visible } = this.state;

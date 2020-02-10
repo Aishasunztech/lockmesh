@@ -4,14 +4,14 @@ import { BASE_URL } from '../../../constants/Application';
 import { APK } from '../../../constants/ApkConstants';
 import { POLICY_APP_NAME } from '../../../constants/PolicyConstants';
 import { Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 
 
 const renderApps = (props, apk_list, isSwitchable, selectedAppKeys) => {
     let apps = [];
     // console.log(selectedAppKeys, 'keys are')
     if (props.app_list) {
-        apk_list.forEach(apk => {
+        checkIsArray(apk_list).forEach(apk => {
             let index = props.app_list.findIndex((app) => app.package_name === apk.package_name);
             if (index === -1) {
                 apps.push(apk);
@@ -23,7 +23,7 @@ const renderApps = (props, apk_list, isSwitchable, selectedAppKeys) => {
 
     let data = [];
 
-    apps.map((app) => {
+    checkIsArray(apps).map((app) => {
 
         let isAvailable = selectedAppKeys !== undefined ? (selectedAppKeys.length) ? selectedAppKeys.find(el => (el === app.apk_id) ? true : false) : false : false;
         if (props.onlyShowSelected) {

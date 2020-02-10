@@ -5,7 +5,7 @@ import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Div
 // Components
 
 // Helpers
-import { convertToLang, formatMoney } from '../../utils/commonUtils'
+import { convertToLang, formatMoney, checkIsArray } from '../../utils/commonUtils'
 import { domainColumns, addDomainModalColumns } from "../../utils/columnsUtils";
 // import { getColor, isBase64, convertToLang } from "../utils/commonUtils"
 // import { getDealerDetails, editDealer } from '../../appRedux/actions'
@@ -109,11 +109,11 @@ export default class AllDomainsModal extends Component {
             let allDomainList = this.props.allDomainList;
             let dealerDomains = this.props.domains
             if (dealerDomains && dealerDomains.length) {
-                allDomainList = allDomainList.filter(d1 => !dealerDomains.find(d2 => (d1.name === d2.name)))
+                allDomainList = checkIsArray(allDomainList).filter(d1 => !dealerDomains.find(d2 => (d1.name === d2.name)))
             }
             console.log("add domains:", this.props.allDomainList, this.props.domains, allDomainList);
 
-            return allDomainList.map((item, index) => {
+            return checkIsArray(allDomainList).map((item, index) => {
                 return {
                     id: item.id,
                     rowKey: item.id,

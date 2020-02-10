@@ -1,7 +1,7 @@
 import { Modal } from 'antd';
 
 import React, { Component } from 'react'
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 
 
@@ -18,15 +18,15 @@ export default class BulkSendMsg extends Component {
         let dealer_ids = [];
         let user_ids = [];
 
-        data.devices.forEach((item) => {
+        checkIsArray(data.devices).forEach((item) => {
             if (item.device_id) {
                 selectedDevices.push({ device_id: item.device_id, usrAccId: item.id, usr_device_id: item.usr_device_id });
             }
         });
-        data.dealers.forEach((item) => {
+        checkIsArray(data.dealers).forEach((item) => {
             dealer_ids.push(item.key);
         });
-        data.users.forEach((item) => {
+        checkIsArray(data.users).forEach((item) => {
             user_ids.push(item.key);
         });
 

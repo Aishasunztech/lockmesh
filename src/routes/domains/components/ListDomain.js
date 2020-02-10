@@ -12,7 +12,7 @@ import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col } from "antd"
 // import { ADMIN } from '../../../constants/Constants';
 import Permissions from '../../utils/Components/Permissions';
 import { Tab_All } from '../../../constants/TabConstants';
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 // const TabPane = Tabs.TabPane;
 export default class ListDomain extends Component {
     state = { visible: false }
@@ -115,7 +115,7 @@ export default class ListDomain extends Component {
         // console.log("renderList: ", list);
         let domainList = [];
         let data
-        list.map((app) => {
+        checkIsArray(list).map((app) => {
             // let parseDealers = JSON.parse(app.dealers);
 
             data = {
@@ -138,7 +138,7 @@ export default class ListDomain extends Component {
                 statusAll: app.statusAll,
                 name: app.name ? app.name : 'N/A',
                 dealer_type: app.dealer_type,
-                
+
                 created_at: app.created_at,
                 updated_at: app.updated_at
             }
@@ -173,7 +173,7 @@ export default class ListDomain extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.rowKey)) {
-                let list = this.state.expandedRowKeys.filter(item => item !== record.rowKey)
+                let list = checkIsArray(this.state.expandedRowKeys).filter(item => item !== record.rowKey)
                 this.setState({ expandedRowKeys: list })
             }
         }

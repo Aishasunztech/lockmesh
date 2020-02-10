@@ -44,7 +44,7 @@ import {
     Button_Save
 } from '../../constants/ButtonConstants'
 
-import { componentSearch, titleCase, convertToLang } from '../utils/commonUtils';
+import { componentSearch, titleCase, convertToLang, checkIsArray } from '../utils/commonUtils';
 import { ADMIN } from '../../constants/Constants';
 import { policyColumns } from '../utils/columnsUtils';
 import { POLICY_PAGE_HEADING } from '../../constants/AppFilterConstants';
@@ -89,7 +89,7 @@ class Policy extends Component {
     handleTableChange = (pagination, query, sorter) => {
         let { columns } = this.state;
 
-        columns.forEach(column => {
+        checkIsArray(columns).forEach(column => {
             if (column.children) {
                 if (Object.keys(sorter).length > 0) {
                     if (column.dataIndex == sorter.field) {

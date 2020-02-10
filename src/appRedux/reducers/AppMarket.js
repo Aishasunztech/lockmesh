@@ -51,20 +51,24 @@ export default (state = initialState, action) => {
                 availbleAppList: availableApps
             }
         }
-        case TRANSFER_APPS:
+        case TRANSFER_APPS: {
             if (action.status) {
                 message.success(action.msg)
                 // success({
                 //     title: "Apps Transferred Successfully",
                 // });
-            }
-            return {
-                ...state,
-                secureMarketList: action.payload.marketApplist,
-                availbleAppList: action.payload.availableApps,
-                isloading: false
+                return {
+                    ...state,
+                    secureMarketList: action.payload.marketApplist,
+                    availbleAppList: action.payload.availableApps,
+                    isloading: false
 
+                }
+            } else {
+                message.error(action.msg);
+                return { ...state }
             }
+        }
         case GET_MARKET_APPS:
             return {
                 ...state,

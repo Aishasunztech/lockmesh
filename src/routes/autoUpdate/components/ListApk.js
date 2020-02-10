@@ -5,7 +5,7 @@ import { BASE_URL, TIMESTAMP_FORMAT} from '../../../constants/Application';
 
 // Helpers
 import {
-     convertTimezoneValue
+     convertTimezoneValue, checkIsArray
 } from '../../utils/commonUtils';
 
 // Components
@@ -74,7 +74,7 @@ export default class ListApk extends Component {
     // renderList
     renderList(list) {
 
-        return list.map((app) => {
+        return checkIsArray(list).map((app) => {
             return {
                 apk_id: app.apk_id,
                 action: (
@@ -100,8 +100,8 @@ export default class ListApk extends Component {
                 label: app.label,
                 package_name: app.package_name,
                 version: app.version,
-                created_at: convertTimezoneValue(this.props.user.timezone, app.created_at, TIMESTAMP_FORMAT),
-                updated_at: convertTimezoneValue(this.props.user.timezone, app.updated_at, TIMESTAMP_FORMAT),
+                created_at: convertTimezoneValue(this.props.user.timezone, app.created_at),
+                updated_at: convertTimezoneValue(this.props.user.timezone, app.updated_at),
             }
            
         });

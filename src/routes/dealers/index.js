@@ -6,7 +6,7 @@ import { Input, Modal, Select, Button } from "antd";
 import { isArray } from "util";
 
 // helpers
-import { componentSearch, getDealerStatus, titleCase, convertToLang, handleMultipleSearch, filterData_RelatedToMultipleSearch } from '../utils/commonUtils';
+import { componentSearch, getDealerStatus, titleCase, convertToLang, handleMultipleSearch, filterData_RelatedToMultipleSearch, checkIsArray } from '../utils/commonUtils';
 
 // actions
 import {
@@ -19,8 +19,6 @@ import {
     editDealer,
     getDropdown,
     postDropdown,
-    postPagination,
-    getPagination,
     handleAddDealerModalAction
 } from "../../appRedux/actions";
 
@@ -110,7 +108,7 @@ class Dealers extends Component {
         // console.log('check sorter func: ', sorter)
         let { columns } = this.state;
 
-        columns.forEach(column => {
+        checkIsArray(columns).forEach(column => {
             if (column.children) {
                 if (Object.keys(sorter).length > 0) {
                     if (column.dataIndex == sorter.field) {
@@ -161,7 +159,7 @@ class Dealers extends Component {
     filterList = (type, dealers) => {
         let dummyDealers = [];
         if (dealers && dealers.length) {
-            dealers.filter(function (dealer) {
+            checkIsArray(dealers).filter(function (dealer) {
                 let dealerStatus = getDealerStatus(dealer.unlink_status, dealer.account_status);
                 if (dealerStatus === type) {
                     dummyDealers.push(dealer);
@@ -377,7 +375,7 @@ class Dealers extends Component {
 
     handlePagination = (value) => {
         this.refs.dealerList.handlePagination(value);
-        this.props.postPagination(value, this.state.dealer_type);
+        // this.props.postPagination(value, this.state.dealer_type);
     }
 
     handleChangetab = (value) => {
@@ -475,7 +473,7 @@ class Dealers extends Component {
         this.props.getDealerList(dealer_type);
         // this.props.getDevicesList();
         this.props.getDropdown(dealer_type);
-        this.props.getPagination(dealer_type);
+        // this.props.getPagination(dealer_type);
 
         this.setState({
             expandedRowsKeys: (this.props.location.state) ? [this.props.location.state.id] : []
@@ -506,8 +504,8 @@ class Dealers extends Component {
         } else if ((window.location.pathname.split("/").pop() === 'dealer') && ((this.state.columns.length > 9) || (this.state.options.length > 7))) {
             // alert('if dealer')
             status = true;
-            this.state.columns = this.state.columns.filter(lst => lst.title !== convertToLang(this.props.translation[Parent_Dealer_ID], "PARENT DEALER ID"));
-            this.state.columns = this.state.columns.filter(lst => lst.title !== convertToLang(this.props.translation[Parent_Dealer], "PARENT DEALER"));
+            this.state.columns = checkIsArray(this.state.columns).filter(lst => lst.title !== convertToLang(this.props.translation[Parent_Dealer_ID], "PARENT DEALER ID"));
+            this.state.columns = checkIsArray(this.state.columns).filter(lst => lst.title !== convertToLang(this.props.translation[Parent_Dealer], "PARENT DEALER"));
             this.state.options = this.state.options.slice(0, 7);
         }
 
@@ -708,8 +706,8 @@ function mapDispatchToProps(dispatch) {
         editDealer: editDealer,
         getDropdown: getDropdown,
         postDropdown: postDropdown,
-        postPagination: postPagination,
-        getPagination: getPagination,
+        // postPagination: postPagination,
+        // getPagination: getPagination,
         handleAddDealerModalAction: handleAddDealerModalAction
     }, dispatch);
 }

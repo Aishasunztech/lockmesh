@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { message, Input, Modal, Button, Popover, Icon } from "antd";
 import AppFilter from '../../components/AppFilter';
 import UserList from "./components/UserList";
-import { getStatus, componentSearch, titleCase, convertToLang, handleMultipleSearch, } from '../utils/commonUtils';
+import { getStatus, componentSearch, titleCase, convertToLang, handleMultipleSearch, checkIsArray, } from '../utils/commonUtils';
 
 import { isArray } from "util";
 import {
@@ -83,7 +83,7 @@ class Users extends Component {
         // 
         let { columns } = this.state;
 
-        columns.forEach(column => {
+        checkIsArray(columns).forEach(column => {
             if (column.children) {
                 if (Object.keys(sorter).length > 0) {
                     if (column.dataIndex == sorter.field) {

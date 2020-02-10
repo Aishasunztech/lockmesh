@@ -6,7 +6,7 @@ import {
     handleCheckAll
 } from "../../../appRedux/actions/ConnectDevice";
 import { SECURE_SETTING, Enable_ALL, Encrypted_ALL, GUEST_ALL, SECURE_SETTING_PERMISSION } from '../../../constants/Constants';
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 
 import { BASE_URL } from '../../../constants/Application';
 
@@ -322,12 +322,13 @@ class AppList extends Component {
 
     renderApps = () => {
         // console.log('props is', this.state.apk_list)
+        let validReturn = false;
         if (this.props.apk_list) {
             if (this.props.apk_list.length) {
                 let featuredApps = []
                 let apps = []
                 let allApks = []
-                this.props.apk_list.map((item, index) => {
+                checkIsArray(this.props.apk_list).map((item, index) => {
                     if (item.package_name === 'com.armorSec.android' || item.package_name === 'ca.unlimitedwireless.mailpgp' || item.package_name === 'com.rim.mobilefusion.client') {
                         featuredApps.push(item);
                         // allApks.splice(index, 1)
@@ -338,7 +339,8 @@ class AppList extends Component {
 
                 allApks = [...featuredApps, ...apps]
 
-                return allApks.map(app => {
+                validReturn = true;
+                return checkIsArray(allApks).map(app => {
                     return this.renderSingleApp(app)
                 })
             }
@@ -350,18 +352,23 @@ class AppList extends Component {
                 if (this.props.AddPolicy) {
                     let index = this.props.allExtensions.findIndex(item => item.uniqueName === SECURE_SETTING);
                     if (index > -1) {
-                        return this.props.allExtensions[index]['subExtension'].map(app => {
+                        validReturn = true;
+                        return checkIsArray(this.props.allExtensions[index]['subExtension']).map(app => {
                             return this.renderExtensionsApp(app)
                         })
                     }
 
                 } else {
-                    return this.props.allExtensions.map(app => {
+                    validReturn = true;
+                    return checkIsArray(this.props.allExtensions).map(app => {
                         return this.renderExtensionsApp(app)
                     })
                 }
 
             }
+        }
+        if (!validReturn) {
+            return [];
         }
 
     }

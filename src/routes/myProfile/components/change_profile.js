@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, Button, Form, Input, message, Select } from 'antd';
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { Button_Ok, Button_submit, Button_Cancel } from '../../../constants/ButtonConstants';
 import { Change_Profile, User_Name_require, Name } from '../../../constants/Constants';
 const { TextArea } = Input
@@ -364,7 +364,7 @@ class EditForm extends Component {
                             placeholder={convertToLang(this.props.translation[""], "Select Country")}
                             optionFilterProp="children"
                         >
-                            {countryList.map((Item) => {
+                            {checkIsArray(countryList).map((Item) => {
                                 return <Select.Option key={Item} value={Item}>{Item}</Select.Option>
                             })}
                         </Select>,

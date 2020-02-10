@@ -4,6 +4,7 @@ import RestService from '../services/RestServices';
 import { SERVER_TIMEZONE, TIMESTAMP_FORMAT } from "../../constants/Application";
 
 import moment from 'moment';
+import { checkIsArray } from "../../routes/utils/commonUtils";
 
 
 
@@ -143,7 +144,7 @@ export function getbulkHistory() {
 
 export const setBulkPushApps = (apps) => {
     // console.log("apps at action file for push apps ", apps)
-    apps.forEach((el) => {
+    checkIsArray(apps).forEach((el) => {
         // el.enable = (typeof (el.enable) === Boolean || typeof (el.enable) === 'Boolean' || typeof (el.enable) === 'boolean') ? el.enable : false;
         // el.guest = (typeof (el.guest) === Boolean || typeof (el.guest) === 'Boolean' || typeof (el.guest) === 'boolean') ? el.guest : false;
         // el.encrypted = (typeof (el.encrypted) === Boolean || typeof (el.encrypted) === 'Boolean' || typeof (el.encrypted) === 'boolean') ? el.encrypted : false;
@@ -180,7 +181,7 @@ export const applyBulkPushApps = (data) => {
 
 // Set Pull apps 
 export const setBulkPullApps = (apps) => {
-    apps.forEach((el) => {
+    checkIsArray(apps).forEach((el) => {
 
         delete el.icon;
         el.apk_id = el.key;

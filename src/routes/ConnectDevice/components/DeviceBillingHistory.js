@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { Modal, message, Input, Table, Switch, Avatar, Button, Card, Row, Col, Select, Spin, Form } from 'antd';
-import { componentSearch, getFormattedDate, convertToLang, checkValue } from '../../utils/commonUtils';
+import { componentSearch, getFormattedDate, convertToLang, checkValue, checkIsArray } from '../../utils/commonUtils';
 import moment from 'moment';
 import {
     getDeviceBillingHistory
@@ -89,8 +89,8 @@ class DeviceBillingDetails extends Component {
     }
     renderList = () => {
         let data = this.props.device_billing_history // console.log
-        if (data && data.length) {
-            return data.map((row, index) => {
+        // if (data && data.length) {
+            return checkIsArray(data).map((row, index) => {
                 // console.log(row);
 
                 // if (row.type === "PACKAGE") {
@@ -116,9 +116,9 @@ class DeviceBillingDetails extends Component {
                 // }
 
             })
-        } else {
-            return []
-        }
+        // } else {
+        //     return []
+        // }
     }
 
 

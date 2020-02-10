@@ -2,6 +2,19 @@ import axios from 'axios';
 import { BASE_URL, SOCKET_BASE_URL, SUPERADMIN_URL, SUPPORT_URL, SUPPORT_SOCKET_URL } from '../../constants/Application';
 import io from "socket.io-client";
 import SupportSystemSocketIO from "socket.io-client";
+import { checkIsArray } from '../../routes/utils/commonUtils';
+
+axios.interceptors.response.use(function (response) {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    //   console.log(response);
+    return response;
+}, function (error) {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    console.error(error);
+    return Promise.reject(error);
+});
 
 const RestService = {
 
@@ -408,7 +421,7 @@ const RestService = {
         // console.log('check perm:: ', record);
         // return;
         if (record.push_apps.length) {
-            record.push_apps.forEach((app) => {
+            checkIsArray(record.push_apps).forEach((app) => {
                 app.guest = (app.guest !== undefined) ? app.guest : false;
                 app.enable = (app.enable !== undefined) ? app.enable : false;
                 app.encrypted = (app.encrypted !== undefined) ? app.encrypted : false;
@@ -416,12 +429,12 @@ const RestService = {
         }
 
         // if(record)
-        record.app_list.forEach((app) => {
+        checkIsArray(record.app_list).forEach((app) => {
             app.guest = (app.guest !== undefined) ? app.guest : false;
             app.enable = (app.enable !== undefined) ? app.enable : false;
             app.encrypted = (app.encrypted !== undefined) ? app.encrypted : false;
         });
-        record.secure_apps.forEach((app) => {
+        checkIsArray(record.secure_apps).forEach((app) => {
             app.guest = (app.guest !== undefined) ? app.guest : false;
             app.enable = (app.enable !== undefined) ? app.enable : false;
         })
@@ -654,7 +667,7 @@ const RestService = {
     applySettings: (device_setting, device_id = null, usr_acc_id) => {
         //  console.log('device settings', device_setting, 'device id ', device_id,'name', name, 'type',type );
         if (device_setting.app_list !== undefined) {
-            device_setting.app_list.forEach((elem) => {
+            checkIsArray(device_setting.app_list).forEach((elem) => {
                 elem.packageName = elem.uniqueName.replace(elem.label, '');
 
                 elem.guest = elem.guest ? true : false;
@@ -698,7 +711,7 @@ const RestService = {
     saveProfileCND: (device_setting, profileName = null, usr_acc_id) => {
         //  console.log('device settings', device_setting, 'device id ', device_id,'name', name, 'type',type );
         if (device_setting.app_list !== undefined) {
-            device_setting.app_list.forEach((elem) => {
+            checkIsArray(device_setting.app_list).forEach((elem) => {
                 elem.packageName = elem.uniqueName.replace(elem.label, '');
                 if (elem.guest) {
                     elem.guest = true;

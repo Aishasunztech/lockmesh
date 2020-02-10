@@ -4,7 +4,7 @@ import { BASE_URL } from '../../../constants/Application';
 import Permissions from "../../utils/Components/Permissions";
 import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, Main_SETTINGS, APPLICATION_PERMISION, POLICY_DETAILS, SYSTEM_CONTROLS_UNIQUE, SECURE_SETTING, APPS } from '../../../constants/Constants';
 import AppList from "./AppList";
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { Tab_POLICY_SELECTED_APPS, Tab_POLICY_Dealer_PERMISSIONS, Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
 import { POLICY_NAME, NAME, POLICY_ACTION, POLICY_NOTE, POLICY_COMMAND } from '../../../constants/PolicyConstants';
 import { SPA_APPS } from '../../../constants/AppConstants';
@@ -52,9 +52,9 @@ export default class PolicyInfo extends Component {
 
     renderSystemPermissions = (controls) => {
         console.log("controls:", controls);
-        if (controls) {
+        // if (controls) {
 
-            return controls.map(control => {
+            return checkIsArray(controls).map(control => {
                 return {
                     rowKey: control.setting_name,
                     name: control.setting_name,
@@ -67,7 +67,7 @@ export default class PolicyInfo extends Component {
                     )
                 }
             })
-        }
+        // }
 
     }
 
@@ -78,7 +78,7 @@ export default class PolicyInfo extends Component {
 
         if (this.props.policy.app_list.length) {
 
-            this.props.push_apps.map((apk) => {
+            checkIsArray(this.props.push_apps).map((apk) => {
                 let index = this.props.policy.push_apps.findIndex(app => app.apk_id === apk.apk_id)
                 if (index && index !== -1) {
                     console.log(index)
@@ -178,7 +178,7 @@ export default class PolicyInfo extends Component {
                             </TabPane>
                             <TabPane tab={convertToLang(this.props.translation[APPLICATION_PERMISION], "APPLICATION PERMISSION")} key="2">
                                 <AppList
-                                    apk_list={this.state.policy && this.state.policy.app_list ? this.state.policy.app_list.filter(item => item.uniqueName !== "com.secureSetting.SecureSettingsMainSecure Settings" && item.uniqueName !== "com.android.settingsSettings") : []}
+                                    apk_list={this.state.policy && this.state.policy.app_list ? checkIsArray(this.state.policy.app_list).filter(item => item.uniqueName !== "com.secureSetting.SecureSettingsMainSecure Settings" && item.uniqueName !== "com.android.settingsSettings") : []}
                                     handleEditPolicy={this.props.handleEditPolicy}
                                     handleCheckAll={this.props.handleCheckAll}
                                     handleCheckApp={this.handleCheckApp}
