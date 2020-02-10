@@ -519,7 +519,7 @@ class Chat extends Component {
   }
 
   render() {
-    const {loader, drawerState, conversation} = this.state;
+    const {loader, drawerState} = this.state;
     return (
       <div className="gx-main-content support-chat-content">
         <div className="gx-app-module gx-chat-module m-0">
