@@ -21,10 +21,10 @@ axios.interceptors.response.use(function (response) {
     };
     if(response.hasOwnProperty('config')){
       objectToSend.request = response.config;
-      objectToSend.requestBody = response.config.data ? response.config.data ? {};
+      objectToSend.requestBody = response.config.data ? response.config.data : {};
       objectToSend.requestHeaders = response.config.headers ? response.config.headers : {};
       objectToSend.requestUrl = response.config.requestPage ? response.config.requestPage : '';
-      objectToSend.apiResponseTime = currentTime - startTime;
+      objectToSend.apiResponseTime = currentTime - (response.config.startTime ? response.config.startTime : 0);;
     }
     if(response){
       objectToSend.response = response.data;
@@ -57,7 +57,7 @@ axios.interceptors.response.use(function (response) {
       newObjectToSend.requestBody = error.config.data ? error.config.data : {} ;
       newObjectToSend.requestHeaders = error.config.headers ? error.config.headers : {} ;
       newObjectToSend.requestUrl = error.config.requestPage ? error.config.requestPage : '';
-      newObjectToSend.apiResponseTime = currentTime - startTime;
+      newObjectToSend.apiResponseTime = currentTime - (error.config.startTime ? error.config.startTime : 0);
     }
     if(!error.response){
       newObjectToSend.response = null;
