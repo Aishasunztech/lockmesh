@@ -224,12 +224,21 @@ class Mail extends PureComponent {
     this.props.resetCurrentTicketId();
   }
 
-  createSupportTicketsTableData(tickets) {
-    return checkIsArray(tickets).map(item => {
-
+  createSupportTicketsTableData(tickets){
+    return tickets.map(item => {
+      let dealer_name = 'N/A';
+      let link_code = 'N/A';
+      if(item.hasOwnProperty('user')){
+        if(item.user.hasOwnProperty('dealer_name')){
+          dealer_name = item.user.dealer_name;
+        }
+        if(item.user.hasOwnProperty('link_code')){
+          link_code = item.user.link_code;
+        }
+      }
       let data = {
         ticketId: item.ticketId,
-        name: item.user.dealer_name + " (" + item.user.link_code + ")",
+        name: dealer_name + " ("+ link_code +")",
         subject: <a href="javascript:void(0);" onClick={() => this.onMailSelect(item)}>{item.subject}</a>,
         subjectStr: item.subject,
         status: item.status,
