@@ -114,10 +114,8 @@ export default class ListSystemMessages extends Component {
 
       renderList.sort((a, b) => moment(b.createdAt + " " + b.createdTime).format("DD-MM-YYYY HH:mm").localeCompare(moment(a.createdAt + " " + a.createdTime).format("DD-MM-YYYY HH:mm")));
 
-      return renderList
-    } else {
-      return []
     }
+    return renderList
 
   }
 

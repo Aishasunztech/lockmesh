@@ -44,7 +44,7 @@ class Support extends Component {
         <Select
           key="system_messages_key"
           className="support_sel_dd"
-          onChange={(e) => { checkIsArray(this.refs.systemMessages.getWrappedInstance()).filterMessages({ filter: e }) }}
+          onChange={(e) => { this.refs.systemMessages.getWrappedInstance().filterMessages({ filter: e }) }}
           defaultValue="all"
         >
           <Select.Option value="all">All</Select.Option>
@@ -58,7 +58,7 @@ class Support extends Component {
         key="systemMessagesSearch"
         placeholder="Search"
         style={{ width: '220px', marginRight: '6px', float: "right", backgroundColor: '#dedede' }}
-        onChange={(e) => { checkIsArray(this.refs.systemMessages.getWrappedInstance()).filterMessages({ searchText: e.target.value }) }}
+        onChange={(e) => { this.refs.systemMessages.getWrappedInstance().filterMessages({ searchText: e.target.value }) }}
       />
     </span>;
 
@@ -73,22 +73,22 @@ class Support extends Component {
       <Select
         key="support_tickets_key"
         className="support_sel_dd"
-        onChange={(e) => { checkIsArray(this.refs.supportTickets.getWrappedInstance()).filterTickets({ filter: e }); }}
+        onChange={(e) => { this.refs.supportTickets.getWrappedInstance().filterTickets({ filter: e }); }}
         defaultValue="all_all"
       >
         <Select.Option value="all_all">All</Select.Option>
         <Select.OptGroup label="Status">
-          {checkIsArray(statuses).filter(checkIsArray(status => status.title !== 'all')).map((status, index) => {
+          {checkIsArray(statuses).filter(status => status.title !== 'all').map((status, index) => {
             return <Select.Option value={"status_" + status.title}>{status.title.charAt(0).toUpperCase() + status.title.substr(1)}</Select.Option>
           })}
         </Select.OptGroup>
         <Select.OptGroup label="Type">
-          {checkIsArray(categories).filter(category => checkIsArray(category.title !== 'all')).map((category, index) => {
+          {checkIsArray(categories).filter(category => category.title !== 'all').map((category, index) => {
             return <Select.Option value={"type_" + category.title}>{category.title.charAt(0).toUpperCase() + category.title.substr(1)}</Select.Option>
           })}
         </Select.OptGroup>
         <Select.OptGroup label="Priority">
-          {checkIsArray(priorities).filter(checkIsArray(priority => checkIsArray(priority.title !== 'all'))).map((priority, index) => {
+          {checkIsArray(priorities).filter(priority => priority.title !== 'all').map((priority, index) => {
             return <Select.Option value={"priority_" + priority.title}>{priority.title.charAt(0).toUpperCase() + priority.title.substr(1)}</Select.Option>
           })}
         </Select.OptGroup>
@@ -99,7 +99,7 @@ class Support extends Component {
         key="tokenSearch"
         placeholder="Search"
         style={{ width: '220px', marginRight: '6px', float: "right", backgroundColor: '#dedede' }}
-        onChange={(e) => { checkIsArray(this.refs.supportTickets.getWrappedInstance()).filterTickets({ searchTicket: e.target.value }) }}
+        onChange={(e) => { this.refs.supportTickets.getWrappedInstance().filterTickets({ searchTicket: e.target.value }) }}
       />
     </span>;
 

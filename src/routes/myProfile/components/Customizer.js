@@ -165,7 +165,7 @@ class Customizer extends Component {
   };
 
   getCustomizerContent = () => {
-    const colorPickers = Object.keys(checkIsArray(this.state.vars)).map(varName => this.getColorPicker(varName));
+    const colorPickers = checkIsArray(Object.keys(this.state.vars)).map(varName => this.getColorPicker(varName));
     const { themeType, layoutType, navStyle, colorSelection } = this.props;
 
     if (themeType === THEME_TYPE_DARK) {

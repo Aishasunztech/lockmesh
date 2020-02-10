@@ -242,7 +242,7 @@ class AddPolicy extends Component {
 
     renderSystemPermissions = () => {
 
-        if (this.state.systemPermissions) {
+        // if (this.state.systemPermissions) {
 
             return checkIsArray(this.state.systemPermissions).map(sysPermission => {
                 return {
@@ -252,7 +252,7 @@ class AddPolicy extends Component {
                 }
             })
 
-        }
+        // }
 
     }
 

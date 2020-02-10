@@ -52,7 +52,7 @@ class Mail extends PureComponent {
 
   filter = () => {
 
-    let filter = checkIsArray(this.state).filter.split('_');
+    let filter = this.state.filter.split('_');
     let searchText = this.state.searchTicket;
     let filter_type = filter[0];
     let value;
@@ -123,7 +123,7 @@ class Mail extends PureComponent {
 
   filterTickets = (obj) => {
     this.setState(obj, () => {
-      checkIsArray(this).filter();
+      this.filter();
     });
   }
 

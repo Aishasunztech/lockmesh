@@ -25,7 +25,7 @@ export default class DeviceSettings extends Component {
 
     controlValues = () => {
         console.log(this.state.controls, 'apply setting controls')
-        if (this.state.controls.length > 0) {
+        // if (this.state.controls.length > 0) {
 
             let data = [];
             checkIsArray(this.state.controls).map(control => {
@@ -61,7 +61,7 @@ export default class DeviceSettings extends Component {
             })
 
             return data;
-        }
+        // }
     }
 
     filterAppList = () => {

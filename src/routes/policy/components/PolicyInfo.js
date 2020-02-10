@@ -52,7 +52,7 @@ export default class PolicyInfo extends Component {
 
     renderSystemPermissions = (controls) => {
         console.log("controls:", controls);
-        if (controls) {
+        // if (controls) {
 
             return checkIsArray(controls).map(control => {
                 return {
@@ -67,7 +67,7 @@ export default class PolicyInfo extends Component {
                     )
                 }
             })
-        }
+        // }
 
     }
 

@@ -348,7 +348,7 @@ class EditPolicy extends Component {
 
         const { controls } = this.state.editAblePolicy;
 
-        if (controls) {
+        // if (controls) {
             return checkIsArray(controls).map(control => {
                 return {
                     rowKey: control.setting_name,
@@ -364,7 +364,7 @@ class EditPolicy extends Component {
                     )
                 }
             })
-        }
+        // }
 
     }
 

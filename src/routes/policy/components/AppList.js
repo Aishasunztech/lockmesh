@@ -322,6 +322,7 @@ class AppList extends Component {
 
     renderApps = () => {
         // console.log('props is', this.state.apk_list)
+        let validReturn = false;
         if (this.props.apk_list) {
             if (this.props.apk_list.length) {
                 let featuredApps = []
@@ -338,6 +339,7 @@ class AppList extends Component {
 
                 allApks = [...featuredApps, ...apps]
 
+                validReturn = true;
                 return checkIsArray(allApks).map(app => {
                     return this.renderSingleApp(app)
                 })
@@ -350,18 +352,23 @@ class AppList extends Component {
                 if (this.props.AddPolicy) {
                     let index = this.props.allExtensions.findIndex(item => item.uniqueName === SECURE_SETTING);
                     if (index > -1) {
+                        validReturn = true;
                         return checkIsArray(this.props.allExtensions[index]['subExtension']).map(app => {
                             return this.renderExtensionsApp(app)
                         })
                     }
 
                 } else {
+                    validReturn = true;
                     return checkIsArray(this.props.allExtensions).map(app => {
                         return this.renderExtensionsApp(app)
                     })
                 }
 
             }
+        }
+        if (!validReturn) {
+            return [];
         }
 
     }

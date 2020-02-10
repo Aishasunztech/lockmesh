@@ -97,7 +97,7 @@ class ComposeTicket extends React.Component {
                 style={{ width: '100%' }}
               >
                 <Select.Option value=''>Select Category</Select.Option>
-                {checkIsArray(categories).filter(checkIsArray(category => category.id !== 0)).map((category, index) => {
+                {checkIsArray(categories).filter(category => category.id !== 0).map((category, index) => {
                   return (<Select.Option key={category.id} value={category.handle}><span className='text-capitalize'>{category.title}</span></Select.Option>)
                 })}
               </Select>
@@ -122,7 +122,7 @@ class ComposeTicket extends React.Component {
               <Select style={{ width: '100%' }}>
                 <Select.Option value=''>Select Priority</Select.Option>
 
-                {checkIsArray(priorities).filter(checkIsArray(priority => priority.id !== 0)).map((priority, index) => {
+                {checkIsArray(priorities).filter(priority => priority.id !== 0).map((priority, index) => {
                   return (<Select.Option key={priority.id} value={priority.handle}><span className='text-capitalize'>{priority.title}</span></Select.Option>)
                 })}
               </Select>
