@@ -5,41 +5,78 @@ import SupportSystemSocketIO from "socket.io-client";
 
 axios.interceptors.request.use(function(config){
   config.startTime = new Date().getTime();
+  config.requestPage = window.location.href;
   return config;
+  // return Promise.reject(config);
 })
 
 axios.interceptors.response.use(function (response) {
-  // Any status code that lie within the range of 2xx cause this function to trigger
-  // Do something with response data
-  // let responseTime = new Date().getTime() - response.config.startTime;
-  // console.log("response time: ", responseTime);
-  console.log('doing request');
-  fetch('http://192.168.0.143:3005/api/v1/logs', {
-    method: 'POST', // *GET, POST, PUT, DELETE, etc.
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: {response: response} // body data type must match "Content-Type" header
-  }).then(d => {
-    console.log('success', d);
-  });
-  return response;
+    let userAgent = window.navigator.userAgent ? window.navigator.userAgent : {} ;
+    let currentTime = new Date().getTime();
+    let objectToSend = {
+      apiResponseTime : currentTime,
+      client_info : {
+        userAgent: userAgent
+      }
+    };
+    if(response.hasOwnProperty('config')){
+      objectToSend.request = response.config;
+      objectToSend.requestBody = response.config.data ? response.config.data ? {};
+      objectToSend.requestHeaders = response.config.headers ? response.config.headers : {};
+      objectToSend.requestUrl = response.config.requestPage ? response.config.requestPage : '';
+      objectToSend.apiResponseTime = currentTime - startTime;
+    }
+    if(response){
+      objectToSend.response = response.data;
+      objectToSend.code = response.status;
+      objectToSend.message = response.statusText;
+      objectToSend.request = response.config;
+      objectToSend.requestBody = response.config.data;
+      objectToSend.requestHeaders = response.config.headers;
+    }
+
+    fetch('http://192.168.0.143:3005/api/v1/logs', {
+      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(objectToSend) // body data type must match "Content-Type" header
+    }).then(d => {}).catch(err => {});
+    return response;
 }
 , function (error) {
-  // Any status codes that falls outside the range of 2xx cause this function to trigger
-  // Do something with response error
-  // return [];
-  fetch('http://192.168.0.143:3005/api/v1/logs', {
-    method: 'POST', // *GET, POST, PUT, DELETE, etc.
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: {resposne: error} // body data type must match "Content-Type" header
-  }).then(data => {
-    console.log('success', data);
-  });
-  return Promise.reject(error);
-}
+    let userAgent = window.navigator.userAgent ? window.navigator.userAgent : {} ;
+    let currentTime = new Date().getTime();
+    let newObjectToSend = {
+      client_info : {
+        userAgent: userAgent
+      }
+    };
+    if(error.config !== null){
+      newObjectToSend.request = error.config;
+      newObjectToSend.requestBody = error.config.data ? error.config.data : {} ;
+      newObjectToSend.requestHeaders = error.config.headers ? error.config.headers : {} ;
+      newObjectToSend.requestUrl = error.config.requestPage ? error.config.requestPage : '';
+      newObjectToSend.apiResponseTime = currentTime - startTime;
+    }
+    if(!error.response){
+      newObjectToSend.response = null;
+      newObjectToSend.code = error.response.status;
+      newObjectToSend.message = error.response.statusText;
+    } else {
+      newObjectToSend.response = error.response;
+      newObjectToSend.code = error.response.status;
+      newObjectToSend.message = error.response.statusText;
+    }
+    fetch('http://192.168.0.143:3005/api/v1/logs', {
+      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newObjectToSend) // body data type must match "Content-Type" header
+    }).then(d => {}).catch(err => {});
+    return Promise.reject(error);
+  }
 );
 
 const RestService = {
@@ -220,7 +257,7 @@ const RestService = {
     },
 
     transferDeviceProfile: (data) => {
-        console.log('data is: ', data)
+        // console.log('data is: ', data)
         return axios.post(BASE_URL + 'users/transfer/device_profile', data, RestService.getHeader());
     },
     transferUser: (data) => {
@@ -599,7 +636,7 @@ const RestService = {
 
     // unlink Device
     unlinkDevice: (device) => {
-        console.log('unlinkDevice ', device)
+        // console.log('unlinkDevice ', device)
         return axios.post(BASE_URL + 'users/unlink/' + device.usr_device_id, { device }, RestService.getHeader());
 
     },
@@ -637,7 +674,7 @@ const RestService = {
     },
 
     relinkDevice: (id) => {
-        console.log(id);
+        // console.log(id);
         return axios.put(BASE_URL + 'users/relink-device/' + id, {}, RestService.getHeader());
     },
 
@@ -780,7 +817,7 @@ const RestService = {
         return axios.post(BASE_URL + 'users/check_pass', { user }, RestService.getHeader());
     },
     saveIDPrices: (data) => {
-        console.log(data, 'save-prices data')
+        // console.log(data, 'save-prices data')
         return axios.patch(BASE_URL + 'users/save-prices', data, RestService.getHeader());
     },
     setPackage: (data) => {
@@ -974,7 +1011,7 @@ const RestService = {
     },
 
     getCancelServiceRequests: () => {
-        console.log("object");
+        // console.log("object");
         return axios.get(BASE_URL + 'users/get-cancel-service-requests', RestService.getHeader());
     },
 
@@ -1045,7 +1082,7 @@ const RestService = {
 
     // suspend accounts
     bulkSuspendDevice: (devices) => {
-        console.log('at rest services page ', devices)
+        // console.log('at rest services page ', devices)
         return axios.post(BASE_URL + 'users/bulk-suspend', devices,
             RestService.getHeader()
         )
