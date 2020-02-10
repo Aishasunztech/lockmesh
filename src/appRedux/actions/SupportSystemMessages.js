@@ -78,7 +78,7 @@ export function getSupportSystemMessagesNotifications(data) {
     });
 
     RestService.getSupportSystemMessagesNotifications(data).then((response) => {
-      if (RestService.checkAuth(response.data)) {
+      if (response && RestService.checkAuth(response.data)) {
         dispatch({
           type: GET_SUPPORT_SYSTEM_MESSAGE_NOTIFICATION,
           payload: response.data

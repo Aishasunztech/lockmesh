@@ -287,7 +287,7 @@ export function getSupportLiveChatNotifications(){
       type: SPIN_lOADING
     });
     RestService.getSupportLiveChatNotifications().then((response) => {
-      if(RestService.checkAuth(response.data)){
+      if(response && RestService.checkAuth(response.data)){
         if(response.data.status){
           dispatch({
             type: 'SUPPORT_LIVE_CHAT_NOTIFICATIONS',
