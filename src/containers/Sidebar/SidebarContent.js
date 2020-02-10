@@ -378,7 +378,7 @@ class SidebarContent extends Component {
               <Menu.Item key="sims">
                 <Link to="/sims">
                   <i className="icon icon-mobile" >
-                    <i class="fa fa-file" aria-hidden="true"></i>
+                    <i className="fa fa-file" aria-hidden="true"></i>
                     {/* <i className="fa fa-mobile" aria-hidden="true"></i> */}
                   </i>
                   {/* <IntlMessages id="sidebar.devices" /> */}

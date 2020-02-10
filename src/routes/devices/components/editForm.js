@@ -858,7 +858,14 @@ class EditDevice extends Component {
         }
     }
     handlePGPModal = () => {
-        this.addPGPEmailModal.showModal();
+        // console.log(this.props.device.pgp_remaining_limit);
+        if (this.props.device.pgp_remaining_limit > 0) {
+            this.addPGPEmailModal.showModal();
+        } else {
+            error({
+                title: "ERROR: You are not allowed to create new PGP EMAIL. Your Max limit has been exeeded to create PGP EMAILS on this device."
+            })
+        }
     }
 
     handleChatID = (e) => {
@@ -1030,10 +1037,9 @@ class EditDevice extends Component {
 
 
     onChangeAdjustExpiry = (value, dateString) => {
-        console.log(dateString);
-
-        console.log(value);
-        console.log(moment(value._d.toString()).format('YYYY/MM/DD'));
+        // console.log(dateString);
+        // console.log(value);
+        // console.log(moment(value._d.toString()).format('YYYY/MM/DD'));
         // console.log(moment.tz(value._d, "America/Toronto").format());
         // console.log(moment(moment.tz(value._d, "America/Toronto").format()).format("YYYY/MM/DD"));
     }
