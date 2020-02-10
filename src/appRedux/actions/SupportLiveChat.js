@@ -3,7 +3,8 @@ import {
   INVALID_TOKEN,
   SPIN_lOADING, GET_SUPPORT_LIVE_CHAT_CONVERSATION,
   GET_SUPPORT_LIVE_CHAT_MESSAGES,
-  SUPPORT_LIVE_CHAT_SET_CONVERSATION_ON_MESSAGE_SENT
+  SUPPORT_LIVE_CHAT_SET_CONVERSATION_ON_MESSAGE_SENT,
+  GET_SUPPORT_LIVE_CHAT_PREVIOUS_MESSAGES
 } from "../../constants/ActionTypes";
 import { Modal } from 'antd';
 import RestService from '../services/RestServices';
@@ -73,6 +74,27 @@ export function getSupportLiveChatMessages(data) {
       if (RestService.checkAuth(response.data)) {
         dispatch({
           type: GET_SUPPORT_LIVE_CHAT_MESSAGES,
+          payload: response.data
+        });
+      } else {
+        dispatch({
+          type: INVALID_TOKEN
+        });
+      }
+    });
+  };
+}
+
+export function getSupportLiveChatPreviousMessages(data){
+  return (dispatch) => {
+    dispatch({
+      type: SPIN_lOADING,
+    });
+
+    RestService.getSupportLiveChatPreviousMessages(data).then((response) => {
+      if (RestService.checkAuth(response.data)) {
+        dispatch({
+          type: GET_SUPPORT_LIVE_CHAT_PREVIOUS_MESSAGES,
           payload: response.data
         });
       } else {
