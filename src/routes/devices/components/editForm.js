@@ -293,9 +293,9 @@ class EditDevice extends Component {
     }
 
     componentDidMount() {
-        this.props.getSimIDs();
-        this.props.getChatIDs();
-        this.props.getPGPEmails();
+        // this.props.getSimIDs();
+        this.props.getChatIDs(this.props.device.id, this.props.device.dealer_id);
+        this.props.getPGPEmails(this.props.device.id, this.props.device.dealer_id);
         this.props.getUserList();
         this.props.getParentPackages()
         this.props.getProductPrices()
@@ -858,14 +858,24 @@ class EditDevice extends Component {
         }
     }
     handlePGPModal = () => {
-        this.addPGPEmailModal.showModal();
+        // console.log(this.props.device.pgp_remaining_limit);
+        if (this.props.device.pgp_remaining_limit > 0) {
+            this.addPGPEmailModal.showModal();
+        } else {
+            error({
+                title: "ERROR: You are not allowed to create new PGP EMAIL. Your Max limit has been exeeded to create PGP EMAILS on this device."
+            })
+        }
     }
 
     handleChatID = (e) => {
+        let device = this.props.device
         let payload = {
             type: 'chat_id',
             auto_generated: true,
-            product_data: {}
+            product_data: {},
+            user_acc_id: device.id,
+            dealer_id: device.dealer_id
         }
         this.props.addProduct(payload)
     }
@@ -1027,10 +1037,9 @@ class EditDevice extends Component {
 
 
     onChangeAdjustExpiry = (value, dateString) => {
-        console.log(dateString);
-
-        console.log(value);
-        console.log(moment(value._d.toString()).format('YYYY/MM/DD'));
+        // console.log(dateString);
+        // console.log(value);
+        // console.log(moment(value._d.toString()).format('YYYY/MM/DD'));
         // console.log(moment.tz(value._d, "America/Toronto").format());
         // console.log(moment(moment.tz(value._d, "America/Toronto").format()).format("YYYY/MM/DD"));
     }
@@ -1782,7 +1791,7 @@ class EditDevice extends Component {
                     ref="addPGPEmailModal"
                     translation={this.props.translation}
                     wrappedComponentRef={(form) => this.addPGPEmailModal = form}
-
+                    device={this.props.device}
                     // actions
                     getDomains={this.props.getDomains}
                     addProduct={this.props.addProduct}
@@ -1982,7 +1991,7 @@ function mapDispatchToProps(dispatch) {
 }
 var mapStateToProps = ({ routing, devices, users, auth, settings, sidebar, account }) => {
     // 
-
+    // console.log(devices.pgp_emails);
     return {
         invoiceID: users.invoiceID,
         user: auth.authUser,

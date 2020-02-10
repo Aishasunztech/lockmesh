@@ -25,7 +25,8 @@ import {
     ADD_DATA_PLAN,
     REJECT_RELINK_DEVICE,
     RELINK_DEVICE,
-    RESET_ADD_PRODUCT_PROPS
+    RESET_ADD_PRODUCT_PROPS,
+    RESET_IDS
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -346,7 +347,6 @@ export function getSimIDs() {
                     type: GET_SIM_IDS,
                     payload: response.data.data
                 });
-
             } else {
                 dispatch({
                     type: INVALID_TOKEN
@@ -356,17 +356,16 @@ export function getSimIDs() {
     }
 }
 
-export function getChatIDs() {
+export function getChatIDs(user_acc_id, dealer_id) {
     return (dispatch) => {
 
-        RestService.getChatIDs().then((response) => {
+        RestService.getChatIDs(user_acc_id, dealer_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 //
                 dispatch({
                     type: GET_CHAT_IDS,
                     payload: response.data.data
                 });
-
             } else {
                 dispatch({
                     type: INVALID_TOKEN
@@ -376,17 +375,15 @@ export function getChatIDs() {
     }
 }
 
-export function getPGPEmails() {
+export function getPGPEmails(user_acc_id, dealer_id) {
     return (dispatch) => {
         // alert("hello");
-        RestService.getPGPEmails().then((response) => {
+        RestService.getPGPEmails(user_acc_id, dealer_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
-                //
                 dispatch({
                     type: GET_PGP_EMAILS,
                     payload: response.data.data
                 });
-
             } else {
                 dispatch({
                     type: INVALID_TOKEN
@@ -402,7 +399,6 @@ export function getAllSimIDs() {
 
         RestService.getAllSimIDs().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                //
                 dispatch({
                     type: GET_SIM_IDS,
                     payload: response.data.data
@@ -572,9 +568,17 @@ export const getProductPrices = () => {
 }
 
 /**
- * @author Usman Hafeez
+ * @author Hamza Dawood
  * @description action for creating pgp, chat and sim
  */
+
+export const resetIds = () => {
+    return (dispatch) => {
+        dispatch({
+            type: RESET_IDS,
+        })
+    }
+}
 
 export const addProduct = (payload) => {
     return (dispatch) => {

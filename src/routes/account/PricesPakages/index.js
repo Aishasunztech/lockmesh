@@ -336,6 +336,120 @@ class Prices extends Component {
                 ]
             }
         ];
+        this.standaloneColumns = [
+            {
+                title: "#",
+                dataIndex: 'sr',
+                key: 'sr',
+                align: "center",
+                render: (text, record, index) => ++index,
+            },
+            {
+                title: "ACTION",
+                dataIndex: 'action',
+                align: 'center',
+                className: 'row',
+                // width: 800,
+            },
+            {
+                title: (
+                    <span>
+                        {convertToLang(props.translation[""], "PERMISSIONS")}
+                        {/* <Popover placement="top" content='dumy'>
+                                <span className="helping_txt"><Icon type="info-circle" /></span>
+                            </Popover> */}
+                    </span>),
+                dataIndex: 'permission',
+                key: 'permission',
+                className: 'row'
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="pkg_name"
+                        key="pkg_name"
+                        id="pkg_name"
+                        className="search_heading"
+                        onKeyUp={this.handleHDWSearch}
+                        autoComplete="new-password"
+                        placeholder='NAME'
+                    />
+                ),
+                dataIndex: 'pkg_name',
+                className: '',
+                children: [
+                    {
+                        title: 'NAME',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'pkg_name',
+                        key: 'pkg_name',
+                        sorter: (a, b) => { return a.name.localeCompare(b.name) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+
+            {
+                title: (
+                    <Input.Search
+                        name="pkg_price"
+                        key="pkg_price"
+                        id="pkg_price"
+                        className="search_heading"
+                        onKeyUp={this.handleHDWSearch}
+                        autoComplete="new-password"
+                        placeholder='PRICE (CREDITS)'
+                    />
+                ),
+                dataIndex: 'pkg_price',
+                className: '',
+                children: [
+                    {
+                        title: 'PRICE (CREDITS)',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'pkg_price',
+                        key: 'pkg_price',
+                        // ...this.getColumnSearchProps('status'),
+                        // sorter: (a, b) => { return a.price - b.price },
+                        sorter: (a, b) => { return a.price.localeCompare(b.price) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="pkg_term"
+                        key="pkg_term"
+                        id="pkg_term"
+                        className="search_heading"
+                        onKeyUp={this.handleHDWSearch}
+                        autoComplete="new-password"
+                        placeholder='TERM'
+                    />
+                ),
+                dataIndex: 'pkg_term',
+                className: '',
+                children: [
+                    {
+                        title: 'TERM',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'pkg_term',
+                        key: 'pkg_term',
+                        // ...this.getColumnSearchProps('status'),
+                        // sorter: (a, b) => { return a.price - b.price },
+                        sorter: (a, b) => { return a.price.localeCompare(b.price) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            }
+        ];
 
         this.state = {
             pricing_modal: false,
@@ -533,7 +647,10 @@ class Prices extends Component {
                 let i = 0
 
                 let packages_type = 'services';
-                if (this.state.packageListTab === '1') {
+                if (this.state.outerTab === '4') {
+                    packages_type = 'standalone_sim';
+                }
+                else if (this.state.packageListTab === '1') {
                     packages_type = 'services';
                 } else if (this.state.packageListTab === '2') {
                     packages_type = 'data_plan';
@@ -850,6 +967,45 @@ class Prices extends Component {
                                     dataSource={this.renderList("hardware")}
                                     bordered
                                     pagination={false}
+                                />
+                            </Tabs.TabPane>
+                            <Tabs.TabPane tab="Stand Alone Sims" key="4">
+                                <Table
+                                    className="devices policy_expand"
+                                    rowClassName={(record, index) => this.state.expandedRowKeys.includes(index) ? 'exp_row' : ''}
+                                    size="default"
+                                    bordered
+                                    expandIcon={(props) => this.customExpandIcon(props)}
+                                    // onExpand={this.onExpandRow}
+                                    expandedRowRender={(record) => {
+                                        // console.log("expandTabSelected", record);
+                                        // console.log("table row", this.state.expandTabSelected[record.rowKey]);
+                                        return <PackagesInfo
+                                            selected={this.state.expandTabSelected[record.rowKey]}
+                                            package={record}
+                                            savePermission={this.props.packagePermission}
+                                            translation={this.props.translation}
+
+                                        />
+
+                                        // if (Object.keys(record.pkg_features).length !== 0 && record.pkg_features.constructor === Object) {
+                                        // } else {
+                                        //     return (
+                                        //         <div>
+                                        //         </div>
+                                        //     )
+                                        // }
+                                    }}
+                                    expandIconColumnIndex={2}
+                                    expandedRowKeys={this.state.expandedRowKeys}
+                                    expandIconAsCell={false}
+                                    columns={this.standaloneColumns}
+                                    onChange={this.props.onChangeTableSorting}
+                                    dataSource={this.renderList("packages")}
+                                    pagination={false}
+                                    rowKey="policy_list"
+                                    ref='policy_table'
+                                    scroll={{ x: true }}
                                 />
                             </Tabs.TabPane>
                         </Tabs>

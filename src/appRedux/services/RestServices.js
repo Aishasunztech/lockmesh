@@ -198,7 +198,6 @@ const RestService = {
         } else {
             return true;
         }
-
     },
     twoFactorAuth: (isEnable) => {
         return axios.post(BASE_URL + 'users/two_factor_auth', { isEnable: isEnable }, RestService.getHeader())
@@ -316,11 +315,11 @@ const RestService = {
         return axios.get(BASE_URL + 'users/get_sim_ids', RestService.getHeader());
     },
 
-    getChatIDs: () => {
-        return axios.get(BASE_URL + 'users/get_chat_ids', RestService.getHeader());
+    getChatIDs: (user_acc_id, dealer_id) => {
+        return axios.get(BASE_URL + `users/get_chat_ids/${user_acc_id}/${dealer_id}`, RestService.getHeader());
     },
-    getPGPEmails: () => {
-        return axios.get(BASE_URL + 'users/get_pgp_emails', RestService.getHeader());
+    getPGPEmails: (user_acc_id, dealer_id) => {
+        return axios.get(BASE_URL + `users/get_pgp_emails/${user_acc_id}/${dealer_id}`, RestService.getHeader());
     },
     // get All ids
     getAllSimIDs: () => {
@@ -1232,7 +1231,7 @@ const RestService = {
 
     //check support system running
     checkSupportServiceRunning: () => {
-      return axios.get(SUPPORT_URL);
+        return axios.get(SUPPORT_URL);
     },
 
     //support tickets
@@ -1298,6 +1297,23 @@ const RestService = {
         return axios.post(SUPPORT_URL + 'system-messages/update-notification', data, RestService.getHeader());
     },
 
+    //SIMS MODULE
+    //GET SIMS List 
+    getStandaloneSimsList: () => {
+        return axios.get(BASE_URL + 'users/get-standalone-sims',
+            RestService.getHeader()
+        )
+    },
+    //CHANGE SIM STATUS ON TWILLIO
+
+    changeSimStatus: (id, type) => {
+        return axios.put(BASE_URL + 'users/change_sim_status',
+            { id, type },
+            RestService.getHeader()
+        )
+    },
+
+
     //send Support Live Chat Message
     sendSupportLiveChatMessage: (data) => {
         return axios.post(SUPPORT_URL + 'messages/send', data, RestService.getHeader());
@@ -1320,12 +1336,12 @@ const RestService = {
 
     // Get Support Live Chat Notifications
     getSupportLiveChatNotifications: () => {
-      return axios.get(SUPPORT_URL + 'messages/getNotifications', RestService.getHeader());
+        return axios.get(SUPPORT_URL + 'messages/getNotifications', RestService.getHeader());
     },
 
     // read the chat message
     updateSupportLiveChatReadStatus: (data) => {
-      return axios.put(SUPPORT_URL + 'messages/read', data, RestService.getHeader());
+        return axios.put(SUPPORT_URL + 'messages/read', data, RestService.getHeader());
     }
 };
 export default RestService;

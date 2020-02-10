@@ -35,7 +35,8 @@ import {
     ADD_DATA_PLAN,
     RELINK_DEVICE,
     REJECT_RELINK_DEVICE,
-    RESET_ADD_PRODUCT_PROPS
+    RESET_ADD_PRODUCT_PROPS,
+    RESET_IDS
 } from "../../constants/ActionTypes";
 
 // import { convertToLang } from '../../routes/utils/commonUtils';
@@ -713,7 +714,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 devices: devices,
-                //    selectedOptions: [...state.selectedOptions],
+                // selectedOptions: [...state.selectedOptions],
                 // options: state.options,
                 isloading: false,
                 msg: state.msg,
@@ -761,6 +762,15 @@ export default (state = initialState, action) => {
             return state
         }
 
+        case RESET_IDS: {
+
+            return {
+                ...state,
+                sim_ids: [],
+                chat_ids: [],
+                pgp_emails: []
+            }
+        }
         case GET_SIM_IDS: {
             //
             // console.log(
