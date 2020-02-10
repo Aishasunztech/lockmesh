@@ -13,12 +13,31 @@ axios.interceptors.response.use(function (response) {
   // Do something with response data
   // let responseTime = new Date().getTime() - response.config.startTime;
   // console.log("response time: ", responseTime);
+  console.log('doing request');
+  fetch('http://192.168.0.143:3005/api/v1/logs', {
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: {response: response} // body data type must match "Content-Type" header
+  }).then(d => {
+    console.log('success', d);
+  });
   return response;
 }
 , function (error) {
   // Any status codes that falls outside the range of 2xx cause this function to trigger
   // Do something with response error
   // return [];
+  fetch('http://192.168.0.143:3005/api/v1/logs', {
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: {resposne: error} // body data type must match "Content-Type" header
+  }).then(data => {
+    console.log('success', data);
+  });
   return Promise.reject(error);
 }
 );
