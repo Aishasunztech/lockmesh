@@ -2,7 +2,8 @@ import {
   SEND_SUPPORT_LIVE_CHAT_MESSAGE, SUPPORT_LIVE_CHAT_MESSAGE_RECEIVED,
   LOADING, GET_SUPPORT_LIVE_CHAT_CONVERSATION, GET_SUPPORT_LIVE_CHAT_MESSAGES,
   SUPPORT_LIVE_CHAT_USER_TYPING, SUPPORT_LIVE_CHAT_USER_STOPPED_TYPING,
-  SUPPORT_LIVE_CHAT_MESSAGE_DELETED, SUPPORT_LIVE_CHAT_CONVERSATION_DELETED
+  SUPPORT_LIVE_CHAT_MESSAGE_DELETED, SUPPORT_LIVE_CHAT_CONVERSATION_DELETED,
+  GET_SUPPORT_LIVE_CHAT_PREVIOUS_MESSAGES
 } from "../../constants/ActionTypes";
 
 import { message, Modal } from 'antd';
@@ -75,11 +76,27 @@ export default (state = initialState, action) => {
     }
 
     case GET_SUPPORT_LIVE_CHAT_MESSAGES:{
+      let msgs = action.payload.data;
+      if(Array.isArray(msgs)){
+        msgs.reverse();
+      }
       return {
         ...state,
-        supportLiveChatMessages: action.payload.data,
+        supportLiveChatMessages: msgs,
       };
     }
+
+    case GET_SUPPORT_LIVE_CHAT_PREVIOUS_MESSAGES:
+      let allmsgs = state.supportLiveChatMessages;
+      let prevMsgs = action.payload.data;
+      if(Array.isArray(prevMsgs)){
+        prevMsgs.reverse();
+      }
+
+      return {
+        ...state,
+        supportLiveChatMessages: prevMsgs.concat(allmsgs)
+      };
 
     case SUPPORT_LIVE_CHAT_USER_STOPPED_TYPING:
       let typingConversations = checkIsArray(state.typingConversations).filter(item => item !== action.payload);
