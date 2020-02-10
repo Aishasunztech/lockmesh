@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col, Tag, Modal } from "antd";
-import { convertToLang, checkValue, convertTimezoneValue, getWeekDayDescription, getMonthName, checkTimezoneValue } from '../../utils/commonUtils';
+import { convertToLang, checkValue, convertTimezoneValue, getWeekDayDescription, getMonthName, checkTimezoneValue, checkIsArray } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 import moment from 'moment';
 import ReadMoreAndLess from 'react-read-more-less';
@@ -85,7 +85,7 @@ export default class ListMsgs extends Component {
         let editDateTime = data.date_time;
         let currentDateTime = moment().tz(this.state.dealerTZ).format(TIMESTAMP_FORMAT);
         // console.log("edit data is: ", data.date_time, " current date: ", moment().tz(this.state.dealerTZ).format(TIMESTAMP_FORMAT), currentDateTime > editDateTime)
-        if (currentDateTime > editDateTime && data.timer_status === "DATE/TIME" ) {
+        if (currentDateTime > editDateTime && data.timer_status === "DATE/TIME") {
             Modal.warning({
                 title: 'This message time is passed',
                 content: 'You are not allowed to change this message settings.'
@@ -206,7 +206,7 @@ export default class ListMsgs extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.rowKey)) {
-                let list = this.state.expandedRowKeys.filter(item => item !== record.rowKey)
+                let list = checkIsArray(this.state.expandedRowKeys).filter(item => item !== record.rowKey)
                 this.setState({ expandedRowKeys: list })
             }
         }

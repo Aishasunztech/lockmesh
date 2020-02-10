@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal, Tabs, Col, Input, Form, Row, DatePicker, Select } from "antd";
 import moment from 'moment';
 import styles from '../reporting.css'
-import { convertToLang, generatePDF, generateExcel, formatMoney, getDateFromTimestamp } from "../../../utils/commonUtils";
+import { convertToLang, generatePDF, generateExcel, formatMoney, getDateFromTimestamp, checkIsArray } from "../../../utils/commonUtils";
 import {
   DEVICE_PRE_ACTIVATION
 } from "../../../../constants/Constants";
@@ -153,7 +153,7 @@ class Sales extends Component {
         reportCard: true
       });
 
-      rows = this.props.salesReport.map((item, index) => {
+      rows = checkIsArray(this.props.salesReport).map((item, index) => {
         return {
           'key': index,
           'count': ++index,
@@ -213,8 +213,8 @@ class Sales extends Component {
   renderList = (list) => {
 
     let data = [];
-    if (list) {
-      list.map((item, index) => {
+    // if (list) {
+      checkIsArray(list).map((item, index) => {
         data.push({
           'key': index,
           'count': ++index,
@@ -228,7 +228,7 @@ class Sales extends Component {
           'created_at': item.created_at ? getDateFromTimestamp(item.created_at) : 'N/A',
         })
       });
-    }
+    // }
     return data;
   };
 
@@ -259,7 +259,7 @@ class Sales extends Component {
     if (e == '') {
       devices = this.props.devices
     } else {
-      devices = this.props.devices.filter(device => device.dealer_id == e);
+      devices = checkIsArray(this.props.devices).filter(device => device.dealer_id == e);
     }
     this.setState({
       deviceList: devices
@@ -334,7 +334,7 @@ class Sales extends Component {
                     >
                       <Select.Option value=''>ALL</Select.Option>
                       <Select.Option value={this.props.user.dealerId}>My Report</Select.Option>
-                      {this.props.dealerList.map((dealer, index) => {
+                      {checkIsArray(this.props.dealerList).map((dealer, index) => {
                         return (<Select.Option key={dealer.dealer_id} value={dealer.dealer_id}>{dealer.dealer_name} ({dealer.link_code})</Select.Option>)
                       })}
                     </Select>
@@ -359,7 +359,7 @@ class Sales extends Component {
                   <Select style={{ width: '100%' }}>
                     <Select.Option value=''>ALL</Select.Option>
                     <Select.Option value={DEVICE_PRE_ACTIVATION}>{DEVICE_PRE_ACTIVATION}</Select.Option>
-                    {this.state.deviceList.map((device, index) => {
+                    {checkIsArray(this.state.deviceList).map((device, index) => {
                       return (<Select.Option key={device.device_id} value={device.device_id}>{device.device_id}</Select.Option>)
                     })}
                   </Select>

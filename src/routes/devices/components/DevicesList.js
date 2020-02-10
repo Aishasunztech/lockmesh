@@ -7,7 +7,7 @@ import CustomScrollbars from "../../../util/CustomScrollbars";
 import { Link } from "react-router-dom";
 import SuspendDevice from './SuspendDevice';
 import ActivateDevcie from './ActivateDevice';
-import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, convertToLang, checkRemainTermDays, convertTimezoneValue, getDevicesListActionBtns } from '../../utils/commonUtils'
+import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, convertToLang, checkRemainTermDays, convertTimezoneValue, getDevicesListActionBtns, checkIsArray } from '../../utils/commonUtils'
 import EditDevice from './editDevice';
 import AddDevice from './AddDevice';
 
@@ -413,7 +413,7 @@ class DevicesList extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.key)) {
-                let list = this.state.expandedRowKeys.filter(item => item !== record.key)
+                let list = checkIsArray(this.state.expandedRowKeys).filter(item => item !== record.key)
                 this.setState({ expandedRowKeys: list })
             }
         }

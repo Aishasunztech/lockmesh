@@ -6,6 +6,7 @@ import {
 } from "../../constants/ActionTypes";
 
 import { message, Modal } from 'antd';
+import { checkIsArray } from "../../routes/utils/commonUtils";
 const success = Modal.success;
 const error = Modal.error;
 const initialState = {
@@ -83,7 +84,7 @@ export default (state = initialState, action) => {
     case UPDATE_SUPPORT_SYSTEM_MESSAGE_NOTIFICATION: {
       let supportSystemMessagesNotifications;
       if(action.payload.status){
-        supportSystemMessagesNotifications = state.supportSystemMessagesNotifications.filter(notification => !action.payload.seenId.includes(notification.system_message._id));
+        supportSystemMessagesNotifications = checkIsArray(state.supportSystemMessagesNotifications).filter(notification => !action.payload.seenId.includes(notification.system_message._id));
       } else {
         supportSystemMessagesNotifications = state.supportSystemMessagesNotifications;
       }

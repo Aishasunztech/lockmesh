@@ -1,10 +1,11 @@
 import React from "react";
-import {Button, DatePicker, Form, Input, message, Modal, Select, Upload} from "antd";
+import { Button, DatePicker, Form, Input, message, Modal, Select, Upload } from "antd";
 import Moment from "moment";
 import categories from "../../data/categories";
 import priorities from "../../data/priorities";
-import {ADMIN_ID, SDEALER} from "../../../../../constants/Constants";
-const {TextArea} = Input;
+import { ADMIN_ID, SDEALER } from "../../../../../constants/Constants";
+import { checkIsArray } from "../../../../utils/commonUtils";
+const { TextArea } = Input;
 
 class ComposeTicket extends React.Component {
   constructor() {
@@ -14,7 +15,7 @@ class ComposeTicket extends React.Component {
   handleSubmit = () => {
 
     this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err){
+      if (!err) {
         values.user = this.props.user;
         this.props.generateSupportTicket(values);
         this.props.onClose();
@@ -25,15 +26,15 @@ class ComposeTicket extends React.Component {
   };
 
   render() {
-    const { onClose, user, connectedDealer, admin} = this.props;
+    const { onClose, user, connectedDealer, admin } = this.props;
     return (
       <Modal onCancel={onClose} visible={this.props.open}
-             title='Generate Ticket'
-             closable={false}
-             onOk={() => {
-               this.handleSubmit()
-             }}
-             style={{zIndex: 2600}}>
+        title='Generate Ticket'
+        closable={false}
+        onOk={() => {
+          this.handleSubmit()
+        }}
+        style={{ zIndex: 2600 }}>
         <Form autoComplete="new-password">
 
           <Form.Item
@@ -72,7 +73,7 @@ class ComposeTicket extends React.Component {
                 <Select.Option key='1' value={JSON.stringify(admin)}><span className='text-capitalize'>Admin</span></Select.Option>
                 {user.type === SDEALER ?
                   <Select.Option key='2' value={JSON.stringify(connectedDealer)}><span className='text-capitalize'>Dealer</span></Select.Option>
-                  : '' }
+                  : ''}
               </Select>
             )}
           </Form.Item>
@@ -96,7 +97,7 @@ class ComposeTicket extends React.Component {
                 style={{ width: '100%' }}
               >
                 <Select.Option value=''>Select Category</Select.Option>
-                {categories.filter(category => category.id !== 0).map((category, index) => {
+                {checkIsArray(categories).filter(category => category.id !== 0).map((category, index) => {
                   return (<Select.Option key={category.id} value={category.handle}><span className='text-capitalize'>{category.title}</span></Select.Option>)
                 })}
               </Select>
@@ -121,7 +122,7 @@ class ComposeTicket extends React.Component {
               <Select style={{ width: '100%' }}>
                 <Select.Option value=''>Select Priority</Select.Option>
 
-                {priorities.filter(priority => priority.id !== 0).map((priority, index) => {
+                {checkIsArray(priorities).filter(priority => priority.id !== 0).map((priority, index) => {
                   return (<Select.Option key={priority.id} value={priority.handle}><span className='text-capitalize'>{priority.title}</span></Select.Option>)
                 })}
               </Select>

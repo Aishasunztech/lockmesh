@@ -1,7 +1,7 @@
 import { Modal } from 'antd';
 
 import React, { Component } from 'react'
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 
 
@@ -18,16 +18,16 @@ export default class BulkPullApps extends Component {
         let dealer_ids = [];
         let user_ids = [];
 
-        devices.forEach((item) => {
+        checkIsArray(devices).forEach((item) => {
             if (item.device_id) {
                 // selectedDevices.push({ device_id: item.usr_device_id, usrAccId: item.id });
                 selectedDevices.push({ device_id: item.device_id, usrAccId: item.id, usr_device_id: item.usr_device_id });
             }
         });
-        dealers.forEach((item) => {
+        checkIsArray(dealers).forEach((item) => {
             dealer_ids.push(item.key);
         });
-        users.forEach((item) => {
+        checkIsArray(users).forEach((item) => {
             user_ids.push(item.key);
         });
 
@@ -42,7 +42,7 @@ export default class BulkPullApps extends Component {
         if (this.props.selectedPullAppsList && this.props.selectedPullAppsList.length) {
 
             // const title = `${convertToLang(this.props.translation[""], `Are you sure, you want to pull (${this.props.selectedPullAppsList.map(item => ` ${item.apk_name}`)}) apps from these devices: `)} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`;
-            const title = `${convertToLang(this.props.translation[""], `Are you sure, you want to pull (${this.props.selectedPullAppsList.map(item => ` ${item.apk_name}`)}) apps from selected devices`)} ?`;
+            const title = `${convertToLang(this.props.translation[""], `Are you sure, you want to pull (${checkIsArray(this.props.selectedPullAppsList).map(item => ` ${item.apk_name}`)}) apps from selected devices`)} ?`;
             this.confirm({
                 title: title,
                 content: '',

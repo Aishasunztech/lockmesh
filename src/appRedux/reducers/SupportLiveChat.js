@@ -7,6 +7,7 @@ import {
 } from "../../constants/ActionTypes";
 
 import { message, Modal } from 'antd';
+import { checkIsArray } from "../../routes/utils/commonUtils";
 const success = Modal.success;
 const error   = Modal.error;
 const initialState = {
@@ -54,7 +55,7 @@ export default (state = initialState, action) => {
 
     case SUPPORT_LIVE_CHAT_MESSAGE_RECEIVED: {
       let supportLiveChatMessages = state.supportLiveChatMessages;
-      let supportLiveChatConversations = state.supportLiveChatConversations.filter(conversation => conversation._id !== action.payload.conversation._id);
+      let supportLiveChatConversations = checkIsArray(state.supportLiveChatConversations).filter(conversation => conversation._id !== action.payload.conversation._id);
 
       // if(!supportLiveChatConversations.some(conversation => conversation._id === action.payload.conversation._id)){
       //   supportLiveChatConversations.push(action.payload.conversation);
@@ -98,7 +99,7 @@ export default (state = initialState, action) => {
       };
 
     case SUPPORT_LIVE_CHAT_USER_STOPPED_TYPING:
-      let typingConversations = state.typingConversations.filter(item => item !== action.payload);
+      let typingConversations = checkIsArray(state.typingConversations).filter(item => item !== action.payload);
       return {
         ...state,
         typingConversations
@@ -106,7 +107,7 @@ export default (state = initialState, action) => {
 
     case SUPPORT_LIVE_CHAT_USER_TYPING:
       let typings = state.typingConversations;
-      typings = typings.filter(item => item !== action.payload);
+      typings = checkIsArray(typings).filter(item => item !== action.payload);
       typings.push(action.payload);
       return {
         ...state,

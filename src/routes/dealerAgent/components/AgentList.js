@@ -13,7 +13,8 @@ import {
     getSortOrder,
     // checkRemainDays, 
     convertToLang,
-    convertTimezoneValue
+    convertTimezoneValue,
+    checkIsArray
 } from '../../utils/commonUtils'
 import { Button_Yes, Button_No } from '../../../constants/ButtonConstants';
 import { DEALER, ADMIN } from '../../../constants/Constants';
@@ -143,7 +144,7 @@ export default class DevicesList extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.key)) {
-                let list = this.state.expandedRowKeys.filter(item => item !== record.key)
+                let list = checkIsArray(this.state.expandedRowKeys).filter(item => item !== record.key)
                 this.setState({ expandedRowKeys: list })
             }
         }

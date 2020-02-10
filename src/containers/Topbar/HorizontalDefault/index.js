@@ -11,6 +11,7 @@ import UserInfo from "components/UserInfo";
 import HorizontalNav from "../HorizontalNav";
 import { Link } from "react-router-dom";
 import { switchLanguage, toggleCollapsedSideNav } from "../../../appRedux/actions/Setting";
+import { checkIsArray } from "../../../routes/utils/commonUtils";
 // import IntlMessages from "../../../util/IntlMessages";
 
 const { Header } = Layout;
@@ -40,7 +41,7 @@ class HorizontalDefault extends Component {
   languageMenu = () => (
     <CustomScrollbars className="gx-popover-lang-scroll">
       <ul className="gx-sub-popover">
-        {languageData.map(language =>
+        {checkIsArray(languageData).map(language =>
           <li className="gx-media gx-pointer" key={JSON.stringify(language)} onClick={(e) =>
             this.props.switchLanguage(language)
           }>

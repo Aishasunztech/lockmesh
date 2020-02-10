@@ -23,7 +23,7 @@ import {
     purchaseCreditsFromCC
 } from "../../appRedux/actions/Account";
 
-import { convertToLang } from '../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../utils/commonUtils';
 
 
 import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Table, Select, Divider } from "antd";
@@ -217,7 +217,7 @@ class Account extends Component {
     searchField = (originalData, fieldName, value) => {
         let demoData = [];
         if (value.length) {
-            originalData.forEach((data) => {
+            checkIsArray(originalData).forEach((data) => {
                 // console.log(data);
                 if (data[fieldName] !== undefined) {
                     if ((typeof data[fieldName]) === 'string') {

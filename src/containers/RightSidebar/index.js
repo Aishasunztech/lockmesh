@@ -5,6 +5,7 @@ import Auxiliary from "../../util/Auxiliary";
 import CustomScrollbars from "../../util/CustomScrollbars";
 import {getSocketProcesses, getNotification } from '../../appRedux/actions';
 import styles from './rightSidebar.css'
+import { checkIsArray } from "../../routes/utils/commonUtils";
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
 
@@ -101,13 +102,13 @@ class RightSidebar extends Component {
     let taskList = [];
 
     if (data.length) {
-      data.map((item, index) => {
+      checkIsArray(data).map((item, index) => {
         // if (item.status === type) {
         taskList.push(item);
         // }
       })
     }
-    return taskList.map((task) => {
+    return checkIsArray(taskList).map((task) => {
       let color = '';
       let status = '';
       switch (task.status) {

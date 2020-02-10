@@ -22,7 +22,7 @@ import AgentTabs from './components/AgentTabs';
 import AddAgent from './components/AddAgent';
 
 import {
-    convertToLang, componentSearch
+    convertToLang, componentSearch, checkIsArray
 } from '../utils/commonUtils'
 import { dealerAgentColumns } from '../utils/columnsUtils';
 import { ADMIN } from '../../constants/Constants';
@@ -97,7 +97,7 @@ class DealerAgent extends Component {
 
         if (e.target.value.length) {
 
-            copyDealerAgents.forEach((agent) => {
+            checkIsArray(copyDealerAgents).forEach((agent) => {
 
                 if (agent[e.target.name] !== undefined) {
                     if ((typeof agent[e.target.name]) === 'string') {
@@ -161,7 +161,7 @@ class DealerAgent extends Component {
     handleTableChange = (pagination, query, sorter) => {
         let { columns } = this.state;
 
-        columns.forEach(column => {
+        checkIsArray(columns).forEach(column => {
             if (column.children) {
                 if (Object.keys(sorter).length > 0) {
                     if (column.dataIndex == sorter.field) {
