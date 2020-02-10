@@ -3,81 +3,80 @@ import { BASE_URL, SOCKET_BASE_URL, SUPERADMIN_URL, SUPPORT_URL, SUPPORT_SOCKET_
 import io from "socket.io-client";
 import SupportSystemSocketIO from "socket.io-client";
 
-axios.interceptors.request.use(function(config){
-  config.startTime = new Date().getTime();
-  config.requestPage = window.location.href;
-  return config;
-  // return Promise.reject(config);
-})
-
-axios.interceptors.response.use(function (response) {
-    let userAgent = window.navigator.userAgent ? window.navigator.userAgent : {} ;
-    let currentTime = new Date().getTime();
-    let objectToSend = {
-      apiResponseTime : currentTime,
-      client_info : {
-        userAgent: userAgent
-      }
-    };
-    if(response.hasOwnProperty('config')){
-      objectToSend.request = response.config;
-      objectToSend.requestBody = response.config.data ? response.config.data : {};
-      objectToSend.requestHeaders = response.config.headers ? response.config.headers : {};
-      objectToSend.requestUrl = response.config.requestPage ? response.config.requestPage : '';
-      objectToSend.apiResponseTime = currentTime - (response.config.startTime ? response.config.startTime : 0);;
-    }
-    if(response){
-      objectToSend.response = response.data;
-      objectToSend.code = response.status;
-      objectToSend.message = response.statusText;
-      objectToSend.request = response.config;
-      objectToSend.requestBody = response.config.data;
-      objectToSend.requestHeaders = response.config.headers;
-    }
-
-    fetch('http://192.168.0.143:3005/api/v1/logs', {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(objectToSend) // body data type must match "Content-Type" header
-    }).then(d => {}).catch(err => {});
-    return response;
-}
-, function (error) {
-    let userAgent = window.navigator.userAgent ? window.navigator.userAgent : {} ;
-    let currentTime = new Date().getTime();
-    let newObjectToSend = {
-      client_info : {
-        userAgent: userAgent
-      }
-    };
-    if(error.config !== null){
-      newObjectToSend.request = error.config;
-      newObjectToSend.requestBody = error.config.data ? error.config.data : {} ;
-      newObjectToSend.requestHeaders = error.config.headers ? error.config.headers : {} ;
-      newObjectToSend.requestUrl = error.config.requestPage ? error.config.requestPage : '';
-      newObjectToSend.apiResponseTime = currentTime - (error.config.startTime ? error.config.startTime : 0);
-    }
-    if(!error.response){
-      newObjectToSend.response = null;
-      newObjectToSend.code = error.response.status;
-      newObjectToSend.message = error.response.statusText;
-    } else {
-      newObjectToSend.response = error.response;
-      newObjectToSend.code = error.response.status;
-      newObjectToSend.message = error.response.statusText;
-    }
-    fetch('http://192.168.0.143:3005/api/v1/logs', {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newObjectToSend) // body data type must match "Content-Type" header
-    }).then(d => {}).catch(err => {});
-    return Promise.reject(error);
-  }
-);
+// axios.interceptors.request.use(function(config){
+//   config.startTime = new Date().getTime();
+//   config.requestPage = window.location.href;
+//   return config;
+//   // return Promise.reject(config);
+// })
+// axios.interceptors.response.use(function (response) {
+//     let userAgent = window.navigator.userAgent ? window.navigator.userAgent : {} ;
+//     let currentTime = new Date().getTime();
+//     let objectToSend = {
+//       apiResponseTime : currentTime,
+//       client_info : {
+//         userAgent: userAgent
+//       }
+//     };
+//     if(response.hasOwnProperty('config')){
+//       objectToSend.request = response.config;
+//       objectToSend.requestBody = response.config.data ? response.config.data : {};
+//       objectToSend.requestHeaders = response.config.headers ? response.config.headers : {};
+//       objectToSend.requestUrl = response.config.requestPage ? response.config.requestPage : '';
+//       objectToSend.apiResponseTime = currentTime - (response.config.startTime ? response.config.startTime : 0);;
+//     }
+//     if(response){
+//       objectToSend.response = response.data;
+//       objectToSend.code = response.status;
+//       objectToSend.message = response.statusText;
+//       objectToSend.request = response.config;
+//       objectToSend.requestBody = response.config.data;
+//       objectToSend.requestHeaders = response.config.headers;
+//     }
+//
+//     fetch('http://192.168.0.143:3005/api/v1/logs', {
+//       method: 'POST', // *GET, POST, PUT, DELETE, etc.
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify(objectToSend) // body data type must match "Content-Type" header
+//     }).then(d => {}).catch(err => {});
+//     return response;
+// }
+// , function (error) {
+//     let userAgent = window.navigator.userAgent ? window.navigator.userAgent : {} ;
+//     let currentTime = new Date().getTime();
+//     let newObjectToSend = {
+//       client_info : {
+//         userAgent: userAgent
+//       }
+//     };
+//     if(error.config !== null){
+//       newObjectToSend.request = error.config;
+//       newObjectToSend.requestBody = error.config.data ? error.config.data : {} ;
+//       newObjectToSend.requestHeaders = error.config.headers ? error.config.headers : {} ;
+//       newObjectToSend.requestUrl = error.config.requestPage ? error.config.requestPage : '';
+//       newObjectToSend.apiResponseTime = currentTime - (error.config.startTime ? error.config.startTime : 0);
+//     }
+//     if(!error.response){
+//       newObjectToSend.response = null;
+//       newObjectToSend.code = error.response.status;
+//       newObjectToSend.message = error.response.statusText;
+//     } else {
+//       newObjectToSend.response = error.response;
+//       newObjectToSend.code = error.response.status;
+//       newObjectToSend.message = error.response.statusText;
+//     }
+//     fetch('http://192.168.0.143:3005/api/v1/logs', {
+//       method: 'POST', // *GET, POST, PUT, DELETE, etc.
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify(newObjectToSend) // body data type must match "Content-Type" header
+//     }).then(d => {}).catch(err => {});
+//     return Promise.reject(error);
+//   }
+// );
 
 const RestService = {
 
