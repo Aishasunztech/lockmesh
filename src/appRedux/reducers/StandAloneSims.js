@@ -35,7 +35,7 @@ export default (state = initialState, action) => {
                 if (index > -1) {
                     if (action.data.type === 'activate') {
                         simList[index].sim_status = 'active'
-                    } else {
+                    } else if (action.data.type === 'suspend') {
                         simList[index].sim_status = 'suspended'
                     }
                 }
@@ -49,8 +49,6 @@ export default (state = initialState, action) => {
                 standAloneSimsList: [...simList]
             }
         }
-
-
         default:
             return state;
 

@@ -293,8 +293,8 @@ class EditDevice extends Component {
     }
 
     componentDidMount() {
-        this.props.getSimIDs();
-        this.props.getChatIDs();
+        // this.props.getSimIDs();
+        this.props.getChatIDs(this.props.device.id, this.props.device.dealer_id);
         this.props.getPGPEmails(this.props.device.id, this.props.device.dealer_id);
         this.props.getUserList();
         this.props.getParentPackages()
@@ -862,10 +862,13 @@ class EditDevice extends Component {
     }
 
     handleChatID = (e) => {
+        let device = this.props.device
         let payload = {
             type: 'chat_id',
             auto_generated: true,
-            product_data: {}
+            product_data: {},
+            user_acc_id: device.id,
+            dealer_id: device.dealer_id
         }
         this.props.addProduct(payload)
     }

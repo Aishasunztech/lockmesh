@@ -86,14 +86,14 @@ class SimList extends Component {
                                         {convertToLang(this.props.translation[Button_Active], "ACTIVATE")}
                                     </Button>
                                 }
-                                {/* <Button
+                                <Button
                                     type=""
                                     size="small"
                                     style={{ textTransform: 'uppercase' }}
-                                    onClick={() => { }}
+                                    onClick={() => { this.changeSimStatus(sim, 'reset') }}
                                 >
                                     {convertToLang(this.props.translation[""], "RESET")}
-                                </Button> */}
+                                </Button>
                             </div>
                         </Fragment>
                     ,

@@ -365,6 +365,7 @@ export const GET_OVERDUE_DETAILS = 'GET_OVERDUE_DETAILS';
  * @description Manage data constants
  */
 
+export const RESET_IDS = 'RESET_IDS';
 export const ADD_PRODUCT = 'ADD_PRODUCT';
 export const RESET_ADD_PRODUCT_PROPS = 'RESET_ADD_PRODUCT_PROPS';
 export const VALIDATE_ICCID = 'VALIDATE_ICCID';

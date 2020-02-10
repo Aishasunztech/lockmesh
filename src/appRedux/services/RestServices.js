@@ -239,8 +239,8 @@ const RestService = {
         return axios.get(BASE_URL + 'users/get_sim_ids', RestService.getHeader());
     },
 
-    getChatIDs: () => {
-        return axios.get(BASE_URL + 'users/get_chat_ids', RestService.getHeader());
+    getChatIDs: (user_acc_id, dealer_id) => {
+        return axios.get(BASE_URL + `users/get_chat_ids/${user_acc_id}/${dealer_id}`, RestService.getHeader());
     },
     getPGPEmails: (user_acc_id, dealer_id) => {
         return axios.get(BASE_URL + `users/get_pgp_emails/${user_acc_id}/${dealer_id}`, RestService.getHeader());

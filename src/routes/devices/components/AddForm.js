@@ -34,6 +34,7 @@ import {
     getPolicies,
     getDomains,
     addProduct,
+    resetIds
 } from "../../../appRedux/actions";
 
 // constants
@@ -247,10 +248,15 @@ class AddDevice extends Component {
             this.props.getProductPrices();
             this.props.getHardwaresPrices();
         }
-        this.props.getPolicies();
-        this.props.getSimIDs();
-        this.props.getChatIDs();
-        this.props.getPGPEmails(this.props.device.id, this.props.device.dealer_id);
+        if (!this.props.preActive) {
+            this.props.getPolicies(this.props.device.id, this.props.device.dealer_id);
+            this.props.getSimIDs(this.props.device.id, this.props.device.dealer_id);
+            this.props.getChatIDs(this.props.device.id, this.props.device.dealer_id);
+            this.props.getPGPEmails(this.props.device.id, this.props.device.dealer_id);
+            console.log("dasd");
+        } else {
+            this.props.resetIds()
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -377,10 +383,14 @@ class AddDevice extends Component {
     }
 
     handleChatID = (e) => {
+        let device = this.props.device
         let payload = {
             type: 'chat_id',
             auto_generated: true,
-            product_data: {}
+            product_data: {},
+            user_acc_id: device ? device.user_acc_id : null,
+            dealer_id: device ? device.dealer_id : null,
+
         }
         this.props.addProduct(payload)
     }
@@ -1834,6 +1844,7 @@ class AddDevice extends Component {
 
                     // data
                     domainList={this.props.domainList}
+                    device={this.props.device}
 
                 />
 
@@ -1980,6 +1991,7 @@ function mapDispatchToProps(dispatch) {
         addSimPermission: null,
         getDomains: getDomains,
         addProduct: addProduct,
+        resetIds: resetIds,
     }, dispatch);
 }
 var mapStateToProps = ({ routing, devices, device_details, users, settings, sidebar, auth, account }) => {

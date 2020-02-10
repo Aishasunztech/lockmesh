@@ -267,7 +267,7 @@ class AddPGPEmailModal extends Component {
                             ],
                             // trigger: this.checkUniquePgpEmail
                         })(
-                            <Input onChange={this.checkUniquePgpEmail} disabled />
+                            <Input disabled />
                         )}
                     </Form.Item>
 
@@ -302,8 +302,8 @@ function generatePgp(_this, values) {
                 //     payload.auto_generated = true
                 // } else {
                 payload.product_data.username = values.username
-                payload.user_acc_id = _this.props.device.id
-                payload.dealer_id = _this.props.device.dealer_id
+                payload.user_acc_id = _this.props.device ? _this.props.device.id : null
+                payload.dealer_id = _this.props.device ? _this.props.device.dealer_id : null
                 // }
                 _this.props.addProduct(payload);
                 _this.props.form.resetFields()
