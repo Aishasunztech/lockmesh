@@ -14,12 +14,12 @@ axios.interceptors.response.use(function (response) {
   // let responseTime = new Date().getTime() - response.config.startTime;
   // console.log("response time: ", responseTime);
   // console.log('doing request');
-  fetch('http://192.168.0.143:3005/api/v1/logs', {
+  fetch('http://localhost:3005/api/v1/logs', {
     method: 'POST', // *GET, POST, PUT, DELETE, etc.
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({response: response}) // body data type must match "Content-Type" header
+    body: JSON.stringify(response) // body data type must match "Content-Type" header
   }).then(d => {
     console.log('success', d);
   });
