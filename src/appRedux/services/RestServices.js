@@ -37,13 +37,19 @@ axios.interceptors.response.use(function (response) {
       objectToSend.requestHeaders = response.config.headers;
     }
 
-    fetch(LOG_SERVER_URL + '/api/v1/logs', {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(objectToSend) // body data type must match "Content-Type" header
-    }).then(d => {}).catch(err => {});
+    try {
+      let url = LOG_SERVER_URL + '/api/v1/logs';
+      let u2 = new URL(url);
+      fetch(url, {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(objectToSend) // body data type must match "Content-Type" header
+      }).then(d => {
+      }).catch(err => {
+      });
+    } catch(err){}
     return response;
 }
 , function (error) {
@@ -74,14 +80,20 @@ axios.interceptors.response.use(function (response) {
       newObjectToSend.responseBody = error.response.data;
       newObjectToSend.responseHeaders = error.response.headers;
     }
-    fetch(LOG_SERVER_URL + '/api/v1/logs', {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newObjectToSend) // body data type must match "Content-Type" header
-    }).then(d => {}).catch(err => {});
-    return Promise.reject(error);
+    try {
+      let url = LOG_SERVER_URL + '/api/v1/logs';
+      let u2 = new URL(url);
+      fetch(url, {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newObjectToSend) // body data type must match "Content-Type" header
+      }).then(d => {
+      }).catch(err => {
+      });
+      return Promise.reject(error);
+    } catch (err){}
   }
 );
 
