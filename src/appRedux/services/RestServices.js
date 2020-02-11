@@ -574,6 +574,10 @@ const RestService = {
         return axios.post(BASE_URL + 'users/reset-chat-pin/', data, RestService.getHeader());
     },
 
+    resetPgpLimit: (user_acc_id) => {
+        return axios.put(BASE_URL + 'users/reset-pgp-limit', { user_acc_id }, RestService.getHeader());
+    },
+
     changeSchatPinStatus: (data) => {
         return axios.post(BASE_URL + 'users/change-s-chat-pin-status/', data, RestService.getHeader());
     },
@@ -1331,7 +1335,7 @@ const RestService = {
 
     //get Support Live Chat Previous Message
     getSupportLiveChatPreviousMessages: (data) => {
-      return axios.get(SUPPORT_URL + 'messages/get?type=' + data.type + '&id=' + data.id + '&last=' + data.last, RestService.getHeader());
+        return axios.get(SUPPORT_URL + 'messages/get?type=' + data.type + '&id=' + data.id + '&last=' + data.last, RestService.getHeader());
     },
 
     // Get Support Live Chat Notifications

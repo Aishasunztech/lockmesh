@@ -47,7 +47,8 @@ import {
   changeSchatPinStatus,
   closeChatIdSettingsEnable,
   resetDevice,
-  deviceNotFound, resetChatPin
+  deviceNotFound, resetChatPin,
+  resetPgpLimit
 } from "../../appRedux/actions/ConnectDevice";
 
 import { getDevicesList, editDevice } from '../../appRedux/actions/Devices';
@@ -622,6 +623,8 @@ class ConnectDevice extends Component {
                     checkPass={this.props.checkPass}
                     chatIdSettingsEnable={this.props.chatIdSettingsEnable}
                     closeChatIdSettingsEnable={this.props.closeChatIdSettingsEnable}
+                    resetPgpLimit={this.props.resetPgpLimit}
+
                   />
                 </Col>
                 <Col className="gutter-row action_group" span={8} xs={24} sm={24} md={24} lg={24} xl={8}>
@@ -652,6 +655,7 @@ class ConnectDevice extends Component {
                         redoBtn={this.props.redoBtn}
                         clearBtn={this.props.clearBtn}
                         translation={this.props.translation}
+                        resetPgpLimit={this.props.resetPgpLimit}
                       />
                       <Button.Group className="nav_btn_grp">
 
@@ -809,7 +813,8 @@ function mapDispatchToProps(dispatch) {
     deviceNotFound: deviceNotFound,
     resetChatPin: resetChatPin,
     changeSchatPinStatus: changeSchatPinStatus,
-    closeChatIdSettingsEnable: closeChatIdSettingsEnable
+    closeChatIdSettingsEnable: closeChatIdSettingsEnable,
+    resetPgpLimit: resetPgpLimit
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, auth, socket, settings }, ownProps) => {
