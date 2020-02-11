@@ -588,7 +588,8 @@ export const addProduct = (payload) => {
                     type: ADD_PRODUCT,
                     payload: {
                         type: payload.type,
-                        ...response.data
+                        ...response.data,
+                        user_acc_id: payload.user_acc_id
                     }
                 })
             } else {
