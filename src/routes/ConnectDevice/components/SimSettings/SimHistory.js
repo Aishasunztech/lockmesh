@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Modal, message, Input, Table, Switch, Avatar } from 'antd';
-import { componentSearch, getFormattedDate, convertToLang } from '../../../utils/commonUtils';
+import { componentSearch, getFormattedDate, convertToLang, checkIsArray } from '../../../utils/commonUtils';
 import Moment from 'react-moment';
 import { SECURE_SETTING, DATE, PROFILE_NAME, SEARCH } from '../../../../constants/Constants';
 import { BASE_URL } from '../../../../constants/Application';
@@ -111,7 +111,7 @@ export default class SimHistory extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.key)) {
-                let list = this.state.expandedRowKeys.filter(item => item !== record.key)
+                let list = checkIsArray(this.state.expandedRowKeys).filter(item => item !== record.key)
                 this.setState({ expandedRowKeys: list })
             }
         }

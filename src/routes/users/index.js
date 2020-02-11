@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { message, Input, Modal, Button, Popover, Icon } from "antd";
 import AppFilter from '../../components/AppFilter';
 import UserList from "./components/UserList";
-import { getStatus, componentSearch, titleCase, convertToLang, handleMultipleSearch, } from '../utils/commonUtils';
+import { getStatus, componentSearch, titleCase, convertToLang, handleMultipleSearch, checkIsArray, } from '../utils/commonUtils';
 
 import { isArray } from "util";
 import {
@@ -83,7 +83,7 @@ class Users extends Component {
         // 
         let { columns } = this.state;
 
-        columns.forEach(column => {
+        checkIsArray(columns).forEach(column => {
             if (column.children) {
                 if (Object.keys(sorter).length > 0) {
                     if (column.dataIndex == sorter.field) {
@@ -121,7 +121,7 @@ class Users extends Component {
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.users_list !== this.props.users_list) {
-            
+
             this.state.columns[2].children[0].title = convertToLang(this.props.translation[USER_ID], "USER ID") + ' (' + nextProps.users_list.length + ')'
             // 
             this.setState({
@@ -198,78 +198,14 @@ class Users extends Component {
         this.refs.add_user.showModal(handleSubmit);
     }
 
-    consoled = () => {
-        // 
-    }
 
-
-    handleSearch2 = (e) => {
-        let demoUsers = [];
-        copyUsers = JSON.parse(JSON.stringify(this.state.originalUsers));
-        let expandedRowsKeys = [];
-
-        if (e.target.value.length) {
-
-            copyUsers.forEach((user) => {
-                //  
-                if (user['devicesList'].length > 0) {
-                    let demoDeviceList = [];
-                    for (let device of user['devicesList']) {
-
-                        if (device[e.target.name] !== undefined && device[e.target.name] !== null) {
-                            if ((typeof device[e.target.name]) === 'string') {
-                                // 
-
-                                if (device[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
-                                    demoDeviceList.push(device);
-                                }
-                            }
-                            else if (device[e.target.name] !== null) {
-                                // 
-                                // if (device[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
-                                //     demoDeviceList.push(device);
-                                // }
-                            } else {
-                                // demoUsers.push(user);
-                            }
-                        } else {
-                            // demoUsers.push(user);
-                        }
-                    }
-                    // 
-
-                    if (demoDeviceList.length > 0) {
-                        user.devicesList = demoDeviceList;
-                        demoUsers.push(user);
-                        expandedRowsKeys.push(user.user_id);
-
-                    }
-
-                }
-
-            });
-            //  
-            this.setState({
-                users: demoUsers,
-                expandedRowsKeys: expandedRowsKeys
-            })
-        } else {
-            this.setState({
-                users: this.state.originalUsers,
-                expandedRowsKeys: []
-            })
-        }
-    }
 
     handleSearch = (e) => {
-        // 
-        // 
 
         this.state.SearchValues[e.target.name] = { key: e.target.name, value: e.target.value };
 
         let response = handleMultipleSearch(e, status, copyUsers, this.state.SearchValues, this.state.users)
 
-        
         this.setState({
             users: response.demoData,
             SearchValues: response.SearchValues
@@ -277,129 +213,11 @@ class Users extends Component {
         status = response.copy_status;
         copyUsers = response.copyRequireSearchData;
 
-
-        // let demoUsers = [];
-        // let demoSearchValues = this.state.SearchValues;
-        // if (status) {
-        //     coppyUsers = this.state.users;
-        //     status = false;
-        // }
-        // // 
-
-        // let targetName = e.target.name;
-        // let targetValue = e.target.value;
-
-        // if (targetValue.length || Object.keys(demoSearchValues).length) {
-        //     demoSearchValues[targetName] = { key: targetName, value: targetValue };
-        //     this.state.SearchValues[targetName] = { key: targetName, value: targetValue };
-        //     // 
-        //     // 
-        //     // 
-        //     coppyUsers.forEach((user) => {
-        //         // 
-
-        //         // if (user[e.target.name] !== undefined) {
-
-        //         let searchColsAre = Object.keys(demoSearchValues).length;
-        //         let searchUsers = 0;
-        //         // if (typeof (user[targetName]) === 'string' && user[targetName] !== null && user[targetName] !== undefined) {
-        //         // 
-
-        //         if (searchColsAre > 0) {
-        //             Object.values(demoSearchValues).forEach((data) => {
-
-        //                 if (typeof (user[data.key]) === 'string' && user[data.key] !== null && user[data.key] !== undefined) {
-
-        //                     if (data.value == "") {
-        //                         searchUsers++;
-        //                     } else if (user[data.key]) {
-        //                         if (user[data.key].toUpperCase().includes(data.value.toUpperCase())) {
-        //                             searchUsers++;
-        //                         }
-        //                     }
-        //                 } else if (isArray(user[data.key])) {
-        //                     if (user[data.key].length.toString().toUpperCase().includes(data.value.toUpperCase())) {
-        //                         searchUsers++;
-        //                     }
-        //                 }
-
-        //             })
-
-        //             if (searchColsAre === searchUsers) {
-        //                 demoUsers.push(user);
-        //             }
-
-        //         } else {
-        //             if (user[targetName].toUpperCase().includes(targetValue.toUpperCase())) {
-        //                 demoUsers.push(user);
-        //             }
-        //         }
-
-
-        //     });
-        //     //  
-        //     this.setState({
-        //         users: demoUsers,
-        //         SearchValues: demoSearchValues
-        //     })
-        // } else {
-        //     this.setState({
-        //         users: coppyUsers,
-        //         SearchValues: demoSearchValues
-        //     })
-        // }
     }
 
-    // handleSearch = (e) => {
-    //     // 
-    //     // 
-
-    //     let demoUsers = [];
-    //     if (status) {
-    //         coppyUsers = this.state.users;
-    //         status = false;
-    //     }
-    //     //   
-
-    //     if (e.target.value.length) {
-    //         // 
-    //         // 
-    //         // 
-    //         coppyUsers.forEach((user) => {
-    //              
-
-    //             if (user[e.target.name] !== undefined) {
-    //                 if ((typeof user[e.target.name]) === 'string') {
-    //                     // 
-    //                     if (user[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
-    //                         demoUsers.push(user);
-    //                     }
-    //                 } else if (user[e.target.name] !== null) {
-    //                     // 
-    //                     if (user[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
-    //                         demoUsers.push(user);
-    //                     }
-    //                 } else {
-    //                     // demoUsers.push(user);
-    //                 }
-    //             } else {
-    //                 demoUsers.push(user);
-    //             }
-    //         });
-    //         //  
-    //         this.setState({
-    //             users: demoUsers
-    //         })
-    //     } else {
-    //         this.setState({
-    //             users: coppyUsers
-    //         })
-    //     }
-    // }
 
     render() {
         this.state.columns[2].children[0].title = convertToLang(this.props.translation[USER_ID], "USER ID") + ' (' + this.state.users.length + ')'
-        // 
         return (
             <Fragment>
                 <AppFilter
@@ -430,7 +248,6 @@ class Users extends Component {
                     expandedRowsKey={this.state.expandedRowsKeys}
                     pagination={this.props.DisplayPages}
                     ref="userList"
-                    consoled={this.consoled}
                     translation={this.props.translation}
                     user={this.props.user}
                 />

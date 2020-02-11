@@ -11,6 +11,7 @@ import ConnectDevice from "./ConnectDevice";
 import Account from "./Account";
 import Policy from "./Policy";
 import Users from "./Users";
+import StandAloneSims from "./StandAloneSims";
 import AppMarket from "./AppMarket";
 import socket from "./Socket";
 import SideBar from "./SideBar"
@@ -35,6 +36,7 @@ const reducers = combineReducers({
   account: Account,
   policies: Policy,
   users: Users,
+  standAloneSims: StandAloneSims,
   appMarket: AppMarket,
   agents: Agents,
   socket: socket,

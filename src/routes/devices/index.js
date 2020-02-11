@@ -28,8 +28,8 @@ import {
     getPGPEmails,
     resetProductAddProps,
     relinkDevice,
-    unflagged, 
-    unlinkDevice, 
+    unflagged,
+    unlinkDevice,
     transferDeviceProfile,
     getDropdown,
     postDropdown
@@ -44,7 +44,8 @@ import {
     convertToLang,
     checkValue,
     handleMultipleSearch,
-    filterData_RelatedToMultipleSearch
+    filterData_RelatedToMultipleSearch,
+    checkIsArray
 } from '../utils/commonUtils';
 
 import { devicesColumns } from '../utils/columnsUtils';
@@ -62,7 +63,7 @@ import {
     DEVICE_TRANSFERED,
     DEVICE_FLAGGED,
     DEALER,
-    
+
 } from '../../constants/Constants'
 
 import {
@@ -147,7 +148,7 @@ class Devices extends Component {
     handleTableChange = (pagination, query, sorter) => {
         let { columns } = this.state;
 
-        columns.forEach(column => {
+        checkIsArray(columns).forEach(column => {
             if (column.children) {
                 if (Object.keys(sorter).length > 0) {
                     if (column.dataIndex == sorter.field) {
@@ -194,7 +195,7 @@ class Devices extends Component {
 
         if (type === DEVICE_FLAGGED) {
             // 
-            devices.filter(function (device) {
+            checkIsArray(devices).filter(function (device) {
                 if (device.finalStatus !== DEVICE_UNLINKED) {
                     // let deviceStatus = getStatus(device.status, device.account_status, device.unlink_status, device.device_status, device.activation_status);
                     let deviceStatus = device.flagged;
@@ -205,7 +206,7 @@ class Devices extends Component {
                 }
             });
         } else {
-            devices.filter(function (device) {
+            checkIsArray(devices).filter(function (device) {
                 // let deviceStatus = getStatus(device.status, device.account_status, device.unlink_status, device.device_status, device.activation_status);
                 let deviceStatus = device.finalStatus;
                 if (deviceStatus === type) {
@@ -763,7 +764,7 @@ class Devices extends Component {
             });
             // console.log("this.props.user ", this.props.user);
             if (this.props.user.type === ADMIN) {
-                dumydata = dumydata.filter(item => item.dataIndex !== 'activation_code');
+                dumydata = checkIsArray(dumydata).filter(item => item.dataIndex !== 'activation_code');
             }
             this.setState({ columns: dumydata, selectedOptions: values });
         } else {

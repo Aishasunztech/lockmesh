@@ -3,7 +3,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip, Progress } from "antd";
-import { componentSearch, convertToLang } from '../../utils/commonUtils';
+import { componentSearch, convertToLang, checkIsArray } from '../../utils/commonUtils';
 import DealerApps from "./DealerApps";
 import PullApps from './PullApps';
 
@@ -264,7 +264,7 @@ export default class PushPullApps extends Component {
         let allSelectedApps = this.state.selectedPushApps;
         let data = [];
 
-        selectedRows.forEach(el => {
+        checkIsArray(selectedRows).forEach(el => {
             let index = allSelectedApps.findIndex(item => item.key == el.key)
             if (index !== -1) {
                 data.push(allSelectedApps[index])
@@ -292,7 +292,7 @@ export default class PushPullApps extends Component {
     }
 
     handleChecked = (e, key, app_id) => {
-        this.state.selectedPushApps.map((el) => {
+        checkIsArray(this.state.selectedPushApps).map((el) => {
             if (el.apk_id === app_id) {
                 el[key] = e;
             }

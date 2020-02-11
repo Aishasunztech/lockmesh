@@ -2,82 +2,82 @@ import axios from 'axios';
 import { BASE_URL, SOCKET_BASE_URL, SUPERADMIN_URL, SUPPORT_URL, SUPPORT_SOCKET_URL } from '../../constants/Application';
 import io from "socket.io-client";
 import SupportSystemSocketIO from "socket.io-client";
+import { checkIsArray } from '../../routes/utils/commonUtils';
 
-axios.interceptors.request.use(function(config){
-  config.startTime = new Date().getTime();
-  config.requestPage = window.location.href;
-  return config;
-  // return Promise.reject(config);
-});
-
-axios.interceptors.response.use(function (response) {
-    let userAgent = window.navigator.userAgent ? window.navigator.userAgent : {} ;
-    let currentTime = new Date().getTime();
-    let objectToSend = {
-      apiResponseTime : currentTime,
-      client_info : {
-        userAgent: userAgent
-      }
-    };
-    if(response.hasOwnProperty('config')){
-      objectToSend.request = response.config;
-      objectToSend.requestBody = response.config.data ? response.config.data : {};
-      objectToSend.requestHeaders = response.config.headers ? response.config.headers : {};
-      objectToSend.requestUrl = response.config.requestPage ? response.config.requestPage : '';
-      objectToSend.apiResponseTime = currentTime - (response.config.startTime ? response.config.startTime : 0);;
-    }
-    if(response){
-      objectToSend.response = response.data;
-      objectToSend.code = response.status;
-      objectToSend.message = response.statusText;
-      objectToSend.request = response.config;
-      objectToSend.requestBody = response.config.data;
-      objectToSend.requestHeaders = response.config.headers;
-    }
-
-    fetch('http://192.168.0.143:3005/api/v1/logs', {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(objectToSend) // body data type must match "Content-Type" header
-    }).then(d => {}).catch(err => {});
-    return response;
-  }
-  , function (error) {
-    let userAgent = window.navigator.userAgent ? window.navigator.userAgent : {} ;
-    let currentTime = new Date().getTime();
-    let newObjectToSend = {
-      client_info : {
-        userAgent: userAgent
-      }
-    };
-    if(error.config !== null){
-      newObjectToSend.request = error.config;
-      newObjectToSend.requestBody = error.config.data ? error.config.data : {} ;
-      newObjectToSend.requestHeaders = error.config.headers ? error.config.headers : {} ;
-      newObjectToSend.requestUrl = error.config.requestPage ? error.config.requestPage : '';
-      newObjectToSend.apiResponseTime = currentTime - (error.config.startTime ? error.config.startTime : 0);
-    }
-    if(!error.response){
-      newObjectToSend.response = null;
-      newObjectToSend.code = error.response.status;
-      newObjectToSend.message = error.response.statusText;
-    } else {
-      newObjectToSend.response = error.response;
-      newObjectToSend.code = error.response.status;
-      newObjectToSend.message = error.response.statusText;
-    }
-    fetch('http://192.168.0.143:3005/api/v1/logs', {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newObjectToSend) // body data type must match "Content-Type" header
-    }).then(d => {}).catch(err => {});
-    return Promise.reject(error);
-  }
-);
+// axios.interceptors.request.use(function(config){
+//   config.startTime = new Date().getTime();
+//   config.requestPage = window.location.href;
+//   return config;
+//   // return Promise.reject(config);
+// })
+// axios.interceptors.response.use(function (response) {
+//     let userAgent = window.navigator.userAgent ? window.navigator.userAgent : {} ;
+//     let currentTime = new Date().getTime();
+//     let objectToSend = {
+//       apiResponseTime : currentTime,
+//       client_info : {
+//         userAgent: userAgent
+//       }
+//     };
+//     if(response.hasOwnProperty('config')){
+//       objectToSend.request = response.config;
+//       objectToSend.requestBody = response.config.data ? response.config.data : {};
+//       objectToSend.requestHeaders = response.config.headers ? response.config.headers : {};
+//       objectToSend.requestUrl = response.config.requestPage ? response.config.requestPage : '';
+//       objectToSend.apiResponseTime = currentTime - (response.config.startTime ? response.config.startTime : 0);;
+//     }
+//     if(response){
+//       objectToSend.response = response.data;
+//       objectToSend.code = response.status;
+//       objectToSend.message = response.statusText;
+//       objectToSend.request = response.config;
+//       objectToSend.requestBody = response.config.data;
+//       objectToSend.requestHeaders = response.config.headers;
+//     }
+//
+//     fetch('http://192.168.0.143:3005/api/v1/logs', {
+//       method: 'POST', // *GET, POST, PUT, DELETE, etc.
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify(objectToSend) // body data type must match "Content-Type" header
+//     }).then(d => {}).catch(err => {});
+//     return response;
+// }
+// , function (error) {
+//     let userAgent = window.navigator.userAgent ? window.navigator.userAgent : {} ;
+//     let currentTime = new Date().getTime();
+//     let newObjectToSend = {
+//       client_info : {
+//         userAgent: userAgent
+//       }
+//     };
+//     if(error.config !== null){
+//       newObjectToSend.request = error.config;
+//       newObjectToSend.requestBody = error.config.data ? error.config.data : {} ;
+//       newObjectToSend.requestHeaders = error.config.headers ? error.config.headers : {} ;
+//       newObjectToSend.requestUrl = error.config.requestPage ? error.config.requestPage : '';
+//       newObjectToSend.apiResponseTime = currentTime - (error.config.startTime ? error.config.startTime : 0);
+//     }
+//     if(!error.response){
+//       newObjectToSend.response = null;
+//       newObjectToSend.code = error.response.status;
+//       newObjectToSend.message = error.response.statusText;
+//     } else {
+//       newObjectToSend.response = error.response;
+//       newObjectToSend.code = error.response.status;
+//       newObjectToSend.message = error.response.statusText;
+//     }
+//     fetch('http://192.168.0.143:3005/api/v1/logs', {
+//       method: 'POST', // *GET, POST, PUT, DELETE, etc.
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify(newObjectToSend) // body data type must match "Content-Type" header
+//     }).then(d => {}).catch(err => {});
+//     return Promise.reject(error);
+//   }
+// );
 
 const RestService = {
 
@@ -198,7 +198,6 @@ const RestService = {
         } else {
             return true;
         }
-
     },
     twoFactorAuth: (isEnable) => {
         return axios.post(BASE_URL + 'users/two_factor_auth', { isEnable: isEnable }, RestService.getHeader())
@@ -316,11 +315,11 @@ const RestService = {
         return axios.get(BASE_URL + 'users/get_sim_ids', RestService.getHeader());
     },
 
-    getChatIDs: () => {
-        return axios.get(BASE_URL + 'users/get_chat_ids', RestService.getHeader());
+    getChatIDs: (user_acc_id, dealer_id) => {
+        return axios.get(BASE_URL + `users/get_chat_ids/${user_acc_id}/${dealer_id}`, RestService.getHeader());
     },
-    getPGPEmails: () => {
-        return axios.get(BASE_URL + 'users/get_pgp_emails', RestService.getHeader());
+    getPGPEmails: (user_acc_id, dealer_id) => {
+        return axios.get(BASE_URL + `users/get_pgp_emails/${user_acc_id}/${dealer_id}`, RestService.getHeader());
     },
     // get All ids
     getAllSimIDs: () => {
@@ -485,7 +484,7 @@ const RestService = {
         // console.log('check perm:: ', record);
         // return;
         if (record.push_apps.length) {
-            record.push_apps.forEach((app) => {
+            checkIsArray(record.push_apps).forEach((app) => {
                 app.guest = (app.guest !== undefined) ? app.guest : false;
                 app.enable = (app.enable !== undefined) ? app.enable : false;
                 app.encrypted = (app.encrypted !== undefined) ? app.encrypted : false;
@@ -493,12 +492,12 @@ const RestService = {
         }
 
         // if(record)
-        record.app_list.forEach((app) => {
+        checkIsArray(record.app_list).forEach((app) => {
             app.guest = (app.guest !== undefined) ? app.guest : false;
             app.enable = (app.enable !== undefined) ? app.enable : false;
             app.encrypted = (app.encrypted !== undefined) ? app.encrypted : false;
         });
-        record.secure_apps.forEach((app) => {
+        checkIsArray(record.secure_apps).forEach((app) => {
             app.guest = (app.guest !== undefined) ? app.guest : false;
             app.enable = (app.enable !== undefined) ? app.enable : false;
         })
@@ -731,7 +730,7 @@ const RestService = {
     applySettings: (device_setting, device_id = null, usr_acc_id) => {
         //  console.log('device settings', device_setting, 'device id ', device_id,'name', name, 'type',type );
         if (device_setting.app_list !== undefined) {
-            device_setting.app_list.forEach((elem) => {
+            checkIsArray(device_setting.app_list).forEach((elem) => {
                 elem.packageName = elem.uniqueName.replace(elem.label, '');
 
                 elem.guest = elem.guest ? true : false;
@@ -775,7 +774,7 @@ const RestService = {
     saveProfileCND: (device_setting, profileName = null, usr_acc_id) => {
         //  console.log('device settings', device_setting, 'device id ', device_id,'name', name, 'type',type );
         if (device_setting.app_list !== undefined) {
-            device_setting.app_list.forEach((elem) => {
+            checkIsArray(device_setting.app_list).forEach((elem) => {
                 elem.packageName = elem.uniqueName.replace(elem.label, '');
                 if (elem.guest) {
                     elem.guest = true;
@@ -1232,7 +1231,7 @@ const RestService = {
 
     //check support system running
     checkSupportServiceRunning: () => {
-      return axios.get(SUPPORT_URL);
+        return axios.get(SUPPORT_URL);
     },
 
     //support tickets
@@ -1298,6 +1297,23 @@ const RestService = {
         return axios.post(SUPPORT_URL + 'system-messages/update-notification', data, RestService.getHeader());
     },
 
+    //SIMS MODULE
+    //GET SIMS List 
+    getStandaloneSimsList: () => {
+        return axios.get(BASE_URL + 'users/get-standalone-sims',
+            RestService.getHeader()
+        )
+    },
+    //CHANGE SIM STATUS ON TWILLIO
+
+    changeSimStatus: (id, type) => {
+        return axios.put(BASE_URL + 'users/change_sim_status',
+            { id, type },
+            RestService.getHeader()
+        )
+    },
+
+
     //send Support Live Chat Message
     sendSupportLiveChatMessage: (data) => {
         return axios.post(SUPPORT_URL + 'messages/send', data, RestService.getHeader());
@@ -1320,12 +1336,12 @@ const RestService = {
 
     // Get Support Live Chat Notifications
     getSupportLiveChatNotifications: () => {
-      return axios.get(SUPPORT_URL + 'messages/getNotifications', RestService.getHeader());
+        return axios.get(SUPPORT_URL + 'messages/getNotifications', RestService.getHeader());
     },
 
     // read the chat message
     updateSupportLiveChatReadStatus: (data) => {
-      return axios.put(SUPPORT_URL + 'messages/read', data, RestService.getHeader());
+        return axios.put(SUPPORT_URL + 'messages/read', data, RestService.getHeader());
     }
 };
 export default RestService;

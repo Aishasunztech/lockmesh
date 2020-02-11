@@ -23,9 +23,9 @@ export default class EditDevice extends Component {
             visible: true,
             func: func,
         });
-        this.props.getSimIDs();
-        this.props.getChatIDs();
-        this.props.getPgpEmails();
+        // this.props.getSimIDs();
+        // this.props.getChatIDs();
+        // this.props.getPgpEmails();
     }
 
 

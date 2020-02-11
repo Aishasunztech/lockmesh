@@ -14,7 +14,7 @@ import {
   DEVICE_UNLINKED,
   DEVICE_PRE_ACTIVATION
 } from '../../constants/Constants';
-import { convertToLang, generateExcel, formatMoney } from '../../routes/utils/commonUtils';
+import { convertToLang, generateExcel, formatMoney, checkIsArray } from '../../routes/utils/commonUtils';
 import {
   Button_Ok,
   Button_Cancel,
@@ -240,8 +240,8 @@ class CreditIcon extends Component {
 
   renderPaymentHistoryList = (list) => {
 
-    if (list) {
-      return list.map((item, index) => {
+    // if (list) {
+      return checkIsArray(list).map((item, index) => {
         return {
           rowKey: item.id,
           key: ++index,
@@ -252,7 +252,7 @@ class CreditIcon extends Component {
           total_credits: item.credits,
         }
       })
-    }
+    // }
   };
 
   renderOverData = () => {

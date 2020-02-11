@@ -31,7 +31,7 @@ import {
 } from "../../constants/PolicyConstants";
 
 import { message, Modal } from 'antd';
-import { convertToLang, findAndRemove_duplicate_in_array, removeDuplicateObjects } from "../../routes/utils/commonUtils";
+import { convertToLang, findAndRemove_duplicate_in_array, removeDuplicateObjects, checkIsArray } from "../../routes/utils/commonUtils";
 import { POLICY_DELETED_SUCCESSFULLY, STATUS_UPDATED } from "../../constants/Constants";
 
 const success = Modal.success
@@ -424,7 +424,7 @@ export default (state = initialState, action) => {
                 let checkButtons = null;
                 let changedExtensions = JSON.parse(JSON.stringify(state.allExtensions));
 
-                changedExtensions.forEach(extension => {
+                checkIsArray(changedExtensions).forEach(extension => {
                     // console.log(extension.uniqueName, '===', action.payload.uniqueName)
 
                     if (extension.uniqueName === action.payload.uniqueName) {
@@ -459,7 +459,7 @@ export default (state = initialState, action) => {
 
             else if (action.payload.stateToUpdate === 'dealerApps') {
                 let changedApps = JSON.parse(JSON.stringify(state.dealer_apk_list));
-                changedApps.forEach(app => {
+                checkIsArray(changedApps).forEach(app => {
                     // console.log(app.app_id,'====', action.payload.app_id)
                     if (app.apk_id === action.payload.app_id) {
                         app.isChanged = true;
@@ -486,7 +486,7 @@ export default (state = initialState, action) => {
 
             else if (action.payload.stateToUpdate === 'appPermissions') {
                 let changedApps = JSON.parse(JSON.stringify(state.appPermissions));
-                changedApps.forEach(app => {
+                checkIsArray(changedApps).forEach(app => {
                     // console.log(app.id,'====', action.payload.app_id ,app)
                     if (app.id === action.payload.app_id) {
                         app.isChanged = true;
@@ -521,10 +521,10 @@ export default (state = initialState, action) => {
                 let changedExtensions = JSON.parse(JSON.stringify(state.allExtensions));
                 state[action.payload.key + 'All' + action.payload.stateToUpdate] = action.payload.value;
 
-                changedExtensions.forEach(extension => {
+                checkIsArray(changedExtensions).forEach(extension => {
                     // console.log(extension.uniqueName, '===', action.payload.uniqueName)
                     if (extension.uniqueName === action.payload.uniqueName) {
-                        extension.subExtension.forEach(obj => {
+                        checkIsArray(extension.subExtension).forEach(obj => {
                             obj[action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
                             obj.isChanged = true;
                         });
@@ -547,7 +547,7 @@ export default (state = initialState, action) => {
                 // console.log(action.payload.key + 'All' + action.payload.stateToUpdate, 'state to update')
 
                 state[action.payload.key + 'All' + action.payload.stateToUpdate] = action.payload.value;
-                changedApps.forEach(app => {
+                checkIsArray(changedApps).forEach(app => {
                     // console.log(app.app_id,'====', action.payload.app_id)
                     app.isChanged = true;
                     app[action.payload.key] = action.payload.value;
@@ -569,7 +569,7 @@ export default (state = initialState, action) => {
                 let changedApps = JSON.parse(JSON.stringify(state.appPermissions));
                 // console.log(action.payload.key + 'All' + action.payload.stateToUpdate, 'state to update')
                 state[action.payload.key + 'All' + action.payload.stateToUpdate] = action.payload.value;
-                changedApps.forEach(app => {
+                checkIsArray(changedApps).forEach(app => {
                     // console.log(app.id,'====', action.payload.app_id ,app)
                     app.isChanged = true;
                     app[action.payload.key] = action.payload.value;
@@ -603,7 +603,7 @@ export default (state = initialState, action) => {
 
             if (action.payload.stateToUpdate === 'allExtensions') {
                 state[action.payload.key + 'All2' + action.payload.stateToUpdate] = action.payload.value;
-                changedState[chandedRowIndex]['secure_apps'].forEach(extension => {
+                checkIsArray(changedState[chandedRowIndex]['secure_apps']).forEach(extension => {
 
                     extension[action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
                     extension.isChanged = true;
@@ -620,7 +620,7 @@ export default (state = initialState, action) => {
             } else if (action.payload.stateToUpdate === 'dealerApps') {
 
                 state[action.payload.key + 'All2' + action.payload.stateToUpdate] = action.payload.value;
-                changedState[chandedRowIndex]['push_apps'].forEach(app => {
+                checkIsArray(changedState[chandedRowIndex]['push_apps']).forEach(app => {
                     app.isChanged = true;
                     app[action.payload.key] = action.payload.value;
                     // console.log(action.payload.key, 'value', action.payload.value)
@@ -635,7 +635,7 @@ export default (state = initialState, action) => {
                 }
             } else if (action.payload.stateToUpdate === 'appPermissions') {
                 state[action.payload.key + 'All2' + action.payload.stateToUpdate] = action.payload.value;
-                changedState[chandedRowIndex]['app_list'].forEach(app => {
+                checkIsArray(changedState[chandedRowIndex]['app_list']).forEach(app => {
                     app.isChanged = true;
                     app[action.payload.key] = action.payload.value;
                 });
@@ -690,7 +690,7 @@ export default (state = initialState, action) => {
         //         if (action.formData.action == "save") {
 
         //             if (index !== -1) {
-        //                 newDealers = newDealers.map((item) => {
+        //                 newDealers = checkIsArray(newDealers).map((item) => {
         //                     return {
         //                         dealer_id: item,
         //                         dealer_type: user.type,
@@ -720,15 +720,15 @@ export default (state = initialState, action) => {
 
         //             if (index !== -1) {
         //                 if (!action.formData.statusAll) {
-        //                     let allDealers = oldDealers.filter((item) => !newDealers.includes(item.dealer_id));
+        //                     let allDealers = checkIsArray(oldDealers).filter((item) => !newDealers.includes(item.dealer_id));
         //                     state.policies[index].dealer_permission = allDealers;
         //                     state.policies[index].permission_count = allDealers.length;
         //                 } else {
         //                     if (user && user.type === "dealer") {
-        //                         state.policies[index].dealer_permission = oldDealers.filter((item) => item.dealer_type == "admin")
+        //                         state.policies[index].dealer_permission = checkIsArray(oldDealers).filter((item) => item.dealer_type == "admin")
         //                     }
         //                     else if (user && user.type === "sdealer") {
-        //                         state.policies[index].dealer_permission = oldDealers.filter((item) => item.dealer_type == "admin" || item.dealer_type == "dealer")
+        //                         state.policies[index].dealer_permission = checkIsArray(oldDealers).filter((item) => item.dealer_type == "admin" || item.dealer_type == "dealer")
         //                     }
         //                     else {
         //                         state.policies[index].dealer_permission = [];
@@ -770,7 +770,7 @@ export default (state = initialState, action) => {
                 if (action.formData.action == "save") {
 
                     if (index !== -1) {
-                        newDealers = newDealers.map((item) => {
+                        newDealers = checkIsArray(newDealers).map((item) => {
                             return {
                                 dealer_id: item,
                                 dealer_type: user.type,
@@ -795,8 +795,8 @@ export default (state = initialState, action) => {
                             if (user.type !== "admin") {
 
                                 let finalDealers = [];
-                                let deleteIds = oldDealers.map((dlr) => dlr.dealer_id);
-                                newDealers.forEach((item) => {
+                                let deleteIds = checkIsArray(oldDealers).map((dlr) => dlr.dealer_id);
+                                checkIsArray(newDealers).forEach((item) => {
                                     if (deleteIds.includes(item.dealer_id)) {
                                         let indexIs = oldDealers.findIndex((e) => e.dealer_id === item.dealer_id);
                                         finalDealers.push(oldDealers[indexIs]);
@@ -818,28 +818,28 @@ export default (state = initialState, action) => {
 
                     if (index !== -1) {
                         if (!action.formData.statusAll) {
-                            let allDealers = oldDealers.filter((item) => !newDealers.includes(item.dealer_id));
+                            let allDealers = checkIsArray(oldDealers).filter((item) => !newDealers.includes(item.dealer_id));
                             // state.policies[index].dealer_permission = allDealers;
                             // state.policies[index].permission_count = allDealers.length;
                             // if (user && user.type !== "admin") {
-                            //     let filterDealers = allDealers.filter((item) => item.dealer_type === "admin");
+                            //     let filterDealers = checkIsArray(allDealers).filter((item) => item.dealer_type === "admin");
                             //     state.policies[index].dealer_permission = filterDealers;
                             //     state.policies[index].permission_count = filterDealers.length;
                             // } else {
-                                state.policies[index].dealer_permission = allDealers;
-                                state.policies[index].permission_count = allDealers.length;
+                            state.policies[index].dealer_permission = allDealers;
+                            state.policies[index].permission_count = allDealers.length;
                             // }
                             state.policies[index].statusAll = false;
                         } else {
                             let allDealers = [];
                             if (user && user.type !== "admin") {
                                 if (user && user.type === "dealer") {
-                                    allDealers = oldDealers.filter((item) => item.dealer_type == "admin");
+                                    allDealers = checkIsArray(oldDealers).filter((item) => item.dealer_type == "admin");
                                     state.policies[index].dealer_permission = allDealers
                                     state.policies[index].permission_count = allDealers.length;
                                 }
                                 else if (user && user.type === "sdealer") {
-                                    allDealers = oldDealers.filter((item) => item.dealer_type == "admin" || item.dealer_type == "dealer");
+                                    allDealers = checkIsArray(oldDealers).filter((item) => item.dealer_type == "admin" || item.dealer_type == "dealer");
                                     state.policies[index].dealer_permission = allDealers
                                     state.policies[index].permission_count = allDealers.length;
                                 }

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Tabs, Button, Row, Col, Avatar, Input, Form, Checkbox, Icon, Steps, message, Table, Divider, Tag, Switch } from "antd";
 
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { getDealerApps } from '../../../appRedux/actions/ConnectDevice';
 import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, SECURE_SETTING, SYSTEM_CONTROLS_UNIQUE, Main_SETTINGS, APPS, POLICY_DETAILS } from '../../../constants/Constants';
 
@@ -242,17 +242,17 @@ class AddPolicy extends Component {
 
     renderSystemPermissions = () => {
 
-        if (this.state.systemPermissions) {
+        // if (this.state.systemPermissions) {
 
-            return this.state.systemPermissions.map(sysPermission => {
+            return checkIsArray(this.state.systemPermissions).map(sysPermission => {
                 return {
                     rowKey: sysPermission.setting_name,
                     name: sysPermission.setting_name,
-                    action: <Switch checked={(sysPermission.setting_status === 1 || sysPermission.setting_status === true)?true: false} onClick={(e) => this.props.handleCheckSystemPermission(e, sysPermission.setting_name)} size="small" />
+                    action: <Switch checked={(sysPermission.setting_status === 1 || sysPermission.setting_status === true) ? true : false} onClick={(e) => this.props.handleCheckSystemPermission(e, sysPermission.setting_name)} size="small" />
                 }
             })
-        
-        }
+
+        // }
 
     }
 
@@ -373,7 +373,7 @@ class AddPolicy extends Component {
                             key="2"
                         >
                             <AppList
-                                apk_list={this.state.appPermissions.filter(item => item.uniqueName !== "com.android.settingsSettings")}
+                                apk_list={checkIsArray(this.state.appPermissions).filter(item => item.uniqueName !== "com.android.settingsSettings")}
                                 dataLength={this.state.appPermissions.length}
                                 handleCheckAllAppPolicy={this.handleCheckAllAppPolicy}
                                 handleCheckApp={this.handleCheckApp}

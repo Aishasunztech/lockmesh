@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { Button, Card, Col, DatePicker, Form, Input, Row, Select, Table, Tabs } from "antd";
 import moment from 'moment';
-import { convertToLang, generateExcel, generatePDF, getDateFromTimestamp } from "../../../utils/commonUtils";
+import { convertToLang, generateExcel, generatePDF, getDateFromTimestamp, checkIsArray } from "../../../utils/commonUtils";
 import { TAB_CHAT_ID, TAB_PGP_EMAIL, TAB_SIM_ID, TAB_VPN } from "../../../../constants/TabConstants";
 import {
   LABEL_DATA_CHAT_ID,
@@ -358,7 +358,7 @@ class ProductInventory extends Component {
 
     if (JSON.stringify(this.props.productReport) !== '{}') {
       if (this.props.productReport.CHAT && this.state.innerTabSelect === '1') {
-        this.props.productReport.CHAT.map((item, index) => {
+        checkIsArray(this.props.productReport.CHAT).map((item, index) => {
           rows.push({
             'count': ++index,
             'chat_id': item.chat_id ? item.chat_id : 'N/A',
@@ -384,7 +384,7 @@ class ProductInventory extends Component {
         fileName = 'product_inventory_CHAT_' + new Date().getTime();
 
       } else if (this.props.productReport.PGP && this.state.innerTabSelect === '2') {
-        this.props.productReport.PGP.map((item, index) => {
+        checkIsArray(this.props.productReport.PGP).map((item, index) => {
 
           rows.push({
             'count': ++index,
@@ -410,7 +410,7 @@ class ProductInventory extends Component {
         fileName = 'product_inventory_PGP_' + new Date().getTime();
 
       } else if (this.props.productReport.SIM && this.state.innerTabSelect === '3') {
-        this.props.productReport.SIM.map((item, index) => {
+        checkIsArray(this.props.productReport.SIM).map((item, index) => {
           rows.push({
             'count': ++index,
             'sim_id': item.sim_id ? item.sim_id : 'N/A',
@@ -435,7 +435,7 @@ class ProductInventory extends Component {
 
         fileName = 'product_inventory_SIM_' + new Date().getTime();
       } else if (this.props.productReport.VPN && this.state.innerTabSelect === '4') {
-        this.props.productReport.VPN.map((item, index) => {
+        checkIsArray(this.props.productReport.VPN).map((item, index) => {
           rows.push({
             'count': ++index,
             'vpn_id': item.vpn_id ? item.vpn_id : 'N/A',
@@ -518,7 +518,7 @@ class ProductInventory extends Component {
     let i = 0;
 
     if (list.CHAT && this.state.innerTabSelect === '1') {
-      list.CHAT.map((item, index) => {
+      checkIsArray(list.CHAT).map((item, index) => {
         data.push({
           'row_key': `${i}Key`,
           'count': ++i,
@@ -533,7 +533,7 @@ class ProductInventory extends Component {
       });
     } else if (list.PGP && this.state.innerTabSelect === '2') {
       this.state.productTypeName = 'PGP Emails';
-      list.PGP.map((item, index) => {
+      checkIsArray(list.PGP).map((item, index) => {
         data.push({
           'row_key': `${i}Key`,
           'count': ++i,
@@ -548,7 +548,7 @@ class ProductInventory extends Component {
       });
     } else if (list.SIM && this.state.innerTabSelect === '3') {
       this.state.productTypeName = 'SIM IDs';
-      list.SIM.map((item, index) => {
+      checkIsArray(list.SIM).map((item, index) => {
         data.push({
           'row_key': `${i}Key`,
           'count': ++i,
@@ -563,7 +563,7 @@ class ProductInventory extends Component {
       });
     } else if (list.VPN && this.state.innerTabSelect === '4') {
       this.state.productTypeName = 'VPN';
-      list.VPN.map((item, index) => {
+      checkIsArray(list.VPN).map((item, index) => {
         data.push({
           'row_key': `${i}Key`,
           'count': ++i,
@@ -595,7 +595,7 @@ class ProductInventory extends Component {
     if (e == '') {
       devices = this.props.devices
     } else {
-      devices = this.props.devices.filter(device => device.dealer_id == e);
+      devices = checkIsArray(this.props.devices).filter(device => device.dealer_id == e);
       // console.log("handleDealerChange ", devices);
     }
     this.setState({
@@ -694,7 +694,7 @@ class ProductInventory extends Component {
                     >
                       <Select.Option value=''>ALL</Select.Option>
                       <Select.Option value={this.props.user.dealerId}>My Report</Select.Option>
-                      {this.props.dealerList.map((dealer, index) => {
+                      {checkIsArray(this.props.dealerList).map((dealer, index) => {
                         return (<Select.Option key={dealer.dealer_id} value={dealer.dealer_id}>{dealer.dealer_name} ({dealer.link_code})</Select.Option>)
                       })}
                     </Select>
@@ -719,7 +719,7 @@ class ProductInventory extends Component {
                   <Select style={{ width: '100%' }}>
                     <Select.Option value=''>ALL</Select.Option>
                     <Select.Option value={DEVICE_PRE_ACTIVATION}>{DEVICE_PRE_ACTIVATION}</Select.Option>
-                    {this.state.deviceList.map((device, index) => {
+                    {checkIsArray(this.state.deviceList).map((device, index) => {
                       return (<Select.Option key={device.device_id} value={device.device_id}>{device.device_id}</Select.Option>)
                     })}
                   </Select>
