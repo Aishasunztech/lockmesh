@@ -200,7 +200,7 @@ class CreditIcon extends Component {
     return <div>
       <Row gutter="16">
         <Col span={12} className="credit_modal_heading bg_brown">
-          <h4 className="mb-0 weight_600"> {convertToLang(this.props.translation[""], "ACCOUNT STATUS")} </h4>
+          <h4 className="mb-0 weight_600"> {convertToLang(this.props.translation[""], "Account Status")} </h4>
         </Col>
         <Col span={12} className={"credit_modal_heading " + class_name}>
           <h4 className=" weight_600 mb-0">

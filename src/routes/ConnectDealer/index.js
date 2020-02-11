@@ -283,7 +283,7 @@ class ConnectDealer extends Component {
     }
 
     ac_st_title = () => {
-        return <h4 className="credit_modal_heading">{convertToLang(this.props.translation[""], "ACCOUNT STATUS")}</h4>
+        return <h4 className="credit_modal_heading">{convertToLang(this.props.translation[""], "Account Status")}</h4>
     };
 
     renderAccountStatus = () => {
