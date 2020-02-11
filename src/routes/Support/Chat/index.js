@@ -228,11 +228,6 @@ class Chat extends Component {
         }
       }
     }
-    if (e.key === 'Enter') {
-      if (this.props.supportSocket && this.state.selectedConversation !== null && this.state.selectedUser !== null && this.state.selectedUser.hasOwnProperty('user')) {
-        this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_STOPPED_TYPING, { conversation: this.state.selectedConversation, user: this.state.selectedUser.user.dealer_id });
-      }
-    }
   }
 
   _handleKeyPress = (e) => {
