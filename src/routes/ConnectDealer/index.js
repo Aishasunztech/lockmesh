@@ -287,7 +287,7 @@ class ConnectDealer extends Component {
     };
 
     renderAccountStatus = () => {
-        let statusBGC, statusDays; 
+        let statusBGC, statusDays;
         let account_status_paragraph = '';
         if (this.props.dealer.account_balance_status_by === 'due_credits') {
             if (this.props.dealer.account_balance_status === 'restricted' && this.props.overdueDetails._30to60 > 0) {
@@ -430,6 +430,7 @@ class ConnectDealer extends Component {
         let restricted_level = ''
         let account_status_message1 = ''
         let account_status_message2 = ''
+        let account_balance_style_icon = ''
 
         if (dealer) {
             dealer_status = (dealer.unlink_status == 1) ? "Archived" : (dealer.account_status === "suspended") ? "Suspend" : "Active";
@@ -437,6 +438,7 @@ class ConnectDealer extends Component {
             restricted_level = dealer.account_balance_status === 'restricted' ? 'Restriction Level 1' : 'Restriction Level 2'
             account_status_message1 = "Account " + restricted_level + " by " + restricted_by
             account_status_message2 = (dealer.account_balance_status === 'restricted' ? "(Pay Later feature disabled)" : "(You may not add new devices)")
+            account_balance_style_icon = (dealer.account_balance_status == 'restricted') ? 'restrict1_icon' : (dealer.account_balance_status === "suspended") ? 'restrict2_icon' : 'active';
         }
 
         this.dealerInfoColumns[1].title = dealer_status.toUpperCase();
@@ -479,16 +481,17 @@ class ConnectDealer extends Component {
                                     {
                                         dealer.account_balance_status !== 'active' ?
                                             <Row style={{ marginTop: 10 }}>
-                                                <Col span={20}>
+                                                <Col span={19}>
                                                     <div style={{ textAlign: 'center' }}>
                                                         <h4>{account_status_message1} <br /> {account_status_message2}</h4>
                                                     </div>
 
                                                 </Col>
-                                                <Col span={4}>
-                                                    <Avatar className="gx-size-30"
+                                                <Col span={5}>
+                                                    {/* <Avatar className="gx-size-30"
                                                         alt={""}
-                                                        src={image} />
+                                                        src={image} /> */}
+                                                    <Icon className={`${account_balance_style_icon}`} type="info-circle" />
                                                 </Col>
 
                                             </Row>

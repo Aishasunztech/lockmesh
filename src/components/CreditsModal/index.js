@@ -241,17 +241,17 @@ class CreditIcon extends Component {
   renderPaymentHistoryList = (list) => {
 
     // if (list) {
-      return checkIsArray(list).map((item, index) => {
-        return {
-          rowKey: item.id,
-          key: ++index,
-          transaction_no: item.id,
-          created_at: item.created_at,
-          payment_method: JSON.parse(item.transection_data).request_type,
-          amount: "$ " + formatMoney(item.credits),
-          total_credits: item.credits,
-        }
-      })
+    return checkIsArray(list).map((item, index) => {
+      return {
+        rowKey: item.id,
+        key: ++index,
+        transaction_no: item.id,
+        created_at: item.created_at,
+        payment_method: JSON.parse(item.transection_data).request_type,
+        amount: "$ " + formatMoney(item.credits),
+        total_credits: item.credits,
+      }
+    })
     // }
   };
 
@@ -441,9 +441,9 @@ class CreditIcon extends Component {
             <Tabs defaultActiveKey="1" onChange={callback} tabPosition={"left"} type="card">
               <TabPane tab="Overview" key="1">
                 <Row>
-                  <Col xs={24} sm={24} md={6} lg={6} xl={6}>
+                  <Col xs={24} sm={24} md={2} lg={2} xl={6}>
                   </Col>
-                  <Col xs={24} sm={24} md={6} lg={6} xl={6} className="mb-16">
+                  <Col xs={24} sm={24} md={10} lg={10} xl={6} className="mb-16">
                     <Table
                       className="ac_status_table"
                       dataSource={this.renderAccountStatus()}
@@ -452,12 +452,13 @@ class CreditIcon extends Component {
                       title={this.ac_st_title}
                       bordered
                       showHeader={false}
+                      scroll={{ x: true }}
                     />
                     {/* <h6 className="mt-6"> {account_status_paragraph}</h6> */}
                   </Col>
                   {/* <Col xs={24} sm={24} md={1} lg={1} xl={1}>
                   </Col> */}
-                  <Col xs={24} sm={24} md={6} lg={6} xl={6}>
+                  <Col xs={24} sm={24} md={10} lg={10} xl={6}>
                     <Table
                       className="current_bl_table"
                       dataSource={this.renderCreditBalance()}
@@ -465,14 +466,15 @@ class CreditIcon extends Component {
                       pagination={false}
                       title={this.cr_blnc_title}
                       bordered
+                      scroll={{ x: true }}
                     />
                   </Col>
                 </Row>
                 <div>
                   <Row>
-                    <Col xs={24} sm={24} md={6} lg={6} xl={6}>
+                    <Col xs={24} sm={24} md={4} lg={4} xl={6}>
                     </Col>
-                    <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                    <Col xs={24} sm={24} md={16} lg={16} xl={12}>
                       <Table
                         className="overdue_table"
                         dataSource={this.renderOverData()}
@@ -537,9 +539,9 @@ class CreditIcon extends Component {
               <TabPane tab="Overdue" key="3">
                 <div>
                   <Row>
-                    <Col xs={24} sm={24} md={6} lg={6} xl={6}>
+                    <Col xs={24} sm={24} md={4} lg={4} xl={6}>
                     </Col>
-                    <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                    <Col xs={24} sm={24} md={16} lg={16} xl={12}>
                       <Table
                         className="overdue_table"
                         dataSource={this.renderOverData()}
