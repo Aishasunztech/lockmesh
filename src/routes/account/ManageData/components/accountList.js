@@ -148,7 +148,7 @@ export default class Tab extends Component {
         // console.log(this.state.dataList);
         return (
             <Fragment>
-                {this.props.user.type === ADMIN ?
+                {/* {this.props.user.type === ADMIN ? */}
                     <Tabs defaultActiveKey="all" type='card' className="dev_tabs dev_tabs1" activeKey={this.state.tabselect} onChange={this.callback}>
                         <TabPane tab={convertToLang(this.props.translation[Tab_All], "All")} key="all" >
                         </TabPane>
@@ -156,7 +156,7 @@ export default class Tab extends Component {
                         <TabPane tab={convertToLang(this.props.translation[Tab_UNUSED], "UNUSED")} key="0" forceRender={true} > </TabPane>
 
                     </Tabs>
-                    : null}
+                    {/* : null} */}
                 <AccountList
                     user={this.props.user}
                     dataList={this.state.dataList}

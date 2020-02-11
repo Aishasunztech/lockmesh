@@ -74,7 +74,8 @@ import {
     DEVICE_NOT_FOUND,
     RESET_CHAT_PIN,
     CHAT_ID_SETTINGS,
-    ENABLE_PWD_CONFIRM
+    ENABLE_PWD_CONFIRM,
+    RESET_PGP_LIMIT
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -1448,6 +1449,23 @@ export const resetChatPin = (data) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: RESET_CHAT_PIN,
+                    payload: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+
+export const resetPgpLimit = (user_acc_id) => {
+    return (dispatch) => {
+        RestService.resetPgpLimit(user_acc_id).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: RESET_PGP_LIMIT,
                     payload: response.data
                 })
             } else {
