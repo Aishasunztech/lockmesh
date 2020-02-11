@@ -16,7 +16,7 @@ let CHARSET = 'UTF-8';
 // set default timezone for local test
 let TIMEZONE = "Europe/London" // "Asia/Karachi";
 
-let LOG_SERVER_BASE_URL = 'https://localhost:3005';
+let LOG_SERVER_BASE_URL = 'http://localhost:3005';
 
 switch (hostName) {
     case "localhost":
