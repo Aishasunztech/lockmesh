@@ -16,6 +16,8 @@ let CHARSET = 'UTF-8';
 // set default timezone for local test
 let TIMEZONE = "Europe/London" // "Asia/Karachi";
 
+let LOG_SERVER_BASE_URL = 'http://localhost:3005';
+
 switch (hostName) {
     case "localhost":
         break;
@@ -30,6 +32,7 @@ switch (hostName) {
         SUPPORT = "https://devsupportapi.lockmesh.com/v1/";
         SUPPORT_SOCKET = "https://devsupportapi.lockmesh.com";
         SUPERADMIN = 'https://devapi.meshguard.co/';
+        LOG_SERVER_BASE_URL = 'https://logs.lockmesh.com';
 
         TITLE = "LockMesh"
         TIMEZONE = "Europe/London"
@@ -45,6 +48,8 @@ switch (hostName) {
         SUPERADMIN = 'https://devapi.meshguard.co/'
         SUPPORT = "https://predevsupport.lockmesh.com/"
 
+        LOG_SERVER_BASE_URL = 'https://logs.lockmesh.com';
+
         TITLE = "LockMesh"
         TIMEZONE = "Europe/London"
         break;
@@ -56,7 +61,9 @@ switch (hostName) {
         URL = "https://loadtesterapi.lockmesh.com/"
         SOCKET_URL = 'wss://loadtesterapi.lockmesh.com';
 
-        SUPERADMIN = 'https://devapi.meshguard.co/'
+        SUPERADMIN = 'https://devapi.meshguard.co/';
+
+        LOG_SERVER_BASE_URL = 'https://logs.lockmesh.com';
         TITLE = "LockMesh"
         TIMEZONE = "Europe/London"
         break;
@@ -71,7 +78,8 @@ switch (hostName) {
 
         SUPPORT = "https://api.lockmesh.com/support/v1/"
         SUPPORT_SOCKET = "https://api.lockmesh.com";
-        SUPERADMIN = 'https://api.meshguard.co/'
+        SUPERADMIN = 'https://api.meshguard.co/';
+        LOG_SERVER_BASE_URL = 'https://logs.lockmesh.com';
 
         TITLE = "LockMesh"
         TIMEZONE = "Europe/London"
@@ -84,7 +92,8 @@ switch (hostName) {
         URL = "https://api.titansecureserver.com/"
         SOCKET_URL = 'wss://api.titansecureserver.com';
 
-        SUPERADMIN = 'https://api.meshguard.co/'
+        SUPERADMIN = 'https://api.meshguard.co/';
+        LOG_SERVER_BASE_URL = 'https://logs.lockmesh.com';
         TITLE = "TitanLocker"
         TIMEZONE = "Europe/London"
         break;
@@ -92,10 +101,11 @@ switch (hostName) {
     case "cryptc.lockmesh.com":
     case "http://cryptc.lockmesh.com":
     case "https://cryptc.lockmesh.com":
-        URL = "https://cryptcapi.lockmesh.com/"
+        URL = "https://cryptcapi.lockmesh.com/";
         SOCKET_URL = 'wss://cryptcapi.lockmesh.com';
 
-        SUPERADMIN = 'https://api.meshguard.co/'
+        SUPERADMIN = 'https://api.meshguard.co/';
+        LOG_SERVER_BASE_URL = 'https://logs.lockmesh.com';
         TITLE = "CryptPhoneC"
         TIMEZONE = "Europe/London"
         break;
@@ -106,7 +116,8 @@ switch (hostName) {
         URL = "https://cryptkapi.lockmesh.com/"
         SOCKET_URL = 'wss://cryptkapi.lockmesh.com';
 
-        SUPERADMIN = 'https://api.meshguard.co/'
+        SUPERADMIN = 'https://api.meshguard.co/';
+        LOG_SERVER_BASE_URL = 'https://logs.lockmesh.com';
         TITLE = "CryptPhoneK"
         TIMEZONE = "Europe/London"
         break;
@@ -126,6 +137,8 @@ export const SUPERADMIN_URL = `${SUPERADMIN}api/v1/`;
 
 export const CHAR_SET = CHARSET;
 export const SERVER_TIMEZONE = TIMEZONE;
+
+export const LOG_SERVER_URL = LOG_SERVER_BASE_URL;
 
 // APP Constants
 export const VERSION = packageJson.version;
