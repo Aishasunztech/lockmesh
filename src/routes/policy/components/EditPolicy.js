@@ -349,21 +349,21 @@ class EditPolicy extends Component {
         const { controls } = this.state.editAblePolicy;
 
         // if (controls) {
-            return checkIsArray(controls).map(control => {
-                return {
-                    rowKey: control.setting_name,
-                    name: control.setting_name,
-                    action: (
-                        <Switch
-                            checked={(control.setting_status === 1 || control.setting_status === true) ? true : false}
-                            onClick={(e) => {
-                                return this.props.handleEditPolicy(e, control.setting_name, '', 'controls', this.state.editAblePolicy.id)
-                            }}
-                            size="small"
-                        />
-                    )
-                }
-            })
+        return checkIsArray(controls).map(control => {
+            return {
+                rowKey: control.setting_name,
+                name: control.setting_name,
+                action: (
+                    <Switch
+                        checked={(control.setting_status === 1 || control.setting_status === true) ? true : false}
+                        onClick={(e) => {
+                            return this.props.handleEditPolicy(e, control.setting_name, '', 'controls', this.state.editAblePolicy.id)
+                        }}
+                        size="small"
+                    />
+                )
+            }
+        })
         // }
 
     }
@@ -468,27 +468,28 @@ class EditPolicy extends Component {
             if (substring === ' ') {
                 callback("Policy name cannot start with blank space.")
             } else {
-
-                response = await RestService.checkPolicyName(value, this.props.editAblePolicyId).then((response) => {
-                    if (RestService.checkAuth(response.data)) {
-                        if (response.data.status) {
-                            return true
+                if (value && value.length) {
+                    response = await RestService.checkPolicyName(value, this.props.editAblePolicyId).then((response) => {
+                        if (RestService.checkAuth(response.data)) {
+                            if (response.data.status) {
+                                return true
+                            }
+                            else {
+                                return false
+                            }
                         }
-                        else {
-                            return false
-                        }
+                    });
+                    if (response) {
+                        callback()
+                        this.props.form.setFieldsValue({
+                            // policy_name: value,
+                            // isPolicy_name: 'success',
+                            command_name: '#' + value.replace(/ /g, '_'),
+                            // policy_name_error: ''
+                        })
+                    } else {
+                        callback("Policy name already taken please use another name.")
                     }
-                });
-                if (response) {
-                    callback()
-                    this.props.form.setFieldsValue({
-                        // policy_name: value,
-                        // isPolicy_name: 'success',
-                        command_name: '#' + value.replace(/ /g, '_'),
-                        // policy_name_error: ''
-                    })
-                } else {
-                    callback("Policy name already taken please use another name.")
                 }
             }
         }

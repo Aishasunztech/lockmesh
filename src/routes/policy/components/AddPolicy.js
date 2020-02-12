@@ -244,13 +244,13 @@ class AddPolicy extends Component {
 
         // if (this.state.systemPermissions) {
 
-            return checkIsArray(this.state.systemPermissions).map(sysPermission => {
-                return {
-                    rowKey: sysPermission.setting_name,
-                    name: sysPermission.setting_name,
-                    action: <Switch checked={(sysPermission.setting_status === 1 || sysPermission.setting_status === true) ? true : false} onClick={(e) => this.props.handleCheckSystemPermission(e, sysPermission.setting_name)} size="small" />
-                }
-            })
+        return checkIsArray(this.state.systemPermissions).map(sysPermission => {
+            return {
+                rowKey: sysPermission.setting_name,
+                name: sysPermission.setting_name,
+                action: <Switch checked={(sysPermission.setting_status === 1 || sysPermission.setting_status === true) ? true : false} onClick={(e) => this.props.handleCheckSystemPermission(e, sysPermission.setting_name)} size="small" />
+            }
+        })
 
         // }
 
@@ -267,26 +267,28 @@ class AddPolicy extends Component {
                 if (substring === ' ') {
                     callback("Policy name cannot start with blank space.")
                 } else {
-                    response = await RestService.checkPolicyName(value).then((response) => {
-                        if (RestService.checkAuth(response.data)) {
-                            if (response.data.status) {
-                                return true
+                    if (value && value.length) {
+                        response = await RestService.checkPolicyName(value).then((response) => {
+                            if (RestService.checkAuth(response.data)) {
+                                if (response.data.status) {
+                                    return true
+                                }
+                                else {
+                                    return false
+                                }
                             }
-                            else {
-                                return false
-                            }
+                        });
+                        if (response) {
+                            callback()
+                            this.setState({
+                                policy_name: value,
+                                // isPolicy_name: 'success',
+                                disabledCommand: '#' + value.replace(/ /g, '_'),
+                                // policy_name_error: ''
+                            })
+                        } else {
+                            callback("Policy name already taken please use another name.")
                         }
-                    });
-                    if (response) {
-                        callback()
-                        this.setState({
-                            policy_name: value,
-                            // isPolicy_name: 'success',
-                            disabledCommand: '#' + value.replace(/ /g, '_'),
-                            // policy_name_error: ''
-                        })
-                    } else {
-                        callback("Policy name already taken please use another name.")
                     }
                 }
             }
