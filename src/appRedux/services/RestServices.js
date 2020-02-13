@@ -11,47 +11,47 @@ axios.interceptors.request.use(function(config){
   // return Promise.reject(config);
 })
 axios.interceptors.response.use(function (response) {
-    let userAgent = window.navigator.userAgent ? window.navigator.userAgent : {} ;
-    let currentTime = new Date().getTime();
-    let objectToSend = {
-      apiResponseTime : currentTime,
-      client_info : {
-        userAgent: userAgent
-      },
-      system_name: SYSTEM_NAME,
-      system_id: SYSTEM_ID
-    };
-    if(response.hasOwnProperty('config')){
-      objectToSend.request = response.config;
-      objectToSend.requestBody = response.config.data ? response.config.data : {};
-      objectToSend.requestHeaders = response.config.headers ? response.config.headers : {};
-      objectToSend.requestUrl = response.config.requestPage ? response.config.requestPage : '';
-      objectToSend.apiResponseTime = currentTime - (response.config.startTime ? response.config.startTime : 0);;
-    }
-    if(response){
-      objectToSend.response = response.data;
-      objectToSend.code = response.status;
-      objectToSend.message = response.statusText;
-      objectToSend.request = response.config;
-      objectToSend.requestBody = response.config.data;
-      objectToSend.responseBody = response.data;
-      objectToSend.responseHeaders = response.headers;
-      objectToSend.requestHeaders = response.config.headers;
-    }
-
-    try {
-      let url = LOG_SERVER_URL + '/api/v1/logs';
-      let u2 = new URL(url);
-      fetch(url, {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Basic ' + btoa(LOGSERVER_AUTH_USER + ':' + LOGSERVER_AUTH_PASS)
-        },
-        body: JSON.stringify(objectToSend) // body data type must match "Content-Type" header
-      }).then(d => {
-      }).catch(err => {});
-    } catch(err){}
+    // let userAgent = window.navigator.userAgent ? window.navigator.userAgent : {} ;
+    // let currentTime = new Date().getTime();
+    // let objectToSend = {
+    //   apiResponseTime : currentTime,
+    //   client_info : {
+    //     userAgent: userAgent
+    //   },
+    //   system_name: SYSTEM_NAME,
+    //   system_id: SYSTEM_ID
+    // };
+    // if(response.hasOwnProperty('config')){
+    //   objectToSend.request = response.config;
+    //   objectToSend.requestBody = response.config.data ? response.config.data : {};
+    //   objectToSend.requestHeaders = response.config.headers ? response.config.headers : {};
+    //   objectToSend.requestUrl = response.config.requestPage ? response.config.requestPage : '';
+    //   objectToSend.apiResponseTime = currentTime - (response.config.startTime ? response.config.startTime : 0);;
+    // }
+    // if(response){
+    //   objectToSend.response = response.data;
+    //   objectToSend.code = response.status;
+    //   objectToSend.message = response.statusText;
+    //   objectToSend.request = response.config;
+    //   objectToSend.requestBody = response.config.data;
+    //   objectToSend.responseBody = response.data;
+    //   objectToSend.responseHeaders = response.headers;
+    //   objectToSend.requestHeaders = response.config.headers;
+    // }
+    //
+    // try {
+    //   let url = LOG_SERVER_URL + '/api/v1/logs';
+    //   let u2 = new URL(url);
+    //   fetch(url, {
+    //     method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Authorization': 'Basic ' + btoa(LOGSERVER_AUTH_USER + ':' + LOGSERVER_AUTH_PASS)
+    //     },
+    //     body: JSON.stringify(objectToSend) // body data type must match "Content-Type" header
+    //   }).then(d => {
+    //   }).catch(err => {});
+    // } catch(err){}
     return response;
 }
 , function (error) {
