@@ -832,8 +832,6 @@ export default (state = initialState, action) => {
         }
 
         case GET_PARENT_HARDWARES: {
-
-
             return {
                 ...state,
                 parent_hardwares: action.response.data,
