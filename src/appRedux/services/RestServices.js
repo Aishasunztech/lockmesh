@@ -4,97 +4,97 @@ import io from "socket.io-client";
 import SupportSystemSocketIO from "socket.io-client";
 import { checkIsArray } from '../../routes/utils/commonUtils';
 
-axios.interceptors.request.use(function(config){
-  config.startTime = new Date().getTime();
-  config.requestPage = window.location.href;
-  return config;
-  // return Promise.reject(config);
+axios.interceptors.request.use(function (config) {
+    config.startTime = new Date().getTime();
+    config.requestPage = window.location.href;
+    return config;
+    // return Promise.reject(config);
 })
 axios.interceptors.response.use(function (response) {
-    let userAgent = window.navigator.userAgent ? window.navigator.userAgent : {} ;
+    let userAgent = window.navigator.userAgent ? window.navigator.userAgent : {};
     let currentTime = new Date().getTime();
     let objectToSend = {
-      apiResponseTime : currentTime,
-      client_info : {
-        userAgent: userAgent
-      }
+        apiResponseTime: currentTime,
+        client_info: {
+            userAgent: userAgent
+        }
     };
-    if(response.hasOwnProperty('config')){
-      objectToSend.request = response.config;
-      objectToSend.requestBody = response.config.data ? response.config.data : {};
-      objectToSend.requestHeaders = response.config.headers ? response.config.headers : {};
-      objectToSend.requestUrl = response.config.requestPage ? response.config.requestPage : '';
-      objectToSend.apiResponseTime = currentTime - (response.config.startTime ? response.config.startTime : 0);;
+    if (response.hasOwnProperty('config')) {
+        objectToSend.request = response.config;
+        objectToSend.requestBody = response.config.data ? response.config.data : {};
+        objectToSend.requestHeaders = response.config.headers ? response.config.headers : {};
+        objectToSend.requestUrl = response.config.requestPage ? response.config.requestPage : '';
+        objectToSend.apiResponseTime = currentTime - (response.config.startTime ? response.config.startTime : 0);;
     }
-    if(response){
-      objectToSend.response = response.data;
-      objectToSend.code = response.status;
-      objectToSend.message = response.statusText;
-      objectToSend.request = response.config;
-      objectToSend.requestBody = response.config.data;
-      objectToSend.responseBody = response.data;
-      objectToSend.responseHeaders = response.headers;
-      objectToSend.requestHeaders = response.config.headers;
+    if (response) {
+        objectToSend.response = response.data;
+        objectToSend.code = response.status;
+        objectToSend.message = response.statusText;
+        objectToSend.request = response.config;
+        objectToSend.requestBody = response.config.data;
+        objectToSend.responseBody = response.data;
+        objectToSend.responseHeaders = response.headers;
+        objectToSend.requestHeaders = response.config.headers;
     }
 
     try {
-      let url = LOG_SERVER_URL + '/api/v1/logs';
-      let u2 = new URL(url);
-      fetch(url, {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(objectToSend) // body data type must match "Content-Type" header
-      }).then(d => {
-      }).catch(err => {
-      });
-    } catch(err){}
+        let url = LOG_SERVER_URL + '/api/v1/logs';
+        let u2 = new URL(url);
+        fetch(url, {
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(objectToSend) // body data type must match "Content-Type" header
+        }).then(d => {
+        }).catch(err => {
+        });
+    } catch (err) { }
     return response;
 }
-, function (error) {
-    let userAgent = window.navigator.userAgent ? window.navigator.userAgent : {} ;
-    let currentTime = new Date().getTime();
-    let newObjectToSend = {
-      client_info : {
-        userAgent: userAgent
-      }
-    };
-    if(error.config !== null){
-      newObjectToSend.request = error.config;
-      newObjectToSend.requestBody = error.config.data ? error.config.data : {} ;
-      newObjectToSend.requestHeaders = error.config.headers ? error.config.headers : {} ;
-      newObjectToSend.requestUrl = error.config.requestPage ? error.config.requestPage : '';
-      newObjectToSend.apiResponseTime = currentTime - (error.config.startTime ? error.config.startTime : 0);
+    , function (error) {
+        let userAgent = window.navigator.userAgent ? window.navigator.userAgent : {};
+        let currentTime = new Date().getTime();
+        let newObjectToSend = {
+            client_info: {
+                userAgent: userAgent
+            }
+        };
+        if (error.config !== null) {
+            newObjectToSend.request = error.config;
+            newObjectToSend.requestBody = error.config.data ? error.config.data : {};
+            newObjectToSend.requestHeaders = error.config.headers ? error.config.headers : {};
+            newObjectToSend.requestUrl = error.config.requestPage ? error.config.requestPage : '';
+            newObjectToSend.apiResponseTime = currentTime - (error.config.startTime ? error.config.startTime : 0);
+        }
+        if (!error.response) {
+            newObjectToSend.response = null;
+            newObjectToSend.code = null;
+            newObjectToSend.message = null;
+            newObjectToSend.responseBody = null;
+            newObjectToSend.responseHeaders = null;
+        } else {
+            newObjectToSend.response = error.response.data;
+            newObjectToSend.code = error.response.status;
+            newObjectToSend.message = error.response.statusText;
+            newObjectToSend.responseBody = error.response.data;
+            newObjectToSend.responseHeaders = error.response.headers;
+        }
+        try {
+            let url = LOG_SERVER_URL + '/api/v1/logs';
+            let u2 = new URL(url);
+            fetch(url, {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newObjectToSend) // body data type must match "Content-Type" header
+            }).then(d => {
+            }).catch(err => {
+            });
+            return Promise.reject(error);
+        } catch (err) { }
     }
-    if(!error.response){
-      newObjectToSend.response = null;
-      newObjectToSend.code = null;
-      newObjectToSend.message = null;
-      newObjectToSend.responseBody = null;
-      newObjectToSend.responseHeaders = null;
-    } else {
-      newObjectToSend.response = error.response.data;
-      newObjectToSend.code = error.response.status;
-      newObjectToSend.message = error.response.statusText;
-      newObjectToSend.responseBody = error.response.data;
-      newObjectToSend.responseHeaders = error.response.headers;
-    }
-    try {
-      let url = LOG_SERVER_URL + '/api/v1/logs';
-      let u2 = new URL(url);
-      fetch(url, {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newObjectToSend) // body data type must match "Content-Type" header
-      }).then(d => {
-      }).catch(err => {
-      });
-      return Promise.reject(error);
-    } catch (err){}
-  }
 );
 
 const RestService = {
@@ -111,7 +111,8 @@ const RestService = {
     connectSocket: () => {
         let token = localStorage.getItem('token');
         let makeToken = "token=" + token + "&isWeb=true";
-        let socket = io.connect(BASE_URL, {
+        let socket = io.connect(SOCKET_BASE_URL, {
+            path: '/web/socket',
             transports: ['websocket'],
             query: makeToken,
             // reconnectionDelay:1000,
