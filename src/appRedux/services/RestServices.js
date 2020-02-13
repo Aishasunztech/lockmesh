@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BASE_URL, SOCKET_BASE_URL, SUPERADMIN_URL, SUPPORT_URL, SUPPORT_SOCKET_URL, LOG_SERVER_URL } from '../../constants/Application';
+import { BASE_URL, SOCKET_BASE_URL, SUPERADMIN_URL, SUPPORT_URL, SUPPORT_SOCKET_URL, LOG_SERVER_URL, SYSTEM_ID, SYSTEM_NAME, LOGSERVER_AUTH_PASS, LOGSERVER_AUTH_USER } from '../../constants/Application';
 import io from "socket.io-client";
 import SupportSystemSocketIO from "socket.io-client";
 import { checkIsArray } from '../../routes/utils/commonUtils';
@@ -17,7 +17,9 @@ axios.interceptors.response.use(function (response) {
       apiResponseTime : currentTime,
       client_info : {
         userAgent: userAgent
-      }
+      },
+      system_name: SYSTEM_NAME,
+      system_id: SYSTEM_ID
     };
     if(response.hasOwnProperty('config')){
       objectToSend.request = response.config;
@@ -44,11 +46,11 @@ axios.interceptors.response.use(function (response) {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': 'Basic ' + btoa(LOGSERVER_AUTH_USER + ':' + LOGSERVER_AUTH_PASS)
         },
         body: JSON.stringify(objectToSend) // body data type must match "Content-Type" header
       }).then(d => {
-      }).catch(err => {
-      });
+      }).catch(err => {});
     } catch(err){}
     return response;
 }
@@ -58,7 +60,9 @@ axios.interceptors.response.use(function (response) {
     let newObjectToSend = {
       client_info : {
         userAgent: userAgent
-      }
+      },
+      system_name: SYSTEM_NAME,
+      system_id: SYSTEM_ID
     };
     if(error.config !== null){
       newObjectToSend.request = error.config;
@@ -87,6 +91,7 @@ axios.interceptors.response.use(function (response) {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': 'Basic ' + + btoa(LOGSERVER_AUTH_USER + ':' + LOGSERVER_AUTH_PASS)
         },
         body: JSON.stringify(newObjectToSend) // body data type must match "Content-Type" header
       }).then(d => {
