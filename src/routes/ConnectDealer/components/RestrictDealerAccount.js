@@ -46,6 +46,7 @@ class RestrictDealerAccount extends Component {
         // callback(dealer.dealer_id)
     }
     handleCancel = () => {
+        this.props.form.resetFields()
         this.setState({ visible: false });
     }
 
@@ -163,8 +164,6 @@ class RestrictDealerAccount extends Component {
                                 </Radio.Group>
                             )}
                         </Form.Item>
-
-
                     </Form>
                 </Modal>
             </Fragment >
