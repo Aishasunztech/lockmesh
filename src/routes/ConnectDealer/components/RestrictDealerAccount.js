@@ -157,7 +157,7 @@ class RestrictDealerAccount extends Component {
                                             <h4 className="mb-0">Restrict ability to Add New Devices</h4>
                                         </Col>
                                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                                            <Radio value="suspended" className="red">Level 2</Radio>
+                                            <Radio value="suspended" className="red" style={{color: 'white'}}>Level 2</Radio>
                                         </Col>
                                     </Row>
                                     {/* <Radio value="active">Active</Radio> */}
