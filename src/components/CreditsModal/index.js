@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Modal, Table, Button, Row, Col, Select, Card, Tabs } from 'antd';
 import { Link } from "react-router-dom";
+import ReactResizeDetector from 'react-resize-detector';
 import PurchaseCredit from "../../routes/account/components/PurchaseCredit";
 import AddDeviceModal from '../../routes/devices/components/AddDevice';
 import {
@@ -53,7 +54,7 @@ class CreditIcon extends Component {
       currency_price: this.props.user_credit,
       currency_unit_price: 1,
       purchase_modal: false,
-
+      tabPosition: window.screen.width > 576 ? "left" : "top"
     };
 
     this.paymentHistoryColumns = [
@@ -410,14 +411,23 @@ class CreditIcon extends Component {
     }
   };
 
-  render() {
-    function callback(key) {
-      console.log(key);
+  resetTabPostion = () => {
+    // console.log("TESTING");
+    let tabPosition = 'left'
+    if (window.screen.width < 576) {
+      tabPosition = 'top'
     }
+    this.setState({
+      tabPosition: tabPosition
+    })
+  }
+
+  render() {
 
     return (
 
-      <div>
+      <div >
+        <ReactResizeDetector handleWidth handleHeight onResize={this.resetTabPostion} />
         <PurchaseCredit
           showPurchaseModal={this.showPurchaseModal}
           purchase_modal={this.state.purchase_modal}
@@ -438,7 +448,7 @@ class CreditIcon extends Component {
         > */}
         <Fragment>
           <Card>
-            <Tabs defaultActiveKey="1" onChange={callback} tabPosition={"left"} type="card">
+            <Tabs defaultActiveKey="1" tabPosition={this.state.tabPosition} type="card">
               <TabPane tab="Overview" key="1">
                 <Row>
                   <Col xs={24} sm={24} md={2} lg={2} xl={4}>
@@ -549,7 +559,7 @@ class CreditIcon extends Component {
           </Card>
         </Fragment>
         {/* </Modal> */}
-      </div>
+      </div >
     )
   }
 }
