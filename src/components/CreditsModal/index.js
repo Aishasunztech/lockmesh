@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Modal, Table, Button, Row, Col, Select, Card, Tabs } from 'antd';
 import { Link } from "react-router-dom";
+import ReactResizeDetector from 'react-resize-detector';
 import PurchaseCredit from "../../routes/account/components/PurchaseCredit";
 import AddDeviceModal from '../../routes/devices/components/AddDevice';
 import {
@@ -53,7 +54,7 @@ class CreditIcon extends Component {
       currency_price: this.props.user_credit,
       currency_unit_price: 1,
       purchase_modal: false,
-
+      tabPosition: window.screen.width > 576 ? "left" : "top"
     };
 
     this.paymentHistoryColumns = [
@@ -335,8 +336,8 @@ class CreditIcon extends Component {
         value: <h5 className={"weight_600 mb-0 p-8 " + statusBGC} >{statusDays} </h5>
       },
       {
-        name: <h5 className={'weight_600 p-8 mb-0 text-uppercase'}>INFO</h5>,
-        value: <h5 className={"weight_600 mb-0 p-8 white_normal " + statusBGC}>{account_status_paragraph} </h5>,
+        name: <h5 className={'p-8 mb-0 text-uppercase'}>INFO</h5>,
+        value: <h5 className={"mb-0 p-8 white_normal line-height-20 " + statusBGC}>{account_status_paragraph} </h5>,
       }
     ];
   };
@@ -410,14 +411,23 @@ class CreditIcon extends Component {
     }
   };
 
-  render() {
-    function callback(key) {
-      console.log(key);
+  resetTabPostion = () => {
+    // console.log("TESTING");
+    let tabPosition = 'left'
+    if (window.screen.width < 576) {
+      tabPosition = 'top'
     }
+    this.setState({
+      tabPosition: tabPosition
+    })
+  }
+
+  render() {
 
     return (
 
-      <div>
+      <div >
+        <ReactResizeDetector handleWidth handleHeight onResize={this.resetTabPostion} />
         <PurchaseCredit
           showPurchaseModal={this.showPurchaseModal}
           purchase_modal={this.state.purchase_modal}
@@ -438,12 +448,12 @@ class CreditIcon extends Component {
         > */}
         <Fragment>
           <Card>
-            <Tabs defaultActiveKey="1" onChange={callback} tabPosition={"left"} type="card">
+            <Tabs defaultActiveKey="1" tabPosition={this.state.tabPosition} type="card">
               <TabPane tab="Overview" key="1">
                 <Row>
-                  <Col xs={24} sm={24} md={2} lg={2} xl={6}>
+                  <Col xs={24} sm={24} md={2} lg={2} xl={4}>
                   </Col>
-                  <Col xs={24} sm={24} md={10} lg={10} xl={6} className="mb-16">
+                  <Col xs={24} sm={24} md={10} lg={10} xl={10} className="mb-16">
                     <Table
                       className="ac_status_table"
                       dataSource={this.renderAccountStatus()}
@@ -472,9 +482,9 @@ class CreditIcon extends Component {
                 </Row>
                 <div>
                   <Row>
-                    <Col xs={24} sm={24} md={4} lg={4} xl={6}>
+                    <Col xs={24} sm={24} md={4} lg={4} xl={4}>
                     </Col>
-                    <Col xs={24} sm={24} md={16} lg={16} xl={12}>
+                    <Col xs={24} sm={24} md={16} lg={16} xl={16}>
                       <Table
                         className="overdue_table"
                         dataSource={this.renderOverData()}
@@ -487,9 +497,7 @@ class CreditIcon extends Component {
                       />
                     </Col>
                   </Row>
-
                 </div>
-
                 <div>
                   <Row>
                     <Col xs={24} sm={24} md={4} lg={4} xl={4}>
@@ -507,14 +515,6 @@ class CreditIcon extends Component {
                     </Col>
                   </Row>
                 </div>
-
-                {/* <div className="edit_ftr_btn11">
-              <Button type="primary" onClick={() => {
-                this.setState({
-                  visible: false
-                })
-              }} >{convertToLang(this.props.translation[""], "OK")}</Button>
-            </div> */}
               </TabPane>
               <TabPane tab="Payment History" key="2">
                 <div>
@@ -533,15 +533,14 @@ class CreditIcon extends Component {
                       />
                     </Col>
                   </Row>
-
                 </div>
               </TabPane>
               <TabPane tab="Overdue" key="3">
                 <div>
                   <Row>
-                    <Col xs={24} sm={24} md={4} lg={4} xl={6}>
+                    <Col xs={24} sm={24} md={4} lg={4} xl={4}>
                     </Col>
-                    <Col xs={24} sm={24} md={16} lg={16} xl={12}>
+                    <Col xs={24} sm={24} md={16} lg={16} xl={16}>
                       <Table
                         className="overdue_table"
                         dataSource={this.renderOverData()}
@@ -555,15 +554,12 @@ class CreditIcon extends Component {
                     </Col>
                   </Row>
                 </div>
-
               </TabPane>
             </Tabs>
-
           </Card>
         </Fragment>
         {/* </Modal> */}
-
-      </div>
+      </div >
     )
   }
 }
