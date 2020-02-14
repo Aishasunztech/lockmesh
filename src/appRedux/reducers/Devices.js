@@ -870,6 +870,11 @@ export default (state = initialState, action) => {
                     // console.log(chat_ids);
                 } else if (action.payload.type === 'pgp_email') {
                     pgp_emails.unshift(action.payload.product);
+                    let deviceIndex = state.devices.findIndex(item => item.id == action.payload.user_acc_id)
+                    // console.log(deviceIndex);
+                    if (deviceIndex > -1) {
+                        state.devices[deviceIndex].pgp_remaining_limit = state.devices[deviceIndex].pgp_remaining_limit - 1
+                    }
                     // console.log(pgp_emails)
                     success({
                         title: "Pgp email has been generated successfully."
@@ -892,7 +897,8 @@ export default (state = initialState, action) => {
                 pgp_emails: [...pgp_emails],
                 chat_ids: [...chat_ids],
                 chat_added: chat_added,
-                pgp_added: pgp_added
+                pgp_added: pgp_added,
+                devices: [...state.devices]
             }
         }
 

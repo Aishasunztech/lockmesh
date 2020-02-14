@@ -84,7 +84,8 @@ import {
     GET_DEVICE_LIST,
     GET_DEVICE_BILLING_HISTORY,
     DEVICE_NOT_FOUND,
-    ENABLE_PWD_CONFIRM
+    ENABLE_PWD_CONFIRM,
+    RESET_PGP_LIMIT
 } from "../../constants/ActionTypes";
 
 import {
@@ -726,6 +727,25 @@ export default (state = initialState, action) => {
             }
             return {
                 ...state,
+            }
+        }
+
+        case RESET_PGP_LIMIT: {
+
+            if (action.payload.status) {
+                success({
+                    title: action.payload.msg,
+                });
+                state.device.pgp_remaining_limit = 10
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+            // console.log(state.device.pgp_remaining_limit);
+            return {
+                ...state,
+                device: JSON.parse(JSON.stringify(state.device))
             }
         }
 
