@@ -47,13 +47,14 @@ class Invoice extends Component {
 
     render() {
         const { user, deviceAction, renewService, applyServicesValue } = this.props;
-        console.log(applyServicesValue);
+        // console.log(applyServicesValue);
 
         let total;
         let discount = Math.ceil(Number(this.props.subTotal) * 0.03);
         let balanceDue = this.props.subTotal;
         let paid = 0;
         let expiry_date;
+        let page_name = this.props.page_name ? this.props.page_name : ''
         // console.log(this.props.serviceData, renewService, applyServicesValue);
         if (deviceAction === "Edit") {
             total = this.props.total;
@@ -66,11 +67,6 @@ class Invoice extends Component {
                     total = this.props.subTotal - this.props.creditsToRefund
                 }
             }
-            // if (applyServicesValue == 'change') {
-            //     expiry_date = 
-            // } else {
-
-            // }
         } else {
             if (this.props.invoiceType === "pay_now") {
                 total = this.props.subTotal - discount;
@@ -103,8 +99,12 @@ class Invoice extends Component {
                     <Row>
                         <Col span={6}>Invoice Date:</Col>
                         <Col span={6}>{moment().format("YYYY/MM/DD")} </Col>
-                        <Col span={6}>User ID:</Col>
-                        <Col span={6}>{this.props.user_id}</Col>
+                        {page_name !== 'sim' ?
+                            <>
+                                <Col span={6}>User ID:</Col>
+                                <Col span={6}>{this.props.user_id}</Col>
+                            </>
+                            : null}
                     </Row>
                     <Row>
                         <Col span={6}>Balance Due:</Col>
@@ -114,8 +114,8 @@ class Invoice extends Component {
                     </Row>
                     <Row>
                         <Col span={12} />
-                        <Col span={6}>Device ID:</Col>
-                        <Col span={6}>{(this.props.deviceAction === "Add") ? "Pre-Activation" : ((this.props.device_id) ? this.props.device_id : "ABCD123456")}</Col>
+                        <Col span={6}>{(page_name === 'sim') ? 'SIM ID' : 'Device ID'}:</Col>
+                        <Col span={6}>{(page_name === 'sim') ? this.props.iccid : (this.props.deviceAction === "Add") ? "Pre-Activation" : ((this.props.device_id) ? this.props.device_id : "ABCD123456")}</Col>
                     </Row>
                 </div>
 

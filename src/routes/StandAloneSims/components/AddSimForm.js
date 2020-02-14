@@ -33,6 +33,10 @@ class AddSimForm extends Component {
             pkg_id: undefined,
             data_pkg_id: "",
             invoice_modal: false,
+            invoiceVisible: false,
+            invoiceType: '',
+            invoiceID: 'PI00001',
+            paidByUser: "PAID",
             packages: [],
             loading: false,
             invoiceColumns: invoiceColumns,
@@ -61,7 +65,7 @@ class AddSimForm extends Component {
 
                             }
                             if (this.state.data_pkg_id) {
-                                dataPlanPackages = this.state.dataPlanPackages.filter(item => item.id === this.state.pkg_id)
+                                dataPlanPackages = this.state.dataPlanPackages.filter(item => item.id === this.state.data_pkg_id)
                             }
                             packages = [...standAlonePackages, ...dataPlanPackages]
                             let total_price = 0
@@ -121,19 +125,18 @@ class AddSimForm extends Component {
         this.props.form.resetFields();
     }
 
-    // componentDidUpdate(prevProps) {
-    //     if (this.props !== prevProps) {
-    //         let updateState = {}
-    //         if (this.props.packages.length !== prevProps.packages.length) {
-    //             updateState.standAlonePackages = this.props.packages.filter(item => item.package_type === 'standalone_sim')
-    //             updateState.dataPlanPackages = this.props.packages.filter(item => item.package_type === 'data_plan')
-    //         }
-    //         if (updateState != {}) {
-    //             this.setState(updateState)
-    //             // console.log("adsdsa");
-    //         }
-    //     }
-    // }
+    componentDidUpdate(prevProps) {
+        if (this.props !== prevProps) {
+            let updateState = {}
+            if (this.props.invoiceID !== prevProps.invoiceID) {
+                updateState.invoiceID = this.props.invoiceID
+                // this.setState({ invoiceID: nextProps.invoiceID })
+            }
+            if (Object.keys(updateState).length) {
+                this.setState(updateState)
+            }
+        }
+    }
 
     handleCancel = () => {
         this.handleReset();
@@ -162,16 +165,13 @@ class AddSimForm extends Component {
 
 
     confirmRenderList = () => {
-        let packages = []
-        let standAlonePackages = []
-        let dataPlanPackages = []
-        if (this.state.pkg_id) {
-            let standAlonePackage = this.state.standAlonePackages.filter(item => item.id === this.state.pkg_id)
-            standAlonePackages = standAlonePackage.map((item, index) => {
+        // let packages = []
+        if (this.state.packages && Array.isArray(this.state.packages) && this.state.packages.length) {
+            return this.state.packages.map((item, index) => {
                 return {
                     id: item.id,
                     rowKey: item.id,
-                    item: `Stand Alone Sim`,
+                    item: item.package_type === 'standalone_sim' ? "STAND ALONE SIM" : `Data plan`,
                     description: item.pkg_name,
                     term: this.state.term,
                     unit_price: item.pkg_price,
@@ -180,28 +180,72 @@ class AddSimForm extends Component {
                 }
             });
         }
-        if (this.state.data_pkg_id) {
-            let dataPlanPackage = this.state.dataPlanPackages.filter(item => item.id === this.state.pkg_id)
-            dataPlanPackages = dataPlanPackage.map((item, index) => {
-                return {
-                    id: item.id,
-                    rowKey: item.id,
-                    item: `Data plan`,
-                    description: item.pkg_name,
-                    term: this.state.term,
-                    unit_price: item.pkg_price,
-                    quantity: 1,
-                    line_total: item.pkg_price
-                }
-            });
-        }
-        packages = [...standAlonePackages, ...dataPlanPackages]
-        if (packages && Array.isArray(packages)) {
-            return packages
-        } else {
+        else {
             return []
         }
     }
+
+    submitServicesConfirm(pay_now) {
+        this.props.getInvoiceId();
+        this.state.serviceData.pay_now = pay_now;
+
+        if (pay_now) {
+            if ((this.state.serviceData.total_price) <= this.props.user_credit || !this.state.serviceData.pay_now) {
+                this.setState({ invoiceVisible: true, invoiceType: "pay_now" })
+            } else {
+                showCreditPurchase(this, "Your Credits are not enough to apply these services. Please select other services OR Purchase Credits.")
+            }
+        } else {
+            let after_pay_credits = this.props.user_credit - this.state.serviceData.total_price
+            let credits_limit = this.props.credits_limit
+            if (credits_limit > after_pay_credits) {
+                showCreditPurchase(this, "Your Credits limits will exceed after apply this service. Please select other services OR Purchase Credits.")
+            } else {
+                this.setState({ invoiceVisible: true, invoiceType: "pay_later" })
+            }
+        }
+
+    }
+
+    handleOkInvoice = () => {
+        // console.log("handleOk for invoice", this.state.serviceData)
+
+        if (this.state.serviceData.total_price <= this.props.user_credit || !this.state.serviceData.pay_now) {
+            this.state.serviceData.paid_by_user = this.state.paidByUser
+            // this.props.AddDeviceHandler(this.state.serviceData);
+            this.props.handleCancel();
+            this.handleReset();
+            this.setState({
+                serviceData: {},
+                showConfirmCredit: false
+            })
+        } else {
+            showCreditPurchase(this, "Your Credits are not enough to apply these services. Please select other services OR Purchase Credits.")
+        }
+
+        this.setState({
+            invoiceVisible: false,
+            // showConfirmCredit: false,
+            servicesModal: false
+        })
+    }
+
+    handleCancelInvoice = () => {
+        this.setState({ invoiceVisible: false })
+    }
+
+    handlePaidUser = (e) => {
+        if (e) {
+            this.setState({
+                paidByUser: "PAID"
+            })
+        } else {
+            this.setState({
+                paidByUser: "UNPAID"
+            })
+        }
+    }
+
 
 
     render() {
@@ -263,6 +307,10 @@ class AddSimForm extends Component {
                     >
                         {this.props.form.getFieldDecorator('email', {
                             initialValue: "",
+                            rules: [{
+                                type: 'email',
+                                message: "Please enter a valid email address"
+                            }]
                         })(
                             <Input
                                 placeholder={convertToLang(this.props.translation[""], "Enter Email")}
@@ -460,12 +508,15 @@ class AddSimForm extends Component {
                         invoiceType={this.state.invoiceType}
                         term={this.state.serviceData.term}
                         duplicate={0}
-                        deviceAction={"Add"}
+                        // deviceAction={"sim"}
                         hardwarePrice={0}
                         hardwares={[]}
                         user_id={null}
                         invoiceID={this.state.invoiceID}
                         translation={this.props.translation}
+                        page_name='sim'
+                        iccid={this.state.serviceData.iccid}
+
                     />
                     <div style={{ float: "right" }}><b>PAID BY USER: </b> <Switch size="small" defaultChecked onChange={this.handlePaidUser} /></div>
                 </Modal>
@@ -500,3 +551,17 @@ var mapStateToProps = ({ routing, devices, device_details, users, settings, side
 }
 
 export default connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(WrappedAddDeviceForm);
+
+function showCreditPurchase(_this, msg) {
+    confirm({
+        title: msg,
+        okText: "PURCHASE CREDITS",
+        onOk() {
+            _this.props.history.push('/account')
+        },
+        onCancel() {
+
+        },
+
+    })
+}
