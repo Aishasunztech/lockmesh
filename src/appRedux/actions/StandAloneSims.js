@@ -1,5 +1,5 @@
 import {
-    INVALID_TOKEN, STAND_ALONE_LIST, CHANGE_SIM_STATUS
+    INVALID_TOKEN, STAND_ALONE_LIST, CHANGE_SIM_STATUS, ADD_STANDALONE_SIM
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -38,6 +38,27 @@ export function changeSimStatus(id, type) {
                     type: CHANGE_SIM_STATUS,
                     payload: response.data,
                     data: { id, type }
+                });
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+
+    };
+}
+
+export function addStandAloneSim(data) {
+    return (dispatch) => {
+        RestService.addStandAloneSim(data).then((response) => {
+            // console.log("data form server");
+            console.log(response.data);
+            if (RestService.checkAuth(response.data)) {
+                // console.log(response.data)
+                dispatch({
+                    type: ADD_STANDALONE_SIM,
+                    payload: response.data,
                 });
             } else {
                 dispatch({

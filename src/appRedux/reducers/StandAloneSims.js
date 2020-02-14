@@ -1,4 +1,4 @@
-import { STAND_ALONE_LIST, CHANGE_SIM_STATUS } from "../../constants/ActionTypes";
+import { STAND_ALONE_LIST, CHANGE_SIM_STATUS, ADD_STANDALONE_SIM } from "../../constants/ActionTypes";
 
 import { message, Modal } from 'antd';
 const success = Modal.success
@@ -47,6 +47,23 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 standAloneSimsList: [...simList]
+            }
+        }
+
+        case ADD_STANDALONE_SIM: {
+            // let simList = state.standAloneSimsList
+
+            if (action.payload.status) {
+                success({
+                    title: action.payload.msg
+                })
+            } else {
+                error({
+                    title: action.payload.msg
+                })
+            }
+            return {
+                ...state,
             }
         }
         default:

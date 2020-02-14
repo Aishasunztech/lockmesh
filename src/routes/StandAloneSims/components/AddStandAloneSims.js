@@ -25,12 +25,11 @@ export default class AddSim extends Component {
 
     }
 
-
-
     handleCancel = () => {
         this.refs.add_sim_form.getWrappedInstance().resetFields();
         this.setState({ visible: false });
     }
+
     render() {
         const { visible, loading } = this.state;
         // console.log(this.props.);

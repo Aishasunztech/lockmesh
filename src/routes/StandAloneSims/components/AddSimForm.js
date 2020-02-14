@@ -15,6 +15,7 @@ import { bindActionCreators } from "redux";
 import {
     getParentPackages,
     getInvoiceId,
+    addStandAloneSim
 } from "../../../appRedux/actions";
 
 const confirm = Modal.confirm;
@@ -165,7 +166,6 @@ class AddSimForm extends Component {
 
 
     confirmRenderList = () => {
-        // let packages = []
         if (this.state.packages && Array.isArray(this.state.packages) && this.state.packages.length) {
             return this.state.packages.map((item, index) => {
                 return {
@@ -212,13 +212,13 @@ class AddSimForm extends Component {
 
         if (this.state.serviceData.total_price <= this.props.user_credit || !this.state.serviceData.pay_now) {
             this.state.serviceData.paid_by_user = this.state.paidByUser
-            // this.props.AddDeviceHandler(this.state.serviceData);
-            this.props.handleCancel();
-            this.handleReset();
-            this.setState({
-                serviceData: {},
-                showConfirmCredit: false
-            })
+            this.props.addStandAloneSim(this.state.serviceData);
+            // this.props.handleCancel();
+            // this.handleReset();
+            // this.setState({
+            //     serviceData: {},
+            //     showConfirmCredit: false
+            // })
         } else {
             showCreditPurchase(this, "Your Credits are not enough to apply these services. Please select other services OR Purchase Credits.")
         }
@@ -281,7 +281,7 @@ class AddSimForm extends Component {
                             ]
                         })(
                             <Input
-                                placeholder={convertToLang(this.props.translation[""], "Enter ICCID")}
+                                type='number' placeholder={convertToLang(this.props.translation[""], "Enter ICCID")}
                             />
                         )}
                     </Form.Item>
@@ -534,6 +534,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getInvoiceId: getInvoiceId,
         getParentPackages,
+        addStandAloneSim
     }, dispatch);
 }
 var mapStateToProps = ({ routing, devices, device_details, users, settings, sidebar, auth, account }) => {
