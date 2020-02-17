@@ -30,7 +30,7 @@ switch (hostName) {
     case "dev.lockmesh.com":
     case "http://dev.lockmesh.com":
     case "https://dev.lockmesh.com":
-        URL = "https://dev.lockmesh.com/api";
+        URL = "https://dev.lockmesh.com/api/";
         SOCKET_URL = 'wss://devapi.lockmesh.com';
         SOCKET_PATH = ''
 
