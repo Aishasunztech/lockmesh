@@ -577,7 +577,6 @@ class Account extends Component {
                                     </div> */}
                             </div>
                         </Col>
-
                         {(this.props.user.type === ADMIN) ?
                             <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                                 <div>
@@ -614,7 +613,6 @@ class Account extends Component {
                                 </div>
                             </Col>
                             : null}
-
                         {(this.props.user.type === ADMIN || this.props.user.type === DEALER || this.props.user.type === SDEALER) ?
                             <Col xs={24} sm={24} md={8} lg={8} xl={8} >
                                 <Link to="/account/managedata" onClick={this.showModal}>
@@ -640,7 +638,6 @@ class Account extends Component {
                                 </Link>
                             </Col>
                             : null}
-
                         {(this.props.user.type === ADMIN || this.props.user.type === DEALER) ?
                             <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                                 <div>
@@ -692,7 +689,6 @@ class Account extends Component {
                                 </div>
                             </Col>
                             : null}
-
                         {(this.props.user.type === ADMIN) ?
                             <Col xs={24} sm={24} md={8} lg={8} xl={8} >
                                 <Modal
@@ -744,7 +740,6 @@ class Account extends Component {
                                 </div>
                             </Col>
                             : null}
-
                     </Row>
                 </div>
                 <PasswordModal
