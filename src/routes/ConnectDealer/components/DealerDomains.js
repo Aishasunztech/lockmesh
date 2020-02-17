@@ -113,39 +113,32 @@ export default class DealerDomains extends Component {
         let loadingCopy = Object.assign({}, this.state.domainLoading)
         loadingCopy[`removebtn_` + id] = true
         this.setState({ domainLoading: loadingCopy })
+
+        setTimeout(
+            (_this = this) => {
+                _this.setState({ domainLoading: false })
+            }, 1000);
     }
     renderDealerDomainList = (list) => {
-        // if (list) {
-            return checkIsArray(list).map((item, index) => {
 
-                // let removeBtnDisable = false;
-                // if (this.props.authUser.id !== item.permission_by) {
-                //     removeBtnDisable = true;
-                // }
+        return checkIsArray(list).map((item, index) => {
 
-                return {
-                    rowKey: item.id,
-                    key: ++index,
-                    action: (<Fragment>
-                        <Button
-                            size="small"
-                            type="danger"
-                            loading={this.state.domainLoading[`removebtn_` + item.id] ? true : false}
-                            onClick={() => this.deleteDomain(item.id)}
-                        // disabled
-                        // disabled={removeBtnDisable}
-
-                        >
-                            {convertToLang(this.props.translation[Button_Remove], "Remove")}
-                        </Button>
-                    </Fragment>),
-                    name: item.name,
-
-                }
-            })
-        // } else {
-        //     return []
-        // }
+            return {
+                rowKey: item.id,
+                key: ++index,
+                action: (<Fragment>
+                    <Button
+                        size="small"
+                        type="danger"
+                        loading={this.state.domainLoading[`removebtn_` + item.id] ? true : false}
+                        onClick={() => this.deleteDomain(item.id)}
+                    >
+                        {convertToLang(this.props.translation[Button_Remove], "Remove")}
+                    </Button>
+                </Fragment>),
+                name: item.name
+            }
+        })
     };
     render() {
         const { visible } = this.state;

@@ -8,6 +8,7 @@ import {
     CONNECT_DEALER_LOADING,
     DEALER_ACCOUNT_STATUS,
     CD_PERMISSION_DOMAINS,
+    ERROR_PERMISSION_DOMAINS,
     SET_DEMOS_LIMIT,
     DEALER_DOMAINS_LOADING,
 } from "../../constants/ActionTypes"
@@ -40,7 +41,7 @@ export function getDealerDetails(dealerId) {
     };
 }
 
-export function getDealerPaymentHistory(dealerId, status='') {
+export function getDealerPaymentHistory(dealerId, status = '') {
     return (dispatch) => {
         RestService.getDealerPaymentHistory(dealerId, status).then((response) => {
 
@@ -161,6 +162,7 @@ export function connectDealerDomainPermission(id, dealers, action, statusAll = f
             type: DEALER_DOMAINS_LOADING
         });
         RestService.connectDealerDomainPermission(id, dealers, action, statusAll).then((response) => {
+            // console.log("response.data ", response.data)
             if (RestService.checkAuth(response.data)) {
 
                 dispatch({
@@ -181,6 +183,11 @@ export function connectDealerDomainPermission(id, dealers, action, statusAll = f
                     type: INVALID_TOKEN
                 });
             }
+        }).catch(error => {
+            console.warn(error)
+            dispatch({
+                type: ERROR_PERMISSION_DOMAINS
+            })
         })
     }
 
