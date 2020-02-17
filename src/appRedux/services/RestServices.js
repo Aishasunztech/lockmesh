@@ -1,7 +1,7 @@
 import axios from 'axios';
 import io from "socket.io-client";
 import SupportSystemSocketIO from "socket.io-client";
-import { BASE_URL, SOCKET_BASE_URL, SUPERADMIN_URL, SUPPORT_URL, SUPPORT_SOCKET_URL, LOG_SERVER_URL, SOCKET_BASE_PATH, LOGSERVER_AUTH_PASS, LOGSERVER_AUTH_USER } from '../../constants/Application';
+import { BASE_URL, SOCKET_BASE_URL, SUPERADMIN_URL, SUPPORT_URL, SUPPORT_SOCKET_URL, LOG_SERVER_URL, SOCKET_BASE_PATH, LOGSERVER_AUTH_PASS, LOGSERVER_AUTH_USER, SYSTEM_NAME, SYSTEM_ID } from '../../constants/Application';
 import { checkIsArray } from '../../routes/utils/commonUtils';
 
 axios.interceptors.request.use(function (config) {
