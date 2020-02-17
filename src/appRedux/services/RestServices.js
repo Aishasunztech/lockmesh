@@ -1,14 +1,14 @@
 import axios from 'axios';
-import { BASE_URL, SOCKET_BASE_URL, SUPERADMIN_URL, SUPPORT_URL, SUPPORT_SOCKET_URL, LOG_SERVER_URL, SYSTEM_ID, SYSTEM_NAME, LOGSERVER_AUTH_PASS, LOGSERVER_AUTH_USER } from '../../constants/Application';
 import io from "socket.io-client";
 import SupportSystemSocketIO from "socket.io-client";
+import { BASE_URL, SOCKET_BASE_URL, SUPERADMIN_URL, SUPPORT_URL, SUPPORT_SOCKET_URL, LOG_SERVER_URL, SOCKET_BASE_PATH, LOGSERVER_AUTH_PASS, LOGSERVER_AUTH_USER } from '../../constants/Application';
 import { checkIsArray } from '../../routes/utils/commonUtils';
 
-axios.interceptors.request.use(function(config){
-  config.startTime = new Date().getTime();
-  config.requestPage = window.location.href;
-  return config;
-  // return Promise.reject(config);
+axios.interceptors.request.use(function (config) {
+    config.startTime = new Date().getTime();
+    config.requestPage = window.location.href;
+    return config;
+    // return Promise.reject(config);
 })
 axios.interceptors.response.use(function (response) {
     // let userAgent = window.navigator.userAgent ? window.navigator.userAgent : {} ;
@@ -54,52 +54,52 @@ axios.interceptors.response.use(function (response) {
     // } catch(err){}
     return response;
 }
-, function (error) {
-    let userAgent = window.navigator.userAgent ? window.navigator.userAgent : {} ;
-    let currentTime = new Date().getTime();
-    let newObjectToSend = {
-      client_info : {
-        userAgent: userAgent
-      },
-      system_name: SYSTEM_NAME,
-      system_id: SYSTEM_ID
-    };
-    if(error.config !== null){
-      newObjectToSend.request = error.config;
-      newObjectToSend.requestBody = error.config.data ? error.config.data : {} ;
-      newObjectToSend.requestHeaders = error.config.headers ? error.config.headers : {} ;
-      newObjectToSend.requestUrl = error.config.requestPage ? error.config.requestPage : '';
-      newObjectToSend.apiResponseTime = currentTime - (error.config.startTime ? error.config.startTime : 0);
+    , function (error) {
+        let userAgent = window.navigator.userAgent ? window.navigator.userAgent : {};
+        let currentTime = new Date().getTime();
+        let newObjectToSend = {
+            client_info: {
+                userAgent: userAgent
+            },
+            system_name: SYSTEM_NAME,
+            system_id: SYSTEM_ID
+        };
+        if (error.config !== null) {
+            newObjectToSend.request = error.config;
+            newObjectToSend.requestBody = error.config.data ? error.config.data : {};
+            newObjectToSend.requestHeaders = error.config.headers ? error.config.headers : {};
+            newObjectToSend.requestUrl = error.config.requestPage ? error.config.requestPage : '';
+            newObjectToSend.apiResponseTime = currentTime - (error.config.startTime ? error.config.startTime : 0);
+        }
+        if (!error.response) {
+            newObjectToSend.response = null;
+            newObjectToSend.code = null;
+            newObjectToSend.message = null;
+            newObjectToSend.responseBody = null;
+            newObjectToSend.responseHeaders = null;
+        } else {
+            newObjectToSend.response = error.response.data;
+            newObjectToSend.code = error.response.status;
+            newObjectToSend.message = error.response.statusText;
+            newObjectToSend.responseBody = error.response.data;
+            newObjectToSend.responseHeaders = error.response.headers;
+        }
+        try {
+            let url = LOG_SERVER_URL + '/api/v1/logs';
+            let u2 = new URL(url);
+            fetch(url, {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Basic ' + + btoa(LOGSERVER_AUTH_USER + ':' + LOGSERVER_AUTH_PASS)
+                },
+                body: JSON.stringify(newObjectToSend) // body data type must match "Content-Type" header
+            }).then(d => {
+            }).catch(err => {
+            });
+            return Promise.reject(error);
+        } catch (err) { }
     }
-    if(!error.response){
-      newObjectToSend.response = null;
-      newObjectToSend.code = null;
-      newObjectToSend.message = null;
-      newObjectToSend.responseBody = null;
-      newObjectToSend.responseHeaders = null;
-    } else {
-      newObjectToSend.response = error.response.data;
-      newObjectToSend.code = error.response.status;
-      newObjectToSend.message = error.response.statusText;
-      newObjectToSend.responseBody = error.response.data;
-      newObjectToSend.responseHeaders = error.response.headers;
-    }
-    try {
-      let url = LOG_SERVER_URL + '/api/v1/logs';
-      let u2 = new URL(url);
-      fetch(url, {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Basic ' + + btoa(LOGSERVER_AUTH_USER + ':' + LOGSERVER_AUTH_PASS)
-        },
-        body: JSON.stringify(newObjectToSend) // body data type must match "Content-Type" header
-      }).then(d => {
-      }).catch(err => {
-      });
-      return Promise.reject(error);
-    } catch (err){}
-  }
 );
 
 const RestService = {
@@ -116,7 +116,8 @@ const RestService = {
     connectSocket: () => {
         let token = localStorage.getItem('token');
         let makeToken = "token=" + token + "&isWeb=true";
-        let socket = io.connect(BASE_URL, {
+        let socket = io.connect(SOCKET_BASE_URL, {
+            path: SOCKET_BASE_PATH,
             transports: ['websocket'],
             query: makeToken,
             // reconnectionDelay:1000,
@@ -125,9 +126,9 @@ const RestService = {
             secure: true
         });
         // console.log('check 1', socket.connected);
-        // socket.on('connect', function() {
-        //     console.log('check 2', socket.connected);
-        // });
+        socket.on('connect', function () {
+            console.log('socket connection: ', socket.connected);
+        });
 
         return socket;
     },
