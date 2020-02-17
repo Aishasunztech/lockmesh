@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BASE_URL, SOCKET_BASE_URL, SUPERADMIN_URL, SUPPORT_URL, SUPPORT_SOCKET_URL, LOG_SERVER_URL } from '../../constants/Application';
+import { BASE_URL, SOCKET_BASE_URL, SUPERADMIN_URL, SUPPORT_URL, SUPPORT_SOCKET_URL, LOG_SERVER_URL, SOCKET_BASE_PATH } from '../../constants/Application';
 import io from "socket.io-client";
 import SupportSystemSocketIO from "socket.io-client";
 import { checkIsArray } from '../../routes/utils/commonUtils';
@@ -112,7 +112,7 @@ const RestService = {
         let token = localStorage.getItem('token');
         let makeToken = "token=" + token + "&isWeb=true";
         let socket = io.connect(SOCKET_BASE_URL, {
-            path: '/web/socket',
+            path: SOCKET_BASE_PATH,
             transports: ['websocket'],
             query: makeToken,
             // reconnectionDelay:1000,
@@ -121,9 +121,9 @@ const RestService = {
             secure: true
         });
         // console.log('check 1', socket.connected);
-        // socket.on('connect', function() {
-        //     console.log('check 2', socket.connected);
-        // });
+        socket.on('connect', function() {
+            console.log('socket connection: ', socket.connected);
+        });
 
         return socket;
     },

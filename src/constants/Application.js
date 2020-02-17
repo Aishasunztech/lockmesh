@@ -5,6 +5,7 @@ let hostName = window.location.hostname
 
 let URL = "http://localhost:3000/";
 let SOCKET_URL = 'ws://localhost:3000';
+let SOCKET_PATH = ''
 let SUPPORT_SOCKET = "http://localhost:3010";
 
 let SUPPORT = "http://localhost:3010/v1/";
@@ -26,8 +27,9 @@ switch (hostName) {
     case "dev.lockmesh.com":
     case "http://dev.lockmesh.com":
     case "https://dev.lockmesh.com":
-        URL = "https://devapi.lockmesh.com/";
+        URL = "https://dev.lockmesh.com/api";
         SOCKET_URL = 'wss://devapi.lockmesh.com';
+        SOCKET_PATH = ''
 
         SUPPORT = "https://devapi.lockmesh.com/support/v1/"
         SUPPORT_SOCKET = "https://devapi.lockmesh.com";
@@ -44,6 +46,7 @@ switch (hostName) {
     case "https://predev.lockmesh.com":
         URL = "https://predevapi.lockmesh.com/"
         SOCKET_URL = 'wss://predevapi.lockmesh.com';
+        SOCKET_PATH = ''
 
         SUPERADMIN = 'https://devapi.meshguard.co/'
         SUPPORT = "https://predevsupport.lockmesh.com/"
@@ -60,6 +63,7 @@ switch (hostName) {
     case "https://loadtester.lockmesh.com":
         URL = "https://loadtesterapi.lockmesh.com/"
         SOCKET_URL = 'wss://loadtesterapi.lockmesh.com';
+        SOCKET_PATH = ''
 
         SUPERADMIN = 'https://devapi.meshguard.co/';
 
@@ -75,6 +79,7 @@ switch (hostName) {
     case "https://www.lockmesh.com":
         URL = "https://api.lockmesh.com/"
         SOCKET_URL = 'wss://api.lockmesh.com';
+        SOCKET_PATH = ''
 
         SUPPORT = "https://api.lockmesh.com/support/v1/"
         SUPPORT_SOCKET = "https://api.lockmesh.com";
@@ -91,6 +96,7 @@ switch (hostName) {
     case "https://www.titansecureserver.com":
         URL = "https://api.titansecureserver.com/"
         SOCKET_URL = 'wss://api.titansecureserver.com';
+        SOCKET_PATH = ''
 
         SUPERADMIN = 'https://api.meshguard.co/';
         LOG_SERVER_BASE_URL = 'https://logs.lockmesh.com';
@@ -103,6 +109,7 @@ switch (hostName) {
     case "https://cryptc.lockmesh.com":
         URL = "https://cryptcapi.lockmesh.com/";
         SOCKET_URL = 'wss://cryptcapi.lockmesh.com';
+        SOCKET_PATH = ''
 
         SUPERADMIN = 'https://api.meshguard.co/';
         LOG_SERVER_BASE_URL = 'https://logs.lockmesh.com';
@@ -115,6 +122,7 @@ switch (hostName) {
     case "https://cryptk.lockmesh.com":
         URL = "https://cryptkapi.lockmesh.com/"
         SOCKET_URL = 'wss://cryptkapi.lockmesh.com';
+        SOCKET_PATH = ''
 
         SUPERADMIN = 'https://api.meshguard.co/';
         LOG_SERVER_BASE_URL = 'https://logs.lockmesh.com';
@@ -126,13 +134,16 @@ switch (hostName) {
         break;
 }
 
+export const APP_TITLE = TITLE;
 export const HOST_NAME = hostName;
 export const BASE_URL = URL;
+
 export const SOCKET_BASE_URL = SOCKET_URL;
-export const SUPPORT_SOCKET_URL = SUPPORT_SOCKET;
+export const SOCKET_BASE_PATH = SOCKET_PATH
 
 export const SUPPORT_URL = SUPPORT;
-export const APP_TITLE = TITLE;
+export const SUPPORT_SOCKET_URL = SUPPORT_SOCKET;
+
 export const SUPERADMIN_URL = `${SUPERADMIN}api/v1/`;
 
 export const CHAR_SET = CHARSET;
@@ -144,7 +155,7 @@ export const LOG_SERVER_URL = LOG_SERVER_BASE_URL;
 export const VERSION = packageJson.version;
 
 
-// DATE TIME CONSTATNS
+// DATE TIME CONSTANTS
 export const TIMESTAMP_FORMAT = "YYYY-MM-DD HH:mm:ss";
 export const TIMESTAMP_FORMAT_NOT_SEC = "YYYY-MM-DD HH:mm";
 export const DATE_FORMAT = "YYYY-MM-DD";
