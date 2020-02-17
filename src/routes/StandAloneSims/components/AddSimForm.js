@@ -149,6 +149,7 @@ class AddSimForm extends Component {
     }
 
     onChangeTerm = (value) => {
+        value = value + ' month'
         let standalonePackages = this.props.packages.filter(item => item.pkg_term == value && item.package_type === 'standalone_sim')
         let dataPackages = this.props.packages.filter(item => item.pkg_term == value && item.package_type === 'data_plan')
         this.props.form.setFieldsValue({
@@ -338,10 +339,10 @@ class AddSimForm extends Component {
                                 autoComplete="new-password"
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             >
-                                <Select.Option value={'1 month'}>1 Month</Select.Option>
-                                <Select.Option value={'3 month'}>3 Month</Select.Option>
-                                <Select.Option value={'6 month'}>6 Month</Select.Option>
-                                <Select.Option value={'12 month'}>12 Month</Select.Option>
+                                <Select.Option value={'1'}>1 Month</Select.Option>
+                                <Select.Option value={'3'}>3 Month</Select.Option>
+                                <Select.Option value={'6'}>6 Month</Select.Option>
+                                <Select.Option value={'12'}>12 Month</Select.Option>
                             </Select>
                         )}
                     </Form.Item>
