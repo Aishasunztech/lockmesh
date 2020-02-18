@@ -131,7 +131,7 @@ class Support extends Component {
   }
 
   componentWillUnmount() {
-    if (this.props.location && this.props.location.pathname && this.props.location.pathname !== '/supports') {
+    if (this.props.location && this.props.location.pathname && this.props.location.pathname !== '/support') {
       if (this.props.resetSupportPage) {
         this.props.resetSupportPage();
       }
