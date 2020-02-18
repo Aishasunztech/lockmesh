@@ -420,7 +420,7 @@ class SidebarContent extends Component {
                     </Link>
                   </Menu.Item>
                   <Menu.Item key="support">
-                    <Link to="/support"><i className="icon icon-team" />
+                    <Link to="/supports"><i className="icon icon-team" />
                       {convertToLang(translation[''], "Support")}
                     </Link>
                   </Menu.Item>
