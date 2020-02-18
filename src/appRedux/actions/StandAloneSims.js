@@ -1,5 +1,5 @@
 import {
-    INVALID_TOKEN, STAND_ALONE_LIST, CHANGE_SIM_STATUS, ADD_STANDALONE_SIM
+    INVALID_TOKEN, STAND_ALONE_LIST, CHANGE_SIM_STATUS, ADD_STANDALONE_SIM, USER_CREDITS
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -60,6 +60,12 @@ export function addStandAloneSim(data) {
                     type: ADD_STANDALONE_SIM,
                     payload: response.data,
                 });
+                if (response.data.status) {
+                    dispatch({
+                        type: USER_CREDITS,
+                        response: response.data
+                    });
+                }
             } else {
                 dispatch({
                     type: INVALID_TOKEN

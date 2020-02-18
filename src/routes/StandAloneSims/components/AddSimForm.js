@@ -214,12 +214,12 @@ class AddSimForm extends Component {
         if (this.state.serviceData.total_price <= this.props.user_credit || !this.state.serviceData.pay_now) {
             this.state.serviceData.paid_by_user = this.state.paidByUser
             this.props.addStandAloneSim(this.state.serviceData);
-            // this.props.handleCancel();
-            // this.handleReset();
-            // this.setState({
-            //     serviceData: {},
-            //     showConfirmCredit: false
-            // })
+            this.props.handleCancel();
+            this.handleReset();
+            this.setState({
+                serviceData: {},
+                showConfirmCredit: false
+            })
         } else {
             showCreditPurchase(this, "Your Credits are not enough to apply these services. Please select other services OR Purchase Credits.")
         }

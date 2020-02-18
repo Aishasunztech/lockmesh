@@ -51,9 +51,9 @@ export default (state = initialState, action) => {
         }
 
         case ADD_STANDALONE_SIM: {
-            // let simList = state.standAloneSimsList
-
+            let simList = state.standAloneSimsList
             if (action.payload.status) {
+                simList.unshift(action.payload.data)
                 success({
                     title: action.payload.msg
                 })
@@ -64,6 +64,7 @@ export default (state = initialState, action) => {
             }
             return {
                 ...state,
+                standAloneSimsList: [...simList]
             }
         }
         default:
