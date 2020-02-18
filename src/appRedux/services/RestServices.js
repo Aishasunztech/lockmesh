@@ -143,7 +143,7 @@ const RestService = {
         let type = localStorage.getItem('type');
         let makeToken = "token=" + token + "&isWeb=true&user_id=" + id + "&type=" + type;
         let socket = SupportSystemSocketIO.connect(SUPPORT_SOCKET_URL, {
-            path: '/support/v1/socket',
+            path: '/supports/v1/socket',
             transports: ['websocket'],
             query: makeToken,
             secure: true,
@@ -628,8 +628,8 @@ const RestService = {
         return axios.post(BASE_URL + 'users/checkApkName', { name, apk_id }, RestService.getHeader());
     },
     // For Service Remaining data
-    getServiceRefund: (service_id) => {
-        return axios.post(BASE_URL + 'users/check-service-refund-credits', { service_id }, RestService.getHeader());
+    getServiceRefund: (service_id, user_acc_id) => {
+        return axios.post(BASE_URL + 'users/check-service-refund-credits', { service_id, user_acc_id }, RestService.getHeader());
     },
     // For check apk name
     checkPolicyName: (name, policy_id = '') => {
