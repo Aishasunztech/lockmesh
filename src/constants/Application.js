@@ -31,8 +31,8 @@ switch (hostName) {
     case "http://dev.lockmesh.com":
     case "https://dev.lockmesh.com":
         URL = "https://dev.lockmesh.com/api/";
-        SOCKET_URL = 'wss://dev.lockmesh.com/api';
-        SOCKET_PATH = '/web/socket'
+        SOCKET_URL = 'wss://dev.lockmesh.com';
+        SOCKET_PATH = '/api/web/socket'
 
         SUPPORT = "https://dev.lockmesh.com/support/v1/"
         SUPPORT_SOCKET = "https://dev.lockmesh.com";
@@ -84,8 +84,8 @@ switch (hostName) {
     case "http://www.lockmesh.com":
     case "https://www.lockmesh.com":
         URL = "https://lockmesh.com/api/"
-        SOCKET_URL = 'wss://lockmesh.com/api';
-        SOCKET_PATH = '/web/socket'
+        SOCKET_URL = 'wss://lockmesh.com';
+        SOCKET_PATH = '/api/web/socket'
 
         SUPPORT = "https://lockmesh.com/support/v1/"
         SUPPORT_SOCKET = "https://lockmesh.com";
