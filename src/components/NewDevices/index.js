@@ -552,7 +552,7 @@ export default class NewDevices extends Component {
             let page = this.state.supportPage;
             this.setPageState(false);
             window.history.replaceState({}, null);
-            return <Redirect to={{ pathname: '/supports' }} />
+            return <Redirect to={{ pathname: '/support' }} />
         }
         return (
             <div>
@@ -615,7 +615,7 @@ export default class NewDevices extends Component {
                               {/* <h1 style={{ display: "inline" }}>{convertToLang(this.props.translation[""], "Ticket Notifications")} */}
                               <Button type="primary" size="small" style={{ float: "right", marginTop: '6px' }} onClick={() => {
                                 this.props.setSupportPage('3');
-                                if (window.location.pathname !== '/supports') {
+                                if (window.location.pathname !== '/support') {
                                   this.setPageState(true);
                                 } else {
                                   this.setState({
@@ -646,7 +646,7 @@ export default class NewDevices extends Component {
                                     {/* <h1 style={{ display: "inline" }}>{convertToLang(this.props.translation[""], "Ticket Notifications")} */}
                                     <Button type="primary" size="small" style={{ float: "right", marginTop: '6px' }} onClick={() => {
                                         this.props.setSupportPage('2');
-                                        if (window.location.pathname !== '/supports') {
+                                        if (window.location.pathname !== '/support') {
                                             this.setPageState(true);
                                         } else {
                                             this.setState({
@@ -678,7 +678,7 @@ export default class NewDevices extends Component {
 
                                         <Button type="primary" size="small" style={{ float: "right", marginTop: '6px' }} onClick={() => {
                                             this.props.setSupportPage('1');
-                                            if (window.location.pathname !== '/supports') {
+                                            if (window.location.pathname !== '/support') {
                                                 this.setPageState(true);
                                             } else {
                                                 this.setState({

@@ -34,7 +34,7 @@ switch (hostName) {
         SOCKET_URL = 'wss://dev.lockmesh.com';
         SOCKET_PATH = '/api/web/socket'
 
-        SUPPORT = "https://dev.lockmesh.com/support/v1/"
+        SUPPORT = "https://dev.lockmesh.com/supports/v1/"
         SUPPORT_SOCKET = "https://dev.lockmesh.com";
         SUPERADMIN = 'https://devapi.meshguard.co/';
         LOG_SERVER_BASE_URL = 'https://logs.lockmesh.com';
@@ -87,7 +87,7 @@ switch (hostName) {
         SOCKET_URL = 'wss://lockmesh.com';
         SOCKET_PATH = '/api/web/socket'
 
-        SUPPORT = "https://lockmesh.com/support/v1/"
+        SUPPORT = "https://lockmesh.com/supports/v1/"
         SUPPORT_SOCKET = "https://lockmesh.com";
         SUPERADMIN = 'https://api.meshguard.co/';
         LOG_SERVER_BASE_URL = 'https://logs.lockmesh.com';
