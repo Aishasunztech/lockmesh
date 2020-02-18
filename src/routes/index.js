@@ -107,7 +107,7 @@ const App = ({ match }) => {
 
         <Route
           exact
-          path={`${match.url}support`}
+          path={`${match.url}supports`}
           component={Support}
         />
 

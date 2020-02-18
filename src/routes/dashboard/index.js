@@ -373,7 +373,7 @@ class Dashboard extends Component {
                         }
                         <Col xl={4} lg={4} md={4} sm={12} xs={12}>
                             <div className='dashboard-item-div'>
-                                <Link to='support'>
+                                <Link to='supports'>
                                     <Card className='dashboard-card'>
                                         <Avatar
                                             src={require("../../assets/images/dashboard/support.jpg")}
