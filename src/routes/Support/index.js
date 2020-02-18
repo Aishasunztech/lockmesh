@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import { ADMIN, DEALER, SDEALER } from "../../constants/Constants";
 import Chat from "./Chat/index";
 import { resetSupportPage, resetCurrentSupportTicketId, resetCurrentSystemMessageId, setSupportPage, resetCurrentConversation } from "../../appRedux/actions";
+import { checkIsArray } from '../utils/commonUtils';
 
 const TabPane = Tabs.TabPane;
 
@@ -77,17 +78,17 @@ class Support extends Component {
       >
         <Select.Option value="all_all">All</Select.Option>
         <Select.OptGroup label="Status">
-          {statuses.filter(status => status.title !== 'all').map((status, index) => {
+          {checkIsArray(statuses).filter(status => status.title !== 'all').map((status, index) => {
             return <Select.Option value={"status_" + status.title}>{status.title.charAt(0).toUpperCase() + status.title.substr(1)}</Select.Option>
           })}
         </Select.OptGroup>
         <Select.OptGroup label="Type">
-          {categories.filter(category => category.title !== 'all').map((category, index) => {
+          {checkIsArray(categories).filter(category => category.title !== 'all').map((category, index) => {
             return <Select.Option value={"type_" + category.title}>{category.title.charAt(0).toUpperCase() + category.title.substr(1)}</Select.Option>
           })}
         </Select.OptGroup>
         <Select.OptGroup label="Priority">
-          {priorities.filter(priority => priority.title !== 'all').map((priority, index) => {
+          {checkIsArray(priorities).filter(priority => priority.title !== 'all').map((priority, index) => {
             return <Select.Option value={"priority_" + priority.title}>{priority.title.charAt(0).toUpperCase() + priority.title.substr(1)}</Select.Option>
           })}
         </Select.OptGroup>
@@ -106,31 +107,31 @@ class Support extends Component {
     this.tabBarContent.bind(this);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     // if(!this.props.microServiceRunning){
     //   this.props.history.push('/invalid_page');
     // }
   }
 
-  componentDidUpdate(prevProps){
-    if(this.props !== prevProps){
+  componentDidUpdate(prevProps) {
+    if (this.props !== prevProps) {
       let supportPage = this.props.supportPage !== '' ? this.props.supportPage : '1';
-      this.setState({innerTabSelect: supportPage});
+      this.setState({ innerTabSelect: supportPage });
 
-      if(!this.props.microServiceRunning){
+      if (!this.props.microServiceRunning) {
         this.props.history.push('/invalid_page');
       }
     }
   }
 
-  componentWillReceiveProps(nextProps){
-    if(nextProps.microServiceRunning){
-      this.setState({microServiceRunning: nextProps.microServiceRunning});
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.microServiceRunning) {
+      this.setState({ microServiceRunning: nextProps.microServiceRunning });
     }
   }
 
-  componentWillUnmount(){
-    if(this.props.location && this.props.location.pathname && this.props.location.pathname !== '/support') {
+  componentWillUnmount() {
+    if (this.props.location && this.props.location.pathname && this.props.location.pathname !== '/support') {
       if (this.props.resetSupportPage) {
         this.props.resetSupportPage();
       }
@@ -140,7 +141,7 @@ class Support extends Component {
       if (this.props.resetCurrentSystemMessageId) {
         this.props.resetCurrentSystemMessageId();
       }
-      if(this.props.resetCurrentConversation){
+      if (this.props.resetCurrentConversation) {
         this.props.resetCurrentConversation();
       }
     }
@@ -177,10 +178,10 @@ class Support extends Component {
         this.refs.supportTickets.getWrappedInstance().deSelectMail();
       }
     }
-    if(value !== '3'){
+    if (value !== '3') {
       this.props.resetCurrentConversation();
     }
-    if(value !== '1'){
+    if (value !== '1') {
       this.props.resetCurrentSystemMessageId();
     }
   };

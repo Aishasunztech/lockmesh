@@ -17,7 +17,7 @@ import Services from './Services';
 import Invoice from './invoice';
 
 // Helpers
-import { checkValue, convertToLang } from '../../utils/commonUtils'
+import { checkValue, convertToLang, checkIsArray } from '../../utils/commonUtils'
 import RestService from '../../../appRedux/services/RestServices';
 import { inventorySales, refundServiceColumns } from '../../utils/columnsUtils';
 
@@ -188,7 +188,7 @@ class EditDevice extends Component {
                 }
                 else if (this.state.services) {
                     let product_prices = this.filterList(this.state.term + ' month', this.props.product_prices, 'product');
-                    let sim_id_price = product_prices.filter((item) => {
+                    let sim_id_price = checkIsArray(product_prices).filter((item) => {
                         if (item.price_for === 'sim_id') {
                             return item
                         }
@@ -293,9 +293,9 @@ class EditDevice extends Component {
     }
 
     componentDidMount() {
-        this.props.getSimIDs();
-        this.props.getChatIDs();
-        this.props.getPGPEmails();
+        // this.props.getSimIDs();
+        this.props.getChatIDs(this.props.device.id, this.props.device.dealer_id);
+        this.props.getPGPEmails(this.props.device.id, this.props.device.dealer_id);
         this.props.getUserList();
         this.props.getParentPackages()
         this.props.getProductPrices()
@@ -545,7 +545,7 @@ class EditDevice extends Component {
     filterList = (type, list, listType) => {
         let dummyPackages = [];
         if (list.length) {
-            list.filter(function (item) {
+            checkIsArray(list).filter(function (item) {
                 let packageTerm;
                 if (listType === 'pkg') {
                     packageTerm = item.pkg_term
@@ -858,14 +858,24 @@ class EditDevice extends Component {
         }
     }
     handlePGPModal = () => {
-        this.addPGPEmailModal.showModal();
+        // console.log(this.props.device.pgp_remaining_limit);
+        if (this.props.device.pgp_remaining_limit > 0) {
+            this.addPGPEmailModal.showModal();
+        } else {
+            error({
+                title: "ERROR: You are not allowed to create new PGP EMAIL. Your Max limit has been exeeded to create PGP EMAILS on this device."
+            })
+        }
     }
 
     handleChatID = (e) => {
+        let device = this.props.device
         let payload = {
             type: 'chat_id',
             auto_generated: true,
-            product_data: {}
+            product_data: {},
+            user_acc_id: device.id,
+            dealer_id: device.dealer_id
         }
         this.props.addProduct(payload)
     }
@@ -1027,10 +1037,9 @@ class EditDevice extends Component {
 
 
     onChangeAdjustExpiry = (value, dateString) => {
-        console.log(dateString);
-
-        console.log(value);
-        console.log(moment(value._d.toString()).format('YYYY/MM/DD'));
+        // console.log(dateString);
+        // console.log(value);
+        // console.log(moment(value._d.toString()).format('YYYY/MM/DD'));
         // console.log(moment.tz(value._d, "America/Toronto").format());
         // console.log(moment(moment.tz(value._d, "America/Toronto").format()).format("YYYY/MM/DD"));
     }
@@ -1384,7 +1393,7 @@ class EditDevice extends Component {
                                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                             disabled={this.state.disableChat}
                                         >
-                                            {this.props.chat_ids.map((chat_id, index) => {
+                                            {checkIsArray(this.props.chat_ids).map((chat_id, index) => {
                                                 return (<Select.Option key={index} value={chat_id.chat_id}>{chat_id.chat_id}</Select.Option>)
                                             })}
                                         </Select>
@@ -1782,7 +1791,7 @@ class EditDevice extends Component {
                     ref="addPGPEmailModal"
                     translation={this.props.translation}
                     wrappedComponentRef={(form) => this.addPGPEmailModal = form}
-
+                    device={this.props.device}
                     // actions
                     getDomains={this.props.getDomains}
                     addProduct={this.props.addProduct}
@@ -1982,7 +1991,7 @@ function mapDispatchToProps(dispatch) {
 }
 var mapStateToProps = ({ routing, devices, users, auth, settings, sidebar, account }) => {
     // 
-
+    // console.log(devices.pgp_emails);
     return {
         invoiceID: users.invoiceID,
         user: auth.authUser,

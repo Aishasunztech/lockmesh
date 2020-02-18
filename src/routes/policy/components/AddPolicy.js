@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Tabs, Button, Row, Col, Avatar, Input, Form, Checkbox, Icon, Steps, message, Table, Divider, Tag, Switch } from "antd";
 
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { getDealerApps } from '../../../appRedux/actions/ConnectDevice';
 import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, SECURE_SETTING, SYSTEM_CONTROLS_UNIQUE, Main_SETTINGS, APPS, POLICY_DETAILS } from '../../../constants/Constants';
 
@@ -242,17 +242,17 @@ class AddPolicy extends Component {
 
     renderSystemPermissions = () => {
 
-        if (this.state.systemPermissions) {
+        // if (this.state.systemPermissions) {
 
-            return this.state.systemPermissions.map(sysPermission => {
-                return {
-                    rowKey: sysPermission.setting_name,
-                    name: sysPermission.setting_name,
-                    action: <Switch checked={(sysPermission.setting_status === 1 || sysPermission.setting_status === true)?true: false} onClick={(e) => this.props.handleCheckSystemPermission(e, sysPermission.setting_name)} size="small" />
-                }
-            })
-        
-        }
+        return checkIsArray(this.state.systemPermissions).map(sysPermission => {
+            return {
+                rowKey: sysPermission.setting_name,
+                name: sysPermission.setting_name,
+                action: <Switch checked={(sysPermission.setting_status === 1 || sysPermission.setting_status === true) ? true : false} onClick={(e) => this.props.handleCheckSystemPermission(e, sysPermission.setting_name)} size="small" />
+            }
+        })
+
+        // }
 
     }
 
@@ -267,26 +267,28 @@ class AddPolicy extends Component {
                 if (substring === ' ') {
                     callback("Policy name cannot start with blank space.")
                 } else {
-                    response = await RestService.checkPolicyName(value).then((response) => {
-                        if (RestService.checkAuth(response.data)) {
-                            if (response.data.status) {
-                                return true
+                    if (value && value.length) {
+                        response = await RestService.checkPolicyName(value).then((response) => {
+                            if (RestService.checkAuth(response.data)) {
+                                if (response.data.status) {
+                                    return true
+                                }
+                                else {
+                                    return false
+                                }
                             }
-                            else {
-                                return false
-                            }
+                        });
+                        if (response) {
+                            callback()
+                            this.setState({
+                                policy_name: value,
+                                // isPolicy_name: 'success',
+                                disabledCommand: '#' + value.replace(/ /g, '_'),
+                                // policy_name_error: ''
+                            })
+                        } else {
+                            callback("Policy name already taken please use another name.")
                         }
-                    });
-                    if (response) {
-                        callback()
-                        this.setState({
-                            policy_name: value,
-                            // isPolicy_name: 'success',
-                            disabledCommand: '#' + value.replace(/ /g, '_'),
-                            // policy_name_error: ''
-                        })
-                    } else {
-                        callback("Policy name already taken please use another name.")
                     }
                 }
             }
@@ -373,7 +375,7 @@ class AddPolicy extends Component {
                             key="2"
                         >
                             <AppList
-                                apk_list={this.state.appPermissions.filter(item => item.uniqueName !== "com.android.settingsSettings")}
+                                apk_list={checkIsArray(this.state.appPermissions).filter(item => item.uniqueName !== "com.android.settingsSettings")}
                                 dataLength={this.state.appPermissions.length}
                                 handleCheckAllAppPolicy={this.handleCheckAllAppPolicy}
                                 handleCheckApp={this.handleCheckApp}

@@ -6,7 +6,7 @@ import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Div
 import AllDomainsModal from './AllDomainsModal';
 
 // Helpers
-import { convertToLang, formatMoney } from '../../utils/commonUtils'
+import { convertToLang, formatMoney, checkIsArray } from '../../utils/commonUtils'
 import { domainColumns } from "../../utils/columnsUtils";
 // import { getColor, isBase64, convertToLang } from "../utils/commonUtils"
 // import { getDealerDetails, editDealer } from '../../appRedux/actions'
@@ -60,7 +60,7 @@ export default class DealerDomains extends Component {
     searchField = (originalData, fieldName, value) => {
         let demoData = [];
         if (value.length) {
-            originalData.forEach((data) => {
+            checkIsArray(originalData).forEach((data) => {
                 // console.log(data);
                 if (data[fieldName] !== undefined) {
                     if ((typeof data[fieldName]) === 'string') {
@@ -113,39 +113,32 @@ export default class DealerDomains extends Component {
         let loadingCopy = Object.assign({}, this.state.domainLoading)
         loadingCopy[`removebtn_` + id] = true
         this.setState({ domainLoading: loadingCopy })
+
+        setTimeout(
+            (_this = this) => {
+                _this.setState({ domainLoading: false })
+            }, 1000);
     }
     renderDealerDomainList = (list) => {
-        if (list) {
-            return list.map((item, index) => {
 
-                // let removeBtnDisable = false;
-                // if (this.props.authUser.id !== item.permission_by) {
-                //     removeBtnDisable = true;
-                // }
+        return checkIsArray(list).map((item, index) => {
 
-                return {
-                    rowKey: item.id,
-                    key: ++index,
-                    action: (<Fragment>
-                        <Button
-                            size="small"
-                            type="danger"
-                            loading={this.state.domainLoading[`removebtn_` + item.id] ? true : false}
-                            onClick={() => this.deleteDomain(item.id)}
-                        // disabled
-                        // disabled={removeBtnDisable}
-
-                        >
-                            {convertToLang(this.props.translation[Button_Remove], "Remove")}
-                        </Button>
-                    </Fragment>),
-                    name: item.name,
-
-                }
-            })
-        } else {
-            return []
-        }
+            return {
+                rowKey: item.id,
+                key: ++index,
+                action: (<Fragment>
+                    <Button
+                        size="small"
+                        type="danger"
+                        loading={this.state.domainLoading[`removebtn_` + item.id] ? true : false}
+                        onClick={() => this.deleteDomain(item.id)}
+                    >
+                        {convertToLang(this.props.translation[Button_Remove], "Remove")}
+                    </Button>
+                </Fragment>),
+                name: item.name
+            }
+        })
     };
     render() {
         const { visible } = this.state;

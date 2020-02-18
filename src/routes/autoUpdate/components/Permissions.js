@@ -7,7 +7,7 @@ import { getAllDealers } from "../../../appRedux/actions/Dealers";
 import DealerList from "./DealerList";
 import CircularProgress from "components/CircularProgress/index";
 
-import { titleCase, convertToLang } from '../../utils/commonUtils';
+import { titleCase, convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { dealerColsWithSearch } from '../../utils/columnsUtils';
 
 import {
@@ -53,7 +53,7 @@ class Permissions extends Component {
     let columns = this.state.addDealerColsInModal;
     console.log('columns are: ', columns);
 
-    columns.forEach(column => {
+    checkIsArray(columns).forEach(column => {
       if (column.children) {
         if (Object.keys(sorter).length > 0) {
           if (column.dataIndex == sorter.field) {
@@ -81,7 +81,7 @@ class Permissions extends Component {
     let columns = this.state.listDealerCols;
     console.log('columns are: ', columns);
 
-    columns.forEach(column => {
+    checkIsArray(columns).forEach(column => {
       // if (column.children) {
       if (Object.keys(sorter).length > 0) {
         if (column.dataIndex == sorter.field) {
@@ -167,9 +167,9 @@ class Permissions extends Component {
     let selectedRows = this.state.selectedRowKeys;
     // var dList = this.state.dealerList; arfan
     var dList = this.state.dealerListForModal;
-    var add_ids = dList.filter(e => !permissions.includes(e.dealer_id));
-    var addUnSelected = add_ids.filter(e => !selectedRows.includes(e.dealer_id));
-    var addUnSelected_IDs = addUnSelected.map(v => v.dealer_id);
+    var add_ids = checkIsArray(dList).filter(e => !permissions.includes(e.dealer_id));
+    var addUnSelected = checkIsArray(add_ids).filter(e => !selectedRows.includes(e.dealer_id));
+    var addUnSelected_IDs = checkIsArray(addUnSelected).map(v => v.dealer_id);
     permissions = [...permissions, ...addUnSelected_IDs];
 
     this.setState({
@@ -181,7 +181,7 @@ class Permissions extends Component {
 
   saveAllDealers = () => {
     let dealer_ids = []
-    this.props.dealerList.map((dealer) => {
+    checkIsArray(this.props.dealerList).map((dealer) => {
       dealer_ids.push(dealer.dealer_id);
     });
     this.setState({ permissions: dealer_ids })
@@ -196,7 +196,7 @@ class Permissions extends Component {
     // console.log(this.props.dealerList, "dealer ids", this.state.dealer_ids);
 
     if (this.state.dealer_ids.length) {
-      this.props.dealerList.map((dealer) => {
+      checkIsArray(this.props.dealerList).map((dealer) => {
         if (this.state.dealer_ids.includes(dealer.dealer_id)) {
           this.state.permissions.push(dealer.dealer_id);
         }
@@ -225,7 +225,7 @@ class Permissions extends Component {
   onSelectChange = (selectedRowKeys, selectedRows) => {
     // console.log(selectedRowKeys, 'selected', selectedRows);
     let dealer_ids = []
-    selectedRows.forEach(row => {
+    checkIsArray(selectedRows).forEach(row => {
       // console.log("selected row", row)
       dealer_ids.push(row.dealer_id);
     });
@@ -240,7 +240,7 @@ class Permissions extends Component {
     let demoData = [];
 
     if (value.length) {
-      originalData.forEach((data) => {
+      checkIsArray(originalData).forEach((data) => {
         if (data[fieldName] !== undefined) {
           if ((typeof data[fieldName]) === 'string') {
 
@@ -270,7 +270,7 @@ class Permissions extends Component {
     let demoData = [];
 
     if (value.length) {
-      originalData.forEach((data) => {
+      checkIsArray(originalData).forEach((data) => {
         if (
           data['dealer_id'].toString().toUpperCase().includes(value.toUpperCase())
         ) {
@@ -382,7 +382,7 @@ class Permissions extends Component {
   removeSelectedDealers = () => {
     let permittedDealers = this.state.permissions;
     let selectedRows = this.state.selectedRowKeys;
-    var remove_ids = permittedDealers.filter(e => !selectedRows.includes(e));
+    var remove_ids = checkIsArray(permittedDealers).filter(e => !selectedRows.includes(e));
 
     this.setState({
       removeSelectedDealersModal: false,
@@ -397,7 +397,7 @@ class Permissions extends Component {
     let data = [];
     // console.log(list);
     let is_included
-    list.map((dealer) => {
+    checkIsArray(list).map((dealer) => {
       // console.log('object recrd', this.props.record.permissions);
       if (this.state.permissions) {
         is_included = this.state.permissions.includes(dealer.dealer_id);

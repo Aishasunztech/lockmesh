@@ -3,6 +3,7 @@ import NotificationItem from "./NotificationItem";
 import {notifications} from "./data";
 import CustomScrollbars from "util/CustomScrollbars";
 import Auxiliary from "util/Auxiliary";
+import { checkIsArray } from "../../routes/utils/commonUtils";
 
 const AppNotification = () => {
   return (
@@ -13,7 +14,7 @@ const AppNotification = () => {
       </div>
       <CustomScrollbars className="gx-popover-scroll">
         <ul className="gx-sub-popover">
-          {notifications.map((notification, index) => <NotificationItem key={index} notification={notification}/>)
+          {checkIsArray(notifications).map((notification, index) => <NotificationItem key={index} notification={notification}/>)
           }
         </ul>
       </CustomScrollbars>

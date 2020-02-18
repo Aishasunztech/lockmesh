@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { Modal, message, Input, Table, Switch, Avatar, Button, Card, Row, Col, Select, Spin, Form } from 'antd';
-import { componentSearch, getFormattedDate, convertToLang, checkValue } from '../../../utils/commonUtils';
+import { componentSearch, getFormattedDate, convertToLang, checkValue, checkIsArray } from '../../../utils/commonUtils';
 import {
   addUser,
   getUserList,
@@ -138,8 +138,8 @@ class Services extends Component {
 
   renderList = (data) => {
     // console.log
-    if (data && data.length) {
-      return data.map((row, index) => {
+    // if (data && data.length) {
+      return checkIsArray(data).map((row, index) => {
         // console.log(row);
 
         // if (row.type === "PACKAGE") {
@@ -164,9 +164,9 @@ class Services extends Component {
         // }
 
       })
-    } else {
-      return []
-    }
+    // } else {
+    //   return []
+    // }
   }
 
 
@@ -175,7 +175,7 @@ class Services extends Component {
     let products = [];
 
     if (services && services.packages) {
-      packages = JSON.parse(services.packages).map((item) => {
+      packages = checkIsArray(JSON.parse(services.packages)).map((item) => {
         item.type = "PACKAGE";
         item.status = services.status;
         item.start_date = services.start_date;
@@ -184,7 +184,7 @@ class Services extends Component {
       });
     }
     if (services && services.products) {
-      products = JSON.parse(services.products).map((item) => {
+      products = checkIsArray(JSON.parse(services.products)).map((item) => {
         item.type = "PRODUCT";
         item.status = services.status;
         item.start_date = services.start_date;

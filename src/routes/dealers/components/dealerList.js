@@ -9,7 +9,7 @@ import { ADMIN, DEALER } from '../../../constants/Constants';
 import scrollIntoView from 'scroll-into-view';
 
 import DealerDevicesList from '../../users/components/UserDeviceList';
-import { convertToLang, convertTimezoneValue } from '../../utils/commonUtils'
+import { convertToLang, convertTimezoneValue, checkIsArray } from '../../utils/commonUtils'
 import { Redirect } from 'react-router-dom';
 import CustomScrollbars from "../../../util/CustomScrollbars";
 import {
@@ -171,7 +171,7 @@ class DealerList extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.row_key)) {
-                let list = this.state.expandedRowKeys.filter(item => item !== record.row_key)
+                let list = checkIsArray(this.state.expandedRowKeys).filter(item => item !== record.row_key)
                 this.setState({ expandedRowKeys: list })
             }
         }
@@ -289,7 +289,7 @@ class DealerList extends Component {
                 connected_devices: dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
                 dealer_credits: dealer.dealer_credits ? dealer.dealer_credits : 0,
                 devicesList: dealer.devicesList,
-                last_login: convertTimezoneValue(this.props.user.timezone, dealer.last_login, TIMESTAMP_FORMAT),
+                last_login: convertTimezoneValue(this.props.user.timezone, dealer.last_login),
                 // last_login: dealer.last_login ? dealer.last_login : 'N/A'
 
             })

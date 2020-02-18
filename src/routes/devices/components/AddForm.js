@@ -16,7 +16,7 @@ import Invoice from './invoice';
 import AddPGPEmailModal from './AddPGPEmailModal';
 
 // helpers
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { inventorySales } from '../../utils/columnsUtils';
 import RestService from '../../../appRedux/services/RestServices'
 
@@ -34,6 +34,7 @@ import {
     getPolicies,
     getDomains,
     addProduct,
+    resetIds
 } from "../../../appRedux/actions";
 
 // constants
@@ -130,7 +131,7 @@ class AddDevice extends Component {
                     }
 
                     let product_prices = this.filterList(this.state.term + ' month', this.props.product_prices, 'product');
-                    let sim_id_price = product_prices.filter((item) => {
+                    let sim_id_price = checkIsArray(product_prices).filter((item) => {
                         if (item.price_for === 'sim_id') {
                             return item
                         }
@@ -247,10 +248,15 @@ class AddDevice extends Component {
             this.props.getProductPrices();
             this.props.getHardwaresPrices();
         }
-        this.props.getPolicies();
-        this.props.getSimIDs();
-        this.props.getChatIDs();
-        this.props.getPGPEmails();
+        if (!this.props.preActive) {
+            this.props.getPolicies(this.props.device.id, this.props.device.dealer_id);
+            this.props.getSimIDs(this.props.device.id, this.props.device.dealer_id);
+            this.props.getChatIDs(this.props.device.id, this.props.device.dealer_id);
+            this.props.getPGPEmails(this.props.device.id, this.props.device.dealer_id);
+            console.log("dasd");
+        } else {
+            this.props.resetIds()
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -283,9 +289,9 @@ class AddDevice extends Component {
 
     handleReset = () => {
 
-        this.props.getSimIDs();
-        this.props.getChatIDs();
-        this.props.getPGPEmails();
+        // this.props.getSimIDs();
+        // this.props.getChatIDs();
+        // this.props.getPGPEmails();
         // this.props.getUserList();
         this.props.form.resetFields();
     }
@@ -377,10 +383,14 @@ class AddDevice extends Component {
     }
 
     handleChatID = (e) => {
+        let device = this.props.device
         let payload = {
             type: 'chat_id',
             auto_generated: true,
-            product_data: {}
+            product_data: {},
+            user_acc_id: device ? device.user_acc_id : null,
+            dealer_id: device ? device.dealer_id : null,
+
         }
         this.props.addProduct(payload)
     }
@@ -622,7 +632,7 @@ class AddDevice extends Component {
     filterList = (type, list, listType) => {
         let dummyPackages = [];
         if (list.length) {
-            list.filter(function (item) {
+            checkIsArray(list).filter(function (item) {
                 let packageTerm;
                 if (listType === 'pkg') {
                     packageTerm = item.pkg_term
@@ -1834,6 +1844,7 @@ class AddDevice extends Component {
 
                     // data
                     domainList={this.props.domainList}
+                    device={this.props.device}
 
                 />
 
@@ -1980,6 +1991,7 @@ function mapDispatchToProps(dispatch) {
         addSimPermission: null,
         getDomains: getDomains,
         addProduct: addProduct,
+        resetIds: resetIds,
     }, dispatch);
 }
 var mapStateToProps = ({ routing, devices, device_details, users, settings, sidebar, auth, account }) => {

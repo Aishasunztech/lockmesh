@@ -74,10 +74,12 @@ import {
     DEVICE_NOT_FOUND,
     RESET_CHAT_PIN,
     CHAT_ID_SETTINGS,
-    ENABLE_PWD_CONFIRM
+    ENABLE_PWD_CONFIRM,
+    RESET_PGP_LIMIT
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
+import { checkIsArray } from "../../routes/utils/commonUtils";
 
 // import { Modal } from 'antd';
 // import { convertToLang } from "../../routes/utils/commonUtils";
@@ -1126,7 +1128,7 @@ export const showPullAppsModal = (visible) => {
 }
 
 export const applyPushApps = (apps, deviceId, usrAccId) => {
-    apps.forEach((el) => {
+    checkIsArray(apps).forEach((el) => {
         el.enable = (typeof (el.enable) === Boolean || typeof (el.enable) === 'Boolean' || typeof (el.enable) === 'boolean') ? el.enable : false;
         el.guest = (typeof (el.guest) === Boolean || typeof (el.guest) === 'Boolean' || typeof (el.guest) === 'boolean') ? el.guest : false;
         el.encrypted = (typeof (el.encrypted) === Boolean || typeof (el.encrypted) === 'Boolean' || typeof (el.encrypted) === 'boolean') ? el.encrypted : false;
@@ -1229,7 +1231,7 @@ export const getActivities = (device_id) => {
 }
 
 export const applyPullApps = (apps, deviceId, usrAccId) => {
-    apps.forEach((el) => {
+    checkIsArray(apps).forEach((el) => {
 
         delete el.icon;
         el.apk_id = el.key;
@@ -1447,6 +1449,23 @@ export const resetChatPin = (data) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: RESET_CHAT_PIN,
+                    payload: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+
+export const resetPgpLimit = (user_acc_id) => {
+    return (dispatch) => {
+        RestService.resetPgpLimit(user_acc_id).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: RESET_PGP_LIMIT,
                     payload: response.data
                 })
             } else {

@@ -68,6 +68,7 @@ export default class DeviceSidebar extends Component {
             dealer_id: '',
             goToPage: '/dealer/dealer',
             confirmChatIdModal: false,
+            confirmPgpModal: false,
             pwdConfirmModal: false,
             chatIdSettingsEnable: false,
             chatIdActionType: ''
@@ -102,6 +103,18 @@ export default class DeviceSidebar extends Component {
             confirmChatIdModal: visible
         })
         // message.info('Clicked on Yes.');
+    }
+    handleConfirmBoxPgpEmail = (visible) => {
+        this.setState({
+            confirmPgpModal: visible
+        })
+        // message.info('Clicked on Yes.');
+    }
+
+    resetLimit = (user_acc_id) => {
+        if (user_acc_id && this.props.auth.authUser.type === ADMIN) {
+            confirmPgpAction(this, user_acc_id, "Are you sure you want to reset pgp emails limit on this device ?", this.props.resetPgpLimit)
+        }
     }
 
     renderDetailsData(device_details) {
@@ -143,7 +156,7 @@ export default class DeviceSidebar extends Component {
             {
                 key: 29,
                 name: (<a>{titleCase(convertToLang(this.props.translation["Last Online"], "Last Online"))}:</a>),
-                value: convertTimezoneValue(this.props.auth.authUser.timezone, device_details.lastOnline, TIMESTAMP_FORMAT),
+                value: convertTimezoneValue(this.props.auth.authUser.timezone, device_details.lastOnline),
                 // value: (device_details.lastOnline) ? moment(device_details.lastOnline).tz(convertTimezoneValue(this.props.auth.authUser.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
                 // value: checkValue(device_details.lastOnline)
                 // value: moment(device_details.lastOnline).format("MM/DD/YYYY HH:mm:ss")
@@ -191,7 +204,41 @@ export default class DeviceSidebar extends Component {
             {
                 key: 8,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_PGP_EMAIL], "PGP EMAIL"))}:</a>),
-                value: checkValue(device_details.pgp_email)
+                value: (device_details.pgp_email && device_details.pgp_email !== "N/A" ? <Fragment>
+                    <div className="gutter-box">{device_details.pgp_email}
+                        {(this.props.auth.authUser.type === ADMIN) ?
+                            <Popover
+                                // placement="rightTop"
+                                title={<div>PGP Email Settings <i className="fa fa-window-close" style={{ float: 'right', cursor: 'pointer' }} onClick={() => this.handleConfirmBoxPgpEmail(false)} aria-hidden="true"></i> </div>}
+                                trigger="click"
+                                visible={this.state.confirmPgpModal}
+                                content={
+                                    <Fragment>
+                                        <Row gutter={16}>
+                                            <Col className="gutter-row" span={24}>
+                                                <Button
+                                                    type="danger"
+                                                    size="small"
+                                                    style={{ width: '100%' }}
+                                                    // className="ml-12"
+                                                    onClick={() => {
+                                                        this.resetLimit(device_details.id)
+                                                    }}>
+                                                    {titleCase(convertToLang(this.props.translation[''], 'RESET LIMIT (10+)'))}
+                                                </Button>
+                                            </Col>
+                                        </Row>
+                                    </Fragment>
+                                }
+                            >
+                                <Button size='small' type='primary' className='edit_btn_cp' onClick={() => this.handleConfirmBoxPgpEmail(!this.state.confirmPgpModal)}>
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                </Button>
+                            </Popover>
+                            : null
+                        }
+                    </div>
+                </Fragment> : "N/A")
             },
             {
                 key: 16,
@@ -363,14 +410,14 @@ export default class DeviceSidebar extends Component {
             {
                 key: 27,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_START_DATE], "START DATE"))}:</a>),
-                value: convertTimezoneValue(this.props.auth.authUser.timezone, device_details.start_date, DATE_FORMAT),
+                value: convertTimezoneValue(this.props.auth.authUser.timezone, device_details.start_date, false, DATE_FORMAT),
                 // value: (device_details.start_date) ? moment(device_details.start_date).tz(convertTimezoneValue(this.props.auth.authUser.timezone)).format("YYYY/MM/DD") : 'N/A',
                 // value: checkValue(device_details.start_date)
             },
             {
                 key: 28,
                 name: (<a>{titleCase(convertToLang(this.props.translation[DEVICE_EXPIRY_DATE], "EXPIRY DATE"))}:</a>),
-                value: convertTimezoneValue(this.props.auth.authUser.timezone, device_details.expiry_date, DATE_FORMAT),
+                value: convertTimezoneValue(this.props.auth.authUser.timezone, device_details.expiry_date, false, DATE_FORMAT),
                 // value: (device_details.expiry_date) ? moment(device_details.expiry_date).tz(convertTimezoneValue(this.props.auth.authUser.timezone)).format("YYYY/MM/DD") : 'N/A',
                 // value: checkValue(device_details.expiry_date)
             },
@@ -538,4 +585,16 @@ export default class DeviceSidebar extends Component {
             </Card>
         )
     }
+}
+function confirmPgpAction(_this, user_acc_id, msg, action) {
+    confirm({
+        title: msg,
+        okText: "CONFIRM",
+        onOk() {
+            action(user_acc_id)
+            _this.setState({
+                confirmPgpModal: false
+            })
+        }
+    })
 }

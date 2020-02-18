@@ -23,7 +23,7 @@ import {
     purchaseCreditsFromCC
 } from "../../appRedux/actions/Account";
 
-import { convertToLang } from '../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../utils/commonUtils';
 
 
 import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Table, Select, Divider } from "antd";
@@ -217,7 +217,7 @@ class Account extends Component {
     searchField = (originalData, fieldName, value) => {
         let demoData = [];
         if (value.length) {
-            originalData.forEach((data) => {
+            checkIsArray(originalData).forEach((data) => {
                 // console.log(data);
                 if (data[fieldName] !== undefined) {
                     if ((typeof data[fieldName]) === 'string') {
@@ -577,7 +577,6 @@ class Account extends Component {
                                     </div> */}
                             </div>
                         </Col>
-
                         {(this.props.user.type === ADMIN) ?
                             <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                                 <div>
@@ -614,7 +613,6 @@ class Account extends Component {
                                 </div>
                             </Col>
                             : null}
-
                         {(this.props.user.type === ADMIN || this.props.user.type === DEALER || this.props.user.type === SDEALER) ?
                             <Col xs={24} sm={24} md={8} lg={8} xl={8} >
                                 <Link to="/account/managedata" onClick={this.showModal}>
@@ -640,7 +638,6 @@ class Account extends Component {
                                 </Link>
                             </Col>
                             : null}
-
                         {(this.props.user.type === ADMIN || this.props.user.type === DEALER) ?
                             <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                                 <div>
@@ -692,7 +689,6 @@ class Account extends Component {
                                 </div>
                             </Col>
                             : null}
-
                         {(this.props.user.type === ADMIN) ?
                             <Col xs={24} sm={24} md={8} lg={8} xl={8} >
                                 <Modal
@@ -744,7 +740,6 @@ class Account extends Component {
                                 </div>
                             </Col>
                             : null}
-
                     </Row>
                 </div>
                 <PasswordModal

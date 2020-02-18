@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Modal, message, Input, Table, Switch, Avatar, Card, Tabs } from 'antd';
-import { componentSearch, getFormattedDate, convertToLang, convertTimezoneValue } from '../../utils/commonUtils';
+import { componentSearch, getFormattedDate, convertToLang, convertTimezoneValue, checkIsArray } from '../../utils/commonUtils';
 import Moment from 'react-moment';
 import { SECURE_SETTING, DATE, PROFILE_NAME } from '../../../constants/Constants';
 import { BASE_URL, TIMESTAMP_FORMAT } from '../../../constants/Application';
@@ -105,7 +105,7 @@ export default class BulkActivity extends Component {
         // console.log("e.target.value ", e.target.name, e.target.value);
         let demoHistory = [];
         if (e.target.value.length && this.props.history && this.props.history.length) {
-            this.props.history.forEach((device) => {
+            checkIsArray(this.props.history).forEach((device) => {
                 if (device.action) {
                     if (device.action.toUpperCase().includes(e.target.value.toUpperCase())) {
                         if (!demoHistory.includes(device)) {
@@ -126,7 +126,7 @@ export default class BulkActivity extends Component {
 
     renderApps = (apps) => {
 
-        return apps.map(app => {
+        return checkIsArray(apps).map(app => {
             // console.log(app.app_id);
             return ({
                 key: app.app_id,
@@ -175,7 +175,7 @@ export default class BulkActivity extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.key)) {
-                let list = this.state.expandedRowKeys.filter(item => item !== record.key)
+                let list = checkIsArray(this.state.expandedRowKeys).filter(item => item !== record.key)
                 this.setState({ expandedRowKeys: list })
             }
         }
@@ -186,20 +186,20 @@ export default class BulkActivity extends Component {
         // let data = this.props.history;
         // let data = this.state.activities;
         // console.log("history is: ", data)
-        if (data && data.length) {
-            return data.map((row, index) => {
+        // if (data && data.length) {
+            return checkIsArray(data).map((row, index) => {
                 // console.log(row);
                 return {
                     key: index,
                     action: row.action.toUpperCase(),
-                    created_at: convertTimezoneValue(this.props.user.timezone, row.created_at, TIMESTAMP_FORMAT),
+                    created_at: convertTimezoneValue(this.props.user.timezone, row.created_at),
                     // created_at: getFormattedDate(row.created_at),
                     allData: row
                 }
             })
-        } else {
-            return [];
-        }
+        // } else {
+        //     return [];
+        // }
     }
     render() {
 

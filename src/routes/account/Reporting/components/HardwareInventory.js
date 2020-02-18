@@ -5,7 +5,7 @@ import {
   DEVICE_PRE_ACTIVATION
 } from "../../../../constants/Constants";
 import styles from '../reporting.css'
-import { convertToLang, generatePDF, generateExcel, getDateFromTimestamp } from "../../../utils/commonUtils";
+import { convertToLang, generatePDF, generateExcel, getDateFromTimestamp, checkIsArray } from "../../../utils/commonUtils";
 let fileName = 'hardware_report_' + new Date().getTime();
 var columns;
 var rows;
@@ -108,7 +108,7 @@ class PaymentHistory extends Component {
         { title: convertToLang(this.props.translation[''], "CREATED AT"), dataKey: "created_at" },
       ];
 
-      rows = this.props.hardwareReport.map((item, index) => {
+      rows = checkIsArray(this.props.hardwareReport).map((item, index) => {
         return {
           count: ++index,
           dealer_pin: item.dealer_pin,
@@ -130,10 +130,10 @@ class PaymentHistory extends Component {
   };
 
   renderList = (list) => {
-    if (list) {
+    // if (list) {
       let data = [];
       let counter = 1;
-      list.map((item, index) => {
+      checkIsArray(list).map((item, index) => {
         let hardware = JSON.parse(item.hardware_data);
         data.push({
           rowKey: counter++,
@@ -146,7 +146,7 @@ class PaymentHistory extends Component {
         })
       });
       return data;
-    }
+    // }
   };
 
   handleDealerChange = (e) => {
@@ -154,7 +154,7 @@ class PaymentHistory extends Component {
     if (e == '') {
       devices = this.props.devices
     } else {
-      devices = this.props.devices.filter(device => device.dealer_id == e);
+      devices = checkIsArray(this.props.devices).filter(device => device.dealer_id == e);
     }
     this.setState({
       deviceList: devices
@@ -190,7 +190,7 @@ class PaymentHistory extends Component {
                 })(
                   <Select style={{ width: '100%' }}>
                     <Select.Option value=''>ALL</Select.Option>
-                    {this.props.hardwares.map((hardware, index) => {
+                    {checkIsArray(this.props.hardwares).map((hardware, index) => {
                       return (<Select.Option key={hardware.hardware_name} value={hardware.hardware_name}>{hardware.hardware_name}</Select.Option>)
                     })}
                   </Select>
@@ -229,7 +229,7 @@ class PaymentHistory extends Component {
                     >
                       <Select.Option value=''>ALL</Select.Option>
                       <Select.Option value={this.props.user.dealerId}>My Report</Select.Option>
-                      {this.props.dealerList.map((dealer, index) => {
+                      {checkIsArray(this.props.dealerList).map((dealer, index) => {
                         return (<Select.Option key={dealer.dealer_id} value={dealer.dealer_id}>{dealer.dealer_name} ({dealer.link_code})</Select.Option>)
                       })}
                     </Select>
@@ -254,7 +254,7 @@ class PaymentHistory extends Component {
                   <Select style={{ width: '100%' }}>
                     <Select.Option value=''>ALL</Select.Option>
                     <Select.Option value={DEVICE_PRE_ACTIVATION}>{DEVICE_PRE_ACTIVATION}</Select.Option>
-                    {this.state.deviceList.map((device, index) => {
+                    {checkIsArray(this.state.deviceList).map((device, index) => {
                       return (<Select.Option key={device.device_id} value={device.device_id}>{device.device_id}</Select.Option>)
                     })}
                   </Select>

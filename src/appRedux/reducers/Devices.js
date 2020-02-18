@@ -35,7 +35,8 @@ import {
     ADD_DATA_PLAN,
     RELINK_DEVICE,
     REJECT_RELINK_DEVICE,
-    RESET_ADD_PRODUCT_PROPS
+    RESET_ADD_PRODUCT_PROPS,
+    RESET_IDS
 } from "../../constants/ActionTypes";
 
 // import { convertToLang } from '../../routes/utils/commonUtils';
@@ -76,7 +77,7 @@ import SettingStates from './InitialStates';
 import React from 'react';
 import { message, Modal, Row, Col, Table } from 'antd';
 import { DEVICE_PRE_ACTIVATION, DEVICE_UNLINKED } from "../../constants/Constants";
-import { convertToLang } from "../../routes/utils/commonUtils";
+import { convertToLang, checkIsArray } from "../../routes/utils/commonUtils";
 
 var { translation } = SettingStates;
 
@@ -392,7 +393,7 @@ export default (state = initialState, action) => {
 
                 var alldevices = state.newDevices;
                 var device_id = action.payload.formData.device_id;
-                filteredDevices = alldevices.filter(device => device.device_id !== device_id);
+                filteredDevices = checkIsArray(alldevices).filter(device => device.device_id !== device_id);
 
                 success({
                     title: action.response.msg,
@@ -454,7 +455,7 @@ export default (state = initialState, action) => {
                 }
                 var alldevices = state.newDevices;
 
-                filteredNewDevices = alldevices.filter(device => device.device_id !== device_id);
+                filteredNewDevices = checkIsArray(alldevices).filter(device => device.device_id !== device_id);
 
                 let randerData = [
                     {
@@ -572,7 +573,7 @@ export default (state = initialState, action) => {
 
                 var alldevices = state.newDevices;
 
-                filteredNewDevices = alldevices.filter(device => device.id !== user_acc_id);
+                filteredNewDevices = checkIsArray(alldevices).filter(device => device.id !== user_acc_id);
 
                 // console.log(filteredNewDevices, 'filtered new devices', alldevices)
                 success({
@@ -713,7 +714,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 devices: devices,
-                //    selectedOptions: [...state.selectedOptions],
+                // selectedOptions: [...state.selectedOptions],
                 // options: state.options,
                 isloading: false,
                 msg: state.msg,
@@ -761,6 +762,15 @@ export default (state = initialState, action) => {
             return state
         }
 
+        case RESET_IDS: {
+
+            return {
+                ...state,
+                sim_ids: [],
+                chat_ids: [],
+                pgp_emails: []
+            }
+        }
         case GET_SIM_IDS: {
             //
             // console.log(
@@ -795,8 +805,8 @@ export default (state = initialState, action) => {
                 //
                 var alldevices = state.devices;
                 var device_id = action.device.device_id;
-                filteredDevices = alldevices.filter(device => device.device_id !== device_id);
-                filteredNewDevices = filteredNewDevices.filter(device => device.device_id !== device_id);
+                filteredDevices = checkIsArray(alldevices).filter(device => device.device_id !== device_id);
+                filteredNewDevices = checkIsArray(filteredNewDevices).filter(device => device.device_id !== device_id);
                 success({
                     title: action.response.msg,
                 });
@@ -860,6 +870,11 @@ export default (state = initialState, action) => {
                     // console.log(chat_ids);
                 } else if (action.payload.type === 'pgp_email') {
                     pgp_emails.unshift(action.payload.product);
+                    let deviceIndex = state.devices.findIndex(item => item.id == action.payload.user_acc_id)
+                    // console.log(deviceIndex);
+                    if (deviceIndex > -1) {
+                        state.devices[deviceIndex].pgp_remaining_limit = state.devices[deviceIndex].pgp_remaining_limit - 1
+                    }
                     // console.log(pgp_emails)
                     success({
                         title: "Pgp email has been generated successfully."
@@ -882,7 +897,8 @@ export default (state = initialState, action) => {
                 pgp_emails: [...pgp_emails],
                 chat_ids: [...chat_ids],
                 chat_added: chat_added,
-                pgp_added: pgp_added
+                pgp_added: pgp_added,
+                devices: [...state.devices]
             }
         }
 

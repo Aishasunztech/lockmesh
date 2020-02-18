@@ -4,7 +4,7 @@ import moment from 'moment';
 import {
   DEVICE_PRE_ACTIVATION
 } from "../../../constants/Constants";
-import {convertToLang, formatMoney, generateExcel, generatePDF} from "../../utils/commonUtils";
+import {convertToLang, formatMoney, generateExcel, generatePDF, checkIsArray} from "../../utils/commonUtils";
 import {bindActionCreators} from "redux";
 import {
   getLatestPaymentHistory
@@ -53,9 +53,9 @@ class PaymentHistory extends Component {
 
 
   renderList = (list) => {
-    if (list) {
+    // if (list) {
 
-      return list.map((item, index) => {
+      return checkIsArray(list).map((item, index) => {
         return {
           rowKey: item.id,
           key: ++index,
@@ -65,7 +65,7 @@ class PaymentHistory extends Component {
           total_credits: item.credits,
         }
       });
-    }
+    // }
   };
 
 

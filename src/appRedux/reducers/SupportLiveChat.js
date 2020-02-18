@@ -2,10 +2,12 @@ import {
   SEND_SUPPORT_LIVE_CHAT_MESSAGE, SUPPORT_LIVE_CHAT_MESSAGE_RECEIVED,
   LOADING, GET_SUPPORT_LIVE_CHAT_CONVERSATION, GET_SUPPORT_LIVE_CHAT_MESSAGES,
   SUPPORT_LIVE_CHAT_USER_TYPING, SUPPORT_LIVE_CHAT_USER_STOPPED_TYPING,
-  SUPPORT_LIVE_CHAT_MESSAGE_DELETED, SUPPORT_LIVE_CHAT_CONVERSATION_DELETED
+  SUPPORT_LIVE_CHAT_MESSAGE_DELETED, SUPPORT_LIVE_CHAT_CONVERSATION_DELETED,
+  GET_SUPPORT_LIVE_CHAT_PREVIOUS_MESSAGES
 } from "../../constants/ActionTypes";
 
 import { message, Modal } from 'antd';
+import { checkIsArray } from "../../routes/utils/commonUtils";
 const success = Modal.success;
 const error   = Modal.error;
 const initialState = {
@@ -53,7 +55,7 @@ export default (state = initialState, action) => {
 
     case SUPPORT_LIVE_CHAT_MESSAGE_RECEIVED: {
       let supportLiveChatMessages = state.supportLiveChatMessages;
-      let supportLiveChatConversations = state.supportLiveChatConversations.filter(conversation => conversation._id !== action.payload.conversation._id);
+      let supportLiveChatConversations = checkIsArray(state.supportLiveChatConversations).filter(conversation => conversation._id !== action.payload.conversation._id);
 
       // if(!supportLiveChatConversations.some(conversation => conversation._id === action.payload.conversation._id)){
       //   supportLiveChatConversations.push(action.payload.conversation);
@@ -74,14 +76,30 @@ export default (state = initialState, action) => {
     }
 
     case GET_SUPPORT_LIVE_CHAT_MESSAGES:{
+      let msgs = action.payload.data;
+      if(Array.isArray(msgs)){
+        msgs.reverse();
+      }
       return {
         ...state,
-        supportLiveChatMessages: action.payload.data,
+        supportLiveChatMessages: msgs,
       };
     }
 
+    case GET_SUPPORT_LIVE_CHAT_PREVIOUS_MESSAGES:
+      let allmsgs = state.supportLiveChatMessages;
+      let prevMsgs = action.payload.data;
+      if(Array.isArray(prevMsgs)){
+        prevMsgs.reverse();
+      }
+
+      return {
+        ...state,
+        supportLiveChatMessages: prevMsgs.concat(allmsgs)
+      };
+
     case SUPPORT_LIVE_CHAT_USER_STOPPED_TYPING:
-      let typingConversations = state.typingConversations.filter(item => item !== action.payload);
+      let typingConversations = checkIsArray(state.typingConversations).filter(item => item !== action.payload);
       return {
         ...state,
         typingConversations
@@ -89,7 +107,7 @@ export default (state = initialState, action) => {
 
     case SUPPORT_LIVE_CHAT_USER_TYPING:
       let typings = state.typingConversations;
-      typings = typings.filter(item => item !== action.payload);
+      typings = checkIsArray(typings).filter(item => item !== action.payload);
       typings.push(action.payload);
       return {
         ...state,

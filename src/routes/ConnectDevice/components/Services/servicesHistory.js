@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Modal, message, Input, Table, Switch, Avatar } from 'antd';
-import { componentSearch, getFormattedDate, convertToLang, checkValue } from '../../../utils/commonUtils';
+import { componentSearch, getFormattedDate, convertToLang, checkValue, checkIsArray } from '../../../utils/commonUtils';
 import Moment from 'react-moment';
 import { SEARCH } from '../../../../constants/Constants';
 import moment from 'moment';
@@ -148,7 +148,7 @@ export default class ServicesHistory extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.key)) {
-                let list = this.state.expandedRowKeys.filter(item => item !== record.key)
+                let list = checkIsArray(this.state.expandedRowKeys).filter(item => item !== record.key)
                 this.setState({ expandedRowKeys: list })
             }
         }
@@ -158,13 +158,13 @@ export default class ServicesHistory extends Component {
 
         let allServices = [];
         // checkServices.map((services) => {
-        checkServices.forEach((services) => {
+            checkIsArray(checkServices).forEach((services) => {
 
             let packages = [];
             let products = [];
 
             if (services && services.packages) {
-                packages = JSON.parse(services.packages).map((item) => {
+                packages = checkIsArray(JSON.parse(services.packages)).map((item) => {
                     item.type = "PACKAGE";
                     item.status = services.status;
                     item.start_date = services.start_date;
@@ -202,8 +202,8 @@ export default class ServicesHistory extends Component {
     renderList = (data) => {
         // console.log('data is: ', data)
         // let data = this.state.services;
-        if (data && data.length) {
-            return data.map((row, index) => {
+        // if (data && data.length) {
+            return checkIsArray(data).map((row, index) => {
                 console.log(row);
                 return {
                     key: index,
@@ -216,9 +216,9 @@ export default class ServicesHistory extends Component {
                     // data: row
                 }
             })
-        } else {
-            return []
-        }
+        // } else {
+        //     return []
+        // }
     }
 
     render() {

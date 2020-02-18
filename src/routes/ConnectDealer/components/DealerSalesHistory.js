@@ -6,7 +6,7 @@ import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Div
 // import EditDealer from '../../dealers/components/editDealer';
 
 // Helpers
-import { convertToLang, formatMoney, getDateFromTimestamp } from '../../utils/commonUtils'
+import { convertToLang, formatMoney, getDateFromTimestamp, checkIsArray } from '../../utils/commonUtils'
 import { DEVICE_PRE_ACTIVATION } from "../../../constants/Constants";
 
 export default class DealerSalesHistory extends Component {
@@ -134,7 +134,7 @@ export default class DealerSalesHistory extends Component {
 
         let data = [];
         if (list) {
-            list.map((item, index) => {
+            checkIsArray(list).map((item, index) => {
                 data.push({
                     key: index,
                     count: ++index,

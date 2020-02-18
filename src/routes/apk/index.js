@@ -24,9 +24,7 @@ import {
     addApk, 
     resetUploadForm, 
     getDropdown, 
-    postDropdown, 
-    postPagination, 
-    getPagination, 
+    postDropdown,
     apkPermission, 
     getPolicies 
 } from "../../appRedux/actions";
@@ -35,7 +33,8 @@ import {
 import {
     convertToLang,
     componentSearch, 
-    titleCase
+    titleCase,
+    checkIsArray
 } from '../utils/commonUtils';
 
 import { 
@@ -103,7 +102,7 @@ class Apk extends Component {
     handleTableChange = (pagination, query, sorter) => {
         let { columns } = this.state;
 
-        columns.forEach(column => {
+        checkIsArray(columns).forEach(column => {
             // if (column.children) {
             if (Object.keys(sorter).length > 0) {
                 if (column.dataIndex == sorter.field) {
@@ -186,7 +185,7 @@ class Apk extends Component {
 
         if (values.length) {
             console.log('values are: ', values)
-            this.state.columns.map((column, index) => {
+            checkIsArray(this.state.columns).map((column, index) => {
 
                 if (dummyData[index].className !== 'row') {
                     dummyData[index].className = 'hide';
@@ -194,7 +193,7 @@ class Apk extends Component {
 
                 // console.log('dummyData is: ', dummyData)
                 // console.log('values are: ', values)
-                values.map((value) => {
+                checkIsArray(values).map((value) => {
                     if (column.dataIndex === value.key) {
                         if ((value.key === APK_PERMISSION && column.dataIndex === 'permission') || (value.key === APK_SHOW_ON_DEVICE && column.dataIndex === 'apk_status')) {
 
@@ -219,7 +218,7 @@ class Apk extends Component {
             this.setState({ columns: dummyData });
 
         } else {
-            const newState = this.state.columns.map((column) => {
+            const newState = checkIsArray(this.state.columns).map((column) => {
                 if (column.className === 'row') {
                     return column;
                 } else {
@@ -237,7 +236,6 @@ class Apk extends Component {
 
     handlePagination = (value) => {
         this.refs.listApk.handlePagination(value);
-        // this.props.postPagination(value, 'apk');
     }
 
     handleComponentSearch = (value) => {
@@ -303,7 +301,7 @@ class Apk extends Component {
 
     filterList = (type, dealers) => {
         let dummyDealers = [];
-        dealers.filter(function (apk) {
+        checkIsArray(dealers).filter(function (apk) {
             let dealerStatus = apk.apk_status;
             if (dealerStatus === type) {
                 dummyDealers.push(apk);
@@ -338,7 +336,6 @@ class Apk extends Component {
         // this.props.getDevicesList();
         //  console.log('apk did mount', this.props.getDropdown('apk'));
         this.props.getDropdown('apk');
-        // this.props.getPagination('apk')
     }
     componentDidMount() {
         // alert("hello213");
@@ -560,8 +557,6 @@ function mapDispatchToProps(dispatch) {
         editApk: editApk,
         getDropdown: getDropdown,
         postDropdown: postDropdown,
-        postPagination: postPagination,
-        getPagination: getPagination,
         addApk: addApk,
         resetUploadForm: resetUploadForm,
         getPolicies: getPolicies,

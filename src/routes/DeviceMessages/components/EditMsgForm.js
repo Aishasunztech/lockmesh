@@ -99,7 +99,7 @@ class EditMsgForm extends Component {
         // const { } = this.props.form;
         // console.log("handle submit ", this.props.selectedDevices, this.state.selectedDealers, this.state.selectedUsers);
         this.props.form.validateFieldsAndScroll((err, values) => {
-            console.log("handle submit 02 ", values, this.props.editRecord)
+            // console.log("handle submit 02 ", values, this.props.editRecord)
 
             if (!err) {
                 let dealerTZ = this.state.dealerTZ;
@@ -202,7 +202,7 @@ class EditMsgForm extends Component {
                     msg: values.msg_txt,
                     timer_status: timerVal,
                     repeat_duration: repeatVal,
-                    date_time: convertTimezoneValue(this.props.user.timezone, dateTimeVal, TIMESTAMP_FORMAT, true), // convert time from client timezone to server timezone
+                    date_time: convertTimezoneValue(this.props.user.timezone, dateTimeVal, true), // convert time from client timezone to server timezone
                     week_day: weekDay,
                     month_date: monthDate,
                     month_name: monthName,
@@ -210,7 +210,7 @@ class EditMsgForm extends Component {
                     interval_description: duration
                 }
 
-                console.log("copyEditRecord data ", data);
+                // console.log("copyEditRecord data ", data);
                 this.refs.update_bulk_msg.handleBulkUpdateMsg(data, this.props.editRecord.devices, this.state.dealerTZ);
 
             }
@@ -287,12 +287,12 @@ class EditMsgForm extends Component {
         }
     }
 
-    // validateRepeater = async (rule, value, callback) => {
-    //     // console.log("values: ", value)
-    //     if (value === 'NONE') {
-    //         callback("Timer value should not be NONE")
-    //     }
-    // }
+    validateRepeater = async (rule, value, callback) => {
+        // console.log("values: ", value)
+        if (value === 'NONE') {
+            callback("Please select repeat duration")
+        }
+    }
 
     range = (start, end) => {
         const result = [];
@@ -406,11 +406,11 @@ class EditMsgForm extends Component {
                                             initialValue: this.state.repeat_duration ? this.state.repeat_duration : '',
                                             rules: [
                                                 {
-                                                    required: true, message: convertToLang(this.props.translation[""], "Repeat Message field is required"),
+                                                    required: true, message: convertToLang(this.props.translation[""], "Repeat duration is required"),
                                                 },
-                                                // {
-                                                //     validator: this.validateRepeater,
-                                                // },
+                                                {
+                                                    validator: this.validateRepeater,
+                                                },
                                             ],
                                         })(
                                             <Select

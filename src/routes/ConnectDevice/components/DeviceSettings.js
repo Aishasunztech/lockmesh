@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Divider, Badge, Switch, Col, Row } from "antd";
 import { APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS, PERMISSION_NAME, PUSH_APPS_TEXT, ADMIN, ANDROID_SETTING_PERMISSION, Main_SETTINGS, SECURE_SETTING, SYSTEM_CONTROLS } from '../../../constants/Constants';
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { PUSH_APPS } from '../../../constants/ActionTypes';
 import { APK_APP_NAME } from '../../../constants/ApkConstants';
 import { Guest, ENCRYPTED, ENABLE, EXTENSION_NAME, ADMIN_PASSWORD_IS_CHANGED, ENCRYPTED_PASSWORD_IS_CHANGED, GUEST_PASSWORD_IS_CHANGED, DURESS_PASSWORD_IS_CHANGED, ENCRYPT } from '../../../constants/TabConstants';
@@ -25,10 +25,10 @@ export default class DeviceSettings extends Component {
 
     controlValues = () => {
         console.log(this.state.controls, 'apply setting controls')
-        if (this.state.controls.length > 0) {
+        // if (this.state.controls.length > 0) {
 
             let data = [];
-            this.state.controls.map(control => {
+            checkIsArray(this.state.controls).map(control => {
                 // if(control.isChanged){
                 if (this.props.showChangedControls) {
                     if (control.isChanged) {
@@ -61,7 +61,7 @@ export default class DeviceSettings extends Component {
             })
 
             return data;
-        }
+        // }
     }
 
     filterAppList = () => {
@@ -159,8 +159,8 @@ export default class DeviceSettings extends Component {
         //     data = JSON.parse(JSON.stringify(datalist))
         // }
 
-        if (datalist.length > 0) {
-            return data.map((item, index) => {
+        // if (datalist.length > 0) {
+            return checkIsArray(data).map((item, index) => {
                 return {
                     rowKey: item.app_id,
                     key: index,
@@ -188,7 +188,7 @@ export default class DeviceSettings extends Component {
                 }
             })
 
-        }
+        // }
     }
     renderPushData = (datalist) => {
         // console.log(JSON.parse(datalist));
@@ -199,8 +199,8 @@ export default class DeviceSettings extends Component {
         //     data = JSON.parse(JSON.stringify(datalist))
         // }
 
-        if (datalist.length > 0) {
-            return data.map((item, index) => {
+        // if (datalist.length > 0) {
+            return checkIsArray(data).map((item, index) => {
                 return {
                     rowKey: item.apk_id,
                     key: index,
@@ -228,7 +228,7 @@ export default class DeviceSettings extends Component {
                 }
             })
 
-        }
+        // }
     }
 
 
@@ -238,7 +238,7 @@ export default class DeviceSettings extends Component {
         let appList = [];
         if (data.length) {
 
-            data.map((item, index) => {
+            checkIsArray(data).map((item, index) => {
                 console.log(item);
                 if (!item.extension && item.visible) {
                     appList.push(
@@ -282,7 +282,7 @@ export default class DeviceSettings extends Component {
         let changes = 0;
         if (this.state.controls && Object.entries(this.state.controls).length) {
             if (this.state.controls && this.state.controls.length) {
-                this.state.controls.map(item => {
+                checkIsArray(this.state.controls).map(item => {
                     if (item.isChanged) {
                         changes++
                     }
@@ -292,12 +292,12 @@ export default class DeviceSettings extends Component {
 
         let setting = [];
         if (this.props.app_list && this.props.app_list.length) {
-            setting = this.props.app_list.filter(item => item.uniqueName === Main_SETTINGS)
+            setting = checkIsArray(this.props.app_list).filter(item => item.uniqueName === Main_SETTINGS)
         }
 
         let exten = [];
         if (this.props.app_list && this.props.app_list.length) {
-            exten = this.props.app_list.filter(item => item.uniqueName === SECURE_SETTING)
+            exten = checkIsArray(this.props.app_list).filter(item => item.uniqueName === SECURE_SETTING)
         }
 
         // console.log(this.props.extensions, 'check extension  ', this.props.extensions[extenObjIndex].isChanged);

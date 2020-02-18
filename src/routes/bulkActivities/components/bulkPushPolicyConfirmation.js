@@ -1,7 +1,7 @@
 import { Modal, Button } from 'antd';
 
 import React, { Component } from 'react'
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { ARE_YOU_SURE_YOU_WANT_ACTIVATE_THE_DEVICE, DO_YOU_WANT_TO_APPLY } from '../../../constants/DeviceConstants';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 
@@ -18,15 +18,15 @@ export default class BulkPushPolicy extends Component {
         let dealer_ids = [];
         let user_ids = [];
 
-        devices.forEach((item) => {
+        checkIsArray(devices).forEach((item) => {
             if (item.usr_device_id) {
                 device_ids.push({ device_id: item.device_id, usrAccId: item.id, usr_device_id: item.usr_device_id });
             }
         });
-        dealers.forEach((item) => {
+        checkIsArray(dealers).forEach((item) => {
             dealer_ids.push(item.key);
         });
-        users.forEach((item) => {
+        checkIsArray(users).forEach((item) => {
             user_ids.push(item.key);
         });
 

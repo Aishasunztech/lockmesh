@@ -14,7 +14,7 @@ import BulkPushAppsConfirmation from './bulkPushAppsConfirmation';
 import BulkPullAppsConfirmation from './bulkPullAppsConfirmation';
 import BulkWipeConfirmation from './bulkWipeConfirmation';
 import BulkPolicyConfirmation from './bulkPushPolicyConfirmation';
-import { checkValue, titleCase, convertToLang, getColor, convertTimezoneValue } from '../../utils/commonUtils'
+import { checkValue, titleCase, convertToLang, getColor, convertTimezoneValue, checkIsArray } from '../../utils/commonUtils'
 
 import { bulkDevicesColumns, devicesColumns, userDevicesListColumns } from '../../utils/columnsUtils';
 
@@ -50,8 +50,8 @@ class FilterDevices extends Component {
     let selectedDevicesColumns = userDevicesListColumns(props.translation, this.handleSearch);
 
     this.state = {
-      columns: columns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
-      selectedDevicesColumns: selectedDevicesColumns.filter(e => e.dataIndex != "activation_code"),
+      columns: checkIsArray(columns).filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
+      selectedDevicesColumns: checkIsArray(selectedDevicesColumns).filter(e => e.dataIndex != "activation_code"),
       sorterKey: '',
       sortOrder: 'ascend',
       showDealersModal: false,
@@ -78,7 +78,7 @@ class FilterDevices extends Component {
     let columns = this.state.columns;
     // console.log('columns are: ', columns);
 
-    columns.forEach(column => {
+    checkIsArray(columns).forEach(column => {
       if (column.children) {
         if (Object.keys(sorter).length > 0) {
           if (column.dataIndex == sorter.field) {
@@ -106,7 +106,7 @@ class FilterDevices extends Component {
     let columns = this.state.columns;
     // console.log('columns are: ', columns);
 
-    columns.forEach(column => {
+    checkIsArray(columns).forEach(column => {
       // if (column.children) {
       if (Object.keys(sorter).length > 0) {
         if (column.dataIndex == sorter.field) {
@@ -146,8 +146,8 @@ class FilterDevices extends Component {
       let selectedDevicesColumns = userDevicesListColumns(nextProps.translation, this.handleSearch);
 
       this.setState({
-        columns: columns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
-        selectedDevicesColumns: selectedDevicesColumns.filter(e => e.dataIndex != "activation_code"),
+        columns: checkIsArray(columns).filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
+        selectedDevicesColumns: checkIsArray(selectedDevicesColumns).filter(e => e.dataIndex != "activation_code"),
       })
     }
 
@@ -289,7 +289,7 @@ class FilterDevices extends Component {
     let unSelectedDevices = this.getUnSelectedDevices(this.props.devices);
 
     if (this.state.selectedRowKeys.length) {
-      unSelectedDevices.map((device) => {
+      checkIsArray(unSelectedDevices).map((device) => {
         if (!this.state.selectedRowKeys.includes(device.id)) {
           selectedDevices.push(device);
         }
@@ -337,7 +337,7 @@ class FilterDevices extends Component {
     // console.log("dealer ids", this.state.device_ids);
     let selectedDevices = this.state.selectedDevices;
     if (this.state.selectedRowKeys.length) {
-      this.props.devices.map((device) => {
+      checkIsArray(this.props.devices).map((device) => {
         if (this.state.selectedRowKeys.includes(device.id)) {
           selectedDevices.push(device);
         }
@@ -358,7 +358,7 @@ class FilterDevices extends Component {
   onSelectChange = (selectedRowKeys, selectedRows) => {
     // console.log(selectedRowKeys, 'selected', selectedRows);
     let device_ids = []
-    selectedRows.forEach(row => {
+    checkIsArray(selectedRows).forEach(row => {
       // console.log("selected row", row)
       device_ids.push(row.id);
     });
@@ -373,7 +373,7 @@ class FilterDevices extends Component {
     let demoData = [];
 
     if (value.length) {
-      originalData.forEach((data) => {
+      checkIsArray(originalData).forEach((data) => {
         if (data[fieldName] !== undefined) {
           if ((typeof data[fieldName]) === 'string') {
 
@@ -403,7 +403,7 @@ class FilterDevices extends Component {
     let demoData = [];
 
     if (value.length) {
-      originalData.forEach((data) => {
+      checkIsArray(originalData).forEach((data) => {
         if (data['dealer_id'].toString().toUpperCase().includes(value.toUpperCase())) {
           demoData.push(data);
         }
@@ -480,9 +480,9 @@ class FilterDevices extends Component {
 
     if (e.target.value.length) {
       // console.log(this.state.devices);
-      copyDevices.forEach((device) => {
+      checkIsArray(copyDevices).forEach((device) => {
         if (e.target.name === 'all') {
-          Object.keys(device).map(key => {
+          checkIsArray(Object.keys(device)).map(key => {
 
             if (device[key] !== undefined && key != 'status' && key != 'account_status') {
               if ((typeof device[key]) === 'string') {
@@ -591,7 +591,7 @@ class FilterDevices extends Component {
 
     let permittedDevices = this.state.selectedDevices;
     let selectedRows = this.state.selectedRowKeys;
-    var selectedDevices = permittedDevices.filter(e => selectedRows.includes(e.id));
+    var selectedDevices = checkIsArray(permittedDevices).filter(e => selectedRows.includes(e.id));
 
     this.props.setSelectedBulkDevices(selectedDevices);
     this.setState({
@@ -626,7 +626,7 @@ class FilterDevices extends Component {
     let data = [];
     // console.log(list);
     let is_included
-    list.map((dealer) => {
+    checkIsArray(list).map((dealer) => {
       // console.log('object recrd', dealer);
       if (this.state.permissions) {
         is_included = this.state.permissions.includes(dealer.dealer_id);
@@ -682,7 +682,7 @@ class FilterDevices extends Component {
 
   renderDevicesList(list, timezone) {
     // console.log('renderList ', list)
-    return list.map((device, index) => {
+    return checkIsArray(list).map((device, index) => {
 
       var status = device.finalStatus;
       // console.log("status ", status)
@@ -744,8 +744,8 @@ class FilterDevices extends Component {
         s_dealer: checkValue(device.s_dealer),
         s_dealer_name: checkValue(device.s_dealer_name),
         remainTermDays: device.remainTermDays,
-        start_date: convertTimezoneValue(timezone, device.start_date, TIMESTAMP_FORMAT),
-        expiry_date: convertTimezoneValue(timezone, device.expiry_date, TIMESTAMP_FORMAT),
+        start_date: convertTimezoneValue(timezone, device.start_date),
+        expiry_date: convertTimezoneValue(timezone, device.expiry_date),
         // start_date: checkValue(device.start_date),
         // expiry_date: checkValue(device.expiry_date),
       }
@@ -756,8 +756,8 @@ class FilterDevices extends Component {
 
     // console.log('this.state.selectedDevices filter ', this.state.selectedDevices)
     if (this.state.selectedDevices.length > 0) {
-      let selectedIDs = this.state.selectedDevices.map((item) => item.id);
-      let fDevices = devices.filter(e => !selectedIDs.includes(e.id));
+      let selectedIDs = checkIsArray(this.state.selectedDevices).map((item) => item.id);
+      let fDevices = checkIsArray(devices).filter(e => !selectedIDs.includes(e.id));
       return fDevices;
     } else {
       return devices
@@ -829,16 +829,16 @@ class FilterDevices extends Component {
     let updateSelectedDevices = devices;
 
     if (action === "SUSPEND DEVICES") {
-      updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED)
+      updateSelectedDevices = checkIsArray(devices).filter((device) => device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED)
     } else if (action === "ACTIVATE DEVICES") {
-      updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED)
+      updateSelectedDevices = checkIsArray(devices).filter((device) => device.finalStatus == DEVICE_SUSPENDED)
     }
     else if (action === "PUSH APPS" || action === "PULL APPS" || action === "UNLINK DEVICES" || action === "PUSH POLICY") {
-      updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED || device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED || device.finalStatus == DEVICE_EXPIRED)
+      updateSelectedDevices = checkIsArray(devices).filter((device) => device.finalStatus == DEVICE_SUSPENDED || device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED || device.finalStatus == DEVICE_EXPIRED)
     }
     else if (action === "WIPE DEVICES") {
       // updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED || device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED || device.finalStatus == DEVICE_EXPIRED || device.finalStatus == DEVICE_UNLINKED || device.finalStatus == DEVICE_TRANSFERED)
-      updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED || device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED || device.finalStatus == DEVICE_EXPIRED || device.finalStatus == DEVICE_TRANSFERED)
+      updateSelectedDevices = checkIsArray(devices).filter((device) => device.finalStatus == DEVICE_SUSPENDED || device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED || device.finalStatus == DEVICE_EXPIRED || device.finalStatus == DEVICE_TRANSFERED)
     }
 
     this.state.selectedDevices = updateSelectedDevices
