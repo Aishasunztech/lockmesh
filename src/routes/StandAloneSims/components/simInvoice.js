@@ -93,7 +93,7 @@ class Invoice extends Component {
                     <Row>
                         <Col span={6}>Balance Due:</Col>
                         <Col span={6}>{balanceDue} Credits</Col>
-                        <Col span={6}>SIM ID:</Col>
+                        <Col span={6}>SIM ICCID:</Col>
                         <Col span={6}>{this.props.iccid}</Col>
                     </Row>
                 </div>
