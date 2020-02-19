@@ -392,7 +392,7 @@ class AddSimForm extends Component {
                             >
                                 <Select.Option value=''>ADD DATA PLAN</Select.Option>
                                 {this.state.dataPlanPackages.map((pkg) => {
-                                    return (<Select.Option key={pkg.id} value={pkg.id}>{`${pkg.pkg_name} (${pkg.pkg_price} Credits) `}</Select.Option>)
+                                    return (<Select.Option key={pkg.id} value={pkg.id}>{`${pkg.pkg_name} (${pkg.data_limit} MB for ${pkg.pkg_price} Credits) `}</Select.Option>)
                                 })}
                             </Select>
                         )}
