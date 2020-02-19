@@ -15,7 +15,8 @@ import {
     DEALER_ACCOUNT_STATUS,
     SET_DEMOS_LIMIT,
     CD_PERMISSION_DOMAINS,
-    DEALER_DOMAINS_LOADING
+    DEALER_DOMAINS_LOADING,
+    ERROR_PERMISSION_DOMAINS
 } from "../../constants/ActionTypes";
 import { checkIsArray } from '../../routes/utils/commonUtils';
 
@@ -261,6 +262,16 @@ export default (state = initialState, action) => {
             }
         }
 
+        case ERROR_PERMISSION_DOMAINS: {
+            error({
+                title: "Data not validated"
+            });
+            return {
+                ...state,
+                isloading: false,
+                dealerDomainLoading: false
+            }
+        }
         case CD_PERMISSION_DOMAINS: {
             // console.log("action.selectedDomains ", action.selectedDomains, state.domains);
             let dealerDomains = state.domains;

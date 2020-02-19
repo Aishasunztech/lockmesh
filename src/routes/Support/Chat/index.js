@@ -265,11 +265,9 @@ class Chat extends Component {
 
     this.setState({
       loader: true,
-      //   selectedSectionId: type === 'user'? data.dealer_id : data.user.dealer_id,
       drawerState: false,
-      //   selectedUser: type === 'user'? data : data.user,
-      //   selectedConversation: selectedConversation,
-      //   conversation: []
+      isScrolledUp: false,
+      lastId: ''
     });
     setTimeout(() => {
       this.setState({ loader: false });
@@ -521,7 +519,6 @@ class Chat extends Component {
 
   render() {
     const { loader, drawerState } = this.state;
-    console.log(this.state);
     return (
       <div className="gx-main-content support-chat-content">
         <div className="gx-app-module gx-chat-module m-0">

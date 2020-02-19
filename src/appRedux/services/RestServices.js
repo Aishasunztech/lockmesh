@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { BASE_URL, SOCKET_BASE_URL, SUPERADMIN_URL, SUPPORT_URL, SUPPORT_SOCKET_URL, LOG_SERVER_URL, SYSTEM_ID, SYSTEM_NAME, LOGSERVER_AUTH_PASS, LOGSERVER_AUTH_USER } from '../../constants/Application';
 import io from "socket.io-client";
 import SupportSystemSocketIO from "socket.io-client";
+import { BASE_URL, SOCKET_BASE_URL, SUPERADMIN_URL, SUPPORT_URL, SUPPORT_SOCKET_URL, LOG_SERVER_URL, SOCKET_BASE_PATH, LOGSERVER_AUTH_PASS, LOGSERVER_AUTH_USER, SYSTEM_NAME, SYSTEM_ID } from '../../constants/Application';
 import { checkIsArray } from '../../routes/utils/commonUtils';
 
 axios.interceptors.request.use(function (config) {
@@ -116,7 +116,8 @@ const RestService = {
     connectSocket: () => {
         let token = localStorage.getItem('token');
         let makeToken = "token=" + token + "&isWeb=true";
-        let socket = io.connect(BASE_URL, {
+        let socket = io.connect(SOCKET_BASE_URL, {
+            path: SOCKET_BASE_PATH,
             transports: ['websocket'],
             query: makeToken,
             // reconnectionDelay:1000,
@@ -125,9 +126,9 @@ const RestService = {
             secure: true
         });
         // console.log('check 1', socket.connected);
-        // socket.on('connect', function() {
-        //     console.log('check 2', socket.connected);
-        // });
+        socket.on('connect', function () {
+            console.log('socket connection: ', socket.connected);
+        });
 
         return socket;
     },
@@ -142,7 +143,7 @@ const RestService = {
         let type = localStorage.getItem('type');
         let makeToken = "token=" + token + "&isWeb=true&user_id=" + id + "&type=" + type;
         let socket = SupportSystemSocketIO.connect(SUPPORT_SOCKET_URL, {
-            path: '/support/v1/socket',
+            path: '/supports/v1/socket',
             transports: ['websocket'],
             query: makeToken,
             secure: true,
@@ -627,8 +628,8 @@ const RestService = {
         return axios.post(BASE_URL + 'users/checkApkName', { name, apk_id }, RestService.getHeader());
     },
     // For Service Remaining data
-    getServiceRefund: (service_id) => {
-        return axios.post(BASE_URL + 'users/check-service-refund-credits', { service_id }, RestService.getHeader());
+    getServiceRefund: (service_id, user_acc_id) => {
+        return axios.post(BASE_URL + 'users/check-service-refund-credits', { service_id, user_acc_id }, RestService.getHeader());
     },
     // For check apk name
     checkPolicyName: (name, policy_id = '') => {
