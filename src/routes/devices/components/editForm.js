@@ -8,7 +8,7 @@ import axios from 'axios';
 import moment from 'moment-timezone';
 
 
-import { Button, Form, Input, Select, InputNumber, Spin, Modal, Table, Switch, DatePicker, Row, Col } from 'antd';
+import { Button, Form, Input, Select, InputNumber, Spin, Modal, Table, Switch, DatePicker, Row, Col, Tooltip } from 'antd';
 
 // Components
 import AddUser from '../../users/components/AddUser';
@@ -1350,7 +1350,18 @@ class EditDevice extends Component {
                                             disabled={this.state.disablePgp}
                                         >
                                             {this.props.pgp_emails.map((pgp_email) => {
-                                                return (<Select.Option key={pgp_email.id} value={pgp_email.pgp_email.trim()}>{pgp_email.pgp_email.trim()}</Select.Option>)
+                                                if (this.props.device.pgp_email == pgp_email.pgp_email) {
+                                                    return (
+                                                        <Select.Option key={pgp_email.id} value={pgp_email.pgp_email.trim()}>
+                                                            {pgp_email.pgp_email.trim()} (Current)
+                                                        </Select.Option>
+                                                    )
+                                                }
+                                                return (
+                                                    <Select.Option key={pgp_email.id} value={pgp_email.pgp_email.trim()}>
+                                                        {pgp_email.pgp_email.trim()}
+                                                    </Select.Option>
+                                                )
                                             })}
                                         </Select>
                                         // <Input />
@@ -1394,6 +1405,10 @@ class EditDevice extends Component {
                                             disabled={this.state.disableChat}
                                         >
                                             {checkIsArray(this.props.chat_ids).map((chat_id, index) => {
+
+                                                if (this.props.device.chat_id == chat_id.chat_id) {
+                                                    return (<Select.Option key={index} value={chat_id.chat_id}>{chat_id.chat_id} (Current)</Select.Option>)
+                                                }
                                                 return (<Select.Option key={index} value={chat_id.chat_id}>{chat_id.chat_id}</Select.Option>)
                                             })}
                                         </Select>
