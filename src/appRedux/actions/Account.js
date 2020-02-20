@@ -21,7 +21,6 @@ import {
     RESET_PRICE,
     GET_PACKAGES,
     PURCHASE_CREDITS,
-    GET_PARENT_PACKAGES,
     PACKAGE_PERMISSION_SAVED,
     DELETE_PACKAGE,
     EDIT_PACKAGE,
@@ -461,7 +460,7 @@ export const purchaseCreditsFromCC = (cardInfo, creditInfo) => {
 }
 
 export function packagePermission(id, dealers, action, statusAll = false, user) {
-    console.log('at domainPermission action ', id, dealers, action, statusAll)
+    // console.log('at domainPermission action ', id, dealers, action, statusAll)
     return (dispatch) => {
         RestService.dealerPermissions(id, dealers, action, statusAll, 'package').then((response) => {
             if (RestService.checkAuth(response.data)) {

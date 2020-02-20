@@ -125,20 +125,22 @@ class AddApk extends Component {
             callback('Please insert a valid name.');
         } else {
 
-            let response = await RestService.checkApkName(value).then((response) => {
-                if (RestService.checkAuth(response.data)) {
-                    if (response.data.status) {
-                        return true
+            if (value && value.length) {
+                let response = await RestService.checkApkName(value).then((response) => {
+                    if (RestService.checkAuth(response.data)) {
+                        if (response.data.status) {
+                            return true
+                        }
+                        else {
+                            return false
+                        }
                     }
-                    else {
-                        return false
-                    }
+                });
+                if (response) {
+                    callback();
+                } else {
+                    callback('Please choose a different name');
                 }
-            });
-            if (response) {
-                callback();
-            } else {
-                callback('Please choose a different name');
             }
         }
     };
@@ -151,7 +153,7 @@ class AddApk extends Component {
             callback();
         }
     };
-    
+
     validateAkpFile = async (rule, value, callback) => {
         const form = this.props.form;
         if (this.state.fileList2.length <= 0) {
@@ -189,7 +191,7 @@ class AddApk extends Component {
         };
         let token = localStorage.getItem('token');
         let _this = this;
-        
+
         // const props changed into logoProps by Usman
         const logoProps = {
             name: 'logo',
@@ -250,7 +252,7 @@ class AddApk extends Component {
                 _this.setState({ fileList });
             },
         };
-        
+
         // const props2 changed into apkProps by Usman
         const apkProps = {
             name: 'apk',
@@ -319,7 +321,7 @@ class AddApk extends Component {
                         <Form.Item {...formItemLayout} label={convertToLang(this.props.translation[APK_NAME], "Apk name")} className="upload_file">
                             {getFieldDecorator('name', {
                                 rules: [{
-                                    required: true, message: convertToLang(this.props.translation[User_Name_require], "Name"),
+                                    required: true, message: convertToLang(this.props.translation[User_Name_require], "Name is required"),
                                 },
                                 {
                                     validator: this.checkUniqueName,

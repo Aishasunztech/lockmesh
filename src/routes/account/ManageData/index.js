@@ -667,10 +667,6 @@ class ManageData extends Component {
                                 ref='addProductModal'
                                 translation={this.props.translation}
                                 wrappedComponentRef={(form) => this.addProductModal = form}
-
-
-
-
                             />
                         </div>
                 }
