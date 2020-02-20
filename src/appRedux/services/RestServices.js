@@ -78,6 +78,9 @@ axios.interceptors.response.use(function (response) {
             newObjectToSend.responseBody = null;
             newObjectToSend.responseHeaders = null;
         } else {
+            if(error.response.status == 422){
+                console.log('ValidationError', error.response.data);
+            }
             newObjectToSend.response = error.response.data;
             newObjectToSend.code = error.response.status;
             newObjectToSend.message = error.response.statusText;
@@ -1026,7 +1029,7 @@ const RestService = {
         return axios.put(BASE_URL + 'users/delete_request/' + request.id, request, RestService.getHeader());
     },
     rejectServiceRequest: (request) => {
-        return axios.put(BASE_URL + 'users/delete_service_request/' + request.id, request, RestService.getHeader());
+        return axios.put(BASE_URL + 'users/delete_service_request/' + request.id, null, RestService.getHeader());
     },
 
     acceptRequest: (request) => {

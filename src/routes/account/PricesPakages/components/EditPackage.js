@@ -98,7 +98,7 @@ class PackagePricingForm extends Component {
                         [fieldName]: e
                     })
                 }
-                // 
+                //
             } else {
                 if (fieldName === "pkgTerms" && value === 'trial') {
                     this.setState({ pkgPrice: 0, [fieldName]: value })
@@ -115,7 +115,7 @@ class PackagePricingForm extends Component {
 
     PackageNameChange = async (rule, value, callback) => {
         let response = true
-        // 
+        //
         response = await RestService.checkPackageName(value).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
@@ -126,7 +126,7 @@ class PackagePricingForm extends Component {
                 }
             }
         });
-        // 
+        //
         if (response) {
             this.props.restrictPackageSubmit(true, 'pkgName')
             callback()
@@ -259,7 +259,7 @@ class PackagePricingForm extends Component {
                                     initialValue: this.props.packageData.retail_price,
                                     rules: [
                                         {
-                                            required: true,
+                                            // required: true,
                                             message: 'Please Input Price',
                                         },
                                     ],
@@ -334,7 +334,7 @@ class PackagePricingForm extends Component {
                 </Row>
 
 
-                {/* <div style={{float: 'right', marginTop: 20}} > 
+                {/* <div style={{float: 'right', marginTop: 20}} >
                     <Button onClick={()=> this.props.showPricingModal(false)}>Cancel</Button>
                     <Button type="primary" htmlType="submit" >Submit</Button>
                 </div>  */}
@@ -429,7 +429,7 @@ export default class EditPackage extends Component {
         if (is_pkg_feature) {
             this.state.pkg_features[field] = value;
             // let arr = Object.values(this.state.pkg_features);
-            // 
+            //
             // arr.filter(item => item !== false)
 
 
@@ -438,7 +438,7 @@ export default class EditPackage extends Component {
 
 
                 if (!arr.includes(true)) {
-                    // 
+                    //
                     this.restrictPackageSubmit(false, 'pkg_features');
 
                 } else {
@@ -486,9 +486,9 @@ export default class EditPackage extends Component {
     }
 
     render() {
-        // 
-        // 
-        // 
+        //
+        //
+        //
         return (
             <Modal
                 maskClosable={false}
@@ -610,7 +610,7 @@ function showConfirm(_this, data) {
             })
         },
         onCancel() {
-            // 
+            //
         },
     });
 }
