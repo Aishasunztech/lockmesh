@@ -1284,7 +1284,7 @@ class AddDevice extends Component {
                                 </Form.Item> 
                             */}
 
-                            {(this.state.type == 0 && lastObject) ?
+                            {/* {(this.state.type == 0 && lastObject) ? */}
                                 <Fragment>
 
                                     {/**
@@ -1691,9 +1691,9 @@ class AddDevice extends Component {
                                         </Col>
                                     }
                                 </Fragment>
-                                :
+                                {/* :
                                 null
-                            }
+                            } */}
 
 
 
