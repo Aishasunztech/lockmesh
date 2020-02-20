@@ -17,6 +17,7 @@ import { domainColumns } from "../../utils/columnsUtils";
 import {
     Button_Remove
 } from '../../../constants/ButtonConstants';
+import { ADMIN } from "../../../constants/Constants";
 // import { DO_YOU_WANT_TO, OF_THIS } from '../../../constants/DeviceConstants';
 // import {
 //     DEALER_TEXT
@@ -132,11 +133,13 @@ export default class DealerDomains extends Component {
                         type="danger"
                         loading={this.state.domainLoading[`removebtn_` + item.id] ? true : false}
                         onClick={() => this.deleteDomain(item.id)}
+                        disabled={item.dealer_type === ADMIN && this.props.authUser.type !== ADMIN ? true : false}
                     >
                         {convertToLang(this.props.translation[Button_Remove], "Remove")}
                     </Button>
                 </Fragment>),
-                name: item.name
+                name: item.name,
+                permission_by: (item.permission_by).toUpperCase()
             }
         })
     };

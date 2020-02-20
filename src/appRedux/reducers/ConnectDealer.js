@@ -263,9 +263,9 @@ export default (state = initialState, action) => {
         }
 
         case ERROR_PERMISSION_DOMAINS: {
-            error({
-                title: "Data not validated"
-            });
+            // error({
+            //     title: "Data not validated"
+            // });
             return {
                 ...state,
                 isloading: false,
@@ -273,7 +273,7 @@ export default (state = initialState, action) => {
             }
         }
         case CD_PERMISSION_DOMAINS: {
-            // console.log("action.selectedDomains ", action.selectedDomains, state.domains);
+            // console.log("action.selectedDomains ", action, state.domains);
             let dealerDomains = state.domains;
             // let domainLoading = false;
             if (action.payload.status) {
@@ -283,7 +283,9 @@ export default (state = initialState, action) => {
 
                 // Save permission for new dealers
                 if (action.formData.action == "save") {
-                    dealerDomains = state.domains.concat(action.selectedDomains)
+                    let newPermittedDomains = action.selectedDomains.map(e => { e['permission_by'] = action.formData.user.name; return e; })
+                    // console.log(action.formData.user.name, "newPermittedDomains  ", newPermittedDomains);
+                    dealerDomains = state.domains.concat(newPermittedDomains)
                 }
                 else if (action.formData.action == "delete") {
                     dealerDomains = checkIsArray(state.domains).filter(item => item.id !== action.selectedDomains)

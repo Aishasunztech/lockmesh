@@ -3833,7 +3833,32 @@ export function domainColumns(translation, handleSearch, isModal = false) {
             //     }
             // ]
         };
+
+        let permissionBy =  {
+            title: (
+                <Input.Search
+                    name="permission_by"
+                    key="permission_by"
+                    id="permission_by"
+                    className="search_heading"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    placeholder="PERMISSION BY"
+                />
+            ),
+            children: [
+                {
+                    title: convertToLang(translation[""], "PERMISSION BY"),
+                    dataIndex: 'permission_by',
+                    key: 'permission_by',
+                    name: 'permission_by'
+                }
+            ]
+        };
+
+
         columns[1] = actionColumn;
+        columns.push(permissionBy);
         // columns.splice(1, 1)
     }
 
