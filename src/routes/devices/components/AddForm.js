@@ -1183,7 +1183,7 @@ class AddDevice extends Component {
                                                     // value={value}
                                                     // onChange={this.onChange}
                                                     // placeholder="Controlled autosize"
-                                                    autosize={{ minRows: 3, maxRows: 5 }}
+                                                    autoSize={{ minRows: 3, maxRows: 5 }}
                                                 />
                                             )}
                                         </Form.Item>
