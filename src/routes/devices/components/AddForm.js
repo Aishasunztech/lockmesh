@@ -1183,7 +1183,7 @@ class AddDevice extends Component {
                                                     // value={value}
                                                     // onChange={this.onChange}
                                                     // placeholder="Controlled autosize"
-                                                    autosize={{ minRows: 3, maxRows: 5 }}
+                                                    autoSize={{ minRows: 3, maxRows: 5 }}
                                                 />
                                             )}
                                         </Form.Item>
@@ -1284,7 +1284,7 @@ class AddDevice extends Component {
                                 </Form.Item> 
                             */}
 
-                            {(this.state.type == 0 && lastObject) ?
+                            {/* {(this.state.type == 0 && lastObject) ? */}
                                 <Fragment>
 
                                     {/**
@@ -1691,9 +1691,9 @@ class AddDevice extends Component {
                                         </Col>
                                     }
                                 </Fragment>
-                                :
+                                {/* :
                                 null
-                            }
+                            } */}
 
 
 
