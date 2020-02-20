@@ -299,7 +299,7 @@ class AddDevice extends Component {
     confirmRenderList = (packages, products, hardwares, term = this.state.term, duplicate = this.state.duplicate) => {
         // console.log('state is: ', this.state)
         let counter = 0
-        let hardwareList = hardwares.map((item, index) => {
+        let hardwareList = checkIsArray(hardwares).map((item, index) => {
             // let services = JSON.parse(item.pkg_features)
             counter++
             return {
@@ -315,7 +315,7 @@ class AddDevice extends Component {
             }
         });
 
-        let packagesList = packages.map((item, index) => {
+        let packagesList = checkIsArray(packages).map((item, index) => {
             // console.log("packages list: ", item);
             // let services = JSON.parse(item.pkg_features)
             counter++
@@ -331,7 +331,7 @@ class AddDevice extends Component {
                 line_total: (duplicate > 0) ? item.pkg_price * duplicate : item.pkg_price
             }
         });
-        let productList = products.map((item, index) => {
+        let productList = checkIsArray(products).map((item, index) => {
             // let services = JSON.parse(item.pkg_features)
             counter++
             return {
@@ -899,7 +899,7 @@ class AddDevice extends Component {
 
     renderDataLimitOptions = () => {
         // this.state.parent_packages
-        return this.props.parent_packages.map((packageItem) => {
+        return checkIsArray(this.props.parent_packages).map((packageItem) => {
             // console.log(packageItem.pkg_term, this.state.term + ' month', packageItem.pkg_term == (this.state.term + ' month'))
             if (packageItem.package_type === 'data_plan' && packageItem.pkg_term == (this.state.term + ' month')) {
                 return <Select.Option key={packageItem.id} value={packageItem.id} >{packageItem.pkg_name + " (" + packageItem.pkg_price + " Credits)"}</Select.Option>
@@ -1026,7 +1026,7 @@ class AddDevice extends Component {
                                                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                                 >
                                                     <Select.Option value="">{convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}</Select.Option>
-                                                    {users_list.map((item, index) => {
+                                                    {checkIsArray(users_list).map((item, index) => {
                                                         return (<Select.Option key={index} value={item.user_id}>{item.user_id} ( {item.user_name} )</Select.Option>)
                                                     })}
                                                 </Select>
@@ -1094,7 +1094,7 @@ class AddDevice extends Component {
                                             }
                                             }
                                         >
-                                            {this.props.parent_hardwares.map((hardware) => {
+                                            {checkIsArray(this.props.parent_hardwares).map((hardware) => {
                                                 return (<Select.Option key={hardware.id} value={hardware.id}>{hardware.hardware_name + " ( PRICE: " + hardware.hardware_price + " Credits ) "}</Select.Option>)
                                             })}
                                         </Select>
@@ -1139,7 +1139,7 @@ class AddDevice extends Component {
                                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                         >
                                             <Select.Option value="">{convertToLang(this.props.translation[SELECT_POLICY], "Select Policy")}</Select.Option>
-                                            {this.props.policies.map((policy, index) => {
+                                            {checkIsArray(this.props.policies).map((policy, index) => {
                                                 return (<Select.Option key={index} value={policy.id}>{policy.policy_name}</Select.Option>)
                                             })}
                                         </Select>
@@ -1337,7 +1337,7 @@ class AddDevice extends Component {
                                                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                                     disabled={this.state.disablePgp}
                                                 >
-                                                    {this.props.pgp_emails.map((pgp_email) => {
+                                                    {checkIsArray(this.props.pgp_emails).map((pgp_email) => {
                                                         return (<Select.Option key={pgp_email.id} value={pgp_email.pgp_email}>{pgp_email.pgp_email}</Select.Option>)
                                                     })}
                                                 </Select>
@@ -1390,7 +1390,7 @@ class AddDevice extends Component {
                                                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                                     disabled={this.state.disableChat}
                                                 >
-                                                    {this.props.chat_ids.map((chat_id, index) => {
+                                                    {checkIsArray(this.props.chat_ids).map((chat_id, index) => {
                                                         return (<Select.Option key={index} value={chat_id.chat_id}>{chat_id.chat_id}</Select.Option>)
                                                     })}
                                                 </Select>
