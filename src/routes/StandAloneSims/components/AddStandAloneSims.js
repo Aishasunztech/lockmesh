@@ -52,6 +52,8 @@ export default class AddSim extends Component {
                         ref='add_sim_form'
                         translation={this.props.translation}
                         wrappedComponentRef={(form) => this.addSimForm = form}
+                        history={this.props.history}
+
                     />
                 </Modal>
             </div>

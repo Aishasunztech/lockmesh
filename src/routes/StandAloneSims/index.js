@@ -58,7 +58,7 @@ class StandAloneSims extends Component {
             if (this.props.simsList !== prevProps.simsList) {
                 updateState.simsList = this.props.simsList
             }
-           
+
 
             if (updateState != {}) {
                 this.setState(updateState)
@@ -167,6 +167,7 @@ class StandAloneSims extends Component {
                 <AddSim
                     ref="add_sim"
                     translation={this.props.translation}
+                    history={this.props.history}
                 />
 
                 <SimsList
