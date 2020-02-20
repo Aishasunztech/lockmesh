@@ -3,8 +3,11 @@ import { Modal, message, Col, Row, Table, Switch } from 'antd';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { inventorySales, refundServiceColumns } from '../../utils/columnsUtils';
+// import convertToLang from '../../utils/columnsUtils';
 import moment from 'moment';
 import { APP_TITLE } from '../../../constants/Application';
+import { convertToLang } from '../../utils/commonUtils';
+import { DUMY_TRANS_ID } from '../../../constants/LabelConstants';
 
 class Invoice extends Component {
 
@@ -13,7 +16,14 @@ class Invoice extends Component {
 
         const invoiceColumns = inventorySales(props.translation);
         const refundServicesColumns = refundServiceColumns(props.translation);
-
+        let data_plan_column = {
+            title: convertToLang(props.translation[DUMY_TRANS_ID], "DATA LIMIT"),
+            dataIndex: 'data_limit',
+            className: '',
+            align: "center",
+            key: 'data_limit'
+        }
+        invoiceColumns.splice(2, 0, data_plan_column)
         this.state = {
             invoiceColumns: invoiceColumns,
             visible: false,

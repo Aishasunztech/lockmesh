@@ -448,7 +448,18 @@ class Prices extends Component {
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
-            }
+            },
+            {
+                title: (
+                    <span>
+                        {convertToLang(props.translation[PACKAGE_SERVICES], "PACKAGE SERVICES")}
+                    </span>
+                ),
+                align: 'center',
+                dataIndex: 'services',
+                key: 'services',
+                className: 'row '
+            },
         ];
 
         this.state = {

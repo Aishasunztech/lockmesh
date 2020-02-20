@@ -28,6 +28,14 @@ class AddSimForm extends Component {
     constructor(props) {
         super(props);
         const invoiceColumns = inventorySales(props.translation);
+        let data_plan_column = {
+            title: convertToLang(props.translation[DUMY_TRANS_ID], "DATA LIMIT"),
+            dataIndex: 'data_limit',
+            className: '',
+            align: "center",
+            key: 'data_limit'
+        }
+        invoiceColumns.splice(3, 0, data_plan_column)
         this.state = {
             visible: false,
             term: undefined,
@@ -174,6 +182,7 @@ class AddSimForm extends Component {
                     rowKey: item.id,
                     item: item.package_type === 'standalone_sim' ? "STAND ALONE SIM" : `Data plan`,
                     description: item.pkg_name,
+                    data_limit: item.data_limit ? item.data_limit : 0,
                     term: this.state.term,
                     unit_price: item.pkg_price,
                     quantity: 1,
@@ -368,7 +377,7 @@ class AddSimForm extends Component {
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             >
                                 {this.state.standAlonePackages.map((pkg) => {
-                                    return (<Select.Option key={pkg.id} value={pkg.id}>{`${pkg.pkg_name} (${pkg.pkg_price} Credits) `}</Select.Option>)
+                                    return (<Select.Option key={pkg.id} value={pkg.id}>{`${pkg.pkg_name} (${pkg.data_limit} MB for ${pkg.pkg_price} Credits) `}</Select.Option>)
                                 })}
                             </Select>
                         )}
