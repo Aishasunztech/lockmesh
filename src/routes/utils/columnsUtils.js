@@ -3551,7 +3551,7 @@ export function inventorySales(translation) {
 
             },
             {
-                title: convertToLang(translation[DUMY_TRANS_ID], "DESCRPTION"),
+                title: convertToLang(translation[DUMY_TRANS_ID], "DESCRIPTION"),
                 dataIndex: 'description',
                 className: '',
                 align: "center",

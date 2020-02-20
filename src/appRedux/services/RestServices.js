@@ -1341,6 +1341,13 @@ const RestService = {
         )
     },
 
+    addStandAloneSim: (data) => {
+        return axios.post(BASE_URL + 'users/add-standalone-sim',
+            data,
+            RestService.getHeader()
+        )
+    },
+
 
     //send Support Live Chat Message
     sendSupportLiveChatMessage: (data) => {
