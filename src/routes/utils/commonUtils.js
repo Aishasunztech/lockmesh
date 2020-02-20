@@ -642,9 +642,12 @@ export function convertTimezoneValue(dealerTimezone, data, clientToServerTZ = fa
 }
 
 export function checkIsArray(data) {
-	if (data && Array.isArray(data) && data.length) {
+	if(!data){
+		return [];
+	}
+	if(Array.isArray(data) && data.length){
 		return data;
-	} else {
+	}else {
 		return [];
 	}
 }
