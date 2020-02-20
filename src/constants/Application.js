@@ -31,11 +31,11 @@ switch (hostName) {
     case "http://dev.lockmesh.com":
     case "https://dev.lockmesh.com":
         URL = "https://dev.lockmesh.com/api/";
-        SOCKET_URL = 'wss://devapi.lockmesh.com';
-        SOCKET_PATH = 'web/socket'
+        SOCKET_URL = 'wss://dev.lockmesh.com';
+        SOCKET_PATH = '/api/web/socket'
 
-        SUPPORT = "https://devapi.lockmesh.com/support/v1/"
-        SUPPORT_SOCKET = "https://devapi.lockmesh.com";
+        SUPPORT = "https://dev.lockmesh.com/supports/v1/"
+        SUPPORT_SOCKET = "https://dev.lockmesh.com";
         SUPERADMIN = 'https://devapi.meshguard.co/';
         LOG_SERVER_BASE_URL = 'https://logs.lockmesh.com';
         SysId = 2;
@@ -84,11 +84,11 @@ switch (hostName) {
     case "http://www.lockmesh.com":
     case "https://www.lockmesh.com":
         URL = "https://lockmesh.com/api/"
-        SOCKET_URL = 'wss://api.lockmesh.com';
-        SOCKET_PATH = 'web/socket'
+        SOCKET_URL = 'wss://lockmesh.com';
+        SOCKET_PATH = '/api/web/socket'
 
-        SUPPORT = "https://api.lockmesh.com/support/v1/"
-        SUPPORT_SOCKET = "https://api.lockmesh.com";
+        SUPPORT = "https://lockmesh.com/supports/v1/"
+        SUPPORT_SOCKET = "https://lockmesh.com";
         SUPERADMIN = 'https://api.meshguard.co/';
         LOG_SERVER_BASE_URL = 'https://logs.lockmesh.com';
         SysId = 1;

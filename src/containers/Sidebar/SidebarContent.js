@@ -378,6 +378,15 @@ class SidebarContent extends Component {
                       {convertToLang(translation[Sidebar_users_devices], "Users & Devices")}
                     </Link>
                   </Menu.Item>
+
+                  <Menu.Item key="users">
+                    <Link to="/users">
+                      <i className="icon icon-user" />
+                      {/* <IntlMessages id="sidebar.users" /> */}
+                      {convertToLang(translation[Sidebar_clients], "Clients")}
+                    </Link>
+                  </Menu.Item>
+
                   <Menu.Item key="sims">
                     <Link to="/sims">
                       <i className="icon icon-mobile" >
@@ -388,13 +397,7 @@ class SidebarContent extends Component {
                       {convertToLang(translation[""], "Sims")}
                     </Link>
                   </Menu.Item>
-                  <Menu.Item key="users">
-                    <Link to="/users">
-                      <i className="icon icon-user" />
-                      {/* <IntlMessages id="sidebar.users" /> */}
-                      {convertToLang(translation[Sidebar_clients], "Clients")}
-                    </Link>
-                  </Menu.Item>
+
                   {(authUser.type === ADMIN) ? <Menu.Item key="dealer/dealer">
                     <Link to="/dealer/dealer"><i className="icon icon-avatar" />
                       {/* <IntlMessages id="sidebar.dealers" /> */}

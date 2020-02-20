@@ -8,7 +8,7 @@ import axios from 'axios';
 import moment from 'moment-timezone';
 
 
-import { Button, Form, Input, Select, InputNumber, Spin, Modal, Table, Switch, DatePicker, Row, Col } from 'antd';
+import { Button, Form, Input, Select, InputNumber, Spin, Modal, Table, Switch, DatePicker, Row, Col, Tooltip } from 'antd';
 
 // Components
 import AddUser from '../../users/components/AddUser';
@@ -153,7 +153,7 @@ class EditDevice extends Component {
         }
     }
     handleUserChange = (e) => {
-        // 
+        //
         this.setState({ addNewUserValue: e });
     }
 
@@ -162,8 +162,8 @@ class EditDevice extends Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                // 
-                // 
+                //
+                //
                 values.prevPGP = this.props.device.pgp_email;
                 values.prevChatID = this.props.device.chat_id;
                 values.prevSimId = this.props.device.sim_id;
@@ -406,7 +406,7 @@ class EditDevice extends Component {
                 let serviceRemainingDays = 0
                 let totalDays = 0
                 if (prevService) {
-                    await RestService.getServiceRefund(prevService.id).then((response) => {
+                    await RestService.getServiceRefund(prevService.id, prevService.user_acc_id).then((response) => {
                         if (RestService.checkAuth(response.data)) {
                             if (response.data.status) {
                                 creditsToRefund = response.data.creditsToRefund
@@ -459,12 +459,12 @@ class EditDevice extends Component {
         }
 
         var current_date = year + '/' + month + '/' + day;
-        // 
+        //
         return current_date;
     }
 
     confirmRenderList(packages, products, term = this.state ? this.state.term : null, duplicate = this.state ? this.state.duplicate : 1) {
-        // 
+        //
         let counter = 0
         let packagesList = packages.map((item, index) => {
             // let services = JSON.parse(item.pkg_features)
@@ -572,7 +572,7 @@ class EditDevice extends Component {
 
 
     handleChangeTab = (value) => {
-        // 
+        //
         switch (value) {
             case '0':
                 this.setState({
@@ -626,7 +626,7 @@ class EditDevice extends Component {
         let disableSim = true;
         let disableSim2 = true;
         let vpn = '';
-        // 
+        //
         let packagesData = []
         let productData = []
         let total_price = 0
@@ -664,7 +664,7 @@ class EditDevice extends Component {
                 if (services.vpn) {
                     vpn = "1"
                 }
-                // 
+                //
             })
         }
         // if (products && products.length) {
@@ -756,7 +756,7 @@ class EditDevice extends Component {
     }
 
     handleOkInvoice = () => {
-        // 
+        //
         if (this.state.serviceData.total_price <= this.props.user_credit || !this.state.serviceData.pay_now) {
             this.state.serviceData.paid_by_user = this.state.paidByUser
             if (this.state.change_data_plan) {
@@ -789,7 +789,7 @@ class EditDevice extends Component {
     }
 
     handlePaidUser = (e) => {
-        // 
+        //
         if (e) {
             this.setState({
                 paidByUser: "PAID"
@@ -816,7 +816,7 @@ class EditDevice extends Component {
                     total_price = total_price + Number(item.unit_price)
                 })
             }
-            // 
+            //
 
             this.setState({
                 packages: packagesData,
@@ -836,9 +836,9 @@ class EditDevice extends Component {
 
     disabledDate = (current) => {
         // Can not select days before today and today
-        // 
-        // let expiry_date = 
-        // 
+        //
+        // let expiry_date =
+        //
         return ((current && current < moment().endOf('day')) || current > moment(this.props.device.expiry_date).add(1, 'M'))
         // return ;
     }
@@ -1045,7 +1045,7 @@ class EditDevice extends Component {
     }
 
     render() {
-        // 
+        //
         const { users_list, device } = this.props;
         // console.log(device);
         return (
@@ -1126,7 +1126,7 @@ class EditDevice extends Component {
                                                 onChange={this.handleUserChange}
                                                 filterOption={
                                                     (input, option) => {
-                                                        // 
+                                                        //
                                                         // return null;
                                                         return (option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0)
                                                     }
@@ -1215,7 +1215,7 @@ class EditDevice extends Component {
                                                         <Select.Option value="extend">{convertToLang(this.props.translation[DUMY_TRANS_ID], "EXTEND SERVICES")}</Select.Option>
                                                         : null}
                                                     <Select.Option value="change">{convertToLang(this.props.translation[DUMY_TRANS_ID], "CHANGE SERVICES")}</Select.Option>
-                                                    {(this.props.device.services && this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION && this.props.device.services.is_temp == 0) ?
+                                                    {(this.props.device.services && this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION && this.props.device.finalStatus !== DEVICE_EXPIRED && this.props.device.services.is_temp == 0) ?
                                                         <Select.Option value="cancel">{convertToLang(this.props.translation[DUMY_TRANS_ID], "CANCEL SERVICES")}</Select.Option>
                                                         : null}
                                                 </Select>
@@ -1350,7 +1350,18 @@ class EditDevice extends Component {
                                             disabled={this.state.disablePgp}
                                         >
                                             {this.props.pgp_emails.map((pgp_email) => {
-                                                return (<Select.Option key={pgp_email.id} value={pgp_email.pgp_email.trim()}>{pgp_email.pgp_email.trim()}</Select.Option>)
+                                                if (this.props.device.pgp_email == pgp_email.pgp_email) {
+                                                    return (
+                                                        <Select.Option key={pgp_email.id} value={pgp_email.pgp_email.trim()}>
+                                                            {pgp_email.pgp_email.trim()} (Current)
+                                                        </Select.Option>
+                                                    )
+                                                }
+                                                return (
+                                                    <Select.Option key={pgp_email.id} value={pgp_email.pgp_email.trim()}>
+                                                        {pgp_email.pgp_email.trim()}
+                                                    </Select.Option>
+                                                )
                                             })}
                                         </Select>
                                         // <Input />
@@ -1394,6 +1405,10 @@ class EditDevice extends Component {
                                             disabled={this.state.disableChat}
                                         >
                                             {checkIsArray(this.props.chat_ids).map((chat_id, index) => {
+
+                                                if (this.props.device.chat_id == chat_id.chat_id) {
+                                                    return (<Select.Option key={index} value={chat_id.chat_id}>{chat_id.chat_id} (Current)</Select.Option>)
+                                                }
                                                 return (<Select.Option key={index} value={chat_id.chat_id}>{chat_id.chat_id}</Select.Option>)
                                             })}
                                         </Select>
@@ -1801,7 +1816,7 @@ class EditDevice extends Component {
                 />
 
                 {/**
-                 * 
+                 *
                  * @section ServicesModal
                  *  */}
                 <Modal
@@ -1836,7 +1851,7 @@ class EditDevice extends Component {
                 </Modal>
 
                 {/**
-                 * 
+                 *
                  * @section ServicesDetailsModal
                  *  */}
                 <Modal
@@ -1919,7 +1934,7 @@ class EditDevice extends Component {
                 </Modal>
 
                 {/**
-                 * 
+                 *
                  * @section InvoiceModal
                  *  */}
                 <Modal
@@ -1990,7 +2005,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ routing, devices, users, auth, settings, sidebar, account }) => {
-    // 
+    //
     // console.log(devices.pgp_emails);
     return {
         invoiceID: users.invoiceID,

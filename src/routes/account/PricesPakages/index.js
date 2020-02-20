@@ -448,7 +448,18 @@ class Prices extends Component {
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
-            }
+            },
+            {
+                title: (
+                    <span>
+                        {convertToLang(props.translation[PACKAGE_SERVICES], "PACKAGE SERVICES")}
+                    </span>
+                ),
+                align: 'center',
+                dataIndex: 'services',
+                key: 'services',
+                className: 'row '
+            },
         ];
 
         this.state = {
@@ -720,17 +731,17 @@ class Prices extends Component {
             }
         } else if (type === "hardware") {
             // if (this.state.hardwares) {
-                return checkIsArray(this.state.hardwares).map((item, index) => {
-                    return {
-                        key: item.id,
-                        sr: ++index,
-                        action:
-                            <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.modifyItem(item, true, 'hardware') }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "MODIFY PRICE")}</Button>,
-                        name: item.hardware_name,
-                        price: item.hardware_price,
-                        retail_price: item.retail_price
-                    }
-                })
+            return checkIsArray(this.state.hardwares).map((item, index) => {
+                return {
+                    key: item.id,
+                    sr: ++index,
+                    action:
+                        <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.modifyItem(item, true, 'hardware') }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "MODIFY PRICE")}</Button>,
+                    name: item.hardware_name,
+                    price: item.hardware_price,
+                    retail_price: item.retail_price
+                }
+            })
             // }
         } else {
             return [];
@@ -932,7 +943,7 @@ class Prices extends Component {
                                                     package={record}
                                                     savePermission={this.props.packagePermission}
                                                     translation={this.props.translation}
-                                                    auth = {this.props.auth}
+                                                    auth={this.props.auth}
 
                                                 />
 
@@ -985,6 +996,7 @@ class Prices extends Component {
                                             package={record}
                                             savePermission={this.props.packagePermission}
                                             translation={this.props.translation}
+                                            auth={this.props.auth}
 
                                         />
 

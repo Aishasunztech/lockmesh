@@ -11,27 +11,25 @@ export default class AddSim extends Component {
         this.state = {
             visible: false,
             handleSubmit: null,
-            user: null,
             titleText: ''
         }
     }
 
 
 
-    showModal = (handleSubmit, user = null, titleText = convertToLang(this.props.translation[""], "Add Stand Alone Sim")) => {
+    showModal = () => {
         // console.log(user);
         this.setState({
             visible: true,
-            handleSubmit: handleSubmit,
-            user: user,
-            titleText: titleText,
         });
 
     }
+
     handleCancel = () => {
-        this.refs.add_user_form.resetFields();
+        this.refs.add_sim_form.getWrappedInstance().resetFields();
         this.setState({ visible: false });
     }
+
     render() {
         const { visible, loading } = this.state;
         // console.log(this.props.);
@@ -45,16 +43,17 @@ export default class AddSim extends Component {
                     onCancel={this.handleCancel}
                     footer={null}
                     className="edit_form"
+                    destroyOnClose={true}
                     okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
                     cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     <AddSimForm
-                        AddSimHandler={this.state.handleSubmit}
                         handleCancel={this.handleCancel}
-                        user={this.state.user}
-                        ref='add_user_form'
+                        ref='add_sim_form'
                         translation={this.props.translation}
-                        standAlonePackages={this.props.standAlonePackages}
+                        wrappedComponentRef={(form) => this.addSimForm = form}
+                        history={this.props.history}
+
                     />
                 </Modal>
             </div>

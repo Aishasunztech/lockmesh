@@ -385,30 +385,45 @@ export default (state = initialState, action) => {
             }
             break;
 
-        case EDIT_DEVICE:
-            let filteredDevices = state.newDevices;
-            if (action.response.status) {
-                let objIndex4 = state.devices.findIndex((obj => obj.device_id === action.payload.formData.device_id));
-                state.devices[objIndex4] = action.response.data[0];
-
-                var alldevices = state.newDevices;
-                var device_id = action.payload.formData.device_id;
-                filteredDevices = checkIsArray(alldevices).filter(device => device.device_id !== device_id);
-
-                success({
-                    title: action.response.msg,
-                });
-            } else {
+        case EDIT_DEVICE: {
+            if (!action.response.status) {
                 error({
                     title: action.response.msg,
                 });
+                return {
+                    ...state
+                }
             }
+
+            let filteredDevices = state.newDevices;
+            let editDevices = state.devices;
+
+            let foundDeviceIndex = checkIsArray(editDevices).findIndex((obj => obj.device_id === action.payload.formData.device_id));
+            // console.log('Data: ', action.response.data[0]);
+            // console.log('device id: ', action.payload.formData.device_id);
+            // console.log('foundDeviceIndex: ', foundDeviceIndex);
+            if(foundDeviceIndex!==-1){
+                editDevices[foundDeviceIndex] = action.response.data[0];
+                // console.log(editDevices);
+            }
+
+            /**
+             * @description yeh code nahe bghairti he
+             */
+            // var alldevices = state.newDevices;
+            // var device_id = action.payload.formData.device_id;
+            // filteredDevices = checkIsArray(alldevices).filter(device => device.device_id !== device_id);
+
+            success({
+                title: action.response.msg,
+            });
+
 
             return {
                 ...state,
-                devices: [...state.devices],
+                devices: [...editDevices],
                 newDevices: filteredDevices,
-                //    selectedOptions: [...state.selectedOptions],
+                // selectedOptions: [...state.selectedOptions],
                 // options: state.options,
                 isloading: false,
                 msg: state.msg,
@@ -416,6 +431,7 @@ export default (state = initialState, action) => {
                 options: state.options,
                 // devices: action.payload,
             }
+        }
 
         case ADD_DATA_PLAN:
             if (action.response.status) {
@@ -832,8 +848,6 @@ export default (state = initialState, action) => {
         }
 
         case GET_PARENT_HARDWARES: {
-
-
             return {
                 ...state,
                 parent_hardwares: action.response.data,
