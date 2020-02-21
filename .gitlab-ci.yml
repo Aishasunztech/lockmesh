@@ -39,27 +39,10 @@ deploy_PreDevLM:
     - echo "Deploy to dev server"
     - ssh-add <(echo "$PRIVATE_KEY")
     - rm -rf .git
-    - ssh -o StrictHostKeyChecking=no web@142.93.165.21 "cd /var/www/html/${WORK_DIR}; git reset --hard; git pull origin ${BRANCH}; npm install; npm run build;"
+    - ssh -o StrictHostKeyChecking=no web@46.101.180.10 "cd /var/www/html/${WORK_DIR}; git reset --hard; git pull origin ${BRANCH}; npm install; npm run build;"
   only:
     - predev
 
-# deploy_LoadTesterLM:
-#   stage: deploy
-#   environment:
-#     name: LoadTesterLM
-#     url: https://loadtester.lockmesh.com
-#   before_script:
-#     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-#     - mkdir -p ~/.ssh
-#     - eval $(ssh-agent -s)
-#     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-#   script:
-#     - echo "Deploy to dev server"
-#     - ssh-add <(echo "$PRIVATE_KEY")
-#     - rm -rf .git
-#     - ssh -o StrictHostKeyChecking=no web@46.101.239.249 "cd /var/www/html/${WORK_DIR}; git reset --hard; git pull origin ${BRANCH}; npm install; npm run build;"
-#   only:
-#     - loadtester
 
 
 
@@ -82,23 +65,6 @@ deploy_LiveLM:
   only:
     - master
 
-# deploy_LiveTitan:
-#   stage: deploy
-#   environment:
-#     name: LiveTitan
-#     url: https://titansecureserver.com
-#   before_script:
-#     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-#     - mkdir -p ~/.ssh
-#     - eval $(ssh-agent -s)
-#     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-#   script:
-#     - echo "Deploy to live server"
-#     - ssh-add <(echo "$PRIVATE_KEY")
-#     - rm -rf .git
-#     - ssh -o StrictHostKeyChecking=no web@165.22.65.173 "cd /var/www/html/${WORK_DIR}; git reset --hard; git pull origin ${BRANCH}; npm install; npm run build;"
-#   only:
-#     - master
 
 
 deploy_LiveCryptPhoneC:
