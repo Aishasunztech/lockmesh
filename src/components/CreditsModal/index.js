@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
-import { Modal, Table, Button, Row, Col, Select } from 'antd';
+import { Modal, Table, Button, Row, Col, Select, Card, Tabs } from 'antd';
 import { Link } from "react-router-dom";
+import ReactResizeDetector from 'react-resize-detector';
 import PurchaseCredit from "../../routes/account/components/PurchaseCredit";
 import AddDeviceModal from '../../routes/devices/components/AddDevice';
 import {
@@ -14,7 +15,7 @@ import {
   DEVICE_UNLINKED,
   DEVICE_PRE_ACTIVATION
 } from '../../constants/Constants';
-import { convertToLang, generateExcel, formatMoney } from '../../routes/utils/commonUtils';
+import { convertToLang, generateExcel, formatMoney, checkIsArray } from '../../routes/utils/commonUtils';
 import {
   Button_Ok,
   Button_Cancel,
@@ -40,7 +41,7 @@ const confirm = Modal.confirm;
 let paymentHistoryColumns;
 let account_status_paragraph = '';
 
-
+const { TabPane } = Tabs;
 class CreditIcon extends Component {
 
   constructor(props) {
@@ -53,7 +54,7 @@ class CreditIcon extends Component {
       currency_price: this.props.user_credit,
       currency_unit_price: 1,
       purchase_modal: false,
-
+      tabPosition: window.screen.width > 576 ? "left" : "top"
     };
 
     this.paymentHistoryColumns = [
@@ -200,10 +201,10 @@ class CreditIcon extends Component {
     return <div>
       <Row gutter="16">
         <Col span={12} className="credit_modal_heading bg_brown">
-          <h4 className="weight_600 mb-0 "><b> {convertToLang(this.props.translation[""], "ACCOUNT STATUS")} </b></h4>
+          <h4 className="mb-0 weight_600"> {convertToLang(this.props.translation[""], "Account Status")} </h4>
         </Col>
         <Col span={12} className={"credit_modal_heading " + class_name}>
-          <h4 className=" weight_600  mb-0 ">
+          <h4 className=" weight_600 mb-0">
             {convertToLang(this.props.translation[""], (this.props.account_balance_status == 'active') ?
               <span className="">ACTIVE</span> : (this.props.account_balance_status === 'restricted') ?
                 <span> Restriction Level 1</span> :
@@ -220,9 +221,9 @@ class CreditIcon extends Component {
 
   overdue_title = () => {
     return <div className="credit_modal_heading">
-      <h4 className="weight_600">{convertToLang(this.props.translation[""], "OVERDUE")}
+      <h4 className="weight_600 mb-0">{convertToLang(this.props.translation[""], "OVERDUE")}
         <Link to={'/account/payment-overdue-history'}>
-          <Button type="default" size="small" className="full_list_btn" onClick={() => this.handleCancel()}>Full List</Button>
+          {/* <Button type="default" size="small" className="full_list_btn" onClick={() => this.handleCancel()}>Full List</Button> */}
         </Link>
       </h4>
     </div>
@@ -230,9 +231,9 @@ class CreditIcon extends Component {
 
   pay_history_title = () => {
     return <div className="credit_modal_heading">
-      <h4 className="weight_600">{convertToLang(this.props.translation[""], "PAYMENT HISTORY")}
+      <h4 className="weight_600 mb-0">{convertToLang(this.props.translation[""], "PAYMENT HISTORY")}
         <Link to={'/account/credits-payment-history'}>
-          <Button type="default" size="small" className="full_list_btn" onClick={() => this.handleCancel()}>Full List</Button>
+          {/* <Button type="default" size="small" className="full_list_btn" onClick={() => this.handleCancel()}>Full List</Button> */}
         </Link>
       </h4>
     </div>
@@ -240,19 +241,19 @@ class CreditIcon extends Component {
 
   renderPaymentHistoryList = (list) => {
 
-    if (list) {
-      return list.map((item, index) => {
-        return {
-          rowKey: item.id,
-          key: ++index,
-          transaction_no: item.id,
-          created_at: item.created_at,
-          payment_method: JSON.parse(item.transection_data).request_type,
-          amount: "$ " + formatMoney(item.credits),
-          total_credits: item.credits,
-        }
-      })
-    }
+    // if (list) {
+    return checkIsArray(list).map((item, index) => {
+      return {
+        rowKey: item.id,
+        key: ++index,
+        transaction_no: item.id,
+        created_at: item.created_at,
+        payment_method: JSON.parse(item.transection_data).request_type,
+        amount: "$ " + formatMoney(item.credits),
+        total_credits: item.credits,
+      }
+    })
+    // }
   };
 
   renderOverData = () => {
@@ -323,7 +324,7 @@ class CreditIcon extends Component {
       return [
         {
           name: <h5 className={'ac_st_info'} >INFO</h5>,
-          value: <h5 className={"weight_600 mb-0 p-8 bg_brown" + statusBGC} >{account_status_paragraph} </h5>,
+          value: <h5 className={"mb-0 p-8 bg_brown " + statusBGC} >{account_status_paragraph} </h5>,
         }
       ];
     }
@@ -335,8 +336,8 @@ class CreditIcon extends Component {
         value: <h5 className={"weight_600 mb-0 p-8 " + statusBGC} >{statusDays} </h5>
       },
       {
-        name: <h5 className={'weight_600 p-8 mb-0 text-uppercase'}>INFO</h5>,
-        value: <h5 className={"weight_600 mb-0 p-8 white_normal " + statusBGC}>{account_status_paragraph} </h5>,
+        name: <h5 className={'p-8 mb-0 text-uppercase'}>INFO</h5>,
+        value: <h5 className={"mb-0 p-8 white_normal line-height-20 " + statusBGC}>{account_status_paragraph} </h5>,
       }
     ];
   };
@@ -410,10 +411,23 @@ class CreditIcon extends Component {
     }
   };
 
+  resetTabPostion = () => {
+    // console.log("TESTING");
+    let tabPosition = 'left'
+    if (window.screen.width < 576) {
+      tabPosition = 'top'
+    }
+    this.setState({
+      tabPosition: tabPosition
+    })
+  }
+
   render() {
+
     return (
 
-      <div>
+      <div >
+        <ReactResizeDetector handleWidth handleHeight onResize={this.resetTabPostion} />
         <PurchaseCredit
           showPurchaseModal={this.showPurchaseModal}
           purchase_modal={this.state.purchase_modal}
@@ -433,73 +447,119 @@ class CreditIcon extends Component {
           className="credit_popup"
         > */}
         <Fragment>
-          <Row>
-            <Col xs={24} sm={24} md={11} lg={11} xl={11} className="mb-16">
-              <Table
-                className="ac_status_table"
-                dataSource={this.renderAccountStatus()}
-                columns={this.a_s_columns}
-                pagination={false}
-                title={this.ac_st_title}
-                bordered
-                showHeader={false}
-              />
-              {/* <h6 className="mt-6"> {account_status_paragraph}</h6> */}
-            </Col>
-            <Col xs={24} sm={24} md={0} lg={1} xl={1}>
-            </Col>
-            <Col xs={24} sm={24} md={14} lg={12} xl={12}>
-              <Table
-                className="current_bl_table"
-                dataSource={this.renderCreditBalance()}
-                columns={this.cr_blnc_columns}
-                pagination={false}
-                title={this.cr_blnc_title}
-                bordered
-              />
-            </Col>
-          </Row>
-          <div>
-            <Row>
-              <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                <Table
-                  className="overdue_table"
-                  dataSource={this.renderOverData()}
-                  columns={this.overdue_columns}
-                  pagination={false}
-                  title={this.overdue_title}
-                  bordered
-                  size="small"
-                  scroll={{ x: true }}
-                />
-              </Col>
-            </Row>
-
-          </div>
-
-          <div>
-            <Table
-              className="pay_history"
-              columns={this.paymentHistoryColumns}
-              dataSource={this.renderPaymentHistoryList(this.props.latestPaymentTransaction)}
-              bordered
-              title={this.pay_history_title}
-              pagination={false}
-              scroll={{ x: true }}
-            />
-          </div>
-
-          {/* <div className="edit_ftr_btn11">
-              <Button type="primary" onClick={() => {
-                this.setState({
-                  visible: false
-                })
-              }} >{convertToLang(this.props.translation[""], "OK")}</Button>
-            </div> */}
+          <Card>
+            <Tabs defaultActiveKey="1" tabPosition={this.state.tabPosition} type="card">
+              <TabPane tab="Overview" key="1">
+                <Row>
+                  <Col xs={24} sm={24} md={2} lg={2} xl={4}>
+                  </Col>
+                  <Col xs={24} sm={24} md={10} lg={10} xl={10} className="mb-16">
+                    <Table
+                      className="ac_status_table"
+                      dataSource={this.renderAccountStatus()}
+                      columns={this.a_s_columns}
+                      pagination={false}
+                      title={this.ac_st_title}
+                      bordered
+                      showHeader={false}
+                      scroll={{ x: true }}
+                    />
+                    {/* <h6 className="mt-6"> {account_status_paragraph}</h6> */}
+                  </Col>
+                  {/* <Col xs={24} sm={24} md={1} lg={1} xl={1}>
+                  </Col> */}
+                  <Col xs={24} sm={24} md={10} lg={10} xl={6}>
+                    <Table
+                      className="current_bl_table"
+                      dataSource={this.renderCreditBalance()}
+                      columns={this.cr_blnc_columns}
+                      pagination={false}
+                      title={this.cr_blnc_title}
+                      bordered
+                      scroll={{ x: true }}
+                    />
+                  </Col>
+                </Row>
+                <div>
+                  <Row>
+                    <Col xs={24} sm={24} md={4} lg={4} xl={4}>
+                    </Col>
+                    <Col xs={24} sm={24} md={16} lg={16} xl={16}>
+                      <Table
+                        className="overdue_table"
+                        dataSource={this.renderOverData()}
+                        columns={this.overdue_columns}
+                        pagination={false}
+                        title={this.overdue_title}
+                        bordered
+                        size="small"
+                        scroll={{ x: true }}
+                      />
+                    </Col>
+                  </Row>
+                </div>
+                <div>
+                  <Row>
+                    <Col xs={24} sm={24} md={4} lg={4} xl={4}>
+                    </Col>
+                    <Col xs={24} sm={24} md={16} lg={16} xl={16}>
+                      <Table
+                        className="pay_history"
+                        columns={this.paymentHistoryColumns}
+                        dataSource={this.renderPaymentHistoryList(this.props.latestPaymentTransaction)}
+                        bordered
+                        title={this.pay_history_title}
+                        pagination={false}
+                        scroll={{ x: true }}
+                      />
+                    </Col>
+                  </Row>
+                </div>
+              </TabPane>
+              <TabPane tab="Payment History" key="2">
+                <div>
+                  <Row>
+                    <Col xs={24} sm={24} md={4} lg={4} xl={4}>
+                    </Col>
+                    <Col xs={24} sm={24} md={16} lg={16} xl={16}>
+                      <Table
+                        className="pay_history"
+                        columns={this.paymentHistoryColumns}
+                        dataSource={this.renderPaymentHistoryList(this.props.latestPaymentTransaction)}
+                        bordered
+                        title={this.pay_history_title}
+                        pagination={false}
+                        scroll={{ x: true }}
+                      />
+                    </Col>
+                  </Row>
+                </div>
+              </TabPane>
+              <TabPane tab="Overdue" key="3">
+                <div>
+                  <Row>
+                    <Col xs={24} sm={24} md={4} lg={4} xl={4}>
+                    </Col>
+                    <Col xs={24} sm={24} md={16} lg={16} xl={16}>
+                      <Table
+                        className="overdue_table"
+                        dataSource={this.renderOverData()}
+                        columns={this.overdue_columns}
+                        pagination={false}
+                        title={this.overdue_title}
+                        bordered
+                        size="small"
+                        scroll={{ x: true }}
+                      />
+                    </Col>
+                  </Row>
+                </div>
+              </TabPane>
+            </Tabs>
+          </Card>
         </Fragment>
         {/* </Modal> */}
-
-      </div>
+      </div >
     )
   }
 }

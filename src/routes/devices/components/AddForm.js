@@ -16,7 +16,7 @@ import Invoice from './invoice';
 import AddPGPEmailModal from './AddPGPEmailModal';
 
 // helpers
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { inventorySales } from '../../utils/columnsUtils';
 import RestService from '../../../appRedux/services/RestServices'
 
@@ -34,6 +34,7 @@ import {
     getPolicies,
     getDomains,
     addProduct,
+    resetIds
 } from "../../../appRedux/actions";
 
 // constants
@@ -130,7 +131,7 @@ class AddDevice extends Component {
                     }
 
                     let product_prices = this.filterList(this.state.term + ' month', this.props.product_prices, 'product');
-                    let sim_id_price = product_prices.filter((item) => {
+                    let sim_id_price = checkIsArray(product_prices).filter((item) => {
                         if (item.price_for === 'sim_id') {
                             return item
                         }
@@ -247,10 +248,15 @@ class AddDevice extends Component {
             this.props.getProductPrices();
             this.props.getHardwaresPrices();
         }
-        this.props.getPolicies();
-        this.props.getSimIDs();
-        this.props.getChatIDs();
-        this.props.getPGPEmails();
+        if (!this.props.preActive) {
+            this.props.getPolicies(this.props.device.id, this.props.device.dealer_id);
+            this.props.getSimIDs(this.props.device.id, this.props.device.dealer_id);
+            this.props.getChatIDs(this.props.device.id, this.props.device.dealer_id);
+            this.props.getPGPEmails(this.props.device.id, this.props.device.dealer_id);
+            console.log("dasd");
+        } else {
+            this.props.resetIds()
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -283,9 +289,9 @@ class AddDevice extends Component {
 
     handleReset = () => {
 
-        this.props.getSimIDs();
-        this.props.getChatIDs();
-        this.props.getPGPEmails();
+        // this.props.getSimIDs();
+        // this.props.getChatIDs();
+        // this.props.getPGPEmails();
         // this.props.getUserList();
         this.props.form.resetFields();
     }
@@ -293,7 +299,7 @@ class AddDevice extends Component {
     confirmRenderList = (packages, products, hardwares, term = this.state.term, duplicate = this.state.duplicate) => {
         // console.log('state is: ', this.state)
         let counter = 0
-        let hardwareList = hardwares.map((item, index) => {
+        let hardwareList = checkIsArray(hardwares).map((item, index) => {
             // let services = JSON.parse(item.pkg_features)
             counter++
             return {
@@ -309,7 +315,7 @@ class AddDevice extends Component {
             }
         });
 
-        let packagesList = packages.map((item, index) => {
+        let packagesList = checkIsArray(packages).map((item, index) => {
             // console.log("packages list: ", item);
             // let services = JSON.parse(item.pkg_features)
             counter++
@@ -325,7 +331,7 @@ class AddDevice extends Component {
                 line_total: (duplicate > 0) ? item.pkg_price * duplicate : item.pkg_price
             }
         });
-        let productList = products.map((item, index) => {
+        let productList = checkIsArray(products).map((item, index) => {
             // let services = JSON.parse(item.pkg_features)
             counter++
             return {
@@ -377,10 +383,14 @@ class AddDevice extends Component {
     }
 
     handleChatID = (e) => {
+        let device = this.props.device
         let payload = {
             type: 'chat_id',
             auto_generated: true,
-            product_data: {}
+            product_data: {},
+            user_acc_id: device ? device.user_acc_id : null,
+            dealer_id: device ? device.dealer_id : null,
+
         }
         this.props.addProduct(payload)
     }
@@ -622,7 +632,7 @@ class AddDevice extends Component {
     filterList = (type, list, listType) => {
         let dummyPackages = [];
         if (list.length) {
-            list.filter(function (item) {
+            checkIsArray(list).filter(function (item) {
                 let packageTerm;
                 if (listType === 'pkg') {
                     packageTerm = item.pkg_term
@@ -889,7 +899,7 @@ class AddDevice extends Component {
 
     renderDataLimitOptions = () => {
         // this.state.parent_packages
-        return this.props.parent_packages.map((packageItem) => {
+        return checkIsArray(this.props.parent_packages).map((packageItem) => {
             // console.log(packageItem.pkg_term, this.state.term + ' month', packageItem.pkg_term == (this.state.term + ' month'))
             if (packageItem.package_type === 'data_plan' && packageItem.pkg_term == (this.state.term + ' month')) {
                 return <Select.Option key={packageItem.id} value={packageItem.id} >{packageItem.pkg_name + " (" + packageItem.pkg_price + " Credits)"}</Select.Option>
@@ -1016,7 +1026,7 @@ class AddDevice extends Component {
                                                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                                 >
                                                     <Select.Option value="">{convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}</Select.Option>
-                                                    {users_list.map((item, index) => {
+                                                    {checkIsArray(users_list).map((item, index) => {
                                                         return (<Select.Option key={index} value={item.user_id}>{item.user_id} ( {item.user_name} )</Select.Option>)
                                                     })}
                                                 </Select>
@@ -1084,7 +1094,7 @@ class AddDevice extends Component {
                                             }
                                             }
                                         >
-                                            {this.props.parent_hardwares.map((hardware) => {
+                                            {checkIsArray(this.props.parent_hardwares).map((hardware) => {
                                                 return (<Select.Option key={hardware.id} value={hardware.id}>{hardware.hardware_name + " ( PRICE: " + hardware.hardware_price + " Credits ) "}</Select.Option>)
                                             })}
                                         </Select>
@@ -1129,7 +1139,7 @@ class AddDevice extends Component {
                                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                         >
                                             <Select.Option value="">{convertToLang(this.props.translation[SELECT_POLICY], "Select Policy")}</Select.Option>
-                                            {this.props.policies.map((policy, index) => {
+                                            {checkIsArray(this.props.policies).map((policy, index) => {
                                                 return (<Select.Option key={index} value={policy.id}>{policy.policy_name}</Select.Option>)
                                             })}
                                         </Select>
@@ -1173,7 +1183,7 @@ class AddDevice extends Component {
                                                     // value={value}
                                                     // onChange={this.onChange}
                                                     // placeholder="Controlled autosize"
-                                                    autosize={{ minRows: 3, maxRows: 5 }}
+                                                    autoSize={{ minRows: 3, maxRows: 5 }}
                                                 />
                                             )}
                                         </Form.Item>
@@ -1274,7 +1284,7 @@ class AddDevice extends Component {
                                 </Form.Item> 
                             */}
 
-                            {(this.state.type == 0 && lastObject) ?
+                            {/* {(this.state.type == 0 && lastObject) ? */}
                                 <Fragment>
 
                                     {/**
@@ -1327,7 +1337,7 @@ class AddDevice extends Component {
                                                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                                     disabled={this.state.disablePgp}
                                                 >
-                                                    {this.props.pgp_emails.map((pgp_email) => {
+                                                    {checkIsArray(this.props.pgp_emails).map((pgp_email) => {
                                                         return (<Select.Option key={pgp_email.id} value={pgp_email.pgp_email}>{pgp_email.pgp_email}</Select.Option>)
                                                     })}
                                                 </Select>
@@ -1380,7 +1390,7 @@ class AddDevice extends Component {
                                                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                                     disabled={this.state.disableChat}
                                                 >
-                                                    {this.props.chat_ids.map((chat_id, index) => {
+                                                    {checkIsArray(this.props.chat_ids).map((chat_id, index) => {
                                                         return (<Select.Option key={index} value={chat_id.chat_id}>{chat_id.chat_id}</Select.Option>)
                                                     })}
                                                 </Select>
@@ -1681,9 +1691,9 @@ class AddDevice extends Component {
                                         </Col>
                                     }
                                 </Fragment>
-                                :
+                                {/* :
                                 null
-                            }
+                            } */}
 
 
 
@@ -1834,6 +1844,7 @@ class AddDevice extends Component {
 
                     // data
                     domainList={this.props.domainList}
+                    device={this.props.device}
 
                 />
 
@@ -1980,6 +1991,7 @@ function mapDispatchToProps(dispatch) {
         addSimPermission: null,
         getDomains: getDomains,
         addProduct: addProduct,
+        resetIds: resetIds,
     }, dispatch);
 }
 var mapStateToProps = ({ routing, devices, device_details, users, settings, sidebar, auth, account }) => {

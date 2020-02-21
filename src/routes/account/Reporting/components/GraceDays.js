@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal, Tabs, Col, Input, Form, Row, DatePicker, Select } from "antd";
 import moment from 'moment';
 import styles from '../reporting.css'
-import { convertToLang, generatePDF, generateExcel, getDateFromTimestamp } from "../../../utils/commonUtils";
+import { convertToLang, generatePDF, generateExcel, getDateFromTimestamp, checkIsArray } from "../../../utils/commonUtils";
 import {
   DEVICE_PRE_ACTIVATION, DEVICE_UNLINKED
 } from "../../../../constants/Constants";
@@ -125,7 +125,7 @@ class Invoice extends Component {
         productType: this.props.productType
       });
 
-      rows = this.props.graceDaysReportReport.map((item, index) => {
+      rows = checkIsArray(this.props.graceDaysReportReport).map((item, index) => {
         return {
           count: ++index,
           device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
@@ -160,8 +160,8 @@ class Invoice extends Component {
   renderList = (list) => {
 
     let data = [];
-    if (list) {
-      list.map((item, index) => {
+    // if (list) {
+      checkIsArray(list).map((item, index) => {
         data.push({
           'key': index,
           'count': ++index,
@@ -173,7 +173,7 @@ class Invoice extends Component {
           'created_at': item.created_at ? getDateFromTimestamp(item.created_at) : 'N/A',
         })
       });
-    }
+    // }
     return data;
   };
 
@@ -182,7 +182,7 @@ class Invoice extends Component {
     if (e == '') {
       devices = this.props.devices
     } else {
-      devices = this.props.devices.filter(device => device.dealer_id == e);
+      devices = checkIsArray(this.props.devices).filter(device => device.dealer_id == e);
     }
     this.setState({
       deviceList: devices
@@ -234,7 +234,7 @@ class Invoice extends Component {
                     >
                       <Select.Option value=''>ALL</Select.Option>
                       <Select.Option value={this.props.user.dealerId} key={this.props.user.dealerId}>My Report</Select.Option>
-                      {this.props.dealerList.map((dealer, index) => {
+                      {checkIsArray(this.props.dealerList).map((dealer, index) => {
                         return (<Select.Option key={dealer.dealer_id} value={dealer.dealer_id}>{dealer.dealer_name} ({dealer.link_code})</Select.Option>)
                       })}
                     </Select>
@@ -259,7 +259,7 @@ class Invoice extends Component {
                   <Select style={{ width: '100%' }}>
                     <Select.Option value=''>ALL</Select.Option>
                     <Select.Option value={DEVICE_PRE_ACTIVATION}>{DEVICE_PRE_ACTIVATION}</Select.Option>
-                    {this.state.deviceList.map((device, index) => {
+                    {checkIsArray(this.state.deviceList).map((device, index) => {
                       return (<Select.Option key={device.device_id} value={device.device_id}>{device.device_id}</Select.Option>)
                     })}
                   </Select>
@@ -322,21 +322,19 @@ class Invoice extends Component {
             {(this.state.reportCard) ?
               <Fragment>
                 <Row>
-                  <Col xs={14} sm={14} md={14} lg={14} xl={14}>
+                  <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                     <h3>Invoice Report</h3>
                   </Col>
-                  <Col xs={10} sm={10} md={10} lg={10} xl={10}>
-                    <div className="pull-right">
-                      <Button className="mb-8" type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, '', fileName, this.state.reportFormData) }}>Download PDF</Button>
-                      <Button className="mb-8" type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName) }}>Download Excel</Button>
-                    </div>
+                  <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                    <Button className="mb-8" type="dotted" icon="download" size="small" onClick={() => { generatePDF(columns, rows, '', fileName, this.state.reportFormData) }}>Download PDF</Button>
+                    <Button className="mb-8" type="primary" icon="download" size="small" onClick={() => { generateExcel(rows, fileName) }}>Download Excel</Button>
                   </Col>
                 </Row>
                 <Table
                   columns={this.columns}
                   dataSource={this.renderList(this.props.graceDaysReportReport)}
                   bordered
-                  scroll={{ x: true, y: true }}
+                  scroll={{ x: true }}
                   pagination={false}
                 />
               </Fragment>

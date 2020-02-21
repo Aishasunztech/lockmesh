@@ -32,7 +32,11 @@ import {
     ACCEPT_REQUEST,
     ADD_PRODUCT,
     VALIDATE_ICCID,
-    ADD_DATA_PLAN
+    ADD_DATA_PLAN,
+    RELINK_DEVICE,
+    REJECT_RELINK_DEVICE,
+    RESET_ADD_PRODUCT_PROPS,
+    RESET_IDS
 } from "../../constants/ActionTypes";
 
 // import { convertToLang } from '../../routes/utils/commonUtils';
@@ -70,8 +74,10 @@ import {
 // } from '../../constants/DeviceConstants';
 
 import SettingStates from './InitialStates';
-import { message, Modal } from 'antd';
+import React from 'react';
+import { message, Modal, Row, Col, Table } from 'antd';
 import { DEVICE_PRE_ACTIVATION, DEVICE_UNLINKED } from "../../constants/Constants";
+import { convertToLang, checkIsArray } from "../../routes/utils/commonUtils";
 
 var { translation } = SettingStates;
 
@@ -128,6 +134,8 @@ const initialState = {
     newDevices: [],
     product_prices: [],
     devicesForReport: [],
+    pgp_added: false,
+    chat_added: false
 };
 
 export default (state = initialState, action) => {
@@ -377,30 +385,45 @@ export default (state = initialState, action) => {
             }
             break;
 
-        case EDIT_DEVICE:
-            let filteredDevices = state.newDevices;
-            if (action.response.status) {
-                let objIndex4 = state.devices.findIndex((obj => obj.device_id === action.payload.formData.device_id));
-                state.devices[objIndex4] = action.response.data[0];
-
-                var alldevices = state.newDevices;
-                var device_id = action.payload.formData.device_id;
-                filteredDevices = alldevices.filter(device => device.device_id !== device_id);
-
-                success({
-                    title: action.response.msg,
-                });
-            } else {
+        case EDIT_DEVICE: {
+            if (!action.response.status) {
                 error({
                     title: action.response.msg,
                 });
+                return {
+                    ...state
+                }
             }
+
+            let filteredDevices = state.newDevices;
+            let editDevices = state.devices;
+
+            let foundDeviceIndex = checkIsArray(editDevices).findIndex((obj => obj.device_id === action.payload.formData.device_id));
+            // console.log('Data: ', action.response.data[0]);
+            // console.log('device id: ', action.payload.formData.device_id);
+            // console.log('foundDeviceIndex: ', foundDeviceIndex);
+            if(foundDeviceIndex!==-1){
+                editDevices[foundDeviceIndex] = action.response.data[0];
+                // console.log(editDevices);
+            }
+
+            /**
+             * @description yeh code nahe bghairti he
+             */
+            // var alldevices = state.newDevices;
+            // var device_id = action.payload.formData.device_id;
+            // filteredDevices = checkIsArray(alldevices).filter(device => device.device_id !== device_id);
+
+            success({
+                title: action.response.msg,
+            });
+
 
             return {
                 ...state,
-                devices: [...state.devices],
+                devices: [...editDevices],
                 newDevices: filteredDevices,
-                //    selectedOptions: [...state.selectedOptions],
+                // selectedOptions: [...state.selectedOptions],
                 // options: state.options,
                 isloading: false,
                 msg: state.msg,
@@ -408,6 +431,7 @@ export default (state = initialState, action) => {
                 options: state.options,
                 // devices: action.payload,
             }
+        }
 
         case ADD_DATA_PLAN:
             if (action.response.status) {
@@ -436,20 +460,95 @@ export default (state = initialState, action) => {
             let devicess = JSON.parse(JSON.stringify(state.devices))
             if (action.response.status) {
                 var device_id = action.payload.formData.device_id;
-                // console.log(state.devices, 'add device reducer', action.response)
+                console.log(state.devices, 'add device reducer', action.response)
                 let index = state.devices.findIndex(dev => dev.device_id == device_id)
-                // console.log(index, 'index is the');
+                console.log(index, 'index is the');
 
                 if (index > -1) {
                     devicess[index] = action.response.data[0]
+                } else {
+                    devicess.unshift(action.response.data[0])
                 }
                 var alldevices = state.newDevices;
 
-                filteredNewDevices = alldevices.filter(device => device.device_id !== device_id);
+                filteredNewDevices = checkIsArray(alldevices).filter(device => device.device_id !== device_id);
+
+                let randerData = [
+                    {
+                        key: "device_id",
+                        left: "DEVICE ID :",
+                        right: action.response.data[0].device_id ? action.response.data[0].device_id : 'N/A'
+                    },
+                    {
+                        key: "user_id",
+                        left: "USER ID :",
+                        right: action.response.data[0].user_id
+                    },
+                    {
+                        key: "status",
+                        left: "STATUS :",
+                        right: action.response.data[0].finalStatus
+                    },
+                    {
+                        key: "pgp_email",
+                        left: "PGP EMAIL :",
+                        right: action.response.data[0].pgp_email
+                    },
+                    {
+                        key: "chat_id",
+                        left: "CHAT ID :",
+                        right: action.response.data[0].chat_id
+                    },
+                    {
+                        key: "sim_id",
+                        left: "SIM ID :",
+                        right: action.response.data[0].sim_id
+                    },
+                    {
+                        key: "sim_id2",
+                        left: "SIM ID 2 :",
+                        right: action.response.data[0].sim_id2
+                    },
+                    {
+                        key: "expiry_date",
+                        left: "EXPIRY DATE :",
+                        right: action.response.data[0].expiry_date
+                    },
+                ]
+                // state.devices.push(action.response.data.data)
+                let successHtml = <div>
+                    <h3>Device Activated Successfully</h3>
+                    <Table
+                        columns={[
+                            {
+                                title: "",
+                                align: "center",
+                                dataIndex: 'left',
+                                key: "left",
+                                className: 'weight_400',
+
+                            },
+                            {
+                                title: "",
+                                align: "center",
+                                dataIndex: 'right',
+                                key: "right",
+                                className: '',
+                            },
+                        ]}
+                        showHeader={false}
+
+                        bordered={false}
+                        dataSource={randerData}
+                        pagination={false}
+                        className='addDevcie_popup'
+                    />
+                </div>
+
 
                 // console.log(filteredNewDevices, 'filtered new devices', alldevices)
                 success({
-                    title: action.response.msg,
+                    title: successHtml
                 });
             }
             else {
@@ -472,13 +571,153 @@ export default (state = initialState, action) => {
             }
         }
 
+        case RELINK_DEVICE: {
+
+            var filteredNewDevices = state.newDevices;
+            let devicess = JSON.parse(JSON.stringify(state.devices))
+            if (action.response.status) {
+                var user_acc_id = action.user_acc_id;
+                console.log(state.devices, 'add device reducer')
+                let index = state.devices.findIndex(dev => dev.id == user_acc_id)
+                console.log(index, 'index is the', action.response.data);
+
+                if (index > -1) {
+                    devicess[index] = action.response.data
+                } else {
+                    devicess.unshift(action.response.data)
+                }
+
+                var alldevices = state.newDevices;
+
+                filteredNewDevices = checkIsArray(alldevices).filter(device => device.id !== user_acc_id);
+
+                // console.log(filteredNewDevices, 'filtered new devices', alldevices)
+                success({
+                    title: action.response.msg,
+                });
+            }
+            else {
+                error({
+                    title: action.response.msg,
+                });
+            }
+
+            return {
+                ...state,
+                devices: devicess,
+                newDevices: filteredNewDevices,
+            }
+        }
+
+        // case REJECT_RELINK_DEVICE: {
+
+        //     let filteredDevices = state.devices;
+        //     let filteredNewDevices = state.newDevices;
+        //     if (action.response.status) {
+        //         //
+        //         var alldevices = state.devices;
+        //         var device_id = action.device.device_id;
+        //         filteredDevices = alldevices.filter(device => device.device_id !== device_id);
+        //         filteredNewDevices = filteredNewDevices.filter(device => device.device_id !== device_id);
+        //         success({
+        //             title: action.response.msg,
+        //         });
+        //     } else {
+        //         error({
+        //             title: action.response.msg,
+        //         });
+        //     }
+
+        //     return {
+        //         ...state,
+        //         devices: filteredDevices,
+        //         newDevices: filteredNewDevices,
+        //     }
+        // }
+
         case PRE_ACTIVATE_DEVICE:
             let devices = [...state.devices]
             if (action.response.status) {
-                //
+                let randerData = [
+                    {
+                        key: "activation_code",
+                        left: "ACTIVATION CODE :",
+                        right: action.response.data.data[0].activation_code ? action.response.data.data[0].activation_code : 'N/A '
+                    },
+                    {
+                        key: "device_id",
+                        left: "DEVICE ID :",
+                        right: action.response.data.data[0].device_id ? action.response.data.data[0].device_id : 'N/A'
+                    },
+                    {
+                        key: "user_id",
+                        left: "USER ID :",
+                        right: action.response.data.data[0].user_id
+                    },
+                    {
+                        key: "status",
+                        left: "STATUS :",
+                        right: action.response.data.data[0].finalStatus
+                    },
+                    {
+                        key: "pgp_email",
+                        left: "PGP EMAIL :",
+                        right: action.response.data.data[0].pgp_email
+                    },
+                    {
+                        key: "chat_id",
+                        left: "CHAT ID :",
+                        right: action.response.data.data[0].chat_id
+                    },
+                    {
+                        key: "sim_id",
+                        left: "SIM ID :",
+                        right: action.response.data.data[0].sim_id
+                    },
+                    {
+                        key: "sim_id2",
+                        left: "SIM ID 2 :",
+                        right: action.response.data.data[0].sim_id2
+                    },
+                    {
+                        key: "expiry_months",
+                        left: "EXPIRY MONTHS :",
+                        right: action.response.data.data[0].expiry_months
+                    },
+                ]
                 // state.devices.push(action.response.data.data)
+                let successHtml = <div>
+                    <h3>Pre Active Device generated Successfully</h3>
+                    <Table
+                        columns={[
+                            {
+                                title: "",
+                                align: "center",
+                                dataIndex: 'left',
+                                key: "left",
+                                className: 'weight_400',
+
+                            },
+                            {
+                                title: "",
+                                align: "center",
+                                dataIndex: 'right',
+                                key: "right",
+                                className: '',
+                            },
+                        ]}
+                        showHeader={false}
+
+                        bordered={false}
+                        dataSource={randerData}
+                        pagination={false}
+                        className='addDevcie_popup'
+                    />
+                </div>
+                // console.log(filteredNewDevices, 'filtered new devices', alldevices)
                 success({
-                    title: action.response.data.msg,
+                    title: successHtml,
+                    // width : 362
                 });
                 devices = [...action.response.data.data, ...state.devices]
                 // message.success('done');
@@ -491,7 +730,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 devices: devices,
-                //    selectedOptions: [...state.selectedOptions],
+                // selectedOptions: [...state.selectedOptions],
                 // options: state.options,
                 isloading: false,
                 msg: state.msg,
@@ -539,6 +778,15 @@ export default (state = initialState, action) => {
             return state
         }
 
+        case RESET_IDS: {
+
+            return {
+                ...state,
+                sim_ids: [],
+                chat_ids: [],
+                pgp_emails: []
+            }
+        }
         case GET_SIM_IDS: {
             //
             // console.log(
@@ -573,8 +821,8 @@ export default (state = initialState, action) => {
                 //
                 var alldevices = state.devices;
                 var device_id = action.device.device_id;
-                filteredDevices = alldevices.filter(device => device.device_id !== device_id);
-                filteredNewDevices = filteredNewDevices.filter(device => device.device_id !== device_id);
+                filteredDevices = checkIsArray(alldevices).filter(device => device.device_id !== device_id);
+                filteredNewDevices = checkIsArray(filteredNewDevices).filter(device => device.device_id !== device_id);
                 success({
                     title: action.response.msg,
                 });
@@ -600,8 +848,6 @@ export default (state = initialState, action) => {
         }
 
         case GET_PARENT_HARDWARES: {
-
-
             return {
                 ...state,
                 parent_hardwares: action.response.data,
@@ -626,20 +872,28 @@ export default (state = initialState, action) => {
         case ADD_PRODUCT: {
             let pgp_emails = state.pgp_emails;
             let chat_ids = state.chat_ids;
-
+            let chat_added = false
+            let pgp_added = false
             if (action.payload.status) {
                 if (action.payload.type === 'chat_id') {
                     chat_ids.unshift(action.payload.product);
                     success({
                         title: "Chat ID has been generated successfully."
                     })
+                    chat_added = true
                     // console.log(chat_ids);
                 } else if (action.payload.type === 'pgp_email') {
                     pgp_emails.unshift(action.payload.product);
+                    let deviceIndex = state.devices.findIndex(item => item.id == action.payload.user_acc_id)
+                    // console.log(deviceIndex);
+                    if (deviceIndex > -1) {
+                        state.devices[deviceIndex].pgp_remaining_limit = state.devices[deviceIndex].pgp_remaining_limit - 1
+                    }
                     // console.log(pgp_emails)
                     success({
                         title: "Pgp email has been generated successfully."
                     })
+                    pgp_added = true
                 }
                 else if (action.payload.type === 'sim_id') {
                     success({
@@ -655,9 +909,21 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 pgp_emails: [...pgp_emails],
-                chat_ids: [...chat_ids]
+                chat_ids: [...chat_ids],
+                chat_added: chat_added,
+                pgp_added: pgp_added,
+                devices: [...state.devices]
             }
         }
+
+        case RESET_ADD_PRODUCT_PROPS: {
+            return {
+                ...state,
+                chat_added: false,
+                pgp_added: false
+            }
+        }
+
 
         default:
             return state;

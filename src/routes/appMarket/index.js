@@ -6,9 +6,18 @@ import CircularProgress from "components/CircularProgress";
 //import {getDevicesList} from '../../appRedux/actions/Devices';
 import { BASE_URL } from '../../constants/Application';
 
-import { getApkList, changeAppStatus, deleteApk, editApk } from "../../appRedux/actions/Apk";
-import { transferApps, getMarketApps, handleUninstall, removeSMapps } from "../../appRedux/actions/AppMarket";
-import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
+import { 
+    getDropdown, 
+    postDropdown, 
+    getApkList, 
+    changeAppStatus, 
+    deleteApk, 
+    editApk,
+    transferApps, 
+    getMarketApps, 
+    handleUninstall, 
+    removeSMapps
+} from '../../appRedux/actions';
 import { ADMIN, DEALER } from "../../constants/Constants";
 import AppMarketList from './appMarketList';
 import Markup from 'interweave';
@@ -28,7 +37,7 @@ import {
     Switch_Button_Uninstall, Button_Save, Button_Cancel
 } from '../../constants/ButtonConstants';
 
-import { convertToLang, titleCase, initCap } from "../utils/commonUtils";
+import { convertToLang, titleCase, initCap, checkIsArray } from "../utils/commonUtils";
 import { appMarketColumns } from "../utils/columnsUtils";
 import CustomScrollbars from "../../util/CustomScrollbars";
 
@@ -94,13 +103,13 @@ class ApkMarket extends React.Component {
         let type = this.props.user.type;
 
         if (type === ADMIN) {
-            secureApps.forEach((app) => {
+            checkIsArray(secureApps).forEach((app) => {
                 if (app.space_type === spaceType && app.dealer_type === type) {
                     secureIds.push(app.id);
                 }
             });
         } else {
-            secureApps.forEach((app) => {
+            checkIsArray(secureApps).forEach((app) => {
                 if (app.space_type === spaceType) {
                     secureIds.push(app.id);
                 }
@@ -110,7 +119,7 @@ class ApkMarket extends React.Component {
 
         // console.log("filterAvailableApp secureIds ", secureIds);
 
-        availableApps.map((app) => {
+        checkIsArray(availableApps).map((app) => {
             if (!secureIds.includes(app.id)) {
                 apps.push(app);
             }
@@ -131,7 +140,7 @@ class ApkMarket extends React.Component {
         //     mEncryptedCopySearch = availableApps;
         // }
 
-        return availableApps.map((app, index) => {
+        return checkIsArray(availableApps).map((app, index) => {
             return {
                 key: app.id,
                 logo:
@@ -149,9 +158,9 @@ class ApkMarket extends React.Component {
 
         let check = [];
         if (this.props.user.type !== ADMIN) {
-            check = this.state.secureMarketList.filter((app) => app.space_type === spaceType && app.dealer_type !== ADMIN)
+            check = checkIsArray(this.state.secureMarketList).filter((app) => app.space_type === spaceType && app.dealer_type !== ADMIN)
         } else {
-            check = this.state.secureMarketList.filter((app) => app.space_type === spaceType && app.dealer_type === ADMIN)
+            check = checkIsArray(this.state.secureMarketList).filter((app) => app.space_type === spaceType && app.dealer_type === ADMIN)
         }
 
 
@@ -185,7 +194,7 @@ class ApkMarket extends React.Component {
         var object = {};
         var result = [];
 
-        arra1.forEach(function (item) {
+        checkIsArray(arra1).forEach(function (item) {
             if (!object[item])
                 object[item] = 0;
             object[item] += 1;
@@ -205,7 +214,7 @@ class ApkMarket extends React.Component {
         // console.log("secureMarketList is: ", secureMarketList)
         let smApps = [];
         if (this.props.user.type === ADMIN) {
-            smApps = secureMarketList.filter((app) => app.dealer_type === this.props.user.type);
+            smApps = checkIsArray(secureMarketList).filter((app) => app.dealer_type === this.props.user.type);
         } else {
 
             smApps = secureMarketList //.filter((app) => app.space_type === spaceType);
@@ -221,7 +230,7 @@ class ApkMarket extends React.Component {
 
 
         // console.log('get duplicate values: ', this.find_duplicate_in_array(smApps.map((app) => app.id)))
-        smApps.forEach((item) => {
+        checkIsArray(smApps).forEach((item) => {
             if (item.dealer_type === ADMIN) {
                 // console.log('check app detail: ', item)
                 item.disabled = true
@@ -231,7 +240,7 @@ class ApkMarket extends React.Component {
             }
         })
 
-        let apkList = smApps.map((app, index) => {
+        let apkList = checkIsArray(smApps).map((app, index) => {
             // console.log("app.is_restrict_uninstall ==> ",app.is_restrict_uninstall)
             let data = {
                 key: app.id,
@@ -271,7 +280,7 @@ class ApkMarket extends React.Component {
     //             item.disabled = false
     //         }
     //     })
-    //     let apkList = combinedList.map((app, index) => {
+    //     let apkList = checkIsArray(combinedList).map((app, index) => {
     //         let data = {
     //             key: app.id,
     //             title:
@@ -390,7 +399,7 @@ class ApkMarket extends React.Component {
         let demoData = [];
 
         if (value.length) {
-            originalData.forEach((data) => {
+            checkIsArray(originalData).forEach((data) => {
                 if (data[fieldName] !== undefined) {
                     if ((typeof data[fieldName]) === 'string') {
 
@@ -417,13 +426,13 @@ class ApkMarket extends React.Component {
     //     //   console.log('will recive props', nextProps);
 
     //     if (this.props.apk_list !== nextProps.apk_list) {
-    //         let keys = nextProps.secureMarketList.map((app) => {
+    //         let keys = checkIsArray(nextProps.secureMarketList).map((app) => {
     //             return app.id
     //         })
     //         // console.log(keys);
 
-    //         let guestApps = nextProps.secureMarketList.filter((app) => app.space_type === "guest");
-    //         let encryptedApps = nextProps.secureMarketList.filter((app) => app.space_type === "encrypted");
+    //         let guestApps = nextProps.checkIsArray(secureMarketList).filter((app) => app.space_type === "guest");
+    //         let encryptedApps = nextProps.checkIsArray(secureMarketList).filter((app) => app.space_type === "encrypted");
 
     //         let guestAvailableApps = this.filterAvailableApp(nextProps.availbleAppList, nextProps.secureMarketList, "guest");
     //         let encryptedAvailableApps = this.filterAvailableApp(nextProps.availbleAppList, nextProps.secureMarketList, "encrypted");
@@ -445,12 +454,12 @@ class ApkMarket extends React.Component {
 
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
-            let keys = this.props.secureMarketList.map((app, index) => {
+            let keys = checkIsArray(this.props.secureMarketList).map((app, index) => {
                 return app.id
             })
 
-            let guestApps = this.props.secureMarketList.filter((app) => app.space_type === "guest");
-            let encryptedApps = this.props.secureMarketList.filter((app) => app.space_type === "encrypted");
+            let guestApps = checkIsArray(this.props.secureMarketList).filter((app) => app.space_type === "guest");
+            let encryptedApps = checkIsArray(this.props.secureMarketList).filter((app) => app.space_type === "encrypted");
 
             let guestAvailableApps = this.filterAvailableApp(this.props.availbleAppList, this.props.secureMarketList, "guest");
             let encryptedAvailableApps = this.filterAvailableApp(this.props.availbleAppList, this.props.secureMarketList, "encrypted");
@@ -491,7 +500,7 @@ class ApkMarket extends React.Component {
         // console.log("this.state.app_ids ", this.state.app_ids)
 
         if (this.state.app_ids.length) {
-            this.state.availbleAppList.map((app) => {
+            checkIsArray(this.state.availbleAppList).map((app) => {
                 if (this.state.app_ids.includes(app.id)) {
                     app.space_type = space;
                     this.state.secureMarketList.push(app);
@@ -508,13 +517,13 @@ class ApkMarket extends React.Component {
             let sm_appIds = [];
 
             if (this.props.user.type !== ADMIN) {
-                this.state.secureMarketList.forEach((app) => {
+                checkIsArray(this.state.secureMarketList).forEach((app) => {
                     if (app.space_type === space && app.dealer_type !== ADMIN) {
                         sm_appIds.push(app.id);
                     }
                 });
             } else {
-                this.state.secureMarketList.forEach((app) => {
+                checkIsArray(this.state.secureMarketList).forEach((app) => {
                     if (app.space_type === space && app.dealer_type !== DEALER) { // && this.props.user.type == app.dealer_type
                         sm_appIds.push(app.id);
                     }
@@ -523,7 +532,7 @@ class ApkMarket extends React.Component {
             // console.log(this.state.secureMarketList, "sm_appIds ", sm_appIds)
 
             let duplicateIds = this.find_duplicate_in_array(sm_appIds);
-            let removeDuplicateIds = sm_appIds.filter((item) => !duplicateIds.includes(item));
+            let removeDuplicateIds = checkIsArray(sm_appIds).filter((item) => !duplicateIds.includes(item));
             this.props.transferApps([...removeDuplicateIds, ...duplicateIds], space)
 
             this.setState({
@@ -545,7 +554,7 @@ class ApkMarket extends React.Component {
         console.log(selectedRowKeys, 'selected', selectedRows);
 
         let app_ids = []
-        selectedRows.forEach(row => {
+        checkIsArray(selectedRows).forEach(row => {
             // console.log("selected row", row)
             app_ids.push(row.key);
         });
@@ -560,8 +569,8 @@ class ApkMarket extends React.Component {
 
         if (this.props.user.type !== ADMIN) {
             // get secure market apps of dealers
-            let dealerGuest = this.state.secureMarketList.filter((app) => app.space_type === "guest" && app.dealer_type === DEALER);
-            let dealerEncrypted = this.state.secureMarketList.filter((app) => app.space_type === "encrypted" && app.dealer_type === DEALER);
+            let dealerGuest = checkIsArray(this.state.secureMarketList).filter((app) => app.space_type === "guest" && app.dealer_type === DEALER);
+            let dealerEncrypted = checkIsArray(this.state.secureMarketList).filter((app) => app.space_type === "encrypted" && app.dealer_type === DEALER);
 
             // hide "Remove All" button for Guest space if dealer not contain any own apk
             let guestindex = columnsGuest.findIndex((obj) => obj.dataIndex == "removeAllGuest");
@@ -616,7 +625,7 @@ class ApkMarket extends React.Component {
                                                     size="middle"
                                                     bordered
                                                     dataSource={this.renderAppList(this.state.guest_SM, 'guest')}
-                                                    columns={columnsGuest.filter((item) => item.dataIndex !== "removeAllEncrypted")}
+                                                    columns={checkIsArray(columnsGuest).filter((item) => item.dataIndex !== "removeAllEncrypted")}
                                                     pagination={false}
                                                 />
                                             </CustomScrollbars>
@@ -639,7 +648,7 @@ class ApkMarket extends React.Component {
                                                     size="middle"
                                                     bordered
                                                     dataSource={this.renderAppList(this.state.encrypted_SM, 'encrypted')}
-                                                    columns={columnsEncrypted.filter((item) => item.dataIndex !== "removeAllGuest")}
+                                                    columns={checkIsArray(columnsEncrypted).filter((item) => item.dataIndex !== "removeAllGuest")}
                                                     pagination={false}
                                                     className="encryptedTable mb-16"
                                                 />
@@ -671,7 +680,7 @@ class ApkMarket extends React.Component {
                                     >
                                         <AppMarketList
                                             dataSource={this.renderAvailableAppList(this.state.space === "guest" ? this.state.guestAvailableApps : this.state.encryptedAvailableApps)}
-                                            columns={columnsModal.filter((item) => (item.dataIndex !== "removeAllGuest" && item.dataIndex !== "removeAllEncrypted" && item.dataIndex !== "counter" && item.dataIndex !== "uninstall"))}
+                                            columns={checkIsArray(columnsModal).filter((item) => (item.dataIndex !== "removeAllGuest" && item.dataIndex !== "removeAllEncrypted" && item.dataIndex !== "counter" && item.dataIndex !== "uninstall"))}
                                             onChangeTableSorting={this.props.onChangeTableSorting}
                                             onSelectChange={this.onSelectChange}
                                             hideDefaultSelections={this.state.hideDefaultSelections}
@@ -712,8 +721,6 @@ function mapDispatchToProps(dispatch) {
         editApk: editApk,
         getDropdown: getDropdown,
         postDropdown: postDropdown,
-        postPagination: postPagination,
-        getPagination: getPagination,
         transferApps: transferApps,
         removeSMapps: removeSMapps,
         getMarketApps: getMarketApps,

@@ -154,20 +154,22 @@ class EditApkForm extends Component {
             callback('Please insert a valid name.');
         } else {
             // console.log(value);
-            let response = await RestService.checkApkName(value, this.props.app.apk_id).then((response) => {
-                if (RestService.checkAuth(response.data)) {
-                    if (response.data.status) {
-                        return true
+            if (value && value.length) {
+                let response = await RestService.checkApkName(value, this.props.app.apk_id).then((response) => {
+                    if (RestService.checkAuth(response.data)) {
+                        if (response.data.status) {
+                            return true
+                        }
+                        else {
+                            return false
+                        }
                     }
-                    else {
-                        return false
-                    }
+                });
+                if (response) {
+                    callback();
+                } else {
+                    callback('Please choose a different name');
                 }
-            });
-            if (response) {
-                callback();
-            } else {
-                callback('Please choose a different name');
             }
         }
     };

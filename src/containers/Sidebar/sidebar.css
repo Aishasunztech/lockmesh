@@ -1,5 +1,15 @@
 /*----------Sidebar page----------*/
 
+
+.side_bar_content .gx-popover-scroll>div:first-child {
+    overflow-x: hidden !important;
+    margin-right: 0 !important;
+}
+
+.side_bar_content .gx-popover-scroll>div:first-child::-webkit-scrollbar {
+    width: 0px;
+}
+
 .side_bar_main .gx-mr-3 {
     margin-right: 15px !important;
 }

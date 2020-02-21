@@ -13,7 +13,7 @@ import ChangeProfile from './components/change_profile';
 import BASE_URL from '../../constants/Application';
 import Customizer1 from './components/Customizer';
 import styles from './components/profile.css';
-import { componentSearch, getFormattedDate, convertToLang, checkValue, getSelectedTZDetail } from '../utils/commonUtils';
+import { componentSearch, getFormattedDate, convertToLang, checkValue, getSelectedTZDetail, checkIsArray } from '../utils/commonUtils';
 import {
     SDEALER, Login_Email, DEVICES, Name, Value, Profile_Info, Edit_Profile, Edit_Profile_02, Edit_Profile_03, Edit_Profile_01, Change_Password, Change_Email, Login_Email_Authentication, Date_Text, CREDITS, ADMIN
 } from "../../constants/Constants";
@@ -25,10 +25,48 @@ import { IP_ADDRESS } from '../../constants/DeviceConstants';
 
 class Profile extends Component {
 
-    state = {
-        visible: false,
-        historyModel: false,
-        limitValue: 20
+    constructor(props) {
+        super(props);
+        var loginHistoryColumns = [
+            {
+                title: '#',
+                align: "center",
+                dataIndex: 'tableIndex',
+                key: "tableIndex",
+                className: '',
+                sorter: (a, b) => { return a.tableIndex - b.tableIndex },
+                sortDirections: ['ascend', 'descend'],
+
+            },
+            {
+                title: convertToLang(this.props.translation[IP_ADDRESS], "IP ADDRESS"),
+                align: "center",
+                dataIndex: 'imei',
+                key: "imei",
+                className: '',
+                sorter: (a, b) => { return a.imei.localeCompare(b.imei) },
+                sortDirections: ['ascend', 'descend'],
+
+            },
+            {
+                title: convertToLang(this.props.translation[Date_Text], "Date"),
+                align: "center",
+                dataIndex: 'changed_time',
+                key: "changed_time",
+                className: '',
+                sorter: (a, b) => { return a.changed_time.localeCompare(b.changed_time) },
+                sortDirections: ['ascend', 'descend'],
+                defaultSortOrder: "descend",
+            },
+        ]
+        this.state = {
+            loginHistoryColumns: loginHistoryColumns,
+            sorterKey: '',
+            sortOrder: 'ascend',
+            visible: false,
+            historyModel: false,
+            limitValue: 20
+        }
     }
     showModal1 = () => {
         this.setState({
@@ -78,8 +116,33 @@ class Profile extends Component {
     componentDidMount = () => {
         this.props.getLoginHistory(0, this.state.limitValue);
     }
+
+    handleTableSorting = (pagination, query, sorter) => {
+        let columns = this.state.loginHistoryColumns;
+
+        checkIsArray(columns).forEach(column => {
+            if (Object.keys(sorter).length > 0) {
+                if (column.dataIndex == sorter.field) {
+                    if (this.state.sorterKey == sorter.field) {
+                        column['sortOrder'] = sorter.order;
+                    } else {
+                        column['sortOrder'] = "ascend";
+                    }
+                } else {
+                    column['sortOrder'] = "";
+                }
+                this.setState({ sorterKey: sorter.field });
+            } else {
+                if (this.state.sorterKey == column.dataIndex) column['sortOrder'] = "ascend";
+            }
+        })
+        this.setState({
+            loginHistoryColumns: columns
+        });
+    }
+
     renderList = (history) => {
-        let data = history.map((data, index) => {
+        let data = checkIsArray(history).map((data, index) => {
             if (data.ip_address.substr(0, 7) === "::ffff:") {
                 data.ip_address = data.ip_address.substr(7)
             }
@@ -365,10 +428,10 @@ class Profile extends Component {
                     onCancel={this.handleCancelHistory}
                     className="login_history"
                     centered
-                    // footer={false}
-                    //bodyStyle={{ height: 500, overflow: "overlay" }}
-                    okText={convertToLang(this.props.translation[""], "Load More History")}
-                    cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
+                    footer={false}
+                //bodyStyle={{ height: 500, overflow: "overlay" }}
+                // okText={convertToLang(this.props.translation[""], "Load More History")}
+                // cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     <Fragment>
                         {/* <div className="row">
@@ -391,41 +454,11 @@ class Profile extends Component {
                         <div className="">
                             <hr className="fix_header_border_login_history" />
                             <Table
-                                columns={[
-                                    {
-                                        title: '#',
-                                        align: "center",
-                                        dataIndex: 'tableIndex',
-                                        key: "tableIndex",
-                                        className: '',
-                                        sorter: (a, b) => { return a.tableIndex - b.tableIndex },
-                                        sortDirections: ['ascend', 'descend'],
-
-                                    },
-                                    {
-                                        title: convertToLang(this.props.translation[IP_ADDRESS], "IP ADDRESS"),
-                                        align: "center",
-                                        dataIndex: 'imei',
-                                        key: "imei",
-                                        className: '',
-                                        sorter: (a, b) => { return a.imei.localeCompare(b.imei) },
-                                        sortDirections: ['ascend', 'descend'],
-
-                                    },
-                                    {
-                                        title: convertToLang(this.props.translation[Date_Text], "Date"),
-                                        align: "center",
-                                        dataIndex: 'changed_time',
-                                        key: "changed_time",
-                                        className: '',
-                                        sorter: (a, b) => { return a.changed_time.localeCompare(b.changed_time) },
-                                        sortDirections: ['ascend', 'descend'],
-
-                                    },
-                                ]}
+                                columns={this.state.loginHistoryColumns}
                                 bordered
                                 dataSource={this.renderList(this.props.loginHistory)}
                                 pagination={false}
+                                onChange={this.handleTableSorting}
                             />
                         </div>
                     </Fragment>

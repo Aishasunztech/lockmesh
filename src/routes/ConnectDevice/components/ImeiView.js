@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Modal, message, Button, Table, Input, Select, Row, Col, Form, InputNumber } from 'antd';
-import { componentSearch, getFormattedDate, convertToLang } from '../../utils/commonUtils';
+import { componentSearch, getFormattedDate, convertToLang, checkIsArray } from '../../utils/commonUtils';
 import WriteImeiFrom from './WriteImeiForm'
 import Moment from 'react-moment'
 import { MANAGE_IMEI, DEVICE_ID, DEVICE_IMEI_1, IMEI_1_NUMBER, SR_NO, CHANGED_DATE, DEVICE_IMEI_2, IMEI_2_NUMBER, GENERATE_IMEI_NUMBER, WRITE_IMEI_2_TEXT, WRITE_IMEI_1, WRITE_IMEI_2, ORIGNAL, CURRENT } from '../../../constants/DeviceConstants';
@@ -28,13 +28,13 @@ export default class ImeiView extends Component {
 
         let dumyImei1List = []
         let dumyImei2List = []
-        let imei1List = this.props.imei_list.filter(item => {
+        let imei1List = checkIsArray(this.props.imei_list).filter(item => {
             if (dumyImei1List.includes(item.imei1) === false) {
                 dumyImei1List.push(item.imei1)
                 return item
             }
         })
-        let imei2List = this.props.imei_list.filter(item => {
+        let imei2List = checkIsArray(this.props.imei_list).filter(item => {
             if (dumyImei2List.includes(item.imei2) === false) {
                 dumyImei2List.push(item.imei2)
                 return item
@@ -154,7 +154,7 @@ export default class ImeiView extends Component {
     renderList = (imei_list, type) => {
         var i = 0;
         let imeiLength = imei_list.length
-        let data = (type === 'IMEI 1') ? imei_list.map((device, index) => {
+        let data = (type === 'IMEI 1') ? checkIsArray(imei_list).map((device, index) => {
             let imei = (device.imei1 !== 'null') ? device.imei1 : 'N/A'
             if (device.orignal_imei1 === device.imei1) {
                 i++
@@ -173,7 +173,7 @@ export default class ImeiView extends Component {
                     changed_time: getFormattedDate(device.created_at)
                 }
             }
-        }) : imei_list.map((device, index) => {
+        }) : checkIsArray(imei_list).map((device, index) => {
             let imei = (device.imei2 !== 'null') ? device.imei2 : 'N/A'
             // console.log("original", device, "imei2", device.imei2);
             if (device.orignal_imei2 === device.imei2) {

@@ -14,7 +14,7 @@ import ModifyPrice from './components/ModifyPrice';
 import { sim, chat, pgp, vpn, DEALER, ADMIN, SDEALER } from '../../../constants/Constants';
 import AppFilter from '../../../components/AppFilter/index';
 import PricesList from './components/pricesList';
-import { componentSearch, getDealerStatus, titleCase, convertToLang } from '../../utils/commonUtils';
+import { componentSearch, getDealerStatus, titleCase, convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { Tab_All } from '../../../constants/TabConstants';
 import {
     TAB_SIM_ID,
@@ -336,6 +336,131 @@ class Prices extends Component {
                 ]
             }
         ];
+        this.standaloneColumns = [
+            {
+                title: "#",
+                dataIndex: 'sr',
+                key: 'sr',
+                align: "center",
+                render: (text, record, index) => ++index,
+            },
+            {
+                title: "ACTION",
+                dataIndex: 'action',
+                align: 'center',
+                className: 'row',
+                // width: 800,
+            },
+            {
+                title: (
+                    <span>
+                        {convertToLang(props.translation[""], "PERMISSIONS")}
+                        {/* <Popover placement="top" content='dumy'>
+                                <span className="helping_txt"><Icon type="info-circle" /></span>
+                            </Popover> */}
+                    </span>),
+                dataIndex: 'permission',
+                key: 'permission',
+                className: 'row'
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="pkg_name"
+                        key="pkg_name"
+                        id="pkg_name"
+                        className="search_heading"
+                        onKeyUp={this.handleHDWSearch}
+                        autoComplete="new-password"
+                        placeholder='NAME'
+                    />
+                ),
+                dataIndex: 'pkg_name',
+                className: '',
+                children: [
+                    {
+                        title: 'NAME',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'pkg_name',
+                        key: 'pkg_name',
+                        sorter: (a, b) => { return a.name.localeCompare(b.name) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+
+            {
+                title: (
+                    <Input.Search
+                        name="pkg_price"
+                        key="pkg_price"
+                        id="pkg_price"
+                        className="search_heading"
+                        onKeyUp={this.handleHDWSearch}
+                        autoComplete="new-password"
+                        placeholder='PRICE (CREDITS)'
+                    />
+                ),
+                dataIndex: 'pkg_price',
+                className: '',
+                children: [
+                    {
+                        title: 'PRICE (CREDITS)',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'pkg_price',
+                        key: 'pkg_price',
+                        // ...this.getColumnSearchProps('status'),
+                        // sorter: (a, b) => { return a.price - b.price },
+                        sorter: (a, b) => { return a.price.localeCompare(b.price) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="pkg_term"
+                        key="pkg_term"
+                        id="pkg_term"
+                        className="search_heading"
+                        onKeyUp={this.handleHDWSearch}
+                        autoComplete="new-password"
+                        placeholder='TERM'
+                    />
+                ),
+                dataIndex: 'pkg_term',
+                className: '',
+                children: [
+                    {
+                        title: 'TERM',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'pkg_term',
+                        key: 'pkg_term',
+                        // ...this.getColumnSearchProps('status'),
+                        // sorter: (a, b) => { return a.price - b.price },
+                        sorter: (a, b) => { return a.price.localeCompare(b.price) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+            {
+                title: (
+                    <span>
+                        {convertToLang(props.translation[PACKAGE_SERVICES], "PACKAGE SERVICES")}
+                    </span>
+                ),
+                align: 'center',
+                dataIndex: 'services',
+                key: 'services',
+                className: 'row '
+            },
+        ];
 
         this.state = {
             pricing_modal: false,
@@ -398,7 +523,7 @@ class Prices extends Component {
 
         if (e.target.value.length) {
 
-            packagesCopy.forEach((dealer) => {
+            checkIsArray(packagesCopy).forEach((dealer) => {
 
                 if (dealer[e.target.name] !== undefined) {
                     if ((typeof dealer[e.target.name]) === 'string') {
@@ -533,16 +658,19 @@ class Prices extends Component {
                 let i = 0
 
                 let packages_type = 'services';
-                if (this.state.packageListTab === '1') {
+                if (this.state.outerTab === '4') {
+                    packages_type = 'standalone_sim';
+                }
+                else if (this.state.packageListTab === '1') {
                     packages_type = 'services';
                 } else if (this.state.packageListTab === '2') {
                     packages_type = 'data_plan';
                 }
-                let packages = this.state.packages.filter(packageItem => packageItem.package_type === packages_type);
+                let packages = checkIsArray(this.state.packages).filter(packageItem => packageItem.package_type === packages_type);
                 let DeleteBtn = null;
                 let EditBtn = null;
                 let ModifyBtn = null;
-                return packages.map((item, index) => {
+                return checkIsArray(packages).map((item, index) => {
                     let customStyle = {}
                     if (item.pkg_term === "trial") {
                         customStyle = { display: 'none' }
@@ -602,19 +730,19 @@ class Prices extends Component {
                 })
             }
         } else if (type === "hardware") {
-            if (this.state.hardwares) {
-                return this.state.hardwares.map((item, index) => {
-                    return {
-                        key: item.id,
-                        sr: ++index,
-                        action:
-                            <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.modifyItem(item, true, 'hardware') }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "MODIFY PRICE")}</Button>,
-                        name: item.hardware_name,
-                        price: item.hardware_price,
-                        retail_price: item.retail_price
-                    }
-                })
-            }
+            // if (this.state.hardwares) {
+            return checkIsArray(this.state.hardwares).map((item, index) => {
+                return {
+                    key: item.id,
+                    sr: ++index,
+                    action:
+                        <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.modifyItem(item, true, 'hardware') }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "MODIFY PRICE")}</Button>,
+                    name: item.hardware_name,
+                    price: item.hardware_price,
+                    retail_price: item.retail_price
+                }
+            })
+            // }
         } else {
             return [];
         }
@@ -815,6 +943,7 @@ class Prices extends Component {
                                                     package={record}
                                                     savePermission={this.props.packagePermission}
                                                     translation={this.props.translation}
+                                                    auth={this.props.auth}
 
                                                 />
 
@@ -849,6 +978,46 @@ class Prices extends Component {
                                     dataSource={this.renderList("hardware")}
                                     bordered
                                     pagination={false}
+                                />
+                            </Tabs.TabPane>
+                            <Tabs.TabPane tab="Stand Alone Sims" key="4">
+                                <Table
+                                    className="devices policy_expand"
+                                    rowClassName={(record, index) => this.state.expandedRowKeys.includes(index) ? 'exp_row' : ''}
+                                    size="default"
+                                    bordered
+                                    expandIcon={(props) => this.customExpandIcon(props)}
+                                    // onExpand={this.onExpandRow}
+                                    expandedRowRender={(record) => {
+                                        // console.log("expandTabSelected", record);
+                                        // console.log("table row", this.state.expandTabSelected[record.rowKey]);
+                                        return <PackagesInfo
+                                            selected={this.state.expandTabSelected[record.rowKey]}
+                                            package={record}
+                                            savePermission={this.props.packagePermission}
+                                            translation={this.props.translation}
+                                            auth={this.props.auth}
+
+                                        />
+
+                                        // if (Object.keys(record.pkg_features).length !== 0 && record.pkg_features.constructor === Object) {
+                                        // } else {
+                                        //     return (
+                                        //         <div>
+                                        //         </div>
+                                        //     )
+                                        // }
+                                    }}
+                                    expandIconColumnIndex={2}
+                                    expandedRowKeys={this.state.expandedRowKeys}
+                                    expandIconAsCell={false}
+                                    columns={this.standaloneColumns}
+                                    onChange={this.props.onChangeTableSorting}
+                                    dataSource={this.renderList("packages")}
+                                    pagination={false}
+                                    rowKey="policy_list"
+                                    ref='policy_table'
+                                    scroll={{ x: true }}
                                 />
                             </Tabs.TabPane>
                         </Tabs>

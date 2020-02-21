@@ -34,6 +34,7 @@ import {
     FLAG_DEVICE,
     UNFLAG_DEVICE,
     WIPE_DEVICE,
+    CHAT_ID_SETTINGS,
     CHECKPASS,
     GET_DEALER_APPS,
     HANDLE_CHECK_EXTENSION,
@@ -82,7 +83,9 @@ import {
     CANCEL_EXTENDED_SERVICE,
     GET_DEVICE_LIST,
     GET_DEVICE_BILLING_HISTORY,
-    DEVICE_NOT_FOUND
+    DEVICE_NOT_FOUND,
+    ENABLE_PWD_CONFIRM,
+    RESET_PGP_LIMIT
 } from "../../constants/ActionTypes";
 
 import {
@@ -91,6 +94,7 @@ import {
 
 import { message, Modal, Alert, Icon } from 'antd';
 import { ACK_UNINSTALLED_APPS, ACK_INSTALLED_APPS, ACK_SETTING_APPLIED, SEND_ONLINE_OFFLINE_STATUS } from '../../constants/SocketConstants';
+import { checkIsArray } from '../../routes/utils/commonUtils';
 // import { Button_Cancel } from '../../constants/ButtonConstants';
 // import { convertToLang } from '../../routes/utils/commonUtils';
 // import { WIPE_DEVICE_DESCRIPTION } from '../../constants/DeviceConstants';
@@ -213,7 +217,8 @@ const initialState = {
     encryptedAllPushApps: false,
     servicesHistoryList: [],
     device_list: [],
-    device_billing_history: []
+    device_billing_history: [],
+    chatIdSettingsEnable: false
 };
 let pwdObject = { "admin_password": null, "guest_password": null, "encrypted_password": null, "duress_password": null }
 
@@ -222,6 +227,12 @@ export default (state = initialState, action) => {
 
     switch (action.type) {
 
+        case ENABLE_PWD_CONFIRM: {
+            return {
+                ...state,
+                chatIdSettingsEnable: false
+            }
+        }
         case CHANGE_PAGE: {
 
             let checkApplyBtn = handleApplyBtn(action.payload, state.undoControls, state.redoControls, state.undoExtensions, state.redoExtensions, state.undoApps, state.redoApps);
@@ -705,35 +716,54 @@ export default (state = initialState, action) => {
 
         case RESET_CHAT_PIN: {
 
-          if (action.payload.status) {
-            success({
-              title: action.payload.msg,
-            });
-          } else {
-            error({
-              title: action.payload.msg,
-            });
-          }
-          return {
-            ...state,
-          }
+            if (action.payload.status) {
+                success({
+                    title: action.payload.msg,
+                });
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+            return {
+                ...state,
+            }
         }
 
-      case CHANGE_SCHAT_ACCOUNT_STATUS: {
+        case RESET_PGP_LIMIT: {
 
-        if (action.payload.status) {
-          success({
-            title: action.payload.msg,
-          });
-        } else {
-          error({
-            title: action.payload.msg,
-          });
+            if (action.payload.status) {
+                success({
+                    title: action.payload.msg,
+                });
+                state.device.pgp_remaining_limit = 10
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+            // console.log(state.device.pgp_remaining_limit);
+            return {
+                ...state,
+                device: JSON.parse(JSON.stringify(state.device))
+            }
         }
-        return {
-          ...state,
+
+        case CHANGE_SCHAT_ACCOUNT_STATUS: {
+
+            if (action.payload.status) {
+                success({
+                    title: action.payload.msg,
+                });
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+            return {
+                ...state,
+            }
         }
-      }
 
 
         // Common Reducer: to display the message from server
@@ -758,17 +788,13 @@ export default (state = initialState, action) => {
         }
 
         case TRANSFER_HISTORY: {
-            if (action.payload.status) {
-                return {
-                    ...state,
-                    transferHistoryList: action.payload.data,
-                    // getHistory: new Date()
-                }
-            } else {
-                return {
-                    ...state,
-                }
+            // if (action.payload.status) {
+            return {
+                ...state,
+                transferHistoryList: action.payload.data,
+                // getHistory: new Date()
             }
+            // }
         }
 
         case SERVICES_HISTORY: {
@@ -938,6 +964,11 @@ export default (state = initialState, action) => {
                         wipeDevieStatus: new Date()
                     }
                     // showConfirm1(action.payload.device, "Do you really want to Wipe the device " + action.payload.device.device_id + "?")
+                } else if (action.payload.actionType === CHAT_ID_SETTINGS) {
+                    return {
+                        ...state,
+                        chatIdSettingsEnable: true
+                    }
                 }
                 else if (action.payload.actionType === POLICY) {
                     return {
@@ -1179,7 +1210,7 @@ export default (state = initialState, action) => {
             let changedExtensions = JSON.parse(JSON.stringify(state.extensions));
             // console.log("changedExtensions: ", changedExtensions, action.payload);
 
-            changedExtensions.forEach(extension => {
+            checkIsArray(changedExtensions).forEach(extension => {
                 if (extension.app_id === action.payload.app_id) {
                     // console.log(extension, extension[action.payload.key]);
                     extension[action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
@@ -1226,7 +1257,7 @@ export default (state = initialState, action) => {
             let changedExtensions = JSON.parse(JSON.stringify(state.extensions));
             state[action.payload.keyAll] = action.payload.value;
 
-            changedExtensions.forEach(extension => {
+            checkIsArray(changedExtensions).forEach(extension => {
                 extension[action.payload.key] = action.payload.value === true ? 1 : 0;
                 extension.isChanged = true;
 
@@ -1325,7 +1356,7 @@ export default (state = initialState, action) => {
         }
         case HANDLE_CHECK_APP: {
             let changedApps = JSON.parse(JSON.stringify(state.app_list));
-            changedApps.forEach(app => {
+            checkIsArray(changedApps).forEach(app => {
                 if (app.app_id === action.payload.app_id) {
                     app.isChanged = true;
                     app[action.payload.key] = action.payload.value;
@@ -1354,7 +1385,7 @@ export default (state = initialState, action) => {
 
         case HANDLE_CHECK_ALL: {
             let applications = JSON.parse(JSON.stringify(state.app_list));
-            applications.forEach(app => {
+            checkIsArray(applications).forEach(app => {
                 if (!app.extension && app.visible) {
                     // console.log(app[action.payload.key], 'kkkkkk', 'guest')
                     app.isChanged = true;
@@ -1530,7 +1561,7 @@ export default (state = initialState, action) => {
                     state.sim_list.push(action.payload);
                 }
 
-                let unRegSims = state.unRegSims.filter(e => e.iccid !== action.payload.iccid);
+                let unRegSims = checkIsArray(state.unRegSims).filter(e => e.iccid !== action.payload.iccid);
                 let getCheckAllValues = checkAllSims(state.sim_list);
 
                 return {
@@ -1613,7 +1644,7 @@ export default (state = initialState, action) => {
 
                 let stateSims = state.sim_list;
                 let getCheckAllValues = checkAllSims(stateSims);
-                let sims = stateSims.filter(e => e.iccid !== action.payload.iccid);
+                let sims = checkIsArray(stateSims).filter(e => e.iccid !== action.payload.iccid);
                 action.payload["created_at"] = new Date();
                 state.simHistoryList.push(action.payload);
 
@@ -1800,8 +1831,8 @@ export default (state = initialState, action) => {
             // console.log("add app in app_list")
             let app_list = state.app_list;
             if (action.payload.status) {
-                action.payload.app_list.forEach((app) => {
-                    let found = state.app_list.filter(e => e.uniqueName === app.uniqueName);
+                checkIsArray(action.payload.app_list).forEach((app) => {
+                    let found = checkIsArray(state.app_list).filter(e => e.uniqueName === app.uniqueName);
                     if (found.length === 0) {
                         app_list.push(app)
                     }
@@ -1819,9 +1850,9 @@ export default (state = initialState, action) => {
         case ACK_UNINSTALLED_APPS: {
             let app_list = state.app_list;
             if (action.payload.status) {
-                action.payload.app_list.forEach((app) => {
+                checkIsArray(action.payload.app_list).forEach((app) => {
                     let index = 0;
-                    app_list.forEach((apk, i) => {
+                    checkIsArray(app_list).forEach((apk, i) => {
                         if (apk.package_name === app.packageName) {
                             index = i;
                         }
@@ -2093,7 +2124,7 @@ function handleCheckedAll(applications) {
     let encryptedAll = false;
     let enableAll = false;
 
-    applications.forEach(app => {
+    checkIsArray(applications).forEach(app => {
         if (!app.extension && app.visible) {
             applicationLength = applicationLength + 1;
             if (app.guest === true || app.guest === 1) {
@@ -2138,7 +2169,7 @@ function handleCheckedAllExts(extensions) {
     let guestAll = false;
     let encryptedAll = false;
 
-    extensions.forEach(app => {
+    checkIsArray(extensions).forEach(app => {
         if (app.guest === true || app.guest === 1) {
             ++guestCount;
         }
@@ -2179,7 +2210,7 @@ function getCheckedAllPushApp(apkList) {
     let encryptedAll = false;
     let enableAll = false;
 
-    apkList.forEach(app => {
+    checkIsArray(apkList).forEach(app => {
         if (app.guest === true || app.guest === 1) {
             guestCount = guestCount + 1;
         }
@@ -2234,8 +2265,8 @@ function checkAllSims(sims) {
         }
     } else if (sims.length) {
 
-        let checkEnc = sims.filter(e => e.encrypt != true);
-        let checkGst = sims.filter(e => e.guest != true);
+        let checkEnc = checkIsArray(sims).filter(e => e.encrypt != true);
+        let checkGst = checkIsArray(sims).filter(e => e.guest != true);
 
         if (checkGst.length > 0) guestSimAll = 0; else guestSimAll = 1;
         if (checkEnc.length > 0) encryptSimAll = 0; else encryptSimAll = 1;

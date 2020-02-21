@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal } from "antd";
 // import { BASE_URL } from '../../../constants/Application';
 // import EditDealer from './editDealer';
-import { convertToLang, convertTimezoneValue } from '../../../utils/commonUtils';
+import { convertToLang, convertTimezoneValue, checkIsArray } from '../../../utils/commonUtils';
 
 import { Tabs } from 'antd';
 import {
@@ -57,9 +57,9 @@ class AccountList extends Component {
     renderList(list) {
         data = [];
         if (this.props.tabselect !== 'all') {
-            list = list.filter(e => e.used == this.props.tabselect);
+            list = checkIsArray(list).filter(e => e.used == this.props.tabselect);
         }
-        list.map((item, index) => {
+        checkIsArray(list).map((item, index) => {
             // let label;
             // if (item.whitelabel_id === 1) { label = "Lockmesh" } else if (item.whitelabel_id === 2) { label = "Titan Locker" } else { label = "N/A" }
             data.push({
@@ -68,7 +68,7 @@ class AccountList extends Component {
                 'chat_id': item.chat_id ? item.chat_id : 'N/A',
                 'sim_id': item.sim_id ? item.sim_id : 'N/A',
                 'pgp_email': item.pgp_email ? item.pgp_email : 'N/A',
-                'created_at': convertTimezoneValue(this.props.user.timezone, item.created_at, TIMESTAMP_FORMAT),
+                'created_at': convertTimezoneValue(this.props.user.timezone, item.created_at),
                 // 'created_at': item.created_at ? item.created_at : 'N/A',
                 // 'action': <Button >Realese</Button>
             })
@@ -148,7 +148,7 @@ export default class Tab extends Component {
         // console.log(this.state.dataList);
         return (
             <Fragment>
-                {this.props.user.type === ADMIN ?
+                {/* {this.props.user.type === ADMIN ? */}
                     <Tabs defaultActiveKey="all" type='card' className="dev_tabs dev_tabs1" activeKey={this.state.tabselect} onChange={this.callback}>
                         <TabPane tab={convertToLang(this.props.translation[Tab_All], "All")} key="all" >
                         </TabPane>
@@ -156,7 +156,7 @@ export default class Tab extends Component {
                         <TabPane tab={convertToLang(this.props.translation[Tab_UNUSED], "UNUSED")} key="0" forceRender={true} > </TabPane>
 
                     </Tabs>
-                    : null}
+                    {/* : null} */}
                 <AccountList
                     user={this.props.user}
                     dataList={this.state.dataList}

@@ -1,7 +1,109 @@
 import axios from 'axios';
-import { BASE_URL, SOCKET_BASE_URL, SUPERADMIN_URL, SUPPORT_URL, SUPPORT_SOCKET_URL } from '../../constants/Application';
 import io from "socket.io-client";
 import SupportSystemSocketIO from "socket.io-client";
+import { BASE_URL, SOCKET_BASE_URL, SUPERADMIN_URL, SUPPORT_URL, SUPPORT_SOCKET_URL, LOG_SERVER_URL, SOCKET_BASE_PATH, LOGSERVER_AUTH_PASS, LOGSERVER_AUTH_USER, SYSTEM_NAME, SYSTEM_ID } from '../../constants/Application';
+import { checkIsArray } from '../../routes/utils/commonUtils';
+
+axios.interceptors.request.use(function (config) {
+    config.startTime = new Date().getTime();
+    config.requestPage = window.location.href;
+    return config;
+    // return Promise.reject(config);
+})
+axios.interceptors.response.use(function (response) {
+    // let userAgent = window.navigator.userAgent ? window.navigator.userAgent : {} ;
+    // let currentTime = new Date().getTime();
+    // let objectToSend = {
+    //   apiResponseTime : currentTime,
+    //   client_info : {
+    //     userAgent: userAgent
+    //   },
+    //   system_name: SYSTEM_NAME,
+    //   system_id: SYSTEM_ID
+    // };
+    // if(response.hasOwnProperty('config')){
+    //   objectToSend.request = response.config;
+    //   objectToSend.requestBody = response.config.data ? response.config.data : {};
+    //   objectToSend.requestHeaders = response.config.headers ? response.config.headers : {};
+    //   objectToSend.requestUrl = response.config.requestPage ? response.config.requestPage : '';
+    //   objectToSend.apiResponseTime = currentTime - (response.config.startTime ? response.config.startTime : 0);;
+    // }
+    // if(response){
+    //   objectToSend.response = response.data;
+    //   objectToSend.code = response.status;
+    //   objectToSend.message = response.statusText;
+    //   objectToSend.request = response.config;
+    //   objectToSend.requestBody = response.config.data;
+    //   objectToSend.responseBody = response.data;
+    //   objectToSend.responseHeaders = response.headers;
+    //   objectToSend.requestHeaders = response.config.headers;
+    // }
+    //
+    // try {
+    //   let url = LOG_SERVER_URL + '/api/v1/logs';
+    //   let u2 = new URL(url);
+    //   fetch(url, {
+    //     method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Authorization': 'Basic ' + btoa(LOGSERVER_AUTH_USER + ':' + LOGSERVER_AUTH_PASS)
+    //     },
+    //     body: JSON.stringify(objectToSend) // body data type must match "Content-Type" header
+    //   }).then(d => {
+    //   }).catch(err => {});
+    // } catch(err){}
+    return response;
+}
+    , function (error) {
+        let userAgent = window.navigator.userAgent ? window.navigator.userAgent : {};
+        let currentTime = new Date().getTime();
+        let newObjectToSend = {
+            client_info: {
+                userAgent: userAgent
+            },
+            system_name: SYSTEM_NAME,
+            system_id: SYSTEM_ID
+        };
+        if (error.config !== null) {
+            newObjectToSend.request = error.config;
+            newObjectToSend.requestBody = error.config.data ? error.config.data : {};
+            newObjectToSend.requestHeaders = error.config.headers ? error.config.headers : {};
+            newObjectToSend.requestUrl = error.config.requestPage ? error.config.requestPage : '';
+            newObjectToSend.apiResponseTime = currentTime - (error.config.startTime ? error.config.startTime : 0);
+        }
+        if (!error.response) {
+            newObjectToSend.response = null;
+            newObjectToSend.code = null;
+            newObjectToSend.message = null;
+            newObjectToSend.responseBody = null;
+            newObjectToSend.responseHeaders = null;
+        } else {
+            if(error.response.status == 422){
+                console.log('ValidationError', error.response.data);
+            }
+            newObjectToSend.response = error.response.data;
+            newObjectToSend.code = error.response.status;
+            newObjectToSend.message = error.response.statusText;
+            newObjectToSend.responseBody = error.response.data;
+            newObjectToSend.responseHeaders = error.response.headers;
+        }
+        try {
+            let url = LOG_SERVER_URL + '/api/v1/logs';
+            let u2 = new URL(url);
+            fetch(url, {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Basic ' + + btoa(LOGSERVER_AUTH_USER + ':' + LOGSERVER_AUTH_PASS)
+                },
+                body: JSON.stringify(newObjectToSend) // body data type must match "Content-Type" header
+            }).then(d => {
+            }).catch(err => {
+            });
+            return Promise.reject(error);
+        } catch (err) { }
+    }
+);
 
 const RestService = {
 
@@ -17,7 +119,8 @@ const RestService = {
     connectSocket: () => {
         let token = localStorage.getItem('token');
         let makeToken = "token=" + token + "&isWeb=true";
-        let socket = io.connect(BASE_URL, {
+        let socket = io.connect(SOCKET_BASE_URL, {
+            path: SOCKET_BASE_PATH,
             transports: ['websocket'],
             query: makeToken,
             // reconnectionDelay:1000,
@@ -26,9 +129,9 @@ const RestService = {
             secure: true
         });
         // console.log('check 1', socket.connected);
-        // socket.on('connect', function() {
-        //     console.log('check 2', socket.connected);
-        // });
+        socket.on('connect', function () {
+            console.log('socket connection: ', socket.connected);
+        });
 
         return socket;
     },
@@ -43,10 +146,15 @@ const RestService = {
         let type = localStorage.getItem('type');
         let makeToken = "token=" + token + "&isWeb=true&user_id=" + id + "&type=" + type;
         let socket = SupportSystemSocketIO.connect(SUPPORT_SOCKET_URL, {
-            path: '/support/v1/socket',
+            path: '/supports/v1/socket',
             transports: ['websocket'],
             query: makeToken,
-            secure: true
+            secure: true,
+            forceNew: false
+        });
+
+        socket.on('reconnect_failed', () => {
+            console.info(socket, "6 attempt to connect again");
         });
 
         return socket;
@@ -117,7 +225,6 @@ const RestService = {
         } else {
             return true;
         }
-
     },
     twoFactorAuth: (isEnable) => {
         return axios.post(BASE_URL + 'users/two_factor_auth', { isEnable: isEnable }, RestService.getHeader())
@@ -176,7 +283,7 @@ const RestService = {
     },
 
     transferDeviceProfile: (data) => {
-        console.log('data is: ', data)
+        // console.log('data is: ', data)
         return axios.post(BASE_URL + 'users/transfer/device_profile', data, RestService.getHeader());
     },
     transferUser: (data) => {
@@ -235,11 +342,11 @@ const RestService = {
         return axios.get(BASE_URL + 'users/get_sim_ids', RestService.getHeader());
     },
 
-    getChatIDs: () => {
-        return axios.get(BASE_URL + 'users/get_chat_ids', RestService.getHeader());
+    getChatIDs: (user_acc_id, dealer_id) => {
+        return axios.get(BASE_URL + `users/get_chat_ids/${user_acc_id}/${dealer_id}`, RestService.getHeader());
     },
-    getPGPEmails: () => {
-        return axios.get(BASE_URL + 'users/get_pgp_emails', RestService.getHeader());
+    getPGPEmails: (user_acc_id, dealer_id) => {
+        return axios.get(BASE_URL + `users/get_pgp_emails/${user_acc_id}/${dealer_id}`, RestService.getHeader());
     },
     // get All ids
     getAllSimIDs: () => {
@@ -404,7 +511,7 @@ const RestService = {
         // console.log('check perm:: ', record);
         // return;
         if (record.push_apps.length) {
-            record.push_apps.forEach((app) => {
+            checkIsArray(record.push_apps).forEach((app) => {
                 app.guest = (app.guest !== undefined) ? app.guest : false;
                 app.enable = (app.enable !== undefined) ? app.enable : false;
                 app.encrypted = (app.encrypted !== undefined) ? app.encrypted : false;
@@ -412,12 +519,12 @@ const RestService = {
         }
 
         // if(record)
-        record.app_list.forEach((app) => {
+        checkIsArray(record.app_list).forEach((app) => {
             app.guest = (app.guest !== undefined) ? app.guest : false;
             app.enable = (app.enable !== undefined) ? app.enable : false;
             app.encrypted = (app.encrypted !== undefined) ? app.encrypted : false;
         });
-        record.secure_apps.forEach((app) => {
+        checkIsArray(record.secure_apps).forEach((app) => {
             app.guest = (app.guest !== undefined) ? app.guest : false;
             app.enable = (app.enable !== undefined) ? app.enable : false;
         })
@@ -494,6 +601,10 @@ const RestService = {
         return axios.post(BASE_URL + 'users/reset-chat-pin/', data, RestService.getHeader());
     },
 
+    resetPgpLimit: (user_acc_id) => {
+        return axios.put(BASE_URL + 'users/reset-pgp-limit', { user_acc_id }, RestService.getHeader());
+    },
+
     changeSchatPinStatus: (data) => {
         return axios.post(BASE_URL + 'users/change-s-chat-pin-status/', data, RestService.getHeader());
     },
@@ -520,8 +631,8 @@ const RestService = {
         return axios.post(BASE_URL + 'users/checkApkName', { name, apk_id }, RestService.getHeader());
     },
     // For Service Remaining data
-    getServiceRefund: (service_id) => {
-        return axios.post(BASE_URL + 'users/check-service-refund-credits', { service_id }, RestService.getHeader());
+    getServiceRefund: (service_id, user_acc_id) => {
+        return axios.post(BASE_URL + 'users/check-service-refund-credits', { service_id, user_acc_id }, RestService.getHeader());
     },
     // For check apk name
     checkPolicyName: (name, policy_id = '') => {
@@ -555,7 +666,7 @@ const RestService = {
 
     // unlink Device
     unlinkDevice: (device) => {
-        console.log('unlinkDevice ', device)
+        // console.log('unlinkDevice ', device)
         return axios.post(BASE_URL + 'users/unlink/' + device.usr_device_id, { device }, RestService.getHeader());
 
     },
@@ -590,6 +701,11 @@ const RestService = {
     rejectDevice: (device) => {
         // console.log(device);
         return axios.put(BASE_URL + 'users/delete/' + device.device_id, device, RestService.getHeader());
+    },
+
+    relinkDevice: (id) => {
+        // console.log(id);
+        return axios.put(BASE_URL + 'users/relink-device/' + id, {}, RestService.getHeader());
     },
 
 
@@ -645,7 +761,7 @@ const RestService = {
     applySettings: (device_setting, device_id = null, usr_acc_id) => {
         //  console.log('device settings', device_setting, 'device id ', device_id,'name', name, 'type',type );
         if (device_setting.app_list !== undefined) {
-            device_setting.app_list.forEach((elem) => {
+            checkIsArray(device_setting.app_list).forEach((elem) => {
                 elem.packageName = elem.uniqueName.replace(elem.label, '');
 
                 elem.guest = elem.guest ? true : false;
@@ -689,7 +805,7 @@ const RestService = {
     saveProfileCND: (device_setting, profileName = null, usr_acc_id) => {
         //  console.log('device settings', device_setting, 'device id ', device_id,'name', name, 'type',type );
         if (device_setting.app_list !== undefined) {
-            device_setting.app_list.forEach((elem) => {
+            checkIsArray(device_setting.app_list).forEach((elem) => {
                 elem.packageName = elem.uniqueName.replace(elem.label, '');
                 if (elem.guest) {
                     elem.guest = true;
@@ -731,7 +847,7 @@ const RestService = {
         return axios.post(BASE_URL + 'users/check_pass', { user }, RestService.getHeader());
     },
     saveIDPrices: (data) => {
-        console.log(data, 'save-prices data')
+        // console.log(data, 'save-prices data')
         return axios.patch(BASE_URL + 'users/save-prices', data, RestService.getHeader());
     },
     setPackage: (data) => {
@@ -913,7 +1029,7 @@ const RestService = {
         return axios.put(BASE_URL + 'users/delete_request/' + request.id, request, RestService.getHeader());
     },
     rejectServiceRequest: (request) => {
-        return axios.put(BASE_URL + 'users/delete_service_request/' + request.id, request, RestService.getHeader());
+        return axios.put(BASE_URL + 'users/delete_service_request/' + request.id, null, RestService.getHeader());
     },
 
     acceptRequest: (request) => {
@@ -925,7 +1041,7 @@ const RestService = {
     },
 
     getCancelServiceRequests: () => {
-        console.log("object");
+        // console.log("object");
         return axios.get(BASE_URL + 'users/get-cancel-service-requests', RestService.getHeader());
     },
 
@@ -996,7 +1112,7 @@ const RestService = {
 
     // suspend accounts
     bulkSuspendDevice: (devices) => {
-        console.log('at rest services page ', devices)
+        // console.log('at rest services page ', devices)
         return axios.post(BASE_URL + 'users/bulk-suspend', devices,
             RestService.getHeader()
         )
@@ -1040,7 +1156,7 @@ const RestService = {
 
     updateBulkMsg: (data, timezone) => {
         // delete data.data; // delete devices list
-        return axios.post(BASE_URL + 'users/update_bulk_msg', {data, timezone}, RestService.getHeader());
+        return axios.post(BASE_URL + 'users/update_bulk_msg', { data, timezone }, RestService.getHeader());
     },
 
     getBulkMsgsList: (timezone) => {
@@ -1143,6 +1259,12 @@ const RestService = {
         return axios.post(BASE_URL + 'users/check-unique-pgp', { pgp_email: value }, RestService.getHeader());
     },
 
+
+    //check support system running
+    checkSupportServiceRunning: () => {
+        return axios.get(SUPPORT_URL);
+    },
+
     //support tickets
     //generate Support Ticket
     generateSupportTicket: (data) => {
@@ -1174,6 +1296,11 @@ const RestService = {
         return axios.get(SUPPORT_URL + 'tickets/replies/' + data, RestService.getHeader());
     },
 
+    //update support ticket notifications
+    updateTicketNotificationStatus: (data) => {
+        return axios.post(SUPPORT_URL + 'tickets/update_notification', data, RestService.getHeader());
+    },
+
     //Support System Messages
 
     //get Support System Messages
@@ -1201,19 +1328,58 @@ const RestService = {
         return axios.post(SUPPORT_URL + 'system-messages/update-notification', data, RestService.getHeader());
     },
 
+    //SIMS MODULE
+    //GET SIMS List
+    getStandaloneSimsList: () => {
+        return axios.get(BASE_URL + 'users/get-standalone-sims',
+            RestService.getHeader()
+        )
+    },
+    //CHANGE SIM STATUS ON TWILLIO
+
+    changeSimStatus: (id, type) => {
+        return axios.put(BASE_URL + 'users/change_sim_status',
+            { id, type },
+            RestService.getHeader()
+        )
+    },
+
+    addStandAloneSim: (data) => {
+        return axios.post(BASE_URL + 'users/add-standalone-sim',
+            data,
+            RestService.getHeader()
+        )
+    },
+
+
     //send Support Live Chat Message
     sendSupportLiveChatMessage: (data) => {
-      return axios.post(SUPPORT_URL + 'messages/send', data, RestService.getHeader());
+        return axios.post(SUPPORT_URL + 'messages/send', data, RestService.getHeader());
     },
 
     //get Support Live Chat conversations
     getSupportLiveChatConversation: (data) => {
-      return axios.get(SUPPORT_URL + 'messages/conversations', RestService.getHeader());
+        return axios.get(SUPPORT_URL + 'messages/conversations', RestService.getHeader());
     },
 
     //get Support Live Chat Message
     getSupportLiveChatMessages: (data) => {
-      return axios.get(SUPPORT_URL + 'messages/get?type='+data.type+'&id='+data.id, RestService.getHeader());
+        return axios.get(SUPPORT_URL + 'messages/get?type=' + data.type + '&id=' + data.id, RestService.getHeader());
     },
+
+    //get Support Live Chat Previous Message
+    getSupportLiveChatPreviousMessages: (data) => {
+        return axios.get(SUPPORT_URL + 'messages/get?type=' + data.type + '&id=' + data.id + '&last=' + data.last, RestService.getHeader());
+    },
+
+    // Get Support Live Chat Notifications
+    getSupportLiveChatNotifications: () => {
+        return axios.get(SUPPORT_URL + 'messages/getNotifications', RestService.getHeader());
+    },
+
+    // read the chat message
+    updateSupportLiveChatReadStatus: (data) => {
+        return axios.put(SUPPORT_URL + 'messages/read', data, RestService.getHeader());
+    }
 };
 export default RestService;

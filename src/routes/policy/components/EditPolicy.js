@@ -24,7 +24,7 @@ import {
     NAME
 } from '../../../constants/PolicyConstants';
 import { Button_Save, Button_Cancel, Button_AddApps, Button_Add } from '../../../constants/ButtonConstants';
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { Tab_POLICY_SELECTED_APPS, Guest, ENCRYPTED, ENABLE, Tab_SECURE_SETTING } from '../../../constants/TabConstants';
 import { SPA_APPS } from '../../../constants/AppConstants';
 
@@ -157,7 +157,7 @@ class EditPolicy extends Component {
             // showing updated Policy Push Apps
             // this.props.apk_list
 
-            this.props.push_apps.map((apk) => {
+            checkIsArray(this.props.push_apps).map((apk) => {
                 let index = editAblePolicy.push_apps.findIndex(app => app.apk_id === apk.apk_id)
                 if (index && index !== -1) {
 
@@ -219,7 +219,7 @@ class EditPolicy extends Component {
             if (this.props.editAblePolicy.length) {
                 let editAblePolicy = this.props.editAblePolicy.find(item => item.id === this.props.editAblePolicyId)
 
-                this.props.push_apps.map((apk) => {
+                checkIsArray(this.props.push_apps).map((apk) => {
                     let index = editAblePolicy.push_apps.findIndex(app => app.apk_id === apk.apk_id)
                     if (index && index !== -1) {
 
@@ -312,7 +312,7 @@ class EditPolicy extends Component {
             let featuredApps = []
             let apps = []
             let allApks = []
-            data.map((item, index) => {
+            checkIsArray(data).map((item, index) => {
                 if (item.package_name === 'com.armorSec.android' || item.package_name === 'ca.unlimitedwireless.mailpgp' || item.package_name === 'com.rim.mobilefusion.client') {
                     featuredApps.push(item);
                     // allApks.splice(index, 1)
@@ -322,7 +322,7 @@ class EditPolicy extends Component {
             })
 
             allApks = [...featuredApps, ...apps]
-            return allApks.map(app => {
+            return checkIsArray(allApks).map(app => {
                 let app_id = (app.apk_id !== undefined) ? app.apk_id : app.id;
                 let label = (app.apk_name !== undefined) ? app.apk_name : app.label;
                 let icon = (app.logo !== undefined) ? app.logo : app.icon;
@@ -348,23 +348,23 @@ class EditPolicy extends Component {
 
         const { controls } = this.state.editAblePolicy;
 
-        if (controls) {
-            return controls.map(control => {
-                return {
-                    rowKey: control.setting_name,
-                    name: control.setting_name,
-                    action: (
-                        <Switch
-                            checked={(control.setting_status === 1 || control.setting_status === true) ? true : false}
-                            onClick={(e) => {
-                                return this.props.handleEditPolicy(e, control.setting_name, '', 'controls', this.state.editAblePolicy.id)
-                            }}
-                            size="small"
-                        />
-                    )
-                }
-            })
-        }
+        // if (controls) {
+        return checkIsArray(controls).map(control => {
+            return {
+                rowKey: control.setting_name,
+                name: control.setting_name,
+                action: (
+                    <Switch
+                        checked={(control.setting_status === 1 || control.setting_status === true) ? true : false}
+                        onClick={(e) => {
+                            return this.props.handleEditPolicy(e, control.setting_name, '', 'controls', this.state.editAblePolicy.id)
+                        }}
+                        size="small"
+                    />
+                )
+            }
+        })
+        // }
 
     }
 
@@ -468,27 +468,28 @@ class EditPolicy extends Component {
             if (substring === ' ') {
                 callback("Policy name cannot start with blank space.")
             } else {
-
-                response = await RestService.checkPolicyName(value, this.props.editAblePolicyId).then((response) => {
-                    if (RestService.checkAuth(response.data)) {
-                        if (response.data.status) {
-                            return true
+                if (value && value.length) {
+                    response = await RestService.checkPolicyName(value, this.props.editAblePolicyId).then((response) => {
+                        if (RestService.checkAuth(response.data)) {
+                            if (response.data.status) {
+                                return true
+                            }
+                            else {
+                                return false
+                            }
                         }
-                        else {
-                            return false
-                        }
+                    });
+                    if (response) {
+                        callback()
+                        this.props.form.setFieldsValue({
+                            // policy_name: value,
+                            // isPolicy_name: 'success',
+                            command_name: '#' + value.replace(/ /g, '_'),
+                            // policy_name_error: ''
+                        })
+                    } else {
+                        callback("Policy name already taken please use another name.")
                     }
-                });
-                if (response) {
-                    callback()
-                    this.props.form.setFieldsValue({
-                        // policy_name: value,
-                        // isPolicy_name: 'success',
-                        command_name: '#' + value.replace(/ /g, '_'),
-                        // policy_name_error: ''
-                    })
-                } else {
-                    callback("Policy name already taken please use another name.")
                 }
             }
         }
@@ -500,7 +501,7 @@ class EditPolicy extends Component {
 
         let pushedApps = [];
         if (this.state.editAblePolicy && this.state.editAblePolicy.push_apps) {
-            apps.forEach(app => {
+            checkIsArray(apps).forEach(app => {
                 let index = this.state.editAblePolicy.push_apps.findIndex(item => item.apk_id === app.apk_id);
                 // console.log("index ", index);
                 if (index === -1) {
@@ -559,7 +560,7 @@ class EditPolicy extends Component {
                         <TabPane tab={convertToLang(this.props.translation[APPLICATION_PERMISION], "Application Permission")} key="2">
                             <AppList
                                 dataLength={this.state.editAblePolicy.app_list.length}
-                                apk_list={this.state.editAblePolicy.app_list.filter(item => item.uniqueName !== "com.android.settingsSettings")}
+                                apk_list={checkIsArray(this.state.editAblePolicy.app_list).filter(item => item.uniqueName !== "com.android.settingsSettings")}
                                 handleEditPolicy={this.props.handleEditPolicy}
                                 handleCheckAll={this.props.handleCheckAll}
                                 removeAppsFromPolicies={this.props.removeAppsFromPolicies}

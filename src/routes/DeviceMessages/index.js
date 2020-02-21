@@ -7,7 +7,7 @@ import Highlighter from 'react-highlight-words';
 import CircularProgress from "components/CircularProgress";
 // import { getDomains, domainPermission } from "../../appRedux/actions/Account";
 import AppFilter from "../../components/AppFilter";
-import { checkValue, titleCase, convertToLang, getColor, componentSearch, checkTimezoneValue } from '../utils/commonUtils'
+import { checkValue, titleCase, convertToLang, getColor, componentSearch, checkTimezoneValue, checkIsArray } from '../utils/commonUtils'
 import { BASE_URL } from '../../constants/Application';
 import ListMsgs from './components/ListMsgs';
 import SendMsgForm from './components/SendMsgForm';
@@ -30,6 +30,7 @@ import { ACTION, Alert_Delete_APK, SEARCH, DEVICE_UNLINKED, DEVICE_PRE_ACTIVATIO
 import { Button_Save, Button_Yes, Button_No, Button_Ok } from "../../constants/ButtonConstants";
 import { deviceMsgsColumns } from "../utils/columnsUtils";
 import { Tab_Active, Tab_All, Tab_Disabled } from "../../constants/TabConstants";
+import { Required_Fields } from '../../constants/DeviceConstants';
 
 var status = true;
 var coppyApks = [];
@@ -62,7 +63,7 @@ class DeviceMessages extends Component {
     handleTableChange = (pagination, query, sorter) => {
         let { columns } = this.state;
 
-        columns.forEach(column => {
+        checkIsArray(columns).forEach(column => {
             // if (column.children) {
             if (Object.keys(sorter).length > 0) {
                 if (column.dataIndex == sorter.field) {
@@ -139,20 +140,8 @@ class DeviceMessages extends Component {
                 })
             }
         } catch (error) {
-            alert("hello");
+            // alert("hello");
         }
-    }
-
-
-    filterList = (type, dealers) => {
-        let dumyDealers = [];
-        dealers.filter(function (apk) {
-            let dealerStatus = apk.apk_status;
-            if (dealerStatus === type) {
-                dumyDealers.push(apk);
-            }
-        });
-        return dumyDealers;
     }
 
 
@@ -254,14 +243,27 @@ class DeviceMessages extends Component {
                 }
                 {/* Send Message modal */}
                 <Modal
-                    title={convertToLang(this.props.translation[""], "Send Message to Selected Devcies")}
+                    title=
+                    {
+                        < Row >
+                            <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+                                <h3 className="mb-0">
+                                    {convertToLang(this.props.translation[""], "Send Message to Selected Devcies")}
+                                </h3>
+                            </Col>
+                            <Col xs={10} sm={10} md={10} lg={10} xl={10} className="text-right">
+                                <p className="mb-0 require_f">(*)- {convertToLang(this.props.translation[Required_Fields], "Required Fields")}</p>
+                            </Col>
+                        </Row>
+                    }
                     width={"700px"}
                     maskClosable={false}
-                    style={{ top: 20 }}
+                    bodyStyle={{ height: '460px', overflow: 'overlay' }}
                     visible={this.state.visible}
                     onOk={() => this.setState({ visible: false })}
                     onCancel={() => this.setState({ visible: false })}
                     footer={false}
+                    className="s_m_form"
                 >
                     <SendMsgForm
                         setSelectedBulkDevices={this.props.setSelectedBulkDevices}
@@ -276,7 +278,7 @@ class DeviceMessages extends Component {
                         getBulkDevicesList={this.props.getBulkDevicesList}
                         getAllDealers={this.props.getAllDealers}
                         getUserList={this.props.getUserList}
-                        renderList={this.renderDevicesList}
+                        // renderList={this.renderDevicesList}
                         translation={this.props.translation}
                     />
 
@@ -372,7 +374,7 @@ class DeviceMessages extends Component {
                         </Fragment>
                         : null}
                 </Modal>
-            </div>
+            </div >
         )
     }
 
@@ -458,7 +460,7 @@ class DeviceMessages extends Component {
         // console.log('check data for search:: originalData', originalData, "fieldName ", fieldName, "value ", value)
         let demoData = [];
         if (value.length) {
-            originalData.forEach((data) => {
+            checkIsArray(originalData).forEach((data) => {
                 // console.log(data);
                 if (data[fieldName] !== undefined) {
                     if ((typeof data[fieldName]) === 'string') {

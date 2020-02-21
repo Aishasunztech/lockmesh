@@ -44,7 +44,7 @@ import {
     Button_Save
 } from '../../constants/ButtonConstants'
 
-import { componentSearch, titleCase, convertToLang } from '../utils/commonUtils';
+import { componentSearch, titleCase, convertToLang, checkIsArray } from '../utils/commonUtils';
 import { ADMIN } from '../../constants/Constants';
 import { policyColumns } from '../utils/columnsUtils';
 import { POLICY_PAGE_HEADING } from '../../constants/AppFilterConstants';
@@ -76,6 +76,7 @@ class Policy extends Component {
             enableAllappPermissions: false,
             encryptedAllappPermissions: false,
             appsGotted: false,
+            policySearchValue: ''
         }
 
     }
@@ -88,7 +89,7 @@ class Policy extends Component {
     handleTableChange = (pagination, query, sorter) => {
         let { columns } = this.state;
 
-        columns.forEach(column => {
+        checkIsArray(columns).forEach(column => {
             if (column.children) {
                 if (Object.keys(sorter).length > 0) {
                     if (column.dataIndex == sorter.field) {
@@ -137,7 +138,7 @@ class Policy extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
-
+            copyPolicy = this.props.policies;
             this.setState({
                 defaultPagingValue: this.props.DisplayPages,
                 policies: this.props.policies,
@@ -150,6 +151,9 @@ class Policy extends Component {
                 encryptedAllappPermissions: this.props.encryptedAllappPermissions,
                 appsGotted: this.props.appsGotted
             })
+            if (this.state.policySearchValue) {
+                this.handleComponentSearch(this.state.policySearchValue);
+            }
         }
         if (this.props.translation != prevProps.translation) {
             this.setState({
@@ -164,36 +168,29 @@ class Policy extends Component {
     }
 
     handleComponentSearch = (value) => {
-        //    console.log('values sr', value)   
         try {
+            let searchValue = value;
+            let resultPolicies = [];
+
+            if (status) {
+                copyPolicy = this.state.policies;
+                status = false;
+            }
+
             if (value.length) {
-
-                // console.log('length')
-
-                if (status) {
-                    // console.log('status')
-                    copyPolicy = this.state.policies;
-                    status = false;
-                }
-                // console.log(this.state.users,'coppy de', coppyDevices)
                 let foundPolicies = componentSearch(copyPolicy, value);
-                // console.log('found devics', foundPolicies)
                 if (foundPolicies.length) {
-                    this.setState({
-                        policies: foundPolicies,
-                    })
-                } else {
-                    this.setState({
-                        policies: []
-                    })
+                    resultPolicies = foundPolicies;
                 }
             } else {
                 status = true;
-
-                this.setState({
-                    policies: copyPolicy,
-                })
+                resultPolicies = copyPolicy;
             }
+
+            this.setState({
+                policies: resultPolicies,
+                policySearchValue: searchValue
+            })
         } catch (error) {
             // alert("hello");
         }

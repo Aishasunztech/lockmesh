@@ -22,7 +22,11 @@ import {
     BULK_DEVICES_LIST,
     GET_PARENT_HARDWARES,
     ADD_PRODUCT,
-    ADD_DATA_PLAN
+    ADD_DATA_PLAN,
+    REJECT_RELINK_DEVICE,
+    RELINK_DEVICE,
+    RESET_ADD_PRODUCT_PROPS,
+    RESET_IDS
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -283,6 +287,44 @@ export function rejectDevice(device) {
     }
 }
 
+// export function rejectRelinkDevice(device) {
+//     return (dispatch) => {
+//         //
+//         RestService.rejectRelinkDevcie(device).then((response) => {
+//             if (RestService.checkAuth(response.data)) {
+//                 dispatch({
+//                     type: REJECT_RELINK_DEVICE,
+//                     response: response.data,
+//                     device: device,
+//                 })
+//             } else {
+//                 dispatch({
+//                     type: INVALID_TOKEN
+//                 })
+//             }
+//         });
+//     }
+// }
+
+export function relinkDevice(id) {
+    return (dispatch) => {
+        //
+        RestService.relinkDevice(id).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: RELINK_DEVICE,
+                    response: response.data,
+                    user_acc_id: id,
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+    }
+}
+
 export function connectDevice(device_id) {
 
     return { type: CONNECT_DEVICE, device_id }
@@ -305,7 +347,6 @@ export function getSimIDs() {
                     type: GET_SIM_IDS,
                     payload: response.data.data
                 });
-
             } else {
                 dispatch({
                     type: INVALID_TOKEN
@@ -315,17 +356,16 @@ export function getSimIDs() {
     }
 }
 
-export function getChatIDs() {
+export function getChatIDs(user_acc_id, dealer_id) {
     return (dispatch) => {
 
-        RestService.getChatIDs().then((response) => {
+        RestService.getChatIDs(user_acc_id, dealer_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 //
                 dispatch({
                     type: GET_CHAT_IDS,
                     payload: response.data.data
                 });
-
             } else {
                 dispatch({
                     type: INVALID_TOKEN
@@ -335,17 +375,15 @@ export function getChatIDs() {
     }
 }
 
-export function getPGPEmails() {
+export function getPGPEmails(user_acc_id, dealer_id) {
     return (dispatch) => {
         // alert("hello");
-        RestService.getPGPEmails().then((response) => {
+        RestService.getPGPEmails(user_acc_id, dealer_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
-                //
                 dispatch({
                     type: GET_PGP_EMAILS,
                     payload: response.data.data
                 });
-
             } else {
                 dispatch({
                     type: INVALID_TOKEN
@@ -361,7 +399,6 @@ export function getAllSimIDs() {
 
         RestService.getAllSimIDs().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                //
                 dispatch({
                     type: GET_SIM_IDS,
                     payload: response.data.data
@@ -531,9 +568,17 @@ export const getProductPrices = () => {
 }
 
 /**
- * @author Usman Hafeez
+ * @author Hamza Dawood
  * @description action for creating pgp, chat and sim
  */
+
+export const resetIds = () => {
+    return (dispatch) => {
+        dispatch({
+            type: RESET_IDS,
+        })
+    }
+}
 
 export const addProduct = (payload) => {
     return (dispatch) => {
@@ -543,7 +588,8 @@ export const addProduct = (payload) => {
                     type: ADD_PRODUCT,
                     payload: {
                         type: payload.type,
-                        ...response.data
+                        ...response.data,
+                        user_acc_id: payload.user_acc_id
                     }
                 })
             } else {
@@ -553,6 +599,14 @@ export const addProduct = (payload) => {
             }
         });
 
+    }
+}
+
+export const resetProductAddProps = (payload) => {
+    return (dispatch) => {
+        dispatch({
+            type: RESET_ADD_PRODUCT_PROPS,
+        })
     }
 }
 

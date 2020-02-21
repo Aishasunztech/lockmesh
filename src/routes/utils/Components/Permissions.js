@@ -7,7 +7,7 @@ import DealerList from "./DealerList";
 import { Redirect } from 'react-router-dom';
 import CircularProgress from "components/CircularProgress";
 
-import { titleCase, convertToLang, checkValue } from '../commonUtils';
+import { titleCase, convertToLang, checkValue, checkIsArray } from '../commonUtils';
 import { dealerColsWithSearch } from '../columnsUtils';
 import { Button_Remove, Button_Add, Button_AddAll, Button_AddExceptSelected, Button_RemoveAll, Button_RemoveExcept, Button_Save, Button_Cancel, Button_DeleteExceptSelected, Button_Yes, Button_No } from '../../../constants/ButtonConstants';
 import { Permission_List, PERMISSION_Add_Modal_Title, PERMISSION_Remove_Modal_Title, PERMISSION_Add_Except_Selected_Modal_Title } from '../../../constants/ApkConstants';
@@ -53,7 +53,7 @@ class Permissions extends Component {
     let columns = this.state.addDealerColsInModal;
     // console.log('columns are: ', columns);
 
-    columns.forEach(column => {
+    checkIsArray(columns).forEach(column => {
       if (column.children) {
         if (Object.keys(sorter).length > 0) {
           if (column.dataIndex == sorter.field) {
@@ -81,7 +81,7 @@ class Permissions extends Component {
     let columns = this.state.listDealerCols;
     // console.log('columns are: ', columns);
 
-    columns.forEach(column => {
+    checkIsArray(columns).forEach(column => {
       // if (column.children) {
       if (Object.keys(sorter).length > 0) {
         if (column.dataIndex == sorter.field) {
@@ -172,7 +172,7 @@ class Permissions extends Component {
   }
 
   getPermissionIds = (data) => {
-    return data.map((item) => item.dealer_id)
+    return checkIsArray(data).map((item) => item.dealer_id)
   }
 
   addSelectedDealers = () => {
@@ -180,9 +180,9 @@ class Permissions extends Component {
     let selectedRows = this.state.selectedRowKeys;
     // var dList = this.state.dealerList; arfan
     var dList = this.state.dealerListForModal;
-    var add_ids = dList.filter(e => !permissions.includes(e.dealer_id));
-    var addUnSelected = add_ids.filter(e => !selectedRows.includes(e.dealer_id));
-    var addUnSelected_IDs = addUnSelected.map(v => v.dealer_id);
+    var add_ids = checkIsArray(dList).filter(e => !permissions.includes(e.dealer_id));
+    var addUnSelected = checkIsArray(add_ids).filter(e => !selectedRows.includes(e.dealer_id));
+    var addUnSelected_IDs = checkIsArray(addUnSelected).map(v => v.dealer_id);
     // permissions = [...permissions, ...addUnSelected_IDs];
 
     this.setState({
@@ -197,9 +197,9 @@ class Permissions extends Component {
   saveAllDealersConfirm = () => {
     let _this = this;
     confirm({
-      title: convertToLang(this.props.translation[Alert_Allow_Permission_Delaer], "Do you really Want to allow Permission for all Dealers?"),
-      okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
-      cancelText: convertToLang(this.props.translation[Button_No], "No"),
+      title: convertToLang(_this.props.translation[Alert_Allow_Permission_Delaer], "Do you really Want to allow Permission for all Dealers?"),
+      okText: convertToLang(_this.props.translation[Button_Yes], "Yes"),
+      cancelText: convertToLang(_this.props.translation[Button_No], "No"),
       onOk() {
         _this.saveAllDealers()
       },
@@ -211,7 +211,7 @@ class Permissions extends Component {
 
   saveAllDealers = () => {
     let dealer_ids = []
-    this.props.dealerList.map((dealer) => {
+    checkIsArray(this.props.dealerList).map((dealer) => {
       dealer_ids.push(dealer.dealer_id);
     });
     // this.setState({ permissions: dealer_ids })
@@ -245,7 +245,7 @@ class Permissions extends Component {
   onSelectChange = (selectedRowKeys, selectedRows) => {
     // console.log(selectedRowKeys, 'selected', selectedRows);
     let dealer_ids = []
-    selectedRows.forEach(row => {
+    checkIsArray(selectedRows).forEach(row => {
       // console.log("selected row", row)
       dealer_ids.push(row.dealer_id);
     });
@@ -260,7 +260,7 @@ class Permissions extends Component {
     let demoData = [];
 
     if (value.length) {
-      originalData.forEach((data) => {
+      checkIsArray(originalData).forEach((data) => {
         if (data[fieldName] !== undefined) {
           if ((typeof data[fieldName]) === 'string') {
 
@@ -290,11 +290,11 @@ class Permissions extends Component {
     let demoData = [];
 
     if (value.length) {
-      originalData.forEach((data, index) => {
+      checkIsArray(originalData).forEach((data, index) => {
 
         // set permission by value only one time
         if (updateDealers) {
-          this.state.permissions.map((prm) => {
+          checkIsArray(this.state.permissions).map((prm) => {
             if (prm.dealer_id === data.dealer_id) {
               if (prm.dealer_type === "dealer") {
                 data["permission_by"] = this.props.user.name;
@@ -396,9 +396,9 @@ class Permissions extends Component {
   removeAllDealersConfirm = () => {
     let _this = this;
     confirm({
-      title: convertToLang(this.props.translation[Alert_Remove_Permission_Delaer], "Do you really Want to Remove Permission for all Dealers?"),
-      okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
-      cancelText: convertToLang(this.props.translation[Button_No], "No"),
+      title: convertToLang(_this.props.translation[Alert_Remove_Permission_Delaer], "Do you really Want to Remove Permission for all Dealers?"),
+      okText: convertToLang(_this.props.translation[Button_Yes], "Yes"),
+      cancelText: convertToLang(_this.props.translation[Button_No], "No"),
       onOk() {
         _this.removeAllDealers();
       },
@@ -431,7 +431,7 @@ class Permissions extends Component {
   removeUnSelectedDealers = () => {
     let permittedDealers = this.getPermissionIds(this.state.permissions);
     let selectedRows = this.state.selectedRowKeys;
-    var remove_ids = permittedDealers.filter(e => !selectedRows.includes(e));
+    var remove_ids = checkIsArray(permittedDealers).filter(e => !selectedRows.includes(e));
 
     this.setState({
       removeUnSelectedDealersModal: false,
@@ -468,11 +468,11 @@ class Permissions extends Component {
     let data = [];
     // console.log(list);
     // console.log("this.state.permissions: ", this.state.permissions);
-    list.map((dealer) => {
+    checkIsArray(list).map((dealer) => {
       let is_included = false;
       let permitData = {};
 
-      this.state.permissions.map((prm) => {
+      checkIsArray(this.state.permissions).map((prm) => {
         if (prm.dealer_id == dealer.dealer_id) {
           permitData = prm;
           is_included = true;
@@ -574,7 +574,7 @@ class Permissions extends Component {
     if (this.props.user.type === "dealer") {
       // console.log("this.props.record.permissions ", this.props.record.permissions)
       let allPermissions = this.props.record.permissions;
-      checkPermissins = allPermissions.filter((item) => item.dealer_type !== "admin");
+      checkPermissins = checkIsArray(allPermissions).filter((item) => item.dealer_type !== "admin");
       if (checkPermissins.length) {
         removeAllBtn = false;
       } else {
@@ -663,7 +663,7 @@ class Permissions extends Component {
           onCancel={() => {
             this.showDealersModal(false)
           }}
-          bodyStyle={{ height: 500, overflow: "overlay" }}
+          bodyStyle={{ height: 400, overflow: "overlay" }}
         >
           <DealerList
             columns={this.state.addDealerColsInModal}
@@ -692,6 +692,7 @@ class Permissions extends Component {
           onCancel={() => {
             this.removeUnSelectedDealersModal(false)
           }}
+          bodyStyle={{ height: 400, overflow: "overlay" }}
         >
           <DealerList
             columns={this.state.addDealerColsInModal}
@@ -721,7 +722,7 @@ class Permissions extends Component {
           onCancel={() => {
             this.addSelectedDealersModal(false)
           }}
-          bodyStyle={{ height: 500, overflow: "overlay" }}
+          bodyStyle={{ height: 400, overflow: "overlay" }}
         >
           <DealerList
             columns={this.state.addDealerColsInModal}

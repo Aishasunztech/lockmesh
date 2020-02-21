@@ -1,6 +1,6 @@
 {
   "name": "LockMesh",
-  "version": "4.1.3",
+  "version": "4.5.0",
   "private": true,
   "dependencies": {
     "@amcharts/amcharts3-react": "^3.1.0",
@@ -52,6 +52,7 @@
     "react-placeholder": "^3.0.1",
     "react-read-more-less": "^0.1.6",
     "react-redux": "^5.0.7",
+    "react-resize-detector": "^4.2.1",
     "react-router-dom": "^4.3.1",
     "react-router-redux": "^5.0.0-alpha.9",
     "react-scripts": "^3.3.0",
@@ -66,12 +67,14 @@
     "redux-saga": "^0.16.0",
     "redux-thunk": "^2.3.0",
     "rheostat": "^3.0.1",
+    "sanitize-html": "^1.21.1",
     "scroll-into-view": "^1.9.7",
     "sequelize-cli": "^5.5.1",
     "slick-carousel": "^1.8.1",
     "socket.io-client": "^2.2.0",
     "url-search-params": "^1.1.0",
     "victory": "^0.27.2",
+    "webpack": "^4.41.2",
     "xlsx": "^0.14.1"
   },
   "scripts": {

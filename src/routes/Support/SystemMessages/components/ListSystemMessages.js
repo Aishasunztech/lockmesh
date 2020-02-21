@@ -4,26 +4,29 @@ import { Table, Button, Icon, Card, Modal } from "antd";
 import {
   checkValue,
   convertToLang,
-  componentSearchSystemMessages
+  componentSearchSystemMessages,
+  checkIsArray
 } from '../../../utils/commonUtils';
 import { supportSystemMessagesReceiversColumns } from '../../../utils/columnsUtils';
 import ViewMessage from './ViewMessage'
 
-let list                = [];
-let systemMessagesCopy  = [];
-let status              = true;
+let list = [];
+let systemMessagesCopy = [];
+let status = true;
 export default class ListSystemMessages extends Component {
 
   constructor(props) {
     super(props);
     let receiversColumns = supportSystemMessagesReceiversColumns(props.translation, this.handleSearch);
+    let currentMessage = props.currentMessage !== null ? props.currentMessage : null;
+    let viewMessage = currentMessage !== null ? true : false;
     this.state = {
       receiversColumns: receiversColumns,
       columns: [],
       expandedRowKeys: [],
       visible: false,
-      messageObject: null,
-      viewMessage: false,
+      messageObject: currentMessage,
+      viewMessage: viewMessage,
       systemMessages: props.filteredMessage
     };
 
@@ -31,22 +34,17 @@ export default class ListSystemMessages extends Component {
     this.confirm = Modal.confirm;
   }
 
-  showModal = () => {
-    this.setState({
-      visible: true,
-    });
-  };
-
   handleOk = (e) => {
     this.setState({
-      visible: false,
+      viewMessage: false,
     });
   };
 
   handleCancel = (e) => {
     this.setState({
-      visible: false,
+      viewMessage: false
     });
+    this.props.resetCurrentSystemMessageId();
   };
 
   componentDidMount() {
@@ -56,78 +54,47 @@ export default class ListSystemMessages extends Component {
 
     if (this.props !== prevProps) {
 
-      // let sentMessages    = this.props.supportSystemMessages ? this.props.supportSystemMessages : [];
-      // let receiveMessages = this.props.receivedSupportSystemMessages ? this.props.receivedSupportSystemMessages : [];
-      //
-      // if (this.props.filterOption === 'all'){
-      //   list        = [...sentMessages , ...receiveMessages];
-      // } else if(this.props.filterOption === 'received'){
-      //   list        = receiveMessages;
-      // }else{
-      //   list        = sentMessages;
-      // }
-      //
-      // this.setState({
-      //   columns: this.props.columns,
-      //   systemMessages: list,
-      // });
+      if (this.props.currentMessage) {
+        let currentMessage = this.props.currentMessage !== null ? this.props.currentMessage : null;
+        let viewMessage = currentMessage !== null ? true : false;
 
-      this.setState({columns: this.props.columns, systemMessages: this.props.filteredMessage});
+        this.setState({ messageObject: currentMessage, viewMessage: viewMessage });
+      }
+
+      this.setState({ columns: this.props.columns, systemMessages: this.props.filteredMessage });
     }
 
-
-    // try {
-    //   if (this.props.systemMessagesSearchValue.length !== prevProps.systemMessagesSearchValue.length) {
-    //
-    //
-    //     if (status) {
-    //
-    //       systemMessagesCopy  = list;
-    //       status              = false;
-    //
-    //     }
-    //
-    //     let foundUsers = componentSearchSystemMessages(systemMessagesCopy, this.props.searchSystemMessagesColumns, this.props.systemMessagesSearchValue);
-    //
-    //     if (foundUsers.length) {
-    //       this.setState({
-    //         systemMessages: foundUsers,
-    //       });
-    //     } else {
-    //       this.setState({
-    //         systemMessages: [],
-    //       });
-    //     }
-    //   } else {
-    //     status = true;
-    //   }
-    // } catch (error) {
-    //
-    // }
-
-    if (this.state.viewMessage && this.props.user.type !== this.state.messageObject.sender_user_type && this.state.messageObject.type === 'Received'){
-      this.props.updateSupportSystemMessageNotification({systemMessageId: [this.state.messageObject.id]})
+    if (this.state.viewMessage && this.props.user.type !== this.state.messageObject.sender_user_type && this.state.messageObject.type === 'Received') {
+      this.props.updateSupportSystemMessageNotification({ systemMessageId: [this.state.messageObject.id] })
     }
   }
 
+  componentWillReceiveProps(props) {
+    let currentMessage = props.currentMessage !== null ? props.currentMessage : null;
+    let viewMessage = currentMessage !== null ? true : false;
+
+    this.setState({ messageObject: currentMessage, viewMessage: viewMessage });
+  }
+
   handleMessageModal = (data) => {
-    this.setState({ viewMessage: true, messageObject: data })
+    this.props.setCurrentSystemMessageId(data);
   };
 
   renderList() {
 
     let data;
-    let renderList      = [];
+    let renderList = [];
 
-    if (this.state.systemMessages.length > 0){
+    if (this.state.systemMessages.length > 0) {
 
-      this.state.systemMessages.map((item) => {
+      checkIsArray(this.state.systemMessages).map((item) => {
         data = {
           key: item.id,
           id: item.id,
           receiver_ids: item.receiver_ids,
           receivers: item.type === 'Sent' ? item.receiver_ids.length : '--',
           type: item.type,
+          sender_user_type: item.sender_user_type,
           sender: item.sender === "" ? "--" : item.sender,
           subject: checkValue(item.subject),
           createdAt: item.createdAt,
@@ -147,10 +114,8 @@ export default class ListSystemMessages extends Component {
 
       renderList.sort((a, b) => moment(b.createdAt + " " + b.createdTime).format("DD-MM-YYYY HH:mm").localeCompare(moment(a.createdAt + " " + a.createdTime).format("DD-MM-YYYY HH:mm")));
 
-      return renderList
-    }else{
-      return []
     }
+    return renderList
 
   }
 
@@ -158,9 +123,9 @@ export default class ListSystemMessages extends Component {
     let receiversData = [];
     let data;
 
-    let dealerData  = [];
-    dealerData      = this.props.dealerList.filter(dealer => list.includes(dealer.dealer_id));
-    dealerData.map((item, index) => {
+    let dealerData = [];
+    dealerData = checkIsArray(this.props.dealerList).filter(dealer => list.includes(dealer.dealer_id));
+    checkIsArray(dealerData).map((item, index) => {
       data = {
         key: item.dealer_id,
         counter: ++index,
@@ -194,7 +159,7 @@ export default class ListSystemMessages extends Component {
       }
     } else if (!expanded) {
       if (this.state.expandedRowKeys.includes(record.key)) {
-        let list = this.state.expandedRowKeys.filter(item => item !== record.key);
+        let list = checkIsArray(this.state.expandedRowKeys).filter(item => item !== record.key);
         this.setState({ expandedRowKeys: list })
       }
     }
@@ -203,52 +168,52 @@ export default class ListSystemMessages extends Component {
   render() {
     return (
       <Fragment>
-          <Table
-            className="gx-table-responsive"
-            rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''}
-            expandIcon={(props) => props.record.receivers === '--' ? "" : this.customExpandIcon(props)}
-            expandedRowRender={(record) => {
-              let expandedTable;
-              if(record.receivers === '--'){
-                expandedTable = "";
-              } else {
-                expandedTable = <Table
-                  style={{ margin: 10 }}
-                  size="middle"
-                  bordered
-                  columns={this.state.receiversColumns}
-                  dataSource={this.renderReceiversList(record.receiver_ids)}
-                  pagination={false}
-                  scroll={{ x: true }}
-                />;
-              }
-              return (
-                <Fragment>
-                  {expandedTable}
-
-                </Fragment>
-              );
-            }}
-            onExpand={this.onExpandRow}
-            expandIconColumnIndex={2}
-            expandIconAsCell={false}
-            size="midddle"
-            bordered
-            columns={this.state.columns}
-            dataSource={this.renderList()}
-            pagination={false
+        <Table
+          className="gx-table-responsive"
+          rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''}
+          expandIcon={(props) => props.record.receivers === '--' ? "" : this.customExpandIcon(props)}
+          expandedRowRender={(record) => {
+            let expandedTable;
+            if (record.receivers === '--') {
+              expandedTable = "";
+            } else {
+              expandedTable = <Table
+                style={{ margin: 10 }}
+                size="middle"
+                bordered
+                columns={this.state.receiversColumns}
+                dataSource={this.renderReceiversList(record.receiver_ids)}
+                pagination={false}
+                scroll={{ x: true }}
+              />;
             }
-            scroll={{ x: true }}
-            rowKey="key"
-          />
+            return (
+              <Fragment>
+                {expandedTable}
+
+              </Fragment>
+            );
+          }}
+          onExpand={this.onExpandRow}
+          expandIconColumnIndex={2}
+          expandIconAsCell={false}
+          size="midddle"
+          bordered
+          columns={this.state.columns}
+          dataSource={this.renderList()}
+          pagination={false
+          }
+          scroll={{ x: true }}
+          rowKey="key"
+        />
 
         <Modal
           title={convertToLang(this.props.translation[""], "View Message")}
           width={"700px"}
           maskClosable={false}
           visible={this.state.viewMessage}
-          onOk={() => this.setState({ viewMessage: false })}
-          onCancel={() => this.setState({ viewMessage: false })}
+          onOk={() => this.handleOk()}
+          onCancel={() => this.handleCancel()}
           footer={false}
         >
           <ViewMessage

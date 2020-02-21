@@ -6,7 +6,7 @@ import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs, Div
 // import EditDealer from '../../dealers/components/editDealer';
 
 // Helpers
-import { convertToLang, formatMoney, getDateFromTimestamp } from '../../utils/commonUtils'
+import { convertToLang, formatMoney, getDateFromTimestamp, checkIsArray } from '../../utils/commonUtils'
 import { DEVICE_PRE_ACTIVATION } from "../../../constants/Constants";
 
 export default class DealerSalesHistory extends Component {
@@ -126,7 +126,7 @@ export default class DealerSalesHistory extends Component {
     componentWillReceiveProps(nextProps) {
         if (this.props.salesHistory.length !== nextProps.salesHistory.length) {
             this.setState({
-                paymentHistory: nextProps.paymentHistory
+                salesHistory: nextProps.salesHistory
             })
         }
     }
@@ -134,18 +134,18 @@ export default class DealerSalesHistory extends Component {
 
         let data = [];
         if (list) {
-            list.map((item, index) => {
+            checkIsArray(list).map((item, index) => {
                 data.push({
-                    'key': index,
-                    'count': ++index,
-                    'device_id': item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
-                    'dealer_pin': item.dealer_pin ? item.dealer_pin : 'N/A',
-                    'type': item.type ? item.type : 'N/A',
-                    'name': item.name ? item.name : 'N/A',
-                    'cost_price': item.cost_price ? item.cost_price : 0,
-                    'sale_price': item.sale_price ? item.sale_price : 0,
-                    'profit_loss': item.profit_loss ? item.profit_loss : 0,
-                    'created_at': item.created_at ? getDateFromTimestamp(item.created_at) : 'N/A',
+                    key: index,
+                    count: ++index,
+                    device_id: item.device_id ? item.device_id : DEVICE_PRE_ACTIVATION,
+                    dealer_pin: item.dealer_pin ? item.dealer_pin : 'N/A',
+                    type: item.type ? item.type : 'N/A',
+                    name: item.name ? item.name : 'N/A',
+                    cost_price: item.cost_price ? item.cost_price : 0,
+                    sale_price: item.sale_price ? item.sale_price : 0,
+                    profit_loss: item.profit_loss ? item.profit_loss : 0,
+                    created_at: item.created_at ? getDateFromTimestamp(item.created_at) : 'N/A',
                 })
             });
         }
@@ -183,7 +183,7 @@ export default class DealerSalesHistory extends Component {
                     <Table
                         className="pay_history"
                         columns={this.dealerSalesColumns}
-                        dataSource={this.renderSalesHistoryList(this.state.paymentHistory)}
+                        dataSource={this.renderSalesHistoryList(this.state.salesHistory)}
                         bordered
                         title={this.pay_history_title}
                         pagination={false}

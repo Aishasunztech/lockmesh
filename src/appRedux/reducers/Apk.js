@@ -26,7 +26,7 @@ import {
 	APK_PERMISSION
 } from '../../constants/ApkConstants';
 import { message, Modal } from 'antd';
-import { findAndRemove_duplicate_in_array, removeDuplicateObjects } from "../../routes/utils/commonUtils";
+import { findAndRemove_duplicate_in_array, removeDuplicateObjects, checkIsArray } from "../../routes/utils/commonUtils";
 
 const success = Modal.success
 const error = Modal.error
@@ -69,24 +69,25 @@ export default (state = initialState, action) => {
 			}
 
 
-		case UNLINK_APK:
+		case UNLINK_APK: {
 
 			// console.log(UNLINK_APK);
 			if (action.response.status) {
 				success({
 					title: action.response.msg,
 				});
-				state.apk_list = state.apk_list.filter(apk => apk.apk_id !== action.payload);
-
+				state.apk_list = checkIsArray(state.apk_list).filter(apk => apk.apk_id !== action.payload);
 			}
+
 			return {
 				...state,
 				isloading: false,
 				apk_list: state.apk_list,
 				options: state.options
 			}
+		}
 
-		case ADD_APK:
+		case ADD_APK: {
 			// console.log(ADD_APK);
 			let newApkList = state.apk_list
 			if (action.response.status) {
@@ -96,8 +97,7 @@ export default (state = initialState, action) => {
 				// console.log("INSERTED DATA", state.apk_list);
 				newApkList.push(action.payload)
 				// console.log("INSERTED DATA", state.apk_list);
-			}
-			else {
+			} else {
 				error({
 					title: action.response.msg,
 				});
@@ -106,7 +106,7 @@ export default (state = initialState, action) => {
 				...state,
 				apk_list: [...newApkList],
 			}
-
+		}
 		case EDIT_APK:
 			// console.log('action edit id');
 			// console.log(action.payload);
@@ -189,7 +189,7 @@ export default (state = initialState, action) => {
 		// 		if (action.formData.action == "save") {
 
 		// 			if (index !== -1) {
-		// 				newDealers = newDealers.map((item) => {
+		// 				newDealers = checkIsArray(newDealers).map((item) => {
 		// 					return {
 		// 						dealer_id: item,
 		// 						dealer_type: user.type,
@@ -216,12 +216,12 @@ export default (state = initialState, action) => {
 
 		// 			if (index !== -1) {
 		// 				if (!action.formData.statusAll) {
-		// 					let allDealers = oldDealers.filter((item) => !newDealers.includes(item.dealer_id));
+		// 					let allDealers = checkIsArray(oldDealers).filter((item) => !newDealers.includes(item.dealer_id));
 		// 					state.apk_list[index].permissions = allDealers;
 		// 					state.apk_list[index].permission_count = allDealers.length;
 		// 				} else {
 		// 					if (user && user.type !== "admin") {
-		// 						state.apk_list[index].permissions = oldDealers.filter((item) => item.dealer_type == "admin");
+		// 						state.apk_list[index].permissions = checkIsArray(oldDealers).filter((item) => item.dealer_type == "admin");
 		// 					} else {
 		// 						state.apk_list[index].permissions = [];
 		// 					}
@@ -261,7 +261,7 @@ export default (state = initialState, action) => {
 				if (action.formData.action == "save") {
 
 					if (index !== -1) {
-						newDealers = newDealers.map((item) => {
+						newDealers = checkIsArray(newDealers).map((item) => {
 							return {
 								dealer_id: item,
 								dealer_type: user.type,
@@ -283,8 +283,8 @@ export default (state = initialState, action) => {
 							if (user.type !== "admin") {
 
 								let finalDealers = [];
-								let deleteIds = oldDealers.map((dlr) => dlr.dealer_id);
-								newDealers.forEach((item) => {
+								let deleteIds = checkIsArray(oldDealers).map((dlr) => dlr.dealer_id);
+								checkIsArray(newDealers).forEach((item) => {
 									if (deleteIds.includes(item.dealer_id)) {
 										let indexIs = oldDealers.findIndex((e) => e.dealer_id === item.dealer_id);
 										finalDealers.push(oldDealers[indexIs]);
@@ -305,21 +305,21 @@ export default (state = initialState, action) => {
 
 					if (index !== -1) {
 						if (!action.formData.statusAll) {
-							let allDealers = oldDealers.filter((item) => !newDealers.includes(item.dealer_id));
+							let allDealers = checkIsArray(oldDealers).filter((item) => !newDealers.includes(item.dealer_id));
 							// state.apk_list[index].permissions = allDealers;
 							// state.apk_list[index].permission_count = allDealers.length;
 							// if (user && user.type !== "admin") {
-							// 	let filterDealers = allDealers.filter((item) => item.dealer_type === "admin");
+							// 	let filterDealers = checkIsArray(allDealers).filter((item) => item.dealer_type === "admin");
 							// 	state.apk_list[index].permissions = filterDealers;
 							// 	state.apk_list[index].permission_count = filterDealers.length;
 							// } else {
-								state.apk_list[index].permissions = allDealers;
-								state.apk_list[index].permission_count = allDealers.length;
+							state.apk_list[index].permissions = allDealers;
+							state.apk_list[index].permission_count = allDealers.length;
 							// }
 							state.apk_list[index].statusAll = false;
 						} else {
 							if (user && user.type !== "admin") {
-								let filterDealers = oldDealers.filter((item) => item.dealer_type === "admin")
+								let filterDealers = checkIsArray(oldDealers).filter((item) => item.dealer_type === "admin")
 								state.apk_list[index].permissions = filterDealers;
 								state.apk_list[index].permission_count = filterDealers.length;
 							} else {

@@ -4,7 +4,8 @@
     margin-bottom: 0;
 }
 
-.change_pass .ant-btn, .change_email .ant-btn {
+.change_pass .ant-btn,
+.change_email .ant-btn {
     padding: 0;
 }
 
@@ -37,7 +38,7 @@
 }
 
 .open_btn1 {
-    bottom: 55px;
+    bottom: 57px;
 }
 
 .ant-btn>.anticon+span {
@@ -122,6 +123,11 @@
     color: black;
 }
 
+.restrict1_icon {
+    color: #dbdb29;
+    font-size: 26px;
+}
+
 .ant-table-tbody>tr.restrict1:hover:not(.ant-table-expanded-row)>td.dealer_values {
     background: yellow !important;
     color: black;
@@ -136,6 +142,11 @@
 .restrict2 td.dealer_values:hover {
     background: red !important;
     color: white;
+}
+
+.restrict2_icon {
+    color: red;
+    font-size: 26px;
 }
 
 .ant-table-tbody>tr.restrict2:hover:not(.ant-table-expanded-row)>td.dealer_values {
@@ -160,6 +171,6 @@
 
 @media (max-width: 768px) {
     .open_btn1 {
-        bottom: 33px;
+        bottom: 57px;
     }
 }

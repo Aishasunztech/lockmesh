@@ -17,7 +17,7 @@ import {
 } from "../../../appRedux/actions";
 
 // Helpers 
-import { componentSearch, titleCase, convertToLang } from '../../utils/commonUtils';
+import { componentSearch, titleCase, convertToLang, checkIsArray } from '../../utils/commonUtils';
 
 
 
@@ -87,7 +87,7 @@ class AccountBalanceInfo extends Component {
         // console.log("devices", copyInnerContent);
 
         if (e.target.value.length) {
-            copyInnerContent.forEach((item) => {
+            checkIsArray(copyInnerContent).forEach((item) => {
 
                 if (item[e.target.name] !== undefined) {
                     if ((typeof item[e.target.name]) === 'string') {
@@ -139,7 +139,7 @@ class AccountBalanceInfo extends Component {
                             <AppFilter
                                 isAddButton={false}
                                 translation={this.props.translation}
-                                pageHeading={convertToLang(this.props.translation[""], "ACCOUNT BALANCE INFO")}
+                                pageHeading={convertToLang(this.props.translation[""], "Account Balance Info")}
                             />
                             <CreditsModal
                                 ref='credits_modal'

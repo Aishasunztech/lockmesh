@@ -129,13 +129,13 @@ class ConnectDealer extends Component {
 
     onChangeCurrency = (e, field) => {
 
+        let _this = this;
         if (e === 'USD') {
             this.setState({
                 currency: 'usd',
                 currency_price: null,
             })
         } else {
-            let _this = this;
             RestService.exchangeCurrency(e).then((response) => {
                 if (response.data.status) {
                     console.log(this.props.dealer.credits * response.data.currency_unit)
@@ -264,14 +264,14 @@ class ConnectDealer extends Component {
                 {
                     key: '10',
                     name: <a>Last Login</a>,
-                    value: convertTimezoneValue(this.props.authUser.timezone, dealer.last_login, TIMESTAMP_FORMAT),
+                    value: convertTimezoneValue(this.props.authUser.timezone, dealer.last_login),
                     // value: (dealer.last_login) ? moment(dealer.last_login).tz(convertTimezoneValue(this.props.authUser.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
                     // value: (dealer.last_login) ? dealer.last_login : 'N/A',
                 },
                 {
                     key: '11',
                     name: <a>Start Date</a>,
-                    value: convertTimezoneValue(this.props.authUser.timezone, dealer.created, TIMESTAMP_FORMAT),
+                    value: convertTimezoneValue(this.props.authUser.timezone, dealer.created),
                     // value: (dealer.created) ? moment(dealer.created).tz(convertTimezoneValue(this.props.authUser.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
                     // value: this.props.dealer.created,
                 },
@@ -283,7 +283,7 @@ class ConnectDealer extends Component {
     }
 
     ac_st_title = () => {
-        return <h4 className="credit_modal_heading weight_600">{convertToLang(this.props.translation[""], "ACCOUNT STATUS")}</h4>
+        return <h4 className="credit_modal_heading">{convertToLang(this.props.translation[""], "Account Status")}</h4>
     };
 
     renderAccountStatus = () => {
@@ -384,14 +384,14 @@ class ConnectDealer extends Component {
                 {
                     key: '1',
                     a:
-                        <div
+                        <div className="cursor_p"
                             onClick={() => this.refs.dealerOverDuePayments.showModal(this.props.dealer, dealer._0to21_dues_history)}
                         >
                             <span className="overdue_txt">0-21:</span>
                             <span className="overdue_values">{dealer._0to21_dues}</span>
                         </div>,
                     b:
-                        <div
+                        <div className="cursor_p"
                             onClick={() => this.refs.dealerOverDuePayments.showModal(this.props.dealer, dealer._21to30_dues_history)}
                         >
                             <span className="overdue_txt">21+:</span>
@@ -403,14 +403,14 @@ class ConnectDealer extends Component {
                     // a: <div><span className="overdue_txt">0-21:</span> <span className="overdue_values">{dealer._0to21_dues}</span></div>,
                     // b: <div><span className="overdue_txt">21+:</span> <span className="overdue_values">{dealer._21to30_dues}</span></div>,
                     a:
-                        <div
+                        <div className="cursor_p"
                             onClick={() => this.refs.dealerOverDuePayments.showModal(this.props.dealer, dealer._30to60_dues_history)}
                         >
                             <span className="overdue_txt">30+:</span>
                             <span className="overdue_values">{dealer._30to60_dues}</span>
                         </div>,
                     b:
-                        <div
+                        <div className="cursor_p"
                             onClick={() => this.refs.dealerOverDuePayments.showModal(this.props.dealer, dealer._60toOnward_history)}
                         >
                             <span className="overdue_txt">60+:</span>
@@ -430,6 +430,7 @@ class ConnectDealer extends Component {
         let restricted_level = ''
         let account_status_message1 = ''
         let account_status_message2 = ''
+        let account_balance_style_icon = ''
 
         if (dealer) {
             dealer_status = (dealer.unlink_status == 1) ? "Archived" : (dealer.account_status === "suspended") ? "Suspend" : "Active";
@@ -437,6 +438,7 @@ class ConnectDealer extends Component {
             restricted_level = dealer.account_balance_status === 'restricted' ? 'Restriction Level 1' : 'Restriction Level 2'
             account_status_message1 = "Account " + restricted_level + " by " + restricted_by
             account_status_message2 = (dealer.account_balance_status === 'restricted' ? "(Pay Later feature disabled)" : "(You may not add new devices)")
+            account_balance_style_icon = (dealer.account_balance_status == 'restricted') ? 'restrict1_icon' : (dealer.account_balance_status === "suspended") ? 'restrict2_icon' : 'active';
         }
 
         this.dealerInfoColumns[1].title = dealer_status.toUpperCase();
@@ -479,16 +481,17 @@ class ConnectDealer extends Component {
                                     {
                                         dealer.account_balance_status !== 'active' ?
                                             <Row style={{ marginTop: 10 }}>
-                                                <Col span={20}>
+                                                <Col span={19}>
                                                     <div style={{ textAlign: 'center' }}>
                                                         <h4>{account_status_message1} <br /> {account_status_message2}</h4>
                                                     </div>
 
                                                 </Col>
-                                                <Col span={4}>
-                                                    <Avatar className="gx-size-30"
+                                                <Col span={5}>
+                                                    {/* <Avatar className="gx-size-30"
                                                         alt={""}
-                                                        src={image} />
+                                                        src={image} /> */}
+                                                    <Icon className={`${account_balance_style_icon}`} type="info-circle" />
                                                 </Col>
 
                                             </Row>
@@ -566,6 +569,7 @@ class ConnectDealer extends Component {
                                     getDealerSalesHistory={this.props.getDealerSalesHistory}
                                     changeDealerStatus={this.props.changeDealerStatus}
                                     domainPermission={this.props.domainPermission}
+                                    dealerDomainLoading={this.props.dealerDomainLoading}
                                 />
                             </Col>
                         </Row>
@@ -622,6 +626,7 @@ var mapStateToProps = ({ dealer_details, dealers, settings, auth, account }) => 
         isLoading: dealer_details.connectDealerLoading,
         authUser: auth.authUser,
         // dealers: dealers.textTransform
+        dealerDomainLoading: dealer_details.dealerDomainLoading
     };
 }
 

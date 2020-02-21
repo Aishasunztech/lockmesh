@@ -46,7 +46,17 @@ class ModifyPriceForm extends Component {
                                 required: true,
                                 message: 'Please Input Price',
                             },
-                        ],
+                            {
+                              validator: async (rule, value) => {
+                                if(this.props.type === 'package'){
+                                  if(value < this.props.item.costPrice){
+                                    throw new Error(`cost price is ${this.props.item.costPrice}. please enter a value greater then cost price`)
+                                  }
+                                }
+                                return true;
+                              }
+                            }
+                        ]
                     })(<Input type='number' min={0} disabled={this.props.user.type === SDEALER} />)}
 
                 </Form.Item>
@@ -60,6 +70,16 @@ class ModifyPriceForm extends Component {
                                     required: true,
                                     message: 'Please Input Price',
                                 },
+                                {
+                                  validator: async (rule, value) => {
+                                    if(this.props.type === 'package'){
+                                      if(value < this.props.item.costPrice){
+                                        throw new Error(`cost price is ${this.props.item.costPrice}. please enter a value greater then cost price`)
+                                      }
+                                    }
+                                    return true;
+                                  }
+                                }
                             ],
                         })(<Input type='number' min={0} />)}
 

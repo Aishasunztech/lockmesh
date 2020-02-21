@@ -5,7 +5,7 @@ import {
   DEVICE_PRE_ACTIVATION
 } from "../../../../constants/Constants";
 import styles from '../reporting.css'
-import { convertToLang, generateExcel, generatePDF } from "../../../utils/commonUtils";
+import { convertToLang, generateExcel, generatePDF, checkIsArray } from "../../../utils/commonUtils";
 var fileName = 'payment_history_' + new Date().getTime()
 var columns;
 var rows;
@@ -146,7 +146,7 @@ class PaymentHistory extends Component {
         { title: convertToLang(this.props.translation[''], "TRANSACTION DATE"), dataKey: "created_at" },
       ];
 
-      rows = this.props.paymentHistoryReport.map((item, index) => {
+      rows = checkIsArray(this.props.paymentHistoryReport).map((item, index) => {
         return {
           count: ++index,
           dealer_pin: item.dealer_pin,
@@ -170,8 +170,8 @@ class PaymentHistory extends Component {
   };
 
   renderList = (list) => {
-    if (list) {
-      return list.map((item, index) => {
+    // if (list) {
+      return checkIsArray(list).map((item, index) => {
         return {
           rowKey: index,
           key: item.id,
@@ -185,7 +185,7 @@ class PaymentHistory extends Component {
           created_at: item.created_at
         }
       })
-    }
+    // }
   };
 
   handleDealerChange = (e) => {
@@ -193,7 +193,7 @@ class PaymentHistory extends Component {
     if (e == '') {
       devices = this.props.devices
     } else {
-      devices = this.props.devices.filter(device => device.dealer_id == e);
+      devices = checkIsArray(this.props.devices).filter(device => device.dealer_id == e);
       // console.log("handleDealerChange ", devices);
     }
     this.setState({
@@ -247,7 +247,7 @@ class PaymentHistory extends Component {
                     >
                       <Select.Option value=''>ALL</Select.Option>
                       <Select.Option value={this.props.user.dealerId}>My Report</Select.Option>
-                      {this.props.dealerList.map((dealer, index) => {
+                      {checkIsArray(this.props.dealerList).map((dealer, index) => {
                         return (<Select.Option key={dealer.dealer_id} value={dealer.dealer_id}>{dealer.dealer_name} ({dealer.link_code})</Select.Option>)
                       })}
                     </Select>
@@ -272,7 +272,7 @@ class PaymentHistory extends Component {
                   <Select style={{ width: '100%' }}>
                     <Select.Option value=''>ALL</Select.Option>
                     <Select.Option value={DEVICE_PRE_ACTIVATION}>{DEVICE_PRE_ACTIVATION}</Select.Option>
-                    {this.state.deviceList.map((device, index) => {
+                    {checkIsArray(this.state.deviceList).map((device, index) => {
                       return (<Select.Option key={device.device_id} value={device.device_id}>{device.device_id}</Select.Option>)
                     })}
                   </Select>
@@ -395,7 +395,7 @@ class PaymentHistory extends Component {
                   dataSource={this.renderList(this.props.paymentHistoryReport)}
                   bordered
                   pagination={false}
-                // scroll={{x:true}}
+                  scroll={{ x: true }}
                 />
               </Fragment>
               : null}

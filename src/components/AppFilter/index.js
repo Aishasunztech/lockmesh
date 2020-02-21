@@ -171,7 +171,7 @@ class AppFilter extends Component {
                                         labelKey="value"
                                         value={this.state.selectedDisplayValues}
                                         placeholder={convertToLang(translation[Appfilter_Display], "Display")}
-                                        manySelectedPlaceholder = {allSelectedOpt ? "All Selected" : `${this.state.selectedDisplayValues.length} selected`}
+                                        manySelectedPlaceholder={allSelectedOpt ? "All Selected" : `${this.state.selectedDisplayValues.length} selected`}
                                         allSelectedPlaceholder={allSelectedOpt ? "All Selected" : ""}
                                         className="display_"
                                         multiple={true}
@@ -179,6 +179,7 @@ class AppFilter extends Component {
                                         includeSelectAll={true}
                                         onChange={values => this.setDropdowns(values)}
                                         dropdownHeight={300}
+                                        caseSensitiveFilter={false}
                                         renderSelectAll={({
                                             filtered,
                                             tabIndex,
@@ -228,6 +229,13 @@ class AppFilter extends Component {
                                             );
                                         }
                                         }
+
+                                        // Filter Options
+                                        // includeFilter={true}
+                                        // onFiltered={(e)=> {
+                                        //     console.log(e)
+                                        // }}
+
                                     />
                                     <Icon type="down" className="down_icon" />
                                 </Fragment>
@@ -335,14 +343,24 @@ class AppFilter extends Component {
                                                                         {this.props.addButtonText}
                                                                     </Button>
                                                                     :
-                                                                    <Button
-                                                                        type="primary"
-                                                                        disabled={(this.props.disableAddButton === true) ? true : false}
-                                                                        style={{ width: '100%' }}
-                                                                        onClick={() => this.props.handleAppFilterAddButton(true)}
-                                                                    >
-                                                                        {this.props.addButtonText}
-                                                                    </Button>
+                                                                    (this.props.isAddSimButton) ?
+                                                                        <Button
+                                                                            type="primary"
+                                                                            // disabled={(this.props.disableAddButton === true) ? true : false}
+                                                                            style={{ width: '100%' }}
+                                                                            onClick={() => this.props.handleAddSimModal(true)}
+                                                                        >
+                                                                            {this.props.addButtonText}
+                                                                        </Button>
+                                                                        :
+                                                                        <Button
+                                                                            type="primary"
+                                                                            disabled={(this.props.disableAddButton === true) ? true : false}
+                                                                            style={{ width: '100%' }}
+                                                                            onClick={() => this.props.handleAppFilterAddButton(true)}
+                                                                        >
+                                                                            {this.props.addButtonText}
+                                                                        </Button>
 
                                     : null
                             }

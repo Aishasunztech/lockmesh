@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { Link } from 'react-router-dom';
 import { getDealerList, addDealer } from "../../appRedux/actions/Dealers";
 import { ADMIN, DEALER, SDEALER, Name, Email, User_Name_require, Only_alpha_numeric, SELECT, Not_valid_Email, PLZ_INPUT_Email } from "../../constants/Constants";
-import { convertToLang } from '../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../utils/commonUtils';
 import { SELECT_Dealer } from '../../constants/DealerConstants';
 
 // const FormItem = Form.Item;
@@ -153,7 +153,7 @@ class AddDealer extends Component {
                                     }],
                                 })(
                                     <Select placeholder={convertToLang(this.props.translation[SELECT_Dealer], "Select Dealer")}>
-                                        {this.props.dealersList.map((dealer, index) => {
+                                        {checkIsArray(this.props.dealersList).map((dealer, index) => {
                                             return (<Option key={index} value={dealer.dealer_id} ><strong>{dealer.dealer_name}</strong> ({dealer.dealer_email})</Option>)
                                         })
                                         }

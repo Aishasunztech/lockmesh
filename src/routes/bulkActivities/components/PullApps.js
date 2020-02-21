@@ -4,7 +4,7 @@ import { BASE_URL } from '../../../constants/Application';
 import { APK } from '../../../constants/ApkConstants';
 import { POLICY_APP_NAME } from '../../../constants/PolicyConstants';
 import { Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 
 
 const renderApps = (apk_list, selectedApps = false) => {
@@ -12,7 +12,7 @@ const renderApps = (apk_list, selectedApps = false) => {
     let app_list = []
 
     if (selectedApps) {
-        apk_list.map((app) => {
+        checkIsArray(apk_list).map((app) => {
             if (app.system_app !== 1) {
                 app_list.push({
                     key: (app.app_id) ? app.app_id : 'N/A',
@@ -24,7 +24,7 @@ const renderApps = (apk_list, selectedApps = false) => {
             }
         });
     } else {
-        apk_list.map((app) => {
+        checkIsArray(apk_list).map((app) => {
             if (app.system_app !== 1) {
                 app_list.push({
                     key: (app.apk_id) ? app.apk_id : 'N/A',

@@ -20,6 +20,7 @@ import {
 	TAB_SIZE
 } from "../../constants/ThemeSetting";
 import { APP_TITLE } from "../../constants/Application";
+import { checkIsArray } from "../../routes/utils/commonUtils";
 
 const { Header } = Layout;
 
@@ -31,7 +32,7 @@ class Topbar extends Component {
 	languageMenu = () => (
 		<CustomScrollbars className="gx-popover-lang-scroll">
 			<ul className="gx-sub-popover">
-				{languageData.map(language => (
+				{checkIsArray(languageData).map(language => (
 					<li
 						className="gx-media gx-pointer"
 						key={JSON.stringify(language)}

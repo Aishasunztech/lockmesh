@@ -1,11 +1,19 @@
+// Libraries
 import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal, Row, Col, Input } from "antd";
-import { BASE_URL } from '../../../constants/Application';
+import { BASE_URL, TIMESTAMP_FORMAT} from '../../../constants/Application';
+
+// Helpers
+import {
+     convertTimezoneValue, checkIsArray
+} from '../../utils/commonUtils';
+
+// Components
 import Permissions from './Permissions';
-
 import EditApk from './EditApk';
-import { AUTO_UPDATE_ADMIN } from '../../../constants/Constants';
 
+// Constants
+import { AUTO_UPDATE_ADMIN } from '../../../constants/Constants';
 
 export default class ListApk extends Component {
     state = { visible: false }
@@ -63,53 +71,13 @@ export default class ListApk extends Component {
         }
     }
 
-    handleCheckChange = (values) => {
-
-        let dumydata = this.state.columns;
-        // console.log('values', values);
-
-        if (values.length) {
-
-            this.state.columns.map((column, index) => {
-
-                if (dumydata[index].className !== 'row') {
-                    dumydata[index].className = 'hide';
-                }
-
-                values.map((value) => {
-                    if (column.title === value) {
-                        dumydata[index].className = '';
-                    }
-                });
-
-            });
-
-            this.setState({ columns: dumydata });
-
-        } else {
-            const newState = this.state.columns.map((column) => {
-                if (column.className === 'row') {
-                    return column;
-                } else {
-                    return ({ ...column, className: 'hide' })
-                }
-            });
-
-            this.setState({
-                columns: newState,
-            });
-        }
-
-    }
-
     // renderList
     renderList(list) {
 
-        return list.map((app) => {
-            // if (app.deleteable) {
+        return checkIsArray(list).map((app) => {
             return {
-                'apk_id': app.apk_id,
-                'action': (
+                apk_id: app.apk_id,
+                action: (
                     <Fragment>
                         <Button type="primary" size="small" style={{ margin: '0px 8px 0 0px', textTransform: "uppercase" }}
                             onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > EDIT</Button>
@@ -119,72 +87,38 @@ export default class ListApk extends Component {
 
                     </Fragment>
                 ),
-                'permission': <span style={{ fontSize: 15, fontWeight: 400 }}>{app.permission_count}</span>,
-                "permissions": app.permissions,
-                'apk_status': (<Switch size="small" defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
-                    this.props.handleStatusChange(e, app.apk_id);
-                }} />),
-                'apk': app.apk ? app.apk : 'N/A',
-                'apk_name': app.apk_name ? app.apk_name : 'N/A',
-                'apk_logo': (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
+                permission: <span style={{ fontSize: 15, fontWeight: 400 }}>{app.permission_count}</span>,
+                permissions: app.permissions,
+                apk: app.apk ? app.apk : 'N/A',
+                apk_name: app.apk_name ? app.apk_name : 'N/A',
+                apk_logo: (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
+                apk_size: (
+                    <div data-column="APP SIZE">
+                        {app.size ? app.size : 'N/A'}
+                    </div>
+                ),
+                label: app.label,
+                package_name: app.package_name,
+                version: app.version,
+                created_at: convertTimezoneValue(this.props.user.timezone, app.created_at),
+                updated_at: convertTimezoneValue(this.props.user.timezone, app.updated_at),
             }
-            // } else {
-            //     return {
-            //         'apk_id': app.apk_id,
-            //         'action': (
-            //             <Fragment>
-            //                 <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px" }}
-            //                     onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > EDIT</Button>
-
-            //             </Fragment>
-            //         ),
-            //         'permission': <span style={{ fontSize: 15, fontWeight: 400 }}>{app.permission_count}</span>,
-            //         "permissions": app.permissions,
-            //         'apk_status': (<Switch size="small" disabled defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
-            //             this.props.handleStatusChange(e, app.apk_id);
-            //         }} />),
-            //         'apk': app.apk ? app.apk : 'N/A',
-            //         'apk_name': app.apk_name ? app.apk_name : 'N/A',
-            //         'apk_logo': (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
-            //     }
-            // }
+           
         });
-    }
-
-    onSelectChange = (selectedRowKeys) => {
-        // console.log('selectedRowKeys changed: ', selectedRowKeys);
-        // this.setState({ selectedRowKeys });
-    }
-    customExpandIcon(props) {
-        if (props.expanded) {
-            return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
-                props.onExpand(props.record, e);
-            }}><Icon type="caret-down" /></a>
-        } else {
-
-            return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
-                props.onExpand(props.record, e);
-            }}><Icon type="caret-right" /></a>
-        }
     }
 
     render() {
 
-        const rowSelection = {
-            onChange: this.onSelectChange,
-        };
-
         return (
             <Card>
                 <Table
-                    // rowSelection={rowSelection}
                     // expandableRowIcon={<Icon type="right" />
                     className="gx-table-responsive apklist_table"
-                    size="midddle"
+                    size="small"
                     bordered
                     columns={this.state.columns}
                     dataSource={this.renderList(this.props.apk_list)}
-                    pagination={{ pageSize: Number(this.state.pagination) }}
+                    pagination={false}
                     className="devices"
                     scroll={{ x: 500 }}
                     rowKey="apk_id"

@@ -1,7 +1,7 @@
 import { Modal } from 'antd';
 
 import React, { Component } from 'react'
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 import PasswordForm from './PasswordForm';
 
@@ -73,15 +73,15 @@ class BulkWipe extends Component {
         let dealer_ids = [];
         let user_ids = [];
 
-        devices.forEach((item) => {
+        checkIsArray(devices).forEach((item) => {
             // if (item.device_id) {
             selectedDevices.push(item.usr_device_id);
             // }
         });
-        dealers.forEach((item) => {
+        checkIsArray(dealers).forEach((item) => {
             dealer_ids.push(item.key);
         });
-        users.forEach((item) => {
+        checkIsArray(users).forEach((item) => {
             user_ids.push(item.key);
         });
 
@@ -99,8 +99,8 @@ class BulkWipe extends Component {
         this.confirm({
             title: title,
             content: '',
-            okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
-            cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
+            okText: convertToLang(_this.props.translation[Button_Ok], "Ok"),
+            cancelText: convertToLang(_this.props.translation[Button_Cancel], "Cancel"),
             onOk: (() => {
                 _this.props.handleWipePwdConfirmModal(true);
                 _this.setState({ wipe_data: data })

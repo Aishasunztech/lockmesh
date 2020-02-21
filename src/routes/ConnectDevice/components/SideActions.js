@@ -6,7 +6,7 @@ import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip, Progress,
 import TableHistory from "./TableHistory";
 import SuspendDevice from '../../devices/components/SuspendDevice';
 import ActivateDevcie from '../../devices/components/ActivateDevice';
-import { componentSearch, convertToLang } from '../../utils/commonUtils';
+import { componentSearch, convertToLang, checkIsArray } from '../../utils/commonUtils';
 import EditDevice from '../../devices/components/editDevice';
 import FlagDevice from '../../ConnectDevice/components/flagDevice';
 import WipeDevice from '../../ConnectDevice/components/wipeDevice';
@@ -578,28 +578,28 @@ class SideActions extends Component {
         this.showSaveProfileModal(false);
         this.props.getProfiles(this.props.device.device_id)
     }
-    transferDeviceProfile = (obj) => {
-        // console.log('at transferDeviceProfile')
-        let _this = this;
-        confirm({ // Are You Sure, You want to Transfer Flagged Device to this Requested Device ?
-            content: `Are you sure you want to Transfer, from ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
-            onOk() {
-                // console.log('OK');
-                _this.props.transferDeviceProfile(obj);
-                // {
-                //     reqDevice: device,
-                //     flagged_device: _this.props.device_details,
-                // }
-                // _this.setState({ DEVICE_TRANSFERED_DONE: new Date() })
+    // transferDeviceProfile = (obj) => {
+    //     // console.log('at transferDeviceProfile')
+    //     let _this = this;
+    //     confirm({ // Are You Sure, You want to Transfer Flagged Device to this Requested Device ?
+    //         content: `Are you sure you want to Transfer, from ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
+    //         onOk() {
+    //             // console.log('OK');
+    //             _this.props.transferDeviceProfile(obj);
+    //             // {
+    //             //     reqDevice: device,
+    //             //     flagged_device: _this.props.device_details,
+    //             // }
+    //             // _this.setState({ DEVICE_TRANSFERED_DONE: new Date() })
 
-            },
-            onCancel() {
-                // console.log('Cancel');
-            },
-            okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
-            cancelText: convertToLang(this.props.translation[Button_No], 'No'),
-        });
-    }
+    //         },
+    //         onCancel() {
+    //             // console.log('Cancel');
+    //         },
+    //         okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
+    //         cancelText: convertToLang(this.props.translation[Button_No], 'No'),
+    //     });
+    // }
 
     handleSimModule = (e) => {
         e.preventDefault();
@@ -820,7 +820,7 @@ class SideActions extends Component {
     handleSearch = (value) => {
         let searchedDevices = [];
         // console.log("searchedValue: ",value)
-        searchedDevices = this.props.device_list.filter((device) => device.device_id.toLowerCase().includes(value.toLowerCase()));
+        searchedDevices = checkIsArray(this.props.device_list).filter((device) => device.device_id.toLowerCase().includes(value.toLowerCase()));
         // console.log(searchedDevices);
         let index = this.props.device_list.findIndex((device) => device.device_id.toLowerCase() === value.toLowerCase());
         let states = {
@@ -890,7 +890,7 @@ class SideActions extends Component {
                                 className="global-search"
                                 size="large"
                                 style={{ width: '100%' }}
-                                dataSource={device_list.map((item, index) => {
+                                dataSource={checkIsArray(device_list).map((item, index) => {
                                     return (<Option key={index} value={item.device_id}>{item.device_id + ' (' + item.finalStatus + ')'}</Option>)
                                 })}
                                 onSelect={this.handleDeviceChange}
@@ -1044,14 +1044,14 @@ class SideActions extends Component {
                             <Button
                                 type="default"
                                 onClick={() => this.handleServicesModal(true)}
-                                style={{ width: "46%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }}
+                                style={{ width: "46%", marginBottom: 16, }}
                             >
-                                <Icon type="file" />
-                                {convertToLang(this.props.translation["ACCOUNT INFO"], "ACCOUNT INFO")}
+                                <Icon type="info-circle" />
+                                {convertToLang(this.props.translation["Account Info"], "Account Info")}
                             </Button>
 
                             <Modal
-                                title={convertToLang(this.props.translation["ACCOUNT INFO"], "ACCOUNT INFO")}
+                                title={convertToLang(this.props.translation["Account Info"], "Account Info")}
                                 maskClosable={false}
                                 width='850px'
                                 style={{ top: 20 }}
@@ -1115,10 +1115,11 @@ class SideActions extends Component {
                                 />
 
                                 <NewDevice
+                                    showSupport={false}
                                     ref='new_device'
                                     devices={this.props.devices}
                                     addDevice={this.props.addDevice}
-                                    transferDeviceProfile={this.transferDeviceProfile}
+                                    transferDeviceProfile={this.props.transferDeviceProfile}
                                     rejectDevice={this.props.rejectDevice}
                                     authUser={this.props.authUser}
                                     requests={this.props.requests}
@@ -1567,7 +1568,7 @@ function showConfirm(device, action, _this, msg, type, transfered = false) {
                     _this.props.getDevicesList();
                 }
                 else if (type === 'flagged') {
-                    action(device.device_id)
+                    action(device.usr_device_id)
                     // _this.props.activateDevice(device)
                 }
                 // if (type === 'unlink') {

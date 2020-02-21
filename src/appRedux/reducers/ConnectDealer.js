@@ -14,8 +14,11 @@ import {
     CONNECT_DEALER_LOADING,
     DEALER_ACCOUNT_STATUS,
     SET_DEMOS_LIMIT,
-    CD_PERMISSION_DOMAINS
+    CD_PERMISSION_DOMAINS,
+    DEALER_DOMAINS_LOADING,
+    ERROR_PERMISSION_DOMAINS
 } from "../../constants/ActionTypes";
+import { checkIsArray } from '../../routes/utils/commonUtils';
 
 // import { Button_Cancel } from '../../constants/ButtonConstants';
 // import { convertToLang } from '../../routes/utils/commonUtils';
@@ -34,7 +37,8 @@ const initialState = {
     paymentHistory: [],
     salesHistory: [],
     domains: [],
-    connectDealerLoading: false
+    connectDealerLoading: false,
+    dealerDomainLoading: false
 };
 
 export default (state = initialState, action) => {
@@ -251,10 +255,27 @@ export default (state = initialState, action) => {
             }
         }
 
+        case DEALER_DOMAINS_LOADING: {
+            return {
+                ...state,
+                dealerDomainLoading: true
+            }
+        }
+
+        case ERROR_PERMISSION_DOMAINS: {
+            error({
+                title: "Data not validated"
+            });
+            return {
+                ...state,
+                isloading: false,
+                dealerDomainLoading: false
+            }
+        }
         case CD_PERMISSION_DOMAINS: {
             // console.log("action.selectedDomains ", action.selectedDomains, state.domains);
             let dealerDomains = state.domains;
-
+            // let domainLoading = false;
             if (action.payload.status) {
                 success({
                     title: action.payload.msg
@@ -265,7 +286,7 @@ export default (state = initialState, action) => {
                     dealerDomains = state.domains.concat(action.selectedDomains)
                 }
                 else if (action.formData.action == "delete") {
-                    dealerDomains = state.domains.filter(item => item.id !== action.selectedDomains)
+                    dealerDomains = checkIsArray(state.domains).filter(item => item.id !== action.selectedDomains)
                 }
             } else {
                 error({
@@ -276,7 +297,8 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isloading: false,
-                domains: dealerDomains
+                domains: dealerDomains,
+                dealerDomainLoading: false // domainLoading
             }
         }
 

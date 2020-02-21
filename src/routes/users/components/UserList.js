@@ -5,7 +5,7 @@ import scrollIntoView from 'scroll-into-view';
 import { Card, Row, Col, List, Button, message, Table, Icon, Switch, Modal } from "antd";
 
 import CustomScrollbars from "../../../util/CustomScrollbars";
-import { getFormattedDate, convertToLang, getDateTimeOfClientTimeZone, convertTimezoneValue } from '../../utils/commonUtils';
+import { getFormattedDate, convertToLang, getDateTimeOfClientTimeZone, convertTimezoneValue, checkIsArray } from '../../utils/commonUtils';
 
 import UserDeviceList from './UserDeviceList'
 import AddUser from './AddUser';
@@ -51,12 +51,12 @@ class UserList extends Component {
     renderList(list) {
         // console.log(list);
 
-        let user_list = list.filter((data) => {
+        let user_list = checkIsArray(list).filter((data) => {
             // if (data.type === "policy") {
             return data
             // }
         })
-        return user_list.map((user, index) => {
+        return checkIsArray(user_list).map((user, index) => {
             // this.state.expandTabSelected[index]='1';
             // this.state.expandedByCustom[index]=false;
             return {
@@ -104,7 +104,7 @@ class UserList extends Component {
                 user_name: user.user_name,
                 email: user.email,
                 tokens: 'N/A',
-                created_at: convertTimezoneValue(this.props.user.timezone, user.created_at, TIMESTAMP_FORMAT),
+                created_at: convertTimezoneValue(this.props.user.timezone, user.created_at),
                 // created_at: (user.created_at) ? moment(user.created_at).tz(convertTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
                 // created_at: getFormattedDate(user.created_at)
             }
@@ -141,7 +141,7 @@ class UserList extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.rowKey)) {
-                let list = this.state.expandedRowKeys.filter(item => item !== record.rowKey)
+                let list = checkIsArray(this.state.expandedRowKeys).filter(item => item !== record.rowKey)
                 this.setState({ expandedRowKeys: list })
             }
         }

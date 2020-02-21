@@ -5,6 +5,7 @@ import {
 } from "../../constants/ActionTypes";
 import { message, Modal } from 'antd';
 import { SERVER_TIMEZONE, TIMESTAMP_FORMAT } from "../../constants/Application";
+import { checkIsArray } from '../../routes/utils/commonUtils';
 
 
 const success = Modal.success
@@ -24,6 +25,7 @@ const initialState = {
     bulkSelectedPushApps: [],
     bulkSelectedPullApps: [],
     bulkResponseModal: false,
+    responseStatus: false,
     failed_device_ids: [],
     queue_device_ids: [],
     pushed_device_ids: [],
@@ -89,15 +91,25 @@ export default (state = initialState, action) => {
             }
         }
 
-        case BULK_HISTORY:
+        case BULK_HISTORY: {
 
             // console.log("action.payload history at red : ", action.payload)
-            return {
-                ...state,
-                isloading: false,
-                history_loading: false,
-                bulkDevicesHistory: action.payload,
+            if (action.payload.status) {
+                return {
+                    ...state,
+                    isloading: false,
+                    history_loading: false,
+                    bulkDevicesHistory: action.payload.history,
+                }
+            } else {
+                return {
+                    ...state,
+                    isloading: false,
+                    history_loading: false
+                }
             }
+        }
+
 
         case BULK_USERS:
 
@@ -145,7 +157,7 @@ export default (state = initialState, action) => {
             if (action.payload.status) {
 
                 let allSuspendedDevices = [...action.payload.data.queue_device_ids, ...action.payload.data.pushed_device_ids];
-                updatePrevBulkDevices = state.bulkDevices.map((item) => {
+                updatePrevBulkDevices = checkIsArray(state.bulkDevices).map((item) => {
                     let bulkObjIndex = allSuspendedDevices.findIndex(obj => obj === item.device_id);
                     if (bulkObjIndex !== -1) {
                         item.finalStatus = "Suspended";
@@ -191,6 +203,8 @@ export default (state = initialState, action) => {
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "suspend",
 
+                responseStatus: action.payload.status,
+
                 selectedDevices: [],
                 bulkDevices: [],
                 bulkAction: '',
@@ -209,7 +223,7 @@ export default (state = initialState, action) => {
             if (action.payload.status) {
 
                 let allSuspendedDevices = [...action.payload.data.queue_device_ids, ...action.payload.data.pushed_device_ids];
-                updatePrevBulkDevices = state.bulkDevices.map((item) => {
+                updatePrevBulkDevices = checkIsArray(state.bulkDevices).map((item) => {
                     let bulkObjIndex = allSuspendedDevices.findIndex(obj => obj === item.device_id);
                     if (bulkObjIndex !== -1) {
                         item.finalStatus = "Active";
@@ -254,6 +268,7 @@ export default (state = initialState, action) => {
                 expire_device_ids: [...state.expire_device_ids],
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "active",
+                responseStatus: action.payload.status,
 
                 selectedDevices: [],
                 bulkDevices: [],
@@ -300,6 +315,7 @@ export default (state = initialState, action) => {
                 pushed_device_ids: [...state.pushed_device_ids],
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "push",
+                responseStatus: action.payload.status,
 
                 // bulkSelectedPushApps: []
                 selectedDevices: [],
@@ -372,6 +388,7 @@ export default (state = initialState, action) => {
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "pull",
 
+                responseStatus: action.payload.status,
                 // bulkSelectedPullApps: []
                 selectedDevices: [],
                 bulkDevices: [],
@@ -391,8 +408,8 @@ export default (state = initialState, action) => {
 
                 let allUnlinkedDevices = [...action.payload.data.queue_device_ids, ...action.payload.data.pushed_device_ids];
                 // console.log("allUnlinkedDevices ", allUnlinkedDevices);
-                updatePrevBulkDevices = state.bulkDevices.filter(item => !allUnlinkedDevices.includes(item.device_id))
-                // updatePrevBulkDevices = state.bulkDevices.map((item) => {
+                updatePrevBulkDevices = checkIsArray(state.bulkDevices).filter(item => !allUnlinkedDevices.includes(item.device_id))
+                // updatePrevBulkDevices = checkIsArray(state.bulkDevices).map((item) => {
                 // let bulkObjIndex = allUnlinkedDevices.findIndex(obj => obj === item.device_id);
                 // if (bulkObjIndex !== -1) {
                 //     // item.finalStatus = "Unlinked";
@@ -432,6 +449,7 @@ export default (state = initialState, action) => {
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "unlink",
 
+                responseStatus: action.payload.status,
                 selectedDevices: [],
                 bulkDevices: [],
                 bulkAction: '',
@@ -453,8 +471,8 @@ export default (state = initialState, action) => {
                 selectedBulkDevices = [];
                 let allWipedDevices = [...action.payload.data.queue_device_ids, ...action.payload.data.pushed_device_ids];
                 // console.log("allWipedDevices ", allWipedDevices);
-                updatePrevBulkDevices = state.bulkDevices.filter(item => !allWipedDevices.includes(item.device_id))
-                // updatePrevBulkDevices = state.bulkDevices.map((item) => {
+                updatePrevBulkDevices = checkIsArray(state.bulkDevices).filter(item => !allWipedDevices.includes(item.device_id))
+                // updatePrevBulkDevices = checkIsArray(state.bulkDevices).map((item) => {
                 //     let bulkObjIndex = allWipedDevices.findIndex(obj => obj === item.device_id);
                 //     if (bulkObjIndex === -1) {
                 //         return item;
@@ -475,6 +493,12 @@ export default (state = initialState, action) => {
                     state.pushed_device_ids = action.payload.data.pushed_device_ids;
                     showResponseModal = true;
                 }
+
+                state.bulkDevices = [];
+                state.bulkAction = '';
+                state.bulkDealers = [];
+                state.bulkUsers = [];
+                state.errorAction = '';
 
             } else {
                 // wipePassMsg = action.payload.wipePassNotMatch ? action.payload.ms : false;
@@ -498,12 +522,13 @@ export default (state = initialState, action) => {
                 selectedDevices: selectedBulkDevices,
                 // wipePassMsg,
                 bulkWipePassModal: wipeModal,
+                responseStatus: action.payload.status,
 
-                bulkDevices: [],
-                bulkAction: '',
-                bulkDealers: [],
-                bulkUsers: [],
-                errorAction: ''
+                bulkDevices: state.bulkDevices,
+                bulkAction: state.bulkAction,
+                bulkDealers: state.bulkDealers,
+                bulkUsers: state.bulkUsers,
+                errorAction: state.errorAction,
             }
         }
 
@@ -542,6 +567,8 @@ export default (state = initialState, action) => {
                 pushed_device_ids: [...state.pushed_device_ids],
                 bulkResponseModal: showResponseModal,
                 response_modal_action: "policy",
+
+                responseStatus: action.payload.status,
 
                 selectedDevices: [],
                 bulkDevices: [],
@@ -621,7 +648,7 @@ export default (state = initialState, action) => {
             let allMsgs = state.bulkMsgs;
 
             if (action.payload.status) {
-                allMsgs = state.bulkMsgs.filter(msg => msg.id !== action.delete_id);
+                allMsgs = checkIsArray(state.bulkMsgs).filter(msg => msg.id !== action.delete_id);
                 success({
                     title: action.payload.msg,
                 });

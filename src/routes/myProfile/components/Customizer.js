@@ -63,7 +63,7 @@ import {
   THEME_TYPE_LITE,
   THEME_TYPE_SEMI_DARK
 } from "../../../constants/ThemeSetting";
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 import { Modal } from 'antd';
 import { Themes_And_Colors, Theme_list_01, Theme_list_02, Theme, Semi_Dark, Dark, Colors, Preset_Color_Pallets, Customize, Reset_Theme, Nav_Style, Lite } from "../../../constants/Constants";
 import { Button_Open } from "../../../constants/ButtonConstants";
@@ -165,7 +165,7 @@ class Customizer extends Component {
   };
 
   getCustomizerContent = () => {
-    const colorPickers = Object.keys(this.state.vars).map(varName => this.getColorPicker(varName));
+    const colorPickers = checkIsArray(Object.keys(this.state.vars)).map(varName => this.getColorPicker(varName));
     const { themeType, layoutType, navStyle, colorSelection } = this.props;
 
     if (themeType === THEME_TYPE_DARK) {
@@ -350,7 +350,7 @@ class Customizer extends Component {
           <img src={require('assets/images/layouts/vertical no header.png')} alt='vertical no header' />
         </span>
       </li>
-      
+
     </ul>
   };
 

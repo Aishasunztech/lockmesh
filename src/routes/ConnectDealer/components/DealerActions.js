@@ -10,7 +10,7 @@ import DealerSalesHistory from "./DealerSalesHistory";
 import DealerDomains from './DealerDomains';
 
 // Helpers
-import { convertToLang, componentSearch } from '../../utils/commonUtils'
+import { convertToLang, componentSearch, checkIsArray } from '../../utils/commonUtils'
 // import { getColor, isBase64, convertToLang } from "../utils/commonUtils"
 // import { getDealerDetails, editDealer } from '../../appRedux/actions'
 // import RestService from "../../appRedux/services/RestServices";
@@ -174,7 +174,7 @@ export default class DealerAction extends Component {
                                 className="global-search"
                                 size="large"
                                 style={{ width: '100%' }}
-                                dataSource={dealerList.map((item, index) => {
+                                dataSource={checkIsArray(dealerList).map((item, index) => {
                                     return (<Select.Option key={index} value={item.dealer_id.toString()}>{item.dealer_name}</Select.Option>)
                                 })}
                                 onSelect={this.handleDealerChange}
@@ -377,7 +377,6 @@ export default class DealerAction extends Component {
                                         showConfirm(this, dealer.dealer_id, this.props.undoDealer, 'UNDELETE')
                                 }
                             >
-                                <Icon type="lock" className="lock_icon" />
                                 {undo_button_text}
                             </Button>
                         </Col>
@@ -427,6 +426,7 @@ export default class DealerAction extends Component {
                     allDomainList={this.props.allDomainList}
                     authUser={this.props.authUser}
                     getDomains={this.props.getDomains}
+                    dealerDomainLoading={this.props.dealerDomainLoading}
                 // dealerDomains
                 />
 

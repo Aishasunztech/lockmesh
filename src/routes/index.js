@@ -9,6 +9,7 @@ import Devices from "./devices/index";
 import ConnectDevice from "./ConnectDevice/index";
 
 import Users from './users';
+import StandAloneSims from './StandAloneSims';
 import Account from "./account/index";
 
 import Dealers from "./dealers/index";
@@ -37,6 +38,8 @@ import Support from './Support/index'
 import DeviceMessages from './DeviceMessages/index'
 import DealerAgent from './dealerAgent/index'
 import BulkActivities from './bulkActivities/index'
+// import ConnectSim from './ConnectSim/index';
+
 // import Documents from "./documents/index";
 
 const App = ({ match }) => {
@@ -56,6 +59,18 @@ const App = ({ match }) => {
           path={`${match.url}devices`}
           component={Devices}
         />
+
+        <Route
+          exact
+          path={`${match.url}sims`}
+          component={StandAloneSims}
+        />
+
+        {/* <Route
+          exact
+          path={`${match.url}connect-sim/:sim_id`}
+          component={ConnectSim}
+        /> */}
 
         <Route
           exact

@@ -10,7 +10,8 @@ import {
   SINGLE_APP_PULLED,
   RECEIVE_SIM_DATA,
   FINISHED_WIPE,
-  DEVICE_SYNCED, GENERATE_SUPPORT_TICKET, UPDATE_SUPPORT_TICKET_REPLY, SYSTEM_SUPPORT_MESSAGE_RECEIVED
+  DEVICE_SYNCED, GENERATE_SUPPORT_TICKET, UPDATE_SUPPORT_TICKET_REPLY, SYSTEM_SUPPORT_MESSAGE_RECEIVED,
+  SUPPORT_LIVE_CHAT_MESSAGE_RECEIVED, SUPPORT_LIVE_CHAT_USER_TYPING, SUPPORT_LIVE_CHAT_USER_STOPPED_TYPING,
 } from "../../constants/ActionTypes";
 
 import {
@@ -315,6 +316,20 @@ export function getAppJobQueue(deviceId) {
     };
 }
 
+export const closeWebSocket = (socket) => {
+  return (dispatch) => {
+    if(socket) {
+      socket.off();
+      socket.disconnect();
+    }
+
+    dispatch({
+      type: DISCONNECT_SOCKET,
+      payload: null
+    });
+  }
+};
+
 export const closeConnectPageSocketEvents = (socket, deviceId) => {
     return (dispatch) => {
         if (socket) {
@@ -389,6 +404,9 @@ export const closeSupportSystemSocket = (socket) => {
       socket.off(GENERATE_SUPPORT_TICKET);
       socket.off(UPDATE_SUPPORT_TICKET_REPLY);
       socket.off(SYSTEM_SUPPORT_MESSAGE_RECEIVED);
+      socket.off(SUPPORT_LIVE_CHAT_MESSAGE_RECEIVED);
+      socket.off(SUPPORT_LIVE_CHAT_USER_TYPING);
+      socket.off(SUPPORT_LIVE_CHAT_USER_STOPPED_TYPING);
 
       socket.disconnect();
     } else {
