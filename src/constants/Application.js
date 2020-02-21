@@ -48,13 +48,13 @@ switch (hostName) {
     case "predev.lockmesh.com":
     case "http://predev.lockmesh.com":
     case "https://predev.lockmesh.com":
-        URL = "https://predevapi.lockmesh.com/"
-        SOCKET_URL = 'wss://predevapi.lockmesh.com';
-        SOCKET_PATH = ''
+        URL = "https://predev.lockmesh.com/api/"
+        SOCKET_URL = 'wss://predev.lockmesh.com';
+        SOCKET_PATH = '/api/web/socket'
 
-        SUPERADMIN = 'https://devapi.meshguard.co/'
-        SUPPORT = "https://predevsupport.lockmesh.com/"
-
+        SUPPORT = "https://predev.lockmesh.com/supports/v1/"
+        SUPPORT_SOCKET = "https://predev.lockmesh.com";
+        SUPERADMIN = 'https://dev.meshguard.co/api/';
         LOG_SERVER_BASE_URL = 'https://logs.lockmesh.com';
         SysId = 3;
 
