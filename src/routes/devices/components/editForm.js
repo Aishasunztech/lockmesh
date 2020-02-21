@@ -1353,7 +1353,7 @@ class EditDevice extends Component {
                                                 if (this.props.device.pgp_email == pgp_email.pgp_email) {
                                                     return (
                                                         <Select.Option key={pgp_email.id} value={pgp_email.pgp_email.trim()}>
-                                                            {pgp_email.pgp_email.trim()} (Current)
+                                                            {`${pgp_email.pgp_email.trim()} (Current)`}
                                                         </Select.Option>
                                                     )
                                                 }
@@ -1401,13 +1401,15 @@ class EditDevice extends Component {
                                             onChange={(value) => this.setState({ chat_id: value })}
                                             // onFocus={handleFocus}
                                             // onBlur={handleBlur}
-                                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                            filterOption={(input, option) => {
+                                                return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            }}
                                             disabled={this.state.disableChat}
                                         >
                                             {checkIsArray(this.props.chat_ids).map((chat_id, index) => {
 
                                                 if (this.props.device.chat_id == chat_id.chat_id) {
-                                                    return (<Select.Option key={index} value={chat_id.chat_id}>{chat_id.chat_id} (Current)</Select.Option>)
+                                                    return (<Select.Option key={index} value={chat_id.chat_id}>{`${chat_id.chat_id} (Current)`}</Select.Option>)
                                                 }
                                                 return (<Select.Option key={index} value={chat_id.chat_id}>{chat_id.chat_id}</Select.Option>)
                                             })}
