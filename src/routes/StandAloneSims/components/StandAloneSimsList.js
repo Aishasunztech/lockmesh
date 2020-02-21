@@ -110,17 +110,10 @@ class SimList extends Component {
                     device_id: sim.device_id ? sim.device_id : 'N/A',
                     status: sim.sim_status == 'active' ? 'ACTIVE' : 'SUSPENDED',
                     sim_iccid: sim.sim_id,
-                    term: sim.term ? (sim.term + ' month') : 'N/A',
+                    term: sim.term ? sim.term + ' month' : 'N/A',
                     start_date: sim.start_date ? sim.start_date : 'N/A',
                     expiry_date: sim.expiry_date ? sim.expiry_date : 'N/A',
-                    // devices: (user.devicesList) ? user.devicesList.length : 0,
-                    // devicesList: user.devicesList,
-                    // user_name: user.user_name,
-                    // email: user.email,
-                    // tokens: 'N/A',
                     created_at: convertTimezoneValue(this.props.user.timezone, sim.created_at, TIMESTAMP_FORMAT),
-                    // created_at: (user.created_at) ? moment(user.created_at).tz(convertTimezoneValue(this.props.user.timezone)).format("YYYY-MM-DD HH:mm:ss") : 'N/A',
-                    // created_at: getFormattedDate(user.created_at)
                 }
             });
 
@@ -176,7 +169,7 @@ class SimList extends Component {
                         </TabPane>
                         <TabPane tab={<span>{convertToLang(translation[""], "Device Sims")} </span>} key="2" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span>{convertToLang(translation[""], "Stand Alone Sims")}</span>} key="3" forceRender={true}>
+                        <TabPane tab={<span>{convertToLang(translation[""], "Standalone Sims")}</span>} key="3" forceRender={true}>
                         </TabPane>
                     </Tabs>
                     <Table

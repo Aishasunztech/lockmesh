@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import AppFilter from '../../components/AppFilter';
 import SimsList from "./components/StandAloneSimsList";
-import { componentSearch, convertToLang, handleMultipleSearch, } from '../utils/commonUtils';
+import { componentSearch, convertToLang, handleMultipleSearch, checkIsArray, } from '../utils/commonUtils';
 
 import {
     Appfilter_SearchUser
@@ -23,6 +23,7 @@ import { StandAloneSimsColumns } from '../utils/columnsUtils';
 
 import AddSim from './components/AddStandAloneSims';
 import { ADMIN } from '../../constants/Constants';
+import SimFilter from '../../components/SimFilter';
 
 var copySimList = [];
 var status = true;
@@ -37,7 +38,10 @@ class StandAloneSims extends Component {
             packages: [],
             tabSelect: '1',
             simsList: props.simsList,
-            SearchValues: []
+            SearchValues: [],
+            totalValue: 0,
+            selectedStatusOption: 'all',
+            selectedTypeOption: 'all'
         }
     }
 
@@ -57,6 +61,7 @@ class StandAloneSims extends Component {
             }
             if (this.props.simsList !== prevProps.simsList) {
                 updateState.simsList = this.props.simsList
+                updateState.totalValue = this.props.simsList.length
             }
 
 
@@ -143,26 +148,73 @@ class StandAloneSims extends Component {
         copySimList = response.copyRequireSearchData;
     }
 
+    handleTypeChange = (type) => {
+        let simsList = this.props.simsList
+        let status = this.state.selectedStatusOption
+        let typeOption = type
+        let filteredList = []
+        if (typeOption === 'all') {
+            if (status === 'all') {
+                filteredList = simsList
+            } else {
+                filteredList = checkIsArray(simsList).filter(item => item.sim_status === status)
+            }
+        } else {
+            if (status === 'all') {
+                filteredList = checkIsArray(simsList).filter(item => item.type === typeOption)
+            } else {
+                filteredList = checkIsArray(simsList).filter(item => item.sim_status === status && item.type === typeOption)
+            }
+        }
+        this.setState({
+            totalValue: filteredList.length,
+            selectedTypeOption: typeOption
+        })
+    }
+
+    handleStatusChange = (status) => {
+        let simsList = this.props.simsList
+        let statusOption = status
+        let typeOption = this.state.selectedTypeOption
+        let filteredList = []
+        if (status === 'all') {
+            if (typeOption === 'all') {
+                filteredList = simsList
+            } else {
+                filteredList = checkIsArray(simsList).filter(item => item.type === typeOption)
+            }
+        } else {
+            if (typeOption === 'all') {
+                filteredList = checkIsArray(simsList).filter(item => item.sim_status === statusOption)
+            } else {
+                filteredList = checkIsArray(simsList).filter(item => item.sim_status === statusOption && item.type === typeOption)
+            }
+        }
+        this.setState({
+            totalValue: filteredList.length,
+            selectedStatusOption: statusOption
+        })
+    }
+
     render() {
         // console.log(this.props.getParentPackages);
         return (
             <Fragment>
-                <AppFilter
+                <SimFilter
                     searchPlaceholder={convertToLang(this.props.translation[Appfilter_SearchUser], "Search")}
-                    defaultPagingValue={this.state.defaultPagingValue}
-                    addButtonText={convertToLang(this.props.translation[""], "Add StandAlone Sim")}
-                    // selectedOptions={this.props.selectedOptions}
-                    // options={this.state.options}
-                    // isAddButton={false}
+                    addButtonText={convertToLang(this.props.translation[""], "Add Standalone Sim")}
                     isAddButton={this.props.user.type !== ADMIN}
                     isAddSimButton={true}
-                    // AddPolicyModel={true}
-                    handleAddSimModal={this.handleAddSimModal}
-                    handleCheckChange={this.handleCheckChange}
-                    handlePagination={this.handlePagination}
+                    handleTypeChange={this.handleTypeChange}
+                    handleStatusChange={this.handleStatusChange}
                     handleComponentSearch={this.handleComponentSearch}
+                    totalValue={this.state.totalValue}
                     translation={this.props.translation}
                     pageHeading={convertToLang(this.props.translation[""], "SIMS")}
+                    typeOptions={[{ name: 'All', value: 'all' }, { name: 'Device Sim', value: 'device' }, { name: 'Standalone Sim', value: 'standalone' }]}
+                    statusOptions={[{ name: 'All', value: 'all' }, { name: 'Active', value: 'active' }, { name: 'Suspended', value: 'suspended' }]}
+                    selectedTypeOption={this.state.selectedTypeOption}
+                    selectedStatusOption={this.state.selectedStatusOption}
                 />
                 <AddSim
                     ref="add_sim"
