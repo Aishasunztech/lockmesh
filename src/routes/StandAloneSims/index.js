@@ -215,6 +215,7 @@ class StandAloneSims extends Component {
                     statusOptions={[{ name: 'All', value: 'all' }, { name: 'Active', value: 'active' }, { name: 'Suspended', value: 'suspended' }]}
                     selectedTypeOption={this.state.selectedTypeOption}
                     selectedStatusOption={this.state.selectedStatusOption}
+                    handleAddSimModal={this.handleAddSimModal}
                 />
                 <AddSim
                     ref="add_sim"
