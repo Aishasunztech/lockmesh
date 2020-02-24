@@ -110,7 +110,7 @@ class SimList extends Component {
                     device_id: sim.device_id ? sim.device_id : 'N/A',
                     status: sim.sim_status == 'active' ? 'ACTIVE' : 'SUSPENDED',
                     sim_iccid: sim.sim_id,
-                    term: sim.term ? sim.term : 'N/A',
+                    term: sim.term ? (sim.term + ' month') : 'N/A',
                     start_date: sim.start_date ? sim.start_date : 'N/A',
                     expiry_date: sim.expiry_date ? sim.expiry_date : 'N/A',
                     // devices: (user.devicesList) ? user.devicesList.length : 0,
