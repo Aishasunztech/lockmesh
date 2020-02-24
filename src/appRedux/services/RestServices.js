@@ -79,8 +79,9 @@ axios.interceptors.response.use(function (response) {
             newObjectToSend.responseHeaders = null;
         } else {
             if(error.response.status == 422){
-                console.log('ValidationError', error.response.data);
+                console.warn('ValidationError', error.response.data);
             }
+            
             newObjectToSend.response = error.response.data;
             newObjectToSend.code = error.response.status;
             newObjectToSend.message = error.response.statusText;
