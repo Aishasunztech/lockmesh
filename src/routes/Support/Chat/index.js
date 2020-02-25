@@ -67,9 +67,9 @@ class Chat extends Component {
 
   resetDrawer = () => {
     this.props.resetCurrentConversation();
-    // this.setState({
-    //   drawerState: true
-    // });
+    this.setState({
+      lastId: ''
+    });
   };
 
   fetchMessages(){}
@@ -375,9 +375,9 @@ class Chat extends Component {
 
       let { lastId } = this.state;
       if(lastId){
-        if(document.getElementById(lastId)){
+        if(document.getElementById(lastId).length){
           setTimeout(function(){
-            document.getElementById(lastId).scrollIntoView();
+              document.getElementById(lastId).scrollIntoView();
           }, 50);
         }
       }
