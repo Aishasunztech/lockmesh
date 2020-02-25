@@ -38,7 +38,7 @@ import Support from './Support/index'
 import DeviceMessages from './DeviceMessages/index'
 import DealerAgent from './dealerAgent/index'
 import BulkActivities from './bulkActivities/index'
-// import ConnectSim from './ConnectSim/index';
+import ConnectSim from './ConnectSim/index';
 
 // import Documents from "./documents/index";
 
@@ -66,11 +66,11 @@ const App = ({ match }) => {
           component={StandAloneSims}
         />
 
-        {/* <Route
+        <Route
           exact
           path={`${match.url}connect-sim/:sim_id`}
           component={ConnectSim}
-        /> */}
+        />
 
         <Route
           exact

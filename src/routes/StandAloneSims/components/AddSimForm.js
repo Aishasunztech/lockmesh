@@ -406,6 +406,29 @@ class AddSimForm extends Component {
                             </Select>
                         )}
                     </Form.Item>
+
+                    <Form.Item
+                        label={convertToLang(this.props.translation[""], "RECURRING")}
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 16 }}
+                    >
+                        {this.props.form.getFieldDecorator('recurring', {
+                            initialValue: 0,
+                        })(
+                            <Select
+                                showSearch
+                                placeholder={convertToLang(this.props.translation[""], "Select recurring option")}
+                                optionFilterProp="children"
+                                autoComplete="new-password"
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                            >
+                                <Select.Option value={0}>NO</Select.Option>
+                                <Select.Option value={1}>YES</Select.Option>
+
+                            </Select>
+                        )}
+                    </Form.Item>
+
                     <Form.Item
                         label={convertToLang(this.props.translation[""], "NOTE")}
                         labelCol={{ span: 8 }}
