@@ -1,6 +1,5 @@
 import packageJson from '../../package.json';
 
-
 let hostName = window.location.hostname
 
 let URL = "http://localhost:3000/";
