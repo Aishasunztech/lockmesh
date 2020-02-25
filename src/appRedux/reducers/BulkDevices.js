@@ -94,20 +94,20 @@ export default (state = initialState, action) => {
         case BULK_HISTORY: {
 
             // console.log("action.payload history at red : ", action.payload)
-            if (action.payload.status) {
+            // if (action.payload.status) {
                 return {
                     ...state,
                     isloading: false,
                     history_loading: false,
-                    bulkDevicesHistory: action.payload.history,
+                    bulkDevicesHistory: action.payload,
                 }
-            } else {
-                return {
-                    ...state,
-                    isloading: false,
-                    history_loading: false
-                }
-            }
+            // } else {
+            //     return {
+            //         ...state,
+            //         isloading: false,
+            //         history_loading: false
+            //     }
+            // }
         }
 
 
