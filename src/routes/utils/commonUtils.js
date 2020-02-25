@@ -642,14 +642,19 @@ export function convertTimezoneValue(dealerTimezone, data, clientToServerTZ = fa
 }
 
 export function checkIsArray(data) {
-	if(!data){
+	if (!data) {
 		return [];
 	}
-	if(Array.isArray(data) && data.length){
+	if (Array.isArray(data) && data.length) {
 		return data;
-	}else {
+	} else {
 		return [];
 	}
+}
+
+
+export function checkDate(date) {
+	return (new Date(date) !== "Invalid Date") && !isNaN(new Date(date));
 }
 
 export function handleMultipleSearch(e, copy_status, copyRequireSearchData, demoSearchValues, requireForSearch) {

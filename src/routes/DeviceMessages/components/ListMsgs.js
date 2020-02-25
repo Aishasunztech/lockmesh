@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col, Tag, Modal } from "antd";
-import { convertToLang, checkValue, convertTimezoneValue, getWeekDayDescription, getMonthName, checkTimezoneValue, checkIsArray } from '../../utils/commonUtils';
+import { convertToLang, checkValue, convertTimezoneValue, getWeekDayDescription, getMonthName, checkTimezoneValue, checkIsArray, checkDate } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 import moment from 'moment';
 import ReadMoreAndLess from 'react-read-more-less';
@@ -167,7 +167,7 @@ export default class ListMsgs extends Component {
                 timer_status: item.timer_status ? item.timer_status : "N/A",
                 repeat: item.repeat_duration ? item.repeat_duration : "NONE",
                 // date_time: item.date_time ? item.date_time : "N/A",
-                date_time: moment(item.date_time).format(dateTimeFormat), // ? convertTimezoneValue(this.props.user.timezone, item.date_time, dateTimeFormat) : "N/A",
+                date_time: checkDate(item.date_time) ? moment(item.date_time).format(dateTimeFormat) : "N/A", // ? convertTimezoneValue(this.props.user.timezone, item.date_time, dateTimeFormat) : "N/A",
                 // date_time: item.timer_status === "DATE/TIME" ? convertTimezoneValue(this.props.user.timezone, item.date_time, TIMESTAMP_FORMAT_NOT_SEC) : (item.timer_status !== "NOW" && item.time) ? item.time : "N/A",
                 interval_description: item.interval_description,
                 // week_day: getWeekDayDescription(item.week_day),
