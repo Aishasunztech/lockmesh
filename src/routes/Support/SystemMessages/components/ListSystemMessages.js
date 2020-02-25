@@ -7,6 +7,7 @@ import {
   componentSearchSystemMessages,
   checkIsArray
 } from '../../../utils/commonUtils';
+import ReadMoreAndLess from 'react-read-more-less';
 import { supportSystemMessagesReceiversColumns } from '../../../utils/columnsUtils';
 import ViewMessage from './ViewMessage'
 
@@ -96,7 +97,16 @@ export default class ListSystemMessages extends Component {
           type: item.type,
           sender_user_type: item.sender_user_type,
           sender: item.sender === "" ? "--" : item.sender,
-          subject: checkValue(item.subject),
+          subject: (
+            <ReadMoreAndLess
+              className="read-more-content"
+              charLimit={100}
+              readMoreText=" Read more"
+              readLessText=" Read less"
+            >
+              {checkValue(item.subject)}
+            </ReadMoreAndLess>
+          ), // checkValue(item.subject),
           createdAt: item.createdAt,
           createdTime: item.createdTime,
           action: (
@@ -169,7 +179,7 @@ export default class ListSystemMessages extends Component {
     return (
       <Fragment>
         <Table
-          className="gx-table-responsive"
+          className="gx-table-responsive msgList"
           rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''}
           expandIcon={(props) => props.record.receivers === '--' ? "" : this.customExpandIcon(props)}
           expandedRowRender={(record) => {

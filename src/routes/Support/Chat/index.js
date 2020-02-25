@@ -41,6 +41,16 @@ class Chat extends Component {
     }
     );
   };
+
+  doIfKeyCode(e, keys=[], cb=null){
+    if(!Array.isArray(keys)){
+      return;
+    }
+    if(keys.includes(e.keyCode) && typeof cb === 'function'){
+      cb();
+    }
+    return;
+  };
   filterUsers = (userName) => {
     if (userName === '') {
       return this.state.copyChatUsers;
@@ -66,12 +76,12 @@ class Chat extends Component {
 
   onScroll = (e) => {
     let { currentConversation } = this.props;
-    if(e.srcElement.scrollHeight === e.srcElement.scrollTop + e.srcElement.clientHeight){
+    if(e.srcElement.scrollHeight <= e.srcElement.scrollTop + e.srcElement.clientHeight + 10){
       if(this.state.isScrolledUp) {
         this.setState({isScrolledUp: false});
       }
     } else {
-      if(e.srcElement.scrollTop === 0){
+      if(e.srcElement.scrollTop <= 10){
         if(this.state.conversation.length){
           if(this.state.lastId !== this.state.conversation[0]._id){
             let convId = (currentConversation !== null) ? currentConversation.hasOwnProperty('_id') && currentConversation._id !== null ? currentConversation._id : '' : '';
@@ -135,7 +145,7 @@ class Chat extends Component {
               />
             </div>
           </div>
-          <i className="gx-icon-btn icon icon-sent" onClick={this.submitComment.bind(this)} />
+          <i className="gx-icon-btn icon icon-sent" tabIndex="0" onKeyDown={(e) => this.doIfKeyCode(e, [32, 13], this.submitComment)} onClick={this.submitComment} />
         </div>
       </div>
     </div>
@@ -312,6 +322,8 @@ class Chat extends Component {
       isScrolledUp: false,
       lastId: ''
     }
+
+    this.submitComment = this.submitComment.bind(this);
   }
 
   componentDidMount() {
@@ -362,7 +374,7 @@ class Chat extends Component {
     if (prevProps !== this.props) {
 
       let { lastId } = this.state;
-      if(lastId !== ''){
+      if(lastId){
         if(document.getElementById(lastId)){
           setTimeout(function(){
             document.getElementById(lastId).scrollIntoView();
@@ -484,11 +496,14 @@ class Chat extends Component {
   submitComment() {
 
     if (this.state.message.length > 0 && this.state.message.trim().length > 0) {
+      // let data = {
+      //   receiver: this.state.selectedUser.user.dealer_id,
+      //   message: this.state.message,
+      // };
       let data = {
-        receiver: this.state.selectedUser.user.dealer_id,
-        message: this.state.message,
-      };
-
+          receiver: this.state.selectedUser.user.dealer_id,
+          message: btoa(this.state.message),
+        };
       this.props.sendSupportLiveChatMessage(data);
       this.setState({
         message: '',
