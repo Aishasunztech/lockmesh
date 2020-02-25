@@ -6,13 +6,15 @@ class Reply extends Component {
     this.state = {
       description: ''
     }
+
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit(){
     if(this.state.description !== '' && this.state.description.trim().length !== ''){
       let description = this.state.description;
       let replyObject = {
-        description: description,
+        description: btoa(description),
         user: this.props.user,
         ticket_id: this.props.supportTicket._id
       }
@@ -26,6 +28,16 @@ class Reply extends Component {
   handleKeyDown(e){
     this.setState({description: e.target.value});
   }
+
+  doIfKeyCode(e, keys=[], cb=null){
+    if(!Array.isArray(keys)){
+      return;
+    }
+    if(keys.includes(e.keyCode) && typeof cb === 'function'){
+      cb();
+    }
+    return;
+  };
 
   render(){
     return (
@@ -42,7 +54,7 @@ class Reply extends Component {
               />
             </div>
           </div>
-          <i className="button-ticket-reply-send gx-icon-btn icon icon-sent" onClick={() => this.handleSubmit()}/>
+          <i className="button-ticket-reply-send gx-icon-btn icon icon-sent" tabIndex="0" onKeyDown={(e) => this.doIfKeyCode(e, [32, 13], this.handleSubmit)} onClick={this.handleSubmit}/>
         </div>
       </div>
     );

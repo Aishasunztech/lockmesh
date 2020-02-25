@@ -9,11 +9,14 @@ import {
   SET_CURRENT_TICKET_ID,
   RESET_CURRENT_TICKET_ID,
   UPDATE_SUPPORT_TICKET_REPLY,
+  UPDATE_SUPPORT_TICKET_REPLY_SOCKET,
   ADMIN_OBJECT_RECEIVED_FOR_USER
 } from "../../constants/ActionTypes";
 
-import { message, Modal } from 'antd';
+import { message, Modal, notification } from 'antd';
 import { checkIsArray } from "../../routes/utils/commonUtils";
+const nSuccess = notification.info;
+const nError = notification.error;
 const success = Modal.success;
 const error   = Modal.error;
 const initialState = {
@@ -76,14 +79,24 @@ export default (state = initialState, action) => {
 
       if (action.payload.status) {
         tickets.unshift(action.payload.data);
-        success({
-          title: action.payload.msg,
-        });
+        let subject = '';
+        if(action.payload && action.payload.data && action.payload.data.subject){
+          subject = (action.payload.data.subject.length > 50) ? action.payload.data.subject.substr(0, 50) + '...' : action.payload.data.subject;
+        }
+        nSuccess({
+          message: action.payload.msg,
+          description: subject,
+          placement: 'bottomRight',
+          duration: 15
+        })
       }
       else {
-        error({
-          title: action.payload.msg,
-        });
+        nError({
+          message: action.payload.msg,
+          description: '',
+          placement: 'bottomRight',
+          duration: 15
+        })
       }
 
       return {
@@ -139,6 +152,46 @@ export default (state = initialState, action) => {
       else {
         error({
           title: action.payload.msg,
+        });
+      }
+
+      if(state.currentTicketId != null){
+        if(state.currentTicketId === action.payload.data._id){
+          replies = action.payload.data.replies;
+        } else {
+          replies = state.supportTicketReplies
+        }
+      } else {
+        replies = []
+      }
+
+      return {
+        ...state,
+        supportTicketReplies: replies,
+      };
+    }
+
+    case UPDATE_SUPPORT_TICKET_REPLY_SOCKET: {
+      let replies = state.supportTicketReplies;
+      if (action.payload.status) {
+        replies = action.payload.data;
+        let subject = '';
+        if(action.payload && action.payload.data && action.payload.data.subject){
+          subject = (action.payload.data.subject.length > 50) ? action.payload.data.subject.substr(0, 50) + '...' : action.payload.data.subject;
+        }
+        nSuccess({
+          message: action.payload.msg,
+          description: subject,
+          placement: 'bottomRight',
+          duration: 15
+        });
+      }
+      else {
+        nError({
+          message: action.payload.msg,
+          description: '',
+          placement: 'bottomRight',
+          duration: 15
         });
       }
 

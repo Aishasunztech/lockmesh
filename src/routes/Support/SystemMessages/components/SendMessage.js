@@ -36,6 +36,8 @@ class SendMessage extends Component {
 
       if (!err) {
         values.receivers = dealerData;
+        values.subject = btoa(values.subject);
+        values.message = btoa(values.message);
         this.props.generateSupportSystemMessages(values);
         this.handleCancel();
       }

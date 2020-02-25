@@ -5,8 +5,10 @@ import {
   LOADING, UPDATE_SUPPORT_SYSTEM_MESSAGE_NOTIFICATION, GET_SUPPORT_SYSTEM_MESSAGE_NOTIFICATION, SYSTEM_SUPPORT_MESSAGE_RECEIVED, ADD_SUPPORT_SYSTEM_MESSAGE_NOTIFICATION
 } from "../../constants/ActionTypes";
 
-import { message, Modal } from 'antd';
+import { message, Modal, notification } from 'antd';
 import { checkIsArray } from "../../routes/utils/commonUtils";
+const nSuccess = notification.info;
+const nError = notification.error;
 const success = Modal.success;
 const error = Modal.error;
 const initialState = {
@@ -72,9 +74,19 @@ export default (state = initialState, action) => {
 
     case SYSTEM_SUPPORT_MESSAGE_RECEIVED: {
       let receivedSupportSystemMessagesList = state.receivedSupportSystemMessages;
-      success({
-        title: action.payload.msg
-      });
+      let subject = '';
+      if(action.payload && action.payload.data && action.payload.data.system_message && action.payload.data.system_message.subject){
+        subject = (action.payload.data.system_message.subject.length > 50) ? action.payload.data.system_message.subject.substr(0, 50) + '...' : action.payload.data.system_message.subject;
+      }
+      nSuccess({
+        message: action.payload.msg,
+        description: subject,
+        placement: 'bottomRight',
+        duration: 15
+      })
+      // success({
+      //   title: action.payload.msg
+      // });
       return {
         ...state,
         receivedSupportSystemMessages: [action.payload.data, ...receivedSupportSystemMessagesList]

@@ -17,6 +17,8 @@ class ComposeTicket extends React.Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         values.user = this.props.user;
+        values.subject = btoa(values.subject);
+        values.description = btoa(values.description);
         this.props.generateSupportTicket(values);
         this.props.onClose();
         this.props.form.resetFields()
