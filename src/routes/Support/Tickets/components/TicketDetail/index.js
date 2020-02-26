@@ -45,7 +45,7 @@ class TicketDetail extends React.Component {
                     this.props.resetCurrentSupportTicketId();
                   }} />
                   </span>
-                  <span className="display-float">Subject: {supportTicket.subject}<br />
+                  <span className="display-float word-break">Subject: {supportTicket.subject}<br />
                     Ticket Id: ({supportTicket.ticketId})</span>
                 </div>
                 {/*<div className="top10">*/}

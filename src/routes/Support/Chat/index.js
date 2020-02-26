@@ -261,6 +261,12 @@ class Chat extends Component {
 
   onSelectUser = (data, type) => {
 
+    let u = type === 'chat' ? data.user : data;
+    let c = (data.hasOwnProperty('_id')) ? data._id : null;
+    if(this.props.currentConversation && this.props.currentConversation.user === u && this.props.currentConversation._id === c){
+      return false;
+    }
+
     if (type === 'chat') {
       this.props.getSupportLiveChatMessages({ type: 'conversation', id: data._id });
       // this.props.markMessagesRead({conversations: [data._id]});

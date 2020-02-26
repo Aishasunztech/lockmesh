@@ -4208,7 +4208,7 @@ export function supportSystemMessage(translation, isModal = false) {
             width: 400,
             maxWidth: 400,
             key: 'subject',
-            sorter: (a, b) => { return a.subject.localeCompare(b.subject) },
+            sorter: (a, b) => { return a.subjectOriginal.localeCompare(b.subject) },
             sortDirections: ['ascend', 'descend'],
         },
 
