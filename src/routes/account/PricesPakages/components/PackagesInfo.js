@@ -82,7 +82,7 @@ export default class PackagesInfo extends Component {
                     }
                 }
             }
-        } else if (packageData.package_type === 'data_plan') {
+        } else if (packageData.package_type === 'data_plan' || packageData.package_type === 'standalone_sim') {
             let dump = {
                 name: 'Data Limit',
                 f_value: packageData.data_limit,

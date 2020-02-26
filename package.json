@@ -67,6 +67,7 @@
     "redux-saga": "^0.16.0",
     "redux-thunk": "^2.3.0",
     "rheostat": "^3.0.1",
+    "sanitize-html": "^1.21.1",
     "scroll-into-view": "^1.9.7",
     "sequelize-cli": "^5.5.1",
     "slick-carousel": "^1.8.1",

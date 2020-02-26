@@ -15,26 +15,26 @@ import { Tab_All } from '../../../constants/TabConstants';
 import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 // const TabPane = Tabs.TabPane;
 export default class ListDomain extends Component {
-    state = { visible: false }
+    // state = { visible: false }
 
-    showModal = () => {
-        this.setState({
-            visible: true,
-        });
-    }
-    handleOk = (e) => {
-        // console.log(e);
-        this.setState({
-            visible: false,
-        });
-    }
+    // showModal = () => {
+    //     this.setState({
+    //         visible: true,
+    //     });
+    // }
+    // handleOk = (e) => {
+    //     // console.log(e);
+    //     this.setState({
+    //         visible: false,
+    //     });
+    // }
 
-    handleCancel = (e) => {
-        // console.log(e);
-        this.setState({
-            visible: false,
-        });
-    }
+    // handleCancel = (e) => {
+    //     // console.log(e);
+    //     this.setState({
+    //         visible: false,
+    //     });
+    // }
     constructor(props) {
         super(props);
         this.state = {
@@ -189,7 +189,7 @@ export default class ListDomain extends Component {
                         rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
-                            // console.log("record ", record);
+                            console.log("record ", record);
                             return (
                                 <Fragment>
                                     <Permissions

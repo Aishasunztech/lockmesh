@@ -3551,7 +3551,7 @@ export function inventorySales(translation) {
 
             },
             {
-                title: convertToLang(translation[DUMY_TRANS_ID], "DESCRPTION"),
+                title: convertToLang(translation[DUMY_TRANS_ID], "DESCRIPTION"),
                 dataIndex: 'description',
                 className: '',
                 align: "center",
@@ -3833,7 +3833,32 @@ export function domainColumns(translation, handleSearch, isModal = false) {
             //     }
             // ]
         };
+
+        let permissionBy =  {
+            title: (
+                <Input.Search
+                    name="permission_by"
+                    key="permission_by"
+                    id="permission_by"
+                    className="search_heading"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    placeholder="PERMISSION BY"
+                />
+            ),
+            children: [
+                {
+                    title: convertToLang(translation[""], "PERMISSION BY"),
+                    dataIndex: 'permission_by',
+                    key: 'permission_by',
+                    name: 'permission_by'
+                }
+            ]
+        };
+
+
         columns[1] = actionColumn;
+        columns.push(permissionBy);
         // columns.splice(1, 1)
     }
 
@@ -4181,8 +4206,9 @@ export function supportSystemMessage(translation, isModal = false) {
             title: convertToLang(translation[""], "SUBJECT"),
             dataIndex: 'subject',
             width: 400,
+            maxWidth: 400,
             key: 'subject',
-            sorter: (a, b) => { return a.subject.localeCompare(b.subject) },
+            sorter: (a, b) => { return a.subjectOriginal.localeCompare(b.subject) },
             sortDirections: ['ascend', 'descend'],
         },
 

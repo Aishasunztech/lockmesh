@@ -53,6 +53,10 @@
   float: left;
 }
 
+.word-break {
+  word-break: break-all;
+}
+
 .text-area-height {
   height: calc(100vh - 335px) !important;
 }

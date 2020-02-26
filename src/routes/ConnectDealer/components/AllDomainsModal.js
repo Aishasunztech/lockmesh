@@ -153,9 +153,9 @@ export default class AllDomainsModal extends Component {
 
     handleAddDomain = () => {
         // console.log("handle add domain for connect deaeler: ", this.props.dealerId, JSON.stringify(this.state.selectedRowKeys), 'save', false, this.props.authUser);
-        this.setState({ domainLoading: true, selectedDomainList: [], selectedRowKeys: [] });
         // this.handleCancel();
         this.props.domainPermission(this.state.selectedRowKeys, [this.props.dealerId], 'save', false, this.props.authUser, this.state.selectedDomainList);
+        this.setState({ domainLoading: true, selectedDomainList: [], selectedRowKeys: [] });
     }
 
     render() {

@@ -78,6 +78,10 @@ axios.interceptors.response.use(function (response) {
             newObjectToSend.responseBody = null;
             newObjectToSend.responseHeaders = null;
         } else {
+            if(error.response.status == 422){
+                console.warn('ValidationError', error.response.data);
+            }
+            
             newObjectToSend.response = error.response.data;
             newObjectToSend.code = error.response.status;
             newObjectToSend.message = error.response.statusText;
@@ -1337,6 +1341,13 @@ const RestService = {
     changeSimStatus: (id, type) => {
         return axios.put(BASE_URL + 'users/change_sim_status',
             { id, type },
+            RestService.getHeader()
+        )
+    },
+
+    addStandAloneSim: (data) => {
+        return axios.post(BASE_URL + 'users/add-standalone-sim',
+            data,
             RestService.getHeader()
         )
     },

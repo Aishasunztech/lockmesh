@@ -20,6 +20,7 @@ import { ADMIN, sim } from '../../../constants/Constants';
 
 import styles from './standAloneSim.css';
 import { TIMESTAMP_FORMAT } from '../../../constants/Application';
+import { Link } from 'react-router-dom';
 // import styles1 from './users_fixheader.css';
 
 const confirm = Modal.confirm
@@ -94,13 +95,22 @@ class SimList extends Component {
                                 >
                                     {convertToLang(this.props.translation[""], "RESET")}
                                 </Button>
+                                <Link to={`/connect-sim/${btoa(sim.sim_id.toString())}`.trim()}>
+                                    <Button
+                                        type="primary"
+                                        size="small"
+                                        style={{ textTransform: 'uppercase' }}
+                                    >
+                                        {convertToLang(this.props.translation[""], "CONNECT")}
+                                    </Button>
+                                </Link>
                             </div>
                         </Fragment>
                     ,
                     device_id: sim.device_id ? sim.device_id : 'N/A',
                     status: sim.sim_status == 'active' ? 'ACTIVE' : 'SUSPENDED',
                     sim_iccid: sim.sim_id,
-                    term: sim.term ? sim.term : 'N/A',
+                    term: sim.term ? (sim.term + ' month') : 'N/A',
                     start_date: sim.start_date ? sim.start_date : 'N/A',
                     expiry_date: sim.expiry_date ? sim.expiry_date : 'N/A',
                     // devices: (user.devicesList) ? user.devicesList.length : 0,
