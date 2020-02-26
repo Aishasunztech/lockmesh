@@ -100,6 +100,10 @@ class Chat extends Component {
     const { message, selectedUser } = this.state;
     return <div className="gx-chat-main">
       <div className="gx-chat-main-header">
+        <div className="gx-d-block gx-d-lg-none">
+          <span className="gx-chat-btn support-chat-small"><i className="gx-icon-btn icon icon-menu"
+                                                              onClick={this.onToggleDrawer.bind(this)} /></span>
+        </div>
         <span className="gx-chat-btn support-chat-small"><i className="gx-icon-btn icon icon-arrow-left"
           onClick={this.resetDrawer.bind(this)} /></span>
         <div className="gx-chat-main-header-info">
