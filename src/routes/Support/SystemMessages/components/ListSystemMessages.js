@@ -97,6 +97,7 @@ export default class ListSystemMessages extends Component {
           type: item.type,
           sender_user_type: item.sender_user_type,
           sender: item.sender === "" ? "--" : item.sender,
+          subjectOriginal: (checkValue(item.subject)),
           subject: (
             <ReadMoreAndLess
               className="read-more-content"
