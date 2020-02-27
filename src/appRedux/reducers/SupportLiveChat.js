@@ -61,9 +61,13 @@ export default (state = initialState, action) => {
       //   supportLiveChatConversations.push(action.payload.conversation);
       // }
 
+      if(supportLiveChatMessages.some(message => message.conversation_id === action.payload.message.conversation_id)){
+        supportLiveChatMessages.push(action.payload.message);
+      }
+
       return {
         ...state,
-        supportLiveChatMessages: [...supportLiveChatMessages, action.payload.message],
+        supportLiveChatMessages: [...supportLiveChatMessages],
         supportLiveChatConversations: [action.payload.conversation, ...supportLiveChatConversations]
       };
     }

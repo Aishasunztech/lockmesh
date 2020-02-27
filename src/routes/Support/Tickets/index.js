@@ -1,9 +1,10 @@
 import React, { PureComponent } from "react";
-import { Button, Modal, Table } from "antd";
+import { Button, Modal, Table, Tooltip } from "antd";
 import ComposeMail from "./components/Compose/index";
 import MailDetail from "./components/TicketDetail/index";
 import { getDateFromTimestamp, checkIsArray } from "../../utils/commonUtils";
 import { bindActionCreators } from "redux";
+import ReadMoreAndLess from 'react-read-more-less';
 import {
   generateSupportTicket,
   supportTicketReply,
@@ -239,7 +240,9 @@ class Mail extends PureComponent {
       let data = {
         ticketId: item.ticketId,
         name: dealer_name + " ("+ link_code +")",
-        subject: <a href="javascript:void(0);" onClick={() => this.onMailSelect(item)}>{item.subject}</a>,
+        subject: (<Tooltip title={item.subject}>
+          <a href="javascript:void(0);" onClick={() => this.onMailSelect(item)}>{item.subject.length > 50 ? item.subject.substr(0, 50) + '...' : item.subject}</a>
+        </Tooltip>),
         subjectStr: item.subject,
         status: item.status,
         type: item.category,

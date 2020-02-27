@@ -318,14 +318,14 @@ class Apk extends Component {
                                                 </Button>
                                             </a>
                                         </Row>
-                                        <Row className="d_t_m">
+                                        {/* <Row className="d_t_m">
                                             <h4 style={{ lineHeight: '30px', marginBottom: 0 }}><Markup content={convertToLang(this.props.translation[DT_MODAL_BODY_7], "Neutral Launcher (BYOD7) <b>(Android v7)</b>")} ></Markup></h4>
                                             <a href={`${BASE_URL}users/getFile/nlbyod7.apk`}>
                                                 <Button type="primary" size="default" style={{ margin: '0 0 0 16px', height: 30, lineHeight: '30px' }}>
                                                     {convertToLang(this.props.translation[Button_DOWNLOAD], "Download")}
                                                 </Button>
                                             </a>
-                                        </Row>
+                                        </Row> */}
                                     </Modal>
 
                                 </Col>

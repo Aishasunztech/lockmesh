@@ -89,6 +89,13 @@ export default class BulkActivity extends Component {
         }
     }
 
+    componentDidMount() {
+        // console.log("componentDidMount this.props.history ", this.props.history)
+        this.setState({
+            activities: this.props.history
+        })
+    }
+
     showModal = () => {
         this.setState({
             visible: true,
