@@ -13,7 +13,6 @@ export default class BulkSendMsg extends Component {
     }
 
     handleBulkSendMsg = (data, dealerTZ) => {
-        // console.log("handleBulkSendMsg ", data);
         let selectedDevices = [];
         let dealer_ids = [];
         let user_ids = [];
@@ -43,9 +42,6 @@ export default class BulkSendMsg extends Component {
             monthName: data.monthName, // for 12 months
             time: data.time
         }
-
-        // console.log("saveData ", saveData);
-
 
         this.confirm({
             // title: `${convertToLang(this.props.translation[""], "Are you sure, you want to send message on these selected devices ")} ${selectedDevices.map(item => ` ${item.device_id}`)} ?`,

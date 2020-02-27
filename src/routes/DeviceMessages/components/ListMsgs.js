@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Tabs, Row, Col, Tag, Modal } from "antd";
-import { convertToLang, checkValue, convertTimezoneValue, getWeekDayDescription, getMonthName, checkTimezoneValue, checkIsArray, checkDate } from '../../utils/commonUtils';
+import { convertToLang, checkValue, checkTimezoneValue, checkIsArray, checkDate } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 import moment from 'moment';
 import ReadMoreAndLess from 'react-read-more-less';
@@ -8,7 +8,6 @@ import CustomScrollbars from "../../../util/CustomScrollbars";
 import { userDevicesListColumns } from '../../utils/columnsUtils';
 import { TIMESTAMP_FORMAT_NOT_SEC, TIME_FORMAT_HM, SERVER_TIMEZONE, HOST_NAME, TIMESTAMP_FORMAT } from '../../../constants/Application';
 import EditMsgModal from './EditMsgForm';
-import { Link } from "react-router-dom";
 import styles from './deviceMsg.css'
 
 export default class ListMsgs extends Component {
@@ -26,7 +25,6 @@ export default class ListMsgs extends Component {
             editRecord: null,
             editModal: false,
             dealerTZ: dealerTZ
-            // textLimit: 100
         };
         this.renderList = this.renderList.bind(this);
         this.confirm = Modal.confirm;
@@ -38,14 +36,12 @@ export default class ListMsgs extends Component {
         });
     }
     handleOk = (e) => {
-        // console.log(e);
         this.setState({
             visible: false,
         });
     }
 
     handleCancel = (e) => {
-        // console.log(e);
         this.setState({
             visible: false,
         });
@@ -58,7 +54,6 @@ export default class ListMsgs extends Component {
     componentDidUpdate(prevProps) {
 
         if (this.props !== prevProps) {
-            // console.log(this.props.columns);
             this.setState({
                 columns: this.props.columns
             })
@@ -81,10 +76,8 @@ export default class ListMsgs extends Component {
     }
 
     handleEditModal = (data) => {
-        // console.log("edit data: ", data);
         let editDateTime = data.date_time;
         let currentDateTime = moment().tz(this.state.dealerTZ).format(TIMESTAMP_FORMAT);
-        // console.log("edit data is: ", data.date_time, " current date: ", moment().tz(this.state.dealerTZ).format(TIMESTAMP_FORMAT), currentDateTime > editDateTime)
         if (currentDateTime > editDateTime && data.timer_status === "DATE/TIME") {
             Modal.warning({
                 title: 'This message time is passed',
@@ -95,29 +88,7 @@ export default class ListMsgs extends Component {
         }
     }
 
-    // expandText = (id) => {
-    //     this.setState({ textLimit: this.state.textLimit + 100 })
-    // }
-
-    // handleLoadMoreText = (msg) => {
-    //     let updateMsg = msg;
-    //     let _this = this;
-    //     if (msg && msg.length > _this.state.textLimit) {
-    //         let random_id = Math.floor(Math.random() * 1000) + 1;
-    //         updateMsg = <p className={'read_more_' + random_id}>{updateMsg.substr(0, _this.state.textLimit)}... <a href='#' onClick={() => _this.expandText(random_id)}>Read more</a></p>
-    //     } else {
-    //         updateMsg = <p>{updateMsg}<a hre='#'></a></p>
-    //     }
-
-    //     return updateMsg
-    // }
-
-    // ReadMore = (e) => {
-    //     console.log("data: e ", e);
-    // }
-
     renderList(list) {
-        // console.log("renderList: ", list);
         let bulkMsgs = [];
         list.map((item) => {
             let parseDevices = item.devices ? JSON.parse(item.devices) : [];
@@ -135,24 +106,19 @@ export default class ListMsgs extends Component {
                 action: (
                     <div data-column="ACTION" style={{ display: "inline-flex" }}>
                         <Fragment>
-                            {/* {(HOST_NAME === 'localhost' || HOST_NAME === 'dev.lockmesh.com') ? */}
                             {(!item.timer_status || item.timer_status === "NOW") ? null : // edit button hide if timer_status is NOW or not defined
                                 <Fragment>
                                     <Button
-                                        // disabled={HOST_NAME === 'localhost' ? false : true}
                                         type="primary"
                                         size="small"
                                         onClick={() => this.handleEditModal(JSON.parse(JSON.stringify(item)))}
                                     >EDIT</Button>
                                 </Fragment>}
-                            {/* : null
-                            } */}
                             <Fragment><Button type="danger" size="small" onClick={() => this.deleteMsg(item.id)}>DELETE</Button></Fragment>
                         </Fragment>
                     </div>
                 ),
                 send_to: parseDevices.length,
-                // msg: this.handleLoadMoreText(checkValue(item.msg)), // checkValue(item.msg),
                 msg: (
                     <ReadMoreAndLess
                         ref={this.ReadMore}
@@ -166,13 +132,8 @@ export default class ListMsgs extends Component {
                 ),
                 timer_status: item.timer_status ? item.timer_status : "N/A",
                 repeat: item.repeat_duration ? item.repeat_duration : "NONE",
-                // date_time: item.date_time ? item.date_time : "N/A",
-                date_time: checkDate(item.date_time) ? moment(item.date_time).format(dateTimeFormat) : "N/A", // ? convertTimezoneValue(this.props.user.timezone, item.date_time, dateTimeFormat) : "N/A",
-                // date_time: item.timer_status === "DATE/TIME" ? convertTimezoneValue(this.props.user.timezone, item.date_time, TIMESTAMP_FORMAT_NOT_SEC) : (item.timer_status !== "NOW" && item.time) ? item.time : "N/A",
+                date_time: checkDate(item.date_time) ? moment(item.date_time).format(dateTimeFormat) : "N/A",
                 interval_description: item.interval_description,
-                // week_day: getWeekDayDescription(item.week_day),
-                // month_date: item.month_date && item.month_date !== 0 ? `On every ${checkValue(item.month_date)} date of month` : "N/A",
-                // month_name: getMonthName(item.month_name),
                 devices: parseDevices,
             }
             bulkMsgs.push(data)
@@ -180,10 +141,6 @@ export default class ListMsgs extends Component {
         return bulkMsgs
     }
 
-    onSelectChange = (selectedRowKeys) => {
-        // console.log('selectedRowKeys changed: ', selectedRowKeys);
-        // this.setState({ selectedRowKeys });
-    }
     customExpandIcon(props) {
         if (props.expanded) {
             return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
@@ -198,7 +155,6 @@ export default class ListMsgs extends Component {
     }
 
     onExpandRow = (expanded, record) => {
-        // console.log(expanded, 'data is expanded', record);
         if (expanded) {
             if (!this.state.expandedRowKeys.includes(record.rowKey)) {
                 this.state.expandedRowKeys.push(record.rowKey);
@@ -217,10 +173,6 @@ export default class ListMsgs extends Component {
     }
 
     render() {
-        // let dealerTZ = checkTimezoneValue(this.props.user.timezone, false);
-        // let convertDateTime = dealerTZ ? moment.tz(dealerTZ).tz(SERVER_TIMEZONE).format("YYYY-MM-DD HH:mm:ss") : "N/A";
-
-        // console.log("convertDateTime ", convertDateTime, "dealerTZ ", dealerTZ, "server timezone: ", SERVER_TIMEZONE);
         return (
             <Fragment>
                 <Card className='fix_card fix_msgList_card'>
@@ -231,7 +183,6 @@ export default class ListMsgs extends Component {
                             rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
                             expandIcon={(props) => this.customExpandIcon(props)}
                             expandedRowRender={(record) => {
-                                // console.log("record ", record);
                                 return (
                                     <Fragment>
                                         <Table
