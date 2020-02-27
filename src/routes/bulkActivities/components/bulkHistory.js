@@ -1,20 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import { Modal, message, Input, Table, Switch, Avatar, Card, Tabs } from 'antd';
-import { componentSearch, getFormattedDate, convertToLang, convertTimezoneValue, checkIsArray } from '../../utils/commonUtils';
-import Moment from 'react-moment';
-import { SECURE_SETTING, DATE, PROFILE_NAME } from '../../../constants/Constants';
-import { BASE_URL, TIMESTAMP_FORMAT } from '../../../constants/Application';
-import CircularProgress from "components/CircularProgress";
-// import styles from './Applist.css';
+import { convertToLang, convertTimezoneValue, checkIsArray } from '../../utils/commonUtils';
+import { DATE } from '../../../constants/Constants';
+import { BASE_URL } from '../../../constants/Application';
 import { POLICY_APP_NAME, POLICY_NAME, ACTIVITY } from '../../../constants/PolicyConstants';
 import { Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
-import { DEVICE_IMEI_1, DEVICE_IMEI_2, ACTIVITIES, DEVICE_ID } from '../../../constants/DeviceConstants';
 import { bulkDeviceHistoryColumns } from '../../utils/columnsUtils';
 import CustomScrollbars from '../../../util/CustomScrollbars';
 
 const TabPane = Tabs.TabPane;
-var copyActivities = [];
-var status = true;
+
 export default class BulkActivity extends Component {
 
     constructor(props) {
@@ -58,20 +53,6 @@ export default class BulkActivity extends Component {
             }
         ];
 
-        // this.imeiColumns = [
-        //     {
-        //         title: convertToLang(props.translation[DEVICE_IMEI_1], "IMEI1"),
-        //         dataIndex: 'imei1',
-        //         key: '1',
-        //         render: text => <a >{text}</a>,
-        //     },
-        //     {
-        //         title: convertToLang(props.translation[DEVICE_IMEI_2], "IMEI2"),
-        //         dataIndex: 'imei2',
-        //         key: '1',
-        //         render: text => <a >{text}</a>,
-        //     },
-        // ];
         this.state = {
             columns: columns,
             visible: false,
@@ -90,7 +71,6 @@ export default class BulkActivity extends Component {
     }
 
     componentDidMount() {
-        // console.log("componentDidMount this.props.history ", this.props.history)
         this.setState({
             activities: this.props.history
         })
@@ -109,7 +89,6 @@ export default class BulkActivity extends Component {
 
 
     handleComponentSearch = (e) => {
-        // console.log("e.target.value ", e.target.name, e.target.value);
         let demoHistory = [];
         if (e.target.value.length && this.props.history && this.props.history.length) {
             checkIsArray(this.props.history).forEach((device) => {
@@ -190,29 +169,17 @@ export default class BulkActivity extends Component {
 
 
     renderHistoryList = (data) => {
-        // let data = this.props.history;
-        // let data = this.state.activities;
-        // console.log("history is: ", data)
-        // if (data && data.length) {
-            return checkIsArray(data).map((row, index) => {
-                // console.log(row);
-                return {
-                    key: index,
-                    action: row.action.toUpperCase(),
-                    created_at: convertTimezoneValue(this.props.user.timezone, row.created_at),
-                    // created_at: getFormattedDate(row.created_at),
-                    allData: row
-                }
-            })
-        // } else {
-        //     return [];
-        // }
+        return checkIsArray(data).map((row, index) => {
+            return {
+                key: index,
+                action: row.action.toUpperCase(),
+                created_at: convertTimezoneValue(this.props.user.timezone, row.created_at),
+                // created_at: getFormattedDate(row.created_at),
+                allData: row
+            }
+        })
     }
     render() {
-
-        // console.log(this.state.activities, 'activities to')
-
-        const { visible, loading } = this.state;
         return (
             <div>
                 <Modal
@@ -241,7 +208,6 @@ export default class BulkActivity extends Component {
                     footer={null}
                     bodyStyle={{ height: 400, overflow: 'overlay', width: '100%' }}
                 >
-                    {/* {this.props.history_loading ? <CircularProgress /> : */}
                     <Card className='fix_card fix_card_his_bulk'>
                         <hr className="fix_header_border" style={{ top: "17px" }} />
                         <CustomScrollbars className="gx-popover-scroll ">
@@ -277,7 +243,6 @@ export default class BulkActivity extends Component {
                                 onExpand={this.onExpandRow}
                                 dataSource={this.renderHistoryList(this.state.activities ? this.state.activities : [])}
                                 expandedRowRender={record => {
-                                    // console.log('recored', record)
 
                                     if (record.action === 'PUSHED APPS' || record.action === 'PULLED APPS' || record.action === 'PUSHED POLICY') {
                                         return (
@@ -316,7 +281,6 @@ export default class BulkActivity extends Component {
                                                                     bordered={false}
                                                                     columns={this.policyColumns}
                                                                     align='center'
-                                                                    // dataSource={[]}
                                                                     dataSource={
                                                                         record.allData.policy ? [{
                                                                             key: record.key,
@@ -357,12 +321,10 @@ export default class BulkActivity extends Component {
                                         )
                                     }
                                 }}
-                                // scroll={{ y: 350 }}
                                 pagination={false}
                             />
                         </CustomScrollbars>
                     </Card>
-                    {/* } */}
                 </Modal>
             </div>
         )

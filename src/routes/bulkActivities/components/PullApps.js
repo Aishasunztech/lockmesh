@@ -1,14 +1,11 @@
 import React, { Fragment, Component } from 'react'
-import { Avatar, Table, Switch } from "antd";
+import { Avatar, Table } from "antd";
 import { BASE_URL } from '../../../constants/Application';
-import { APK } from '../../../constants/ApkConstants';
 import { POLICY_APP_NAME } from '../../../constants/PolicyConstants';
-import { Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
 import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 
 
 const renderApps = (apk_list, selectedApps = false) => {
-    // console.log(selectedApps, "selectedApps apk_list renderApps ", apk_list)
     let app_list = []
 
     if (selectedApps) {
@@ -55,7 +52,6 @@ const PullApps = (props) => {
             sorter: (a, b) => { return a.label.localeCompare(b.label) },
 
             sortDirections: ['ascend', 'descend'],
-            // sortOrder:"ascend",
             defaultSortOrder: "ascend"
         },
     ];

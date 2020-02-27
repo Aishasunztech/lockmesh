@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Icon, Popover, Checkbox } from 'antd';
-// import Styles from "./Applist.css";
 import { Encrypted_ALL, GUEST_ALL, Enable_ALL } from '../../../constants/Constants';
 import { convertToLang } from '../../utils/commonUtils';
 
@@ -17,8 +16,6 @@ export default class ExtensionDropdown extends Component {
 
     }
     componentDidMount() {
-        // console.log("AppDropdown");
-        // console.log(this.props);
         this.setState({
             guestAll: this.props.guestAll,
             encryptedAll: this.props.encryptedAll,
@@ -26,11 +23,6 @@ export default class ExtensionDropdown extends Component {
         });
     }
     componentWillReceiveProps(nextProps) {
-        // if(this.props !== nextProps){
-        // alert("hello");
-        // console.log("appdropdown nextprops", nextProps);
-        // this.state[this.checked_app_id.key] = this.checked_app_id.value;
-       
             this.setState({
                 guestAll: nextProps.guestAll,
                 encryptedAll: nextProps.encryptedAll,
@@ -40,13 +32,10 @@ export default class ExtensionDropdown extends Component {
         // }
     }
     handleCheckedAll = (e, key) => {
-        // console.log("hello world");
-        // console.log(e.target.checked,key);
         this.props.handleCheckedAll(key, e.target.checked);
     }
 
     handleCheckedAllPushApps = (e, key) => {
-        console.log(e, key, 'handleCheckedAllPushApps')
         this.props.handleCheckedAllPushApps(e.target.checked, key)
     }
 

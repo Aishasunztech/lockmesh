@@ -13,16 +13,12 @@ export default class BulkUnlink extends Component {
     }
 
     handleBulkUnlink = (devices, dealers, users) => {
-        console.log("devices lklk", devices)
         let selectedDevices = [];
         let dealer_ids = [];
         let user_ids = [];
 
         checkIsArray(devices).forEach((item) => {
-            if (item.device_id) {
-                // selectedDevices.push({ device_id: item.usr_device_id, usrAccId: item.id });
-                selectedDevices.push({ device_id: item.device_id, usrAccId: item.id, usr_device_id: item.usr_device_id });
-            }
+            selectedDevices.push({ device_id: item.device_id, usrAccId: item.id, usr_device_id: item.usr_device_id });
         });
         checkIsArray(dealers).forEach((item) => {
             dealer_ids.push(item.key);
@@ -32,7 +28,6 @@ export default class BulkUnlink extends Component {
         });
 
         let data = {
-            // apps:  // this.props.selectedPushAppsList,
             selectedDevices: JSON.stringify(devices),
             dealer_ids,
             user_ids

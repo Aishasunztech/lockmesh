@@ -1,11 +1,8 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Divider, Badge, Switch, Col, Row } from "antd";
-import { APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS, PERMISSION_NAME, PUSH_APPS_TEXT, ADMIN, ANDROID_SETTING_PERMISSION, Main_SETTINGS, SECURE_SETTING, SYSTEM_CONTROLS } from '../../../constants/Constants';
+import { APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS, PERMISSION_NAME, PUSH_APPS_TEXT, ADMIN, ANDROID_SETTING_PERMISSION, Main_SETTINGS, SECURE_SETTING } from '../../../constants/Constants';
 import { convertToLang, checkIsArray } from '../../utils/commonUtils';
-import { PUSH_APPS } from '../../../constants/ActionTypes';
-import { APK_APP_NAME } from '../../../constants/ApkConstants';
 import { Guest, ENCRYPTED, ENABLE, EXTENSION_NAME, ADMIN_PASSWORD_IS_CHANGED, ENCRYPTED_PASSWORD_IS_CHANGED, GUEST_PASSWORD_IS_CHANGED, DURESS_PASSWORD_IS_CHANGED, ENCRYPT } from '../../../constants/TabConstants';
-import { DEVICE_STATUS } from '../../../constants/DeviceConstants';
 import { appsColumns, extensionColumns, controlColumns } from '../../utils/columnsUtils';
 
 export default class DeviceSettings extends Component {
@@ -24,27 +21,11 @@ export default class DeviceSettings extends Component {
     }
 
     controlValues = () => {
-        console.log(this.state.controls, 'apply setting controls')
-        // if (this.state.controls.length > 0) {
-
-            let data = [];
-            checkIsArray(this.state.controls).map(control => {
-                // if(control.isChanged){
-                if (this.props.showChangedControls) {
-                    if (control.isChanged) {
-                        data.push({
-                            rowKey: control.setting_name,
-                            key: control.setting_name,
-                            label: control.setting_name,
-                            status: <Switch
-                                size="small"
-                                value={control.setting_status}
-                                checked={(control.setting_status === true || control.setting_status === 1) ? true : false}
-                                disabled={true}
-                            />,
-                        })
-                    }
-                } else {
+        // console.log(this.state.controls, 'apply setting controls')
+        let data = [];
+        checkIsArray(this.state.controls).map(control => {
+            if (this.props.showChangedControls) {
+                if (control.isChanged) {
                     data.push({
                         rowKey: control.setting_name,
                         key: control.setting_name,
@@ -57,16 +38,27 @@ export default class DeviceSettings extends Component {
                         />,
                     })
                 }
-                // }
-            })
+            } else {
+                data.push({
+                    rowKey: control.setting_name,
+                    key: control.setting_name,
+                    label: control.setting_name,
+                    status: <Switch
+                        size="small"
+                        value={control.setting_status}
+                        checked={(control.setting_status === true || control.setting_status === 1) ? true : false}
+                        disabled={true}
+                    />,
+                })
+            }
+        })
 
-            return data;
+        return data;
         // }
     }
 
     filterAppList = () => {
         let data = this.props.app_list;
-        // console.log("policy app data ", data, this.props.show_all_apps, this.props.show_unchanged);
         let applist = [];
         if (this.props.show_all_apps) {
             this.setState({ app_list: data })
@@ -85,7 +77,7 @@ export default class DeviceSettings extends Component {
         let data = this.props.extensions;
 
         let extensions = [];
-        
+
         if (this.props.show_all_apps) {
             if (this.props.show_unchanged) {
                 if (data.length) {
@@ -151,89 +143,68 @@ export default class DeviceSettings extends Component {
         }
     }
     renderData = (datalist) => {
-        // console.log(JSON.parse(datalist));
-        // console.log(this.props.type, 'datalist is type of');
         let data = JSON.parse(JSON.stringify(datalist));
-
-        // if (this.props.type === 'profile') {
-        //     data = JSON.parse(JSON.stringify(datalist))
-        // }
-
-        // if (datalist.length > 0) {
-            return checkIsArray(data).map((item, index) => {
-                return {
-                    rowKey: item.app_id,
-                    key: index,
-                    app_name: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
-                    label: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
-                    // guest: (item.guest === 1 || item.guest === true) ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>,
-                    guest: <Switch
-                        size="small"
-                        value={item.guest}
-                        checked={(item.guest === true || item.guest === 1) ? true : false}
-                        disabled={true}
-                    />,
-                    encrypted: <Switch
-                        size="small"
-                        value={item.encrypted}
-                        checked={(item.encrypted === true || item.encrypted === 1) ? true : false}
-                        disabled={true}
-                    />,
-                    enable: <Switch
-                        size="small"
-                        value={item.enable}
-                        checked={(item.enable === true || item.enable === 1) ? true : false}
-                        disabled={true}
-                    />,
-                }
-            })
+        return checkIsArray(data).map((item, index) => {
+            return {
+                rowKey: item.app_id,
+                key: index,
+                app_name: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
+                label: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
+                guest: <Switch
+                    size="small"
+                    value={item.guest}
+                    checked={(item.guest === true || item.guest === 1) ? true : false}
+                    disabled={true}
+                />,
+                encrypted: <Switch
+                    size="small"
+                    value={item.encrypted}
+                    checked={(item.encrypted === true || item.encrypted === 1) ? true : false}
+                    disabled={true}
+                />,
+                enable: <Switch
+                    size="small"
+                    value={item.enable}
+                    checked={(item.enable === true || item.enable === 1) ? true : false}
+                    disabled={true}
+                />,
+            }
+        })
 
         // }
     }
     renderPushData = (datalist) => {
-        // console.log(JSON.parse(datalist));
-        // console.log(this.props.type, 'datalist is type of');
         let data = JSON.parse(JSON.stringify(datalist));
-
-        // if (this.props.type === 'profile') {
-        //     data = JSON.parse(JSON.stringify(datalist))
-        // }
-
-        // if (datalist.length > 0) {
-            return checkIsArray(data).map((item, index) => {
-                return {
-                    rowKey: item.apk_id,
-                    key: index,
-                    app_name: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
-                    label: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
-                    // guest: (item.guest === 1 || item.guest === true) ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>,
-                    guest: <Switch
-                        size="small"
-                        value={item.guest}
-                        checked={(item.guest === true || item.guest === 1) ? true : false}
-                        disabled={true}
-                    />,
-                    encrypted: <Switch
-                        size="small"
-                        value={item.encrypted}
-                        checked={(item.encrypted === true || item.encrypted === 1) ? true : false}
-                        disabled={true}
-                    />,
-                    enable: <Switch
-                        size="small"
-                        value={item.enable}
-                        checked={(item.enable === true || item.enable === 1) ? true : false}
-                        disabled={true}
-                    />,
-                }
-            })
-
-        // }
+        return checkIsArray(data).map((item, index) => {
+            return {
+                rowKey: item.apk_id,
+                key: index,
+                app_name: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
+                label: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
+                guest: <Switch
+                    size="small"
+                    value={item.guest}
+                    checked={(item.guest === true || item.guest === 1) ? true : false}
+                    disabled={true}
+                />,
+                encrypted: <Switch
+                    size="small"
+                    value={item.encrypted}
+                    checked={(item.encrypted === true || item.encrypted === 1) ? true : false}
+                    disabled={true}
+                />,
+                enable: <Switch
+                    size="small"
+                    value={item.enable}
+                    checked={(item.enable === true || item.enable === 1) ? true : false}
+                    disabled={true}
+                />,
+            }
+        })
     }
 
 
     renderAppList = (datalist) => {
-        // console.log(datalist, "applist");
         let data = JSON.parse(JSON.stringify(datalist));
         let appList = [];
         if (data.length) {
@@ -275,8 +246,6 @@ export default class DeviceSettings extends Component {
     }
 
     render() {
-        // console.log("this.props.controls. ischanged", this.props.controls, this.state.app_list)
-
 
         // find the length of changed controls. it can be refactored
         let changes = 0;
@@ -299,11 +268,6 @@ export default class DeviceSettings extends Component {
         if (this.props.app_list && this.props.app_list.length) {
             exten = checkIsArray(this.props.app_list).filter(item => item.uniqueName === SECURE_SETTING)
         }
-
-        // console.log(this.props.extensions, 'check extension  ', this.props.extensions[extenObjIndex].isChanged);
-
-        // console.log("extenObjIndex ", extenObjIndex)
-        // console.log("this.props.extensions extenObjIndex ", this.props.extensions[extenObjIndex])
 
         return (
             <div>
@@ -431,7 +395,6 @@ export default class DeviceSettings extends Component {
                             this.state.controls.length > 0 ?
 
                                 <div>
-                                    {/* {console.log('if', Object.entries(this.state.controls.controls).length > 0)} */}
                                     <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], "SYSTEM PERMISSION")}</Divider>
 
                                     <Table

@@ -13,14 +13,12 @@ export default class BulkPullApps extends Component {
     }
 
     handleBulkPullApps = (devices, dealers, users) => {
-        // console.log("devices lklk", devices)
         let selectedDevices = [];
         let dealer_ids = [];
         let user_ids = [];
 
         checkIsArray(devices).forEach((item) => {
             if (item.device_id) {
-                // selectedDevices.push({ device_id: item.usr_device_id, usrAccId: item.id });
                 selectedDevices.push({ device_id: item.device_id, usrAccId: item.id, usr_device_id: item.usr_device_id });
             }
         });
@@ -37,7 +35,6 @@ export default class BulkPullApps extends Component {
             dealer_ids,
             user_ids
         }
-        // console.log("this.props.selectedPullAppsList ", this.props.selectedPullAppsList);
 
         if (this.props.selectedPullAppsList && this.props.selectedPullAppsList.length) {
 
@@ -57,7 +54,6 @@ export default class BulkPullApps extends Component {
 
             Modal.error({
                 title: 'Apps not selected to pull on your selected devices. Please select apps to performe an action.',
-                // content: 'some messages...some messages...',
             });
 
         }
