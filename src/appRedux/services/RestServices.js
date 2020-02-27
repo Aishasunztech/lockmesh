@@ -1132,12 +1132,6 @@ const RestService = {
         return axios.get(BASE_URL + 'users/get-bulk-history', RestService.getHeader())
     },
 
-    // get users of selected dealers
-    // getUsersOfDealers: (data) => {
-    //     console.log("at rest file", data)
-    //     return axios.post(BASE_URL + 'users/getUsersOfDealers', data, RestService.getHeader())
-    // },
-
     applyBulkPushApps: (data) => {
         // console.log('at rest serv file', data)
         return axios.post(BASE_URL + 'users/apply_bulk_pushapps', data, RestService.getHeader());

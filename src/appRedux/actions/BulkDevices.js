@@ -1,4 +1,4 @@
-import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES, WIPE_BULK_DEVICES, UNLINK_BULK_DEVICES, CLOSE_RESPONSE_MODAL, APPLY_BULK_POLICY, SET_BULK_MESSAGE, SEND_BULK_MESSAGE, SEND_BULK_WIPE_PASS, HANDLE_BULK_WIPE_PASS, BULK_HISTORY_LOADING, SET_BULK_ACTION, SET_BULK_DATA, GET_BULK_MSGS, DELETE_BULK_MSG, UPDATE_BULK_MESSAGE } from "../../constants/ActionTypes";
+import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES, WIPE_BULK_DEVICES, UNLINK_BULK_DEVICES, CLOSE_RESPONSE_MODAL, APPLY_BULK_POLICY, SET_BULK_MESSAGE, SEND_BULK_MESSAGE, SEND_BULK_WIPE_PASS, HANDLE_BULK_WIPE_PASS, BULK_HISTORY_LOADING, SET_BULK_ACTION, SET_BULK_DATA, GET_BULK_MSGS, DELETE_BULK_MSG, UPDATE_BULK_MESSAGE } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
 import { SERVER_TIMEZONE, TIMESTAMP_FORMAT } from "../../constants/Application";
@@ -114,30 +114,6 @@ export function getbulkHistory() {
     }
 
 }
-
-// export function getUsersOfDealers(data) {
-//     console.log("getUsersOfDealers ", data)
-//     return (dispatch) => {
-//         RestService.getUsersOfDealers(data).then((response) => {
-//             if (RestService.checkAuth(response.data)) {
-//                 // console.log('response', response.data);
-
-//                 if (response.data) {
-//                     dispatch({
-//                         type: BULK_USERS,
-//                         payload: response.data,
-//                     });
-//                 }
-
-//             } else {
-//                 dispatch({
-//                     type: INVALID_TOKEN
-//                 });
-//             }
-//         });
-//     }
-
-// }
 
 
 
