@@ -239,11 +239,11 @@ class SendMsgForm extends Component {
         // console.log("nextProps.users_list && nextProps.dealerList ", nextProps.users_list, nextProps.dealerList)
         if (nextProps.users_list && nextProps.dealerList) {
             let allDealers = nextProps.dealerList.map((item) => {
-                return ({ key: item.dealer_id, label: item.dealer_name })
+                return ({ key: item.dealer_id, label: `${item.dealer_name} (${item.link_code})` })
             });
 
             let allUsers = nextProps.users_list.map((item) => {
-                return ({ key: item.user_id, label: item.user_name })
+                return ({ key: item.user_id, label: `${item.user_name} (${item.user_id})` })
             });
             this.setState({ allUsers, allDealers })
         }
@@ -262,11 +262,11 @@ class SendMsgForm extends Component {
 
         if (this.props.users_list || this.props.dealerList) {
             allDealers = this.props.dealerList.map((item) => {
-                return ({ key: item.dealer_id, label: item.dealer_name })
+                return ({ key: item.dealer_id, label: `${item.dealer_name} (${item.link_code})` })
             });
 
             allUsers = this.props.users_list.map((item) => {
-                return ({ key: item.user_id, label: item.user_name })
+                return ({ key: item.user_id, label: `${item.user_name} (${item.user_id})` })
             });
         }
 

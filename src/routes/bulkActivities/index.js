@@ -261,11 +261,11 @@ class BulkActivities extends Component {
 
 
         let allDealers = checkIsArray(nextProps.dealerList).map((item) => {
-            return ({ key: item.dealer_id, label: item.dealer_name })
+            return ({ key: item.dealer_id, label: `${item.dealer_name} (${item.link_code})` })
         });
 
         let allUsers = checkIsArray(nextProps.users_list).map((item) => {
-            return ({ key: item.user_id, label: item.user_name })
+            return ({ key: item.user_id, label: `${item.user_name} (${item.user_id})` })
         });
         this.setState({ allUsers, allDealers })
     }
