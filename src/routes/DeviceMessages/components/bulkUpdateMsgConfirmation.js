@@ -13,7 +13,6 @@ export default class BulkUpdateMsg extends Component {
     }
 
     handleBulkUpdateMsg = (data, devices, dealerTZ) => {
-        // console.log("handleBulkUpdateMsg ", data.repeat_duration);
 
         this.confirm({
             title: `${convertToLang(this.props.translation[""], "Are you sure, you want to update bulk message setting ?")}`,

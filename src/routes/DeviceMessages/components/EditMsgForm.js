@@ -1,22 +1,12 @@
 import React, { Component, Fragment } from 'react';
-import { Button, Form, Input, Select, InputNumber, Row, Col, Tag, Calendar, DatePicker, TimePicker, Modal } from 'antd';
+import { Button, Form, Input, Select, Row, Col, Tag, DatePicker, TimePicker, Modal } from 'antd';
 import { checkValue, convertToLang, getMonthName, checkTimezoneValue, convertTimezoneValue, getWeekDayDescription, getWeekDays, getMonthNames, getDaysOfMonth } from '../../utils/commonUtils'
-
-import {
-    DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, User_Name_require, Only_alpha_numeric, Not_valid_Email, Email, Name, Required_Email
-} from '../../../constants/Constants';
-import { Button_Cancel, Button_submit } from '../../../constants/ButtonConstants';
+import { Button_Cancel } from '../../../constants/ButtonConstants';
 import { Required_Fields } from '../../../constants/DeviceConstants';
-import FilterDevices from './filterDevices'
 import BulkUpdateMsgConfirmation from './bulkUpdateMsgConfirmation';
-// import RepeatMsgCalender from './repeateMsgCalender';
 import moment from 'moment';
-import DataNotFound from '../../InvalidPage/dataNotFound';
-import { TIMESTAMP_FORMAT, SERVER_TIMEZONE } from '../../../constants/Application';
+import { TIMESTAMP_FORMAT } from '../../../constants/Application';
 
-const confirm = Modal.confirm;
-const success = Modal.success
-const error = Modal.error
 const { TextArea } = Input;
 
 
@@ -26,7 +16,6 @@ class EditMsgForm extends Component {
         super(props);
 
         this.durationList = [
-            // { key: 'NONE', value: "NONE" },
             { key: 'DAILY', value: "Daily" },
             { key: 'WEEKLY', value: "Weekly" },
             { key: 'MONTHLY', value: "Monthly" },
@@ -35,32 +24,6 @@ class EditMsgForm extends Component {
             { key: '12 MONTHS', value: "12 Months" },
         ];
 
-        // this.weekDays = [
-        //     { key: 1, value: "Sunday" },
-        //     { key: 2, value: "Monday" },
-        //     { key: 3, value: "Tuesday" },
-        //     { key: 4, value: "Wednesday" },
-        //     { key: 5, value: "Thursday" },
-        //     { key: 6, value: "Friday" },
-        //     { key: 7, value: "Saturday" },
-        // ];
-
-        // this.monthNames = [
-        //     { key: 1, value: "January" },
-        //     { key: 2, value: "February" },
-        //     { key: 3, value: "March" },
-        //     { key: 4, value: "April" },
-        //     { key: 5, value: "May" },
-        //     { key: 6, value: "June" },
-        //     { key: 7, value: "July" },
-        //     { key: 8, value: "August" },
-        //     { key: 9, value: "September" },
-        //     { key: 10, value: "October" },
-        //     { key: 11, value: "November" },
-        //     { key: 12, value: "December" },
-        // ];
-
-        // this.monthDays = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
         let dealerTZ = checkTimezoneValue(props.user.timezone, false); // withGMT = false
 
         this.state = {
@@ -77,15 +40,12 @@ class EditMsgForm extends Component {
             selectedAction: 'NONE',
             selected_Time: '',
             isNowSet: false,
-            // timer: '',
             monthDate: 0,
-            // editRecord: null,
 
             timer: '',
             selected_dateTime: null,
 
             repeat_duration: 'NONE',
-            // date_time: '',
             time: '',
             week_day: 0,
             month_date: 0,
@@ -96,10 +56,7 @@ class EditMsgForm extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        // const { } = this.props.form;
-        // console.log("handle submit ", this.props.selectedDevices, this.state.selectedDealers, this.state.selectedUsers);
         this.props.form.validateFieldsAndScroll((err, values) => {
-            // console.log("handle submit 02 ", values, this.props.editRecord)
 
             if (!err) {
                 let dealerTZ = this.state.dealerTZ;
@@ -181,7 +138,6 @@ class EditMsgForm extends Component {
                             weekDay = "";
                             duration = `Every ${getMonthName(monthName)} on ${checkValue(monthDate)} date`;
                             dateTimeVal = moment().tz(dealerTZ).set({ "month": monthName - 1, "date": monthDate, hours, minutes }).format(TIMESTAMP_FORMAT);
-                            // console.log("compare date: ", dateTimeVal < currentDateIs, dateTimeVal, currentDateIs, moment().month())
 
                             if (dateTimeVal < currentDateIs) {
                                 // set next year with same date if current date passed 
@@ -235,48 +191,24 @@ class EditMsgForm extends Component {
     }
 
 
-
-    // componentDidMount() {
-    //     this.setState({
-    //         editRecord: this.props.editRecord,
-    //     })
-    // }
-
     handleReset = () => {
         this.props.form.resetFields();
-        // this.state.editRecord.repeat_duration = 'NONE';
-        // this.setState({ editRecord: this.state.editRecord })
     }
-
 
     handleCancel = () => {
         this.handleReset();
         this.props.handleEditMsgModal(false);
     }
 
-    // dateTimeOnChange = (value, dateString) => {
-    //     this.state.editRecord.date_time = dateString;
-    //     this.setState({ editRecord: this.state.editRecord });
-    // }
     dateTimeOnChange = (value, dateString) => {
-        console.log("dateString ", dateString)
         this.setState({ selected_dateTime: dateString });
     }
-
-    // timeOnChange = (value, dateString) => {
-    //     const [hours, minutes] = dateString.split(':');
-    //     let dateTimeVal = moment.tz(this.state.dealerTZ).set({ hours, minutes }).format(TIMESTAMP_FORMAT);
-    //     this.setState({ selected_Time: dateString, selected_dateTime: dateTimeVal });
-    // }
 
     timeOnChange = (value, dateString) => {
         this.setState({ selected_Time: dateString });
     }
 
     handleEditMsgRecord = (e, fieldName) => {
-        // let record = this.state.editRecord;
-        // record[fieldName] = e;
-        // console.log("record:", record);
 
         if (fieldName === 'month_name') {
             let getDays = getDaysOfMonth(e);
@@ -288,7 +220,6 @@ class EditMsgForm extends Component {
     }
 
     validateRepeater = async (rule, value, callback) => {
-        // console.log("values: ", value)
         if (value === 'NONE') {
             callback("Please select repeat duration")
         }
@@ -319,12 +250,9 @@ class EditMsgForm extends Component {
         var { editRecord } = this.state;
 
         if (!editRecord) {
-            return null // <DataNotFound />
+            return null
         }
-        // console.log("moment().set(copyEditRecord.time, 'HH:mm').format('YYYY-MM-DD HH:mm:ss') ",this.state.editRecord,  moment(new Date()).set("12:22", 'HH:mm').format('YYYY-MM-DD HH:mm:ss'))
-        // let checkTime = convertTimezoneValue(this.props.user.timezone, this.state.selected_dateTime, "HH:mm");
-        // console.log("edit msg checkTime:  ", checkTime, this.state.selected_dateTime, this.state.selected_Time, this.props.editRecord);
-        // console.log("conditions render func: ", this.state.timer === "DATE/TIME", moment(this.state.selected_dateTime).format(TIMESTAMP_FORMAT) < moment().tz(this.state.dealerTZ).format(TIMESTAMP_FORMAT), moment(this.state.selected_dateTime, this.state.dealerTZ).format(TIMESTAMP_FORMAT), moment().tz(this.state.dealerTZ).format(TIMESTAMP_FORMAT))
+      
         return (
             <div>
                 <Modal
@@ -333,7 +261,6 @@ class EditMsgForm extends Component {
                     maskClosable={false}
                     style={{ top: 20 }}
                     visible={this.props.editModal}
-                    // onOk={this.handleCancel}
                     onCancel={this.handleCancel}
                     footer={false}
                 >

@@ -6,11 +6,9 @@ import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 import PasswordForm from './PasswordForm';
 
 class WipePasswordModal extends Component {
-    // console.log('object,', props.actionType)
     render() {
         return (
             <Modal
-                // closable={false}
                 maskClosable={false}
                 style={{ top: 20 }}
                 width="330px"
@@ -55,12 +53,6 @@ class BulkWipe extends Component {
         this.confirm = Modal.confirm;
     }
 
-    // showWipePwdConfirmModal = (visible) => {
-    //     this.setState({
-    //         pwdConfirmModal: visible,
-    //     })
-    // }
-
     componentDidUpdate(prevProps) {
         if (this.props.bulkWipePassModal !== prevProps.bulkWipePassModal) {
             this.setState({ bulkWipePassModal: this.props.bulkWipePassModal })
@@ -68,15 +60,12 @@ class BulkWipe extends Component {
     }
 
     handleBulkWipe = (devices, dealers, users) => {
-        // console.log("devices lklk", devices)
         let selectedDevices = [];
         let dealer_ids = [];
         let user_ids = [];
 
         checkIsArray(devices).forEach((item) => {
-            // if (item.device_id) {
             selectedDevices.push(item.usr_device_id);
-            // }
         });
         checkIsArray(dealers).forEach((item) => {
             dealer_ids.push(item.key);
@@ -91,8 +80,6 @@ class BulkWipe extends Component {
             user_ids
         }
 
-        // console.log("data ", data)
-
         // const title = `${convertToLang(this.props.translation[""], "Are you sure, you want to wipe these selected devices ")} ${devices.map(item => ` ${item.device_id}`)} ?`;
         const title = `${convertToLang(this.props.translation[""], "Are you sure, you want to wipe selected devices")} ?`;
         let _this = this;
@@ -104,7 +91,6 @@ class BulkWipe extends Component {
             onOk: (() => {
                 _this.props.handleWipePwdConfirmModal(true);
                 _this.setState({ wipe_data: data })
-                // this.props.wipeBulkDevices(data);
             }),
             onCancel() { },
         });
@@ -112,20 +98,17 @@ class BulkWipe extends Component {
     }
 
     setWipePass = (value) => {
-        console.log("wipe pass: ", value);
+        // console.log("wipe pass: ", value);
         this.setState({ wipePass: value });
     }
 
     render() {
-        // return (null);
-        // console.log("state ", this.state)
         return (
             <div>
                 <WipePasswordModal
                     translation={this.props.translation}
                     pwdConfirmModal={this.state.bulkWipePassModal}
                     showWipePwdConfirmModal={this.props.handleWipePwdConfirmModal}
-                    // checkPass={this.props.checkPass}
                     setWipePass={this.setWipePass}
                     wipeBulkDevices={this.props.wipeBulkDevices}
                     wipeData={this.state.wipe_data}

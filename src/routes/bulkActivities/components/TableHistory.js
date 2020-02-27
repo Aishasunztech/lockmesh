@@ -1,20 +1,13 @@
 import React, { Component } from 'react'
 import { Table, Button } from "antd";
-
-// import AppList from "./AppList";
 import DeviceSettings from './DeviceSettings';
-// import styles from './Applist.css';
 
 import {
     SECURE_SETTING,
-    POLICY,
     Name,
     ACTION
-    // , 
-    // SYSTEM_CONTROLS, NOT_AVAILABLE, MANAGE_PASSWORD, MAIN_MENU, APPS,
 } from '../../../constants/Constants';
 import { convertToLang, checkIsArray } from '../../utils/commonUtils';
-import { Button_Apply } from '../../../constants/ButtonConstants';
 import { HISTORY_DATE } from '../../../constants/DeviceConstants';
 
 
@@ -29,7 +22,6 @@ class TableHistory extends Component {
     }
 
     onExpandRow = (expanded, record) => {
-        // console.log(expanded, 'data is expanded', record);
         if (expanded) {
             if (!this.state.expandedRowKeys.includes(record.key)) {
                 this.state.expandedRowKeys.push(record.key);
@@ -44,7 +36,6 @@ class TableHistory extends Component {
     }
 
     renderList = (histories, callback, selectedPolicy) => {
-        // console.log("list", histories);
         let historyList = [];
 
         histories.map((history) => {
@@ -55,7 +46,6 @@ class TableHistory extends Component {
 
                 if (history.id == selectedPolicy.id) {
                     btnTxt = "Remove";
-                    // btnDisable = true;
                 } else {
                     btnDisable = true;
                 }
@@ -94,11 +84,6 @@ class TableHistory extends Component {
     }
 
     renderColumn = (type) => {
-        // if(type === "history"){
-
-        // } else {
-
-        // }
         return [
             {
                 title: (type === "history") ? convertToLang(this.props.translation[HISTORY_DATE], "History Date") : `${type} ${convertToLang(this.props.translation[Name], "Name")}`,
@@ -116,9 +101,6 @@ class TableHistory extends Component {
     }
 
     render() {
-        // const TableHistory = (props) => {
-        // console.log("props", this.props.histories);
-
         return (
             <Table
                 style={{ margin: 0, padding: 0 }}
@@ -141,25 +123,18 @@ class TableHistory extends Component {
                     console.log("table history controls: ", controls);
                     let push_apps = record.push_apps === null || record.push_apps === 'null' ? [] : record.push_apps;
                     let passwords = record.passwords;
-                    // console.log("app_list: ", app_list);
-                    // console.log("extensions: ", extensions);
                     if (this.props.type === 'profile' && record.controls !== null && record.controls !== '' && record.controls !== undefined) {
                         console.log("CONTROLS SETTINGS", controls);
                         let cntrl = {};
                         cntrl = JSON.parse(JSON.stringify(record.controls))
                         controls = cntrl
                     }
-                    // console.log("push_apps: ", push_apps);
 
                     return (
                         <DeviceSettings
                             app_list={app_list}
                             extensions={extensions}
                             extensionUniqueName={SECURE_SETTING}
-                            // isAdminPwd={this.props.isAdminPwd}
-                            // isDuressPwd={this.props.isDuressPwd}
-                            // isEncryptedPwd={this.props.isEncryptedPwd}
-                            // isGuestPwd={this.props.isGuestPwd}
                             passwords={passwords}
                             show_all_apps={true}
                             controls={controls}
@@ -176,7 +151,5 @@ class TableHistory extends Component {
         )
     }
 }
-
-// }
 
 export default TableHistory;

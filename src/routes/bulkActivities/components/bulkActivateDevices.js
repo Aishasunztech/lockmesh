@@ -1,8 +1,7 @@
-import { Modal, Button } from 'antd';
+import { Modal } from 'antd';
 
 import React, { Component } from 'react'
 import { convertToLang, checkIsArray } from '../../utils/commonUtils';
-import { ARE_YOU_SURE_YOU_WANT_ACTIVATE_THE_DEVICE } from '../../../constants/DeviceConstants';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 
 export default class BulkActivateDevices extends Component {

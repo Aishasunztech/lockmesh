@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Input, Modal, Select, Table, Card } from "antd";
+import { Table, Card } from "antd";
 import CustomScrollbars from '../../../util/CustomScrollbars';
 
 const FilterDevicesList = (props) => {

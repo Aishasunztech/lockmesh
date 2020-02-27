@@ -652,6 +652,10 @@ export function checkIsArray(data) {
 	}
 }
 
+export function checkDate(date) {
+	return (new Date(date) !== "Invalid Date") && !isNaN(new Date(date));
+}
+
 export function handleMultipleSearch(e, copy_status, copyRequireSearchData, demoSearchValues, requireForSearch) {
 	// handleMultipleSearch(e, this.state.copy_status, copyDevices, this.state.SearchValues, this.state.filteredDevices)
 

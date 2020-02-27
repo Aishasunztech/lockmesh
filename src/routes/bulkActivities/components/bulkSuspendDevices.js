@@ -2,7 +2,6 @@ import { Modal } from 'antd';
 
 import React, { Component } from 'react'
 import { convertToLang, checkIsArray } from '../../utils/commonUtils';
-import { ARE_YOU_SURE_YOU_WANT_ACTIVATE_THE_DEVICE, ARE_YOU_SURE_YOU_WANT_SUSPEND_THE_DEVICE } from '../../../constants/DeviceConstants';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 
 
@@ -20,9 +19,7 @@ export default class BulkSuspendDevices extends Component {
         let user_ids = [];
 
         checkIsArray(devices).forEach((item) => {
-            // if (item.usr_device_id) {
-                device_ids.push(item.usr_device_id);
-            // }
+            device_ids.push(item.usr_device_id);
         });
         checkIsArray(dealers).forEach((item) => {
             dealer_ids.push(item.key);

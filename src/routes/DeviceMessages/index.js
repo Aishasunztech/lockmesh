@@ -1,17 +1,13 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Input, Icon, Modal, Select, Button, Tooltip, Popover, Avatar, Row, Col, Table } from "antd";
-import { Link } from 'react-router-dom';
-import Highlighter from 'react-highlight-words';
+import { Icon, Modal, Avatar, Row, Col, Table } from "antd";
 import CircularProgress from "components/CircularProgress";
-// import { getDomains, domainPermission } from "../../appRedux/actions/Account";
 import AppFilter from "../../components/AppFilter";
-import { checkValue, titleCase, convertToLang, getColor, componentSearch, checkTimezoneValue, checkIsArray } from '../utils/commonUtils'
+import { checkValue, convertToLang, getColor, componentSearch, checkTimezoneValue, checkIsArray } from '../utils/commonUtils'
 import { BASE_URL } from '../../constants/Application';
 import ListMsgs from './components/ListMsgs';
 import SendMsgForm from './components/SendMsgForm';
-// import EditMsgForm from './components/EditMsgForm';
 
 import { getAllDealers } from "../../appRedux/actions/Dealers";
 import { getUserList } from "../../appRedux/actions/Users";
@@ -21,7 +17,6 @@ import {
     sendBulkMsg,
     updateBulkMsg,
     closeResponseModal,
-    // setBulkMsg,
     getBulkMsgsList,
     deleteBulkMsg
 } from "../../appRedux/actions/BulkDevices";
@@ -442,14 +437,7 @@ class DeviceMessages extends Component {
         let fieldName = e.target.name;
         let fieldValue = e.target.value;
 
-        if (domainStatus) {
-            copyDomainList = this.props.bulkMsgs
-            domainStatus = false;
-        }
-
-        // console.log("copyDomainList ", copyDomainList)
         let searchedData = this.searchField(this.props.bulkMsgs, fieldName, fieldValue);
-        // console.log("searchedData ", searchedData)
         this.setState({
             bulkMsgs: searchedData
         });
@@ -457,11 +445,9 @@ class DeviceMessages extends Component {
     }
 
     searchField = (originalData, fieldName, value) => {
-        // console.log('check data for search:: originalData', originalData, "fieldName ", fieldName, "value ", value)
         let demoData = [];
         if (value.length) {
             checkIsArray(originalData).forEach((data) => {
-                // console.log(data);
                 if (data[fieldName] !== undefined) {
                     if ((typeof data[fieldName]) === 'string') {
 
@@ -473,9 +459,6 @@ class DeviceMessages extends Component {
                             demoData.push(data);
                         }
                     }
-                    // else {
-                    //     // demoDevices.push(device);
-                    // }
                 } else {
                     demoData.push(data);
                 }
@@ -486,11 +469,6 @@ class DeviceMessages extends Component {
             return originalData;
         }
     }
-
-    // handleReset = (clearFilters) => {
-    //     clearFilters();
-    //     this.setState({ searchText: '' });
-    // }
 }
 
 
@@ -509,7 +487,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 const mapStateToProps = ({ account, auth, settings, dealers, bulkDevices }) => {
-    // console.log("bulkDevices.usersOfDealers ", bulkDevices.usersOfDealers);
     return {
         isloading: account.isloading,
         user: auth.authUser,
