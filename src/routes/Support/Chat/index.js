@@ -266,10 +266,16 @@ class Chat extends Component {
   onSelectUser = (data, type) => {
 
     let u = type === 'chat' ? data.user : data;
-    let c = (data.hasOwnProperty('_id')) ? data._id : null;
-    if(this.props.currentConversation && this.props.currentConversation.user === u && this.props.currentConversation._id === c){
+    if(this.props.currentConversation && this.props.currentConversation.user && this.props.currentConversation.user.dealer_id === u.dealer_id){
       return false;
     }
+
+    // let { currentConversation } = this.props;
+    // if(currentConversation && currentConversation.user && currentConversation._id){
+    //   if(this.props.supportSocket){
+    //     this.props.supportSocket.emit(SUPPORT_LIVE_CHAT_I_STOPPED_TYPING, {conversation: currentConversation._id, user: currentConversation.user.dealer_id});
+    //   }
+    // }
 
     if (type === 'chat') {
       this.props.getSupportLiveChatMessages({ type: 'conversation', id: data._id });
@@ -287,7 +293,9 @@ class Chat extends Component {
       loader: true,
       drawerState: false,
       isScrolledUp: false,
-      lastId: ''
+      lastId: '',
+      message: '',
+      isTypingEventEmitted: false
     });
     setTimeout(() => {
       this.setState({ loader: false });

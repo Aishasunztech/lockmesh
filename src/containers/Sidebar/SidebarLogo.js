@@ -56,7 +56,8 @@ class SidebarLogo extends Component {
           </div>
         ) : null}
 
-        <a href="/" className="gx-site-logo" style={{ width: '100%' }}>
+        {/* <a href="/" className="gx-site-logo" style={{ width: '100%' }}> */}
+        <Link to="/dashboard" className="gx-site-logo" style={{ width: '100%' }}>
           {navStyle === NAV_STYLE_NO_HEADER_MINI_SIDEBAR &&
             width >= TAB_SIZE ? (
               <p className="mb-0" style={{ fontSize: 18 }}>
@@ -73,7 +74,8 @@ class SidebarLogo extends Component {
                   </p>
                 </Fragment>
               )}
-        </a>
+        </Link>
+        {/* </a> */}
         <Tooltip placement="bottomLeft" title={selected_tz_detail}>
           <p className="mb-0" style={{ fontSize: 18, float: 'right' }}>
             <Clock

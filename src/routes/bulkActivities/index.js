@@ -47,6 +47,7 @@ var copyDealerAgents = [];
 var status = true;
 var copy_status = true;
 const confirm = Modal.confirm;
+var copySelectedPolicy = ''
 
 class BulkActivities extends Component {
     constructor(props) {
@@ -557,14 +558,11 @@ class BulkActivities extends Component {
     setPolicy = (policy, remove = false) => {
         console.log("called apply policy function ", policy)
 
-        let updatePolicies = this.state.selectedPolicy;
+        let updatePolicies = '';
 
-        if (remove) {
-            updatePolicies = '';
-        } else {
+        if (!remove) {
             updatePolicies = policy;
         }
-
         this.setState({
             selectedPolicy: updatePolicies
         })
@@ -762,7 +760,7 @@ class BulkActivities extends Component {
                         unlinkBulkDevices={this.props.unlinkBulkDevices}
                         wipeBulkDevices={this.props.wipeBulkDevices}
                         bulkApplyPolicy={this.props.applyBulkPolicy}
-                        selectedPolicy={this.state.selectedPolicy}
+                        selectedPolicy={copySelectedPolicy} // this.state.selectedPolicy
                         actionMsg={this.state.actionMsg}
                         setBulkData={this.props.setBulkData}
                     />
@@ -880,10 +878,16 @@ class BulkActivities extends Component {
                     maskClosable={false}
                     style={{ top: 20 }}
                     visible={this.state.pushPolicyModal}
-                    onOk={() => this.setState({ pushPolicyModal: false })}
-                    onCancel={() => this.setState({ pushPolicyModal: false })}
+                    onOk={() => {
+                        this.setState({ pushPolicyModal: false });
+                        copySelectedPolicy = this.state.selectedPolicy;
+                    }}
+                    onCancel={() => this.setState({ pushPolicyModal: false, selectedPolicy: '' })}
                     className="load_policy_popup"
-                    footer={false}
+                    okButtonProps={{ disabled: this.state.selectedPolicy ? false : true }}
+                    // footer={false}
+                    okText={convertToLang(this.props.translation[""], "Add Confirm")}
+                    cancelText={convertToLang(this.props.translation[""], "Reset")}
                 >
                     {
                         <TableHistory

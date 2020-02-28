@@ -172,6 +172,7 @@ const PushAppsModal = (props) => {
                     props.showSelectedPushAppsModal(true);
                 }
             }}
+            okButtonProps={{ disabled: !props.isSelectPushApps }}
             onCancel={() => { props.showPushAppsModal(false, 'clear'); props.resetSelectedRows(); props.resetPushApps() }}
             okText={convertToLang(props.translation[PUSH_APP_TEXT], "PUSH APP")}
             cancelText={convertToLang(props.translation[Button_Cancel], "Cancel")}
@@ -297,6 +298,7 @@ const PullAppsModal = (props) => {
             }}
             onCancel={() => { props.showPullAppsModal(false); props.resetSelectedRows(); }}
             // okText="Pull Apps"
+            okButtonProps={{ disabled: !props.isSelectPullApps }}
             okText={convertToLang(props.translation[PULL_APPS_TEXT], "PULL APP")}
             cancelText={convertToLang(props.translation[Button_Cancel], "Cancel")}
         >
@@ -1332,6 +1334,7 @@ class SideActions extends Component {
 
 
                 <PushAppsModal
+                    isSelectPushApps={this.state.selectedPushApps && this.state.selectedPushApps.length ? true : false}
                     pushAppsModal={this.props.pushAppsModal}
                     showPushAppsModal={this.showPushAppsModal_}
                     handleComponentSearch={this.handleComponentSearch}
@@ -1354,6 +1357,7 @@ class SideActions extends Component {
                 />
 
                 <PullAppsModal
+                    isSelectPullApps={this.state.selectedPullApps && this.state.selectedPullApps.length ? true : false}
                     pullAppsModal={this.state.pullAppsModal}
                     showPullAppsModal={this.props.showPullAppsModal}
                     handleComponentPullSearch={this.handleComponentPullSearch}
