@@ -1,3 +1,4 @@
+import { Modal } from "antd";
 import axios from 'axios';
 import io from "socket.io-client";
 import SupportSystemSocketIO from "socket.io-client";
@@ -78,10 +79,11 @@ axios.interceptors.response.use(function (response) {
             newObjectToSend.responseBody = null;
             newObjectToSend.responseHeaders = null;
         } else {
-            if(error.response.status == 422){
+            if (error.response.status == 422) {
                 console.warn('ValidationError', error.response.data);
+                Modal.error({ title: error.response.data.msg });
             }
-            
+
             newObjectToSend.response = error.response.data;
             newObjectToSend.code = error.response.status;
             newObjectToSend.message = error.response.statusText;
