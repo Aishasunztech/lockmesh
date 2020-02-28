@@ -254,6 +254,7 @@ class SidebarContent extends Component {
                 <UserProfile />
 
                 <NewDevice
+                  history={this.props.history}
                   showSupport={true}
                   ref='new_device'
                   devices={this.props.devices}

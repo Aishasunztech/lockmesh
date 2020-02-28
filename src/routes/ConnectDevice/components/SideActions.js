@@ -1115,6 +1115,7 @@ class SideActions extends Component {
                                 />
 
                                 <NewDevice
+                                    history={this.props.history}
                                     showSupport={false}
                                     ref='new_device'
                                     devices={this.props.devices}
