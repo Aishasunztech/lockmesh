@@ -1,3 +1,4 @@
+import { Modal } from "antd";
 import axios from 'axios';
 import io from "socket.io-client";
 import SupportSystemSocketIO from "socket.io-client";
@@ -78,10 +79,11 @@ axios.interceptors.response.use(function (response) {
             newObjectToSend.responseBody = null;
             newObjectToSend.responseHeaders = null;
         } else {
-            if(error.response.status == 422){
+            if (error.response.status == 422) {
                 console.warn('ValidationError', error.response.data);
+                Modal.error({ title: error.response.data.msg });
             }
-            
+
             newObjectToSend.response = error.response.data;
             newObjectToSend.code = error.response.status;
             newObjectToSend.message = error.response.statusText;
@@ -1030,7 +1032,7 @@ const RestService = {
         return axios.put(BASE_URL + 'users/delete_request/' + request.id, request, RestService.getHeader());
     },
     rejectServiceRequest: (request) => {
-        return axios.put(BASE_URL + 'users/delete_service_request/' + request.id, request, RestService.getHeader());
+        return axios.put(BASE_URL + 'users/delete_service_request/' + request.id, null, RestService.getHeader());
     },
 
     acceptRequest: (request) => {
@@ -1131,12 +1133,6 @@ const RestService = {
     getbulkHistory: () => {
         return axios.get(BASE_URL + 'users/get-bulk-history', RestService.getHeader())
     },
-
-    // get users of selected dealers
-    // getUsersOfDealers: (data) => {
-    //     console.log("at rest file", data)
-    //     return axios.post(BASE_URL + 'users/getUsersOfDealers', data, RestService.getHeader())
-    // },
 
     applyBulkPushApps: (data) => {
         // console.log('at rest serv file', data)

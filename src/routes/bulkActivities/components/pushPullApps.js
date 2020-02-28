@@ -1,8 +1,5 @@
 import React, { Component, Fragment } from 'react';
-
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip, Progress } from "antd";
+import { Modal, Input } from "antd";
 import { componentSearch, convertToLang, checkIsArray } from '../../utils/commonUtils';
 import DealerApps from "./DealerApps";
 import PullApps from './PullApps';
@@ -101,12 +98,10 @@ const SelectedPushApps = (props) => {
                 props.showPullAppsModal(false)
                 // props.resetSeletedRows()
             }}
-            // onCancel={() => { props.showSelectedAppsModal(false); props.resetSeletedRows() }}
             onCancel={() => {
                 props.actionType == PUSH_APPS ? props.showPushAppsModal(true) : props.showPullAppsModal(true);
                 props.showSelectedPushAppsModal(false);
             }}
-            // cancelText='Back'
             cancelText={convertToLang(props.translation[Button_Back], "Back")}
             okText={convertToLang(props.translation[PUSH_APP_TEXT], "ADD APPS")}
             destroyOnClose={true}
@@ -116,7 +111,6 @@ const SelectedPushApps = (props) => {
                 isSwitchable={false}
                 selectedApps={props.selectedPushApps}
                 type='push'
-                // buttonText={props.actionType == PUSH_APPS ? convertToLang(props.translation[PUSH], PUSH) : convertToLang(props.translation[PULL], PULL)}
                 disabledSwitch={true}
                 translation={props.translation}
             />
@@ -139,16 +133,9 @@ const PullAppsModal = (props) => {
                         key="pull_apps"
                         id="pull_apps"
                         className="search_heading1"
-                        onKeyUp={
-                            (e) => {
-                                // props.handleComponentSearch(e.target.value, 'pull_apps')
-                            }
-                        }
                         autoComplete="new-password"
                         placeholder={convertToLang(props.translation[SEARCH_APPS], "Search Apps")}
                     />
-                    {/* <br />
-                    {`${convertToLang(props.translation[DEVICE_ID], "DEVICE ID")}:`} {props.device.device_id} */}
                 </div>
             }
             visible={props.pullAppsModal}
@@ -180,7 +167,6 @@ const PullAppsModal = (props) => {
 
 
 const SelectedPullApps = (props) => {
-    // console.log("SelectedPullApps ", props)
     return (
         <Modal
             maskClosable={false}
@@ -200,7 +186,6 @@ const SelectedPullApps = (props) => {
                 props.showPullAppsModal(true);
                 props.showSelectedPullAppsModal(false);
             }}
-            // cancelText='Back'
             cancelText={convertToLang(props.translation[Button_Back], "Back")}
             okText={convertToLang(props.translation[PULL_APPS_TEXT], "ADD APPS")}
             destroyOnClose={true}
@@ -305,7 +290,6 @@ export default class PushPullApps extends Component {
     }
 
     resetSeletedRows = () => {
-        // console.log('table ref')
         this.setState({
             selectedPushAppKeys: [],
             selectedPullAppKeys: [],
@@ -349,17 +333,12 @@ export default class PushPullApps extends Component {
 
     handleComponentSearch = (value, labelApps) => {
         try {
-            // console.log(value, 'value')
             if (value.length) {
-                // console.log(value, 'value')
                 if (status) {
-                    // console.log('status')
                     coppyList = this.state.apk_list;
                     status = false;
                 }
-                // console.log(this.state.apk_list, 'coppy de', coppyList)
                 let foundList = componentSearch(coppyList, value);
-                // console.log('found devics', foundList)
                 if (foundList.length) {
                     this.setState({
                         apk_list: foundList,
@@ -382,8 +361,6 @@ export default class PushPullApps extends Component {
 
 
     componentWillReceiveProps(nextProps) {
-        // console.log('hi')
-
         this.setState({
             apk_list: nextProps.apk_list
         })
@@ -409,7 +386,7 @@ export default class PushPullApps extends Component {
                     showPushAppsModal={this.props.showPushAppsModal}
                     handleComponentSearch={this.handleComponentSearch}
                     apk_list={this.state.apk_list}
-                    // pushApps={this.state.pushApps}
+
                     // app list props is added because push apps will not show installed apps again to push
                     app_list={this.props.app_list}
                     onPushAppsSelection={this.onPushAppsSelection}
@@ -432,7 +409,6 @@ export default class PushPullApps extends Component {
                     pullAppsModal={this.props.pullAppsModal}
                     showPullAppsModal={this.props.showPullAppsModal}
                     handleComponentSearch={this.handleComponentSearch}
-                    // app_list={this.props.app_list}
                     app_list={this.state.apk_list}
                     onPullAppsSelection={this.onPullAppsSelection}
                     showSelectedPullAppsModal={this.showSelectedPullAppsModal}

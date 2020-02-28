@@ -245,6 +245,7 @@ class Chat extends Component {
   }
 
   _handleKeyPress = (e) => {
+    this._emitEvent(e);
     if(e.keyCode === 13 && !e.shiftKey){
       e.preventDefault();
       if(this.props.supportSocket && this.state.selectedConversation !== null && this.state.selectedUser !== null && this.state.selectedUser.hasOwnProperty('user')){
@@ -252,7 +253,6 @@ class Chat extends Component {
       }
       this.submitComment();
     }
-    // this._emitEvent(e);
     // if (e.key === 'Enter') {
     //   this.submitComment();
     // }

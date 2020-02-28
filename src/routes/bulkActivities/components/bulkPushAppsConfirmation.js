@@ -14,14 +14,12 @@ export default class BulkPushApps extends Component {
     }
 
     handleBulkPushApps = (devices, dealers, users) => {
-        console.log("devices lklk", devices)
         let selectedDevices = [];
         let dealer_ids = [];
         let user_ids = [];
 
         checkIsArray(devices).forEach((item) => {
             if (item.device_id) {
-                // selectedDevices.push({ device_id: item.usr_device_id, usrAccId: item.id });
                 selectedDevices.push({ device_id: item.device_id, usrAccId: item.id, usr_device_id: item.usr_device_id });
             }
         });
@@ -39,8 +37,6 @@ export default class BulkPushApps extends Component {
             user_ids
         }
 
-        // console.log('data is', data, this.props.selectedPushAppsList, "this.props.selectedPushAppsList");
-
         if (this.props.selectedPushAppsList && this.props.selectedPushAppsList.length) {
             const title =
                 <Markup content={`${convertToLang(this.props.translation[""], `Are you sure, you want to push (${checkIsArray(this.props.selectedPushAppsList).map(item => ` ${item.apk_name}`)}) apps into selected devices`)} ?`} ></Markup>
@@ -53,7 +49,6 @@ export default class BulkPushApps extends Component {
                 okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
                 cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
                 onOk: (() => {
-                    // console.log('click on ok btn');
                     return this.props.applyPushApps(data);
                 }),
                 onCancel() { },
@@ -62,7 +57,6 @@ export default class BulkPushApps extends Component {
 
             Modal.error({
                 title: 'Apps not selected to push on your selected devices. Please select apps to performe an action.',
-                // content: 'some messages...some messages...',
               });
 
         }

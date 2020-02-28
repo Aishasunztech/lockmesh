@@ -2,7 +2,7 @@ import { Modal, Button } from 'antd';
 
 import React, { Component } from 'react'
 import { convertToLang, checkIsArray } from '../../utils/commonUtils';
-import { ARE_YOU_SURE_YOU_WANT_ACTIVATE_THE_DEVICE, DO_YOU_WANT_TO_APPLY } from '../../../constants/DeviceConstants';
+import { DO_YOU_WANT_TO_APPLY } from '../../../constants/DeviceConstants';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 
 export default class BulkPushPolicy extends Component {
@@ -36,8 +36,6 @@ export default class BulkPushPolicy extends Component {
             user_ids,
             policyId: selectedPolicy.id
         }
-        // console.log("selectedPolicy ", selectedPolicy);
-        // console.log("confrim data: ", data);
 
         if (selectedPolicy && selectedPolicy.policy_name) {
 
@@ -53,16 +51,13 @@ export default class BulkPushPolicy extends Component {
                 onCancel() { },
             });
         } else {
-
             Modal.error({
                 title: 'Policy not selected to push on your selected devices. Please select policy to performe an action.',
             });
-
         }
     }
 
     render() {
         return (null);
     }
-
 }

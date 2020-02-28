@@ -87,7 +87,7 @@ class PackagePricingForm extends Component {
                         [fieldName]: e
                     })
                 }
-                // 
+                //
             } else {
                 if (fieldName === "pkgTerms" && value === 'trial') {
                     this.setState({ pkgPrice: 0, [fieldName]: value })
@@ -104,7 +104,7 @@ class PackagePricingForm extends Component {
 
     PackageNameChange = async (rule, value, callback) => {
         let response = true
-        // 
+        //
         response = await RestService.checkPackageName(value).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
@@ -115,7 +115,7 @@ class PackagePricingForm extends Component {
                 }
             }
         });
-        // 
+        //
         if (response) {
             this.props.restrictPackageSubmit(true, 'pkgName')
             callback()
@@ -241,7 +241,7 @@ class PackagePricingForm extends Component {
                                 {getFieldDecorator('retail_price', {
                                     rules: [
                                         {
-                                            required: true,
+                                            // required: true,
                                             message: 'Please Input Package Price',
                                         },
                                     ],
@@ -317,7 +317,7 @@ class PackagePricingForm extends Component {
                 </Row>
 
 
-                {/* <div style={{float: 'right', marginTop: 20}} > 
+                {/* <div style={{float: 'right', marginTop: 20}} >
                     <Button onClick={()=> this.props.showPricingModal(false)}>Cancel</Button>
                     <Button type="primary" htmlType="submit" >Submit</Button>
                 </div>  */}

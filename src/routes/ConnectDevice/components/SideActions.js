@@ -20,7 +20,7 @@ import PullApps from './PullApps';
 import SimHistory from './SimSettings/SimHistory';
 import NewDevice from '../../../components/NewDevices';
 import ExtensionDropdown from './ExtensionDropdown';
-
+import { resetProductAddProps } from '../../../appRedux/actions';
 import {
     showHistoryModal,
     showSaveProfileModal,
@@ -1117,6 +1117,7 @@ class SideActions extends Component {
                                 />
 
                                 <NewDevice
+                                    history={this.props.history}
                                     showSupport={false}
                                     ref='new_device'
                                     devices={this.props.devices}
@@ -1423,6 +1424,7 @@ class SideActions extends Component {
                     getSimIDs={this.props.getSimIDs}
                     getChatIDs={this.props.getChatIDs}
                     getPgpEmails={this.props.getPgpEmails}
+                    resetProductAddProps={this.props.resetProductAddProps}
                 />
                 <WipeDevice
                     ref='wipe_device'
@@ -1500,7 +1502,8 @@ function mapDispatchToProps(dispatch) {
         handleCheckedAllPushApps: handleCheckedAllPushApps,
         transferHistory: transferHistory,
         getDeviceListConnectDevice: getDeviceListConnectDevice,
-        getDeviceBillingHistory: getDeviceBillingHistory
+        getDeviceBillingHistory: getDeviceBillingHistory,
+        resetProductAddProps: resetProductAddProps
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth, settings, devices, sidebar }, otherProps) => {

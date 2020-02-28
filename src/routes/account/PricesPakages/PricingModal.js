@@ -82,7 +82,7 @@ export default class PricingModal extends Component {
                     errors++;
                 }
             }
-            // 
+            //
 
             if (errors === 0) {
                 this.props.saveIDPrices({ data: data, dealer_id: this.props.dealer_id })
@@ -100,7 +100,7 @@ export default class PricingModal extends Component {
         } else if (this.state.outerTab === '2') {
 
             var isnum = /^\d+$/.test(this.state.pkgPrice);
-            // 
+            //
             if (this.state.packageFormErrors && (!this.state.packageFormErrors.length || (this.state.packageFormErrors[0] === "pkgPrice" && this.state.pkgTerms === "trial")) && isnum && (this.state.pkgPrice > 0 || this.state.pkgTerms === "trial") && this.state.pkg_features && this.state.pkgName && this.state.pkgTerms && this.state.pkgName !== '' && this.state.pkgTerms !== '') {
                 let pkgName = this.state.pkgName;
                 let pkgTerm = this.state.pkgTerms;
@@ -126,7 +126,7 @@ export default class PricingModal extends Component {
         if (is_pkg_feature) {
             this.state.pkg_features[field] = value;
             // let arr = Object.values(this.state.pkg_features);
-            // 
+            //
             // arr.filter(item => item !== false)
 
 
@@ -135,7 +135,7 @@ export default class PricingModal extends Component {
 
 
                 if (!arr.includes(true)) {
-                    // 
+                    //
                     this.restrictPackageSubmit(false, 'pkg_features');
 
                 } else {
@@ -190,9 +190,9 @@ export default class PricingModal extends Component {
     }
 
     render() {
-        // 
-        // 
-        // 
+        //
+        //
+        //
         return (
             <Modal
                 maskClosable={false}
@@ -207,7 +207,7 @@ export default class PricingModal extends Component {
                     this.props.showPricingModal(false);
                     this.props.resetPrice();
                     this.setState({
-                        outerTab: '1',
+                        // outerTab: this.props.auth.type !== "admin" ? "2" : 1,
                         pkgPrice: 0,
                         pkg_features: JSON.parse(JSON.stringify(pkg_features)),
                         pkgTerms: '1 month',
@@ -325,7 +325,7 @@ function showConfirm(_this, data) {
             </Row>
         </div>,
         onOk() {
-            // 
+            //
             _this.props.setPackage(data);
             _this.props.showPricingModal(false);
             _this.setState({

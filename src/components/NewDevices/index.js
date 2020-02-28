@@ -437,13 +437,13 @@ export default class NewDevices extends Component {
                             type="danger"
                             size="small"
                             style={{ margin: '0 8px 0 8px' }}
-                            onClick={() => { this.rejectServiceRequest(request); }}>{convertToLang(this.props.translation[Button_Decline], "DECLINE")}
+                            onClick={() => { this.rejectServiceRequest({id: request.id}); }}>{convertToLang(this.props.translation[Button_Decline], "DECLINE")}
                         </Button>
                         <Button
                             type="primary"
                             size="small"
                             style={{ margin: '0 8px 0 8px' }}
-                            onClick={() => { this.acceptServiceRequest(request) }}>
+                            onClick={() => { this.acceptServiceRequest({id: request.id, user_acc_id: request.user_acc_id}) }}>
                             {convertToLang(this.props.translation[Button_ACCEPT], "ACCEPT")}
                         </Button>
                     </div>,

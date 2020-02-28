@@ -1,11 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, message, Radio, Button, Form, Input } from 'antd';
-import {
-    PUSH_APPS,
-    WIPE_DEVICE,
-    PULL_APPS,
-    POLICY
-} from "../../../constants/ActionTypes"
+import { Button, Form, Input } from 'antd';
 import { PANEL_PASSWORD_MODAL, PLEASE_INPUT_YOUR_PASSWORD, ENTER_PASSWORD } from '../../../constants/DeviceConstants';
 import { convertToLang } from '../../utils/commonUtils';
 import { Markup } from 'interweave';
@@ -23,21 +17,15 @@ class PassworForm extends Component {
     }
     handleSubmit = (e) => {
         e.preventDefault();
-        // console.log(this.props.actionType, 'action type');
         this.props.form.validateFieldsAndScroll((err, values) => {
-            //  console.log(this.props.actionType, 'action type');
             if (!err) {
-                // this.props.setWipePass(values.pass);
                 this.props.wipeBulkDevices({ ...this.props.wipeData, wipePassword: values.pass });
             }
         });
         this.props.form.resetFields()
-        // this.props.handleCancel(false, this.props.actionType);
     }
 
     render() {
-        const { visible, loading } = this.state;
-        const { getFieldDecorator } = this.props.form;
         return (
             <Form onSubmit={this.handleSubmit} autoComplete="new-password" className="text-center wipe_content">
                 <Form.Item

@@ -1,7 +1,7 @@
 
 import moment from 'moment';
 import {
-    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES, UNLINK_BULK_DEVICES, WIPE_BULK_DEVICES, CLOSE_RESPONSE_MODAL, APPLY_BULK_POLICY, SET_BULK_MESSAGE, SEND_BULK_MESSAGE, SEND_BULK_WIPE_PASS, HANDLE_BULK_WIPE_PASS, BULK_HISTORY_LOADING, SET_BULK_ACTION, SET_BULK_DATA, GET_BULK_MSGS, DELETE_BULK_MSG, UPDATE_BULK_MESSAGE
+    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_PUSH_APPS, SET_PUSH_APPS, SET_PULL_APPS, BULK_PULL_APPS, SET_SELECTED_BULK_DEVICES, UNLINK_BULK_DEVICES, WIPE_BULK_DEVICES, CLOSE_RESPONSE_MODAL, APPLY_BULK_POLICY, SET_BULK_MESSAGE, SEND_BULK_MESSAGE, SEND_BULK_WIPE_PASS, HANDLE_BULK_WIPE_PASS, BULK_HISTORY_LOADING, SET_BULK_ACTION, SET_BULK_DATA, GET_BULK_MSGS, DELETE_BULK_MSG, UPDATE_BULK_MESSAGE
 } from "../../constants/ActionTypes";
 import { message, Modal } from 'antd';
 import { SERVER_TIMEZONE, TIMESTAMP_FORMAT } from "../../constants/Application";
@@ -94,33 +94,21 @@ export default (state = initialState, action) => {
         case BULK_HISTORY: {
 
             // console.log("action.payload history at red : ", action.payload)
-            // if (action.payload.status) {
-                return {
-                    ...state,
-                    isloading: false,
-                    history_loading: false,
-                    bulkDevicesHistory: action.payload,
-                }
-            // } else {
-            //     return {
-            //         ...state,
-            //         isloading: false,
-            //         history_loading: false
-            //     }
-            // }
-        }
-
-
-        case BULK_USERS:
-
-            // console.log("action.payload BULK_USERS at red : ", action.payload)
             if (action.payload.status) {
                 return {
                     ...state,
                     isloading: false,
-                    usersOfDealers: action.payload.users_list,
+                    history_loading: false,
+                    bulkDevicesHistory: action.payload.history,
+                }
+            } else {
+                return {
+                    ...state,
+                    isloading: false,
+                    history_loading: false
                 }
             }
+        }
 
 
 

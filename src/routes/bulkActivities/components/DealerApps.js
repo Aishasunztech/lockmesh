@@ -8,7 +8,6 @@ import { convertToLang, checkIsArray } from '../../utils/commonUtils';
 
 
 const renderApps = (props, apk_list, isSwitchable, selectedAppKeys) => {
-    // console.log("pushApps ", props.pushApps)
     let apps = [];
     if (props.app_list) {
         checkIsArray(apk_list).forEach(apk => {
@@ -21,18 +20,7 @@ const renderApps = (props, apk_list, isSwitchable, selectedAppKeys) => {
         apps = apk_list;
     }
 
-    // console.log(selectedAppKeys, "apps ", apps, "props.selectedApps ", props.selectedApps);
     return checkIsArray(apps).map((app) => {
-
-        // if (props.pushApps) {
-        //     props.pushApps.forEach(apk => {
-        //         if (app.apk_id === apk.apk_id) {
-        //             app.guest = apk.guest;
-        //             app.encrypted = apk.encrypted;
-        //             app.enable = apk.enable;
-        //         }
-        //     });
-        // } else 
         if (props.selectedApps) {
             checkIsArray(props.selectedApps).forEach(apk => {
                 if (app.apk_id === apk.apk_id) {
@@ -98,7 +86,6 @@ const DealerApps = (props) => {
             sorter: (a, b) => { return a.apk_name.localeCompare(b.apk_name) },
 
             sortDirections: ['ascend', 'descend'],
-            // sortOrder:"ascend",
             defaultSortOrder: "ascend"
         },
         {
